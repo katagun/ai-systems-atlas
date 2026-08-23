@@ -1,0 +1,1660 @@
+{
+  "generated_at": "2026-08-23",
+  "policy": "GitHub-hosted projects with an OSI-compatible open-source codebase; source-available and proprietary systems are excluded.",
+  "projects": [
+    {
+      "id": "gstack",
+      "name": "GStack",
+      "repo": "garrytan/gstack",
+      "url": "https://github.com/garrytan/gstack",
+      "description": "Opinionated roles, skills, QA, review, and release workflows for coding agents.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 129292,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 5.5,
+        "data_sovereignty": 8,
+        "interoperability": 8.5,
+        "memory_intelligence": 4.5,
+        "operational_simplicity": 8,
+        "maturity": 8.5,
+        "overall": 6.97
+      },
+      "strengths": [
+        "Excellent end-to-end software process",
+        "Strong role separation and artifact handoffs",
+        "Codex and multi-agent support"
+      ],
+      "weaknesses": [
+        "Not a knowledge store",
+        "Memory is workflow-specific",
+        "Large opinionated surface area"
+      ],
+      "why_it_matters": "Provides the orchestration discipline Cognosaic should borrow without confusing coding workflow with memory.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "appflowy",
+      "name": "AppFlowy",
+      "repo": "AppFlowy-IO/AppFlowy",
+      "url": "https://github.com/AppFlowy-IO/AppFlowy",
+      "description": "Open-source collaborative workspace combining documents, databases, tasks, and AI.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 75879,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.5,
+        "memory_intelligence": 5.5,
+        "operational_simplicity": 7.5,
+        "maturity": 9,
+        "overall": 7.64
+      },
+      "strengths": [
+        "Polished structured workspace",
+        "Cross-platform native apps",
+        "Strong data-control posture"
+      ],
+      "weaknesses": [
+        "Heavy system to customize",
+        "AI memory lifecycle is not first-class",
+        "Database-centric canonical data"
+      ],
+      "why_it_matters": "Shows how structured workspaces and approachable UX can coexist with user control.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "anythingllm",
+      "name": "AnythingLLM",
+      "repo": "Mintplex-Labs/anything-llm",
+      "url": "https://github.com/Mintplex-Labs/anything-llm",
+      "description": "Local-first AI workspaces, RAG, agents, and broad model/provider support.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 65102,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8,
+        "data_sovereignty": 8,
+        "interoperability": 9,
+        "memory_intelligence": 7,
+        "operational_simplicity": 8,
+        "maturity": 8.5,
+        "overall": 8.05
+      },
+      "strengths": [
+        "Broad provider and deployment support",
+        "Strong turnkey local AI experience",
+        "Useful agent and document workflows"
+      ],
+      "weaknesses": [
+        "Knowledge remains app-centric",
+        "Provenance and temporal truth are limited",
+        "Can become a generic AI shell"
+      ],
+      "why_it_matters": "Demonstrates low-friction, provider-agnostic local AI over personal sources.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "mem0",
+      "name": "Mem0",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0",
+      "description": "A universal long-term memory layer for AI agents.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "temporal"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "partial",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 63875,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 6.5,
+        "interoperability": 9,
+        "memory_intelligence": 9,
+        "operational_simplicity": 8,
+        "maturity": 9,
+        "overall": 8.32
+      },
+      "strengths": [
+        "Developer-friendly memory API",
+        "Multi-signal retrieval",
+        "User/session/agent scoping"
+      ],
+      "weaknesses": [
+        "Canonical memory is not human-readable",
+        "Extraction can encode model errors",
+        "Managed platform outpaces OSS features"
+      ],
+      "why_it_matters": "Defines the external-memory service pattern and a strong retrieval baseline.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "memos",
+      "name": "Memos",
+      "repo": "usememos/memos",
+      "url": "https://github.com/usememos/memos",
+      "description": "Lightweight, Markdown-native, self-hosted quick capture.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "relational_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "Markdown-like records in SQLite",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 62463,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 9,
+        "interoperability": 7.5,
+        "memory_intelligence": 4.5,
+        "operational_simplicity": 9.5,
+        "maturity": 8.5,
+        "overall": 7.83
+      },
+      "strengths": [
+        "Extremely low capture friction",
+        "Simple self-hosting",
+        "Clear ownership"
+      ],
+      "weaknesses": [
+        "Limited graph and memory intelligence",
+        "Not agent-native",
+        "Best for fragments rather than deep synthesis"
+      ],
+      "why_it_matters": "A reminder that capture friction matters more than elaborate ontology at the moment of thought.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "joplin",
+      "name": "Joplin",
+      "repo": "laurent22/joplin",
+      "url": "https://github.com/laurent22/joplin",
+      "description": "Offline-first Markdown notes and tasks with end-to-end encrypted sync.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "AGPL-3.0-or-later",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 56061,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8,
+        "data_sovereignty": 9.5,
+        "interoperability": 8,
+        "memory_intelligence": 4.5,
+        "operational_simplicity": 8,
+        "maturity": 9.5,
+        "overall": 7.85
+      },
+      "strengths": [
+        "Excellent offline and sync story",
+        "E2EE and broad platform support",
+        "Mature import/export ecosystem"
+      ],
+      "weaknesses": [
+        "Weak graph semantics",
+        "AI is not the architectural center",
+        "Sync complexity remains"
+      ],
+      "why_it_matters": "Contributes mature offline-first, encryption, sync, and import/export lessons.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "siyuan",
+      "name": "SiYuan",
+      "repo": "siyuan-note/siyuan",
+      "url": "https://github.com/siyuan-note/siyuan",
+      "description": "Privacy-first block-based knowledge workspace with references, queries, APIs, and AI.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 45942,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 9,
+        "interoperability": 8,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7.5,
+        "maturity": 9,
+        "overall": 8.1
+      },
+      "strengths": [
+        "Fine-grained block references",
+        "Powerful querying and APIs",
+        "Cross-platform and self-hosted"
+      ],
+      "weaknesses": [
+        "Complex data model",
+        "Some useful features are paid",
+        "Agent memory governance is limited"
+      ],
+      "why_it_matters": "Shows the power of block-level identity, queries, and rich local knowledge work.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "logseq",
+      "name": "Logseq",
+      "repo": "logseq/logseq",
+      "url": "https://github.com/logseq/logseq",
+      "description": "Privacy-first graph-oriented knowledge management and collaboration.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "plain_files",
+        "graph_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "graph_traversal",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "Markdown/Org or local database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 44573,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 9,
+        "data_sovereignty": 9.5,
+        "interoperability": 9,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7.5,
+        "maturity": 9,
+        "overall": 8.46
+      },
+      "strengths": [
+        "Local-first linked thinking",
+        "Markdown and Org-mode support",
+        "Powerful graph and query model"
+      ],
+      "weaknesses": [
+        "New database architecture adds migration risk",
+        "Can overwhelm casual users",
+        "AI remains an add-on"
+      ],
+      "why_it_matters": "Contributes durable user-controlled knowledge, backlinks, blocks, and graph-native thinking.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "quivr",
+      "name": "Quivr",
+      "repo": "QuivrHQ/quivr",
+      "url": "https://github.com/QuivrHQ/quivr",
+      "description": "Opinionated RAG framework for integrating generative AI into applications.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 39417,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 6.5,
+        "data_sovereignty": 7,
+        "interoperability": 9,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 7,
+        "maturity": 7.5,
+        "overall": 7.37
+      },
+      "strengths": [
+        "Composable RAG building blocks",
+        "Model and vector-store flexibility",
+        "Useful application integration focus"
+      ],
+      "weaknesses": [
+        "Less of a personal knowledge product",
+        "Temporal memory is weak",
+        "Requires product engineering around it"
+      ],
+      "why_it_matters": "A representative vector-centric RAG system and useful contrast to graph/temporal memory.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "open-notebook",
+      "name": "Open Notebook",
+      "repo": "lfnovo/open-notebook",
+      "url": "https://github.com/lfnovo/open-notebook",
+      "description": "Open-source NotebookLM-style research and learning workspace.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 37395,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 8,
+        "interoperability": 8,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 8,
+        "maturity": 8,
+        "overall": 8.02
+      },
+      "strengths": [
+        "Source-grounded research workflows",
+        "Flexible model support",
+        "Good notebook mental model"
+      ],
+      "weaknesses": [
+        "Primarily source-set oriented",
+        "Long-term identity and memory are limited",
+        "Less suited to operational life management"
+      ],
+      "why_it_matters": "Contributes source-grounded synthesis and notebook-level context boundaries.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "trilium",
+      "name": "Trilium",
+      "repo": "TriliumNext/Trilium",
+      "url": "https://github.com/TriliumNext/Trilium",
+      "description": "Hierarchical, scriptable personal knowledge base with revision history, encryption, APIs, and graph views.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "graph_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 37557,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 9,
+        "data_sovereignty": 9,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7,
+        "maturity": 9.5,
+        "overall": 8.3
+      },
+      "strengths": [
+        "Deep hierarchy and cloning",
+        "Per-note encryption and revision history",
+        "Scripting and REST API",
+        "Proven scale beyond 100k notes"
+      ],
+      "weaknesses": [
+        "Database is less portable than plain files",
+        "UI is power-user oriented",
+        "AI memory is not native"
+      ],
+      "why_it_matters": "Contributes hierarchy, revisions, encryption, automation, and proven large-vault behavior.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "khoj",
+      "name": "Khoj",
+      "repo": "khoj-ai/khoj",
+      "url": "https://github.com/khoj-ai/khoj",
+      "description": "Self-hostable AI second brain over documents, web, agents, and automations.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 36675,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 9,
+        "data_sovereignty": 8.5,
+        "interoperability": 9,
+        "memory_intelligence": 8,
+        "operational_simplicity": 7.5,
+        "maturity": 9,
+        "overall": 8.55
+      },
+      "strengths": [
+        "Broad document and model support",
+        "Self-hosting and local models",
+        "Agents and scheduled automation"
+      ],
+      "weaknesses": [
+        "Canonical knowledge is not human-readable",
+        "Large application surface",
+        "Temporal contradictions need stronger governance"
+      ],
+      "why_it_matters": "The closest complete open-source AI second-brain product in the set.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "graphiti",
+      "name": "Graphiti",
+      "repo": "getzep/graphiti",
+      "url": "https://github.com/getzep/graphiti",
+      "description": "Temporal context graph engine for evolving agent knowledge.",
+      "primary_role": "context_graph_engine",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "graph_db",
+        "vector_index",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "graph_traversal",
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "temporal"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "supersession"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 30221,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.5,
+        "memory_intelligence": 9.5,
+        "operational_simplicity": 5.5,
+        "maturity": 8.5,
+        "overall": 7.85
+      },
+      "strengths": [
+        "Explicit temporal validity",
+        "Episode-level provenance",
+        "Hybrid graph retrieval",
+        "Incremental updates"
+      ],
+      "weaknesses": [
+        "Operational graph-database burden",
+        "LLM-dependent extraction",
+        "Not a user-facing brain"
+      ],
+      "why_it_matters": "Supplies the strongest model for changing truth, provenance, and as-of retrieval.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "cognee",
+      "name": "Cognee",
+      "repo": "topoteretes/cognee",
+      "url": "https://github.com/topoteretes/cognee",
+      "description": "Knowledge-graph and memory platform for persistent agent context.",
+      "primary_role": "context_graph_engine",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "graph_db",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "graph_traversal",
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 30197,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7.5,
+        "data_sovereignty": 7,
+        "interoperability": 8.5,
+        "memory_intelligence": 8.5,
+        "operational_simplicity": 6,
+        "maturity": 8,
+        "overall": 7.64
+      },
+      "strengths": [
+        "Graph-oriented memory pipelines",
+        "Multiple data and storage backends",
+        "Agent-focused APIs"
+      ],
+      "weaknesses": [
+        "Complex pipeline surface",
+        "Less transparent canonical memory",
+        "Temporal semantics are weaker than Graphiti"
+      ],
+      "why_it_matters": "Represents knowledge-graph enrichment and memory pipelines across heterogeneous data.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "activitywatch",
+      "name": "ActivityWatch",
+      "repo": "ActivityWatch/activitywatch",
+      "url": "https://github.com/ActivityWatch/activitywatch",
+      "description": "Privacy-focused automatic activity and time tracking.",
+      "primary_role": "ambient_capture",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "event_log",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "structured_query",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "activity"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "license": "MPL-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 18685,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 6.5,
+        "data_sovereignty": 9.5,
+        "interoperability": 8,
+        "memory_intelligence": 4.5,
+        "operational_simplicity": 8.5,
+        "maturity": 9,
+        "overall": 7.51
+      },
+      "strengths": [
+        "Low-overhead passive activity capture",
+        "Local and extensible",
+        "Useful behavioral timeline"
+      ],
+      "weaknesses": [
+        "Captures activity metadata, not meaning",
+        "Needs downstream synthesis",
+        "Can still expose sensitive behavior"
+      ],
+      "why_it_matters": "Broadens ambient capture beyond screenshots: app and time telemetry can become evidence for work recall.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "reor",
+      "name": "Reor",
+      "repo": "reorproject/reor",
+      "url": "https://github.com/reorproject/reor",
+      "description": "Private local AI PKM using Markdown, local models, and vector search.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "plain_files",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "archived",
+      "stars": 8568,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 9,
+        "interoperability": 8,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 8,
+        "maturity": 5.5,
+        "overall": 7.85
+      },
+      "strengths": [
+        "Local models and Markdown",
+        "Useful semantic linking",
+        "Strong privacy posture"
+      ],
+      "weaknesses": [
+        "Repository is archived",
+        "Desktop-centric architecture",
+        "Limited temporal/provenance model"
+      ],
+      "why_it_matters": "A valuable example of local AI over Markdown, but also a warning about project continuity.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "silverbullet",
+      "name": "SilverBullet",
+      "repo": "silverbulletmd/silverbullet",
+      "url": "https://github.com/silverbulletmd/silverbullet",
+      "description": "Markdown-based programmable personal productivity platform.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "plain_files",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 5907,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 9.5,
+        "interoperability": 9,
+        "memory_intelligence": 5.5,
+        "operational_simplicity": 7,
+        "maturity": 7.5,
+        "overall": 7.9
+      },
+      "strengths": [
+        "Plain Markdown ownership",
+        "Powerful end-user programming",
+        "Self-hosted web experience"
+      ],
+      "weaknesses": [
+        "Programming model can intimidate",
+        "AI and memory extraction are not central",
+        "Mobile experience is indirect"
+      ],
+      "why_it_matters": "Shows how a second brain can remain programmable without surrendering canonical files.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "basic-memory",
+      "name": "Basic Memory",
+      "repo": "basicmachines-co/basic-memory",
+      "url": "https://github.com/basicmachines-co/basic-memory",
+      "description": "Markdown-native knowledge graph and semantic memory bridge for AI clients.",
+      "primary_role": "memory_bridge",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "plain_files",
+        "vector_index",
+        "graph_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 3730,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 9,
+        "data_sovereignty": 9.5,
+        "interoperability": 9.5,
+        "memory_intelligence": 8,
+        "operational_simplicity": 8,
+        "maturity": 7.5,
+        "overall": 8.66
+      },
+      "strengths": [
+        "Human and agents share Markdown",
+        "MCP and skills integration",
+        "Optional semantic reranking",
+        "No mandatory cloud"
+      ],
+      "weaknesses": [
+        "MCP can add tool/context overhead",
+        "Graph semantics are lightweight",
+        "Sync and mobile are more complex locally"
+      ],
+      "why_it_matters": "The clearest human-readable bridge between personal knowledge and multiple agents.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "letta-code",
+      "name": "Letta Code",
+      "repo": "letta-ai/letta-code",
+      "url": "https://github.com/letta-ai/letta-code",
+      "description": "Stateful agent harness with memory, identity, skills, schedules, subagents, and self-improvement.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "git_versioned",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "self_editing",
+        "consolidation",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 3096,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": 24363,
+      "current_repo_note": "The former letta-ai/letta repository is now a landing page; active code moved here.",
+      "score": {
+        "second_brain_fit": 7.5,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "memory_intelligence": 9,
+        "operational_simplicity": 6.5,
+        "maturity": 7,
+        "overall": 7.74
+      },
+      "strengths": [
+        "Memory and identity are first-class",
+        "Git-tracked context",
+        "Dreaming, skills, schedules, and subagents"
+      ],
+      "weaknesses": [
+        "Agent can rewrite its own context",
+        "Cloud features affect portability",
+        "Current codebase is much newer than historical repo"
+      ],
+      "why_it_matters": "Defines embedded, self-editing agent memory and long-horizon runtime behavior.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "openrecall",
+      "name": "OpenRecall",
+      "repo": "openrecall/openrecall",
+      "url": "https://github.com/openrecall/openrecall",
+      "description": "Fully open-source local screenshot-based digital history and recall.",
+      "primary_role": "ambient_capture",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "raw_media",
+        "relational_db",
+        "vector_index",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "license": "AGPL-3.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 2931,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7,
+        "data_sovereignty": 9.5,
+        "interoperability": 7,
+        "memory_intelligence": 6,
+        "operational_simplicity": 6.5,
+        "maturity": 6.5,
+        "overall": 7.14
+      },
+      "strengths": [
+        "Passive local capture",
+        "Cross-platform",
+        "Searchable digital timeline"
+      ],
+      "weaknesses": [
+        "High privacy and storage risk",
+        "Noisy raw evidence",
+        "Project activity is slower than leaders"
+      ],
+      "why_it_matters": "Provides an open-source ambient-capture reference without accepting source-available substitutes.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "langmem",
+      "name": "LangMem",
+      "repo": "langchain-ai/langmem",
+      "url": "https://github.com/langchain-ai/langmem",
+      "description": "Utilities for extracting and managing long-term memories in agent applications.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": 1622,
+      "stars_verified_at": "2026-08-23",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 6.5,
+        "data_sovereignty": 6.5,
+        "interoperability": 8,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 7,
+        "maturity": 6.5,
+        "overall": 6.98
+      },
+      "strengths": [
+        "Focused memory primitives",
+        "Integrates with agent graphs",
+        "Compact developer surface"
+      ],
+      "weaknesses": [
+        "Framework coupling",
+        "Not a user-facing product",
+        "Smaller ecosystem than Mem0"
+      ],
+      "why_it_matters": "A useful example of memory as explicit application logic rather than a full platform.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "foam",
+      "name": "Foam",
+      "repo": "foambubble/foam",
+      "url": "https://github.com/foambubble/foam",
+      "description": "VS Code-based personal knowledge management using Markdown and wikilinks.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "plain_files",
+        "graph_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "license": "MIT",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7.5,
+        "data_sovereignty": 10,
+        "interoperability": 9,
+        "memory_intelligence": 4.5,
+        "operational_simplicity": 8,
+        "maturity": 7,
+        "overall": 7.64
+      },
+      "strengths": [
+        "Plain files and Git friendliness",
+        "Excellent developer ergonomics",
+        "Low lock-in"
+      ],
+      "weaknesses": [
+        "VS Code-centric",
+        "Limited structured memory lifecycle",
+        "No built-in AI memory"
+      ],
+      "why_it_matters": "Represents the smallest viable local-first graph: Markdown, links, editor, and Git.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "qdrant",
+      "name": "Qdrant",
+      "repo": "qdrant/qdrant",
+      "url": "https://github.com/qdrant/qdrant",
+      "description": "High-performance vector similarity search engine.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 3.5,
+        "data_sovereignty": 7,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 5.5,
+        "maturity": 8,
+        "overall": 6.34
+      },
+      "strengths": [
+        "Strong reusable retrieval foundation",
+        "Broad ecosystem integrations"
+      ],
+      "weaknesses": [
+        "Not a second brain by itself",
+        "Requires ingestion, governance, provenance, and UX layers"
+      ],
+      "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "chroma",
+      "name": "Chroma",
+      "repo": "chroma-core/chroma",
+      "url": "https://github.com/chroma-core/chroma",
+      "description": "Developer-oriented embedding database for AI applications.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 3.5,
+        "data_sovereignty": 7,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 5.5,
+        "maturity": 8,
+        "overall": 6.34
+      },
+      "strengths": [
+        "Strong reusable retrieval foundation",
+        "Broad ecosystem integrations"
+      ],
+      "weaknesses": [
+        "Not a second brain by itself",
+        "Requires ingestion, governance, provenance, and UX layers"
+      ],
+      "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "milvus",
+      "name": "Milvus",
+      "repo": "milvus-io/milvus",
+      "url": "https://github.com/milvus-io/milvus",
+      "description": "Distributed vector database for large-scale similarity search.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "Apache-2.0",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 3.5,
+        "data_sovereignty": 7,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 5.5,
+        "maturity": 8,
+        "overall": 6.34
+      },
+      "strengths": [
+        "Strong reusable retrieval foundation",
+        "Broad ecosystem integrations"
+      ],
+      "weaknesses": [
+        "Not a second brain by itself",
+        "Requires ingestion, governance, provenance, and UX layers"
+      ],
+      "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-23"
+    },
+    {
+      "id": "weaviate",
+      "name": "Weaviate",
+      "repo": "weaviate/weaviate",
+      "url": "https://github.com/weaviate/weaviate",
+      "description": "Vector database with hybrid search and structured filtering.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "license": "BSD-3-Clause",
+      "license_scope": "open_source",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 3.5,
+        "data_sovereignty": 7,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 5.5,
+        "maturity": 8,
+        "overall": 6.34
+      },
+      "strengths": [
+        "Strong reusable retrieval foundation",
+        "Broad ecosystem integrations"
+      ],
+      "weaknesses": [
+        "Not a second brain by itself",
+        "Requires ingestion, governance, provenance, and UX layers"
+      ],
+      "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-23"
+    }
+  ]
+}

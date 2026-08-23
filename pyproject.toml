@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cognosaic"
+version = "0.1.0"
+description = "A local-first, provenance-aware second brain and open-source systems directory"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Shamil Assylbekov" }]
+keywords = ["second-brain", "personal-knowledge-management", "agent-memory", "local-first"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.scripts]
+cognosaic = "cognosaic.cli:main"
+
+[tool.setuptools]
+packages = ["cognosaic"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

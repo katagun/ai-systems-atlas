@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-08-23",
+  "entries": [
+    {
+      "name": "screenpipe",
+      "repo": "screenpipe/screenpipe",
+      "reason": "Source-available commercial license; not OSI open source.",
+      "useful_lesson": "Ambient screen/audio capture, local search, and per-pipeline permissions."
+    },
+    {
+      "name": "AFFiNE",
+      "repo": "toeverything/AFFiNE",
+      "reason": "Mixed repository: community/client portions are open, but backend enterprise code has production restrictions.",
+      "useful_lesson": "Integrated document, database, and whiteboard workspace UX."
+    },
+    {
+      "name": "Onyx",
+      "repo": "onyx-dot-app/onyx",
+      "reason": "Open-core repository containing enterprise-licensed directories; excluded by strict all-code-open default.",
+      "useful_lesson": "Enterprise connectors and RAG operations."
+    },
+    {
+      "name": "Obsidian",
+      "repo": null,
+      "reason": "Not open source.",
+      "useful_lesson": "Local Markdown ecosystem and plugin-driven PKM."
+    },
+    {
+      "name": "Microsoft Recall",
+      "repo": null,
+      "reason": "Proprietary.",
+      "useful_lesson": "OS-level ambient recall and the associated privacy threat model."
+    },
+    {
+      "name": "Rewind / Limitless",
+      "repo": null,
+      "reason": "Proprietary.",
+      "useful_lesson": "Consumer ambient-memory product design."
+    }
+  ]
+}

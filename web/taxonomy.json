@@ -1,0 +1,324 @@
+{
+  "version": "1.0",
+  "principle": "Each project has one primary role and many orthogonal traits. Product role and storage/retrieval architecture must never be conflated.",
+  "primary_roles": [
+    {
+      "id": "human_pkm",
+      "name": "Human-first PKM / workspace",
+      "definition": "A user-facing system whose canonical workflow is human writing, organizing, linking, and revisiting knowledge.",
+      "examples": [
+        "Logseq",
+        "Trilium",
+        "AppFlowy",
+        "Joplin",
+        "SiYuan",
+        "Memos"
+      ]
+    },
+    {
+      "id": "ai_knowledge_app",
+      "name": "AI knowledge app / RAG brain",
+      "definition": "A user-facing assistant that ingests documents or connected sources and answers, searches, summarizes, or automates over them.",
+      "examples": [
+        "Khoj",
+        "AnythingLLM",
+        "Open Notebook",
+        "Quivr"
+      ]
+    },
+    {
+      "id": "agent_memory_service",
+      "name": "External agent-memory service",
+      "definition": "A library or service outside the agent runtime that extracts, stores, retrieves, and manages durable memories through an SDK, API, or tool protocol. The agent can be replaced while the memory remains.",
+      "examples": [
+        "Mem0",
+        "LangMem"
+      ]
+    },
+    {
+      "id": "context_graph_engine",
+      "name": "Temporal context / knowledge-graph engine",
+      "definition": "Infrastructure that represents entities, relationships, provenance, and often changing truth over time rather than only flat chunks.",
+      "examples": [
+        "Graphiti",
+        "Cognee"
+      ]
+    },
+    {
+      "id": "stateful_agent_runtime",
+      "name": "Stateful agent runtime / harness",
+      "definition": "The agent itself owns identity, durable state, skills, schedules, and a memory lifecycle as part of its runtime.",
+      "examples": [
+        "Letta Code"
+      ]
+    },
+    {
+      "id": "coding_agent_workflow",
+      "name": "Coding-agent workflow / skill stack",
+      "definition": "Prompts, roles, tools, and process that turn a coding agent into a repeatable software-delivery system. Memory may be present, but software execution is primary.",
+      "examples": [
+        "GStack"
+      ]
+    },
+    {
+      "id": "memory_bridge",
+      "name": "Human–agent memory bridge",
+      "definition": "A compatibility layer that exposes human-owned files or workspaces to multiple agents, usually through MCP, skills, CLI, or an API.",
+      "examples": [
+        "Basic Memory"
+      ]
+    },
+    {
+      "id": "ambient_capture",
+      "name": "Ambient capture / lifelogging",
+      "definition": "A passive collector that records digital activity such as active apps, screen snapshots, audio, or events without requiring deliberate note creation.",
+      "examples": [
+        "OpenRecall",
+        "ActivityWatch"
+      ]
+    },
+    {
+      "id": "retrieval_infrastructure",
+      "name": "Retrieval / storage infrastructure",
+      "definition": "A low-level vector, graph, lexical, or multimodal store used to build memory systems; not a second brain by itself.",
+      "examples": [
+        "Qdrant",
+        "Chroma",
+        "Milvus",
+        "Weaviate"
+      ]
+    },
+    {
+      "id": "research_reference",
+      "name": "Research / benchmark / reference",
+      "definition": "A survey, benchmark, course, template, or catalog that informs implementation but is not itself a complete operational second brain.",
+      "examples": []
+    }
+  ],
+  "agent_relations": [
+    {
+      "id": "none",
+      "name": "No agent dependency"
+    },
+    {
+      "id": "agent_enabled_ui",
+      "name": "Human app with optional AI"
+    },
+    {
+      "id": "external_memory",
+      "name": "External memory used by agents"
+    },
+    {
+      "id": "embedded_memory",
+      "name": "Memory embedded in agent runtime"
+    },
+    {
+      "id": "agent_runtime",
+      "name": "Full agent runtime"
+    },
+    {
+      "id": "coding_workflow",
+      "name": "Coding-agent process layer"
+    }
+  ],
+  "architectures": [
+    {
+      "id": "plain_files",
+      "name": "Plain files / Markdown",
+      "note": "Human-readable canonical data."
+    },
+    {
+      "id": "relational_db",
+      "name": "Relational database"
+    },
+    {
+      "id": "vector_index",
+      "name": "Vector / embedding index",
+      "note": "An architecture trait, not a product category."
+    },
+    {
+      "id": "graph_db",
+      "name": "Graph database / knowledge graph"
+    },
+    {
+      "id": "full_text",
+      "name": "Keyword / full-text index"
+    },
+    {
+      "id": "event_log",
+      "name": "Append-only event log"
+    },
+    {
+      "id": "raw_media",
+      "name": "Screenshots / audio / raw media"
+    },
+    {
+      "id": "git_versioned",
+      "name": "Git-versioned state"
+    },
+    {
+      "id": "hybrid",
+      "name": "Multiple coordinated stores"
+    }
+  ],
+  "retrieval_modes": [
+    {
+      "id": "keyword",
+      "name": "Keyword / BM25 / FTS"
+    },
+    {
+      "id": "semantic_vector",
+      "name": "Semantic vector retrieval"
+    },
+    {
+      "id": "hybrid",
+      "name": "Hybrid lexical + semantic"
+    },
+    {
+      "id": "graph_traversal",
+      "name": "Graph traversal / neighborhood"
+    },
+    {
+      "id": "temporal",
+      "name": "Temporal / as-of retrieval"
+    },
+    {
+      "id": "structured_query",
+      "name": "SQL / Datalog / structured queries"
+    },
+    {
+      "id": "agentic",
+      "name": "Iterative agent-driven retrieval"
+    },
+    {
+      "id": "recency_rules",
+      "name": "Recency, rules, or deterministic ranking"
+    }
+  ],
+  "capture_modes": [
+    {
+      "id": "manual",
+      "name": "Manual writing"
+    },
+    {
+      "id": "file_import",
+      "name": "File/import/sync"
+    },
+    {
+      "id": "conversation",
+      "name": "Conversation extraction"
+    },
+    {
+      "id": "connectors",
+      "name": "API / SaaS connectors"
+    },
+    {
+      "id": "scheduled",
+      "name": "Scheduled collection or research"
+    },
+    {
+      "id": "screen",
+      "name": "Screen capture"
+    },
+    {
+      "id": "audio",
+      "name": "Audio capture / transcription"
+    },
+    {
+      "id": "activity",
+      "name": "App/window/keyboard activity"
+    },
+    {
+      "id": "coding_session",
+      "name": "Coding-agent session state"
+    }
+  ],
+  "memory_lifecycle": [
+    {
+      "id": "human_curated",
+      "name": "Human-curated"
+    },
+    {
+      "id": "append_only",
+      "name": "Append-only accumulation"
+    },
+    {
+      "id": "upsert_rewrite",
+      "name": "Upsert or rewrite"
+    },
+    {
+      "id": "supersession",
+      "name": "Explicit supersession with history"
+    },
+    {
+      "id": "versioned",
+      "name": "Revision/version history"
+    },
+    {
+      "id": "consolidation",
+      "name": "Summarization / consolidation / dreaming"
+    },
+    {
+      "id": "decay",
+      "name": "Decay / forgetting"
+    },
+    {
+      "id": "self_editing",
+      "name": "Agent self-edits memory or skills"
+    }
+  ],
+  "license_scopes": [
+    {
+      "id": "open_source",
+      "name": "OSI-compatible open source",
+      "included_by_default": true
+    },
+    {
+      "id": "open_core",
+      "name": "Open-source core plus restricted enterprise code",
+      "included_by_default": false
+    },
+    {
+      "id": "source_available",
+      "name": "Source visible but commercially or otherwise restricted",
+      "included_by_default": false
+    },
+    {
+      "id": "proprietary",
+      "name": "Proprietary",
+      "included_by_default": false
+    }
+  ],
+  "score_dimensions": [
+    {
+      "id": "second_brain_fit",
+      "weight": 0.22,
+      "definition": "How directly useful the project is as a personal or agentic second brain."
+    },
+    {
+      "id": "data_sovereignty",
+      "weight": 0.18,
+      "definition": "Local-first behavior, exportability, privacy, and user control."
+    },
+    {
+      "id": "interoperability",
+      "weight": 0.16,
+      "definition": "Open formats, APIs, adapters, and model/provider portability."
+    },
+    {
+      "id": "memory_intelligence",
+      "weight": 0.18,
+      "definition": "Retrieval, temporal handling, provenance, consolidation, and contradiction management."
+    },
+    {
+      "id": "operational_simplicity",
+      "weight": 0.12,
+      "definition": "Setup and maintenance burden for a technically capable individual."
+    },
+    {
+      "id": "maturity",
+      "weight": 0.14,
+      "definition": "Adoption, maintenance, documentation, and production readiness."
+    }
+  ]
+}
