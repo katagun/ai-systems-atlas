@@ -3,41 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Memory Systems Atlas: open-source memory, PKM, agent, RAG, and retrieval systems compared by role and architecture.">
-  <title>Memory Systems Atlas</title>
+  <meta name="description" content="Agent Systems Atlas: open-source memory and AI agent systems compared within explicit families, roles, and score profiles.">
+  <title>Agent Systems Atlas</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <div class="brand" aria-label="Memory Systems Atlas">
+    <div class="brand" aria-label="Agent Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>Memory Systems Atlas</strong><small>open-source systems map</small></span>
+      <span><strong>Agent Systems Atlas</strong><small>memory + agents, mapped</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
-    <a class="github-link" href="https://github.com/embark-delve/memory-systems-atlas" target="_blank" rel="noreferrer">View source ↗</a>
+    <a class="github-link" href="https://github.com/embark-delve/agent-systems-atlas" target="_blank" rel="noreferrer">View source ↗</a>
   </header>
 
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
         <p class="eyebrow">Open-source systems, compared by what they actually are</p>
-        <h1 id="directory-title">Do not compare a coding workflow to a vector database.</h1>
-        <p class="hero-copy">Memory Systems Atlas separates product role from memory architecture, capture mode, lifecycle, and agent relationship—then scores each project for second-brain usefulness.</p>
+        <h1 id="directory-title">Memory and agency are related. They are not the same category.</h1>
+        <p class="hero-copy">Agent Systems Atlas maps open-source memory systems and AI agents in one evidence-backed directory. Family-specific roles and score profiles keep useful comparisons honest.</p>
         <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
       </div>
 
       <section class="taxonomy-note" aria-label="Taxonomy note">
-        <div><span class="signal"></span><strong>Primary role</strong> answers “what is the product?”</div>
-        <div><span class="signal"></span><strong>Architecture</strong> answers “how does it store and retrieve?”</div>
-        <div><span class="signal"></span><strong>Agent relation</strong> answers “where does memory live relative to the agent?”</div>
+        <div><span class="signal"></span><strong>System family</strong> separates durable knowledge from action-taking agents.</div>
+        <div><span class="signal"></span><strong>Primary role</strong> answers “what job does the product do?”</div>
+        <div><span class="signal"></span><strong>Score profile</strong> prevents cross-family rankings.</div>
       </section>
 
       <section class="control-panel" aria-label="Directory filters">
         <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="project, strength, weakness, architecture…" autocomplete="off"></label>
+        <label><span>System family</span><select id="family-filter"><option value="">All families</option></select></label>
         <label><span>Primary role</span><select id="role-filter"><option value="">All roles</option></select></label>
         <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
         <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
@@ -53,14 +54,15 @@
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">
       <div class="section-heading">
         <p class="eyebrow">A multi-axis model</p>
-        <h1 id="taxonomy-title">One primary role. Several orthogonal traits.</h1>
-        <p>A system can be an AI knowledge app that uses a vector index, runs locally, captures files, and exposes tools to agents. Those are different facts—not competing labels.</p>
+        <h1 id="taxonomy-title">One family. One primary role. Several orthogonal traits.</h1>
+        <p>A system can be a coding agent that runs locally, edits files, invokes MCP tools, and keeps session state. Those are different facts—not competing labels or a memory-system score.</p>
       </div>
       <div id="taxonomy-content" class="taxonomy-content"></div>
       <section class="definitions">
         <article><h2>External agent memory</h2><p>A separate library or service persists memory outside the agent runtime. Agents call it through an SDK, API, CLI, or protocol. Replacing the agent does not delete the memory. This improves reuse, but can create an opaque second source of truth.</p></article>
         <article><h2>Ambient capture</h2><p>Passive collection of digital activity—screenshots, audio, active apps, window titles, or events—without deliberate note taking. It minimizes capture friction but creates severe privacy, noise, retention, and consent obligations.</p></article>
-        <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. Human PKM tools, RAG apps, agent-memory services, and ambient systems can all use vectors while remaining fundamentally different products.</p></article>
+        <article><h2>Agent-system score</h2><p>Rates reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity. It is not comparable to the memory-system score.</p></article>
+        <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. PKM tools, RAG apps, memory services, and agents can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
   </main>
@@ -70,7 +72,7 @@
     <div id="dialog-content"></div>
   </dialog>
 
-  <footer><span>Memory Systems Atlas</span><span>Role is not architecture.</span><span id="data-date"></span></footer>
+  <footer><span>Agent Systems Atlas</span><span>Family is not role. Role is not architecture.</span><span id="data-date"></span></footer>
   <script src="app.js" defer></script>
 </body>
 </html>

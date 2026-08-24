@@ -1,10 +1,10 @@
-# AGENTS.md — Memory Systems Atlas
+# AGENTS.md — Agent Systems Atlas
 
-Curated, license-gated directory of open-source memory, PKM, RAG, agent, and retrieval systems.
+Curated, license-gated directory of open-source memory systems and AI agent systems.
 
 ## Layout
 
-- `directory/` — canonical catalog, taxonomy, and exclusions
+- `directory/` — canonical catalog, taxonomy, pinned license evidence, and exclusions
 - `scripts/` — validation and scheduled GitHub refresh
 - `web/` — dependency-free static directory UI
 - `docs/` — taxonomy, research, curation policy, and ADRs
@@ -30,7 +30,8 @@ Run validation and tests before claiming a change is complete. For web changes, 
 
 - Main entries are GitHub-hosted and OSI-compatible. Verify the repository license files, not README claims.
 - Restricted or mixed-license projects go in `directory/exclusions.json`.
-- Assign exactly one `primary_role`; vector, graph, Markdown, and SQLite are architectures, not roles.
+- Assign exactly one `system_family` and one `primary_role`; vector, graph, Markdown, and SQLite are architectures, not roles.
+- Memory and agent systems use different score profiles; never publish a cross-family score ranking.
 - Preserve the distinction between live metadata and human editorial scores.
 - Automated candidates stay provisional until an evidence-backed human review.
 - Keep `directory/*.json` and the copies served from `web/` synchronized.

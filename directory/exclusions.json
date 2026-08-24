@@ -20,6 +20,12 @@
       "useful_lesson": "Enterprise connectors and RAG operations."
     },
     {
+      "name": "OpenHands",
+      "repo": "OpenHands/OpenHands",
+      "reason": "Mixed repository: the core is MIT, while enterprise code is source-available under commercial terms.",
+      "useful_lesson": "Sandboxed coding-agent execution, event streams, and delegation architecture."
+    },
+    {
       "name": "Obsidian",
       "repo": null,
       "reason": "Not open source.",

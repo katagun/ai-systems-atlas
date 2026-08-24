@@ -1,7 +1,7 @@
 [project]
-name = "memory-systems-atlas"
+name = "agent-systems-atlas"
 version = "0.1.0"
-description = "A curated, license-gated atlas of open-source memory and personal knowledge systems"
+description = "A curated, license-gated atlas of open-source memory and AI agent systems"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"

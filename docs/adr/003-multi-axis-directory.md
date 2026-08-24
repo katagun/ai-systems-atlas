@@ -4,7 +4,7 @@
 
 ## Decision
 
-Each project receives one primary system role and multiple independent traits for agent relationship, storage architecture, retrieval, capture, lifecycle, deployment, openness, and data ownership.
+Each project receives one system family, one compatible primary role, and multiple independent traits for agent relationship, storage architecture, retrieval, capture, lifecycle, deployment, openness, and data ownership. ADR 004 adds family-specific score profiles.
 
 ## Consequences
 

@@ -1,8 +1,8 @@
-# Memory Systems Atlas
+# Agent Systems Atlas
 
-Memory Systems Atlas is a curated, license-gated directory of open-source personal knowledge management, second-brain, agent-memory, RAG, ambient-capture, coding-agent, and retrieval-infrastructure projects.
+Agent Systems Atlas is a curated, license-gated directory of open-source memory systems and AI agent systems. It covers personal knowledge management, second brains, agent memory, RAG, ambient capture, coding and research agents, browser agents, multi-agent orchestration, frameworks, and retrieval infrastructure.
 
-It separates **what a system is for** from **how it stores and retrieves memory**. Every project has one primary role plus orthogonal traits for agent relationship, architecture, retrieval, capture, lifecycle, deployment, openness, and data ownership.
+It first separates **memory systems** from **agent systems**, then separates **what a system is for** from **how it works**. Every project has one family and one primary role plus orthogonal traits. Each family has its own editorial score; scores are not ranked across families.
 
 This repository is the editorial directory and static web application. The local-first second-brain implementation informed by this research lives in [Cognosaic](https://github.com/embark-delve/cognosaic).
 
@@ -24,6 +24,7 @@ Open `http://127.0.0.1:8765`.
 ```text
 directory/projects.json       curated project records and editorial scores
 directory/taxonomy.json       roles, traits, and score dimensions
+directory/license-evidence.json reviewed license URLs and pinned blob SHAs
 directory/exclusions.json     relevant projects outside the open-source gate
 docs/TAXONOMY.md              taxonomy rationale and definitions
 docs/RESEARCH.md              architectural research synthesis
@@ -39,6 +40,8 @@ web/                          dependency-free static directory UI
 - Main entries must be GitHub-hosted and use an OSI-compatible license.
 - License claims must be verified from the repository's license files, not its README.
 - Every project has exactly one primary role; vector, graph, Markdown, and SQLite are architectures rather than roles.
+- Every project belongs to exactly one family and uses that family's score profile.
+- Memory-system and agent-system scores are never presented as one leaderboard.
 - Live GitHub metadata never changes a human editorial score.
 - Automated discoveries remain provisional until reviewed.
 - Relevant source-available, mixed-license, and proprietary systems belong in `directory/exclusions.json`.
@@ -47,7 +50,7 @@ See [docs/CURATION.md](docs/CURATION.md) before adding or rescoring a project.
 
 ## Automation
 
-The weekly workflow refreshes GitHub metadata, quarantines unavailable or license-incompatible entries, proposes new candidates, validates the catalog, and runs the test suite. Automated discovery never represents itself as a completed editorial review.
+The weekly workflow refreshes GitHub metadata, quarantines unavailable entries, proposes new candidates, validates the catalog, and runs the test suite. Discovery never auto-promotes a project into the curated directory and never represents metadata license detection as completed license review.
 
 ## License
 

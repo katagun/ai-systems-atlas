@@ -1,4 +1,4 @@
-name: Verify Memory Systems Atlas
+name: Verify Agent Systems Atlas
 
 on:
   push:

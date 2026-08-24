@@ -31,8 +31,8 @@ jobs:
             echo "No directory changes"
             exit 0
           fi
-          git config user.name "memory-systems-atlas-bot"
-          git config user.email "memory-systems-atlas-bot@users.noreply.github.com"
+          git config user.name "agent-systems-atlas-bot"
+          git config user.email "agent-systems-atlas-bot@users.noreply.github.com"
           git add directory web
           git commit -m "chore(directory): weekly GitHub refresh"
           git push

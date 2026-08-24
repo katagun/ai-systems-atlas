@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Refresh GitHub metadata and discover new open-source memory-system candidates.
+"""Refresh GitHub metadata and discover memory- and agent-system candidates.
 
-Existing editorial analysis is preserved. New projects are added as low-confidence
-candidates only when the repository metadata, license, and keyword classifier all
-pass strict gates. A human or coding agent can then deepen the review.
+Existing editorial analysis and pinned license conclusions are preserved. Discovery
+writes a candidate queue only; entry into the main catalog requires manual license,
+classification, and scoring review.
 """
 from __future__ import annotations
 
@@ -27,6 +27,7 @@ QUARANTINE_PATH = ROOT / "directory" / "quarantine.json"
 
 ALLOWED_LICENSES = {
     "MIT", "Apache-2.0", "AGPL-3.0", "GPL-3.0", "GPL-2.0", "LGPL-3.0",
+    "AGPL-3.0-or-later", "GPL-3.0-or-later", "GPL-2.0-or-later",
     "BSD-3-Clause", "BSD-2-Clause", "MPL-2.0", "EUPL-1.2", "ISC", "Unlicense",
 }
 DISCOVERY_QUERIES = [
@@ -38,6 +39,10 @@ DISCOVERY_QUERIES = [
     'vector database AI memory in:description stars:>1000 archived:false',
     'screen recall privacy in:description stars:>300 archived:false',
     'coding agent skills workflow in:description stars:>500 archived:false',
+    'open source coding agent in:description stars:>1000 archived:false',
+    'research agent web in:description stars:>1000 archived:false',
+    'browser agent in:name,description stars:>1000 archived:false',
+    'multi-agent framework in:description stars:>1000 archived:false',
 ]
 RELEVANT = {
     "memory", "second brain", "knowledge", "pkm", "note", "rag", "retrieval",
@@ -54,7 +59,7 @@ def github_get(path: str, token: str | None) -> dict[str, Any]:
     url = path if path.startswith("https://") else f"https://api.github.com{path}"
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "memory-systems-atlas-updater/0.1",
+        "User-Agent": "agent-systems-atlas-updater/0.2",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:
@@ -76,6 +81,16 @@ def classify(text: str) -> tuple[str | None, float]:
         return "ambient_capture", max(relevance, 0.86)
     if "coding agent" in lowered and any(term in lowered for term in ("skill", "workflow", "software factory")):
         return "coding_agent_workflow", max(relevance, 0.86)
+    if "coding agent" in lowered or "ai pair programmer" in lowered:
+        return "coding_agent", max(relevance, 0.82)
+    if "research agent" in lowered or "deep research" in lowered:
+        return "research_agent", max(relevance, 0.82)
+    if "browser agent" in lowered or "computer use agent" in lowered:
+        return "browser_computer_agent", max(relevance, 0.82)
+    if "multi-agent" in lowered or "multi agent" in lowered:
+        return "multi_agent_orchestrator", max(relevance, 0.8)
+    if "agent framework" in lowered or "agent sdk" in lowered:
+        return "agent_framework_sdk", max(relevance, 0.8)
     if any(term in lowered for term in ("stateful agent", "agent runtime", "agent harness")) and "memory" in lowered:
         return "stateful_agent_runtime", max(relevance, 0.83)
     if "temporal" in lowered and "graph" in lowered:
@@ -93,20 +108,28 @@ def classify(text: str) -> tuple[str | None, float]:
 
 def candidate_template(repo: dict[str, Any], role: str, confidence: float) -> dict[str, Any]:
     license_id = (repo.get("license") or {}).get("spdx_id")
+    agent_roles = {
+        "coding_agent", "research_agent", "browser_computer_agent", "stateful_agent_runtime",
+        "coding_agent_workflow", "multi_agent_orchestrator", "agent_framework_sdk",
+    }
+    family = "agent_system" if role in agent_roles else "memory_system"
     dimensions_by_role = {
         "human_pkm": [7.0, 8.0, 7.0, 4.5, 7.0, 6.0],
         "ai_knowledge_app": [7.0, 6.5, 7.5, 6.5, 6.5, 6.0],
         "agent_memory_service": [6.5, 6.0, 7.5, 7.0, 6.5, 5.5],
         "context_graph_engine": [6.0, 6.0, 7.0, 7.5, 5.0, 5.5],
-        "stateful_agent_runtime": [6.0, 6.0, 7.0, 7.5, 5.5, 5.5],
-        "coding_agent_workflow": [4.5, 7.0, 7.0, 4.0, 6.5, 6.0],
         "ambient_capture": [5.5, 7.0, 6.0, 5.5, 5.5, 5.0],
         "retrieval_infrastructure": [3.5, 6.5, 8.0, 6.0, 5.0, 6.5],
     }
-    values = dimensions_by_role[role]
-    names = ["second_brain_fit", "data_sovereignty", "interoperability", "memory_intelligence", "operational_simplicity", "maturity"]
+    if family == "agent_system":
+        values = [6.0, 6.5, 6.0, 6.0, 5.5, 6.5, 7.0, 5.5]
+        names = ["task_reliability", "tool_use", "autonomy", "human_control", "observability_recovery", "data_sovereignty", "interoperability", "maturity"]
+        weights = [0.20, 0.14, 0.10, 0.15, 0.12, 0.10, 0.09, 0.10]
+    else:
+        values = dimensions_by_role[role]
+        names = ["second_brain_fit", "data_sovereignty", "interoperability", "memory_intelligence", "operational_simplicity", "maturity"]
+        weights = [0.22, 0.18, 0.16, 0.18, 0.12, 0.14]
     score = dict(zip(names, values, strict=True))
-    weights = [0.22, 0.18, 0.16, 0.18, 0.12, 0.14]
     score["overall"] = round(sum(value * weight for value, weight in zip(values, weights, strict=True)), 2)
     architectures = []
     lowered = f"{repo.get('name','')} {repo.get('description') or ''} {' '.join(repo.get('topics') or [])}".lower()
@@ -116,15 +139,17 @@ def candidate_template(repo: dict[str, Any], role: str, confidence: float) -> di
     ]:
         if term in lowered and architecture not in architectures:
             architectures.append(architecture)
-    return {
+    candidate = {
         "id": re.sub(r"[^a-z0-9]+", "-", repo["full_name"].lower()).strip("-"),
+        "system_family": family,
+        "score_profile": "agent" if family == "agent_system" else "memory",
         "name": repo["name"],
         "repo": repo["full_name"],
         "url": repo["html_url"],
         "description": repo.get("description") or "Auto-discovered GitHub project awaiting editorial review.",
         "primary_role": role,
         "secondary_roles": [],
-        "agent_relation": "external_memory" if "agent" in lowered else "none",
+        "agent_relation": "agent_runtime" if family == "agent_system" else ("external_memory" if "agent" in lowered else "none"),
         "architectures": architectures or ["hybrid"],
         "retrieval_modes": ["semantic_vector"] if "vector" in lowered else ["keyword"],
         "capture_modes": ["file_import"],
@@ -149,6 +174,13 @@ def candidate_template(repo: dict[str, Any], role: str, confidence: float) -> di
         "classification_confidence": round(confidence, 2),
         "verified_at": now_date(),
     }
+    if family == "agent_system":
+        candidate.update({
+            "agent_interfaces": ["library"],
+            "execution_boundaries": ["framework_defined"],
+            "agent_capabilities": ["workflows"],
+        })
+    return candidate
 
 
 def main() -> int:
@@ -178,14 +210,9 @@ def main() -> int:
             "verified_at": now_date(),
         })
         license_id = (metadata.get("license") or {}).get("spdx_id")
-        if license_id and license_id != "NOASSERTION":
-            project["license"] = license_id
-            if license_id not in ALLOWED_LICENSES:
-                quarantined.append({"project": project, "reason": f"License changed to {license_id}"})
-                projects.remove(project)
-        elif project.get("research_confidence") == "low":
-            quarantined.append({"project": project, "reason": "License could not be verified automatically"})
-            projects.remove(project)
+        project["github_detected_license"] = license_id
+        if license_id and license_id != "NOASSERTION" and license_id not in ALLOWED_LICENSES:
+            quarantined.append({"repo": project["repo"], "reason": f"GitHub now detects {license_id}; pinned evidence requires re-review"})
         time.sleep(0.05)
 
     candidates: list[dict[str, Any]] = []
@@ -212,17 +239,14 @@ def main() -> int:
             existing[full_name] = candidate
         time.sleep(0.1)
 
-    # Add only high-confidence candidates to the main data, visibly marked as candidates.
-    promoted = [candidate for candidate in candidates if candidate["classification_confidence"] >= 0.85]
-    projects.extend(promoted)
-    projects.sort(key=lambda project: (project.get("status") != "active", -(project.get("score") or {}).get("overall", 0), project["name"].lower()))
+    projects.sort(key=lambda project: (project["system_family"], project["name"].lower()))
     document["generated_at"] = now_date()
     PROJECTS_PATH.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     CANDIDATES_PATH.write_text(json.dumps({"generated_at": now_date(), "candidates": candidates}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     QUARANTINE_PATH.write_text(json.dumps({"generated_at": now_date(), "entries": quarantined}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    for name in ("projects.json", "taxonomy.json", "exclusions.json"):
+    for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json"):
         shutil.copy2(ROOT / "directory" / name, ROOT / "web" / name)
-    print(json.dumps({"updated": len(projects), "discovered": len(candidates), "auto_added": len(promoted), "quarantined": len(quarantined)}, indent=2))
+    print(json.dumps({"updated": len(projects), "discovered": len(candidates), "auto_added": 0, "quarantined": len(quarantined)}, indent=2))
     return 0
 
 
