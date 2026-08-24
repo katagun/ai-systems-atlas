@@ -13,25 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           python-version: "3.12"
       - name: Refresh GitHub metadata and discover candidates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/update_directory.py
+        run: uv run python scripts/update_directory.py
       - name: Validate directory
-        run: python scripts/validate_directory.py
+        run: uv run python scripts/validate_directory.py
       - name: Run tests
-        run: python -m unittest discover -s tests -v
+        run: uv run python -m unittest discover -s tests -v
       - name: Commit verified changes
         run: |
           if git diff --quiet; then
             echo "No directory changes"
             exit 0
           fi
-          git config user.name "cognosaic-bot"
-          git config user.email "cognosaic-bot@users.noreply.github.com"
+          git config user.name "memory-systems-atlas-bot"
+          git config user.email "memory-systems-atlas-bot@users.noreply.github.com"
           git add directory web
           git commit -m "chore(directory): weekly GitHub refresh"
           git push

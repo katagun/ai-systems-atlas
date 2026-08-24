@@ -19,9 +19,9 @@ The main research set:
 | AppFlowy | Structured workspace UX | Documents, databases, projects, native cross-platform experience, data control | Heavy system whose AI memory lifecycle remains secondary |
 | OpenRecall | Open ambient capture | Local, cross-platform, searchable screenshot history | Privacy, storage, noise, and slower project activity |
 
-## Architectural synthesis
+## Architectural synthesis for local-first memory
 
-Cognosaic adopts:
+A local-first memory implementation can adopt:
 
 - **from Logseq and Basic Memory:** human-readable knowledge and links;
 - **from Trilium:** revisions, structured metadata, automation, and scale discipline;
@@ -33,7 +33,7 @@ Cognosaic adopts:
 - **from GStack:** role-specialized workflow and evidence-based completion;
 - **from OpenRecall and ActivityWatch:** optional ambient evidence streams, never enabled by default.
 
-Cognosaic rejects:
+This research argues against:
 
 - vectors as the only canonical representation;
 - untraceable memory extraction;

@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cognosaic: an open-source second-brain systems directory and local-first memory engine.">
-  <title>Cognosaic — map the memory systems</title>
+  <meta name="description" content="Memory Systems Atlas: open-source memory, PKM, agent, RAG, and retrieval systems compared by role and architecture.">
+  <title>Memory Systems Atlas</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <div class="brand" aria-label="Cognosaic">
+    <div class="brand" aria-label="Memory Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>Cognosaic</strong><small>memory systems atlas</small></span>
+      <span><strong>Memory Systems Atlas</strong><small>open-source systems map</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
-      <button class="tab" data-tab="brain">My Brain</button>
     </nav>
-    <a class="github-link" href="https://github.com/" target="_blank" rel="noreferrer">GitHub-only sources ↗</a>
+    <a class="github-link" href="https://github.com/embark-delve/memory-systems-atlas" target="_blank" rel="noreferrer">View source ↗</a>
   </header>
 
   <main id="main">
@@ -27,7 +26,7 @@
       <div class="hero">
         <p class="eyebrow">Open-source systems, compared by what they actually are</p>
         <h1 id="directory-title">Do not compare a coding workflow to a vector database.</h1>
-        <p class="hero-copy">Cognosaic separates product role from memory architecture, capture mode, lifecycle, and agent relationship—then scores each project for second-brain usefulness.</p>
+        <p class="hero-copy">Memory Systems Atlas separates product role from memory architecture, capture mode, lifecycle, and agent relationship—then scores each project for second-brain usefulness.</p>
         <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
       </div>
 
@@ -38,14 +37,11 @@
       </section>
 
       <section class="control-panel" aria-label="Directory filters">
-        <label class="search-field">
-          <span>Search</span>
-          <input id="project-search" type="search" placeholder="project, strength, weakness, architecture…" autocomplete="off">
-        </label>
+        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="project, strength, weakness, architecture…" autocomplete="off"></label>
         <label><span>Primary role</span><select id="role-filter"><option value="">All roles</option></select></label>
         <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
         <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
-        <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option></select></label>
+        <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="candidate">Candidates</option><option value="archived">Archived</option></select></label>
         <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name">Name</option></select></label>
         <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first only</span></label>
       </section>
@@ -67,37 +63,6 @@
         <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. Human PKM tools, RAG apps, agent-memory services, and ambient systems can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
-
-    <section id="brain" class="view" aria-labelledby="brain-title">
-      <div class="section-heading">
-        <p class="eyebrow">Local-first operational memory</p>
-        <h1 id="brain-title">A brain that can explain where an answer came from.</h1>
-        <p>Canonical Markdown records, append-only audit events, explicit supersession, a rebuildable SQLite index, and bounded cited context packs.</p>
-      </div>
-      <div id="brain-offline" class="notice" hidden>The memory API is not running. Start it with <code>cognosaic serve</code>. The directory remains fully usable.</div>
-      <div class="brain-layout">
-        <section class="panel">
-          <h2>Capture</h2>
-          <form id="capture-form">
-            <label><span>Title</span><input name="title" required placeholder="Decision, observation, person, project…"></label>
-            <label><span>Type</span><select name="record_type"><option>note</option><option>observation</option><option>decision</option><option>project</option><option>person</option><option>task</option><option>source</option><option>claim</option><option>event</option></select></label>
-            <label><span>Tags</span><input name="tags" placeholder="comma, separated"></label>
-            <label><span>Content</span><textarea name="content" required rows="9" placeholder="Write the evidence, context, and implications—not just a fragment."></textarea></label>
-            <button type="submit" class="primary-button">Store canonical record</button>
-            <p id="capture-status" class="form-status" aria-live="polite"></p>
-          </form>
-        </section>
-        <section class="panel search-panel">
-          <h2>Recall</h2>
-          <form id="brain-search-form" class="inline-form">
-            <input name="q" required placeholder="What do I know about…">
-            <button class="primary-button" type="submit">Search</button>
-          </form>
-          <div class="brain-actions"><button id="context-button" class="ghost-button">Build cited context pack</button><button id="brief-button" class="ghost-button">Generate 7-day brief</button></div>
-          <div id="brain-results" class="brain-results" aria-live="polite"></div>
-        </section>
-      </div>
-    </section>
   </main>
 
   <dialog id="project-dialog">
@@ -105,7 +70,7 @@
     <div id="dialog-content"></div>
   </dialog>
 
-  <footer><span>Cognosaic</span><span>Canonical files &gt; opaque memory.</span><span id="data-date"></span></footer>
+  <footer><span>Memory Systems Atlas</span><span>Role is not architecture.</span><span id="data-date"></span></footer>
   <script src="app.js" defer></script>
 </body>
 </html>

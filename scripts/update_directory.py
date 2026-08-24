@@ -54,7 +54,7 @@ def github_get(path: str, token: str | None) -> dict[str, Any]:
     url = path if path.startswith("https://") else f"https://api.github.com{path}"
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "cognosaic-directory-updater/0.1",
+        "User-Agent": "memory-systems-atlas-updater/0.1",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:

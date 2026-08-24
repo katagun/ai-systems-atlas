@@ -1,4 +1,4 @@
-const state = { projects: [], taxonomy: null, token: null, brainOnline: false };
+const state = { projects: [], taxonomy: null };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -6,22 +6,16 @@ const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
 
-async function loadJSON(apiPath, staticPath) {
-  try {
-    const response = await fetch(apiPath, { cache: "no-store" });
-    if (!response.ok) throw new Error(`${response.status}`);
-    return await response.json();
-  } catch (_) {
-    const response = await fetch(staticPath, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Unable to load ${staticPath}`);
-    return await response.json();
-  }
+async function loadJSON(path) {
+  const response = await fetch(path, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Unable to load ${path}`);
+  return response.json();
 }
 
 async function bootstrap() {
   const [directory, taxonomy] = await Promise.all([
-    loadJSON("/api/directory", "projects.json"),
-    loadJSON("/api/taxonomy", "taxonomy.json")
+    loadJSON("projects.json"),
+    loadJSON("taxonomy.json")
   ]);
   state.projects = directory.projects;
   state.taxonomy = taxonomy;
@@ -31,7 +25,6 @@ async function bootstrap() {
   renderProjects();
   renderTaxonomy();
   bindEvents();
-  await connectBrain();
 }
 
 function roleName(id) {
@@ -141,76 +134,19 @@ function bindEvents() {
   }));
   ["#project-search", "#role-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   $("#reset-filters").addEventListener("click", () => {
-    $("#project-search").value = ""; $("#role-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = ""; $("#status-filter").value = "active"; $("#sort-filter").value = "score"; $("#local-filter").checked = false; renderProjects();
+    $("#project-search").value = "";
+    $("#role-filter").value = "";
+    $("#agent-filter").value = "";
+    $("#architecture-filter").value = "";
+    $("#status-filter").value = "active";
+    $("#sort-filter").value = "score";
+    $("#local-filter").checked = false;
+    renderProjects();
   });
   $(".dialog-close").addEventListener("click", () => $("#project-dialog").close());
   $("#project-dialog").addEventListener("click", event => { if (event.target === $("#project-dialog")) $("#project-dialog").close(); });
-  $("#capture-form").addEventListener("submit", captureRecord);
-  $("#brain-search-form").addEventListener("submit", searchBrain);
-  $("#context-button").addEventListener("click", buildContext);
-  $("#brief-button").addEventListener("click", buildBrief);
-}
-
-async function connectBrain() {
-  try {
-    const response = await fetch("/api/session", { cache: "no-store" });
-    if (!response.ok) throw new Error();
-    state.token = (await response.json()).mutation_token;
-    state.brainOnline = true;
-  } catch (_) {
-    state.brainOnline = false;
-    $("#brain-offline").hidden = false;
-  }
-}
-
-async function api(path, options = {}) {
-  if (!state.brainOnline) throw new Error("Memory API is offline");
-  const headers = { ...(options.headers || {}) };
-  if (options.method && options.method !== "GET") headers["X-Cognosaic-Token"] = state.token;
-  const response = await fetch(path, { ...options, headers });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
-  return data;
-}
-
-async function captureRecord(event) {
-  event.preventDefault();
-  const form = new FormData(event.currentTarget);
-  const payload = Object.fromEntries(form.entries());
-  payload.tags = String(payload.tags || "").split(",").map(item => item.trim()).filter(Boolean);
-  const status = $("#capture-status");
-  try {
-    const record = await api("/api/capture", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    status.textContent = `Stored ${record.id}`;
-    event.currentTarget.reset();
-  } catch (error) { status.textContent = error.message; }
-}
-
-async function searchBrain(event) {
-  event.preventDefault();
-  const q = new FormData(event.currentTarget).get("q");
-  try {
-    const results = await api(`/api/search?q=${encodeURIComponent(q)}`);
-    $("#brain-results").innerHTML = results.map(result => `<article class="memory-result"><h3>${escapeHTML(result.title)} <small>${escapeHTML(result.citation)}</small></h3><p>${escapeHTML(result.record_type)} · score ${result.score}</p><pre>${escapeHTML(result.excerpt)}</pre></article>`).join("") || '<div class="notice">No supporting records found.</div>';
-  } catch (error) { $("#brain-results").innerHTML = `<div class="notice">${escapeHTML(error.message)}</div>`; }
-}
-
-async function buildContext() {
-  const q = new FormData($("#brain-search-form")).get("q");
-  if (!q) return;
-  try {
-    const pack = await api(`/api/context?q=${encodeURIComponent(q)}`);
-    $("#brain-results").innerHTML = `<article class="memory-result"><h3>Cited context pack</h3><pre>${escapeHTML(pack.text)}</pre></article>`;
-  } catch (error) { $("#brain-results").innerHTML = `<div class="notice">${escapeHTML(error.message)}</div>`; }
-}
-
-async function buildBrief() {
-  try {
-    const brief = await api("/api/brief?days=7");
-    $("#brain-results").innerHTML = `<article class="memory-result"><h3>7-day brief</h3><pre>${escapeHTML(brief.brief)}</pre></article>`;
-  } catch (error) { $("#brain-results").innerHTML = `<div class="notice">${escapeHTML(error.message)}</div>`; }
 }
 
 bootstrap().catch(error => {
-  document.body.innerHTML = `<main><div class="notice">Cognosaic failed to load: ${escapeHTML(error.message)}</div></main>`;
+  document.body.innerHTML = `<main><div class="notice">Memory Systems Atlas failed to load: ${escapeHTML(error.message)}</div></main>`;
 });

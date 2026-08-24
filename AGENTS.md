@@ -1,37 +1,38 @@
-# AGENTS.md — Cognosaic
+# AGENTS.md — Memory Systems Atlas
 
-Local-first second brain + license-gated directory of open-source memory/PKM/agent projects.
-Canonical Markdown records are the source of truth; SQLite/FTS indexes are disposable projections.
+Curated, license-gated directory of open-source memory, PKM, RAG, agent, and retrieval systems.
 
 ## Layout
 
-- `cognosaic/` — engine, CLI (`cognosaic`), loopback web API (`api.py`, `serve`)
-- `directory/` — `projects.json` (curated catalog), `taxonomy.json`, `exclusions.json`
-- `scripts/` — `validate_directory.py`, `update_directory.py` (weekly GitHub refresh, runs in CI)
-- `web/` — static directory UI + local memory UI
-- `docs/` — `SPEC.md`, `TAXONOMY.md`, `ARCHITECTURE.md`, `adr/`, `IMPLEMENTATION_PLAN.md`
-- `tests/` — unittest suite
+- `directory/` — canonical catalog, taxonomy, and exclusions
+- `scripts/` — validation and scheduled GitHub refresh
+- `web/` — dependency-free static directory UI
+- `docs/` — taxonomy, research, curation policy, and ADRs
+- `tests/` — directory invariants
 
-Read `docs/SPEC.md`, `docs/TAXONOMY.md`, `docs/ARCHITECTURE.md`, and relevant ADRs before changing behavior.
+Read `docs/TAXONOMY.md`, `docs/CURATION.md`, and relevant ADRs before changing classifications or editorial data.
 
 ## Commands
 
+Use `uv` for all Python work.
+
 ```bash
-python -m venv .venv && source .venv/bin/activate && pip install -e .   # Python >= 3.11, no deps
-python scripts/validate_directory.py
-python -m unittest discover -s tests -v
-python -m compileall cognosaic scripts tests
-cognosaic --home ./demo-brain init|remember|search|context|serve        # see README for full CLI
+uv sync --locked
+uv run python scripts/validate_directory.py
+uv run python -m unittest discover -s tests -v
+uv run python -m compileall scripts tests
+uv run python -m http.server 8765 --directory web
 ```
 
-Run validate + tests before claiming any change is done. For web changes also start `serve` and exercise `/api/health`, capture, search, and context packs.
+Run validation and tests before claiming a change is complete. For web changes, also serve `web/` and exercise search, filters, taxonomy, and project details.
 
 ## Hard rules
 
-- Directory: GitHub-hosted, OSI-compatible licenses only. Verify from license files, not READMEs. Restricted projects go in `exclusions.json`.
-- One `primary_role` per project; vector/graph/Markdown/SQLite are architectures, not roles.
-- Live GitHub metadata never overwrites the human editorial score.
-- Memory: never silently overwrite facts — use supersession. Records must stay readable without Cognosaic; indexes must be rebuildable (`reindex`).
-- Mutating web APIs stay loopback-only and require the session mutation token.
-- Never report tests/builds as passing unless you ran them.
-- Finish the requested slice; log adjacent ideas in `docs/IMPLEMENTATION_PLAN.md` instead of expanding scope.
+- Main entries are GitHub-hosted and OSI-compatible. Verify the repository license files, not README claims.
+- Restricted or mixed-license projects go in `directory/exclusions.json`.
+- Assign exactly one `primary_role`; vector, graph, Markdown, and SQLite are architectures, not roles.
+- Preserve the distinction between live metadata and human editorial scores.
+- Automated candidates stay provisional until an evidence-backed human review.
+- Keep `directory/*.json` and the copies served from `web/` synchronized.
+- Use `uv` for anything Python.
+- Never report checks as passing unless you ran them.
