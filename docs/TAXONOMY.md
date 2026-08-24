@@ -33,6 +33,16 @@ The agent score measures task reliability, tool use, autonomy, human control, ob
 
 An 8.4 agent score and an 8.4 memory score answer different questions. The web directory shows editorial scores only when one family is selected. “All families” supports discovery by name or GitHub stars, not a synthetic best-overall list.
 
+## Guided finder
+
+The web finder is a transparent decision flow over this taxonomy:
+
+1. choose the memory or agent family;
+2. choose a desired job, which maps to one or more primary roles;
+3. choose a priority such as local control, interoperability, operational simplicity, developer composability, or human control and recovery.
+
+Only active projects in the chosen family and role set are eligible. The priority adds weight to documented traits or score dimensions, while the family-specific editorial score breaks close ties. Results explain the matched role and traits and surface one recorded weakness. The finder never compares numeric scores across families and should be treated as a starting shortlist rather than an empirical evaluation of a user's workload.
+
 ## Shared axes
 
 Architecture, retrieval, deployment, openness, and relationship to agents remain orthogonal traits. Vector, graph, Markdown, relational storage, and full-text search are implementation choices, not product roles.

@@ -1,10 +1,49 @@
-const state = { projects: [], taxonomy: null, licenses: new Map() };
+const state = { projects: [], taxonomy: null, licenses: new Map(), finder: { step: 0, answers: {} } };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
+
+const FINDER_FAMILIES = [
+  { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
+  { id: "agent_system", label: "Plan and take action", description: "Coding, research, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" }
+];
+
+const FINDER_GOALS = {
+  memory_system: [
+    { id: "personal_knowledge", label: "Keep my own notes and knowledge", description: "A workspace for writing, linking, organizing, and revisiting ideas.", roles: ["human_pkm"] },
+    { id: "knowledge_assistant", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", roles: ["ai_knowledge_app"] },
+    { id: "agent_memory", label: "Give agents durable memory", description: "Memory services, temporal context, or a bridge to human-owned knowledge.", roles: ["agent_memory_service", "context_graph_engine", "memory_bridge"] },
+    { id: "ambient_recall", label: "Automatically remember activity", description: "Passive capture for reconstructing digital work and context.", roles: ["ambient_capture"] },
+    { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
+  ],
+  agent_system: [
+    { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
+    { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
+    { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
+    { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
+    { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
+  ]
+};
+
+const FINDER_PRIORITIES = {
+  memory_system: [
+    { id: "local_editable", label: "Local, inspectable knowledge", description: "Prefer local-first systems with data people can directly inspect or edit." },
+    { id: "local_control", label: "Self-hosting and privacy", description: "Prefer local execution and strong control over stored data." },
+    { id: "easy", label: "Low setup and maintenance", description: "Prefer systems that are easier for an individual to operate." },
+    { id: "portable", label: "Open and interoperable", description: "Prefer portable formats, APIs, and provider flexibility." },
+    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+  ],
+  agent_system: [
+    { id: "direct_use", label: "Ready for me to use", description: "Prefer terminal, IDE, or web interfaces over embedded libraries." },
+    { id: "developer", label: "Composable developer framework", description: "Prefer libraries and APIs for building a custom agent product." },
+    { id: "local", label: "Local execution and control", description: "Prefer local-first agents that can operate on the host." },
+    { id: "control", label: "Human control and recovery", description: "Prefer approvals, observability, checkpoints, and recoverability." },
+    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+  ]
+};
 
 async function loadJSON(path) {
   const response = await fetch(path, { cache: "no-store" });
@@ -23,6 +62,7 @@ async function bootstrap() {
   populateFilters();
   renderStats();
   renderProjects();
+  renderFinder();
   renderTaxonomy();
   bindEvents();
 }
@@ -114,6 +154,122 @@ function renderProjects() {
   $$('[data-project]').forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
 }
 
+function finderChoice(key, item) {
+  return `<button class="finder-choice" data-finder-choice="${escapeHTML(key)}" data-finder-value="${escapeHTML(item.id)}">
+    <span class="finder-choice-cue">${escapeHTML(item.cue || "Choose this")}</span>
+    <strong>${escapeHTML(item.label)}</strong>
+    <span>${escapeHTML(item.description)}</span>
+  </button>`;
+}
+
+function renderFinderProgress() {
+  const step = state.finder.step;
+  const labels = ["Direction", "Job", "Priority"];
+  $("#finder-progress").innerHTML = labels.map((item, index) => {
+    const status = step > index ? "is-complete" : step === index ? "is-active" : "";
+    return `<div class="finder-progress-step ${status}"><span>${step > index ? "✓" : index + 1}</span><strong>${item}</strong></div>`;
+  }).join("") + `<p>${step >= 3 ? "Shortlist ready" : `Step ${step + 1} of 3`}</p>`;
+}
+
+function renderFinder() {
+  renderFinderProgress();
+  const { step, answers } = state.finder;
+  let content;
+  if (step === 0) {
+    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What do you primarily need?</h2><p>Memory systems preserve and retrieve knowledge. Agent systems plan and act through tools.</p></div>
+      <div class="finder-choice-grid two-up">${FINDER_FAMILIES.map(item => finderChoice("family", item)).join("")}</div>`;
+  } else if (step === 1) {
+    const choices = FINDER_GOALS[answers.family];
+    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(familyName(answers.family))}</p><h2>What job should it perform?</h2><p>Choose the closest primary outcome. You can broaden the directory filters afterward.</p></div>
+      <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
+  } else if (step === 2) {
+    const choices = FINDER_PRIORITIES[answers.family];
+    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most in the shortlist?</h2><p>This preference adjusts the ranking inside the selected family and job.</p></div>
+      <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
+  } else {
+    content = renderFinderResults();
+  }
+  const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
+  $("#finder-content").innerHTML = content + navigation;
+}
+
+function priorityBoost(project, priority) {
+  if (project.system_family === "memory_system") {
+    if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
+    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + project.score.data_sovereignty / 10;
+    if (priority === "easy") return project.score.operational_simplicity / 2;
+    if (priority === "portable") return project.score.interoperability / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
+    return project.score.overall / 3;
+  }
+  if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
+  if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
+  if (priority === "local") return (project.local_first ? 3 : 0) + (project.execution_boundaries.includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
+  if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
+  return project.score.overall / 3;
+}
+
+function recommendationReasons(project, priority) {
+  const reasons = [roleName(project.primary_role)];
+  if (project.local_first) reasons.push("Local-first");
+  if (project.system_family === "memory_system") {
+    if (project.human_editable) reasons.push("Human-editable data");
+    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
+  } else {
+    const interfaces = project.agent_interfaces.slice(0, 2).map(item => taxonomyName("agent_interfaces", item));
+    reasons.push(...interfaces);
+    if (priority === "control") reasons.push(`Human control ${project.score.human_control}/10`);
+  }
+  return [...new Set(reasons)].slice(0, 4);
+}
+
+function recommendedProjects() {
+  const { family, goal, priority } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
+  return state.projects
+    .filter(project => project.status === "active" && project.system_family === family && goalConfig.roles.includes(project.primary_role))
+    .map(project => {
+      const roleIndex = goalConfig.roles.indexOf(project.primary_role);
+      const match = 6 - roleIndex * 0.4 + project.score.overall * 0.2 + priorityBoost(project, priority);
+      return { project, match, reasons: recommendationReasons(project, priority) };
+    })
+    .sort((a, b) => b.match - a.match || b.project.score.overall - a.project.score.overall || a.project.name.localeCompare(b.project.name))
+    .slice(0, 3);
+}
+
+function renderFinderResults() {
+  const { family, goal, priority } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
+  const priorityConfig = FINDER_PRIORITIES[family].find(item => item.id === priority);
+  const results = recommendedProjects();
+  return `<div class="finder-result-heading"><div><p class="eyebrow">Your starting shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Ranked within ${escapeHTML(familyName(family).toLowerCase())}, with extra weight for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matching directory →</button></div>
+    <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family)}">
+      <div class="finder-rank">0${index + 1}</div>
+      <div><p class="family-label">${escapeHTML(roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p></div>
+      <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(project.weaknesses[0])}</p>
+      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(project.score_profile)} score</span><button data-finder-project="${escapeHTML(project.id)}">View full profile →</button></div>
+    </article>`).join("")}</div>
+    <p class="finder-disclaimer">These are explainable starting points based on curated roles, traits, and family-specific editorial scores—not personalized guarantees or a benchmark of your exact workload.</p>`;
+}
+
+function applyFinderToDirectory() {
+  const { family, goal, priority } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
+  $("#project-search").value = "";
+  $("#family-filter").value = family;
+  populateRoleFilter();
+  $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
+  $("#agent-filter").value = "";
+  $("#architecture-filter").value = "";
+  $("#status-filter").value = "active";
+  $("#local-filter").checked = ["local_editable", "local_control", "local"].includes(priority);
+  $("#sort-filter").value = "score";
+  updateScoreSortAvailability();
+  renderProjects();
+  activateView("directory");
+}
+
 function renderTaxonomy() {
   const memoryRoles = state.taxonomy.primary_roles.filter(item => item.family === "memory_system");
   const agentRoles = state.taxonomy.primary_roles.filter(item => item.family === "agent_system");
@@ -148,11 +304,14 @@ function openProject(id) {
   $("#project-dialog").showModal();
 }
 
+function activateView(id) {
+  $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
+  $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function bindEvents() {
-  $$(".tab").forEach(button => button.addEventListener("click", () => {
-    $$(".tab").forEach(item => item.classList.toggle("is-active", item === button));
-    $$(".view").forEach(view => view.classList.toggle("is-active", view.id === button.dataset.tab));
-  }));
+  $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $("#family-filter").addEventListener("input", () => {
     populateRoleFilter();
     updateScoreSortAvailability();
@@ -164,6 +323,40 @@ function bindEvents() {
     $("#role-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
     $("#status-filter").value = "active"; $("#sort-filter").value = "score"; updateScoreSortAvailability(); $("#local-filter").checked = false;
     renderProjects();
+  });
+  $("#finder-content").addEventListener("click", event => {
+    const choice = event.target.closest("[data-finder-choice]");
+    if (choice) {
+      const key = choice.dataset.finderChoice;
+      state.finder.answers[key] = choice.dataset.finderValue;
+      if (key === "family") {
+        delete state.finder.answers.goal;
+        delete state.finder.answers.priority;
+      } else if (key === "goal") {
+        delete state.finder.answers.priority;
+      }
+      state.finder.step = Math.min(3, state.finder.step + 1);
+      renderFinder();
+      return;
+    }
+    if (event.target.closest("[data-finder-back]")) {
+      state.finder.step = Math.max(0, state.finder.step - 1);
+      if (state.finder.step < 2) delete state.finder.answers.priority;
+      if (state.finder.step < 1) delete state.finder.answers.goal;
+      renderFinder();
+      return;
+    }
+    if (event.target.closest("[data-finder-reset]")) {
+      state.finder = { step: 0, answers: {} };
+      renderFinder();
+      return;
+    }
+    const projectButton = event.target.closest("[data-finder-project]");
+    if (projectButton) {
+      openProject(projectButton.dataset.finderProject);
+      return;
+    }
+    if (event.target.closest("[data-finder-directory]")) applyFinderToDirectory();
   });
   $(".dialog-close").addEventListener("click", () => $("#project-dialog").close());
   $("#project-dialog").addEventListener("click", event => { if (event.target === $("#project-dialog")) $("#project-dialog").close(); });

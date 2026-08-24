@@ -19,6 +19,8 @@ uv run python -m http.server 8765 --directory web
 
 Open `http://127.0.0.1:8765`.
 
+The **Find a system** tab provides a three-step guided shortlist. It asks for the desired family, primary job, and most important tradeoff, then explains up to three matches using catalog roles, traits, and the appropriate family-specific score. It is a discovery aid, not a personalized guarantee or a cross-family leaderboard.
+
 ## Repository map
 
 ```text

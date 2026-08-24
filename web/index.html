@@ -16,6 +16,7 @@
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
+      <button class="tab" data-tab="finder">Find a system</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
     <a class="github-link" href="https://github.com/embark-delve/agent-systems-atlas" target="_blank" rel="noreferrer">View source ↗</a>
@@ -49,6 +50,18 @@
 
       <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Reset filters</button></div>
       <section id="project-grid" class="project-grid" aria-label="Open-source projects"></section>
+    </section>
+
+    <section id="finder" class="view" aria-labelledby="finder-title">
+      <div class="section-heading finder-heading">
+        <p class="eyebrow">A three-step starting point</p>
+        <h1 id="finder-title">What kind of system fits your job?</h1>
+        <p>Choose the outcome you want, the job it should perform, and the tradeoff you care about most. The finder will explain up to three strong matches from the curated directory.</p>
+      </div>
+      <section class="finder-shell" aria-label="Guided system finder">
+        <div id="finder-progress" class="finder-progress" aria-label="Finder progress"></div>
+        <div id="finder-content" class="finder-content" aria-live="polite"></div>
+      </section>
     </section>
 
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">
