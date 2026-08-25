@@ -23,12 +23,16 @@ Fields are grouped by responsibility:
 
 - **Identity:** `id`, `name`, `repo`, `url`, `description`.
 - **Classification:** `system_family`, `primary_role`, `secondary_roles`, `score_profile`.
-- **Traits:** agent relationship, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, provenance, and agent-only operation fields.
+- **Traits:** agent relationship, optional reviewed provider relationship and model backends, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, provenance, and agent-only operation fields.
 - **License gate:** `license`, `license_scope`, `status`.
 - **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
 - **Live metadata:** stars, forks, open issues, push time, detected license, and their metadata timestamps.
 
 All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, or score-profile combinations.
+
+### Optional provider traits
+
+`provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits.
 
 ## Timestamp semantics
 

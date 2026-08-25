@@ -1947,6 +1947,51 @@
       ]
     },
     {
+      "repo": "anthropics/claude-agent-sdk-python",
+      "name": "claude-agent-sdk-python",
+      "url": "https://github.com/anthropics/claude-agent-sdk-python",
+      "description": "Python SDK for building tool-using agents on the Claude Agent SDK and its bundled Claude Code runtime.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.9,
+      "github_detected_license": "MIT",
+      "stars": 7971,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "license_scope",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "deepseek-ai/deepseek-harness",
+      "name": "deepseek-harness",
+      "url": "https://github.com/deepseek-ai/deepseek-harness",
+      "description": "Open-source, plugin-oriented agent harness with a local web interface and extensible runtime.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.9,
+      "github_detected_license": "MIT",
+      "stars": 195167,
+      "topics": [
+        "ai-agents",
+        "cordis",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "license_scope",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "openai/openai-agents-python",
       "name": "openai-agents-python",
       "url": "https://github.com/openai/openai-agents-python",

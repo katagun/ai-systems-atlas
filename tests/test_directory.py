@@ -35,6 +35,14 @@ class DirectoryTests(unittest.TestCase):
         self.assertNotIn("vector", roles)
         self.assertIn("vector_index", {item["id"] for item in self.taxonomy["architectures"]})
 
+    def test_provider_relationship_is_a_trait_not_a_family(self) -> None:
+        families = {item["id"] for item in self.taxonomy["system_families"]}
+        relationships = {item["id"] for item in self.taxonomy["provider_relationships"]}
+
+        self.assertNotIn("model_provider", families)
+        self.assertEqual({"provider_native", "multi_provider", "provider_agnostic"}, relationships)
+        self.assertIn("anthropic", {item["id"] for item in self.taxonomy["model_backends"]})
+
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}
         for project in self.document["projects"]:

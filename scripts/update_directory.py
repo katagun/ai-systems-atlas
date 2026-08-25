@@ -47,6 +47,8 @@ DISCOVERY_QUERIES = [
     '"text-to-sql" in:name,description stars:>500 archived:false',
     '"data assistant" agent database in:description stars:>1000 archived:false',
     'multi-agent framework in:description stars:>1000 archived:false',
+    '"agent sdk" in:name,description stars:>500 archived:false',
+    '"agent harness" in:name,description stars:>500 archived:false',
 ]
 RELEVANT = {
     "memory", "second brain", "knowledge", "pkm", "note", "rag", "retrieval",
@@ -129,10 +131,10 @@ def classify(text: str) -> tuple[str | None, float]:
         return "browser_computer_agent", max(relevance, 0.82)
     if "multi-agent" in lowered or "multi agent" in lowered:
         return "multi_agent_orchestrator", max(relevance, 0.8)
+    if any(term in lowered for term in ("stateful agent", "agent runtime", "agent harness")):
+        return "stateful_agent_runtime", max(relevance, 0.83)
     if "agent framework" in lowered or "agent sdk" in lowered:
         return "agent_framework_sdk", max(relevance, 0.8)
-    if any(term in lowered for term in ("stateful agent", "agent runtime", "agent harness")) and "memory" in lowered:
-        return "stateful_agent_runtime", max(relevance, 0.83)
     if "temporal" in lowered and "graph" in lowered:
         return "context_graph_engine", max(relevance, 0.9)
     if "knowledge graph" in lowered and "agent" in lowered:
@@ -146,18 +148,16 @@ def classify(text: str) -> tuple[str | None, float]:
     return None, relevance
 
 
-def candidate_template(repo: dict[str, Any], role: str, confidence: float, discovered_at: str) -> dict[str, Any]:
+def candidate_template(
+    repo: dict[str, Any], family: str, role: str, confidence: float, discovered_at: str
+) -> dict[str, Any]:
     """Create a discovery record without pretending an editorial review occurred."""
-    agent_roles = {
-        "coding_agent", "research_agent", "browser_computer_agent", "data_analysis_agent",
-        "stateful_agent_runtime", "coding_agent_workflow", "multi_agent_orchestrator", "agent_framework_sdk",
-    }
     return {
         "repo": repo["full_name"],
         "name": repo["name"],
         "url": repo["html_url"],
         "description": repo.get("description") or "GitHub project awaiting editorial review.",
-        "proposed_system_family": "agent_system" if role in agent_roles else "memory_system",
+        "proposed_system_family": family,
         "proposed_primary_role": role,
         "classification_confidence": round(confidence, 2),
         "github_detected_license": (repo.get("license") or {}).get("spdx_id"),
@@ -249,6 +249,7 @@ def discover_candidates(
     known_projects: set[str],
     previous_candidates: list[dict[str, Any]],
     allowed_licenses: set[str],
+    role_families: dict[str, str],
     getter: GitHubGetter,
     token: str | None,
     discovered_at: str,
@@ -278,9 +279,10 @@ def discover_candidates(
                 continue
             text = f"{repo.get('name', '')} {repo.get('description') or ''} {' '.join(repo.get('topics') or [])}"
             role, confidence = classify(text)
-            if not role or confidence < 0.75:
+            family = role_families.get(role) if role else None
+            if not role or not family or confidence < 0.75:
                 continue
-            candidates[repo_key] = candidate_template(repo, role, confidence, discovered_at)
+            candidates[repo_key] = candidate_template(repo, family, role, confidence, discovered_at)
             known.add(repo_key)
             new_count += 1
         sleeper(0.1)
@@ -318,6 +320,7 @@ def main() -> int:
         return 1
 
     allowed_licenses = {item["id"] for item in taxonomy["allowed_licenses"]}
+    role_families = {item["id"]: item["family"] for item in taxonomy["primary_roles"]}
     known_projects = {project["repo"].lower() for project in projects}
     known_projects.update(
         item["repo"].lower()
@@ -328,6 +331,7 @@ def main() -> int:
         known_projects,
         candidate_document["candidates"],
         allowed_licenses,
+        role_families,
         github_get,
         token,
         refreshed_at,

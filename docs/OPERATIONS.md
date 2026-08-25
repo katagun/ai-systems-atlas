@@ -49,6 +49,8 @@ For one record in `directory/candidates.json`:
 
 Never copy proposed classification into the catalog without human confirmation. Never reuse a provisional candidate as an editorial score.
 
+Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
+
 ## Resolve a quarantine
 
 Inspect the repository license files again; GitHub's detected SPDX value is only the trigger.

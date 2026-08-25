@@ -55,6 +55,12 @@ Only active projects in the chosen family and role set are eligible. The priorit
 
 Architecture, retrieval, deployment, openness, and relationship to agents remain orthogonal traits. Vector, graph, Markdown, relational storage, and full-text search are implementation choices, not product roles.
 
+### Model-provider relationship
+
+Provider coupling is also orthogonal. `provider_native` identifies a primary path coupled to one provider, `multi_provider` identifies several maintained first-class integrations, and `provider_agnostic` requires a substitutable backend contract. Reviewed backend identifiers live in the taxonomy. These optional fields roll out through deliberate project review; their absence means “not reviewed.” See [ADR 006](adr/006-provider-relationships-are-orthogonal.md).
+
+Providers and plain model API clients are not operational system families. An official SDK can qualify as an agent framework or runtime only when it materially owns a tool-using agent loop.
+
 ### External agent memory
 
 A component outside the agent runtime that persists memory while agents, models, or prompts can change. It improves reuse and portability but creates another source of truth and hard questions about deletion, provenance, scope, and temporal validity.

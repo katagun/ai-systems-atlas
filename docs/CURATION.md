@@ -24,6 +24,8 @@ Vertical agents qualify when they own an iterative, tool-using workflow with dom
 
 Frameworks qualify when building or running tool-using agents is a primary outcome. A general LLM application library or optimizer that can support an agent is provisional until that behavior is shown to be material. Client SDKs do not make a proprietary hosted or enterprise-licensed platform eligible; classify the product represented by the reviewed source, not the brand attached to the SDK.
 
+A provider-native SDK or harness qualifies only when agent execution—not model API access—is its primary outcome. Record provider coupling only from reviewed official support: missing provider traits mean “not reviewed,” never “provider agnostic.” Plain inference clients, provider adapters, and tracing clients remain outside the scored catalog.
+
 ## Classification
 
 Choose `system_family` from the project's primary outcome:

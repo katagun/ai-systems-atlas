@@ -122,7 +122,9 @@ class UpdateDirectoryTests(unittest.TestCase):
             "topics": ["agent"],
         }
 
-        candidate = update_directory.candidate_template(repo, "coding_agent", 0.82, "2026-08-25")
+        candidate = update_directory.candidate_template(
+            repo, "agent_system", "coding_agent", 0.82, "2026-08-25"
+        )
 
         self.assertNotIn("score", candidate)
         self.assertNotIn("verified_at", candidate)
@@ -143,10 +145,37 @@ class UpdateDirectoryTests(unittest.TestCase):
             "topics": ["text-to-sql"],
         }
 
-        candidate = update_directory.candidate_template(repo, role, confidence, "2026-08-25")
+        candidate = update_directory.candidate_template(
+            repo, "agent_system", role, confidence, "2026-08-25"
+        )
 
         self.assertEqual("data_analysis_agent", role)
         self.assertGreaterEqual(confidence, 0.84)
+        self.assertEqual("agent_system", candidate["proposed_system_family"])
+
+    def test_agent_harness_does_not_need_memory_wording(self) -> None:
+        role, confidence = update_directory.classify(
+            "An agent harness with sessions, tools, plugins, and an interactive runtime"
+        )
+
+        self.assertEqual("stateful_agent_runtime", role)
+        self.assertGreaterEqual(confidence, 0.83)
+
+    def test_candidate_family_is_supplied_by_taxonomy_policy(self) -> None:
+        repo = {
+            "full_name": "example/agent-sdk",
+            "name": "agent-sdk",
+            "html_url": "https://github.com/example/agent-sdk",
+            "description": "Agent SDK",
+            "license": {"spdx_id": "MIT"},
+            "stargazers_count": 12,
+            "topics": ["agents"],
+        }
+
+        candidate = update_directory.candidate_template(
+            repo, "agent_system", "agent_framework_sdk", 0.8, "2026-08-25"
+        )
+
         self.assertEqual("agent_system", candidate["proposed_system_family"])
 
 

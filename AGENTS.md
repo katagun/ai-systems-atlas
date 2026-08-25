@@ -13,6 +13,7 @@ Read only the documents required by the change:
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
 | finder, filters, details, styles, or accessibility | `docs/WEB.md` |
 | taxonomy or family boundaries | relevant files in `docs/adr/` |
+| direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
 Do not preload `docs/RESEARCH.md` unless the task concerns research conclusions or project lessons.

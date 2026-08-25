@@ -26,6 +26,7 @@ class DocumentationTests(unittest.TestCase):
 
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
+            "ROADMAP.md",
             "BACKLOG.md",
             "docs/CURATION.md",
             "docs/DATA_MODEL.md",
@@ -33,6 +34,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/TAXONOMY.md",
             "docs/WEB.md",
             "docs/adr/005-fail-closed-license-drift.md",
+            "docs/adr/006-provider-relationships-are-orthogonal.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

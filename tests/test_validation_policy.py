@@ -53,6 +53,47 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("unknown retrieval_modes" in error for error in errors), errors)
 
+    def test_unknown_provider_relationship_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        projects_path = root / "directory" / "projects.json"
+        projects = json.loads(projects_path.read_text(encoding="utf-8"))
+        projects["projects"][0]["provider_relationship"] = "mostly_anthropic"
+        projects["projects"][0]["model_backends"] = ["anthropic"]
+        self.write_json(projects_path, projects)
+        self.write_json(root / "web" / "projects.json", projects)
+
+        errors = validate(root)
+
+        self.assertTrue(any("unknown provider relationship" in error for error in errors), errors)
+
+    def test_provider_traits_must_be_reviewed_together(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        projects_path = root / "directory" / "projects.json"
+        projects = json.loads(projects_path.read_text(encoding="utf-8"))
+        projects["projects"][0]["provider_relationship"] = "provider_native"
+        self.write_json(projects_path, projects)
+        self.write_json(root / "web" / "projects.json", projects)
+
+        errors = validate(root)
+
+        self.assertTrue(any("provider traits must be supplied together" in error for error in errors), errors)
+
+    def test_provider_native_requires_one_backend(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        projects_path = root / "directory" / "projects.json"
+        projects = json.loads(projects_path.read_text(encoding="utf-8"))
+        projects["projects"][0]["provider_relationship"] = "provider_native"
+        projects["projects"][0]["model_backends"] = ["anthropic", "openai"]
+        self.write_json(projects_path, projects)
+        self.write_json(root / "web" / "projects.json", projects)
+
+        errors = validate(root)
+
+        self.assertTrue(any("provider_native requires exactly one model backend" in error for error in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

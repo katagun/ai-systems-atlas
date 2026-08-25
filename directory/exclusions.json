@@ -60,6 +60,12 @@
       "repo": "mastra-ai/mastra",
       "reason": "Mixed open-core repository: most code is Apache-2.0, while ee/ directories prohibit production use without a commercial agreement.",
       "useful_lesson": "TypeScript-first agent workflows, evaluation, observability, and deployment ergonomics."
+    },
+    {
+      "name": "Claude Agent SDK for TypeScript",
+      "repo": "anthropics/claude-agent-sdk-typescript",
+      "reason": "The repository LICENSE.md reserves all rights and makes use subject to Anthropic's commercial terms; it is not OSI open source.",
+      "useful_lesson": "Provider-native agent SDK design, typed tool interfaces, hooks, permissions, and session management."
     }
   ]
 }

@@ -22,6 +22,7 @@ Read only what your task needs:
 
 | Goal | Read next |
 |---|---|
+| Understand direction and sequencing | [`ROADMAP.md`](ROADMAP.md) |
 | Understand families, roles, and scores | [`docs/TAXONOMY.md`](docs/TAXONOMY.md) |
 | Add, remove, classify, or rescore a project | [`docs/CURATION.md`](docs/CURATION.md) |
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |

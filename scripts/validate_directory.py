@@ -19,6 +19,8 @@ TAXONOMY_GROUPS = (
     "system_families",
     "primary_roles",
     "agent_relations",
+    "provider_relationships",
+    "model_backends",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -45,7 +47,8 @@ PROJECT_REQUIRED = {
 }
 PROJECT_OPTIONAL = {
     "agent_interfaces", "execution_boundaries", "agent_capabilities", "pushed_at", "forks",
-    "open_issues", "metadata_verified_at", "github_detected_license",
+    "open_issues", "metadata_verified_at", "github_detected_license", "provider_relationship",
+    "model_backends",
 }
 
 
@@ -241,6 +244,17 @@ def validate(root: Path = ROOT) -> list[str]:
             validate_string_list(project, field, enum_ids[group], prefix, errors)
         if project.get("agent_relation") not in enum_ids["agent_relations"]:
             errors.append(f"{prefix}: unknown agent relation")
+        has_provider_relationship = "provider_relationship" in project
+        has_model_backends = "model_backends" in project
+        if has_provider_relationship != has_model_backends:
+            errors.append(f"{prefix}: provider traits must be supplied together")
+        elif has_provider_relationship:
+            relationship = project.get("provider_relationship")
+            if relationship not in enum_ids["provider_relationships"]:
+                errors.append(f"{prefix}: unknown provider relationship")
+            validate_string_list(project, "model_backends", enum_ids["model_backends"], prefix, errors)
+            if relationship == "provider_native" and len(project.get("model_backends", [])) != 1:
+                errors.append(f"{prefix}: provider_native requires exactly one model backend")
         if project.get("provenance") not in enum_ids["provenance_levels"]:
             errors.append(f"{prefix}: unknown provenance level")
         if project.get("research_confidence") not in enum_ids["research_confidence_levels"]:

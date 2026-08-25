@@ -31,6 +31,20 @@
     {"id": "agent_runtime", "name": "Full agent runtime"},
     {"id": "coding_workflow", "name": "Coding-agent process layer"}
   ],
+  "provider_relationships": [
+    {"id": "provider_native", "name": "Provider-native", "definition": "The primary supported path is officially coupled to one model-provider ecosystem."},
+    {"id": "multi_provider", "name": "Multi-provider", "definition": "The project maintains first-class integrations with multiple named model backends."},
+    {"id": "provider_agnostic", "name": "Provider-agnostic", "definition": "The project exposes a substitutable backend contract rather than making one provider the primary path."}
+  ],
+  "model_backends": [
+    {"id": "anthropic", "name": "Anthropic"},
+    {"id": "openai", "name": "OpenAI"},
+    {"id": "deepseek", "name": "DeepSeek"},
+    {"id": "google", "name": "Google"},
+    {"id": "mistral", "name": "Mistral AI"},
+    {"id": "openai_compatible", "name": "OpenAI-compatible endpoint"},
+    {"id": "local_runtime", "name": "Local model runtime"}
+  ],
   "architectures": [
     {"id": "plain_files", "name": "Plain files / Markdown", "note": "Human-readable canonical data."},
     {"id": "relational_db", "name": "Relational database"},
