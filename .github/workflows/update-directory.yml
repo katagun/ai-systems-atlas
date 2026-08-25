@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: directory-refresh
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -25,6 +29,8 @@ jobs:
         run: uv run python scripts/validate_directory.py
       - name: Run tests
         run: uv run python -m unittest discover -s tests -v
+      - name: Run web behavior tests
+        run: node --test tests/test_web.js
       - name: Commit verified changes
         run: |
           if git diff --quiet; then

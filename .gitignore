@@ -6,5 +6,3 @@ __pycache__/
 .coverage
 htmlcov/
 .DS_Store
-directory/candidates.json
-directory/quarantine.json

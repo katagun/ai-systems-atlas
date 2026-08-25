@@ -23,4 +23,6 @@ jobs:
       - name: Compile Python sources
         run: uv run python -m compileall scripts tests
       - name: Check browser JavaScript syntax
-        run: node --check web/app.js
+        run: node --check web/app-core.js && node --check web/app.js
+      - name: Run web behavior tests
+        run: node --test tests/test_web.js

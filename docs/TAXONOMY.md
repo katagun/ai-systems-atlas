@@ -11,6 +11,8 @@ Every catalog entry therefore receives:
 3. orthogonal architecture and operating traits; and
 4. the score profile assigned to its family.
 
+`directory/taxonomy.json` is the executable source for families, roles, traits, statuses, deployment modes, confidence and provenance levels, eligible licenses, and score weights. This document explains the model; validation enforces the JSON definitions.
+
 ## Family 1: memory systems
 
 Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, retrieval infrastructure, and research reference.
@@ -19,7 +21,7 @@ The memory score measures second-brain fit, data sovereignty, interoperability, 
 
 ## Family 2: agent systems
 
-Agent-system roles are coding agent, research agent, browser / computer-use agent, stateful agent runtime, coding-agent workflow, multi-agent orchestrator, and agent framework / SDK.
+Agent-system roles are coding agent, research agent, browser / computer-use agent, data-analysis / text-to-SQL agent, stateful agent runtime, coding-agent workflow, multi-agent orchestrator, and agent framework / SDK.
 
 Agent projects also record:
 
@@ -28,6 +30,12 @@ Agent projects also record:
 - capabilities: code and shell execution, browser control, research, multi-agent coordination, persistent state, MCP, and explicit workflows.
 
 The agent score measures task reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity.
+
+### Vertical agents and framework boundaries
+
+A vertical system can be an agent when it owns a consequential tool loop rather than only generating text. For data analysis, this means planning or refining a query, executing it through database or analytics tools, validating or repairing the result, and explaining the output. A text-to-SQL model, prompt collection, benchmark, or training dataset alone is not a data-analysis agent.
+
+Include a framework when building or running tool-using agents is a primary product outcome. General LLM application libraries, prompt optimizers, tracing clients, and proprietary observability services do not become agent systems merely because agents can use them. Borderline open-source frameworks stay provisional until review establishes that agent execution is material rather than incidental.
 
 ## No cross-family ranking
 
@@ -41,7 +49,7 @@ The web finder is a transparent decision flow over this taxonomy:
 2. choose a desired job, which maps to one or more primary roles;
 3. choose a priority such as local control, interoperability, operational simplicity, developer composability, or human control and recovery.
 
-Only active projects in the chosen family and role set are eligible. The priority adds weight to documented traits or score dimensions, while the family-specific editorial score breaks close ties. Results explain the matched role and traits and surface one recorded weakness. The finder never compares numeric scores across families and should be treated as a starting shortlist rather than an empirical evaluation of a user's workload.
+Only active projects in the chosen family and role set are eligible. The priority adds weight to documented traits or score dimensions, while the family-specific editorial score breaks close ties. Results explain the matched role and traits and surface one recorded weakness. Opening the directory preserves the complete eligible role set; preferences remain soft ranking signals rather than hard filters. The finder never compares numeric scores across families and should be treated as a starting shortlist rather than an empirical evaluation of a user's workload.
 
 ## Shared axes
 

@@ -17,6 +17,7 @@
     {"id": "coding_agent", "family": "agent_system", "name": "Coding agent", "definition": "An interactive agent that reads, edits, runs, and reasons about software projects."},
     {"id": "research_agent", "family": "agent_system", "name": "Research agent", "definition": "An agent that plans multi-step information gathering and synthesizes cited findings."},
     {"id": "browser_computer_agent", "family": "agent_system", "name": "Browser / computer-use agent", "definition": "An agent specialized in operating browsers, desktops, or other graphical interfaces."},
+    {"id": "data_analysis_agent", "family": "agent_system", "name": "Data-analysis / text-to-SQL agent", "definition": "An agent that plans, executes, validates, and explains structured-data queries or analyses through database and analytics tools."},
     {"id": "stateful_agent_runtime", "family": "agent_system", "name": "Stateful agent runtime / harness", "definition": "A persistent agent runtime that owns identity, durable state, skills, schedules, and memory lifecycle."},
     {"id": "coding_agent_workflow", "family": "agent_system", "name": "Coding-agent workflow / skill stack", "definition": "Prompts, roles, tools, and process that turn coding agents into a repeatable software-delivery system."},
     {"id": "multi_agent_orchestrator", "family": "agent_system", "name": "Multi-agent orchestrator", "definition": "A system for coordinating specialized agents, handoffs, workflows, and shared execution."},
@@ -95,6 +96,50 @@
     {"id": "persistent_state", "name": "Persistent state"},
     {"id": "mcp", "name": "Model Context Protocol"},
     {"id": "workflows", "name": "Explicit workflows / graphs"}
+  ],
+  "deployment_modes": [
+    {"id": "desktop", "name": "Desktop application"},
+    {"id": "mobile", "name": "Mobile application"},
+    {"id": "local_cli", "name": "Local CLI"},
+    {"id": "ide_extension", "name": "IDE extension"},
+    {"id": "library", "name": "Embedded library"},
+    {"id": "self_hosted", "name": "Self-hosted service"},
+    {"id": "managed_cloud", "name": "Managed cloud"},
+    {"id": "cloud_optional", "name": "Optional cloud services"}
+  ],
+  "project_statuses": [
+    {"id": "active", "name": "Active"},
+    {"id": "archived", "name": "Archived"},
+    {"id": "quarantined", "name": "Quarantined pending review"},
+    {"id": "removed", "name": "Repository unavailable"}
+  ],
+  "provenance_levels": [
+    {"id": "limited", "name": "Limited"},
+    {"id": "partial", "name": "Partial"},
+    {"id": "moderate", "name": "Moderate"},
+    {"id": "strong", "name": "Strong"}
+  ],
+  "research_confidence_levels": [
+    {"id": "low", "name": "Low"},
+    {"id": "medium", "name": "Medium"},
+    {"id": "high", "name": "High"}
+  ],
+  "allowed_licenses": [
+    {"id": "MIT", "name": "MIT License"},
+    {"id": "Apache-2.0", "name": "Apache License 2.0"},
+    {"id": "AGPL-3.0", "name": "GNU Affero General Public License 3.0"},
+    {"id": "AGPL-3.0-or-later", "name": "GNU Affero General Public License 3.0 or later"},
+    {"id": "GPL-3.0", "name": "GNU General Public License 3.0"},
+    {"id": "GPL-3.0-or-later", "name": "GNU General Public License 3.0 or later"},
+    {"id": "GPL-2.0", "name": "GNU General Public License 2.0"},
+    {"id": "GPL-2.0-or-later", "name": "GNU General Public License 2.0 or later"},
+    {"id": "LGPL-3.0", "name": "GNU Lesser General Public License 3.0"},
+    {"id": "BSD-3-Clause", "name": "BSD 3-Clause License"},
+    {"id": "BSD-2-Clause", "name": "BSD 2-Clause License"},
+    {"id": "MPL-2.0", "name": "Mozilla Public License 2.0"},
+    {"id": "EUPL-1.2", "name": "European Union Public Licence 1.2"},
+    {"id": "ISC", "name": "ISC License"},
+    {"id": "Unlicense", "name": "The Unlicense"}
   ],
   "license_scopes": [
     {"id": "open_source", "name": "OSI-compatible open source", "included_by_default": true},

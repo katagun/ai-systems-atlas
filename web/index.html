@@ -4,59 +4,61 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Agent Systems Atlas: open-source memory and AI agent systems compared within explicit families, roles, and score profiles.">
+  <meta name="theme-color" content="#f3f1eb">
   <title>Agent Systems Atlas</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3.1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="brand" aria-label="Agent Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>Agent Systems Atlas</strong><small>memory + agents, mapped</small></span>
+      <span><strong>Agent Systems Atlas</strong><small>memory + agents</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
-      <button class="tab" data-tab="finder">Find a system</button>
+      <button class="tab" data-tab="finder">Finder</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
-    <a class="github-link" href="https://github.com/embark-delve/agent-systems-atlas" target="_blank" rel="noreferrer">View source ↗</a>
+    <a class="github-link" href="https://github.com/embark-delve/agent-systems-atlas" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
 
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
-        <p class="eyebrow">Open-source systems, compared by what they actually are</p>
-        <h1 id="directory-title">Memory and agency are related. They are not the same category.</h1>
-        <p class="hero-copy">Agent Systems Atlas maps open-source memory systems and AI agents in one evidence-backed directory. Family-specific roles and score profiles keep useful comparisons honest.</p>
-        <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
+        <p class="eyebrow" id="hero-kicker">Reviewed open-source projects</p>
+        <h1 id="directory-title">Find a system that fits.</h1>
+        <p class="hero-copy">Explore memory and agent systems by role, architecture, deployment, and fit.</p>
+        <button class="hero-action" data-open-tab="finder">Not sure? Help me choose →</button>
       </div>
 
-      <section class="taxonomy-note" aria-label="Taxonomy note">
-        <div><span class="signal"></span><strong>System family</strong> separates durable knowledge from action-taking agents.</div>
-        <div><span class="signal"></span><strong>Primary role</strong> answers “what job does the product do?”</div>
-        <div><span class="signal"></span><strong>Score profile</strong> prevents cross-family rankings.</div>
-      </section>
-
-      <section class="control-panel" aria-label="Directory filters">
-        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="project, strength, weakness, architecture…" autocomplete="off"></label>
-        <label><span>System family</span><select id="family-filter"><option value="">All families</option></select></label>
-        <label><span>Primary role</span><select id="role-filter"><option value="">All roles</option></select></label>
-        <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
-        <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
-        <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="candidate">Candidates</option><option value="archived">Archived</option></select></label>
+      <section class="control-panel" id="directory-controls" aria-label="Directory filters">
+        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search projects and traits" autocomplete="off"></label>
+        <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
+        <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
         <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name">Name</option></select></label>
-        <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first only</span></label>
+        <details class="advanced-filter-shell">
+          <summary>More filters</summary>
+          <div class="advanced-filters">
+            <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
+            <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
+            <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="quarantined">Quarantined</option><option value="removed">Unavailable</option></select></label>
+            <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
+          </div>
+        </details>
+        <p class="filter-guidance">Scores compare projects only within the selected family. <button data-open-tab="taxonomy">How comparisons work →</button></p>
       </section>
 
-      <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Reset filters</button></div>
+      <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
+      <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear</button></div>
       <section id="project-grid" class="project-grid" aria-label="Open-source projects"></section>
     </section>
 
     <section id="finder" class="view" aria-labelledby="finder-title">
       <div class="section-heading finder-heading">
-        <p class="eyebrow">A three-step starting point</p>
-        <h1 id="finder-title">What kind of system fits your job?</h1>
-        <p>Choose the outcome you want, the job it should perform, and the tradeoff you care about most. The finder will explain up to three strong matches from the curated directory.</p>
+        <p class="eyebrow">Three quick questions</p>
+        <h1 id="finder-title">What should the system help you do?</h1>
+        <p>Answer three questions to get up to three reviewed matches.</p>
       </div>
       <section class="finder-shell" aria-label="Guided system finder">
         <div id="finder-progress" class="finder-progress" aria-label="Finder progress"></div>
@@ -85,7 +87,8 @@
     <div id="dialog-content"></div>
   </dialog>
 
-  <footer><span>Agent Systems Atlas</span><span>Family is not role. Role is not architecture.</span><span id="data-date"></span></footer>
-  <script src="app.js" defer></script>
+  <footer><span>Agent Systems Atlas</span><span>Compared within families.</span><span id="data-date"></span></footer>
+  <script src="app-core.js?v=2.1" defer></script>
+  <script src="app.js?v=2.2" defer></script>
 </body>
 </html>

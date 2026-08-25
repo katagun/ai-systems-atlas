@@ -1,4 +1,4 @@
-const state = { projects: [], taxonomy: null, licenses: new Map(), finder: { step: 0, answers: {} } };
+const state = { projects: [], taxonomy: null, licenses: new Map(), directoryRoles: null, finder: { step: 0, answers: {} } };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -58,7 +58,7 @@ async function bootstrap() {
   state.projects = directory.projects;
   state.taxonomy = taxonomy;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.repo.toLowerCase(), item]));
-  $("#data-date").textContent = `Data verified ${directory.generated_at}`;
+  $("#data-date").textContent = `Data updated ${directory.generated_at}`;
   populateFilters();
   renderStats();
   renderProjects();
@@ -89,7 +89,10 @@ function populateRoleFilter() {
   const role = $("#role-filter");
   const selected = role.value;
   const family = $("#family-filter").value;
-  const roles = state.taxonomy.primary_roles.filter(item => !family || item.family === family);
+  const publishedRoles = new Set(state.projects
+    .filter(project => !family || project.system_family === family)
+    .map(project => project.primary_role));
+  const roles = state.taxonomy.primary_roles.filter(item => publishedRoles.has(item.id));
   role.innerHTML = '<option value="">All roles</option>' + roles.map(item => `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`).join("");
   if (roles.some(item => item.id === selected)) role.value = selected;
 }
@@ -105,41 +108,32 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const licensed = state.licenses.size;
-  const stars = state.projects.reduce((sum, project) => sum + (project.stars || 0), 0);
+  $("#hero-kicker").textContent = `${state.projects.length} reviewed open-source projects`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory systems"], [agents, "agent systems"], [licensed, "pinned licenses"], [compactNumber(stars), "verified stars"]
+    [memories, "memory"], [agents, "agents"], [licensed, "licenses reviewed"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
 }
 
 function filteredProjects() {
-  const term = $("#project-search").value.trim().toLowerCase();
-  const family = $("#family-filter").value;
-  const role = $("#role-filter").value;
-  const agent = $("#agent-filter").value;
-  const architecture = $("#architecture-filter").value;
-  const status = $("#status-filter").value;
-  const localOnly = $("#local-filter").checked;
-  const sort = $("#sort-filter").value;
-  const results = state.projects.filter(project => {
-    const haystack = JSON.stringify(project).toLowerCase();
-    return (!term || haystack.includes(term)) && (!family || project.system_family === family) &&
-      (!role || project.primary_role === role) && (!agent || project.agent_relation === agent) &&
-      (!architecture || project.architectures.includes(architecture)) && (!status || project.status === status) &&
-      (!localOnly || project.local_first);
+  return AtlasCore.filterAndSortProjects(state.projects, {
+    term: $("#project-search").value,
+    family: $("#family-filter").value,
+    role: $("#role-filter").value,
+    roles: state.directoryRoles || [],
+    agent: $("#agent-filter").value,
+    architecture: $("#architecture-filter").value,
+    status: $("#status-filter").value,
+    localOnly: $("#local-filter").checked,
+    sort: $("#sort-filter").value
   });
-  results.sort((a, b) => {
-    if (sort === "stars") return (b.stars || -1) - (a.stars || -1);
-    if (sort === "name") return a.name.localeCompare(b.name);
-    return b.score.overall - a.score.overall;
-  });
-  return results;
 }
 
 function renderProjects() {
   const projects = filteredProjects();
   const family = $("#family-filter").value;
-  const scoreContext = family ? ` · ${familyName(family)} score` : " · scores hidden across families";
-  $("#result-count").textContent = `${projects.length} of ${state.projects.length} projects${scoreContext}`;
+  const finderContext = state.directoryRoles ? " · Finder match" : "";
+  const scoreContext = family ? ` · ${family === "memory_system" ? "Memory" : "Agent"} score${finderContext}` : " · Scores hidden across families";
+  $("#result-count").textContent = `${projects.length} ${projects.length === 1 ? "project" : "projects"}${scoreContext}`;
   $("#project-grid").innerHTML = projects.map(project => {
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
@@ -148,7 +142,7 @@ function renderProjects() {
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <p>${escapeHTML(project.description)}</p>
       <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
-      <div class="card-footer"><span>${compactNumber(project.stars)} ★ ${project.status === "archived" ? '<b class="archived">· archived</b>' : ""}</span><button data-project="${escapeHTML(project.id)}">Inspect system →</button></div>
+      <div class="card-footer"><span>${compactNumber(project.stars)} ★ ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><button data-project="${escapeHTML(project.id)}">View details →</button></div>
     </article>`;
   }).join("") || '<div class="notice">No projects match these filters.</div>';
   $$('[data-project]').forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
@@ -176,15 +170,15 @@ function renderFinder() {
   const { step, answers } = state.finder;
   let content;
   if (step === 0) {
-    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What do you primarily need?</h2><p>Memory systems preserve and retrieve knowledge. Agent systems plan and act through tools.</p></div>
+    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Memory systems preserve knowledge. Agent systems plan and act through tools.</p></div>
       <div class="finder-choice-grid two-up">${FINDER_FAMILIES.map(item => finderChoice("family", item)).join("")}</div>`;
   } else if (step === 1) {
     const choices = FINDER_GOALS[answers.family];
-    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(familyName(answers.family))}</p><h2>What job should it perform?</h2><p>Choose the closest primary outcome. You can broaden the directory filters afterward.</p></div>
+    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(familyName(answers.family))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
   } else if (step === 2) {
     const choices = FINDER_PRIORITIES[answers.family];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most in the shortlist?</h2><p>This preference adjusts the ranking inside the selected family and job.</p></div>
+    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking within the selected family.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
     content = renderFinderResults();
@@ -242,15 +236,15 @@ function renderFinderResults() {
   const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
   const priorityConfig = FINDER_PRIORITIES[family].find(item => item.id === priority);
   const results = recommendedProjects();
-  return `<div class="finder-result-heading"><div><p class="eyebrow">Your starting shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Ranked within ${escapeHTML(familyName(family).toLowerCase())}, with extra weight for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matching directory →</button></div>
+  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(familyName(family).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
     <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family)}">
       <div class="finder-rank">0${index + 1}</div>
       <div><p class="family-label">${escapeHTML(roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p></div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(project.weaknesses[0])}</p>
-      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(project.score_profile)} score</span><button data-finder-project="${escapeHTML(project.id)}">View full profile →</button></div>
+      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(project.score_profile)} score</span><button data-finder-project="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
-    <p class="finder-disclaimer">These are explainable starting points based on curated roles, traits, and family-specific editorial scores—not personalized guarantees or a benchmark of your exact workload.</p>`;
+    <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
 
 function applyFinderToDirectory() {
@@ -259,11 +253,12 @@ function applyFinderToDirectory() {
   $("#project-search").value = "";
   $("#family-filter").value = family;
   populateRoleFilter();
+  state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
   $("#agent-filter").value = "";
   $("#architecture-filter").value = "";
   $("#status-filter").value = "active";
-  $("#local-filter").checked = ["local_editable", "local_control", "local"].includes(priority);
+  $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
   updateScoreSortAvailability();
   renderProjects();
@@ -278,7 +273,10 @@ function renderTaxonomy() {
     ["Agent relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
-    ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities]
+    ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities],
+    ["Deployment modes", state.taxonomy.deployment_modes], ["Project statuses", state.taxonomy.project_statuses],
+    ["Provenance levels", state.taxonomy.provenance_levels], ["Research confidence", state.taxonomy.research_confidence_levels],
+    ["Eligible licenses", state.taxonomy.allowed_licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
@@ -291,7 +289,7 @@ function openProject(id) {
   const familyDetail = project.system_family === "agent_system"
     ? `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`
     : `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
-  const licenseLink = proof ? `<a href="${escapeHTML(proof.url)}" target="_blank" rel="noreferrer">${escapeHTML(project.license)} license file ↗</a>` : escapeHTML(project.license);
+  const licenseLink = proof ? `<a href="${escapeHTML(proof.immutable_url)}" target="_blank" rel="noreferrer">${escapeHTML(project.license)} immutable evidence ↗</a> · <a href="${escapeHTML(proof.url)}" target="_blank" rel="noreferrer">source path ↗</a>` : escapeHTML(project.license);
   $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>License:</strong> ${licenseLink}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">Open GitHub repository ↗</a></p></section>
@@ -312,14 +310,17 @@ function activateView(id) {
 
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
+  $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $("#family-filter").addEventListener("input", () => {
+    state.directoryRoles = null;
     populateRoleFilter();
     updateScoreSortAvailability();
     renderProjects();
   });
-  ["#project-search", "#role-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
+  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
+  ["#project-search", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   $("#reset-filters").addEventListener("click", () => {
-    $("#project-search").value = ""; $("#family-filter").value = "memory_system"; populateRoleFilter();
+    state.directoryRoles = null; $("#project-search").value = ""; $("#family-filter").value = "memory_system"; populateRoleFilter();
     $("#role-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
     $("#status-filter").value = "active"; $("#sort-filter").value = "score"; updateScoreSortAvailability(); $("#local-filter").checked = false;
     renderProjects();
