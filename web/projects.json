@@ -3789,6 +3789,162 @@
       "license_review_status": "verified"
     },
     {
+      "id": "grok",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Grok",
+      "repo": null,
+      "url": "https://grok.com/",
+      "description": "SpaceXAI's general assistant for conversation, current information, files, creation, research, and optional agentic actions.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "x_ai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "service-managed account, conversation history, uploaded content, preferences, and generated or agent-created artifacts",
+      "deployment": [
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the Grok consumer service at grok.com and its mobile apps; Grok on X, Grok Bot, developer APIs, PromptIDE, and model releases have distinct product or contractual boundaries.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.7,
+        "context_continuity": 7.8,
+        "tools_integrations": 8.5,
+        "human_control": 7.8,
+        "data_governance": 6.6,
+        "interoperability": 6.8,
+        "usability_access": 8.7,
+        "maturity": 8.5,
+        "overall": 7.95
+      },
+      "strengths": [
+        "Current-information access, research workflows, files, creation, and multimodal input cover a broad general-assistant surface",
+        "Optional agentic actions can extend conversation into browsing, code execution, tool use, file changes, and connected services",
+        "Web and mobile access provide a low-friction provider-native workspace"
+      ],
+      "weaknesses": [
+        "The operational implementation and model runtime are proprietary and provider-native",
+        "Public evidence does not establish the project, memory, connector, or portability depth of the most mature assistant workspaces",
+        "Consumer Grok, Grok on X, Grok Bot, APIs, and model releases use overlapping branding but different operational and contractual boundaries"
+      ],
+      "why_it_matters": "A major provider-native general assistant whose real-time retrieval and emerging agentic actions make it operationally distinct from the separate Grok Bot and developer platform.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "microsoft-365-copilot",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Microsoft 365 Copilot",
+      "repo": null,
+      "url": "https://www.microsoft.com/en-us/microsoft-365-copilot",
+      "description": "Microsoft's organizational work assistant across Microsoft 365 data, applications, search, notebooks, creation, and agents.",
+      "primary_role": "enterprise_work_assistant",
+      "secondary_roles": [
+        "general_ai_assistant"
+      ],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "tenant-managed Microsoft 365 content and permissions plus service-managed chats, notebooks, search context, agent configurations, and generated artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the organizational Microsoft 365 Copilot product under commercial licensing; consumer Microsoft Copilot, Copilot Studio, Security Copilot, GitHub Copilot, and Microsoft Foundry remain distinct products.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.0,
+        "context_continuity": 9.2,
+        "tools_integrations": 9.6,
+        "human_control": 8.5,
+        "data_governance": 9.2,
+        "interoperability": 8.4,
+        "usability_access": 8.8,
+        "maturity": 9.2,
+        "overall": 9.01
+      },
+      "strengths": [
+        "Work IQ grounds chat, search, notebooks, creation, and agents in organizational context across Microsoft 365 applications",
+        "Enterprise search and ready-made or custom agents connect knowledge retrieval with governed business actions",
+        "Microsoft 365 permissions, sensitivity labels, retention policies, administration, and commercial data protections provide a strong tenant boundary"
+      ],
+      "weaknesses": [
+        "The broad Copilot brand and overlapping Chat, Studio, agent, and application surfaces make product boundaries difficult to communicate",
+        "Licensing, capabilities, and integrations vary by tenant plan, administrator configuration, application, and region",
+        "The service is proprietary, cloud-managed, and deeply coupled to the Microsoft 365 ecosystem"
+      ],
+      "why_it_matters": "A leading enterprise assistant reference that combines tenant context, governed search, productivity applications, notebooks, and custom agents within a mature organizational control plane.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
       "id": "microsoft-copilot",
       "system_family": "assistant_system",
       "score_profile": "assistant",
