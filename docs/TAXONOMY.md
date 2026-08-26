@@ -61,7 +61,7 @@ Architecture, retrieval, deployment, source model, licenses, and relationship to
 
 ### Source model and licenses
 
-`source_model` answers how much of the operational system users may inspect and use: open source, mixed open licenses, open core, source available, proprietary, or unclear. `licenses` records every material code, content, or product-terms identifier reviewed for the listed system. Neither field is a family, role, score profile, or inclusion gate.
+`source_model` answers how much of the operational system users may inspect and use: open source, mixed open licenses, mixed open and proprietary, open core, source available, proprietary, or unclear. “Open core” requires the reusable open code to be the operational core; “mixed source” covers an open wrapper or component around a closed core or runtime. `licenses` records every material code, content, or product-terms identifier reviewed for the listed system. Neither field is a family, role, score profile, or inclusion gate.
 
 An open-source-only view is a user-selected filter. Mixed licenses retain their component or path scope in evidence. Proprietary terms can support a listing when operational behavior is otherwise reviewable, but lower inspectability should affect research confidence and relevant score dimensions. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md).
 

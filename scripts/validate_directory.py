@@ -304,6 +304,8 @@ def validate(root: Path = ROOT) -> list[str]:
                 "mixed_open_source": len(project.get("licenses", [])) >= 2
                 and bool(project_license_kinds)
                 and project_license_kinds <= {"open_source", "open_content"},
+                "mixed_source": "open_source" in project_license_kinds
+                and bool(project_license_kinds & {"restricted", "proprietary"}),
                 "open_core": "open_source" in project_license_kinds
                 and bool(project_license_kinds & {"restricted", "proprietary"}),
                 "source_available": "restricted" in project_license_kinds

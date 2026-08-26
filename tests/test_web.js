@@ -7,6 +7,7 @@ const projects = [
   { name: "Bridge", primary_role: "memory_bridge", system_family: "memory_system", agent_relation: "external_memory", architectures: ["plain_files"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 10, score: { overall: 8 } },
   { name: "Service", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["vector_index"], source_model: "mixed_open_source", licenses: ["Apache-2.0", "CC-BY-4.0"], status: "active", local_first: false, stars: null, score: { overall: 7 } },
   { name: "Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["git_versioned"], source_model: "open_core", licenses: ["MIT", "LicenseRef-Commercial"], status: "active", local_first: true, stars: 20, score: { overall: 10 } },
+  { name: "SDK", primary_role: "agent_framework_sdk", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["event_log"], source_model: "mixed_source", licenses: ["MIT", "LicenseRef-Proprietary"], status: "active", local_first: false, stars: 15, score: { overall: 8.5 } },
 ];
 
 test("finder role sets exclude unrelated projects without imposing a local-only threshold", () => {
@@ -28,7 +29,7 @@ test("family matching keeps score comparisons inside one family", () => {
 
 test("unknown stars sort behind verified star counts", () => {
   const results = filterAndSortProjects(projects, { sort: "stars" });
-  assert.deepEqual(results.map(project => project.name), ["Agent", "Bridge", "PKM", "Service"]);
+  assert.deepEqual(results.map(project => project.name), ["Agent", "SDK", "Bridge", "PKM", "Service"]);
 });
 
 test("license and source-model filters combine", () => {
@@ -38,6 +39,15 @@ test("license and source-model filters combine", () => {
     sort: "name",
   });
   assert.deepEqual(results.map(project => project.name), ["Bridge"]);
+});
+
+test("mixed-source projects remain independently filterable", () => {
+  const results = filterAndSortProjects(projects, {
+    license: "LicenseRef-Proprietary",
+    sourceModel: "mixed_source",
+    sort: "name",
+  });
+  assert.deepEqual(results.map(project => project.name), ["SDK"]);
 });
 
 test("multi-license projects match any reviewed license", () => {

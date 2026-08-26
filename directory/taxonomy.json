@@ -186,6 +186,7 @@
   "source_models": [
     {"id": "open_source", "name": "Open source", "definition": "Operational code is released under one OSI-approved license."},
     {"id": "mixed_open_source", "name": "Mixed open licenses", "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions."},
+    {"id": "mixed_source", "name": "Mixed open and proprietary", "definition": "The operational product combines reusable open-source components with a proprietary or restricted core, runtime, or distribution boundary."},
     {"id": "open_core", "name": "Open core", "definition": "An open-source core is accompanied by restricted components or enterprise features."},
     {"id": "source_available", "name": "Source available", "definition": "Operational source is visible but use, modification, or production deployment is restricted."},
     {"id": "proprietary", "name": "Proprietary", "definition": "Operational implementation is not provided under reusable source terms."},

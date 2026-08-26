@@ -365,6 +365,111 @@
       "source_model": "proprietary"
     },
     {
+      "id": "claude-agent-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Claude Agent SDK",
+      "repo": "anthropics/claude-agent-sdk-python",
+      "url": "https://github.com/anthropics/claude-agent-sdk-python",
+      "description": "Provider-native Python and TypeScript SDKs that embed the Claude Code agent loop, tools, permissions, hooks, sessions, subagents, skills, plugins, and MCP.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator",
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "streamed SDK messages, Claude Code session state, project instructions, checkpoints, tool results, and application-defined external session stores",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 7973,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "The Python repository is the representative open wrapper; the product also ships a commercially governed TypeScript SDK and bundles the Claude Code runtime.",
+      "score": {
+        "task_reliability": 8.7,
+        "tool_use": 9.5,
+        "autonomy": 9.1,
+        "human_control": 9.1,
+        "observability_recovery": 8.9,
+        "data_sovereignty": 6.0,
+        "interoperability": 7.5,
+        "maturity": 8.7,
+        "overall": 8.56
+      },
+      "strengths": [
+        "Exposes the production Claude Code agent loop with built-in file, shell, web, MCP, subagent, skill, and plugin capabilities",
+        "Permissions, lifecycle hooks, human input, file checkpointing, session resume and fork, and OpenTelemetry support provide strong control seams",
+        "Python and TypeScript bindings let applications own orchestration while reusing a mature interactive coding-agent runtime"
+      ],
+      "weaknesses": [
+        "The runtime is provider-native and requires Anthropic models rather than a substitutable model backend",
+        "The MIT Python wrapper bundles a commercially governed Claude Code executable, while the TypeScript SDK is governed by Anthropic commercial terms",
+        "Powerful default file and shell tools require deliberate permission, sandbox, credential, and data-retention policy"
+      ],
+      "why_it_matters": "Shows the tradeoff of embedding a mature provider-owned agent runtime: unusually deep tools and controls with materially less model and licensing portability than open provider-agnostic frameworks.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-25T22:47:08Z",
+      "forks": 1251,
+      "open_issues": 442,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Proprietary",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified"
+    },
+    {
       "id": "cline",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -1091,6 +1196,115 @@
       "pushed_at": "2026-08-25T02:02:13Z",
       "forks": 14480,
       "open_issues": 864,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "google-adk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Google Agent Development Kit",
+      "repo": "google/adk-python",
+      "url": "https://github.com/google/adk-python",
+      "description": "Google's open multi-language framework for tool-using agents, graph workflows, delegation, state, evaluation, human approvals, and local or managed deployment.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator",
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "google",
+        "anthropic",
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "code or declarative agent and workflow definitions, chronological session events, mutable state, artifacts, traces, and evaluation sets",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 21289,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "The Python repository is the canonical metadata source for one ADK product also implemented by Google in TypeScript, Go, Java, and Kotlin; language feature parity varies.",
+      "score": {
+        "task_reliability": 8.4,
+        "tool_use": 9.3,
+        "autonomy": 8.8,
+        "human_control": 9.0,
+        "observability_recovery": 9.2,
+        "data_sovereignty": 8.4,
+        "interoperability": 9.4,
+        "maturity": 8.8,
+        "overall": 8.88
+      },
+      "strengths": [
+        "Open, inspectable agent and workflow runtime with official implementations across five languages",
+        "Broad tool, MCP, OpenAPI, A2A, state, memory, evaluation, trace, and deployment seams",
+        "Callbacks, tool confirmation, workflow interruption, pause and resume, and session rewind provide strong control and recovery surfaces"
+      ],
+      "weaknesses": [
+        "Feature parity and maturity vary materially by language, with Python providing the deepest implementation",
+        "Gemini and Google Cloud are the best-integrated path even though model and deployment seams are replaceable",
+        "Major-version changes to agent APIs, events, and session schemas create migration risk in a fast-moving framework"
+      ],
+      "why_it_matters": "A significant provider-published framework whose operational runner remains open and replaceable across model, storage, tool, protocol, and deployment seams.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-26T01:51:58Z",
+      "forks": 3894,
+      "open_issues": 541,
       "metadata_verified_at": "2026-08-25",
       "github_detected_license": "Apache-2.0",
       "licenses": [
@@ -1931,6 +2145,121 @@
         "MIT"
       ],
       "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "mastra",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Mastra",
+      "repo": "mastra-ai/mastra",
+      "url": "https://github.com/mastra-ai/mastra",
+      "description": "Open-core TypeScript framework and runtime for tool-using agents, durable workflows, memory, delegation, evaluation, observability, and self-hosted or managed deployment.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "stateful_agent_runtime",
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "deepseek",
+        "google",
+        "mistral",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "application-defined agents, tools, message and thread memory, workflow run state and snapshots, traces, evaluations, and storage records",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 27471,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "The root license path map makes repository content outside ee/ Apache-2.0; every ee/ path is commercially restricted, and Mastra Platform is a separate proprietary service.",
+      "score": {
+        "task_reliability": 8.2,
+        "tool_use": 9.2,
+        "autonomy": 8.6,
+        "human_control": 9.0,
+        "observability_recovery": 9.1,
+        "data_sovereignty": 8.1,
+        "interoperability": 9.5,
+        "maturity": 8.6,
+        "overall": 8.75
+      },
+      "strengths": [
+        "A configurable agent loop backed by typed tools, workflows, memory, scoring, and durable execution",
+        "Strong approval, suspension, resumption, tracing, replay, and failure-control surfaces",
+        "Broad model portability plus MCP, A2A, ACP, browser, sandbox, storage, and deployment integrations"
+      ],
+      "weaknesses": [
+        "The large, rapidly changing monorepo creates substantial conceptual and upgrade surface",
+        "Production authentication, authorization, Agent Builder, and other ee/ features have commercial restrictions",
+        "The documentation license page still broadly describes Mastra as Apache-2.0 despite the authoritative root license carving out every ee/ path"
+      ],
+      "why_it_matters": "An unusually integrated TypeScript agent stack that treats tools, memory, workflows, evaluation, human control, observability, and deployment as one operational framework while exposing a clear open-core boundary.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-26T01:31:11Z",
+      "forks": 2692,
+      "open_issues": 465,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "NOASSERTION",
+      "licenses": [
+        "Apache-2.0",
+        "LicenseRef-Commercial",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "open_core",
       "license_review_status": "verified"
     },
     {

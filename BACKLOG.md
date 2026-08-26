@@ -4,7 +4,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the 94 provisional records in small, evidence-backed batches; next prioritize Claude Agent SDKs, Google ADK, and Mastra.
+- [ ] Review the remaining 89 provisional records in small, evidence-backed batches.
 - [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
@@ -24,6 +24,8 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Publish Claude Agent SDK, Google ADK, and Mastra as one-record-per-product framework systems with provider traits, scoped license evidence, and duplicate language-binding dispositions.
+- [x] Distinguish mixed-source products from open-core products so an open wrapper around a closed operational runtime is represented accurately.
 - [x] Add an unscored Specifications catalog with MCP, A2A, AG-UI, ACP, AGENTS.md, CLAUDE.md, Agent Skills, and Agent Plugins; include taxonomy-backed filters and pinned evidence.
 - [x] Publish the static site through a validated, least-privilege GitHub Pages workflow and document repository safeguards.
 - [x] Publish Claude Code, Devin, Kiro, OpenHands, OpenClaw, Pi, and Prime Agent with source-model-appropriate license or terms evidence.

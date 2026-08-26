@@ -14,7 +14,7 @@ An entry belongs in `directory/projects.json` only when:
 4. authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and
 5. its record identifies evidence, research confidence, and verification date.
 
-README badges and GitHub's detected SPDX value help locate evidence but do not replace reviewing license files, component maps, package manifests, or commercial terms. Record every material license from the taxonomy and classify the overall source model. Mixed-license, open-core, source-available, proprietary, and unclear systems remain eligible when they pass the operational scope gate.
+README badges and GitHub's detected SPDX value help locate evidence but do not replace reviewing license files, component maps, package manifests, or commercial terms. Record every material license from the taxonomy and classify the overall source model. Mixed-open-license, mixed-source, open-core, source-available, proprietary, and unclear systems remain eligible when they pass the operational scope gate. Use `open_core` only when the reusable open code is the operational core; use `mixed_source` when an open wrapper or component depends on a closed operational core or runtime.
 
 An immutable blob proves the reviewed file's content, not repository-wide scope. Evidence therefore records the component or path it covers. Non-Git terms evidence is inherently mutable and must be labeled accordingly.
 

@@ -34,9 +34,9 @@ All enum values and score dimensions come from `taxonomy.json`. Validation rejec
 
 ### Source and license traits
 
-`source_model` is one of `open_source`, `mixed_open_source`, `open_core`, `source_available`, `proprietary`, or `unclear`. `licenses` lists every material reviewed identifier, including content or commercial terms that cover part of the represented system. Neither field controls inclusion.
+`source_model` is one of `open_source`, `mixed_open_source`, `mixed_source`, `open_core`, `source_available`, `proprietary`, or `unclear`. `licenses` lists every material reviewed identifier, including content or commercial terms that cover part of the represented system. Neither field controls inclusion.
 
-The taxonomy assigns each license a kind. Validation keeps the two fields coherent: open-source models use only open-source terms; mixed-open-source models use at least two open code/content terms; open-core models combine an open-source core with restricted or proprietary terms; and source-available, proprietary, or unclear models include their corresponding term kind.
+The taxonomy assigns each license a kind. Validation keeps the two fields coherent: open-source models use only open-source terms; mixed-open-source models use at least two open code/content terms; mixed-source and open-core models combine reusable open-source code with restricted or proprietary terms; and source-available, proprietary, or unclear models include their corresponding term kind. Use `open_core` only when the reusable open code is the operational core. Use `mixed_source` when an open wrapper or component depends on a closed operational core or runtime.
 
 `license_review_status` is `verified` when evidence supports the reviewed classification and `review_required` when automation or a reviewer detected possible drift. Review-required systems remain visible.
 

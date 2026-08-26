@@ -8,7 +8,7 @@ Make the Atlas broad enough to represent important memory and agent-system choic
 
 - Separate relevance from licensing: include by operational role and expose source model, licenses, and evidence as filters and labels.
 - Represent model-provider coupling as reviewed traits, not as a third system family.
-- Review provisional projects in small domain batches, continuing with provider SDKs, the coding-agent second pass, and thin operational roles.
+- Review provisional projects in small domain batches, continuing with the coding-agent second pass, source-model diversity, and thin operational roles.
 - Measure coverage by operational role, source-model diversity, and meaningful alternatives—not one misleading project total.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
