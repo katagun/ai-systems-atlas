@@ -23,7 +23,9 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 
 ## Behavioral contracts
 
-- The default directory shows active memory systems ranked by the memory score.
+- The default directory shows every active family alphabetically, with cross-family scores hidden.
+- Choosing a family clears any role or Finder-role constraint; “Clear filters” restores the all-family active-system default.
+- “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.
 - Directory role filters list only roles represented by published projects; candidate-only taxonomy roles remain discoverable in Taxonomy without offering empty filters.
 - Selecting all families hides score values and disables score sorting.
 - Finder recommendations consider only active projects in the selected family and role set.

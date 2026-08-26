@@ -3,6 +3,22 @@
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.AtlasCore = api;
 })(typeof globalThis === "undefined" ? this : globalThis, function createAtlasCore() {
+  function directoryDefaults() {
+    return {
+      term: "",
+      family: "",
+      role: "",
+      roles: [],
+      agent: "",
+      architecture: "",
+      sourceModel: "",
+      license: "",
+      status: "active",
+      localOnly: false,
+      sort: "name",
+    };
+  }
+
   function matchesSearchTerm(haystack, term) {
     if (!term) return true;
     if (term.length > 2) return haystack.includes(term);
@@ -48,5 +64,5 @@
     }).sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  return { compareProjects, filterAndSortProjects, filterSpecifications, matchesProject };
+  return { compareProjects, directoryDefaults, filterAndSortProjects, filterSpecifications, matchesProject };
 });

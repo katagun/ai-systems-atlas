@@ -360,17 +360,41 @@
       ]
     },
     {
+      "project_id": "gbrain",
+      "repo": "garrytan/gbrain",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository root, including the CLI, library, memory engine, MCP server, skills, and documentation",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/garrytan/gbrain/blob/master/LICENSE",
+          "blob_sha": "35029511144443297cad2d26e4bac17d0e352f93",
+          "immutable_url": "https://api.github.com/repos/garrytan/gbrain/git/blobs/35029511144443297cad2d26e4bac17d0e352f93"
+        }
+      ]
+    },
+    {
       "project_id": "gstack",
       "repo": "garrytan/gstack",
       "items": [
         {
           "license_id": "MIT",
-          "scope": "repository",
+          "scope": "GStack-authored source, documentation, skills, and assets, excluding incorporated third-party components",
           "kind": "git_blob",
           "path": "LICENSE",
           "url": "https://github.com/garrytan/gstack/blob/main/LICENSE",
           "blob_sha": "35029511144443297cad2d26e4bac17d0e352f93",
           "immutable_url": "https://api.github.com/repos/garrytan/gstack/git/blobs/35029511144443297cad2d26e4bac17d0e352f93"
+        },
+        {
+          "license_id": "OFL-1.1",
+          "scope": "Excalifont and related font faces embedded in lib/diagram-render/dist/diagram-render.html through the Excalidraw dependency",
+          "kind": "git_blob",
+          "path": "lib/diagram-render/THIRD-PARTY-LICENSES.md",
+          "url": "https://github.com/garrytan/gstack/blob/main/lib/diagram-render/THIRD-PARTY-LICENSES.md",
+          "blob_sha": "78597e74058c803c8abcf3bd68275867aed27c39",
+          "immutable_url": "https://api.github.com/repos/garrytan/gstack/git/blobs/78597e74058c803c8abcf3bd68275867aed27c39"
         }
       ]
     },

@@ -178,6 +178,7 @@
     {"id": "EUPL-1.2", "name": "European Union Public Licence 1.2", "kind": "open_source"},
     {"id": "ISC", "name": "ISC License", "kind": "open_source"},
     {"id": "Unlicense", "name": "The Unlicense", "kind": "open_source"},
+    {"id": "OFL-1.1", "name": "SIL Open Font License 1.1", "kind": "open_content"},
     {"id": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0", "kind": "open_content"},
     {"id": "LicenseRef-Commercial", "name": "Commercial or production-restricted terms", "kind": "restricted"},
     {"id": "LicenseRef-Proprietary", "name": "Proprietary", "kind": "proprietary"},

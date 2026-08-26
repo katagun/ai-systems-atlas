@@ -24,6 +24,8 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Make all active families the clear/default directory state, clear family-scoped roles on family changes, and surface hidden advanced-filter counts.
+- [x] Publish GBrain as a local-first external agent-memory service with scoped MIT evidence; confirm GStack remains separately represented as a coding-agent workflow.
 - [x] Publish Claude Agent SDK, Google ADK, and Mastra as one-record-per-product framework systems with provider traits, scoped license evidence, and duplicate language-binding dispositions.
 - [x] Distinguish mixed-source products from open-core products so an open wrapper around a closed operational runtime is represented accurately.
 - [x] Add an unscored Specifications catalog with MCP, A2A, AG-UI, ACP, AGENTS.md, CLAUDE.md, Agent Skills, and Agent Plugins; include taxonomy-backed filters and pinned evidence.

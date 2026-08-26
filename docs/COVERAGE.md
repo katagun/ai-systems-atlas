@@ -16,7 +16,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-25
 
-The reviewed catalog contains 60 systems: 24 memory systems and 36 agent systems. Fifty-four are open-source, two are open-core, one is mixed-source, and three are proprietary. The provisional queue contains 89 records. The separate unscored collection contains eight specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
+The reviewed catalog contains 61 systems: 25 memory systems and 36 agent systems. Fifty-five are open-source, two are open-core, one is mixed-source, and three are proprietary. The provisional queue contains 89 records. The separate unscored collection contains eight specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -26,7 +26,7 @@ The reviewed catalog contains 60 systems: 24 memory systems and 36 agent systems
 | AI knowledge app / RAG brain | 5 | 4 | Useful baseline; review enterprise/open-core alternatives |
 | Retrieval infrastructure | 4 | 4 | Adequate baseline |
 | Data-analysis / text-to-SQL agent | 3 | 2 | Improved; add distinct governed and enterprise approaches |
-| Agent memory service | 2 | 2 | Thin |
+| Agent memory service | 3 | 3 | Improved; compare memory ownership, lifecycle, and retrieval intelligence |
 | Ambient capture | 2 | 2 | Thin; source-model diversity is missing |
 | Context graph engine | 2 | 2 | Thin |
 | Multi-agent orchestrator | 2 | 2 | Thin relative to ecosystem size |
