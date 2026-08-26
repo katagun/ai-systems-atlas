@@ -16,7 +16,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-25
 
-The reviewed catalog contains 57 systems: 24 memory systems and 33 agent systems. Fifty-three are represented by open-source operational code, one is open-core, and three are proprietary. The provisional queue contains 71 records.
+The reviewed catalog contains 57 systems: 24 memory systems and 33 agent systems. Fifty-three are represented by open-source operational code, one is open-core, and three are proprietary. The provisional queue contains 94 records.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|

@@ -20,7 +20,7 @@ Reduce repetitive review work while preserving deliberate editorial judgment.
 
 - Add guarded candidate-promotion and stale-review reporting commands.
 - Make repository transfers, license drift, and link failures explicit, recoverable review events.
-- Add accessibility and deployment checks that fit the dependency-light static site.
+- Add accessibility and link checks that fit the dependency-light static site; keep the Pages deployment path validated and reproducible.
 
 Exit signal: routine catalog maintenance is repeatable, evidence-safe, and documented without relying on maintainer memory.
 

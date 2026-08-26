@@ -248,6 +248,35 @@
       ]
     },
     {
+      "repo": "BAI-LAB/MemoryOS",
+      "name": "MemoryOS",
+      "url": "https://github.com/BAI-LAB/MemoryOS",
+      "description": "Operational personalized-agent memory system with short-, mid-, and long-term memory tiers, profile updates, MCP tools, and Docker deployment.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.95,
+      "github_detected_license": "Apache-2.0",
+      "stars": 1560,
+      "topics": [
+        "agent",
+        "language-model",
+        "llm",
+        "long-term-memory",
+        "operating-system",
+        "personalization",
+        "rag",
+        "retrieval-augmented-generation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "ballred/obsidian-claude-pkm",
       "name": "obsidian-claude-pkm",
       "url": "https://github.com/ballred/obsidian-claude-pkm",
@@ -265,6 +294,63 @@
         "pkm",
         "productivity",
         "second-brain"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "browserbase/stagehand",
+      "name": "Stagehand",
+      "url": "https://github.com/browserbase/stagehand",
+      "description": "Browser-agent SDK with Playwright-style primitives, self-healing actions, local and remote browser control, and autonomous multi-step execution.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.9,
+      "github_detected_license": "MIT",
+      "stars": 24057,
+      "topics": [
+        "agents",
+        "ai",
+        "llms",
+        "playwright",
+        "puppeteer",
+        "selenium"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "camel-ai/camel",
+      "name": "CAMEL",
+      "url": "https://github.com/camel-ai/camel",
+      "description": "Multi-agent framework for stateful agent societies, task automation, tool integration, data generation, and large-scale simulation.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.95,
+      "github_detected_license": "Apache-2.0",
+      "stars": 17638,
+      "topics": [
+        "agent",
+        "ai-societies",
+        "artificial-intelligence",
+        "communicative-ai",
+        "cooperative-ai",
+        "deep-learning",
+        "large-language-models",
+        "multi-agent-systems",
+        "natural-language-processing"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -700,6 +786,55 @@
     },
     {
       "repo": null,
+      "name": "Amazon Q Developer",
+      "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
+      "description": "AWS coding agent that understands workspaces, plans changes, edits files, suggests or runs shell commands, generates tests, and performs software upgrades.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "ide",
+        "provider-native"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Factory Droid",
+      "url": "https://docs.factory.ai/",
+      "description": "Managed coding agent available through desktop, web, CLI, headless execution, and cloud computers for implementation and software-delivery workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "cli",
+        "cloud-agent",
+        "software-delivery"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "GitHub Copilot coding agent",
       "url": "https://github.com/features/copilot",
       "description": "Proprietary GitHub coding agent for delegated issue-to-pull-request work alongside IDE assistance.",
@@ -734,6 +869,31 @@
       "topics": [
         "coding-agent",
         "cloud"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Junie",
+      "url": "https://junie.jetbrains.com/docs/",
+      "description": "JetBrains coding agent for IDE, terminal, headless CI, and GitHub Actions workflows that plans, edits, runs commands and tests, and verifies changes.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "cli",
+        "ide",
+        "provider-native"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -867,6 +1027,36 @@
       ]
     },
     {
+      "repo": "i-am-bee/beeai-framework",
+      "name": "BeeAI Framework",
+      "url": "https://github.com/i-am-bee/beeai-framework",
+      "description": "Python and TypeScript framework for building agents and multi-agent workflows with tools, memory, middleware, and protocol integrations.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.95,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3385,
+      "topics": [
+        "agents",
+        "ai",
+        "ai-agent",
+        "beeai",
+        "framework",
+        "llm",
+        "multiagent",
+        "python",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "IAAR-Shanghai/Awesome-AI-Memory",
       "name": "Awesome-AI-Memory",
       "url": "https://github.com/IAAR-Shanghai/Awesome-AI-Memory",
@@ -922,6 +1112,41 @@
         "realtime",
         "vectors",
         "websockets"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ItzCrazyKns/Vane",
+      "name": "Vane (formerly Perplexica)",
+      "url": "https://github.com/ItzCrazyKns/Vane",
+      "description": "Self-hostable AI answering engine that searches current web sources, refines retrieval, and returns synthesized answers with citations.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "research_agent",
+      "classification_confidence": 0.85,
+      "github_detected_license": "MIT",
+      "stars": 36471,
+      "topics": [
+        "ai-agents",
+        "ai-search-engine",
+        "answering-engine",
+        "artificial-intelligence",
+        "llm",
+        "machine-learning",
+        "open-source-ai-search-engine",
+        "perplexica",
+        "rag",
+        "search-engine",
+        "searxng",
+        "searxng-copilot",
+        "self-hosted-ai",
+        "vane"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1034,6 +1259,100 @@
         "llm",
         "llms",
         "openai"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "langflow-ai/langflow",
+      "name": "Langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "description": "Visual and code-driven platform for building, executing, and deploying AI agents and workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.88,
+      "github_detected_license": "MIT",
+      "stars": 153680,
+      "topics": [
+        "agents",
+        "chatgpt",
+        "generative-ai",
+        "large-language-models",
+        "multiagent",
+        "react-flow"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "langgenius/dify",
+      "name": "Dify",
+      "url": "https://github.com/langgenius/dify",
+      "description": "Collaborative platform for building and operating agentic workflows, RAG pipelines, model integrations, and tool-using applications.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.88,
+      "github_detected_license": "NOASSERTION",
+      "stars": 153509,
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "agentic-framework",
+        "agentic-workflow",
+        "ai",
+        "automation",
+        "claude",
+        "deepseek",
+        "genai",
+        "gpt",
+        "llm",
+        "low-code",
+        "mcp",
+        "nextjs",
+        "no-code",
+        "openai",
+        "python",
+        "skills",
+        "workflow"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "lavague-ai/LaVague",
+      "name": "LaVague",
+      "url": "https://github.com/lavague-ai/LaVague",
+      "description": "Framework for web agents that turns objectives into browser actions through a world model and Selenium, Playwright, or Chrome-extension drivers.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.97,
+      "github_detected_license": "Apache-2.0",
+      "stars": 6389,
+      "topics": [
+        "ai",
+        "browser",
+        "large-action-model",
+        "llm",
+        "oss",
+        "rag"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1202,6 +1521,231 @@
         "rag",
         "semantic-search",
         "vector-database"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "memodb-io/memobase",
+      "name": "Memobase",
+      "url": "https://github.com/memodb-io/memobase",
+      "description": "Self-hostable long-term memory service that derives structured user profiles and time-aware events for AI applications through APIs and SDKs.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.99,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2858,
+      "topics": [
+        "ai-companion",
+        "ai-memory",
+        "chatgpt",
+        "llm-application",
+        "llm-memory",
+        "long-term-memory",
+        "memory",
+        "rag",
+        "retrieval",
+        "user-memory"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "MemTensor/MemOS",
+      "name": "MemOS",
+      "url": "https://github.com/MemTensor/MemOS",
+      "description": "Self-evolving memory system for agents with persistent storage, hybrid retrieval, memory management, and cross-task skill reuse.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.95,
+      "github_detected_license": "Apache-2.0",
+      "stars": 10982,
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "ai",
+        "ai-agents",
+        "chatgpt",
+        "claude",
+        "deepseek-harness",
+        "dsh-plugin",
+        "hermes",
+        "llm",
+        "long-term-memory",
+        "mcp",
+        "memory",
+        "memory-management",
+        "openclaw",
+        "rag",
+        "self-evolving",
+        "self-hosted",
+        "skills",
+        "token-savings"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "microsoft/autogen",
+      "name": "AutoGen",
+      "url": "https://github.com/microsoft/autogen",
+      "description": "A framework for creating multi-agent AI applications that can act autonomously or work alongside humans; now in maintenance mode in favor of Microsoft Agent Framework.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.96,
+      "github_detected_license": "CC-BY-4.0",
+      "stars": 60629,
+      "topics": [
+        "agentic",
+        "agentic-agi",
+        "agents",
+        "ai",
+        "autogen",
+        "autogen-ecosystem",
+        "chatgpt",
+        "framework",
+        "llm-agent",
+        "llm-framework"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "microsoft/magentic-ui",
+      "name": "Magentic-UI",
+      "url": "https://github.com/microsoft/magentic-ui",
+      "description": "Human-centered agent for monitored browser, code, and local-file tasks with editable plans, intervention, approvals, and recurring workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": "MIT",
+      "stars": 10076,
+      "topics": [
+        "agents",
+        "ai",
+        "ai-ux",
+        "autogen",
+        "browser-use",
+        "computer-use-agent",
+        "cua",
+        "fara",
+        "magenticbrain",
+        "magenticlite",
+        "ui"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "microsoft/semantic-kernel",
+      "name": "Semantic Kernel",
+      "url": "https://github.com/microsoft/semantic-kernel",
+      "description": "Microsoft SDK with agent abstractions, tool integration, and multi-agent patterns for building AI applications in Python, .NET, and Java.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.9,
+      "github_detected_license": "MIT",
+      "stars": 28501,
+      "topics": [
+        "ai",
+        "artificial-intelligence",
+        "llm",
+        "openai",
+        "sdk"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "microsoft/TaskWeaver",
+      "name": "TaskWeaver",
+      "url": "https://github.com/microsoft/TaskWeaver",
+      "description": "Archived code-first agent framework for planning and executing stateful data-analysis tasks through generated code and plugins.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "data_analysis_agent",
+      "classification_confidence": 0.96,
+      "github_detected_license": "MIT",
+      "stars": 6173,
+      "topics": [
+        "agent",
+        "ai-agents",
+        "code-interpreter",
+        "copilot",
+        "data-analysis",
+        "llm",
+        "openai"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "mindsdb/mindshub",
+      "name": "MindsHub",
+      "url": "https://github.com/mindsdb/mindshub",
+      "description": "Unified workspace and runtime for agents that connect models, tools, APIs, and data sources to execute persistent tasks.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.78,
+      "github_detected_license": "MIT",
+      "stars": 39642,
+      "topics": [
+        "agents",
+        "ai",
+        "anton",
+        "artificial-inteligence",
+        "claude",
+        "claude-cowork",
+        "codex",
+        "cowork",
+        "deepseek",
+        "glm",
+        "hermes",
+        "hermes-agent",
+        "kimi",
+        "mcp",
+        "mindsdb"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1729,6 +2273,77 @@
       ]
     },
     {
+      "repo": "simular-ai/Agent-S",
+      "name": "Agent S",
+      "url": "https://github.com/simular-ai/Agent-S",
+      "description": "Computer-use agent framework with planning, GUI grounding, memory, and desktop automation capabilities.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": "Apache-2.0",
+      "stars": 12189,
+      "topics": [
+        "agent-computer-interface",
+        "ai-agents",
+        "computer-automation",
+        "computer-use",
+        "computer-use-agent",
+        "cua",
+        "grounding",
+        "gui-agents",
+        "in-context-reinforcement-learning",
+        "memory",
+        "mllm",
+        "planning",
+        "retrieval-augmented-generation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Skyvern-AI/skyvern",
+      "name": "Skyvern",
+      "url": "https://github.com/Skyvern-AI/skyvern",
+      "description": "Browser-workflow agent that plans and executes tasks through Playwright, vision models, validation, and observable workflow runs.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": "AGPL-3.0",
+      "stars": 22851,
+      "topics": [
+        "ai",
+        "api",
+        "automation",
+        "browser",
+        "browser-automation",
+        "computer",
+        "gpt",
+        "llm",
+        "playwright",
+        "powerautomate",
+        "puppeteer",
+        "python",
+        "rpa",
+        "selenium",
+        "vision",
+        "workflow"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "softaworks/agent-toolkit",
       "name": "agent-toolkit",
       "url": "https://github.com/softaworks/agent-toolkit",
@@ -1781,6 +2396,77 @@
       ]
     },
     {
+      "repo": "stanford-oval/storm",
+      "name": "STORM",
+      "url": "https://github.com/stanford-oval/storm",
+      "description": "Knowledge-curation system that performs multi-perspective research and generates cited, full-length reports.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "research_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": "MIT",
+      "stars": 31131,
+      "topics": [
+        "agentic-rag",
+        "deep-research",
+        "emnlp2024",
+        "knowledge-curation",
+        "large-language-models",
+        "naacl",
+        "nlp",
+        "report-generation",
+        "retrieval-augmented-generation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "strands-agents/harness-sdk",
+      "name": "Strands Agents SDK",
+      "url": "https://github.com/strands-agents/harness-sdk",
+      "description": "Open-source Python and TypeScript SDK for building and controlling model-driven agent harnesses across models and deployment environments.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.98,
+      "github_detected_license": "Apache-2.0",
+      "stars": 7006,
+      "topics": [
+        "agent-framework",
+        "agentic",
+        "agentic-ai",
+        "agents",
+        "ai",
+        "ai-agents",
+        "anthropic",
+        "autonomous-agents",
+        "bedrock",
+        "generative-ai",
+        "harness",
+        "llm",
+        "llm-agent",
+        "mcp",
+        "multi-agent-systems",
+        "openai",
+        "python",
+        "sdk",
+        "strands-agents",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "superagent-ai/grok-cli",
       "name": "grok-cli",
       "url": "https://github.com/superagent-ai/grok-cli",
@@ -1798,6 +2484,39 @@
         "coding-agent",
         "grok",
         "xai"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "supermemoryai/supermemory",
+      "name": "Supermemory",
+      "url": "https://github.com/supermemoryai/supermemory",
+      "description": "Memory and context service for agents with fact extraction, evolving user profiles, hybrid retrieval, connectors, and local self-hosting.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.99,
+      "github_detected_license": "MIT",
+      "stars": 29065,
+      "topics": [
+        "agent-memory",
+        "ai-memory",
+        "cloudflare-kv",
+        "cloudflare-pages",
+        "cloudflare-workers",
+        "drizzle-orm",
+        "memory",
+        "postgres",
+        "remix",
+        "tailwindcss",
+        "typescript",
+        "vite"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",

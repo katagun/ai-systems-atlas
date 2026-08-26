@@ -1,4 +1,4 @@
-name: Refresh open-source systems directory
+name: Refresh AI systems directory
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     - cron: "17 7 * * 1"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: directory-refresh
@@ -15,12 +15,20 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
+          enable-cache: true
           python-version: "3.12"
+      - name: Sync environment
+        run: uv sync --locked
       - name: Refresh GitHub metadata and discover candidates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,16 +37,45 @@ jobs:
         run: uv run python scripts/validate_directory.py
       - name: Run tests
         run: uv run python -m unittest discover -s tests -v
+      - name: Compile Python sources
+        run: uv run python -m compileall scripts tests
+      - name: Check browser JavaScript syntax
+        run: node --check web/app-core.js && node --check web/app.js
       - name: Run web behavior tests
         run: node --test tests/test_web.js
-      - name: Commit verified changes
+      - name: Open or update the refresh pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          if git diff --quiet; then
+          set -euo pipefail
+
+          git add directory web
+          if git diff --cached --quiet; then
             echo "No directory changes"
             exit 0
           fi
-          git config user.name "agent-systems-atlas-bot"
-          git config user.email "agent-systems-atlas-bot@users.noreply.github.com"
-          git add directory web
+
+          git diff --cached --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(directory): weekly GitHub refresh"
-          git push
+
+          branch="automation/directory-refresh"
+          remote_sha="$(git ls-remote --heads origin "refs/heads/${branch}" | cut -f1)"
+          if [[ -n "${remote_sha}" ]]; then
+            git push --force-with-lease="refs/heads/${branch}:${remote_sha}" \
+              origin "HEAD:refs/heads/${branch}"
+          else
+            git push origin "HEAD:refs/heads/${branch}"
+          fi
+
+          if [[ "$(gh pr list --head "${branch}" --state open --json number --jq length)" -eq 0 ]]; then
+            gh pr create \
+              --base "${DEFAULT_BRANCH}" \
+              --head "${branch}" \
+              --title "chore(directory): weekly GitHub refresh" \
+              --body $'Automated metadata refresh and candidate discovery.\n\nReview license incidents and candidate additions before merging.'
+          else
+            echo "Updated the existing directory refresh pull request"
+          fi

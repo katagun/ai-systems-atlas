@@ -64,4 +64,18 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. Review a failed run rather than manually committing partial runner output. Candidate and license-review queues are tracked files, so successful refresh results remain available after the runner exits.
+`.github/workflows/update-directory.yml` runs weekly and on demand. It validates a complete refresh, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, and the CI result before merging. Review a failed run rather than manually committing partial runner output.
+
+The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR. GitHub may require a maintainer to approve CI on bot-created PRs; that review gate is intentional.
+
+## GitHub Pages
+
+`.github/workflows/deploy-pages.yml` validates the published catalog and deploys only `web/` after a push to `main` or a manual run. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its deployment protection rules enabled.
+
+The site URL follows the repository owner and name. After a transfer or rename, update any explicit links or custom-domain configuration separately; the deployment workflow itself is owner-independent.
+
+## Repository safeguards
+
+`.github/workflows/verify.yml` is the required CI check. Configure a `main` ruleset that requires pull requests, the `verify` job, conversation resolution, and a current branch before merge. Keep force-pushes and branch deletion disabled. Enable secret scanning, push protection, Dependabot alerts, and CodeQL default setup for the public repository.
+
+All third-party actions are pinned to immutable commit SHAs. `.github/dependabot.yml` opens weekly pull requests to keep those pins current. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.

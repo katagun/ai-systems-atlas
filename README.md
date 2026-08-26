@@ -2,6 +2,8 @@
 
 AI Systems Atlas is a curated directory of operational AI systems, currently organized around memory systems and agent systems across source models. It separates what a system is for from how it works, makes licensing explicit, and compares scores only inside the appropriate system family.
 
+Browse the published directory at [katagun.github.io/agent-systems-atlas](https://katagun.github.io/agent-systems-atlas/).
+
 The repository contains the canonical editorial catalog, its validation and refresh automation, and a dependency-free static web interface. The local-first second-brain implementation informed by this research lives in [Cognosaic](https://github.com/embark-delve/cognosaic).
 
 ## Start here
