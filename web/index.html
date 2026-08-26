@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://katagun.github.io/ai-systems-atlas/">
   <title>AI Systems Atlas</title>
   <link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/">
-  <link rel="stylesheet" href="styles.css?v=3.2">
+  <link rel="stylesheet" href="styles.css?v=4.0">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -34,7 +34,7 @@
       <div class="hero">
         <p class="eyebrow" id="hero-kicker">Reviewed systems</p>
         <h1 id="directory-title">Find a system that fits.</h1>
-        <p class="hero-copy">Explore memory and agent systems by role, architecture, deployment, and fit.</p>
+        <p class="hero-copy">Explore memory, agent, and assistant systems by role, architecture, deployment, and fit.</p>
         <button class="hero-action" data-open-tab="finder">Not sure? Help me choose →</button>
       </div>
 
@@ -48,7 +48,7 @@
           <div class="advanced-filters">
             <label><span>Source model</span><select id="source-model-filter"><option value="">All source models</option></select></label>
             <label><span>License</span><select id="license-filter"><option value="">All licenses</option></select></label>
-            <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
+            <label><span>AI relationship</span><select id="agent-filter"><option value="">All relationships</option></select></label>
             <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
             <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="removed">Unavailable</option></select></label>
             <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
@@ -95,13 +95,14 @@
       <div class="section-heading">
         <p class="eyebrow">A multi-axis model</p>
         <h1 id="taxonomy-title">One family. One primary role. Several orthogonal traits.</h1>
-        <p>A system can be a coding agent that runs locally, edits files, invokes MCP tools, and keeps session state. Those are different facts—not competing labels or a memory-system score.</p>
+        <p>A system can be an assistant that uses one provider, connects to work data, and retains service-managed context. Those are different facts—not competing labels or an agent-system score.</p>
       </div>
       <div id="taxonomy-content" class="taxonomy-content"></div>
       <section class="definitions">
         <article><h2>External agent memory</h2><p>A separate library or service persists memory outside the agent runtime. Agents call it through an SDK, API, CLI, or protocol. Replacing the agent does not delete the memory. This improves reuse, but can create an opaque second source of truth.</p></article>
         <article><h2>Ambient capture</h2><p>Passive collection of digital activity—screenshots, audio, active apps, window titles, or events—without deliberate note taking. It minimizes capture friction but creates severe privacy, noise, retention, and consent obligations.</p></article>
         <article><h2>Agent-system score</h2><p>Rates reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity. It is not comparable to the memory-system score.</p></article>
+        <article><h2>Assistant-system score</h2><p>Rates product-level reliability, context continuity, tools and integrations, human control, data governance, interoperability, usability, and maturity. It does not rank underlying models.</p></article>
         <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. PKM tools, RAG apps, memory services, and agents can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
@@ -118,7 +119,7 @@
   </dialog>
 
   <footer><span>AI Systems Atlas</span><span>Systems scored within families. Specifications unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=3.5" defer></script>
-  <script src="app.js?v=3.5" defer></script>
+  <script src="app-core.js?v=4.0" defer></script>
+  <script src="app.js?v=4.0" defer></script>
 </body>
 </html>

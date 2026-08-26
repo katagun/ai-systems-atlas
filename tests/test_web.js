@@ -10,6 +10,7 @@ const projects = [
   { name: "SDK", primary_role: "agent_framework_sdk", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["event_log"], source_model: "mixed_source", licenses: ["MIT", "LicenseRef-Proprietary"], status: "active", local_first: false, stars: 15, score: { overall: 8.5 } },
   { name: "GBrain", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["git_versioned"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 24, score: { overall: 8.7 } },
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
+  { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
 
 test("finder role sets exclude unrelated projects without imposing a local-only threshold", () => {
@@ -27,6 +28,7 @@ test("finder role sets exclude unrelated projects without imposing a local-only 
 test("family matching keeps score comparisons inside one family", () => {
   assert.equal(matchesProject(projects[3], { family: "memory_system" }), false);
   assert.equal(matchesProject(projects[0], { family: "memory_system" }), true);
+  assert.equal(matchesProject(projects[7], { family: "assistant_system" }), true);
 });
 
 test("directory defaults expose every active family without a hidden role constraint", () => {
@@ -63,7 +65,16 @@ test("single-character search finds matching system-name prefixes across familie
 
 test("unknown stars sort behind verified star counts", () => {
   const results = filterAndSortProjects(projects, { sort: "stars" });
-  assert.deepEqual(results.map(project => project.name), ["GStack", "GBrain", "Agent", "SDK", "Bridge", "PKM", "Service"]);
+  assert.deepEqual(results.map(project => project.name), ["GStack", "GBrain", "Agent", "SDK", "Bridge", "PKM", "Service", "Assistant"]);
+});
+
+test("assistant family supports role filtering and family-local score sorting", () => {
+  const results = filterAndSortProjects(projects, {
+    family: "assistant_system",
+    role: "general_ai_assistant",
+    sort: "score",
+  });
+  assert.deepEqual(results.map(project => project.name), ["Assistant"]);
 });
 
 test("license and source-model filters combine", () => {

@@ -1,6 +1,6 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory and AI agent systems plus unscored interoperability specifications. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory, agent, and assistant systems plus unscored interoperability specifications. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 

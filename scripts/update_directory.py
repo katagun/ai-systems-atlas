@@ -9,18 +9,29 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import UTC, datetime
+import xml.etree.ElementTree as ET
+import xml.parsers.expat as expat
+from datetime import UTC, date, datetime, timedelta
+from email.utils import parsedate_to_datetime
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from .discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
     from .sync_web_data import main as sync_web_data
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from discovery_sources import canonical_url_key, https_url_host, validate_discovery_sources
     from sync_web_data import main as sync_web_data
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,9 +40,18 @@ PROJECTS_PATH = DIRECTORY / "projects.json"
 TAXONOMY_PATH = DIRECTORY / "taxonomy.json"
 CANDIDATES_PATH = DIRECTORY / "candidates.json"
 LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
+DISCOVERY_SOURCES_PATH = DIRECTORY / "discovery-sources.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 MIN_METADATA_SUCCESS_RATIO = 0.80
+MAX_FEED_BYTES = 2 * 1024 * 1024
+MAX_FEED_OBSERVATIONS = 100
+FEED_LOOKBACK_DAYS = 14
+ANNOUNCEMENT_SIGNAL_PATTERN = re.compile(
+    r"\b(?:introduc(?:e[sd]?|ing)|announc(?:e[sd]?|ing)|launch(?:ed|es|ing)?|new)\b"
+    r"|\b(?:now available|general availability|public preview)\b",
+    re.IGNORECASE,
+)
 DISCOVERY_QUERIES = [
     '"second brain" in:name,description stars:>500 archived:false',
     '"agent memory" in:name,description stars:>500 archived:false',
@@ -58,6 +78,22 @@ RELEVANT = {
 EXCLUDED = {"game", "awesome list", "interview questions", "tutorial only", "course only"}
 
 GitHubGetter = Callable[[str, str | None], dict[str, Any]]
+FeedGetter = Callable[[str, set[str]], bytes]
+
+
+class _TextExtractor(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        self.parts.append(data)
+
+
+def plain_text(value: str) -> str:
+    parser = _TextExtractor()
+    parser.feed(value)
+    return " ".join(" ".join(parser.parts).split())
 
 
 def now_date() -> str:
@@ -107,6 +143,56 @@ def github_get(
     raise AssertionError("retry loop ended without returning or raising")
 
 
+class _AllowlistedRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def __init__(self, allowed_hosts: set[str]) -> None:
+        super().__init__()
+        self.allowed_hosts = allowed_hosts
+
+    def redirect_request(
+        self,
+        req: urllib.request.Request,
+        fp: Any,
+        code: int,
+        msg: str,
+        headers: Any,
+        newurl: str,
+    ) -> urllib.request.Request | None:
+        if https_url_host(newurl) not in self.allowed_hosts:
+            raise urllib.error.URLError("feed redirect left its HTTPS host allowlist")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def feed_get(
+    url: str,
+    allowed_hosts: set[str],
+    *,
+    attempts: int = 3,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> bytes:
+    if https_url_host(url) not in allowed_hosts:
+        raise ValueError("feed URL is outside its HTTPS host allowlist")
+    headers = {"User-Agent": "ai-systems-atlas-updater/0.5"}
+    request = urllib.request.Request(url, headers=headers)
+    opener = urllib.request.build_opener(_AllowlistedRedirectHandler(allowed_hosts))
+    for attempt in range(attempts):
+        try:
+            with opener.open(request, timeout=30) as response:
+                if https_url_host(response.geturl()) not in allowed_hosts:
+                    raise ValueError("feed response left its HTTPS host allowlist")
+                body = response.read(MAX_FEED_BYTES + 1)
+                if len(body) > MAX_FEED_BYTES:
+                    raise ValueError("feed exceeds size limit")
+                return body
+        except urllib.error.HTTPError as exc:
+            if exc.code not in TRANSIENT_HTTP_CODES or attempt == attempts - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == attempts - 1:
+                raise
+        sleeper(2**attempt)
+    raise AssertionError("retry loop ended without returning or raising")
+
+
 def classify(text: str) -> tuple[str | None, float]:
     lowered = text.lower()
     if any(term in lowered for term in EXCLUDED):
@@ -141,10 +227,18 @@ def classify(text: str) -> tuple[str | None, float]:
         return "context_graph_engine", max(relevance, 0.82)
     if "agent" in lowered and "memory" in lowered:
         return "agent_memory_service", max(relevance, 0.8)
-    if any(term in lowered for term in ("rag", "notebooklm", "chat with your docs", "document assistant")):
+    if any(term in lowered for term in (
+        "rag", "notebooklm", "chat with your docs", "chat with your documents", "document assistant",
+    )):
         return "ai_knowledge_app", max(relevance, 0.78)
     if any(term in lowered for term in ("note-taking", "note taking", "personal knowledge", "pkm", "digital garden")):
         return "human_pkm", max(relevance, 0.76)
+    if any(term in lowered for term in ("multi-model chat", "multi model chat", "multiple models in chat")):
+        return "multi_model_chat_client", max(relevance, 0.8)
+    if "assistant" in lowered and any(term in lowered for term in ("enterprise", "workplace", "organization", "business")):
+        return "enterprise_work_assistant", max(relevance, 0.78)
+    if any(term in lowered for term in ("ai assistant", "personal assistant", "chat assistant")):
+        return "general_ai_assistant", max(relevance, 0.76)
     return None, relevance
 
 
@@ -167,6 +261,141 @@ def candidate_template(
         "discovered_at": discovered_at,
         "review_required": ["licensing", "classification", "traits", "editorial_score"],
     }
+
+
+def official_candidate_template(
+    *,
+    source: dict[str, Any],
+    title: str,
+    url: str,
+    summary: str,
+    family: str,
+    role: str,
+    confidence: float,
+    discovered_at: str,
+) -> dict[str, Any]:
+    description = f"Official {source['name']} announcement awaiting editorial review."
+    if summary:
+        description = f"{description} {summary}"
+    return {
+        "repo": None,
+        "name": title,
+        "url": url,
+        "description": description[:1000],
+        "proposed_system_family": family,
+        "proposed_primary_role": role,
+        "classification_confidence": round(confidence, 2),
+        "github_detected_license": None,
+        "stars": None,
+        "topics": ["official-announcement", source["id"]],
+        "status": "provisional",
+        "discovered_at": discovered_at,
+        "review_required": ["licensing", "classification", "traits", "editorial_score"],
+    }
+
+
+def _child_text(element: ET.Element, names: tuple[str, ...]) -> str:
+    for child in element.iter():
+        local_name = child.tag.rsplit("}", 1)[-1].lower()
+        if local_name in names:
+            return "".join(child.itertext()).strip()
+    return ""
+
+
+def _item_link(element: ET.Element) -> str:
+    for child in element.iter():
+        if child.tag.rsplit("}", 1)[-1].lower() != "link":
+            continue
+        href = child.attrib.get("href")
+        if href and child.attrib.get("rel", "alternate") in {"", "alternate"}:
+            return href.strip()
+        if child.text:
+            return child.text.strip()
+    return ""
+
+
+def _published_date(value: str) -> date | None:
+    if not value:
+        return None
+    try:
+        return parsedate_to_datetime(value).date()
+    except (TypeError, ValueError, OverflowError):
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00")).date()
+        except ValueError:
+            return None
+
+
+def _reject_document_doctype(body: bytes) -> None:
+    """Reject an actual XML doctype without mistaking CDATA text for markup."""
+    parser = expat.ParserCreate()
+
+    def reject(*_args: object) -> None:
+        raise ValueError("DOCTYPE is not allowed in discovery feeds")
+
+    parser.StartDoctypeDeclHandler = reject
+    try:
+        parser.Parse(body, True)
+    except ValueError:
+        raise
+    except expat.ExpatError as exc:
+        raise ET.ParseError(str(exc)) from exc
+
+
+def parse_official_feed(
+    body: bytes,
+    source: dict[str, Any],
+    role_families: dict[str, str],
+    discovered_at: str,
+) -> list[dict[str, Any]]:
+    if len(body) > MAX_FEED_BYTES:
+        raise ValueError("feed exceeds size limit")
+    _reject_document_doctype(body)
+    root = ET.fromstring(body)
+    if root.tag.rsplit("}", 1)[-1].lower() not in {"rss", "feed"}:
+        raise ValueError("official discovery source must be an RSS or Atom feed")
+    items = [
+        element for element in root.iter()
+        if element.tag.rsplit("}", 1)[-1].lower() in {"item", "entry"}
+    ]
+    observed_date = date.fromisoformat(discovered_at)
+    cutoff = observed_date - timedelta(days=FEED_LOOKBACK_DAYS)
+    latest = observed_date + timedelta(days=1)
+    allowed_hosts = set(source["item_hosts"])
+    candidates: list[dict[str, Any]] = []
+    for item in items:
+        title = plain_text(_child_text(item, ("title",)))
+        summary = plain_text(_child_text(item, ("description", "summary", "content")))
+        url = _item_link(item)
+        published = _published_date(_child_text(item, ("pubdate", "published", "updated")))
+        parsed_url = urllib.parse.urlparse(url)
+        if (
+            not title
+            or published is None
+            or published < cutoff
+            or published > latest
+            or parsed_url.scheme != "https"
+            or (parsed_url.hostname or "").lower() not in allowed_hosts
+            or not ANNOUNCEMENT_SIGNAL_PATTERN.search(title)
+        ):
+            continue
+        role, confidence = classify(f"{title} {summary}")
+        family = role_families.get(role) if role else None
+        if not role or not family or confidence < 0.75:
+            continue
+        candidates.append(official_candidate_template(
+            source=source,
+            title=title,
+            url=url,
+            summary=summary,
+            family=family,
+            role=role,
+            confidence=confidence,
+            discovered_at=discovered_at,
+        ))
+        if len(candidates) >= MAX_FEED_OBSERVATIONS:
+            break
+    return candidates
 
 
 def refresh_projects(
@@ -297,16 +526,62 @@ def discover_candidates(
     return ordered, new_count, successful_queries, failures
 
 
+def discover_official_candidates(
+    previous_candidates: list[dict[str, Any]],
+    known_urls: set[str],
+    sources: list[dict[str, Any]],
+    role_families: dict[str, str],
+    discovered_at: str,
+    *,
+    getter: FeedGetter = feed_get,
+) -> tuple[list[dict[str, Any]], int, int, list[str]]:
+    def candidate_key(item: dict[str, Any]) -> str:
+        repo = item.get("repo")
+        return str(repo).lower() if repo else canonical_url_key(item["url"])
+
+    candidates = {candidate_key(item): item for item in previous_candidates}
+    known = {canonical_url_key(value) for value in known_urls} | set(candidates)
+    new_count = 0
+    successful_sources = 0
+    failures: list[str] = []
+    for source in sources:
+        try:
+            observations = parse_official_feed(
+                getter(source["feed_url"], set(source["item_hosts"])),
+                source,
+                role_families,
+                discovered_at,
+            )
+        except (ET.ParseError, ValueError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+            failures.append(f"{source['id']}: {type(exc).__name__}: {exc}")
+            continue
+        successful_sources += 1
+        for observation in observations:
+            key = candidate_key(observation)
+            if key in known:
+                continue
+            candidates[key] = observation
+            known.add(key)
+            new_count += 1
+    return sorted(candidates.values(), key=candidate_key), new_count, successful_sources, failures
+
+
 def main() -> int:
     token = os.environ.get("GITHUB_TOKEN")
     refreshed_at = now_date()
     document = load_json(PROJECTS_PATH)
     taxonomy = load_json(TAXONOMY_PATH)
     exclusions = load_json(DIRECTORY / "exclusions.json")
+    discovery_sources = load_json(DISCOVERY_SOURCES_PATH)
     candidate_document = load_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []})
     review_document = load_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []})
     projects = document["projects"]
     previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
+
+    if source_errors := validate_discovery_sources(discovery_sources):
+        for error in source_errors:
+            print(f"error: {error}", file=sys.stderr)
+        return 1
 
     successes, metadata_failures, reviews = refresh_projects(
         projects,
@@ -347,10 +622,26 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
+    known_urls = {project["url"] for project in projects}
+    candidates, new_official_candidates, successful_sources, official_failures = discover_official_candidates(
+        candidates,
+        known_urls,
+        discovery_sources["sources"],
+        role_families,
+        refreshed_at,
+    )
+    if discovery_sources["sources"] and successful_sources == 0:
+        print("error: every official discovery source failed; existing candidate queue was preserved", file=sys.stderr)
+        for failure in official_failures:
+            print(f"warning: {failure}", file=sys.stderr)
+        return 1
+
     for failure in metadata_failures:
         print(f"warning: {failure}", file=sys.stderr)
     for failure in discovery_failures:
         print(f"warning: discovery query failed: {failure}", file=sys.stderr)
+    for failure in official_failures:
+        print(f"warning: official discovery source failed: {failure}", file=sys.stderr)
 
     projects.sort(key=lambda project: (project["system_family"], project["name"].lower()))
     document["generated_at"] = refreshed_at
@@ -363,7 +654,8 @@ def main() -> int:
         "metadata_refreshed": successes,
         "metadata_failed": len(metadata_failures),
         "discovery_queries_succeeded": successful_queries,
-        "new_candidates": new_candidates,
+        "official_sources_succeeded": successful_sources,
+        "new_candidates": new_candidates + new_official_candidates,
         "candidate_queue": len(candidates),
         "license_reviews_open": len(reviews),
         "auto_added": 0,

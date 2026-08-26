@@ -15,6 +15,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `license-review.json` | Open license-evidence review incidents | No |
+| `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
 
 Run `uv run python scripts/sync_web_data.py` after manually changing published data.
 
@@ -30,7 +31,7 @@ Fields are grouped by responsibility:
 - **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
 - **Live metadata:** stars, forks, open issues, push time, detected license, and their metadata timestamps. These may be null for systems without a public GitHub repository.
 
-All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, or score-profile combinations.
+All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, secondary-role, or score-profile combinations. Every family has exactly one score profile. Agent-operation fields are required only for agent systems; assistants use the shared architecture, retrieval, capture, lifecycle, deployment, provider, and evidence fields.
 
 ### Source and license traits
 
@@ -74,6 +75,12 @@ Candidate records contain discovery facts and proposed classification only. They
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
 See `OPERATIONS.md` for promotion and resolution procedures.
+
+## Discovery source registry
+
+`discovery-sources.json` is operational configuration, not a catalog or evidence source. Each sorted entry identifies one authoritative HTTPS hub and feed plus the exact lowercase public DNS hosts allowed for the configured URLs, redirects, and feed item links. It contains no proposed family, role, license, source model, provider trait, score, or editorial conclusion.
+
+The updater reads recent official announcements, applies conservative launch and relevance gates, and emits ordinary provisional candidate records. It never fetches linked article pages or treats registry inclusion as product eligibility. Feed observations receive the same complete human-review requirements as GitHub discoveries.
 
 ## Specification record
 

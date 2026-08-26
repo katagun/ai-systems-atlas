@@ -6,7 +6,7 @@
 
 The Atlas originally admitted only GitHub-hosted systems whose repositories fit one OSI-compatible license scope. That made source inspection and evidence straightforward, but it also made licensing decide whether a relevant system existed in the directory. Mixed-license, open-core, source-available, and proprietary systems disappeared from comparison even when they materially answered the user's question.
 
-The product is a directory of operational memory and agent systems. Relevance and capability should determine inclusion. Licensing should explain what users may inspect, run, modify, and redistribute.
+The product is a directory of operational memory, agent, and assistant systems. Relevance and capability should determine inclusion. Licensing should explain what users may inspect, run, modify, and redistribute.
 
 ## Decision
 

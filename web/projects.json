@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25",
+  "generated_at": "2026-08-26",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -3385,6 +3385,247 @@
         "LicenseRef-Commercial"
       ],
       "source_model": "open_core",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "amazon-quick",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Amazon Quick",
+      "repo": null,
+      "url": "https://aws.amazon.com/quick/",
+      "description": "AWS work assistant combining organizational knowledge, research, analytics, actions, custom agents, skills, and scheduled workflows.",
+      "primary_role": "enterprise_work_assistant",
+      "secondary_roles": [
+        "general_ai_assistant"
+      ],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "architectures": [
+        "graph_db",
+        "hybrid"
+      ],
+    "retrieval_modes": [
+      "hybrid",
+      "structured_query",
+      "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, spaces, organizational indexes, knowledge graph, agent configurations, and workflow artifacts",
+      "deployment": [
+        "desktop",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+    "current_repo_note": "Amazon Quick is the current product boundary that evolved from QuickSight; it also integrates Amazon Q Business indexes and capabilities.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.6,
+        "context_continuity": 8.8,
+        "tools_integrations": 9.2,
+        "human_control": 8.6,
+        "data_governance": 9.0,
+        "interoperability": 8.5,
+        "usability_access": 8.2,
+        "maturity": 8.1,
+        "overall": 8.67
+      },
+      "strengths": [
+        "Combines enterprise search, cited research, analytics, applications, and actions in one governed workspace",
+        "Custom agents, scheduled work, MCP and OpenAPI connections, and human-in-the-loop automation cover broad work patterns",
+        "Permission-aware organizational data and AWS administration provide a strong enterprise control boundary"
+      ],
+      "weaknesses": [
+        "Proprietary managed service with limited implementation inspectability",
+        "The broad product bundle and evolving desktop preview make capability boundaries and maturity uneven",
+        "Organizational context and long-term personalization are service-managed rather than local-first"
+      ],
+      "why_it_matters": "A major hyperscaler reference for an enterprise assistant that unifies knowledge, agent creation, business actions, analytics, and persistent work context.",
+    "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "chatgpt",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "ChatGPT",
+      "repo": null,
+      "url": "https://chatgpt.com/",
+      "description": "OpenAI's general-purpose assistant for conversation, files, research, connected applications, memory, projects, and tool-using work.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+    "architectures": [
+      "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, saved memory, projects, connected-app context, tasks, and generated work artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the end-user ChatGPT product; Codex and OpenAI Agents SDK remain distinct operational systems.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.1,
+        "context_continuity": 8.8,
+        "tools_integrations": 9.3,
+        "human_control": 8.4,
+        "data_governance": 7.6,
+        "interoperability": 7.8,
+        "usability_access": 9.2,
+        "maturity": 9.6,
+        "overall": 8.73
+      },
+      "strengths": [
+        "Broad, mature assistant experience spanning research, files, creation, connected applications, and tool-using work",
+        "Projects, saved memory, recurring tasks, and cross-device clients support continuity across sessions",
+        "Strong usability, documentation, and ecosystem adoption"
+      ],
+      "weaknesses": [
+        "Operational implementation and model runtime are proprietary and provider-native",
+        "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
+        "Service-managed context and memory reduce data portability and local control"
+      ],
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
+    "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "t3-chat",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "T3 Chat",
+      "repo": null,
+      "url": "https://t3.chat/",
+      "description": "Multi-model chat workspace with provider choice, persistent and temporary threads, attachments, profiles, and optional web search.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "google",
+        "openai",
+        "openrouter"
+      ],
+    "architectures": [
+      "undisclosed_managed"
+      ],
+    "retrieval_modes": [
+      "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "service-managed threads, attachments, profiles, preferences, and generated chat artifacts",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "T3 Chat is the hosted assistant product; the separately open-source T3 Code control plane is a coding-agent workflow candidate.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.1,
+        "context_continuity": 7.8,
+        "tools_integrations": 6.8,
+        "human_control": 7.8,
+        "data_governance": 7.0,
+        "interoperability": 9.0,
+        "usability_access": 8.7,
+        "maturity": 7.8,
+        "overall": 7.82
+      },
+      "strengths": [
+        "First-class choice across several major model-provider ecosystems",
+        "Clean persistent and temporary chat workflows with attachments and reusable profiles",
+        "Simple interface lowers the friction of comparing and switching models"
+      ],
+      "weaknesses": [
+        "Bounded search and tool calls do not provide the autonomous work loop of a general agent",
+        "Hosted proprietary service with limited implementation and storage inspectability",
+        "Tool and enterprise-integration breadth is narrower than larger assistant platforms"
+      ],
+      "why_it_matters": "A useful comparison point for assistant products whose primary value is a consistent multi-provider workspace rather than owning a model or autonomous runtime.",
+    "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
       "license_review_status": "verified"
     },
     {

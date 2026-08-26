@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import copy
 import urllib.error
+import urllib.request
 import unittest
+from unittest import mock
 
 from scripts import update_directory
 
@@ -183,6 +185,18 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("stateful_agent_runtime", role)
         self.assertGreaterEqual(confidence, 0.83)
 
+    def test_specialized_memory_roles_precede_broad_assistant_fallbacks(self) -> None:
+        cases = {
+            "AI assistant to chat with your documents and personal knowledge": "ai_knowledge_app",
+            "personal AI assistant for note-taking and your digital garden": "human_pkm",
+            "enterprise AI assistant for agent memory and knowledge graphs": "context_graph_engine",
+        }
+
+        for description, expected_role in cases.items():
+            with self.subTest(description=description):
+                role, _confidence = update_directory.classify(description)
+                self.assertEqual(expected_role, role)
+
     def test_candidate_family_is_supplied_by_taxonomy_policy(self) -> None:
         repo = {
             "full_name": "example/agent-sdk",
@@ -217,6 +231,238 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual(0, new_count)
         self.assertGreater(successful_queries, 0)
         self.assertEqual([], failures)
+
+    def test_official_rss_discovery_creates_only_a_provisional_observation(self) -> None:
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        body = b"""<?xml version="1.0"?><rss><channel><item>
+          <title>Introducing a new enterprise AI assistant</title>
+          <link>https://vendor.example/news/assistant</link>
+          <description>An enterprise business assistant with connected workplace tools.</description>
+          <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
+        </item></channel></rss>"""
+
+        candidates, new_count, successes, failures = update_directory.discover_official_candidates(
+            [],
+            set(),
+            [source],
+            {"enterprise_work_assistant": "assistant_system"},
+            "2026-08-26",
+            getter=lambda _url, _hosts: body,
+        )
+
+        self.assertEqual((1, 1, []), (new_count, successes, failures))
+        candidate = candidates[0]
+        self.assertEqual("assistant_system", candidate["proposed_system_family"])
+        self.assertEqual("enterprise_work_assistant", candidate["proposed_primary_role"])
+        self.assertEqual(["official-announcement", "vendor-ai"], candidate["topics"])
+        for editorial_field in ("score", "verified_at", "licenses", "source_model", "provider_relationship"):
+            self.assertNotIn(editorial_field, candidate)
+
+    def test_official_discovery_rejects_external_hosts_and_unsafe_xml(self) -> None:
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        external = b"""<feed xmlns="http://www.w3.org/2005/Atom"><entry>
+          <title>Launching a new AI assistant</title>
+          <link href="https://untrusted.example/product"/>
+          <summary>A personal AI assistant for broad tasks.</summary>
+          <updated>2026-08-26T12:00:00Z</updated>
+        </entry></feed>"""
+
+        self.assertEqual([], update_directory.parse_official_feed(
+            external, source, {"general_ai_assistant": "assistant_system"}, "2026-08-26"
+        ))
+        with self.assertRaisesRegex(ValueError, "DOCTYPE"):
+            update_directory.parse_official_feed(
+                b"<!DOCTYPE rss><rss/>", source, {}, "2026-08-26"
+            )
+
+        utf16_doctype = """<?xml version="1.0" encoding="UTF-16"?>
+          <!DOCTYPE rss [<!ENTITY title "Introducing an AI assistant">]>
+          <rss><channel><item><title>&title;</title></item></channel></rss>""".encode("utf-16")
+        with self.assertRaisesRegex(ValueError, "DOCTYPE"):
+            update_directory.parse_official_feed(
+                utf16_doctype, source, {}, "2026-08-26"
+            )
+
+    def test_official_feed_allows_html_doctype_inside_cdata(self) -> None:
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        body = b"""<rss><channel><item>
+          <title>Introducing an AI assistant</title>
+          <link>https://vendor.example/news/assistant</link>
+          <description><![CDATA[<!DOCTYPE html><p>A personal AI assistant.</p>]]></description>
+          <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
+        </item></channel></rss>"""
+
+        candidates = update_directory.parse_official_feed(
+            body, source, {"general_ai_assistant": "assistant_system"}, "2026-08-26"
+        )
+
+        self.assertEqual(1, len(candidates))
+
+    def test_official_feed_bounds_observations_without_rejecting_large_feeds(self) -> None:
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        items = "".join(
+            f"""<item><title>Introducing AI assistant {index}</title>
+              <link>https://vendor.example/news/assistant-{index}</link>
+              <description>A personal AI assistant.</description>
+              <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate></item>"""
+            for index in range(150)
+        )
+
+        candidates = update_directory.parse_official_feed(
+            f"<rss><channel>{items}</channel></rss>".encode(),
+            source,
+            {"general_ai_assistant": "assistant_system"},
+            "2026-08-26",
+        )
+
+        self.assertEqual(update_directory.MAX_FEED_OBSERVATIONS, len(candidates))
+
+    def test_official_feed_rejects_substring_signals_and_future_dates(self) -> None:
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        items = """<item><title>Renewing our AI assistant</title>
+            <link>https://vendor.example/news/renewal</link>
+            <description>A personal AI assistant.</description>
+            <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate></item>
+          <item><title>Newsroom update for our AI assistant</title>
+            <link>https://vendor.example/news/update</link>
+            <description>A personal AI assistant.</description>
+            <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate></item>
+          <item><title>Introducing an AI assistant</title>
+            <link>https://vendor.example/news/future</link>
+            <description>A personal AI assistant.</description>
+            <pubDate>Wed, 26 Aug 2099 12:00:00 GMT</pubDate></item>"""
+
+        candidates = update_directory.parse_official_feed(
+            f"<rss><channel>{items}</channel></rss>".encode(),
+            source,
+            {"general_ai_assistant": "assistant_system"},
+            "2026-08-26",
+        )
+
+        self.assertEqual([], candidates)
+
+    def test_official_discovery_preserves_existing_candidate_by_url(self) -> None:
+        previous = [{
+            "repo": None,
+            "url": "https://vendor.example/news/assistant/?utm_source=manual",
+            "name": "Manual review",
+        }]
+        source = {
+            "id": "vendor-ai",
+            "name": "Vendor AI",
+            "hub_url": "https://vendor.example/news",
+            "feed_url": "https://vendor.example/feed.xml",
+            "item_hosts": ["vendor.example"],
+        }
+        body = b"""<rss><channel><item><title>Introducing an AI assistant</title>
+          <link>https://vendor.example/news/assistant</link>
+          <description>A personal AI assistant.</description>
+          <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
+        </item></channel></rss>"""
+
+        candidates, new_count, successes, failures = update_directory.discover_official_candidates(
+            previous,
+            set(),
+            [source],
+            {"general_ai_assistant": "assistant_system"},
+            "2026-08-26",
+            getter=lambda _url, _hosts: body,
+        )
+
+        self.assertEqual(previous, candidates)
+        self.assertEqual((0, 1, []), (new_count, successes, failures))
+
+    def test_canonical_url_identity_preserves_non_tracking_query_bytes(self) -> None:
+        key = update_directory.canonical_url_key(
+            "https://Vendor.Example/item/?b=%2F&a=hello+world&%75tm_source=test#section"
+        )
+
+        self.assertEqual(
+            "https://vendor.example/item?b=%2F&a=hello+world",
+            key,
+        )
+
+    def test_feed_get_rejects_initial_and_redirect_hosts_outside_allowlist(self) -> None:
+        with self.assertRaisesRegex(ValueError, "outside"):
+            update_directory.feed_get(
+                "https://untrusted.example/feed.xml", {"vendor.example"}, attempts=1
+            )
+
+        handler = update_directory._AllowlistedRedirectHandler({"vendor.example"})
+        with self.assertRaisesRegex(urllib.error.URLError, "redirect"):
+            handler.redirect_request(
+                urllib.request.Request("https://vendor.example/feed.xml"),
+                None,
+                302,
+                "Found",
+                {},
+                "https://untrusted.example/feed.xml",
+            )
+
+    def test_all_official_source_failures_abort_before_writes(self) -> None:
+        source_document = {
+            "version": "1.0",
+            "sources": [{
+                "id": "vendor-ai",
+                "name": "Vendor AI",
+                "hub_url": "https://vendor.example/news",
+                "feed_url": "https://vendor.example/feed.xml",
+                "item_hosts": ["vendor.example"],
+            }],
+        }
+        project_document = {"generated_at": "2026-08-25", "projects": [{"repo": "example/tool", "url": "https://github.com/example/tool"}]}
+        documents = {
+            update_directory.PROJECTS_PATH: project_document,
+            update_directory.TAXONOMY_PATH: {"primary_roles": [{"id": "coding_agent", "family": "agent_system"}]},
+            update_directory.DIRECTORY / "exclusions.json": {"entries": []},
+            update_directory.DISCOVERY_SOURCES_PATH: source_document,
+            update_directory.CANDIDATES_PATH: {"candidates": []},
+            update_directory.LICENSE_REVIEW_PATH: {"entries": []},
+        }
+
+        with (
+            mock.patch.object(update_directory, "load_json", side_effect=lambda path, default=None: documents.get(path, default)),
+            mock.patch.object(update_directory, "refresh_projects", return_value=(1, [], [])),
+            mock.patch.object(update_directory, "discover_candidates", return_value=([], 0, 1, [])),
+            mock.patch.object(update_directory, "discover_official_candidates", return_value=([], 0, 0, ["offline"])),
+            mock.patch.object(update_directory, "write_json") as write_json,
+            mock.patch.object(update_directory, "sync_web_data") as synchronize,
+        ):
+            result = update_directory.main()
+
+        self.assertEqual(1, result)
+        write_json.assert_not_called()
+        synchronize.assert_not_called()
 
 
 if __name__ == "__main__":

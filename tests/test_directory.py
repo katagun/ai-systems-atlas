@@ -49,6 +49,38 @@ class DirectoryTests(unittest.TestCase):
         self.assertEqual({"provider_native", "multi_provider", "provider_agnostic"}, relationships)
         self.assertIn("anthropic", {item["id"] for item in self.taxonomy["model_backends"]})
 
+    def test_assistant_family_has_distinct_roles_and_score_profile(self) -> None:
+        families = {item["id"] for item in self.taxonomy["system_families"]}
+        roles = {
+            item["id"]: item["family"]
+            for item in self.taxonomy["primary_roles"]
+        }
+        profiles = {
+            item["id"]: item["family"]
+            for item in self.taxonomy["score_profiles"]
+        }
+
+        self.assertIn("assistant_system", families)
+        self.assertEqual("assistant_system", profiles["assistant"])
+        self.assertEqual(
+            {"general_ai_assistant", "enterprise_work_assistant", "multi_model_chat_client"},
+            {role for role, family in roles.items() if family == "assistant_system"},
+        )
+
+    def test_first_assistant_batch_is_reviewed_across_each_role(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+        expected = {
+            "chatgpt": "general_ai_assistant",
+            "amazon-quick": "enterprise_work_assistant",
+            "t3-chat": "multi_model_chat_client",
+        }
+
+        for project_id, role in expected.items():
+            self.assertEqual("assistant_system", projects[project_id]["system_family"])
+            self.assertEqual("assistant", projects[project_id]["score_profile"])
+            self.assertEqual(role, projects[project_id]["primary_role"])
+            self.assertEqual("proprietary", projects[project_id]["source_model"])
+
     def test_reviewed_provider_traits_are_atomic_and_taxonomy_backed(self) -> None:
         relationships = {item["id"] for item in self.taxonomy["provider_relationships"]}
         backends = {item["id"] for item in self.taxonomy["model_backends"]}

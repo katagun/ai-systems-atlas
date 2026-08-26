@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "sources": [
+    {
+      "id": "aws-ai-blog",
+      "name": "AWS Artificial Intelligence Blog",
+      "hub_url": "https://aws.amazon.com/blogs/machine-learning/",
+      "feed_url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "item_hosts": ["aws.amazon.com"]
+    },
+    {
+      "id": "github-copilot-changelog",
+      "name": "GitHub Copilot Changelog",
+      "hub_url": "https://github.blog/changelog/?label=copilot",
+      "feed_url": "https://github.blog/changelog/label/copilot/feed/",
+      "item_hosts": ["github.blog"]
+    },
+    {
+      "id": "google-ai-blog",
+      "name": "Google AI Blog",
+      "hub_url": "https://blog.google/innovation-and-ai/technology/ai/",
+      "feed_url": "https://blog.google/innovation-and-ai/technology/ai/rss/",
+      "item_hosts": ["blog.google"]
+    },
+    {
+      "id": "google-developers-blog",
+      "name": "Google Developers Blog",
+      "hub_url": "https://developers.googleblog.com/",
+      "feed_url": "https://developers.googleblog.com/feeds/posts/default/",
+      "item_hosts": ["developers.googleblog.com"]
+    },
+    {
+      "id": "jetbrains-ai-blog",
+      "name": "JetBrains AI Blog",
+      "hub_url": "https://blog.jetbrains.com/ai/",
+      "feed_url": "https://blog.jetbrains.com/ai/feed/",
+      "item_hosts": ["blog.jetbrains.com"]
+    },
+    {
+      "id": "openai-news",
+      "name": "OpenAI News",
+      "hub_url": "https://openai.com/news/",
+      "feed_url": "https://openai.com/news/rss.xml",
+      "item_hosts": ["openai.com"]
+    },
+    {
+      "id": "replit-blog",
+      "name": "Replit Blog",
+      "hub_url": "https://replit.com/blog",
+      "feed_url": "https://replit.com/blog/feed.xml",
+      "item_hosts": ["replit.com"]
+    },
+    {
+      "id": "windows-experience-blog",
+      "name": "Windows Experience Blog",
+      "hub_url": "https://blogs.windows.com/windowsexperience/",
+      "feed_url": "https://blogs.windows.com/windowsexperience/feed/",
+      "item_hosts": ["blogs.windows.com"]
+    }
+  ]
+}

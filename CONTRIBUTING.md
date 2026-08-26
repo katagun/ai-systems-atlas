@@ -10,7 +10,7 @@ AI Systems Atlas accepts focused corrections, new evidence, candidate suggestion
 - Automation or GitHub workflows: read [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 - Browser behavior or styles: read [`docs/WEB.md`](docs/WEB.md).
 
-Suggest an unreviewed project through the issue form rather than adding it directly to the published catalog. A catalog addition needs authoritative operational evidence, reviewed license or terms scope, a taxonomy-backed classification, and complete required fields. Vendor-specific instruction conventions must be labeled as such.
+Suggest an unreviewed project through the issue form rather than adding it directly to the published catalog. A catalog addition needs authoritative operational evidence, reviewed license or terms scope, a taxonomy-backed classification, and complete required fields. Assistant reviews evaluate the product rather than a transient underlying-model benchmark. Vendor-specific instruction conventions must be labeled as such.
 
 ## Verify the change
 

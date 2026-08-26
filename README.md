@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems and the specifications that connect them. Memory and agent systems are compared only inside their family; protocols, conventions, and package formats are classified separately and left unscored. Licensing and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems and the specifications that connect them. Memory, agent, and assistant systems are compared only inside their family; protocols, conventions, and package formats are classified separately and left unscored. Licensing and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [katagun.github.io/ai-systems-atlas](https://katagun.github.io/ai-systems-atlas/).
 
@@ -52,6 +52,7 @@ directory/specifications.json  reviewed unscored protocols, conventions, and for
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
+directory/discovery-sources.json allowlisted official discovery feeds
 scripts/                        refresh, synchronization, and validation
 tests/                          Python invariants, web logic tests, and browser E2E tests
 web/                            static directory UI and published data copies
@@ -65,7 +66,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - A detected license mismatch marks evidence for review without hiding the project or rewriting human conclusions.
 - Automated discoveries remain provisional and receive no editorial score or review date.
 - Editorial verification dates are separate from live GitHub metadata dates.
-- Memory and agent scores are never ranked across families.
+- Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.
 
 The weekly workflow refreshes live metadata, preserves candidate and license-review queues, validates the complete catalog, runs tests, and commits only verified data changes.

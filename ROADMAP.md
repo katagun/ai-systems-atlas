@@ -2,18 +2,20 @@
 
 This roadmap describes outcomes and sequencing. [`BACKLOG.md`](BACKLOG.md) is the source of truth for executable work; policy and architectural decisions live in `docs/`.
 
-## Current: representative, transparent AI-system coverage
+## Current: comprehensive coverage within a declared operational scope
 
-Make the Atlas broad enough to represent important memory and agent-system choices without hiding systems because of their source model.
+Make the Atlas broad enough to represent important memory, agent, and assistant-system choices without hiding systems because of their source model.
 
 - Separate relevance from licensing: include by operational role and expose source model, licenses, and evidence as filters and labels.
-- Represent model-provider coupling as reviewed traits, not as a third system family.
-- Review provisional projects in small domain batches, continuing with the coding-agent second pass, source-model diversity, and thin operational roles.
+- Compare memory, agent, and assistant products only within their outcome-specific family and score profile.
+- Represent model-provider coupling as reviewed traits, never as a system family.
+- Review provisional projects in small domain batches, continuing with assistants, managed proprietary platforms, coding agents, source-model diversity, and thin operational roles.
 - Measure coverage by operational role, source-model diversity, and meaningful alternatives—not one misleading project total.
+- Combine GitHub repository discovery with a conservative allowlist of authoritative vendor feeds so proprietary products can enter the same provisional queue.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
 
-Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
+Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
 
 ## Next: efficient curation
 
@@ -31,7 +33,7 @@ Evaluate a separate, unscored ecosystem index for adjacent model providers, API 
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 
-Evaluate additional scored families only when a distinct operational outcome cannot fit the memory or agent profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
+Evaluate additional scored families only when a distinct operational outcome cannot fit the memory, agent, or assistant profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
 
 Exit signal: evidence of user value justifies the additional model and maintenance surface.
 

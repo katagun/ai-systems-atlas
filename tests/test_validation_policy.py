@@ -177,6 +177,81 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("provider_native requires exactly one model backend" in error for error in errors), errors)
 
+    def test_every_family_requires_exactly_one_score_profile(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        taxonomy_path = root / "directory" / "taxonomy.json"
+        taxonomy = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+        duplicate = dict(next(item for item in taxonomy["score_profiles"] if item["family"] == "assistant_system"))
+        duplicate["id"] = "assistant_duplicate"
+        taxonomy["score_profiles"].append(duplicate)
+        self.write_json(taxonomy_path, taxonomy)
+        self.write_json(root / "web" / "taxonomy.json", taxonomy)
+
+        errors = validate(root)
+
+        self.assertTrue(any("requires exactly one score profile" in error for error in errors), errors)
+
+    def test_secondary_roles_cannot_cross_family_boundaries(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        projects_path = root / "directory" / "projects.json"
+        projects = json.loads(projects_path.read_text(encoding="utf-8"))
+        projects["projects"][0]["secondary_roles"] = ["general_ai_assistant"]
+        self.write_json(projects_path, projects)
+        self.write_json(root / "web" / "projects.json", projects)
+
+        errors = validate(root)
+
+        self.assertTrue(any("secondary roles must belong" in error for error in errors), errors)
+
+    def test_discovery_sources_require_https_and_lowercase_hosts(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        sources_path = root / "directory" / "discovery-sources.json"
+        sources = json.loads(sources_path.read_text(encoding="utf-8"))
+        sources["sources"][0]["feed_url"] = "http://example.com/feed.xml"
+        sources["sources"][0]["item_hosts"] = ["Example.COM"]
+        self.write_json(sources_path, sources)
+
+        errors = validate(root)
+
+        self.assertTrue(any("feed_url must be an HTTPS URL" in error for error in errors), errors)
+        self.assertTrue(any("item_hosts must be a non-empty unique list" in error for error in errors), errors)
+
+    def test_discovery_sources_require_public_coherent_hosts(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        sources_path = root / "directory" / "discovery-sources.json"
+        sources = json.loads(sources_path.read_text(encoding="utf-8"))
+        sources["sources"][0]["item_hosts"] = ["localhost"]
+        self.write_json(sources_path, sources)
+
+        errors = validate(root)
+
+        self.assertTrue(any("lowercase public DNS hosts" in error for error in errors), errors)
+
+        sources["sources"][0]["item_hosts"] = ["example.com"]
+        self.write_json(sources_path, sources)
+        errors = validate(root)
+
+        self.assertTrue(any("host must appear in item_hosts" in error for error in errors), errors)
+
+    def test_candidate_url_identity_normalizes_slashes_and_tracking_parameters(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        candidates_path = root / "directory" / "candidates.json"
+        candidates = json.loads(candidates_path.read_text(encoding="utf-8"))
+        original = next(item for item in candidates["candidates"] if item["repo"] is None)
+        duplicate = dict(original)
+        duplicate["url"] = original["url"].rstrip("/") + "/?utm_source=test"
+        candidates["candidates"].append(duplicate)
+        self.write_json(candidates_path, candidates)
+
+        errors = validate(root)
+
+        self.assertTrue(any("duplicate candidate identity" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

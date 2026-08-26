@@ -2,7 +2,7 @@
 
 ## Selection method
 
-The catalog is coverage-weighted rather than a naïve star leaderboard. Popularity is tracked separately, but a selected project must contribute a distinct architectural or operational lesson. Memory and agent projects are evaluated within separate families.
+The catalog is coverage-weighted rather than a naïve star leaderboard. Popularity is tracked separately, but a selected project must contribute a distinct architectural or operational lesson. Memory, agent, and assistant projects are evaluated only within their separate families and score profiles.
 
 ### Memory-system research set
 

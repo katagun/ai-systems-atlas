@@ -1,8 +1,8 @@
 # Atlas taxonomy
 
-## Why two families
+## Why separate families
 
-Memory systems preserve and retrieve knowledge. Agent systems plan and take actions through tools. They overlap—agents use memory and memory products increasingly contain agents—but their primary outcomes and failure modes differ. One flat category would reward a vector database, coding agent, and note-taking app against the same rubric.
+Memory systems preserve and retrieve knowledge. Agent systems plan and take actions through tools. Assistant systems provide broad interactive help in an end-user conversational workspace. They overlap, but their primary outcomes and failure modes differ. One flat category would reward a vector database, coding agent, note-taking app, and hosted assistant against the same rubric.
 
 Every catalog entry therefore receives:
 
@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications are a separate collection, not a third system family. They are classified by artifact type, integration scope, and publication status, and never receive an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md) and [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
+Specifications are a separate collection, not another system family. They are classified by artifact type, integration scope, and publication status, and never receive an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md) and [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
 
 ## Family 1: memory systems
 
@@ -33,6 +33,14 @@ Agent projects also record:
 
 The agent score measures task reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity.
 
+## Family 3: assistant systems
+
+Assistant-system roles are general AI assistant, enterprise work assistant, and multi-model chat client. The family covers end-user products whose primary outcome is broad conversational assistance, even when they also offer memory, research, connected tools, or agentic modes.
+
+The assistant score measures task reliability, context continuity, tools and integrations, human control, data governance, interoperability, usability and access, and maturity. It evaluates the product-level experience and controls, not a transient leaderboard of its underlying models.
+
+Keep product boundaries explicit. ChatGPT is distinct from Codex and OpenAI Agents SDK; T3 Chat is distinct from T3 Code; Grok is distinct from Grok Bot; and GroqChat is distinct from Groq's inference service. A thin prompt wrapper, API playground, provider, or model repository is not an assistant system.
+
 ### Vertical agents and framework boundaries
 
 A vertical system can be an agent when it owns a consequential tool loop rather than only generating text. For data analysis, this means planning or refining a query, executing it through database or analytics tools, validating or repairing the result, and explaining the output. A text-to-SQL model, prompt collection, benchmark, or training dataset alone is not a data-analysis agent.
@@ -41,7 +49,7 @@ Include a framework when building or running tool-using agents is a primary prod
 
 ## No cross-family ranking
 
-An 8.4 agent score and an 8.4 memory score answer different questions. The web directory shows editorial scores only when one family is selected. “All families” supports discovery by name or GitHub stars, not a synthetic best-overall list.
+An 8.4 agent score, assistant score, and memory score answer different questions. The web directory shows editorial scores only when one family is selected. “All families” supports discovery by name or GitHub stars, not a synthetic best-overall list.
 
 Specifications are also never inserted into this ranking. A protocol can be mature and widely adopted without being a deployable agent, and an instruction convention cannot be meaningfully scored against a memory service.
 
@@ -49,7 +57,7 @@ Specifications are also never inserted into this ranking. A protocol can be matu
 
 The web finder is a transparent decision flow over this taxonomy:
 
-1. choose the memory or agent family;
+1. choose the memory, agent, or assistant family;
 2. choose a desired job, which maps to one or more primary roles;
 3. choose a priority such as local control, interoperability, operational simplicity, developer composability, or human control and recovery.
 
@@ -90,3 +98,6 @@ Passive evidence collection such as app activity, screenshots, browser history, 
 | GPT Researcher | Agent | Research agent | Web research, cited reports, multi-step planning |
 | Browser Use | Agent | Browser agent | Browser control, local or remote execution |
 | LangGraph | Agent | Agent framework | Durable graph state, checkpoints, human control |
+| ChatGPT | Assistant | General AI assistant | Projects, memory, research, connected applications |
+| Amazon Quick | Assistant | Enterprise work assistant | Organizational context, agents, analytics, governed actions |
+| T3 Chat | Assistant | Multi-model chat client | Persistent workspace with first-class provider choice |

@@ -2,7 +2,7 @@
 
 ## Scope
 
-The scored catalog covers reviewed operational memory systems and AI agent systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md).
+The scored catalog covers reviewed operational memory, agent, and assistant systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md).
 
 ## Inclusion gate
 
@@ -28,12 +28,15 @@ Frameworks qualify when building or running tool-using agents is a primary outco
 
 A provider-native SDK or harness qualifies only when agent execution—not model API access—is its primary outcome. The runtime may be open or proprietary; that difference belongs in `source_model`, evidence, weaknesses, and data-sovereignty scoring. Record provider coupling only from reviewed official support: missing provider traits mean “not reviewed,” never “provider agnostic.” Plain inference clients, provider adapters, and tracing clients remain outside the scored catalog.
 
+Assistants qualify when a maintained end-user product owns a broad conversational workspace, durable context, connected information, model choice, or governed work assistance. Score the documented product boundary, not an underlying model benchmark or its most agentic optional feature. Keep branded products separate when their operational outcomes differ: an assistant, coding agent, SDK, and provider API from one vendor are not duplicate records. Thin prompt wrappers and raw API playgrounds remain outside the scored catalog.
+
 ## Classification
 
 Choose `system_family` from the project's primary outcome:
 
 - choose `memory_system` when preserving, organizing, retrieving, or reasoning over durable knowledge is primary;
-- choose `agent_system` when planning and acting through tools is primary.
+- choose `agent_system` when planning and acting through tools is primary;
+- choose `assistant_system` when broad interactive help in an end-user conversational workspace is primary.
 
 Then assign one primary role belonging to that family. Record independent traits for source model, licenses, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, and provenance. Agent entries additionally require interfaces, execution boundaries, and capabilities.
 
@@ -61,7 +64,18 @@ Scores run from 0 to 10. The overall is the profile's weighted sum rounded to tw
 - interoperability: 9%;
 - maturity: 10%.
 
-The two profiles are not comparable. Do not produce a cross-family leaderboard or reuse a project's old score when moving it between families. Stars, forks, activity, and archival status are live signals; they never overwrite editorial scores.
+### Assistant profile
+
+- task reliability: 19%;
+- context continuity: 14%;
+- tools and integrations: 13%;
+- human control: 13%;
+- data governance: 13%;
+- interoperability: 10%;
+- usability and access: 8%;
+- maturity: 10%.
+
+The three profiles are not comparable. Do not produce a cross-family leaderboard or reuse a project's old score when moving it between families. Stars, forks, activity, and archival status are live signals; they never overwrite editorial scores.
 
 ## Human and automated fields
 

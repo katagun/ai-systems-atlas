@@ -174,8 +174,8 @@ h1 {
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
-  max-width: 540px;
+  grid-template-columns: repeat(4, minmax(105px, 1fr));
+  max-width: 720px;
   margin-top: 1.4rem;
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line-strong);
@@ -326,6 +326,8 @@ input:focus, select:focus {
 }
 .project-card.agent_system { background: #fdfbf7; }
 .project-card.agent_system::before { background: #ad8462; }
+.project-card.assistant_system { background: #faf9fc; }
+.project-card.assistant_system::before { background: #817792; }
 .specification-card { min-height: 360px; background: #f8faf8; }
 .specification-card::before { background: #587785; }
 .project-card:hover {
@@ -385,6 +387,7 @@ input:focus, select:focus {
   text-transform: uppercase;
 }
 .agent_system .role-badge { background: var(--sand-soft); color: #76563c; }
+.assistant_system .role-badge { background: #ece8f1; color: #5f536f; }
 .specification-card .role-badge { background: #e7eff0; color: #48636e; }
 .license-row {
   display: flex;
@@ -520,6 +523,7 @@ input:focus, select:focus {
 .finder-disclaimer { color: var(--muted); line-height: 1.65; }
 .finder-choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
 .finder-choice-grid.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.finder-choice-grid.family-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .finder-choice {
   min-height: 180px;
   padding: 1.25rem;
@@ -559,6 +563,7 @@ input:focus, select:focus {
   flex-direction: column;
 }
 .finder-result.agent_system { background: #fdfbf7; }
+.finder-result.assistant_system { background: #faf9fc; }
 .finder-rank { align-self: end; color: #839188; font: 500 1.4rem var(--font-mono); }
 .finder-result h3 { margin: .2rem 0 .7rem; font-size: 1.65rem; font-weight: 600; letter-spacing: -.035em; }
 .finder-result p { color: var(--muted); line-height: 1.55; }
@@ -638,7 +643,7 @@ footer {
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
   .hero h1 { font-size: clamp(2.55rem, 11vw, 3.7rem); }
   .view, #directory.view { padding: 2.6rem 0; }
-  .hero-stats { max-width: none; grid-template-columns: repeat(3, 1fr); }
+  .hero-stats { max-width: none; grid-template-columns: repeat(2, 1fr); }
   .stat { padding-right: .45rem; }
   .stat + .stat { padding-left: .55rem; }
   .stat strong { display: block; }
@@ -649,7 +654,8 @@ footer {
   .project-grid,
   .finder-results,
   .finder-choice-grid,
-  .finder-choice-grid.two-up { grid-template-columns: 1fr; }
+  .finder-choice-grid.two-up,
+  .finder-choice-grid.family-grid { grid-template-columns: 1fr; }
   .finder-progress { grid-template-columns: repeat(3, 1fr); }
   .finder-progress-step { justify-content: center; }
   .finder-progress-step strong { display: none; }

@@ -1,7 +1,67 @@
 {
-  "verified_at": "2026-08-25",
+  "verified_at": "2026-08-26",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
+    {
+      "project_id": "amazon-quick",
+      "repo": null,
+      "items": [
+      {
+        "license_id": "LicenseRef-Proprietary",
+        "scope": "Amazon Quick managed service and product features governed by AWS service terms",
+        "kind": "web_terms",
+        "url": "https://aws.amazon.com/service-terms/",
+        "verified_at": "2026-08-26"
+      },
+      {
+        "license_id": "LicenseRef-Proprietary",
+        "scope": "Underlying agreement governing use of AWS services, including Amazon Quick",
+        "kind": "web_terms",
+        "url": "https://aws.amazon.com/agreement/",
+        "verified_at": "2026-08-26"
+      }
+      ]
+    },
+    {
+      "project_id": "chatgpt",
+      "repo": null,
+      "items": [
+      {
+        "license_id": "LicenseRef-Proprietary",
+        "scope": "Individual-use ChatGPT service and software",
+        "kind": "web_terms",
+        "url": "https://openai.com/policies/terms-of-use/",
+        "verified_at": "2026-08-26"
+      },
+      {
+        "license_id": "LicenseRef-Proprietary",
+        "scope": "Feature-specific terms incorporated into OpenAI services, including ChatGPT features",
+        "kind": "web_terms",
+        "url": "https://openai.com/policies/service-terms/",
+        "verified_at": "2026-08-26"
+      },
+      {
+        "license_id": "LicenseRef-Proprietary",
+        "scope": "Business and enterprise use of ChatGPT services",
+        "kind": "web_terms",
+        "url": "https://openai.com/policies/business-terms/",
+        "verified_at": "2026-08-26"
+      }
+      ]
+    },
+    {
+      "project_id": "t3-chat",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "T3 Chat hosted service and access rights",
+          "kind": "web_terms",
+          "url": "https://t3.chat/terms-of-service",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
     {
       "project_id": "activitywatch",
       "repo": "ActivityWatch/activitywatch",
