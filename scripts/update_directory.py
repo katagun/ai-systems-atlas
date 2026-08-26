@@ -28,7 +28,7 @@ DIRECTORY = ROOT / "directory"
 PROJECTS_PATH = DIRECTORY / "projects.json"
 TAXONOMY_PATH = DIRECTORY / "taxonomy.json"
 CANDIDATES_PATH = DIRECTORY / "candidates.json"
-QUARANTINE_PATH = DIRECTORY / "quarantine.json"
+LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 MIN_METADATA_SUCCESS_RATIO = 0.80
@@ -165,13 +165,13 @@ def candidate_template(
         "topics": repo.get("topics") or [],
         "status": "provisional",
         "discovered_at": discovered_at,
-        "review_required": ["license_scope", "classification", "traits", "editorial_score"],
+        "review_required": ["licensing", "classification", "traits", "editorial_score"],
     }
 
 
 def refresh_projects(
     projects: list[dict[str, Any]],
-    previous_quarantine: dict[str, dict[str, Any]],
+    previous_reviews: dict[str, dict[str, Any]],
     getter: GitHubGetter,
     token: str | None,
     refreshed_at: str,
@@ -180,10 +180,12 @@ def refresh_projects(
 ) -> tuple[int, list[str], list[dict[str, Any]]]:
     successes = 0
     failures: list[str] = []
-    quarantine: list[dict[str, Any]] = []
+    reviews: list[dict[str, Any]] = []
 
     for project in projects:
-        repo_key = project["repo"].lower()
+        if not project.get("repo"):
+            continue
+        project_id = project["id"]
         try:
             metadata = getter(f"/repos/{project['repo']}", token)
         except urllib.error.HTTPError as exc:
@@ -194,18 +196,18 @@ def refresh_projects(
                 project["current_repo_note"] = f"GitHub returned {exc.code} on {refreshed_at}."
                 continue
             failures.append(f"{project['repo']}: HTTP {exc.code}")
-            if project.get("status") == "quarantined" and repo_key in previous_quarantine:
-                quarantine.append(previous_quarantine[repo_key])
+            if project.get("license_review_status") == "review_required" and project_id in previous_reviews:
+                reviews.append(previous_reviews[project_id])
             continue
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
             failures.append(f"{project['repo']}: {type(exc).__name__}: {exc}")
-            if project.get("status") == "quarantined" and repo_key in previous_quarantine:
-                quarantine.append(previous_quarantine[repo_key])
+            if project.get("license_review_status") == "review_required" and project_id in previous_reviews:
+                reviews.append(previous_reviews[project_id])
             continue
 
         successes += 1
-        was_quarantined = project.get("status") == "quarantined"
-        if project.get("status") != "candidate" and not was_quarantined:
+        review_was_open = project.get("license_review_status") == "review_required"
+        if project.get("status") != "candidate":
             project["status"] = "archived" if metadata.get("archived") else "active"
         project.update({
             "stars": metadata.get("stargazers_count"),
@@ -218,37 +220,41 @@ def refresh_projects(
         detected_license = (metadata.get("license") or {}).get("spdx_id")
         project["github_detected_license"] = detected_license
         meaningful_license = detected_license not in {None, "", "NOASSERTION"}
-        if meaningful_license and detected_license != project.get("license"):
-            project["status"] = "quarantined"
-            reason = f"GitHub detects {detected_license}; pinned review records {project.get('license')}."
+        if meaningful_license and detected_license not in project.get("licenses", []):
+            project["license_review_status"] = "review_required"
+            reason = (
+                f"GitHub detects {detected_license}; reviewed evidence records "
+                f"{', '.join(project.get('licenses', []))}."
+            )
             project["current_repo_note"] = f"License review required: {reason}"
-            quarantine.append({
+            reviews.append({
+                "project_id": project_id,
                 "repo": project["repo"],
-                "expected_license": project.get("license"),
+                "expected_licenses": project.get("licenses", []),
                 "detected_license": detected_license,
                 "reason": reason,
                 "detected_at": refreshed_at,
                 "status": "open",
             })
-        elif was_quarantined:
-            project["status"] = "quarantined"
-            quarantine.append(previous_quarantine.get(repo_key, {
+        elif review_was_open:
+            project["license_review_status"] = "review_required"
+            reviews.append(previous_reviews.get(project_id, {
+                "project_id": project_id,
                 "repo": project["repo"],
-                "expected_license": project.get("license"),
+                "expected_licenses": project.get("licenses", []),
                 "detected_license": detected_license,
-                "reason": "Previously quarantined; human license review is still required.",
+                "reason": "A previous license-evidence review still requires human resolution.",
                 "detected_at": refreshed_at,
                 "status": "open",
             }))
         sleeper(0.05)
 
-    return successes, failures, quarantine
+    return successes, failures, reviews
 
 
 def discover_candidates(
     known_projects: set[str],
     previous_candidates: list[dict[str, Any]],
-    allowed_licenses: set[str],
     role_families: dict[str, str],
     getter: GitHubGetter,
     token: str | None,
@@ -256,7 +262,10 @@ def discover_candidates(
     *,
     sleeper: Callable[[float], None] = time.sleep,
 ) -> tuple[list[dict[str, Any]], int, int, list[str]]:
-    candidates = {item["repo"].lower(): item for item in previous_candidates}
+    def candidate_key(item: dict[str, Any]) -> str:
+        return str(item.get("repo") or item["url"]).lower()
+
+    candidates = {candidate_key(item): item for item in previous_candidates}
     known = known_projects | set(candidates)
     new_count = 0
     successful_queries = 0
@@ -274,9 +283,6 @@ def discover_candidates(
             repo_key = repo["full_name"].lower()
             if repo_key in known or repo.get("fork") or repo.get("archived"):
                 continue
-            license_id = (repo.get("license") or {}).get("spdx_id")
-            if license_id not in allowed_licenses:
-                continue
             text = f"{repo.get('name', '')} {repo.get('description') or ''} {' '.join(repo.get('topics') or [])}"
             role, confidence = classify(text)
             family = role_families.get(role) if role else None
@@ -287,7 +293,7 @@ def discover_candidates(
             new_count += 1
         sleeper(0.1)
 
-    ordered = sorted(candidates.values(), key=lambda item: item["repo"].lower())
+    ordered = sorted(candidates.values(), key=candidate_key)
     return ordered, new_count, successful_queries, failures
 
 
@@ -298,30 +304,30 @@ def main() -> int:
     taxonomy = load_json(TAXONOMY_PATH)
     exclusions = load_json(DIRECTORY / "exclusions.json")
     candidate_document = load_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []})
-    quarantine_document = load_json(QUARANTINE_PATH, {"version": "1.0", "updated_at": None, "entries": []})
+    review_document = load_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []})
     projects = document["projects"]
-    previous_quarantine = {item["repo"].lower(): item for item in quarantine_document["entries"]}
+    previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
 
-    successes, metadata_failures, quarantine = refresh_projects(
+    successes, metadata_failures, reviews = refresh_projects(
         projects,
-        previous_quarantine,
+        previous_reviews,
         github_get,
         token,
         refreshed_at,
     )
-    success_ratio = successes / len(projects) if projects else 1.0
+    github_projects = sum(bool(project.get("repo")) for project in projects)
+    success_ratio = successes / github_projects if github_projects else 1.0
     if success_ratio < MIN_METADATA_SUCCESS_RATIO:
         print(
-            f"error: refreshed {successes}/{len(projects)} projects; minimum success ratio is {MIN_METADATA_SUCCESS_RATIO:.0%}",
+            f"error: refreshed {successes}/{github_projects} GitHub projects; minimum success ratio is {MIN_METADATA_SUCCESS_RATIO:.0%}",
             file=sys.stderr,
         )
         for failure in metadata_failures:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
-    allowed_licenses = {item["id"] for item in taxonomy["allowed_licenses"]}
     role_families = {item["id"]: item["family"] for item in taxonomy["primary_roles"]}
-    known_projects = {project["repo"].lower() for project in projects}
+    known_projects = {project["repo"].lower() for project in projects if project.get("repo")}
     known_projects.update(
         item["repo"].lower()
         for item in exclusions.get("entries", [])
@@ -330,7 +336,6 @@ def main() -> int:
     candidates, new_candidates, successful_queries, discovery_failures = discover_candidates(
         known_projects,
         candidate_document["candidates"],
-        allowed_licenses,
         role_families,
         github_get,
         token,
@@ -351,7 +356,7 @@ def main() -> int:
     document["generated_at"] = refreshed_at
     write_json(PROJECTS_PATH, document)
     write_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": refreshed_at, "candidates": candidates})
-    write_json(QUARANTINE_PATH, {"version": "1.0", "updated_at": refreshed_at, "entries": quarantine})
+    write_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": refreshed_at, "entries": reviews})
     sync_web_data()
 
     print(json.dumps({
@@ -360,7 +365,7 @@ def main() -> int:
         "discovery_queries_succeeded": successful_queries,
         "new_candidates": new_candidates,
         "candidate_queue": len(candidates),
-        "quarantined": len(quarantine),
+        "license_reviews_open": len(reviews),
         "auto_added": 0,
     }, indent=2))
     return 0

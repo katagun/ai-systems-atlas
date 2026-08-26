@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Agent Systems Atlas: open-source memory and AI agent systems compared within explicit families, roles, and score profiles.">
+  <meta name="description" content="Agent Systems Atlas: reviewed memory and AI agent systems compared by capability, source model, license, and family-specific scores.">
   <meta name="theme-color" content="#f3f1eb">
   <title>Agent Systems Atlas</title>
   <link rel="stylesheet" href="styles.css?v=3.1">
@@ -26,7 +26,7 @@
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
-        <p class="eyebrow" id="hero-kicker">Reviewed open-source projects</p>
+        <p class="eyebrow" id="hero-kicker">Reviewed systems</p>
         <h1 id="directory-title">Find a system that fits.</h1>
         <p class="hero-copy">Explore memory and agent systems by role, architecture, deployment, and fit.</p>
         <button class="hero-action" data-open-tab="finder">Not sure? Help me choose →</button>
@@ -40,9 +40,11 @@
         <details class="advanced-filter-shell">
           <summary>More filters</summary>
           <div class="advanced-filters">
+            <label><span>Source model</span><select id="source-model-filter"><option value="">All source models</option></select></label>
+            <label><span>License</span><select id="license-filter"><option value="">All licenses</option></select></label>
             <label><span>Agent relation</span><select id="agent-filter"><option value="">All relations</option></select></label>
             <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
-            <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="quarantined">Quarantined</option><option value="removed">Unavailable</option></select></label>
+            <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="removed">Unavailable</option></select></label>
             <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
           </div>
         </details>
@@ -51,7 +53,7 @@
 
       <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
       <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear</button></div>
-      <section id="project-grid" class="project-grid" aria-label="Open-source projects"></section>
+      <section id="project-grid" class="project-grid" aria-label="Reviewed projects"></section>
     </section>
 
     <section id="finder" class="view" aria-labelledby="finder-title">
@@ -88,7 +90,7 @@
   </dialog>
 
   <footer><span>Agent Systems Atlas</span><span>Compared within families.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=2.1" defer></script>
-  <script src="app.js?v=2.2" defer></script>
+  <script src="app-core.js?v=3.0" defer></script>
+  <script src="app.js?v=3.0" defer></script>
 </body>
 </html>

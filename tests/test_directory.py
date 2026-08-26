@@ -14,11 +14,16 @@ class DirectoryTests(unittest.TestCase):
         cls.document = json.loads((ROOT / "directory" / "projects.json").read_text(encoding="utf-8"))
         cls.evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text(encoding="utf-8"))
 
-    def test_projects_are_open_source_and_have_unique_ids(self) -> None:
+    def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]
         ids = [project["id"] for project in projects]
         self.assertEqual(len(ids), len(set(ids)))
-        self.assertTrue(all(project["license_scope"] == "open_source" for project in projects))
+        source_models = {item["id"] for item in self.taxonomy["source_models"]}
+        licenses = {item["id"] for item in self.taxonomy["licenses"]}
+        for project in projects:
+            self.assertIn(project["source_model"], source_models)
+            self.assertTrue(project["licenses"])
+            self.assertFalse(set(project["licenses"]) - licenses)
 
     def test_taxonomy_references_are_valid(self) -> None:
         roles = {item["id"]: item["family"] for item in self.taxonomy["primary_roles"]}
@@ -43,6 +48,59 @@ class DirectoryTests(unittest.TestCase):
         self.assertEqual({"provider_native", "multi_provider", "provider_agnostic"}, relationships)
         self.assertIn("anthropic", {item["id"] for item in self.taxonomy["model_backends"]})
 
+    def test_reviewed_provider_traits_are_atomic_and_taxonomy_backed(self) -> None:
+        relationships = {item["id"] for item in self.taxonomy["provider_relationships"]}
+        backends = {item["id"] for item in self.taxonomy["model_backends"]}
+        reviewed = [project for project in self.document["projects"] if "provider_relationship" in project]
+
+        self.assertGreaterEqual(len(reviewed), 1)
+        for project in reviewed:
+            self.assertIn(project["provider_relationship"], relationships, project["repo"])
+            self.assertTrue(project["model_backends"], project["repo"])
+            self.assertFalse(set(project["model_backends"]) - backends, project["repo"])
+
+    def test_license_only_exclusions_return_to_the_review_queue(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        requeued = {
+            "OpenHands/OpenHands",
+            "anthropics/claude-agent-sdk-python",
+            "anthropics/claude-agent-sdk-typescript",
+            "mastra-ai/mastra",
+            "onyx-dot-app/onyx",
+            "screenpipe/screenpipe",
+            "toeverything/AFFiNE",
+        }
+
+        self.assertLessEqual(requeued, {candidate["repo"] for candidate in candidates["candidates"]})
+        self.assertTrue(requeued.isdisjoint({entry["repo"] for entry in exclusions["entries"]}))
+
+    def test_wrenai_is_reviewed_as_open_core_not_excluded(self) -> None:
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        project = next(project for project in self.document["projects"] if project["id"] == "wrenai")
+
+        self.assertEqual("open_core", project["source_model"])
+        self.assertEqual(
+            {"Apache-2.0", "CC-BY-4.0", "LicenseRef-Commercial"},
+            set(project["licenses"]),
+        )
+        self.assertNotIn(project["repo"], {entry["repo"] for entry in exclusions["entries"]})
+
+    def test_reviewed_framework_batch_leaves_the_candidate_queue(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        reviewed_repos = {
+            "langchain-ai/langchain",
+            "openai/openai-agents-python",
+        }
+
+        self.assertLessEqual(
+            reviewed_repos,
+            {project["repo"] for project in self.document["projects"]},
+        )
+        self.assertTrue(
+            reviewed_repos.isdisjoint({candidate["repo"] for candidate in candidates["candidates"]})
+        )
+
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}
         for project in self.document["projects"]:
@@ -61,13 +119,17 @@ class DirectoryTests(unittest.TestCase):
             self.assertTrue(project["execution_boundaries"], project["repo"])
             self.assertTrue(project["agent_capabilities"], project["repo"])
 
-    def test_every_project_has_pinned_license_evidence(self) -> None:
-        evidence = {item["repo"].lower(): item for item in self.evidence["entries"]}
-        projects = {item["repo"].lower(): item for item in self.document["projects"]}
+    def test_every_project_has_scoped_license_evidence(self) -> None:
+        evidence = {item["project_id"]: item for item in self.evidence["entries"]}
+        projects = {item["id"]: item for item in self.document["projects"]}
         self.assertEqual(set(projects), set(evidence))
-        for repo, project in projects.items():
-            self.assertEqual(project["license"], evidence[repo]["spdx_id"])
-            self.assertEqual(40, len(evidence[repo]["blob_sha"]))
+        for project_id, project in projects.items():
+            items = evidence[project_id]["items"]
+            self.assertEqual(set(project["licenses"]), {item["license_id"] for item in items})
+            for item in items:
+                self.assertTrue(item["scope"])
+                if item["kind"] == "git_blob":
+                    self.assertEqual(40, len(item["blob_sha"]))
 
     def test_web_data_matches_directory_data(self) -> None:
         for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json"):

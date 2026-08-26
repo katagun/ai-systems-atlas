@@ -11,7 +11,7 @@ Every catalog entry therefore receives:
 3. orthogonal architecture and operating traits; and
 4. the score profile assigned to its family.
 
-`directory/taxonomy.json` is the executable source for families, roles, traits, statuses, deployment modes, confidence and provenance levels, eligible licenses, and score weights. This document explains the model; validation enforces the JSON definitions.
+`directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
 ## Family 1: memory systems
 
@@ -35,7 +35,7 @@ The agent score measures task reliability, tool use, autonomy, human control, ob
 
 A vertical system can be an agent when it owns a consequential tool loop rather than only generating text. For data analysis, this means planning or refining a query, executing it through database or analytics tools, validating or repairing the result, and explaining the output. A text-to-SQL model, prompt collection, benchmark, or training dataset alone is not a data-analysis agent.
 
-Include a framework when building or running tool-using agents is a primary product outcome. General LLM application libraries, prompt optimizers, tracing clients, and proprietary observability services do not become agent systems merely because agents can use them. Borderline open-source frameworks stay provisional until review establishes that agent execution is material rather than incidental.
+Include a framework when building or running tool-using agents is a primary product outcome. General LLM application libraries, prompt optimizers, tracing clients, and observability services do not become agent systems merely because agents can use them. Borderline frameworks stay provisional until review establishes that agent execution is material rather than incidental.
 
 ## No cross-family ranking
 
@@ -53,7 +53,13 @@ Only active projects in the chosen family and role set are eligible. The priorit
 
 ## Shared axes
 
-Architecture, retrieval, deployment, openness, and relationship to agents remain orthogonal traits. Vector, graph, Markdown, relational storage, and full-text search are implementation choices, not product roles.
+Architecture, retrieval, deployment, source model, licenses, and relationship to agents remain orthogonal traits. Vector, graph, Markdown, relational storage, and full-text search are implementation choices, not product roles.
+
+### Source model and licenses
+
+`source_model` answers how much of the operational system users may inspect and use: open source, mixed open licenses, open core, source available, proprietary, or unclear. `licenses` records every material code, content, or product-terms identifier reviewed for the listed system. Neither field is a family, role, score profile, or inclusion gate.
+
+An open-source-only view is a user-selected filter. Mixed licenses retain their component or path scope in evidence. Proprietary terms can support a listing when operational behavior is otherwise reviewable, but lower inspectability should affect research confidence and relevant score dimensions. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md).
 
 ### Model-provider relationship
 

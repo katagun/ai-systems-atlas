@@ -4,16 +4,16 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the 66 provisional records in small, evidence-backed batches, starting with provider-native agent SDKs, then framework SDKs, then data-analysis agents.
+- [ ] Review the 72 provisional records in small, evidence-backed batches, starting with data-analysis agents.
 - [ ] Decide whether the static site needs a repository-owned deployment workflow and document the chosen hosting path.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
 
 ## Next
 
-- [ ] Add a small review command that promotes a candidate only after all required editorial and license fields are present.
+- [ ] Add a small review command that promotes a candidate only after all required editorial, source-model, license, and evidence fields are present.
 - [ ] Add a stale-review report that distinguishes editorial age from GitHub metadata age without changing either.
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.
-- [ ] Add link checking for project, source-license, and immutable-evidence URLs with rate-limit-aware caching.
+- [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
 - [ ] Add provider-relationship UI detail only after enough reviewed projects carry the trait; add a filter only when it yields meaningful choices.
 
 ## Later
@@ -22,13 +22,18 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Replace license-gated inclusion with reviewed source-model and multi-license classification across policy, data, automation, and UI.
+- [x] Publish WrenAI as the first reviewed open-core data-analysis agent with scoped Apache, CC BY, and commercial evidence.
+- [x] Return ten license-only exclusions to the provisional queue; reserve exclusions for family and role boundaries.
 - [x] Define provider relationships as optional reviewed traits in ADR 006, taxonomy, validation, and task-routed documentation.
-- [x] Add Claude Agent SDK for Python and DeepSeek Harness to the provisional queue; exclude the proprietary TypeScript SDK.
+- [x] Add Claude Agent SDK for Python and DeepSeek Harness to the provisional queue under the initial license-gated policy (later superseded by ADR 007).
 - [x] Make discovery recognize agent harnesses and derive candidate families from taxonomy-owned role policy.
-- [x] Make license drift fail closed for every detected license mismatch.
-- [x] Preserve candidate and quarantine queues as versioned review artifacts.
+- [x] Review the first provider-native batch under the initial operational-source boundary (later superseded by ADR 007).
+- [x] Review the first framework batch: publish OpenAI Agents SDK and LangChain with pinned license and provider evidence.
+- [x] Introduce durable license-drift incidents, now represented by non-hiding evidence-review signals under ADR 007.
+- [x] Preserve candidate and license-review queues as versioned review artifacts.
 - [x] Separate editorial `verified_at` from `metadata_verified_at` and field-specific live dates.
-- [x] Centralize the curated license allowlist in the taxonomy and enforce it in validation.
+- [x] Centralize license identifiers and source-model coherence rules in the taxonomy and validation.
 - [x] Tie immutable evidence URLs to recorded Git blob SHAs.
 - [x] Expand schema validation across taxonomy axes, queues, dates, URLs, and published copies.
 - [x] Add updater regression tests and dependency-free web behavior tests.

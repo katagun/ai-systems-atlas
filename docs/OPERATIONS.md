@@ -26,23 +26,23 @@ The token is optional locally but recommended because GitHub search has a low an
 
 The refresh is transactional at the repository level:
 
-1. update live metadata in memory;
+1. update live metadata in memory for projects with GitHub repositories;
 2. require at least 80% project metadata success;
 3. require at least one successful discovery query;
-4. detect license drift and set affected projects to `quarantined`;
-5. preserve prior candidates and unresolved quarantines;
+4. detect license drift, mark evidence `review_required`, and open a durable incident;
+5. preserve prior candidates and unresolved license-review incidents;
 6. write canonical JSON and synchronize published web copies;
 7. validate and test in CI before committing.
 
-Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a project `removed`. Automated refreshes never edit editorial fields.
+Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Automated refreshes never edit editorial fields.
 
 ## Review a candidate
 
 For one record in `directory/candidates.json`:
 
-1. Inspect repository license files and their scope.
-2. If the project is restricted, mixed, or unclear, add it to `exclusions.json` and remove the candidate.
-3. Read official documentation and enough implementation to establish behavior.
+1. Inspect authoritative license or terms sources and their component scope.
+2. Classify `source_model` and record every material license; restricted, mixed, and proprietary systems remain eligible.
+3. Read official documentation and enough implementation or product behavior to establish the operational outcome.
 4. Follow `CURATION.md` to create the full project and evidence records.
 5. Remove the candidate only in the same change that records its disposition.
 6. Synchronize, validate, test, and exercise the UI.
@@ -51,16 +51,17 @@ Never copy proposed classification into the catalog without human confirmation. 
 
 Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
 
-## Resolve a quarantine
+## Resolve a license review
 
-Inspect the repository license files again; GitHub's detected SPDX value is only the trigger.
+Inspect the authoritative license or terms sources again; GitHub's detected SPDX value is only the trigger.
 
-- **Still eligible:** update the project license if needed, replace evidence with the newly reviewed blob, set status to `active` or `archived`, and remove the quarantine entry.
-- **Restricted or mixed:** move the project to `exclusions.json`, remove its project and evidence records, and remove the quarantine entry.
-- **Unclear:** leave both the project status and queue entry quarantined.
+- Update `licenses` and `source_model` when the reviewed scope changed.
+- Replace or extend scoped evidence, set `license_review_status` to `verified`, and remove the incident.
+- If scope remains unclear, keep the project visible with its last reviewed classification, retain `review_required`, and explain the uncertainty in the incident and project weaknesses.
+- Move a project to exclusions only when the operational family/role boundary—not its license—fails review.
 
-Resolution must update all related records atomically. Validation rejects mismatches between project statuses and the quarantine queue.
+Resolution must update all related records atomically. Validation rejects mismatches between project review status and the license-review queue.
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. Review a failed run rather than manually committing partial runner output. Candidate and quarantine queues are tracked files, so successful refresh results remain available after the runner exits.
+`.github/workflows/update-directory.yml` runs weekly and on demand. Review a failed run rather than manually committing partial runner output. Candidate and license-review queues are tracked files, so successful refresh results remain available after the runner exits.

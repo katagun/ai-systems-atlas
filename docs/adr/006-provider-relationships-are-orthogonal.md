@@ -15,7 +15,7 @@ Keep `memory_system` and `agent_system` as the only system families. Describe a 
 
 The fields are optional during rollout so existing records do not acquire inferred claims. When either field is reviewed, both are required. `provider_native` requires exactly one backend; the other relationships may name multiple backends. Absence means “not reviewed,” not “provider agnostic.”
 
-Provider-native agent SDKs and harnesses may qualify when building or running a tool-using agent is their primary outcome. Plain inference/API clients, model repositories, adapters, and tracing clients remain outside the scored catalog. A future unscored ecosystem index requires separate evidence of user value and is not part of this decision.
+Provider-native agent SDKs and harnesses may qualify when building or running a tool-using agent is their primary outcome. Source ownership and runtime dependencies are recorded through the source model, license evidence, strengths, weaknesses, and research confidence; they are not inclusion gates. Plain inference/API clients, model repositories, adapters, and tracing clients remain outside the scored catalog because they do not independently provide the operational outcome. A future unscored ecosystem index requires separate evidence of user value and is not part of this decision.
 
 Discovery receives role-to-family policy from the taxonomy rather than maintaining its own family list. Automated discovery may propose family and role, but it does not assign provider traits.
 

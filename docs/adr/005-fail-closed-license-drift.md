@@ -1,6 +1,8 @@
 # ADR 005: Fail-closed license drift and durable review queues
 
-**Status:** Accepted
+**Status:** Superseded in part by ADR 007
+
+The durable-queue and human-owned timestamp decisions remain active. ADR 007 replaces license-gated inclusion and project quarantine with a non-hiding license-review signal.
 
 ## Context
 

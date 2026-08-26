@@ -124,8 +124,11 @@
   "project_statuses": [
     {"id": "active", "name": "Active"},
     {"id": "archived", "name": "Archived"},
-    {"id": "quarantined", "name": "Quarantined pending review"},
     {"id": "removed", "name": "Repository unavailable"}
+  ],
+  "license_review_statuses": [
+    {"id": "verified", "name": "License evidence verified"},
+    {"id": "review_required", "name": "License evidence needs review"}
   ],
   "provenance_levels": [
     {"id": "limited", "name": "Limited"},
@@ -138,28 +141,34 @@
     {"id": "medium", "name": "Medium"},
     {"id": "high", "name": "High"}
   ],
-  "allowed_licenses": [
-    {"id": "MIT", "name": "MIT License"},
-    {"id": "Apache-2.0", "name": "Apache License 2.0"},
-    {"id": "AGPL-3.0", "name": "GNU Affero General Public License 3.0"},
-    {"id": "AGPL-3.0-or-later", "name": "GNU Affero General Public License 3.0 or later"},
-    {"id": "GPL-3.0", "name": "GNU General Public License 3.0"},
-    {"id": "GPL-3.0-or-later", "name": "GNU General Public License 3.0 or later"},
-    {"id": "GPL-2.0", "name": "GNU General Public License 2.0"},
-    {"id": "GPL-2.0-or-later", "name": "GNU General Public License 2.0 or later"},
-    {"id": "LGPL-3.0", "name": "GNU Lesser General Public License 3.0"},
-    {"id": "BSD-3-Clause", "name": "BSD 3-Clause License"},
-    {"id": "BSD-2-Clause", "name": "BSD 2-Clause License"},
-    {"id": "MPL-2.0", "name": "Mozilla Public License 2.0"},
-    {"id": "EUPL-1.2", "name": "European Union Public Licence 1.2"},
-    {"id": "ISC", "name": "ISC License"},
-    {"id": "Unlicense", "name": "The Unlicense"}
+  "licenses": [
+    {"id": "MIT", "name": "MIT License", "kind": "open_source"},
+    {"id": "Apache-2.0", "name": "Apache License 2.0", "kind": "open_source"},
+    {"id": "AGPL-3.0", "name": "GNU Affero General Public License 3.0", "kind": "open_source"},
+    {"id": "AGPL-3.0-or-later", "name": "GNU Affero General Public License 3.0 or later", "kind": "open_source"},
+    {"id": "GPL-3.0", "name": "GNU General Public License 3.0", "kind": "open_source"},
+    {"id": "GPL-3.0-or-later", "name": "GNU General Public License 3.0 or later", "kind": "open_source"},
+    {"id": "GPL-2.0", "name": "GNU General Public License 2.0", "kind": "open_source"},
+    {"id": "GPL-2.0-or-later", "name": "GNU General Public License 2.0 or later", "kind": "open_source"},
+    {"id": "LGPL-3.0", "name": "GNU Lesser General Public License 3.0", "kind": "open_source"},
+    {"id": "BSD-3-Clause", "name": "BSD 3-Clause License", "kind": "open_source"},
+    {"id": "BSD-2-Clause", "name": "BSD 2-Clause License", "kind": "open_source"},
+    {"id": "MPL-2.0", "name": "Mozilla Public License 2.0", "kind": "open_source"},
+    {"id": "EUPL-1.2", "name": "European Union Public Licence 1.2", "kind": "open_source"},
+    {"id": "ISC", "name": "ISC License", "kind": "open_source"},
+    {"id": "Unlicense", "name": "The Unlicense", "kind": "open_source"},
+    {"id": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0", "kind": "open_content"},
+    {"id": "LicenseRef-Commercial", "name": "Commercial or production-restricted terms", "kind": "restricted"},
+    {"id": "LicenseRef-Proprietary", "name": "Proprietary", "kind": "proprietary"},
+    {"id": "LicenseRef-Unclear", "name": "Unclear or unresolved terms", "kind": "unclear"}
   ],
-  "license_scopes": [
-    {"id": "open_source", "name": "OSI-compatible open source", "included_by_default": true},
-    {"id": "open_core", "name": "Open-source core plus restricted enterprise code", "included_by_default": false},
-    {"id": "source_available", "name": "Source visible but restricted", "included_by_default": false},
-    {"id": "proprietary", "name": "Proprietary", "included_by_default": false}
+  "source_models": [
+    {"id": "open_source", "name": "Open source", "definition": "Operational code is released under one OSI-approved license."},
+    {"id": "mixed_open_source", "name": "Mixed open licenses", "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions."},
+    {"id": "open_core", "name": "Open core", "definition": "An open-source core is accompanied by restricted components or enterprise features."},
+    {"id": "source_available", "name": "Source available", "definition": "Operational source is visible but use, modification, or production deployment is restricted."},
+    {"id": "proprietary", "name": "Proprietary", "definition": "Operational implementation is not provided under reusable source terms."},
+    {"id": "unclear", "name": "Unclear", "definition": "Available evidence does not yet support a confident source-model conclusion."}
   ],
   "score_profiles": [
     {

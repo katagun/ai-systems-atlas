@@ -32,8 +32,9 @@ TAXONOMY_GROUPS = (
     "project_statuses",
     "provenance_levels",
     "research_confidence_levels",
-    "allowed_licenses",
-    "license_scopes",
+    "licenses",
+    "source_models",
+    "license_review_statuses",
     "score_profiles",
 )
 
@@ -41,7 +42,8 @@ PROJECT_REQUIRED = {
     "id", "system_family", "score_profile", "name", "repo", "url", "description",
     "primary_role", "secondary_roles", "agent_relation", "architectures", "retrieval_modes",
     "capture_modes", "memory_lifecycle", "canonical_data", "deployment", "local_first",
-    "human_editable", "provenance", "license", "license_scope", "status", "stars",
+    "human_editable", "provenance", "licenses", "source_model", "license_review_status",
+    "status", "stars",
     "stars_verified_at", "historical_stars", "current_repo_note", "score", "strengths",
     "weaknesses", "why_it_matters", "research_confidence", "verified_at",
 }
@@ -117,7 +119,7 @@ def validate(root: Path = ROOT) -> list[str]:
         data = load("projects.json")
         evidence_data = load("license-evidence.json")
         candidates_data = load("candidates.json")
-        quarantine_data = load("quarantine.json")
+        license_review_data = load("license-review.json")
         exclusions_data = load("exclusions.json")
     finally:
         DIRECTORY = original_directory
@@ -139,6 +141,15 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in taxonomy.get("score_profiles", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
+    license_kinds = {
+        item["id"]: item.get("kind")
+        for item in taxonomy.get("licenses", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    known_license_kinds = {"open_source", "open_content", "restricted", "proprietary", "unclear"}
+    for license_id, kind in license_kinds.items():
+        if kind not in known_license_kinds:
+            errors.append(f"taxonomy: license {license_id!r} has unknown kind {kind!r}")
     for profile_id, profile in profiles.items():
         if profile.get("family") not in families:
             errors.append(f"taxonomy: score profile {profile_id!r} has unknown family")
@@ -168,7 +179,7 @@ def validate(root: Path = ROOT) -> list[str]:
         if not isinstance(project, dict):
             errors.append("projects.json: every project must be an object")
             continue
-        prefix = str(project.get("repo", project.get("id", "unknown")))
+        prefix = str(project.get("repo") or project.get("id") or "unknown")
         missing = PROJECT_REQUIRED - set(project)
         unknown_fields = set(project) - PROJECT_REQUIRED - PROJECT_OPTIONAL
         if missing:
@@ -186,14 +197,17 @@ def validate(root: Path = ROOT) -> list[str]:
 
         repo = project.get("repo")
         repo_key = repo.lower() if isinstance(repo, str) else ""
-        if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo):
-            errors.append(f"{prefix}: invalid GitHub repository")
-        elif repo_key in repos:
-            errors.append(f"{prefix}: duplicate repository")
-        else:
-            repos.add(repo_key)
-        if project.get("url") != f"https://github.com/{repo}":
-            errors.append(f"{prefix}: url must be the canonical GitHub repository URL")
+        if repo is not None:
+            if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo):
+                errors.append(f"{prefix}: invalid GitHub repository")
+            elif repo_key in repos:
+                errors.append(f"{prefix}: duplicate repository")
+            else:
+                repos.add(repo_key)
+            if project.get("url") != f"https://github.com/{repo}":
+                errors.append(f"{prefix}: url must be the canonical GitHub repository URL")
+        elif not isinstance(project.get("url"), str) or not project["url"].startswith("https://"):
+            errors.append(f"{prefix}: non-GitHub systems require an authoritative HTTPS URL")
 
         for field in ("name", "description", "canonical_data", "why_it_matters"):
             if not isinstance(project.get(field), str) or not project[field].strip():
@@ -261,11 +275,32 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"{prefix}: unknown research confidence")
         if project.get("status") not in enum_ids["project_statuses"]:
             errors.append(f"{prefix}: unknown project status")
-
-        if project.get("license_scope") != "open_source":
-            errors.append(f"{prefix}: non-open-source entry in main directory")
-        if project.get("license") not in enum_ids["allowed_licenses"]:
-            errors.append(f"{prefix}: license is not in the curated OSI-compatible allowlist")
+        validate_string_list(project, "licenses", enum_ids["licenses"], prefix, errors)
+        source_model = project.get("source_model")
+        if source_model not in enum_ids["source_models"]:
+            errors.append(f"{prefix}: unknown source model")
+        else:
+            project_license_kinds = {
+                license_kinds[license_id]
+                for license_id in project.get("licenses", [])
+                if license_id in license_kinds
+            }
+            coherent = {
+                "open_source": bool(project_license_kinds) and project_license_kinds <= {"open_source"},
+                "mixed_open_source": len(project.get("licenses", [])) >= 2
+                and bool(project_license_kinds)
+                and project_license_kinds <= {"open_source", "open_content"},
+                "open_core": "open_source" in project_license_kinds
+                and bool(project_license_kinds & {"restricted", "proprietary"}),
+                "source_available": "restricted" in project_license_kinds
+                and "open_source" not in project_license_kinds,
+                "proprietary": project_license_kinds == {"proprietary"},
+                "unclear": "unclear" in project_license_kinds,
+            }[source_model]
+            if not coherent:
+                errors.append(f"{prefix}: source model and license kinds are inconsistent")
+        if project.get("license_review_status") not in enum_ids["license_review_statuses"]:
+            errors.append(f"{prefix}: unknown license review status")
 
         if family == "agent_system":
             for field, group in (
@@ -281,8 +316,8 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"{prefix}: verified_at must be an ISO date")
         if project.get("stars") is not None and (not isinstance(project["stars"], int) or project["stars"] < 0):
             errors.append(f"{prefix}: stars must be a non-negative integer or null")
-        if project.get("status") in {"active", "archived"} and project.get("stars") is None:
-            errors.append(f"{prefix}: active and archived projects require refreshed stars")
+        if repo and project.get("status") in {"active", "archived"} and project.get("stars") is None:
+            errors.append(f"{prefix}: active and archived GitHub projects require refreshed stars")
         if project.get("stars") is not None and not valid_date(project.get("stars_verified_at")):
             errors.append(f"{prefix}: populated stars require stars_verified_at")
         if project.get("stars_verified_at") is not None and not valid_date(project["stars_verified_at"]):
@@ -305,42 +340,89 @@ def validate(root: Path = ROOT) -> list[str]:
     evidence_entries = evidence_data.get("entries", [])
     if not valid_date(evidence_data.get("verified_at")):
         errors.append("license-evidence.json: verified_at must be an ISO date")
-    evidence_repos = [item.get("repo", "").lower() for item in evidence_entries if isinstance(item, dict)]
-    duplicate_evidence = sorted({repo for repo in evidence_repos if evidence_repos.count(repo) > 1})
+    evidence_ids = [item.get("project_id") for item in evidence_entries if isinstance(item, dict)]
+    duplicate_evidence = sorted({item for item in evidence_ids if item and evidence_ids.count(item) > 1})
     if duplicate_evidence:
-        errors.append(f"license evidence has duplicate repositories: {duplicate_evidence}")
-    evidence = {item["repo"].lower(): item for item in evidence_entries if isinstance(item, dict) and item.get("repo")}
-    if set(evidence) != repos:
-        errors.append(f"license evidence/project repositories differ: missing={sorted(repos - set(evidence))}, extra={sorted(set(evidence) - repos)}")
-    projects_by_repo = {project["repo"].lower(): project for project in projects if isinstance(project.get("repo"), str)}
-    for repo_key, project in projects_by_repo.items():
-        proof = evidence.get(repo_key)
+        errors.append(f"license evidence has duplicate project ids: {duplicate_evidence}")
+    evidence = {
+        item["project_id"]: item
+        for item in evidence_entries
+        if isinstance(item, dict) and isinstance(item.get("project_id"), str)
+    }
+    projects_by_id = {
+        project["id"]: project for project in projects if isinstance(project.get("id"), str)
+    }
+    projects_by_repo = {
+        project["repo"].lower(): project
+        for project in projects
+        if isinstance(project.get("repo"), str)
+    }
+    if set(evidence) != set(projects_by_id):
+        errors.append(
+            "license evidence/project ids differ: "
+            f"missing={sorted(set(projects_by_id) - set(evidence))}, "
+            f"extra={sorted(set(evidence) - set(projects_by_id))}"
+        )
+    for project_id, project in projects_by_id.items():
+        proof = evidence.get(project_id)
         if not proof:
             continue
-        prefix = project["repo"]
-        if proof.get("spdx_id") != project.get("license"):
-            errors.append(f"{prefix}: evidence license does not match project license")
-        blob_sha = proof.get("blob_sha")
-        if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
-            errors.append(f"{prefix}: invalid license blob SHA")
-            continue
-        path = proof.get("path")
-        if not isinstance(path, str) or not path:
-            errors.append(f"{prefix}: license evidence requires a path")
-        source_prefix = f"https://github.com/{project['repo']}/blob/"
-        if not isinstance(proof.get("url"), str) or not proof["url"].startswith(source_prefix):
-            errors.append(f"{prefix}: source license URL must be a GitHub blob URL")
-        expected_immutable = f"https://api.github.com/repos/{project['repo']}/git/blobs/{blob_sha}"
-        if proof.get("immutable_url") != expected_immutable:
-            errors.append(f"{prefix}: immutable license URL must address the recorded blob SHA")
+        prefix = str(project.get("repo") or project_id)
+        if proof.get("repo") != project.get("repo"):
+            errors.append(f"{prefix}: evidence repository does not match project")
+        items = proof.get("items")
+        if not isinstance(items, list) or not items:
+            errors.append(f"{prefix}: license evidence items must be a non-empty list")
+            items = []
+        evidence_licenses = {
+            item.get("license_id") for item in items if isinstance(item, dict)
+        }
+        if evidence_licenses != set(project.get("licenses", [])):
+            errors.append(f"{prefix}: evidence licenses do not match project licenses")
+        for item in items:
+            if not isinstance(item, dict):
+                errors.append(f"{prefix}: every license evidence item must be an object")
+                continue
+            if not isinstance(item.get("scope"), str) or not item["scope"].strip():
+                errors.append(f"{prefix}: license evidence requires a scope")
+            kind = item.get("kind")
+            if kind == "git_blob":
+                if not project.get("repo"):
+                    errors.append(f"{prefix}: git-blob evidence requires a GitHub repository")
+                    continue
+                blob_sha = item.get("blob_sha")
+                if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                    errors.append(f"{prefix}: invalid license blob SHA")
+                    continue
+                path = item.get("path")
+                if not isinstance(path, str) or not path:
+                    errors.append(f"{prefix}: license evidence requires a path")
+                source_prefix = f"https://github.com/{project['repo']}/blob/"
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(source_prefix):
+                    errors.append(f"{prefix}: source license URL must be a GitHub blob URL")
+                expected_immutable = (
+                    f"https://api.github.com/repos/{project['repo']}/git/blobs/{blob_sha}"
+                )
+                if item.get("immutable_url") != expected_immutable:
+                    errors.append(
+                        f"{prefix}: immutable license URL must address the recorded blob SHA"
+                    )
+            elif kind == "web_terms":
+                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                    errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
+                if not valid_date(item.get("verified_at")):
+                    errors.append(f"{prefix}: web terms require verified_at")
+            else:
+                errors.append(f"{prefix}: unknown license evidence kind {kind!r}")
 
     candidate_entries = candidates_data.get("candidates")
     if not isinstance(candidate_entries, list):
         errors.append("candidates.json: candidates must be a list")
         candidate_entries = []
     candidate_repos: set[str] = set()
+    candidate_keys: set[str] = set()
     for candidate in candidate_entries:
-        prefix = candidate.get("repo", "unknown") if isinstance(candidate, dict) else "unknown"
+        prefix = (candidate.get("repo") or candidate.get("url") or "unknown") if isinstance(candidate, dict) else "unknown"
         required = {
             "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
             "classification_confidence", "github_detected_license", "stars", "topics", "status",
@@ -349,20 +431,32 @@ def validate(root: Path = ROOT) -> list[str]:
         if not isinstance(candidate, dict) or set(candidate) != required:
             errors.append(f"candidate {prefix}: fields do not match candidate schema")
             continue
-        repo_key = candidate["repo"].lower()
-        if repo_key in candidate_repos or repo_key in repos:
-            errors.append(f"candidate {prefix}: duplicate or already curated repository")
-        candidate_repos.add(repo_key)
+        candidate_repo = candidate["repo"]
+        repo_key = candidate_repo.lower() if isinstance(candidate_repo, str) else ""
+        candidate_key = repo_key or str(candidate.get("url", "")).lower()
+        if candidate_key in candidate_keys:
+            errors.append(f"candidate {prefix}: duplicate candidate identity")
+        candidate_keys.add(candidate_key)
+        if repo_key:
+            if repo_key in candidate_repos or repo_key in repos:
+                errors.append(f"candidate {prefix}: duplicate or already curated repository")
+            candidate_repos.add(repo_key)
         if candidate["status"] != "provisional":
             errors.append(f"candidate {prefix}: status must be provisional")
-        if candidate["url"] != f"https://github.com/{candidate['repo']}":
+        if candidate_repo and candidate["url"] != f"https://github.com/{candidate_repo}":
             errors.append(f"candidate {prefix}: url must be the canonical GitHub repository URL")
+        if not candidate_repo and (
+            not isinstance(candidate["url"], str) or not candidate["url"].startswith("https://")
+        ):
+            errors.append(f"candidate {prefix}: non-GitHub candidate requires an HTTPS URL")
         family = candidate["proposed_system_family"]
         role = candidate["proposed_primary_role"]
         if family not in families or role not in roles or roles.get(role) != family:
             errors.append(f"candidate {prefix}: proposed family and role are incompatible")
-        if candidate["github_detected_license"] not in enum_ids["allowed_licenses"]:
-            errors.append(f"candidate {prefix}: detected license is not allowed")
+        if candidate["github_detected_license"] is not None and not isinstance(
+            candidate["github_detected_license"], str
+        ):
+            errors.append(f"candidate {prefix}: detected license must be a string or null")
         if not is_number(candidate["classification_confidence"]) or not 0 <= candidate["classification_confidence"] <= 1:
             errors.append(f"candidate {prefix}: classification confidence must be between 0 and 1")
         if candidate["stars"] is not None and (not isinstance(candidate["stars"], int) or candidate["stars"] < 0):
@@ -371,31 +465,39 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"candidate {prefix}: topics must be a list of strings")
         review_required = candidate["review_required"]
         if not isinstance(review_required, list) or any(not isinstance(item, str) for item in review_required) or set(review_required) != {
-            "license_scope", "classification", "traits", "editorial_score"
+            "licensing", "classification", "traits", "editorial_score"
         }:
             errors.append(f"candidate {prefix}: review_required is incomplete")
         if not valid_date(candidate["discovered_at"]):
             errors.append(f"candidate {prefix}: discovered_at must be an ISO date")
 
-    quarantine_entries = quarantine_data.get("entries")
-    if not isinstance(quarantine_entries, list):
-        errors.append("quarantine.json: entries must be a list")
-        quarantine_entries = []
-    quarantine_repos = [item.get("repo", "").lower() for item in quarantine_entries if isinstance(item, dict)]
-    if len(quarantine_repos) != len(set(quarantine_repos)):
-        errors.append("quarantine.json: repository entries must be unique")
-    status_quarantined = {repo for repo, project in projects_by_repo.items() if project.get("status") == "quarantined"}
-    if set(quarantine_repos) != status_quarantined:
-        errors.append("quarantine queue and quarantined project statuses must match")
-    for item in quarantine_entries:
+    review_entries = license_review_data.get("entries")
+    if not isinstance(review_entries, list):
+        errors.append("license-review.json: entries must be a list")
+        review_entries = []
+    review_ids = [item.get("project_id") for item in review_entries if isinstance(item, dict)]
+    if len(review_ids) != len(set(review_ids)):
+        errors.append("license-review.json: project entries must be unique")
+    review_required = {
+        project_id
+        for project_id, project in projects_by_id.items()
+        if project.get("license_review_status") == "review_required"
+    }
+    if set(review_ids) != review_required:
+        errors.append("license-review queue and project review statuses must match")
+    for item in review_entries:
         if not isinstance(item, dict):
-            errors.append("quarantine.json: every entry must be an object")
+            errors.append("license-review.json: every entry must be an object")
             continue
-        project = projects_by_repo.get(str(item.get("repo", "")).lower())
+        project = projects_by_id.get(str(item.get("project_id", "")))
         if item.get("status") != "open" or not valid_date(item.get("detected_at")):
-            errors.append(f"quarantine {item.get('repo', 'unknown')}: invalid status or detected_at")
-        if project and item.get("expected_license") != project.get("license"):
-            errors.append(f"quarantine {item.get('repo', 'unknown')}: expected license does not match project")
+            errors.append(
+                f"license review {item.get('project_id', 'unknown')}: invalid status or detected_at"
+            )
+        if project and item.get("expected_licenses") != project.get("licenses"):
+            errors.append(
+                f"license review {item.get('project_id', 'unknown')}: expected licenses do not match project"
+            )
 
     excluded_repos = {
         item["repo"].lower()
@@ -407,7 +509,10 @@ def validate(root: Path = ROOT) -> list[str]:
     if overlap := excluded_repos & candidate_repos:
         errors.append(f"repositories cannot be both candidates and excluded: {sorted(overlap)}")
 
-    for queue_name, document in (("candidates.json", candidates_data), ("quarantine.json", quarantine_data)):
+    for queue_name, document in (
+        ("candidates.json", candidates_data),
+        ("license-review.json", license_review_data),
+    ):
         if document.get("version") != "1.0":
             errors.append(f"{queue_name}: unsupported version")
         if document.get("updated_at") is not None and not valid_date(document["updated_at"]):
@@ -427,7 +532,7 @@ def main() -> int:
     data = load("projects.json")
     families = sorted({project["system_family"] for project in data["projects"]})
     counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
-    print(f"validated {len(data['projects'])} projects with pinned licenses: {counts}")
+    print(f"validated {len(data['projects'])} projects with reviewed license evidence: {counts}")
     return 0
 
 

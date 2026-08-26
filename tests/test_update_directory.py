@@ -9,8 +9,11 @@ from scripts import update_directory
 
 def project_fixture(status: str = "active") -> dict:
     return {
+        "id": "tool",
         "repo": "example/tool",
-        "license": "MIT",
+        "licenses": ["MIT"],
+        "source_model": "open_source",
+        "license_review_status": "verified",
         "status": status,
         "verified_at": "2025-01-15",
         "stars": 10,
@@ -31,18 +34,19 @@ def metadata_fixture(license_id: str = "MIT") -> dict:
 
 
 class UpdateDirectoryTests(unittest.TestCase):
-    def test_allowed_to_allowed_license_change_is_quarantined(self) -> None:
+    def test_license_change_opens_review_without_hiding_project(self) -> None:
         project = project_fixture()
 
-        successes, failures, quarantine = update_directory.refresh_projects(
+        successes, failures, reviews = update_directory.refresh_projects(
             [project], {}, lambda _path, _token: metadata_fixture("Apache-2.0"), None, "2026-08-25", sleeper=lambda _delay: None
         )
 
         self.assertEqual(1, successes)
         self.assertEqual([], failures)
-        self.assertEqual("quarantined", project["status"])
-        self.assertEqual("MIT", quarantine[0]["expected_license"])
-        self.assertEqual("Apache-2.0", quarantine[0]["detected_license"])
+        self.assertEqual("active", project["status"])
+        self.assertEqual("review_required", project["license_review_status"])
+        self.assertEqual(["MIT"], reviews[0]["expected_licenses"])
+        self.assertEqual("Apache-2.0", reviews[0]["detected_license"])
 
     def test_metadata_refresh_does_not_change_editorial_verification_date(self) -> None:
         project = project_fixture()
@@ -62,20 +66,22 @@ class UpdateDirectoryTests(unittest.TestCase):
         def unavailable(_path: str, _token: str | None) -> dict:
             raise urllib.error.URLError("offline")
 
-        successes, failures, quarantine = update_directory.refresh_projects(
+        successes, failures, reviews = update_directory.refresh_projects(
             [project], {}, unavailable, None, "2026-08-25", sleeper=lambda _delay: None
         )
 
         self.assertEqual(0, successes)
         self.assertEqual(before, project)
         self.assertEqual(1, len(failures))
-        self.assertEqual([], quarantine)
+        self.assertEqual([], reviews)
 
-    def test_transport_failure_preserves_an_open_quarantine(self) -> None:
-        project = project_fixture("quarantined")
+    def test_transport_failure_preserves_an_open_license_review(self) -> None:
+        project = project_fixture()
+        project["license_review_status"] = "review_required"
         previous_entry = {
+            "project_id": "tool",
             "repo": "example/tool",
-            "expected_license": "MIT",
+            "expected_licenses": ["MIT"],
             "detected_license": "Apache-2.0",
             "reason": "review required",
             "detected_at": "2026-08-24",
@@ -85,18 +91,33 @@ class UpdateDirectoryTests(unittest.TestCase):
         def unavailable(_path: str, _token: str | None) -> dict:
             raise urllib.error.URLError("offline")
 
-        _, _, quarantine = update_directory.refresh_projects(
-            [project], {"example/tool": previous_entry}, unavailable, None, "2026-08-25", sleeper=lambda _delay: None
+        _, _, reviews = update_directory.refresh_projects(
+            [project], {"tool": previous_entry}, unavailable, None, "2026-08-25", sleeper=lambda _delay: None
         )
 
-        self.assertEqual([previous_entry], quarantine)
+        self.assertEqual([previous_entry], reviews)
 
-    def test_existing_quarantine_requires_human_resolution(self) -> None:
-        project = project_fixture("quarantined")
+    def test_non_github_projects_are_not_sent_to_github(self) -> None:
+        project = project_fixture()
+        project["repo"] = None
+
+        def unexpected_request(_path: str, _token: str | None) -> dict:
+            raise AssertionError("non-GitHub project should not be refreshed through GitHub")
+
+        successes, failures, reviews = update_directory.refresh_projects(
+            [project], {}, unexpected_request, None, "2026-08-25", sleeper=lambda _delay: None
+        )
+
+        self.assertEqual((0, [], []), (successes, failures, reviews))
+
+    def test_existing_license_review_requires_human_resolution(self) -> None:
+        project = project_fixture()
+        project["license_review_status"] = "review_required"
         previous = {
-            "example/tool": {
+            "tool": {
+                "project_id": "tool",
                 "repo": "example/tool",
-                "expected_license": "MIT",
+                "expected_licenses": ["MIT"],
                 "detected_license": "Apache-2.0",
                 "reason": "review required",
                 "detected_at": "2026-08-24",
@@ -104,12 +125,13 @@ class UpdateDirectoryTests(unittest.TestCase):
             }
         }
 
-        _, _, quarantine = update_directory.refresh_projects(
+        _, _, reviews = update_directory.refresh_projects(
             [project], previous, lambda _path, _token: metadata_fixture("MIT"), None, "2026-08-25", sleeper=lambda _delay: None
         )
 
-        self.assertEqual("quarantined", project["status"])
-        self.assertEqual("2026-08-24", quarantine[0]["detected_at"])
+        self.assertEqual("active", project["status"])
+        self.assertEqual("review_required", project["license_review_status"])
+        self.assertEqual("2026-08-24", reviews[0]["detected_at"])
 
     def test_candidate_has_no_editorial_score_or_review_date(self) -> None:
         repo = {
@@ -177,6 +199,24 @@ class UpdateDirectoryTests(unittest.TestCase):
         )
 
         self.assertEqual("agent_system", candidate["proposed_system_family"])
+
+    def test_discovery_preserves_non_github_candidates(self) -> None:
+        previous = [{"repo": None, "url": "https://example.com/system", "name": "External"}]
+
+        candidates, new_count, successful_queries, failures = update_directory.discover_candidates(
+            set(),
+            previous,
+            {"coding_agent": "agent_system"},
+            lambda _path, _token: {"items": []},
+            None,
+            "2026-08-25",
+            sleeper=lambda _seconds: None,
+        )
+
+        self.assertEqual(previous, candidates)
+        self.assertEqual(0, new_count)
+        self.assertGreater(successful_queries, 0)
+        self.assertEqual([], failures)
 
 
 if __name__ == "__main__":

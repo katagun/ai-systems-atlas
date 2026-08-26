@@ -8,7 +8,7 @@ const label = value => String(value || "").replaceAll("_", " ").replace(/\b\w/g,
 
 const FINDER_FAMILIES = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
-  { id: "agent_system", label: "Plan and take action", description: "Coding, research, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" }
+  { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" }
 ];
 
 const FINDER_GOALS = {
@@ -22,6 +22,7 @@ const FINDER_GOALS = {
   agent_system: [
     { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
     { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
+    { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
     { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
     { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
     { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
@@ -57,7 +58,7 @@ async function bootstrap() {
   ]);
   state.projects = directory.projects;
   state.taxonomy = taxonomy;
-  state.licenses = new Map(licenseEvidence.entries.map(item => [item.repo.toLowerCase(), item]));
+  state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
   $("#data-date").textContent = `Data updated ${directory.generated_at}`;
   populateFilters();
   renderStats();
@@ -74,6 +75,8 @@ const familyName = id => taxonomyName("system_families", id);
 const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
+const sourceModelName = id => taxonomyName("source_models", id);
+const licenseName = id => taxonomyName("licenses", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
 function populateFilters() {
@@ -83,6 +86,10 @@ function populateFilters() {
   populateRoleFilter();
   state.taxonomy.agent_relations.forEach(item => $("#agent-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   state.taxonomy.architectures.forEach(item => $("#architecture-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedSourceModels = new Set(state.projects.map(project => project.source_model));
+  state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
+  state.taxonomy.licenses.filter(item => publishedLicenses.has(item.id)).forEach(item => $("#license-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`));
 }
 
 function populateRoleFilter() {
@@ -107,10 +114,10 @@ function updateScoreSortAvailability() {
 function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
-  const licensed = state.licenses.size;
-  $("#hero-kicker").textContent = `${state.projects.length} reviewed open-source projects`;
+  const licensed = state.projects.filter(project => project.license_review_status === "verified").length;
+  $("#hero-kicker").textContent = `${state.projects.length} reviewed systems`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [licensed, "licenses reviewed"]
+    [memories, "memory"], [agents, "agents"], [licensed, "license profiles"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
 }
 
@@ -122,6 +129,8 @@ function filteredProjects() {
     roles: state.directoryRoles || [],
     agent: $("#agent-filter").value,
     architecture: $("#architecture-filter").value,
+    sourceModel: $("#source-model-filter").value,
+    license: $("#license-filter").value,
     status: $("#status-filter").value,
     localOnly: $("#local-filter").checked,
     sort: $("#sort-filter").value
@@ -138,8 +147,9 @@ function renderProjects() {
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(project.repo)}</div></div>${score}</div>
+      <div class="card-top"><div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(project.repo || project.url)}</div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
       <div class="card-footer"><span>${compactNumber(project.stars)} ★ ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><button data-project="${escapeHTML(project.id)}">View details →</button></div>
@@ -239,7 +249,9 @@ function renderFinderResults() {
   return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(familyName(family).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
     <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family)}">
       <div class="finder-rank">0${index + 1}</div>
-      <div><p class="family-label">${escapeHTML(roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p></div>
+      <div><p class="family-label">${escapeHTML(roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
+        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}</div>
+      </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(project.weaknesses[0])}</p>
       <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(project.score_profile)} score</span><button data-finder-project="${escapeHTML(project.id)}">View details →</button></div>
@@ -257,6 +269,8 @@ function applyFinderToDirectory() {
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
   $("#agent-filter").value = "";
   $("#architecture-filter").value = "";
+  $("#source-model-filter").value = "";
+  $("#license-filter").value = "";
   $("#status-filter").value = "active";
   $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
@@ -276,7 +290,7 @@ function renderTaxonomy() {
     ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities],
     ["Deployment modes", state.taxonomy.deployment_modes], ["Project statuses", state.taxonomy.project_statuses],
     ["Provenance levels", state.taxonomy.provenance_levels], ["Research confidence", state.taxonomy.research_confidence_levels],
-    ["Eligible licenses", state.taxonomy.allowed_licenses]
+    ["Source models", state.taxonomy.source_models], ["Licenses and terms", state.taxonomy.licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
@@ -284,15 +298,19 @@ function renderTaxonomy() {
 function openProject(id) {
   const project = state.projects.find(item => item.id === id);
   if (!project) return;
-  const proof = state.licenses.get(project.repo.toLowerCase());
+  const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
   const familyDetail = project.system_family === "agent_system"
     ? `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`
     : `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
-  const licenseLink = proof ? `<a href="${escapeHTML(proof.immutable_url)}" target="_blank" rel="noreferrer">${escapeHTML(project.license)} immutable evidence ↗</a> · <a href="${escapeHTML(proof.url)}" target="_blank" rel="noreferrer">source path ↗</a>` : escapeHTML(project.license);
+  const licenseLinks = proof ? proof.items.map(item => item.kind === "git_blob"
+    ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
+    : `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a></p>`
+  ).join("") : `<p>${project.licenses.map(escapeHTML).join(" · ")}</p>`;
   $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>License:</strong> ${licenseLink}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">Open GitHub repository ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">Open project source ↗</a></p></section>
+      <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(project.score_profile === "agent" ? "Agent-system" : "Memory-system")} score</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Weaknesses</h3><ul>${project.weaknesses.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
@@ -318,10 +336,10 @@ function bindEvents() {
     renderProjects();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
-  ["#project-search", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
+  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   $("#reset-filters").addEventListener("click", () => {
     state.directoryRoles = null; $("#project-search").value = ""; $("#family-filter").value = "memory_system"; populateRoleFilter();
-    $("#role-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
+    $("#role-filter").value = ""; $("#source-model-filter").value = ""; $("#license-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
     $("#status-filter").value = "active"; $("#sort-filter").value = "score"; updateScoreSortAvailability(); $("#local-filter").checked = false;
     renderProjects();
   });

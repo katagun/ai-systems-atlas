@@ -20,7 +20,32 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "agno-agi/agno",
+      "name": "agno",
+      "url": "https://github.com/agno-agi/agno",
+      "description": "Open-source framework for building, running, and managing agent platforms.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.93,
+      "github_detected_license": "Apache-2.0",
+      "stars": 41909,
+      "topics": [
+        "agents",
+        "ai-agents",
+        "developer-tools",
+        "python"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -61,7 +86,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -89,7 +114,47 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "anthropics/claude-agent-sdk-python",
+      "name": "Claude Agent SDK for Python",
+      "url": "https://github.com/anthropics/claude-agent-sdk-python",
+      "description": "Provider-native Python SDK for controlling Claude agent sessions, tools, hooks, permissions, and subagents.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.99,
+      "github_detected_license": "MIT",
+      "stars": 7972,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "anthropics/claude-agent-sdk-typescript",
+      "name": "Claude Agent SDK for TypeScript",
+      "url": "https://github.com/anthropics/claude-agent-sdk-typescript",
+      "description": "Provider-native TypeScript SDK for building Claude-powered, tool-using agents.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.99,
+      "github_detected_license": null,
+      "stars": 1718,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -121,7 +186,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -160,7 +225,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -201,7 +266,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -229,7 +294,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -255,7 +320,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -275,7 +340,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -301,7 +366,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -333,7 +398,35 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "deepset-ai/haystack",
+      "name": "haystack",
+      "url": "https://github.com/deepset-ai/haystack",
+      "description": "Open-source orchestration framework for agent workflows, retrieval, routing, memory, generation, and multimodal applications.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.88,
+      "github_detected_license": "Apache-2.0",
+      "stars": 26313,
+      "topics": [
+        "agent-framework",
+        "agents",
+        "context-engineering",
+        "mcp",
+        "multi-agent",
+        "orchestration",
+        "rag"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -360,7 +453,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -380,7 +473,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -406,7 +499,32 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "eosphoros-ai/DB-GPT",
+      "name": "DB-GPT",
+      "url": "https://github.com/eosphoros-ai/DB-GPT",
+      "description": "Open-source agentic AI data assistant for building data-analysis and database agent applications.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "data_analysis_agent",
+      "classification_confidence": 0.93,
+      "github_detected_license": "MIT",
+      "stars": 19792,
+      "topics": [
+        "agents",
+        "database",
+        "llm",
+        "rag"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -447,7 +565,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -487,7 +605,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -522,7 +640,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -559,7 +677,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -597,7 +715,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -629,7 +747,83 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Obsidian",
+      "url": "https://obsidian.md/",
+      "description": "Local-first personal knowledge workspace built around plain Markdown files, links, and plugins.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "human_pkm",
+      "classification_confidence": 1.0,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "knowledge-management",
+        "local-first",
+        "markdown",
+        "notes",
+        "pkm"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Microsoft Recall",
+      "url": "https://support.microsoft.com/en-us/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c",
+      "description": "Opt-in Windows activity capture with a searchable timeline of encrypted local snapshots.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ambient_capture",
+      "classification_confidence": 1.0,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "ambient-capture",
+        "local-storage",
+        "semantic-search",
+        "windows"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Limitless (formerly Rewind)",
+      "url": "https://www.limitless.ai/",
+      "description": "Historical ambient-memory product whose Rewind capture apps are sunsetting after acquisition; existing Pendant support continues through 2026.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ambient_capture",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "ambient-capture",
+        "audio",
+        "lifelogging",
+        "wearable"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -661,7 +855,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -695,7 +889,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -721,7 +915,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -745,7 +939,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -778,7 +972,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -807,7 +1001,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -832,7 +1026,33 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "mastra-ai/mastra",
+      "name": "Mastra",
+      "url": "https://github.com/mastra-ai/mastra",
+      "description": "TypeScript framework for building agents, workflows, retrieval, evaluation, and observability.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.99,
+      "github_detected_license": "NOASSERTION",
+      "stars": 27469,
+      "topics": [
+        "agents",
+        "evals",
+        "mcp",
+        "typescript",
+        "workflows"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -870,7 +1090,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -908,7 +1128,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -949,7 +1169,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -990,7 +1210,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1031,7 +1251,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1066,7 +1286,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1106,7 +1326,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1143,7 +1363,59 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "onyx-dot-app/onyx",
+      "name": "Onyx",
+      "url": "https://github.com/onyx-dot-app/onyx",
+      "description": "AI knowledge platform with enterprise search, connectors, retrieval, and chat across organizational data.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ai_knowledge_app",
+      "classification_confidence": 0.98,
+      "github_detected_license": "NOASSERTION",
+      "stars": 31762,
+      "topics": [
+        "ai-chat",
+        "enterprise-search",
+        "information-retrieval",
+        "rag",
+        "self-hosted"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "OpenHands/OpenHands",
+      "name": "OpenHands",
+      "url": "https://github.com/OpenHands/OpenHands",
+      "description": "Software-development agent platform for planning, editing, executing, and validating code changes.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": "MIT",
+      "stars": 85095,
+      "topics": [
+        "agent",
+        "artificial-intelligence",
+        "cli",
+        "developer-tools",
+        "llm"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1178,7 +1450,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1207,7 +1479,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1244,7 +1516,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1277,7 +1549,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1313,7 +1585,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1338,7 +1610,35 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "run-llama/llama_index",
+      "name": "llama_index",
+      "url": "https://github.com/run-llama/llama_index",
+      "description": "Open-source document-agent and data framework spanning retrieval, OCR, agent workflows, tools, and multi-agent applications.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 51869,
+      "topics": [
+        "agents",
+        "data",
+        "framework",
+        "llamaindex",
+        "multi-agents",
+        "rag",
+        "vector-database"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1366,7 +1666,34 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "screenpipe/screenpipe",
+      "name": "screenpipe",
+      "url": "https://github.com/screenpipe/screenpipe",
+      "description": "Local-first continuous screen and audio capture that exposes computer history as context for agents.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ambient_capture",
+      "classification_confidence": 0.98,
+      "github_detected_license": "NOASSERTION",
+      "stars": 21229,
+      "topics": [
+        "agents",
+        "ai-memory",
+        "local-first",
+        "mcp",
+        "screen-recording",
+        "speech-to-text"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1389,7 +1716,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1417,7 +1744,33 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "sqlchat/sqlchat",
+      "name": "sqlchat",
+      "url": "https://github.com/sqlchat/sqlchat",
+      "description": "Self-hostable conversational SQL client that turns natural-language requests into database operations.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "data_analysis_agent",
+      "classification_confidence": 0.9,
+      "github_detected_license": "MIT",
+      "stars": 5843,
+      "topics": [
+        "database",
+        "sql",
+        "sqlclient",
+        "text-to-sql",
+        "text2sql"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1441,7 +1794,27 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "stanfordnlp/dspy",
+      "name": "dspy",
+      "url": "https://github.com/stanfordnlp/dspy",
+      "description": "Framework for modular, optimizable language-model programs, including ReAct modules and tool-using agent loops.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.68,
+      "github_detected_license": "MIT",
+      "stars": 37592,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1469,7 +1842,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1510,7 +1883,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1551,7 +1924,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1586,7 +1959,60 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "toeverything/AFFiNE",
+      "name": "AFFiNE",
+      "url": "https://github.com/toeverything/AFFiNE",
+      "description": "Knowledge workspace combining documents, databases, planning, and whiteboards.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "human_pkm",
+      "classification_confidence": 0.96,
+      "github_detected_license": "NOASSERTION",
+      "stars": 71875,
+      "topics": [
+        "knowledge-base",
+        "markdown",
+        "notes",
+        "whiteboard",
+        "workspace"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "vanna-ai/vanna",
+      "name": "vanna",
+      "url": "https://github.com/vanna-ai/vanna",
+      "description": "Archived text-to-SQL framework and agent application; retained provisionally for historical coverage or successor tracking.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "data_analysis_agent",
+      "classification_confidence": 0.88,
+      "github_detected_license": "MIT",
+      "stars": 23818,
+      "topics": [
+        "agent",
+        "data-visualization",
+        "database",
+        "rag",
+        "sql",
+        "text-to-sql"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1611,7 +2037,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1638,7 +2064,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1679,7 +2105,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1699,7 +2125,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1740,7 +2166,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"
@@ -1760,288 +2186,7 @@
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "eosphoros-ai/DB-GPT",
-      "name": "DB-GPT",
-      "url": "https://github.com/eosphoros-ai/DB-GPT",
-      "description": "Open-source agentic AI data assistant for building data-analysis and database agent applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.93,
-      "github_detected_license": "MIT",
-      "stars": 19792,
-      "topics": [
-        "agents",
-        "database",
-        "llm",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "langchain-ai/langchain",
-      "name": "langchain",
-      "url": "https://github.com/langchain-ai/langchain",
-      "description": "Open-source agent engineering framework with reusable model, tool, middleware, and agent abstractions.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.94,
-      "github_detected_license": "MIT",
-      "stars": 144969,
-      "topics": [
-        "agents",
-        "ai-agents",
-        "framework",
-        "langchain",
-        "llm",
-        "multiagent",
-        "python",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "sqlchat/sqlchat",
-      "name": "sqlchat",
-      "url": "https://github.com/sqlchat/sqlchat",
-      "description": "Self-hostable conversational SQL client that turns natural-language requests into database operations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 5843,
-      "topics": [
-        "database",
-        "sql",
-        "sqlclient",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "stanfordnlp/dspy",
-      "name": "dspy",
-      "url": "https://github.com/stanfordnlp/dspy",
-      "description": "Framework for modular, optimizable language-model programs, including ReAct modules and tool-using agent loops.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.68,
-      "github_detected_license": "MIT",
-      "stars": 37592,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "vanna-ai/vanna",
-      "name": "vanna",
-      "url": "https://github.com/vanna-ai/vanna",
-      "description": "Archived text-to-SQL framework and agent application; retained provisionally for historical coverage or successor tracking.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.88,
-      "github_detected_license": "MIT",
-      "stars": 23818,
-      "topics": [
-        "agent",
-        "data-visualization",
-        "database",
-        "rag",
-        "sql",
-        "text-to-sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "agno-agi/agno",
-      "name": "agno",
-      "url": "https://github.com/agno-agi/agno",
-      "description": "Open-source framework for building, running, and managing agent platforms.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.93,
-      "github_detected_license": "Apache-2.0",
-      "stars": 41909,
-      "topics": [
-        "agents",
-        "ai-agents",
-        "developer-tools",
-        "python"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "deepset-ai/haystack",
-      "name": "haystack",
-      "url": "https://github.com/deepset-ai/haystack",
-      "description": "Open-source orchestration framework for agent workflows, retrieval, routing, memory, generation, and multimodal applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.88,
-      "github_detected_license": "Apache-2.0",
-      "stars": 26313,
-      "topics": [
-        "agent-framework",
-        "agents",
-        "context-engineering",
-        "mcp",
-        "multi-agent",
-        "orchestration",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "anthropics/claude-agent-sdk-python",
-      "name": "claude-agent-sdk-python",
-      "url": "https://github.com/anthropics/claude-agent-sdk-python",
-      "description": "Python SDK for building tool-using agents on the Claude Agent SDK and its bundled Claude Code runtime.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 7971,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "deepseek-ai/deepseek-harness",
-      "name": "deepseek-harness",
-      "url": "https://github.com/deepseek-ai/deepseek-harness",
-      "description": "Open-source, plugin-oriented agent harness with a local web interface and extensible runtime.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 195167,
-      "topics": [
-        "ai-agents",
-        "cordis",
-        "dsh",
-        "dsh-plugin"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "openai/openai-agents-python",
-      "name": "openai-agents-python",
-      "url": "https://github.com/openai/openai-agents-python",
-      "description": "Open-source framework for tool-using agents, handoffs, guardrails, sessions, tracing, and multi-agent workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.96,
-      "github_detected_license": "MIT",
-      "stars": 28955,
-      "topics": [
-        "agents",
-        "ai",
-        "framework",
-        "harness",
-        "llm",
-        "openai",
-        "python"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "run-llama/llama_index",
-      "name": "llama_index",
-      "url": "https://github.com/run-llama/llama_index",
-      "description": "Open-source document-agent and data framework spanning retrieval, OCR, agent workflows, tools, and multi-agent applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 51869,
-      "topics": [
-        "agents",
-        "data",
-        "framework",
-        "llamaindex",
-        "multi-agents",
-        "rag",
-        "vector-database"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "license_scope",
+        "licensing",
         "classification",
         "traits",
         "editorial_score"

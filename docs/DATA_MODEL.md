@@ -9,11 +9,11 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
 | `projects.json` | Reviewed catalog and editorial scores | Yes |
-| `taxonomy.json` | Enums, license allowlist, score profiles | Yes |
-| `license-evidence.json` | Reviewed license evidence | Yes |
-| `exclusions.json` | Relevant systems outside the gate | Yes |
-| `candidates.json` | Provisional discovery queue | No |
-| `quarantine.json` | Open license-review incidents | No |
+| `taxonomy.json` | Enums, source models, licenses, and score profiles | Yes |
+| `license-evidence.json` | Scoped reviewed license and terms evidence | Yes |
+| `exclusions.json` | Reviewed scope-boundary decisions | Yes |
+| `candidates.json` | Provisional discovery and migration queue | No |
+| `license-review.json` | Open license-evidence review incidents | No |
 
 Run `uv run python scripts/sync_web_data.py` after manually changing published data.
 
@@ -21,14 +21,23 @@ Run `uv run python scripts/sync_web_data.py` after manually changing published d
 
 Fields are grouped by responsibility:
 
-- **Identity:** `id`, `name`, `repo`, `url`, `description`.
-- **Classification:** `system_family`, `primary_role`, `secondary_roles`, `score_profile`.
+- **Identity:** `id`, `name`, optional GitHub `repo`, authoritative `url`, and `description`.
+- **Classification:** `system_family`, `primary_role`, `secondary_roles`, and `score_profile`.
 - **Traits:** agent relationship, optional reviewed provider relationship and model backends, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, provenance, and agent-only operation fields.
-- **License gate:** `license`, `license_scope`, `status`.
+- **Licensing:** non-empty `licenses`, one `source_model`, and `license_review_status`.
+- **Lifecycle:** `status`.
 - **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
-- **Live metadata:** stars, forks, open issues, push time, detected license, and their metadata timestamps.
+- **Live metadata:** stars, forks, open issues, push time, detected license, and their metadata timestamps. These may be null for systems without a public GitHub repository.
 
 All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, or score-profile combinations.
+
+### Source and license traits
+
+`source_model` is one of `open_source`, `mixed_open_source`, `open_core`, `source_available`, `proprietary`, or `unclear`. `licenses` lists every material reviewed identifier, including content or commercial terms that cover part of the represented system. Neither field controls inclusion.
+
+The taxonomy assigns each license a kind. Validation keeps the two fields coherent: open-source models use only open-source terms; mixed-open-source models use at least two open code/content terms; open-core models combine an open-source core with restricted or proprietary terms; and source-available, proprietary, or unclear models include their corresponding term kind.
+
+`license_review_status` is `verified` when evidence supports the reviewed classification and `review_required` when automation or a reviewer detected possible drift. Review-required systems remain visible.
 
 ### Optional provider traits
 
@@ -47,19 +56,20 @@ Automation must never update `verified_at`.
 
 ## License evidence
 
-Each main project has exactly one evidence record:
+Each project has one evidence record keyed by `project_id`. Its `items` cover every identifier in the project's `licenses` list:
 
-- `url` identifies the human-readable repository source path and may follow a branch;
-- `blob_sha` identifies the exact reviewed Git blob content;
-- `immutable_url` addresses that blob through GitHub's Git Data API;
-- `spdx_id` must match the project license and the taxonomy allowlist.
+- `license_id` is a taxonomy identifier;
+- `scope` states the component, path, documentation, assets, or product terms covered;
+- `kind` is `git_blob` or `web_terms`;
+- Git evidence records `path`, `url`, `blob_sha`, and `immutable_url`;
+- web terms record an authoritative `url` and `verified_at`, with no claim of immutability.
 
-The blob identity proves content, not license scope. A human must still inspect the repository layout and determine whether restricted code changes the inclusion decision.
+The evidence set may include multiple licenses for one repository. Blob identity proves content, not scope; reviewers must inspect path maps, package manifests, and relevant terms.
 
 ## Review queues
 
-Candidate records contain discovery facts and proposed classification only. They intentionally have no editorial score, evidence, confidence assessment, or editorial verification date.
+Candidate records contain discovery facts and proposed classification only. They intentionally have no editorial score, evidence, confidence assessment, or editorial verification date. Manually added candidates may omit `repo` when the product has no canonical GitHub repository.
 
-Quarantine records correspond one-to-one with projects whose status is `quarantined`. Automation may add or preserve a quarantine, but only a human review may resolve it.
+License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
 See `OPERATIONS.md` for promotion and resolution procedures.

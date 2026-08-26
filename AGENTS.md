@@ -1,6 +1,6 @@
 # AGENTS.md — Agent Systems Atlas
 
-This repository is a curated, license-gated directory of open-source memory systems and AI agent systems. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory systems and AI agent systems across open-source, mixed, open-core, source-available, and proprietary source models. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 
@@ -38,15 +38,16 @@ Run synchronization after changing any published `directory/*.json` file. Run al
 
 ## Hard rules
 
-- Main entries must be GitHub-hosted and use a license listed in `directory/taxonomy.json`.
-- Review repository license files and scope; README claims and GitHub SPDX detection are insufficient.
-- A license mismatch is fail-closed: keep the project quarantined until human review resolves it.
+- Relevance and operational capability determine inclusion; license or source model never does.
+- Review authoritative license or terms sources and their component/path scope; README claims and GitHub SPDX detection are insufficient.
+- Record every material license and one source-model classification from `directory/taxonomy.json`.
+- A license mismatch opens a durable review incident and marks license evidence stale; it never silently hides the project or changes the human conclusion.
 - Assign exactly one `system_family` and one compatible `primary_role`.
 - Architecture, retrieval, deployment, and agent traits are not primary roles.
 - Never compare or rank scores across score profiles.
 - Never let automated refreshes change editorial prose, scores, evidence, confidence, or `verified_at`.
 - Never promote `directory/candidates.json` records without the complete curation workflow.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, and `license-evidence.json` synchronized into `web/`; review queues are not published.
+- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, and `license-evidence.json` synchronized into `web/`; candidate and license-review queues are not published.
 - Never report checks as passing unless you ran them.
 
 Existing unrelated changes belong to the user. Preserve them.

@@ -2,70 +2,10 @@
   "generated_at": "2026-08-25",
   "entries": [
     {
-      "name": "screenpipe",
-      "repo": "screenpipe/screenpipe",
-      "reason": "Source-available commercial license; not OSI open source.",
-      "useful_lesson": "Ambient screen/audio capture, local search, and per-pipeline permissions."
-    },
-    {
-      "name": "AFFiNE",
-      "repo": "toeverything/AFFiNE",
-      "reason": "Mixed repository: community/client portions are open, but backend enterprise code has production restrictions.",
-      "useful_lesson": "Integrated document, database, and whiteboard workspace UX."
-    },
-    {
-      "name": "Onyx",
-      "repo": "onyx-dot-app/onyx",
-      "reason": "Open-core repository containing enterprise-licensed directories; excluded by strict all-code-open default.",
-      "useful_lesson": "Enterprise connectors and RAG operations."
-    },
-    {
-      "name": "OpenHands",
-      "repo": "OpenHands/OpenHands",
-      "reason": "Mixed repository: the core is MIT, while enterprise code is source-available under commercial terms.",
-      "useful_lesson": "Sandboxed coding-agent execution, event streams, and delegation architecture."
-    },
-    {
-      "name": "Obsidian",
-      "repo": null,
-      "reason": "Not open source.",
-      "useful_lesson": "Local Markdown ecosystem and plugin-driven PKM."
-    },
-    {
-      "name": "Microsoft Recall",
-      "repo": null,
-      "reason": "Proprietary.",
-      "useful_lesson": "OS-level ambient recall and the associated privacy threat model."
-    },
-    {
-      "name": "Rewind / Limitless",
-      "repo": null,
-      "reason": "Proprietary.",
-      "useful_lesson": "Consumer ambient-memory product design."
-    },
-    {
-      "name": "WrenAI",
-      "repo": "Canner/WrenAI",
-      "reason": "Mixed-license repository with an explicit path-based license map; excluded by the strict single-scope catalog rule.",
-      "useful_lesson": "Governed semantic context, query validation, and text-to-SQL across heterogeneous data sources."
-    },
-    {
       "name": "LangSmith",
       "repo": "langchain-ai/langsmith-sdk",
-      "reason": "The public MIT repository contains client SDKs, while the LangSmith platform is commercial and self-hosting requires an Enterprise license.",
+      "reason": "The reviewed repository is a client SDK for tracing and evaluation; it does not itself provide a memory system or a tool-acting agent runtime.",
       "useful_lesson": "Agent tracing, evaluation, production observability, and recovery-oriented operations."
-    },
-    {
-      "name": "Mastra",
-      "repo": "mastra-ai/mastra",
-      "reason": "Mixed open-core repository: most code is Apache-2.0, while ee/ directories prohibit production use without a commercial agreement.",
-      "useful_lesson": "TypeScript-first agent workflows, evaluation, observability, and deployment ergonomics."
-    },
-    {
-      "name": "Claude Agent SDK for TypeScript",
-      "repo": "anthropics/claude-agent-sdk-typescript",
-      "reason": "The repository LICENSE.md reserves all rights and makes use subject to Anthropic's commercial terms; it is not OSI open source.",
-      "useful_lesson": "Provider-native agent SDK design, typed tool interfaces, hooks, permissions, and session management."
     }
   ]
 }

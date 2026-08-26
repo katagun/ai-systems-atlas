@@ -65,6 +65,6 @@ This research argues against:
 
 ## Directory policy
 
-The main catalog contains GitHub-hosted projects whose relevant code is under an OSI-compatible license. Source-visible but restricted projects are documented separately because their ideas remain useful, but they cannot satisfy the user’s open-source-only constraint.
+The catalog is organized by operational relevance, not by license eligibility. Open-source, open-core, source-available, and proprietary systems can all qualify when their behavior can be reviewed responsibly. Licensing remains prominent, scoped evidence: users can filter by exact license or source model, and inspectability influences confidence and relevant score dimensions. An open-source-only directory is therefore a view over the catalog rather than its boundary. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md).
 
-Known exclusions include OpenHands (mixed MIT/source-available repository), screenpipe (source-available commercial license), AFFiNE (mixed repository with production-restricted backend portions), proprietary Obsidian, Microsoft Recall, and Rewind/Limitless.
+License-only exclusions were returned to the review queue. True exclusions now express a role or evidence boundary—for example, a tracing client that does not itself act as an agent—not a preference for one software-distribution model.

@@ -367,6 +367,34 @@ input:focus, select:focus {
   text-transform: uppercase;
 }
 .agent_system .role-badge { background: var(--sand-soft); color: #76563c; }
+.license-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin: -.25rem 0 .75rem;
+}
+.license-badge,
+.source-badge,
+.review-badge {
+  padding: .25rem .42rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bg-elevated);
+  color: var(--muted);
+  font: 600 .62rem var(--font-mono);
+}
+.source-badge {
+  border-color: #c5d1c8;
+  background: var(--sage-soft);
+  color: #365748;
+  font-family: var(--font-body);
+}
+.review-badge {
+  border-color: #d6b694;
+  background: #f5ece3;
+  color: #754b2d;
+  font-family: var(--font-body);
+}
 .project-card > p { margin-top: .2rem; color: var(--muted); font-size: .91rem; line-height: 1.6; }
 .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; padding-top: 1rem; }
 .tags span {
