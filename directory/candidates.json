@@ -96,46 +96,6 @@
       ]
     },
     {
-      "repo": "anthropics/claude-agent-sdk-python",
-      "name": "Claude Agent SDK for Python",
-      "url": "https://github.com/anthropics/claude-agent-sdk-python",
-      "description": "Provider-native Python SDK for controlling Claude agent sessions, tools, hooks, permissions, and subagents.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.99,
-      "github_detected_license": "MIT",
-      "stars": 7972,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "anthropics/claude-agent-sdk-typescript",
-      "name": "Claude Agent SDK for TypeScript",
-      "url": "https://github.com/anthropics/claude-agent-sdk-typescript",
-      "description": "Provider-native TypeScript SDK for building Claude-powered, tool-using agents.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.99,
-      "github_detected_license": null,
-      "stars": 1718,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "anymorph-ai/Claudable",
       "name": "Claudable",
       "url": "https://github.com/anymorph-ai/Claudable",
@@ -609,78 +569,6 @@
         "parallel-agents",
         "parallelexecution",
         "terminal"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "google/adk-go",
-      "name": "adk-go",
-      "url": "https://github.com/google/adk-go",
-      "description": "An open-source, code-first Go toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 8698,
-      "topics": [
-        "a2a",
-        "agents",
-        "agents-sdk",
-        "ai",
-        "aiagentframework",
-        "gemini",
-        "genai",
-        "go",
-        "llm",
-        "mcp",
-        "multi-agent-collaboration",
-        "multi-agent-systems",
-        "sdk",
-        "vertex-ai"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "google/adk-python",
-      "name": "adk-python",
-      "url": "https://github.com/google/adk-python",
-      "description": "An open-source, code-first Python toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 21278,
-      "topics": [
-        "agent",
-        "agentic",
-        "agentic-ai",
-        "agents",
-        "agents-sdk",
-        "ai",
-        "ai-agents",
-        "aiagentframework",
-        "genai",
-        "genai-chatbot",
-        "llm",
-        "llms",
-        "multi-agent",
-        "multi-agent-systems",
-        "multi-agents",
-        "multi-agents-collaboration"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1378,32 +1266,6 @@
         "mcp-server",
         "rss",
         "rss-reader"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "mastra-ai/mastra",
-      "name": "Mastra",
-      "url": "https://github.com/mastra-ai/mastra",
-      "description": "TypeScript framework for building agents, workflows, retrieval, evaluation, and observability.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.99,
-      "github_detected_license": "NOASSERTION",
-      "stars": 27469,
-      "topics": [
-        "agents",
-        "evals",
-        "mcp",
-        "typescript",
-        "workflows"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",

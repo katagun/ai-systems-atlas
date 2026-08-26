@@ -138,6 +138,35 @@
       ]
     },
     {
+      "project_id": "claude-agent-sdk",
+      "repo": "anthropics/claude-agent-sdk-python",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Python SDK wrapper source",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/anthropics/claude-agent-sdk-python/blob/main/LICENSE",
+          "blob_sha": "3fa6a64e52f30d3ad836f98b3f0da6f4b6263bb8",
+          "immutable_url": "https://api.github.com/repos/anthropics/claude-agent-sdk-python/git/blobs/3fa6a64e52f30d3ad836f98b3f0da6f4b6263bb8"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Bundled Claude Code executable and TypeScript SDK distribution, excluding separately licensed wrapper components",
+          "kind": "web_terms",
+          "url": "https://code.claude.com/docs/en/agent-sdk/overview#license-and-terms",
+          "verified_at": "2026-08-25"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Use of the complete Agent SDK product under Anthropic's Commercial Terms, excluding separately licensed components",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-08-25"
+        }
+      ]
+    },
+    {
       "project_id": "cline",
       "repo": "cline/cline",
       "items": [
@@ -346,6 +375,21 @@
       ]
     },
     {
+      "project_id": "google-adk",
+      "repo": "google/adk-python",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "canonical Python SDK repository and operational runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google/adk-python/blob/main/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/google/adk-python/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
+    },
+    {
       "project_id": "haystack",
       "repo": "deepset-ai/haystack",
       "items": [
@@ -490,6 +534,37 @@
           "url": "https://github.com/logseq/logseq/blob/master/LICENSE.md",
           "blob_sha": "0394f2b6e73d87eff0394dc454f3b189d5fce14f",
           "immutable_url": "https://api.github.com/repos/logseq/logseq/git/blobs/0394f2b6e73d87eff0394dc454f3b189d5fce14f"
+        }
+      ]
+    },
+    {
+      "project_id": "mastra",
+      "repo": "mastra-ai/mastra",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Mastra-authored repository content outside every directory named ee/, excluding incorporated third-party components",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/mastra-ai/mastra/blob/main/LICENSE.md",
+          "blob_sha": "f1c9c2100794bb04b1f70d3978b4caeec6ed625e",
+          "immutable_url": "https://api.github.com/repos/mastra-ai/mastra/git/blobs/f1c9c2100794bb04b1f70d3978b4caeec6ed625e"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Every ee/ directory, including enterprise authentication, authorization, Agent Builder, editor, and playground features; production use requires a written agreement",
+          "kind": "git_blob",
+          "path": "ee/LICENSE",
+          "url": "https://github.com/mastra-ai/mastra/blob/main/ee/LICENSE",
+          "blob_sha": "f655f76536e466b0f3771befd5c9d052d760aa8d",
+          "immutable_url": "https://api.github.com/repos/mastra-ai/mastra/git/blobs/f655f76536e466b0f3771befd5c9d052d760aa8d"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Mastra Platform commercial cloud service and related proprietary cloud dashboards, APIs, CLIs, and SDKs; excludes Community and Enterprise Edition framework code",
+          "kind": "web_terms",
+          "url": "https://mastra.ai/terms-of-service",
+          "verified_at": "2026-08-25"
         }
       ]
     },

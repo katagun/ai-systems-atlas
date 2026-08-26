@@ -64,9 +64,6 @@ class DirectoryTests(unittest.TestCase):
         candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
         exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
         requeued = {
-            "anthropics/claude-agent-sdk-python",
-            "anthropics/claude-agent-sdk-typescript",
-            "mastra-ai/mastra",
             "onyx-dot-app/onyx",
             "screenpipe/screenpipe",
             "toeverything/AFFiNE",
@@ -124,6 +121,30 @@ class DirectoryTests(unittest.TestCase):
         )
         self.assertTrue(
             reviewed_repos.isdisjoint({candidate["repo"] for candidate in candidates["candidates"]})
+        )
+
+    def test_provider_framework_batch_has_evidence_backed_dispositions(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        projects = {project["id"]: project for project in self.document["projects"]}
+        reviewed_repos = {
+            "anthropics/claude-agent-sdk-python",
+            "anthropics/claude-agent-sdk-typescript",
+            "google/adk-go",
+            "google/adk-python",
+            "mastra-ai/mastra",
+        }
+
+        self.assertTrue(reviewed_repos.isdisjoint({item["repo"] for item in candidates["candidates"]}))
+        self.assertEqual("mixed_source", projects["claude-agent-sdk"]["source_model"])
+        self.assertEqual("provider_native", projects["claude-agent-sdk"]["provider_relationship"])
+        self.assertEqual("open_source", projects["google-adk"]["source_model"])
+        self.assertEqual("provider_agnostic", projects["google-adk"]["provider_relationship"])
+        self.assertEqual("open_core", projects["mastra"]["source_model"])
+        self.assertEqual("provider_agnostic", projects["mastra"]["provider_relationship"])
+        self.assertLessEqual(
+            {"anthropics/claude-agent-sdk-typescript", "google/adk-go"},
+            {item["repo"] for item in exclusions["entries"]},
         )
 
     def test_data_analysis_batch_has_evidence_backed_dispositions(self) -> None:

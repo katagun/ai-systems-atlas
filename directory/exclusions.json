@@ -2,6 +2,18 @@
   "generated_at": "2026-08-25",
   "entries": [
     {
+      "name": "Claude Agent SDK for TypeScript",
+      "repo": "anthropics/claude-agent-sdk-typescript",
+      "reason": "Anthropic presents the Python and TypeScript libraries as language bindings for one Claude Agent SDK product; the Atlas represents that product through the canonical Python repository rather than duplicating the same operational system.",
+      "useful_lesson": "Language bindings can differ in implementation visibility and license terms even when they expose one product boundary."
+    },
+    {
+      "name": "Google ADK for Go",
+      "repo": "google/adk-go",
+      "reason": "Google presents Go, Python, TypeScript, Java, and Kotlin implementations as one Agent Development Kit; the Atlas represents the product through the canonical Python repository rather than scoring language bindings separately.",
+      "useful_lesson": "Cross-language framework parity, test-support licensing, and provider integration depth should be reviewed without multiplying product records."
+    },
+    {
       "name": "LangSmith",
       "repo": "langchain-ai/langsmith-sdk",
       "reason": "The reviewed repository is a client SDK for tracing and evaluation; it does not itself provide a memory system or a tool-acting agent runtime.",

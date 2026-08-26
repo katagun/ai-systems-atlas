@@ -11,7 +11,7 @@ The product is a directory of operational memory and agent systems. Relevance an
 ## Decision
 
 - Include a reviewed system when it fits a family and primary role, regardless of source model.
-- Record `source_model` separately as `open_source`, `mixed_open_source`, `open_core`, `source_available`, `proprietary`, or `unclear`.
+- Record `source_model` separately as `open_source`, `mixed_open_source`, `mixed_source`, `open_core`, `source_available`, `proprietary`, or `unclear`. Use `open_core` when the reusable open code is the operational core; use `mixed_source` when an open wrapper or component depends on a closed core or runtime.
 - Record every material license in `licenses`; do not collapse path- or component-specific terms into a misleading single value.
 - Allow multiple scoped evidence items per project. Git-hosted evidence pins blobs; non-Git terms link the authoritative reviewed source and explicitly carry weaker mutability guarantees.
 - Treat exclusions as scope decisions, not license decisions. Relevant but unreviewed systems belong in the candidate queue.
