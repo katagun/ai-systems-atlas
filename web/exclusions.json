@@ -6,6 +6,12 @@
       "repo": "langchain-ai/langsmith-sdk",
       "reason": "The reviewed repository is a client SDK for tracing and evaluation; it does not itself provide a memory system or a tool-acting agent runtime.",
       "useful_lesson": "Agent tracing, evaluation, production observability, and recovery-oriented operations."
+    },
+    {
+      "name": "SQL Chat",
+      "repo": "sqlchat/sqlchat",
+      "reason": "The reviewed implementation is a chat-based SQL client that generates and executes user-selected statements, but it does not own an iterative planning, validation, or repair loop required by the data-analysis agent role.",
+      "useful_lesson": "Conversational database UX, locally stored connection data, self-hosting, and explicit query execution."
     }
   ]
 }

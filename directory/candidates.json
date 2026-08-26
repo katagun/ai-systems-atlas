@@ -27,38 +27,13 @@
       ]
     },
     {
-      "repo": "agno-agi/agno",
-      "name": "agno",
-      "url": "https://github.com/agno-agi/agno",
-      "description": "Open-source framework for building, running, and managing agent platforms.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.93,
-      "github_detected_license": "Apache-2.0",
-      "stars": 41909,
-      "topics": [
-        "agents",
-        "ai-agents",
-        "developer-tools",
-        "python"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "AgriciDaniel/claude-obsidian",
       "name": "claude-obsidian",
       "url": "https://github.com/AgriciDaniel/claude-obsidian",
       "description": "Self-organizing AI second brain for Obsidian + Claude Code. Drop any source and Claude reads, links, and files it into one connected knowledge graph of plain Markdown you own. AI note-taking, personal knowledge management (PKM), and an open-source Notion alternative. Based on Karpathy's LLM Wiki pattern.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "context_graph_engine",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "MIT",
       "stars": 12410,
       "topics": [
@@ -199,7 +174,7 @@
       "description": "A curated solutions to building a self-evolving second brain that helps AI agents understand your personal and team context.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 517,
       "topics": [
@@ -405,34 +380,6 @@
       ]
     },
     {
-      "repo": "deepset-ai/haystack",
-      "name": "haystack",
-      "url": "https://github.com/deepset-ai/haystack",
-      "description": "Open-source orchestration framework for agent workflows, retrieval, routing, memory, generation, and multimodal applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.88,
-      "github_detected_license": "Apache-2.0",
-      "stars": 26313,
-      "topics": [
-        "agent-framework",
-        "agents",
-        "context-engineering",
-        "mcp",
-        "multi-agent",
-        "orchestration",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "dendronhq/dendron",
       "name": "dendron",
       "url": "https://github.com/dendronhq/dendron",
@@ -506,38 +453,13 @@
       ]
     },
     {
-      "repo": "eosphoros-ai/DB-GPT",
-      "name": "DB-GPT",
-      "url": "https://github.com/eosphoros-ai/DB-GPT",
-      "description": "Open-source agentic AI data assistant for building data-analysis and database agent applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.93,
-      "github_detected_license": "MIT",
-      "stars": 19792,
-      "topics": [
-        "agents",
-        "database",
-        "llm",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "eugeniughelbur/obsidian-second-brain",
       "name": "obsidian-second-brain",
       "url": "https://github.com/eugeniughelbur/obsidian-second-brain",
       "description": "Persistent memory for Claude Code and 6 other CLI agents, stored as plain markdown in your Obsidian vault. Stop re-explaining your projects, decisions and people every session. 45 commands: hybrid semantic search, self-rewriting notes, key-less web research, and scheduled agents that maintain the vault while you sleep.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "MIT",
       "stars": 4191,
       "topics": [
@@ -755,12 +677,81 @@
     },
     {
       "repo": null,
+      "name": "Cursor",
+      "url": "https://cursor.com/",
+      "description": "Proprietary agentic code editor with repository context, tool use, and delegated coding workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "ide"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "GitHub Copilot coding agent",
+      "url": "https://github.com/features/copilot",
+      "description": "Proprietary GitHub coding agent for delegated issue-to-pull-request work alongside IDE assistance.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "github"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Jules",
+      "url": "https://jules.google/",
+      "description": "Google's asynchronous cloud coding agent for repository tasks and reviewed code changes.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "cloud"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Obsidian",
       "url": "https://obsidian.md/",
       "description": "Local-first personal knowledge workspace built around plain Markdown files, links, and plugins.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "human_pkm",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": null,
       "stars": null,
       "topics": [
@@ -781,12 +772,35 @@
     },
     {
       "repo": null,
+      "name": "Replit Agent",
+      "url": "https://replit.com/ai",
+      "description": "Hosted coding agent for planning, building, testing, and deploying applications in Replit workspaces.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "cloud"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Microsoft Recall",
       "url": "https://support.microsoft.com/en-us/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c",
       "description": "Opt-in Windows activity capture with a searchable timeline of encrypted local snapshots.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "ambient_capture",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": null,
       "stars": null,
       "topics": [
@@ -794,6 +808,29 @@
         "local-storage",
         "semantic-search",
         "windows"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Windsurf",
+      "url": "https://windsurf.com/",
+      "description": "Proprietary agentic development environment with code editing, terminal tools, and project context.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "ide"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -836,7 +873,7 @@
       "description": "Awesome AI Memory | LLM Memory | A curated knowledge base on AI memory for LLMs and agents, covering long-term memory, reasoning, retrieval, and memory-native system design.  Awesome-AI-Memory 是一个 集中式、持续更新的 AI 记忆知识库，系统性整理了与 大模型记忆（LLM Memory）与智能体记忆（Agent Memory） 相关的前沿研究、工程框架、系统设计、评测基准与真实应用实践。",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 1179,
       "topics": [
@@ -1141,7 +1178,7 @@
       "description": "Encrypted, fully offline agentic memory. One click install, GUI w/ memory map, all OS and agents. Superior memory creation, storage and retrieval.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 584,
       "topics": [
@@ -1223,7 +1260,7 @@
       "description": "Agent memory for LLMs: 30 runnable Jupyter notebooks covering conversation buffers, vector stores, knowledge graphs, episodic and semantic memory, MemGPT, Mem0, Letta, Zep, Graphiti, LoCoMo benchmarks, and production patterns.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 932,
       "topics": [
@@ -1299,7 +1336,7 @@
       "description": "我的第二大脑 second brain，我的数字花园 digital garden，用obsidian双链笔记软件写作而成",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "human_pkm",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "MIT",
       "stars": 2460,
       "topics": [
@@ -1385,32 +1422,6 @@
         "information-retrieval",
         "rag",
         "self-hosted"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "OpenHands/OpenHands",
-      "name": "OpenHands",
-      "url": "https://github.com/OpenHands/OpenHands",
-      "description": "Software-development agent platform for planning, editing, executing, and validating code changes.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.99,
-      "github_detected_license": "MIT",
-      "stars": 85095,
-      "topics": [
-        "agent",
-        "artificial-intelligence",
-        "cli",
-        "developer-tools",
-        "llm"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1562,7 +1573,7 @@
       "description": "A lightweight local-first graphic-centric  productivity tool to build your second brain. Supporting Excalidraw/Tldraw whiteboard and notion-like note. 一款以图形为中心、轻量级、本地优先的用于构建第二大脑的效率工具。支持 Excalidraw、Tldraw 白板和类 Notion 笔记。",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "human_pkm",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "AGPL-3.0",
       "stars": 2649,
       "topics": [
@@ -1592,6 +1603,29 @@
       ]
     },
     {
+      "repo": "RooCodeInc/Roo-Code",
+      "name": "Roo Code",
+      "url": "https://github.com/RooCodeInc/Roo-Code",
+      "description": "Roo Code gives developers a team of configurable coding agents inside the editor.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": "Apache-2.0",
+      "stars": 24325,
+      "topics": [
+        "coding-agent",
+        "ide"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "Roznoshchik/Lurnby",
       "name": "Lurnby",
       "url": "https://github.com/Roznoshchik/Lurnby",
@@ -1606,34 +1640,6 @@
         "personal-knowledge-system",
         "reading",
         "spaced-repetition-system"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "run-llama/llama_index",
-      "name": "llama_index",
-      "url": "https://github.com/run-llama/llama_index",
-      "description": "Open-source document-agent and data framework spanning retrieval, OCR, agent workflows, tools, and multi-agent applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 51869,
-      "topics": [
-        "agents",
-        "data",
-        "framework",
-        "llamaindex",
-        "multi-agents",
-        "rag",
-        "vector-database"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1751,32 +1757,6 @@
       ]
     },
     {
-      "repo": "sqlchat/sqlchat",
-      "name": "sqlchat",
-      "url": "https://github.com/sqlchat/sqlchat",
-      "description": "Self-hostable conversational SQL client that turns natural-language requests into database operations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 5843,
-      "topics": [
-        "database",
-        "sql",
-        "sqlclient",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "stagewise-io/stagewise",
       "name": "stagewise",
       "url": "https://github.com/stagewise-io/stagewise",
@@ -1791,26 +1771,6 @@
         "agent-orchestration",
         "ide"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "stanfordnlp/dspy",
-      "name": "dspy",
-      "url": "https://github.com/stanfordnlp/dspy",
-      "description": "Framework for modular, optimizable language-model programs, including ReAct modules and tool-using agent loops.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.68,
-      "github_detected_license": "MIT",
-      "stars": 37592,
-      "topics": [],
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
@@ -1896,7 +1856,7 @@
       "description": "The local-first LLM Wiki: open-source knowledge graph builder, RAG knowledge base, and agent memory store. Built on Andrej Karpathy's pattern. An Obsidian alternative for personal knowledge management, AI second brain, and durable Claude Code / Codex / OpenClaw memory.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "context_graph_engine",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "MIT",
       "stars": 670,
       "topics": [
@@ -1931,13 +1891,37 @@
       ]
     },
     {
+      "repo": "SWE-agent/SWE-agent",
+      "name": "SWE-agent",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "description": "Research-rooted coding agent that attempts issue resolution in a configurable computer environment.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.99,
+      "github_detected_license": "MIT",
+      "stars": 20137,
+      "topics": [
+        "agent",
+        "developer-tools",
+        "llm"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "TeleAI-UAGI/Awesome-Agent-Memory",
       "name": "Awesome-Agent-Memory",
       "url": "https://github.com/TeleAI-UAGI/Awesome-Agent-Memory",
       "description": "Curated systems, benchmarks, and papers etc. on memory for LLMs/MLLMs --- long-term context, retrieval, and reasoning.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 605,
       "topics": [
@@ -1992,33 +1976,6 @@
       ]
     },
     {
-      "repo": "vanna-ai/vanna",
-      "name": "vanna",
-      "url": "https://github.com/vanna-ai/vanna",
-      "description": "Archived text-to-SQL framework and agent application; retained provisionally for historical coverage or successor tracking.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.88,
-      "github_detected_license": "MIT",
-      "stars": 23818,
-      "topics": [
-        "agent",
-        "data-visualization",
-        "database",
-        "rag",
-        "sql",
-        "text-to-sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "vectorize-io/hindsight",
       "name": "hindsight",
       "url": "https://github.com/vectorize-io/hindsight",
@@ -2050,7 +2007,7 @@
       "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "AGPL-3.0",
       "stars": 33197,
       "topics": [
@@ -2138,7 +2095,7 @@
       "description": "XERJ is the new way for AI to search data. Its autoindex capability activates agents to know your data without the token waste of grep and sed. One command indexes code, docs, logs and PDFs for search, RAG, security audits and agent memory, using 40x fewer tokens than grep. Elasticsearch compatible, so existing clients just work.",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 1.0,
+      "classification_confidence": 1,
       "github_detected_license": "Apache-2.0",
       "stars": 1644,
       "topics": [

@@ -5,6 +5,7 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
+const projectLocation = project => project.repo || new URL(project.url).hostname.replace(/^www\./, "");
 
 const FINDER_FAMILIES = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
@@ -117,7 +118,7 @@ function renderStats() {
   const licensed = state.projects.filter(project => project.license_review_status === "verified").length;
   $("#hero-kicker").textContent = `${state.projects.length} reviewed systems`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [licensed, "license profiles"]
+    [memories, "memory"], [agents, "agents"], [licensed, "license-reviewed"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
 }
 
@@ -146,13 +147,14 @@ function renderProjects() {
   $("#project-grid").innerHTML = projects.map(project => {
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
+    const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(project.repo || project.url)}</div></div>${score}</div>
+      <div class="card-top"><div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
-      <div class="card-footer"><span>${compactNumber(project.stars)} ★ ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><button data-project="${escapeHTML(project.id)}">View details →</button></div>
+      <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><button data-project="${escapeHTML(project.id)}">View details →</button></div>
     </article>`;
   }).join("") || '<div class="notice">No projects match these filters.</div>';
   $$('[data-project]').forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
@@ -309,7 +311,7 @@ function openProject(id) {
   ).join("") : `<p>${project.licenses.map(escapeHTML).join(" · ")}</p>`;
   $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">Open project source ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(project.score_profile === "agent" ? "Agent-system" : "Memory-system")} score</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
@@ -382,5 +384,5 @@ function bindEvents() {
 }
 
 bootstrap().catch(error => {
-  document.body.innerHTML = `<main><div class="notice">Agent Systems Atlas failed to load: ${escapeHTML(error.message)}</div></main>`;
+  document.body.innerHTML = `<main><div class="notice">AI Systems Atlas failed to load: ${escapeHTML(error.message)}</div></main>`;
 });

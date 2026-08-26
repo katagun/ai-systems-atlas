@@ -3,17 +3,62 @@
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
-      "project_id": "gstack",
-      "repo": "garrytan/gstack",
+      "project_id": "activitywatch",
+      "repo": "ActivityWatch/activitywatch",
+      "items": [
+        {
+          "license_id": "MPL-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE.txt",
+          "url": "https://github.com/ActivityWatch/activitywatch/blob/master/LICENSE.txt",
+          "blob_sha": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+          "immutable_url": "https://api.github.com/repos/ActivityWatch/activitywatch/git/blobs/d0a1fa1482eea82e19510e7920cbe3a03e41f691"
+        }
+      ]
+    },
+    {
+      "project_id": "agno",
+      "repo": "agno-agi/agno",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository root and the reviewed Agno framework/runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agno-agi/agno/blob/main/LICENSE",
+          "blob_sha": "51032f045aafc8732c072ed31aa96f2994f29081",
+          "immutable_url": "https://api.github.com/repos/agno-agi/agno/git/blobs/51032f045aafc8732c072ed31aa96f2994f29081"
+        }
+      ]
+    },
+    {
+      "project_id": "aider",
+      "repo": "Aider-AI/aider",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE.txt",
+          "url": "https://github.com/Aider-AI/aider/blob/main/LICENSE.txt",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/Aider-AI/aider/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
+    },
+    {
+      "project_id": "anythingllm",
+      "repo": "Mintplex-Labs/anything-llm",
       "items": [
         {
           "license_id": "MIT",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/garrytan/gstack/blob/main/LICENSE",
-          "blob_sha": "35029511144443297cad2d26e4bac17d0e352f93",
-          "immutable_url": "https://api.github.com/repos/garrytan/gstack/git/blobs/35029511144443297cad2d26e4bac17d0e352f93"
+          "url": "https://github.com/Mintplex-Labs/anything-llm/blob/master/LICENSE",
+          "blob_sha": "cc42d1d080250fb38c47b81ed8f9fb1d64dc2965",
+          "immutable_url": "https://api.github.com/repos/Mintplex-Labs/anything-llm/git/blobs/cc42d1d080250fb38c47b81ed8f9fb1d64dc2965"
         }
       ]
     },
@@ -33,17 +78,418 @@
       ]
     },
     {
-      "project_id": "anythingllm",
-      "repo": "Mintplex-Labs/anything-llm",
+      "project_id": "basic-memory",
+      "repo": "basicmachines-co/basic-memory",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/basicmachines-co/basic-memory/blob/main/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/basicmachines-co/basic-memory/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        }
+      ]
+    },
+    {
+      "project_id": "browser-use",
+      "repo": "browser-use/browser-use",
       "items": [
         {
           "license_id": "MIT",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/Mintplex-Labs/anything-llm/blob/master/LICENSE",
-          "blob_sha": "cc42d1d080250fb38c47b81ed8f9fb1d64dc2965",
-          "immutable_url": "https://api.github.com/repos/Mintplex-Labs/anything-llm/git/blobs/cc42d1d080250fb38c47b81ed8f9fb1d64dc2965"
+          "url": "https://github.com/browser-use/browser-use/blob/main/LICENSE",
+          "blob_sha": "1ea3836ce58a4cd32c90c0b4f4e736d840d23780",
+          "immutable_url": "https://api.github.com/repos/browser-use/browser-use/git/blobs/1ea3836ce58a4cd32c90c0b4f4e736d840d23780"
+        }
+      ]
+    },
+    {
+      "project_id": "chroma",
+      "repo": "chroma-core/chroma",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/chroma-core/chroma/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/chroma-core/chroma/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "claude-code",
+      "repo": "anthropics/claude-code",
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Claude Code repository and operational distribution",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/anthropics/claude-code/blob/main/LICENSE.md",
+          "blob_sha": "645a5d67c6d1e16437bec850dad5bd3b6c81f77c",
+          "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/645a5d67c6d1e16437bec850dad5bd3b6c81f77c"
+        }
+      ]
+    },
+    {
+      "project_id": "cline",
+      "repo": "cline/cline",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/cline/cline/blob/main/LICENSE",
+          "blob_sha": "05ae14a377caf4df24e26edde0c4f7b22ef3ef30",
+          "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/05ae14a377caf4df24e26edde0c4f7b22ef3ef30"
+        }
+      ]
+    },
+    {
+      "project_id": "codex",
+      "repo": "openai/codex",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/openai/codex/blob/main/LICENSE",
+          "blob_sha": "4606e72e042564097e8780d66c1d4dcb611869bd",
+          "immutable_url": "https://api.github.com/repos/openai/codex/git/blobs/4606e72e042564097e8780d66c1d4dcb611869bd"
+        }
+      ]
+    },
+    {
+      "project_id": "cognee",
+      "repo": "topoteretes/cognee",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/topoteretes/cognee/blob/main/LICENSE",
+          "blob_sha": "fd57f68790eb9919fc622902caf31f831f9c4e8f",
+          "immutable_url": "https://api.github.com/repos/topoteretes/cognee/git/blobs/fd57f68790eb9919fc622902caf31f831f9c4e8f"
+        }
+      ]
+    },
+    {
+      "project_id": "crewai",
+      "repo": "crewAIInc/crewAI",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/crewAIInc/crewAI/blob/main/LICENSE",
+          "blob_sha": "a6ee25527ec07201e4373fcbf89f128f304a6f2e",
+          "immutable_url": "https://api.github.com/repos/crewAIInc/crewAI/git/blobs/a6ee25527ec07201e4373fcbf89f128f304a6f2e"
+        }
+      ]
+    },
+    {
+      "project_id": "db-gpt",
+      "repo": "eosphoros-ai/DB-GPT",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/eosphoros-ai/DB-GPT/blob/main/LICENSE",
+          "blob_sha": "4cb947da14136e3df4ada472d7d6fed38b70b1cd",
+          "immutable_url": "https://api.github.com/repos/eosphoros-ai/DB-GPT/git/blobs/4cb947da14136e3df4ada472d7d6fed38b70b1cd"
+        }
+      ]
+    },
+    {
+      "project_id": "deepseek-harness",
+      "repo": "deepseek-ai/deepseek-harness",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/deepseek-ai/deepseek-harness/blob/master/LICENSE",
+          "blob_sha": "c1f7a78e89e4e4dc7b86664c3b3c76eb5eee1785",
+          "immutable_url": "https://api.github.com/repos/deepseek-ai/deepseek-harness/git/blobs/c1f7a78e89e4e4dc7b86664c3b3c76eb5eee1785"
+        }
+      ]
+    },
+    {
+      "project_id": "devin",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Cognition platform services, including Devin",
+          "kind": "web_terms",
+          "url": "https://cognition.com/legal/platform-terms-of-service",
+          "verified_at": "2026-08-25"
+        }
+      ]
+    },
+    {
+      "project_id": "dspy",
+      "repo": "stanfordnlp/dspy",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/stanfordnlp/dspy/blob/main/LICENSE",
+          "blob_sha": "be3f5c0e3fc7e6b0e7c9dddd9db313ab15bfa62b",
+          "immutable_url": "https://api.github.com/repos/stanfordnlp/dspy/git/blobs/be3f5c0e3fc7e6b0e7c9dddd9db313ab15bfa62b"
+        }
+      ]
+    },
+    {
+      "project_id": "foam",
+      "repo": "foambubble/foam",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/foambubble/foam/blob/main/LICENSE",
+          "blob_sha": "a21ccb15ed6a005e61a7097b055e5b4bee51fbf8",
+          "immutable_url": "https://api.github.com/repos/foambubble/foam/git/blobs/a21ccb15ed6a005e61a7097b055e5b4bee51fbf8"
+        }
+      ]
+    },
+    {
+      "project_id": "gemini-cli",
+      "repo": "google-gemini/gemini-cli",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google-gemini/gemini-cli/blob/main/LICENSE",
+          "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+          "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
+        }
+      ]
+    },
+    {
+      "project_id": "goose",
+      "repo": "aaif-goose/goose",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/aaif-goose/goose/blob/main/LICENSE",
+          "blob_sha": "c83043d4494071fbd93ef245a14e573c5a8280c4",
+          "immutable_url": "https://api.github.com/repos/aaif-goose/goose/git/blobs/c83043d4494071fbd93ef245a14e573c5a8280c4"
+        }
+      ]
+    },
+    {
+      "project_id": "gpt-researcher",
+      "repo": "assafelovic/gpt-researcher",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/assafelovic/gpt-researcher/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/assafelovic/gpt-researcher/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "graphiti",
+      "repo": "getzep/graphiti",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/getzep/graphiti/blob/main/LICENSE",
+          "blob_sha": "5feb0d9d299a1107adfa8331306b13cc0eff2d78",
+          "immutable_url": "https://api.github.com/repos/getzep/graphiti/git/blobs/5feb0d9d299a1107adfa8331306b13cc0eff2d78"
+        }
+      ]
+    },
+    {
+      "project_id": "gstack",
+      "repo": "garrytan/gstack",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/garrytan/gstack/blob/main/LICENSE",
+          "blob_sha": "35029511144443297cad2d26e4bac17d0e352f93",
+          "immutable_url": "https://api.github.com/repos/garrytan/gstack/git/blobs/35029511144443297cad2d26e4bac17d0e352f93"
+        }
+      ]
+    },
+    {
+      "project_id": "haystack",
+      "repo": "deepset-ai/haystack",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Haystack OSS repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/deepset-ai/haystack/blob/main/LICENSE",
+          "blob_sha": "6fb66d8d5fa55912ee80f4fdab94cab99140c448",
+          "immutable_url": "https://api.github.com/repos/deepset-ai/haystack/git/blobs/6fb66d8d5fa55912ee80f4fdab94cab99140c448"
+        }
+      ]
+    },
+    {
+      "project_id": "joplin",
+      "repo": "laurent22/joplin",
+      "items": [
+        {
+          "license_id": "AGPL-3.0-or-later",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/laurent22/joplin/blob/dev/LICENSE",
+          "blob_sha": "2bb93544540be10fcd06928d0064daa29caab7dd",
+          "immutable_url": "https://api.github.com/repos/laurent22/joplin/git/blobs/2bb93544540be10fcd06928d0064daa29caab7dd"
+        }
+      ]
+    },
+    {
+      "project_id": "khoj",
+      "repo": "khoj-ai/khoj",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/khoj-ai/khoj/blob/master/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/khoj-ai/khoj/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        }
+      ]
+    },
+    {
+      "project_id": "kiro",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Kiro IDE and CLI downloads governed by AWS customer and service terms",
+          "kind": "web_terms",
+          "url": "https://kiro.dev/downloads/",
+          "verified_at": "2026-08-25"
+        }
+      ]
+    },
+    {
+      "project_id": "langchain",
+      "repo": "langchain-ai/langchain",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langchain-ai/langchain/blob/master/LICENSE",
+          "blob_sha": "3957738673765912ca83a0048f833e095d61e087",
+          "immutable_url": "https://api.github.com/repos/langchain-ai/langchain/git/blobs/3957738673765912ca83a0048f833e095d61e087"
+        }
+      ]
+    },
+    {
+      "project_id": "langgraph",
+      "repo": "langchain-ai/langgraph",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langchain-ai/langgraph/blob/main/LICENSE",
+          "blob_sha": "fc0602feecdd6748623c852ab534e1ca612673c7",
+          "immutable_url": "https://api.github.com/repos/langchain-ai/langgraph/git/blobs/fc0602feecdd6748623c852ab534e1ca612673c7"
+        }
+      ]
+    },
+    {
+      "project_id": "langmem",
+      "repo": "langchain-ai/langmem",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langchain-ai/langmem/blob/main/LICENSE",
+          "blob_sha": "c38f6f284dc464af69e9f618bc0304d299d0bdf0",
+          "immutable_url": "https://api.github.com/repos/langchain-ai/langmem/git/blobs/c38f6f284dc464af69e9f618bc0304d299d0bdf0"
+        }
+      ]
+    },
+    {
+      "project_id": "letta-code",
+      "repo": "letta-ai/letta-code",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/letta-ai/letta-code/blob/main/LICENSE",
+          "blob_sha": "e72f5de5dd5610ee3fee7feb791ebff246cc931e",
+          "immutable_url": "https://api.github.com/repos/letta-ai/letta-code/git/blobs/e72f5de5dd5610ee3fee7feb791ebff246cc931e"
+        }
+      ]
+    },
+    {
+      "project_id": "llamaindex",
+      "repo": "run-llama/llama_index",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "LlamaIndex OSS repository and same-license integration packages; excludes separate LlamaCloud services",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/run-llama/llama_index/blob/main/LICENSE",
+          "blob_sha": "e6074042d0391061b7d7d45d21e6693ae108daec",
+          "immutable_url": "https://api.github.com/repos/run-llama/llama_index/git/blobs/e6074042d0391061b7d7d45d21e6693ae108daec"
+        }
+      ]
+    },
+    {
+      "project_id": "logseq",
+      "repo": "logseq/logseq",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/logseq/logseq/blob/master/LICENSE.md",
+          "blob_sha": "0394f2b6e73d87eff0394dc454f3b189d5fce14f",
+          "immutable_url": "https://api.github.com/repos/logseq/logseq/git/blobs/0394f2b6e73d87eff0394dc454f3b189d5fce14f"
         }
       ]
     },
@@ -78,62 +524,32 @@
       ]
     },
     {
-      "project_id": "joplin",
-      "repo": "laurent22/joplin",
+      "project_id": "microsoft-agent-framework",
+      "repo": "microsoft/agent-framework",
       "items": [
         {
-          "license_id": "AGPL-3.0-or-later",
+          "license_id": "MIT",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/laurent22/joplin/blob/dev/LICENSE",
-          "blob_sha": "2bb93544540be10fcd06928d0064daa29caab7dd",
-          "immutable_url": "https://api.github.com/repos/laurent22/joplin/git/blobs/2bb93544540be10fcd06928d0064daa29caab7dd"
+          "url": "https://github.com/microsoft/agent-framework/blob/main/LICENSE",
+          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+          "immutable_url": "https://api.github.com/repos/microsoft/agent-framework/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
         }
       ]
     },
     {
-      "project_id": "siyuan",
-      "repo": "siyuan-note/siyuan",
-      "items": [
-        {
-          "license_id": "AGPL-3.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/siyuan-note/siyuan/blob/master/LICENSE",
-          "blob_sha": "bae94e189e62df1b8d5bd11435d954b25bee9d7b",
-          "immutable_url": "https://api.github.com/repos/siyuan-note/siyuan/git/blobs/bae94e189e62df1b8d5bd11435d954b25bee9d7b"
-        }
-      ]
-    },
-    {
-      "project_id": "logseq",
-      "repo": "logseq/logseq",
-      "items": [
-        {
-          "license_id": "AGPL-3.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE.md",
-          "url": "https://github.com/logseq/logseq/blob/master/LICENSE.md",
-          "blob_sha": "0394f2b6e73d87eff0394dc454f3b189d5fce14f",
-          "immutable_url": "https://api.github.com/repos/logseq/logseq/git/blobs/0394f2b6e73d87eff0394dc454f3b189d5fce14f"
-        }
-      ]
-    },
-    {
-      "project_id": "quivr",
-      "repo": "QuivrHQ/quivr",
+      "project_id": "milvus",
+      "repo": "milvus-io/milvus",
       "items": [
         {
           "license_id": "Apache-2.0",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/QuivrHQ/quivr/blob/main/LICENSE",
-          "blob_sha": "269a7a17274d4c1ec4d0c2a2b64b14e66124592e",
-          "immutable_url": "https://api.github.com/repos/QuivrHQ/quivr/git/blobs/269a7a17274d4c1ec4d0c2a2b64b14e66124592e"
+          "url": "https://github.com/milvus-io/milvus/blob/master/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/milvus-io/milvus/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
         }
       ]
     },
@@ -153,77 +569,167 @@
       ]
     },
     {
-      "project_id": "trilium",
-      "repo": "TriliumNext/Trilium",
+      "project_id": "openai-agents-sdk",
+      "repo": "openai/openai-agents-python",
       "items": [
         {
-          "license_id": "AGPL-3.0",
+          "license_id": "MIT",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/TriliumNext/Trilium/blob/main/LICENSE",
-          "blob_sha": "dbbe3558157f5861bff35dcb37b328b679b0ccfd",
-          "immutable_url": "https://api.github.com/repos/TriliumNext/Trilium/git/blobs/dbbe3558157f5861bff35dcb37b328b679b0ccfd"
+          "url": "https://github.com/openai/openai-agents-python/blob/main/LICENSE",
+          "blob_sha": "e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4",
+          "immutable_url": "https://api.github.com/repos/openai/openai-agents-python/git/blobs/e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4"
         }
       ]
     },
     {
-      "project_id": "khoj",
-      "repo": "khoj-ai/khoj",
+      "project_id": "openclaw",
+      "repo": "openclaw/openclaw",
       "items": [
         {
-          "license_id": "AGPL-3.0",
-          "scope": "repository",
+          "license_id": "MIT",
+          "scope": "repository root and the reviewed OpenClaw gateway, applications, and packages",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/khoj-ai/khoj/blob/master/LICENSE",
-          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
-          "immutable_url": "https://api.github.com/repos/khoj-ai/khoj/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+          "url": "https://github.com/openclaw/openclaw/blob/main/LICENSE",
+          "blob_sha": "ebaebf7c416761a32f932ad70ebe5d1d2e214f68",
+          "immutable_url": "https://api.github.com/repos/openclaw/openclaw/git/blobs/ebaebf7c416761a32f932ad70ebe5d1d2e214f68"
         }
       ]
     },
     {
-      "project_id": "graphiti",
-      "repo": "getzep/graphiti",
+      "project_id": "opencode",
+      "repo": "anomalyco/opencode",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/anomalyco/opencode/blob/dev/LICENSE",
+          "blob_sha": "6439474beed8e0271df9862eff97ffd70ec2464c",
+          "immutable_url": "https://api.github.com/repos/anomalyco/opencode/git/blobs/6439474beed8e0271df9862eff97ffd70ec2464c"
+        }
+      ]
+    },
+    {
+      "project_id": "openhands",
+      "repo": "OpenHands/OpenHands",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository root and the reviewed OpenHands agent and Agent Canvas implementation",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/OpenHands/OpenHands/blob/main/LICENSE",
+          "blob_sha": "f6f60f52368bcc96f82fbe59ec65049c2c3af9db",
+          "immutable_url": "https://api.github.com/repos/OpenHands/OpenHands/git/blobs/f6f60f52368bcc96f82fbe59ec65049c2c3af9db"
+        }
+      ]
+    },
+    {
+      "project_id": "openinterpreter",
+      "repo": "openinterpreter/openinterpreter",
       "items": [
         {
           "license_id": "Apache-2.0",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/getzep/graphiti/blob/main/LICENSE",
-          "blob_sha": "5feb0d9d299a1107adfa8331306b13cc0eff2d78",
-          "immutable_url": "https://api.github.com/repos/getzep/graphiti/git/blobs/5feb0d9d299a1107adfa8331306b13cc0eff2d78"
+          "url": "https://github.com/openinterpreter/openinterpreter/blob/main/LICENSE",
+          "blob_sha": "4606e72e042564097e8780d66c1d4dcb611869bd",
+          "immutable_url": "https://api.github.com/repos/openinterpreter/openinterpreter/git/blobs/4606e72e042564097e8780d66c1d4dcb611869bd"
         }
       ]
     },
     {
-      "project_id": "cognee",
-      "repo": "topoteretes/cognee",
+      "project_id": "openrecall",
+      "repo": "openrecall/openrecall",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/openrecall/openrecall/blob/main/LICENSE",
+          "blob_sha": "86b183af83333bff1e3c0ae10c6a459659309d77",
+          "immutable_url": "https://api.github.com/repos/openrecall/openrecall/git/blobs/86b183af83333bff1e3c0ae10c6a459659309d77"
+        }
+      ]
+    },
+    {
+      "project_id": "pi",
+      "repo": "earendil-works/pi",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "monorepo, including coding agent, agent core, model API, and TUI packages",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/earendil-works/pi/blob/main/LICENSE",
+          "blob_sha": "b0a8e9b81083294360c69b4ec45d3d39a2b28197",
+          "immutable_url": "https://api.github.com/repos/earendil-works/pi/git/blobs/b0a8e9b81083294360c69b4ec45d3d39a2b28197"
+        }
+      ]
+    },
+    {
+      "project_id": "prime-agent",
+      "repo": "PrimeIntellect-ai/prime-agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository root and the reviewed Prime Agent runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/LICENSE",
+          "blob_sha": "e15dcd837b11cfb1f627e388561f3ea6405097c1",
+          "immutable_url": "https://api.github.com/repos/PrimeIntellect-ai/prime-agent/git/blobs/e15dcd837b11cfb1f627e388561f3ea6405097c1"
+        }
+      ]
+    },
+    {
+      "project_id": "pydantic-ai",
+      "repo": "pydantic/pydantic-ai",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/pydantic/pydantic-ai/blob/main/LICENSE",
+          "blob_sha": "1bf1f55e6d1736b499ded961ec6b94bfebb17aec",
+          "immutable_url": "https://api.github.com/repos/pydantic/pydantic-ai/git/blobs/1bf1f55e6d1736b499ded961ec6b94bfebb17aec"
+        }
+      ]
+    },
+    {
+      "project_id": "qdrant",
+      "repo": "qdrant/qdrant",
       "items": [
         {
           "license_id": "Apache-2.0",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/topoteretes/cognee/blob/main/LICENSE",
-          "blob_sha": "fd57f68790eb9919fc622902caf31f831f9c4e8f",
-          "immutable_url": "https://api.github.com/repos/topoteretes/cognee/git/blobs/fd57f68790eb9919fc622902caf31f831f9c4e8f"
+          "url": "https://github.com/qdrant/qdrant/blob/master/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/qdrant/qdrant/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
         }
       ]
     },
     {
-      "project_id": "activitywatch",
-      "repo": "ActivityWatch/activitywatch",
+      "project_id": "quivr",
+      "repo": "QuivrHQ/quivr",
       "items": [
         {
-          "license_id": "MPL-2.0",
+          "license_id": "Apache-2.0",
           "scope": "repository",
           "kind": "git_blob",
-          "path": "LICENSE.txt",
-          "url": "https://github.com/ActivityWatch/activitywatch/blob/master/LICENSE.txt",
-          "blob_sha": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
-          "immutable_url": "https://api.github.com/repos/ActivityWatch/activitywatch/git/blobs/d0a1fa1482eea82e19510e7920cbe3a03e41f691"
+          "path": "LICENSE",
+          "url": "https://github.com/QuivrHQ/quivr/blob/main/LICENSE",
+          "blob_sha": "269a7a17274d4c1ec4d0c2a2b64b14e66124592e",
+          "immutable_url": "https://api.github.com/repos/QuivrHQ/quivr/git/blobs/269a7a17274d4c1ec4d0c2a2b64b14e66124592e"
         }
       ]
     },
@@ -258,287 +764,17 @@
       ]
     },
     {
-      "project_id": "basic-memory",
-      "repo": "basicmachines-co/basic-memory",
+      "project_id": "siyuan",
+      "repo": "siyuan-note/siyuan",
       "items": [
         {
           "license_id": "AGPL-3.0",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/basicmachines-co/basic-memory/blob/main/LICENSE",
-          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
-          "immutable_url": "https://api.github.com/repos/basicmachines-co/basic-memory/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
-        }
-      ]
-    },
-    {
-      "project_id": "letta-code",
-      "repo": "letta-ai/letta-code",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/letta-ai/letta-code/blob/main/LICENSE",
-          "blob_sha": "e72f5de5dd5610ee3fee7feb791ebff246cc931e",
-          "immutable_url": "https://api.github.com/repos/letta-ai/letta-code/git/blobs/e72f5de5dd5610ee3fee7feb791ebff246cc931e"
-        }
-      ]
-    },
-    {
-      "project_id": "openrecall",
-      "repo": "openrecall/openrecall",
-      "items": [
-        {
-          "license_id": "AGPL-3.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/openrecall/openrecall/blob/main/LICENSE",
-          "blob_sha": "86b183af83333bff1e3c0ae10c6a459659309d77",
-          "immutable_url": "https://api.github.com/repos/openrecall/openrecall/git/blobs/86b183af83333bff1e3c0ae10c6a459659309d77"
-        }
-      ]
-    },
-    {
-      "project_id": "langmem",
-      "repo": "langchain-ai/langmem",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/langchain-ai/langmem/blob/main/LICENSE",
-          "blob_sha": "c38f6f284dc464af69e9f618bc0304d299d0bdf0",
-          "immutable_url": "https://api.github.com/repos/langchain-ai/langmem/git/blobs/c38f6f284dc464af69e9f618bc0304d299d0bdf0"
-        }
-      ]
-    },
-    {
-      "project_id": "foam",
-      "repo": "foambubble/foam",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/foambubble/foam/blob/main/LICENSE",
-          "blob_sha": "a21ccb15ed6a005e61a7097b055e5b4bee51fbf8",
-          "immutable_url": "https://api.github.com/repos/foambubble/foam/git/blobs/a21ccb15ed6a005e61a7097b055e5b4bee51fbf8"
-        }
-      ]
-    },
-    {
-      "project_id": "qdrant",
-      "repo": "qdrant/qdrant",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/qdrant/qdrant/blob/master/LICENSE",
-          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-          "immutable_url": "https://api.github.com/repos/qdrant/qdrant/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-        }
-      ]
-    },
-    {
-      "project_id": "chroma",
-      "repo": "chroma-core/chroma",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/chroma-core/chroma/blob/main/LICENSE",
-          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-          "immutable_url": "https://api.github.com/repos/chroma-core/chroma/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-        }
-      ]
-    },
-    {
-      "project_id": "milvus",
-      "repo": "milvus-io/milvus",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/milvus-io/milvus/blob/master/LICENSE",
-          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-          "immutable_url": "https://api.github.com/repos/milvus-io/milvus/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-        }
-      ]
-    },
-    {
-      "project_id": "weaviate",
-      "repo": "weaviate/weaviate",
-      "items": [
-        {
-          "license_id": "BSD-3-Clause",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/weaviate/weaviate/blob/main/LICENSE",
-          "blob_sha": "9c72163669ab9ea0b4c9efb7734fa87062f88f34",
-          "immutable_url": "https://api.github.com/repos/weaviate/weaviate/git/blobs/9c72163669ab9ea0b4c9efb7734fa87062f88f34"
-        }
-      ]
-    },
-    {
-      "project_id": "codex",
-      "repo": "openai/codex",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/openai/codex/blob/main/LICENSE",
-          "blob_sha": "4606e72e042564097e8780d66c1d4dcb611869bd",
-          "immutable_url": "https://api.github.com/repos/openai/codex/git/blobs/4606e72e042564097e8780d66c1d4dcb611869bd"
-        }
-      ]
-    },
-    {
-      "project_id": "gemini-cli",
-      "repo": "google-gemini/gemini-cli",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/google-gemini/gemini-cli/blob/main/LICENSE",
-          "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
-          "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
-        }
-      ]
-    },
-    {
-      "project_id": "opencode",
-      "repo": "anomalyco/opencode",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/anomalyco/opencode/blob/dev/LICENSE",
-          "blob_sha": "6439474beed8e0271df9862eff97ffd70ec2464c",
-          "immutable_url": "https://api.github.com/repos/anomalyco/opencode/git/blobs/6439474beed8e0271df9862eff97ffd70ec2464c"
-        }
-      ]
-    },
-    {
-      "project_id": "cline",
-      "repo": "cline/cline",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/cline/cline/blob/main/LICENSE",
-          "blob_sha": "05ae14a377caf4df24e26edde0c4f7b22ef3ef30",
-          "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/05ae14a377caf4df24e26edde0c4f7b22ef3ef30"
-        }
-      ]
-    },
-    {
-      "project_id": "aider",
-      "repo": "Aider-AI/aider",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE.txt",
-          "url": "https://github.com/Aider-AI/aider/blob/main/LICENSE.txt",
-          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
-          "immutable_url": "https://api.github.com/repos/Aider-AI/aider/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
-        }
-      ]
-    },
-    {
-      "project_id": "goose",
-      "repo": "aaif-goose/goose",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/aaif-goose/goose/blob/main/LICENSE",
-          "blob_sha": "c83043d4494071fbd93ef245a14e573c5a8280c4",
-          "immutable_url": "https://api.github.com/repos/aaif-goose/goose/git/blobs/c83043d4494071fbd93ef245a14e573c5a8280c4"
-        }
-      ]
-    },
-    {
-      "project_id": "browser-use",
-      "repo": "browser-use/browser-use",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/browser-use/browser-use/blob/main/LICENSE",
-          "blob_sha": "1ea3836ce58a4cd32c90c0b4f4e736d840d23780",
-          "immutable_url": "https://api.github.com/repos/browser-use/browser-use/git/blobs/1ea3836ce58a4cd32c90c0b4f4e736d840d23780"
-        }
-      ]
-    },
-    {
-      "project_id": "gpt-researcher",
-      "repo": "assafelovic/gpt-researcher",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/assafelovic/gpt-researcher/blob/main/LICENSE",
-          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-          "immutable_url": "https://api.github.com/repos/assafelovic/gpt-researcher/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-        }
-      ]
-    },
-    {
-      "project_id": "openinterpreter",
-      "repo": "openinterpreter/openinterpreter",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/openinterpreter/openinterpreter/blob/main/LICENSE",
-          "blob_sha": "4606e72e042564097e8780d66c1d4dcb611869bd",
-          "immutable_url": "https://api.github.com/repos/openinterpreter/openinterpreter/git/blobs/4606e72e042564097e8780d66c1d4dcb611869bd"
-        }
-      ]
-    },
-    {
-      "project_id": "langgraph",
-      "repo": "langchain-ai/langgraph",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/langchain-ai/langgraph/blob/main/LICENSE",
-          "blob_sha": "fc0602feecdd6748623c852ab534e1ca612673c7",
-          "immutable_url": "https://api.github.com/repos/langchain-ai/langgraph/git/blobs/fc0602feecdd6748623c852ab534e1ca612673c7"
+          "url": "https://github.com/siyuan-note/siyuan/blob/master/LICENSE",
+          "blob_sha": "bae94e189e62df1b8d5bd11435d954b25bee9d7b",
+          "immutable_url": "https://api.github.com/repos/siyuan-note/siyuan/git/blobs/bae94e189e62df1b8d5bd11435d954b25bee9d7b"
         }
       ]
     },
@@ -558,92 +794,47 @@
       ]
     },
     {
-      "project_id": "pydantic-ai",
-      "repo": "pydantic/pydantic-ai",
+      "project_id": "trilium",
+      "repo": "TriliumNext/Trilium",
       "items": [
         {
-          "license_id": "MIT",
+          "license_id": "AGPL-3.0",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/pydantic/pydantic-ai/blob/main/LICENSE",
-          "blob_sha": "1bf1f55e6d1736b499ded961ec6b94bfebb17aec",
-          "immutable_url": "https://api.github.com/repos/pydantic/pydantic-ai/git/blobs/1bf1f55e6d1736b499ded961ec6b94bfebb17aec"
+          "url": "https://github.com/TriliumNext/Trilium/blob/main/LICENSE",
+          "blob_sha": "dbbe3558157f5861bff35dcb37b328b679b0ccfd",
+          "immutable_url": "https://api.github.com/repos/TriliumNext/Trilium/git/blobs/dbbe3558157f5861bff35dcb37b328b679b0ccfd"
         }
       ]
     },
     {
-      "project_id": "crewai",
-      "repo": "crewAIInc/crewAI",
+      "project_id": "vanna",
+      "repo": "vanna-ai/vanna",
       "items": [
         {
           "license_id": "MIT",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/crewAIInc/crewAI/blob/main/LICENSE",
-          "blob_sha": "a6ee25527ec07201e4373fcbf89f128f304a6f2e",
-          "immutable_url": "https://api.github.com/repos/crewAIInc/crewAI/git/blobs/a6ee25527ec07201e4373fcbf89f128f304a6f2e"
+          "url": "https://github.com/vanna-ai/vanna/blob/main/LICENSE",
+          "blob_sha": "ce7db53087e8a3bc7d83a67bbf49c3e39b323671",
+          "immutable_url": "https://api.github.com/repos/vanna-ai/vanna/git/blobs/ce7db53087e8a3bc7d83a67bbf49c3e39b323671"
         }
       ]
     },
     {
-      "project_id": "microsoft-agent-framework",
-      "repo": "microsoft/agent-framework",
+      "project_id": "weaviate",
+      "repo": "weaviate/weaviate",
       "items": [
         {
-          "license_id": "MIT",
+          "license_id": "BSD-3-Clause",
           "scope": "repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/microsoft/agent-framework/blob/main/LICENSE",
-          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
-          "immutable_url": "https://api.github.com/repos/microsoft/agent-framework/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
-        }
-      ]
-    },
-    {
-      "project_id": "deepseek-harness",
-      "repo": "deepseek-ai/deepseek-harness",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/deepseek-ai/deepseek-harness/blob/master/LICENSE",
-          "blob_sha": "c1f7a78e89e4e4dc7b86664c3b3c76eb5eee1785",
-          "immutable_url": "https://api.github.com/repos/deepseek-ai/deepseek-harness/git/blobs/c1f7a78e89e4e4dc7b86664c3b3c76eb5eee1785"
-        }
-      ]
-    },
-    {
-      "project_id": "langchain",
-      "repo": "langchain-ai/langchain",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/langchain-ai/langchain/blob/master/LICENSE",
-          "blob_sha": "3957738673765912ca83a0048f833e095d61e087",
-          "immutable_url": "https://api.github.com/repos/langchain-ai/langchain/git/blobs/3957738673765912ca83a0048f833e095d61e087"
-        }
-      ]
-    },
-    {
-      "project_id": "openai-agents-sdk",
-      "repo": "openai/openai-agents-python",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "repository",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/openai/openai-agents-python/blob/main/LICENSE",
-          "blob_sha": "e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4",
-          "immutable_url": "https://api.github.com/repos/openai/openai-agents-python/git/blobs/e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4"
+          "url": "https://github.com/weaviate/weaviate/blob/main/LICENSE",
+          "blob_sha": "9c72163669ab9ea0b4c9efb7734fa87062f88f34",
+          "immutable_url": "https://api.github.com/repos/weaviate/weaviate/git/blobs/9c72163669ab9ea0b4c9efb7734fa87062f88f34"
         }
       ]
     },

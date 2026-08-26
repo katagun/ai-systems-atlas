@@ -3,6 +3,107 @@
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
+      "id": "agno",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Agno",
+      "repo": "agno-agi/agno",
+      "url": "https://github.com/agno-agi/agno",
+      "description": "Python framework and AgentOS runtime for building, serving, observing, securing, and managing agent platforms.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator",
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "agent definitions, sessions, memory, knowledge, traces, evaluations, and application storage",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 41916,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 8.3,
+        "tool_use": 9.2,
+        "autonomy": 8.8,
+        "human_control": 8.5,
+        "observability_recovery": 8.7,
+        "data_sovereignty": 8.8,
+        "interoperability": 9.2,
+        "maturity": 8.8,
+        "overall": 8.73
+      },
+      "strengths": [
+        "Covers the full agent-platform path from SDK definitions to API runtime, UI, storage, traces, and deployment",
+        "Human approvals, JWT-based access control, memory, knowledge, evaluations, and observability are integrated",
+        "Large tool and interface ecosystem with MCP, A2A, messaging, and self-hosted deployment options"
+      ],
+      "weaknesses": [
+        "The broad SDK, runtime, UI, and deployment surface increases conceptual and upgrade complexity",
+        "Default telemetry requires an explicit opt-out for teams with strict outbound-data policies",
+        "Application teams still own tool safety, model behavior, infrastructure hardening, and cost controls"
+      ],
+      "why_it_matters": "Shows what an integrated, self-hostable agent platform looks like when runtime operations are treated as part of the framework rather than an afterthought.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-26T00:55:57Z",
+      "forks": 5822,
+      "open_issues": 1298,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
       "id": "aider",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -166,6 +267,102 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "claude-code",
+      "name": "Claude Code",
+      "repo": "anthropics/claude-code",
+      "url": "https://github.com/anthropics/claude-code",
+      "description": "Proprietary Anthropic coding agent for terminal, IDE, GitHub, and programmatic workflows.",
+      "primary_role": "coding_agent",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "local working tree, project instructions, and resumable Claude Code sessions",
+      "deployment": [
+        "local_cli",
+        "ide_extension",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 143005,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "The public repository is canonical, but the operational distribution remains proprietary under Anthropic commercial terms.",
+      "pushed_at": "2026-08-25T22:31:52Z",
+      "forks": 22881,
+      "open_issues": 14885,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.1,
+        "tool_use": 9.2,
+        "autonomy": 8.8,
+        "human_control": 8.5,
+        "observability_recovery": 8.7,
+        "data_sovereignty": 6.8,
+        "interoperability": 8.4,
+        "maturity": 9.3,
+        "overall": 8.67
+      },
+      "strengths": [
+        "Strong repository-scale editing, shell use, and Git workflows",
+        "Granular permissions, hooks, MCP, subagents, and resumable sessions",
+        "Terminal, IDE, GitHub, and SDK surfaces"
+      ],
+      "weaknesses": [
+        "Operational implementation is proprietary and coupled to Anthropic models",
+        "Model processing is remote even though tools and files can remain local"
+      ],
+      "why_it_matters": "A major provider-native reference for controlled coding agents and the runtime exposed through Claude Agent SDKs.",
+      "research_confidence": "high",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
     },
     {
       "id": "cline",
@@ -423,6 +620,115 @@
       "license_review_status": "verified"
     },
     {
+      "id": "db-gpt",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DB-GPT",
+      "repo": "eosphoros-ai/DB-GPT",
+      "url": "https://github.com/eosphoros-ai/DB-GPT",
+      "description": "Agentic data assistant for planning and executing SQL, Python analysis, reusable skills, and multi-source reporting in sandboxed environments.",
+      "primary_role": "data_analysis_agent",
+      "secondary_roles": [
+        "agent_framework_sdk",
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "graph_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "database schemas, connected datasets, knowledge bases, skills, workflow state, and generated artifacts",
+      "deployment": [
+        "local_cli",
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 19792,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 9.0,
+        "autonomy": 8.7,
+        "human_control": 7.4,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.7,
+        "interoperability": 8.7,
+        "maturity": 8.5,
+        "overall": 8.3
+      },
+      "strengths": [
+        "Plans and executes multi-step SQL and Python analysis rather than stopping at query generation",
+        "Combines databases, files, knowledge bases, reusable skills, RAG, and multi-agent workflows",
+        "Supports sandboxed execution, self-hosting, local models, and OpenAI-compatible providers"
+      ],
+      "weaknesses": [
+        "The broad platform and deployment surface create substantial setup and operational complexity",
+        "Human approval and rollback behavior vary across agents, tools, and application flows",
+        "Reliable production analysis still depends on model quality and careful database permissions"
+      ],
+      "why_it_matters": "A comprehensive reference for data agents that combine query generation, code execution, skills, sandboxing, and reports in one runtime.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-21T01:55:03Z",
+      "forks": 2890,
+      "open_issues": 426,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
       "id": "deepseek-harness",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -526,6 +832,181 @@
       "pushed_at": "2026-08-21T12:35:08Z",
       "forks": 22044,
       "open_issues": 0,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "devin",
+      "name": "Devin",
+      "repo": null,
+      "url": "https://docs.devin.ai/get-started/devin-intro",
+      "description": "Hosted autonomous software-engineering agent with an observable shell, IDE, browser, API, and parallel sessions.",
+      "primary_role": "coding_agent",
+      "architectures": [
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "cloud workspaces, repository state, session history, knowledge, and playbooks",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.5,
+        "tool_use": 9.0,
+        "autonomy": 9.3,
+        "human_control": 8.4,
+        "observability_recovery": 8.8,
+        "data_sovereignty": 3.6,
+        "interoperability": 7.6,
+        "maturity": 9.0,
+        "overall": 8.15
+      },
+      "strengths": [
+        "Long-running cloud workspaces expose shell, editor, browser, and logs",
+        "Human takeover, API access, parallel sessions, knowledge, and playbooks support team workflows",
+        "Mature GitHub and Slack integration"
+      ],
+      "weaknesses": [
+        "Proprietary managed service with limited implementation inspectability",
+        "Cloud execution and retained organizational context reduce data sovereignty",
+        "Official guidance still recommends bounded tasks and human review for reliability"
+      ],
+      "why_it_matters": "A reference proprietary cloud agent for delegated, asynchronous software work rather than only interactive code assistance.",
+      "research_confidence": "high",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
+      "id": "dspy",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DSPy",
+      "repo": "stanfordnlp/dspy",
+      "url": "https://github.com/stanfordnlp/dspy",
+      "description": "Framework for programming and optimizing modular AI systems, including retrieval pipelines, tool-using ReAct agents, evaluation, and self-improving model programs.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "Python modules, declarative signatures, examples, evaluation sets, optimization traces, and compiled programs",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 37596,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 8.5,
+        "tool_use": 7.8,
+        "autonomy": 7.9,
+        "human_control": 8.7,
+        "observability_recovery": 8.5,
+        "data_sovereignty": 9.2,
+        "interoperability": 9.0,
+        "maturity": 9.2,
+        "overall": 8.56
+      },
+      "strengths": [
+        "Declarative signatures and modular programs separate system intent from brittle hand-written prompts",
+        "Evaluation-driven optimizers can improve prompts, examples, and weights against explicit metrics",
+        "Includes tool schemas and ReAct agent loops while remaining compatible with varied model backends"
+      ],
+      "weaknesses": [
+        "It is a general AI-programming framework rather than a full operational agent platform",
+        "Optimization requires representative datasets, metrics, model calls, and careful experimental discipline",
+        "Deployment, persistence, permissions, and production recovery remain application-defined"
+      ],
+      "why_it_matters": "Broadens the Atlas beyond orchestration by treating AI-system behavior as typed, evaluable, optimizable programs.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-26T00:14:45Z",
+      "forks": 3258,
+      "open_issues": 637,
       "metadata_verified_at": "2026-08-25",
       "github_detected_license": "MIT",
       "licenses": [
@@ -873,6 +1354,204 @@
       "license_review_status": "verified"
     },
     {
+      "id": "haystack",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Haystack",
+      "repo": "deepset-ai/haystack",
+      "url": "https://github.com/deepset-ai/haystack",
+      "description": "Production-oriented Python orchestration framework for explicit RAG pipelines, tool-using agents, context engineering, evaluation, and lifecycle control.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "local_runtime"
+      ],
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "typed pipeline graphs, component state, documents, messages, tool calls, traces, and application-defined memory",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 26317,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 8.5,
+        "tool_use": 8.8,
+        "autonomy": 8.2,
+        "human_control": 8.8,
+        "observability_recovery": 9.0,
+        "data_sovereignty": 8.7,
+        "interoperability": 9.4,
+        "maturity": 9.1,
+        "overall": 8.78
+      },
+      "strengths": [
+        "Explicit pipelines, loops, branches, routing, retrieval, and agent steps make control flow inspectable",
+        "Lifecycle hooks, tool-call metrics, token accounting, evaluation, and tracing support production recovery",
+        "Broad provider, retrieval, storage, component, and deployment interoperability"
+      ],
+      "weaknesses": [
+        "Complex pipelines require more deliberate composition than higher-level opinionated agent APIs",
+        "Some serving, MCP, UI, and enterprise operations rely on adjacent Hayhooks or commercial products",
+        "Persistent memory and authorization policy remain application and integration concerns"
+      ],
+      "why_it_matters": "A mature reference for transparent, production-oriented orchestration where retrieval and agent control flow remain explicit.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-25T15:22:18Z",
+      "forks": 3037,
+      "open_issues": 104,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "kiro",
+      "name": "Kiro",
+      "repo": null,
+      "url": "https://kiro.dev/",
+      "description": "Proprietary agentic IDE and CLI centered on specs, steering files, hooks, powers, and MCP integrations.",
+      "primary_role": "coding_agent",
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "local working tree plus Markdown specs, steering files, hooks, and service-managed sessions",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "ide_extension",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Kiro's official GitHub repository is documentation and issue-tracking surface, not reusable operational source.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.1,
+        "tool_use": 8.7,
+        "autonomy": 8.2,
+        "human_control": 8.8,
+        "observability_recovery": 8.3,
+        "data_sovereignty": 6.0,
+        "interoperability": 8.4,
+        "maturity": 8.2,
+        "overall": 8.15
+      },
+      "strengths": [
+        "Specs and steering keep intent in reviewable project files",
+        "Hooks and powers support explicit repeatable automation",
+        "IDE, CLI, and MCP cover interactive and scripted workflows"
+      ],
+      "weaknesses": [
+        "Operational implementation is proprietary and governed by AWS service terms",
+        "Model and service processing limits local-only operation"
+      ],
+      "why_it_matters": "A distinct provider product that makes specifications and durable project guidance first-class coding-agent artifacts.",
+      "research_confidence": "high",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
       "id": "langchain",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -1143,6 +1822,113 @@
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "llamaindex",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "LlamaIndex",
+      "repo": "run-llama/llama_index",
+      "url": "https://github.com/run-llama/llama_index",
+      "description": "Data and agent framework for ingestion, indexing, retrieval, tools, workflows, multi-agent applications, and document-centric AI systems.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "vector_index",
+        "graph_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "documents, nodes, indices, workflow events, messages, tool state, and application-defined stores",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 51871,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "This entry represents the MIT-licensed LlamaIndex OSS framework; LlamaParse and LlamaCloud are separate commercial services.",
+      "score": {
+        "task_reliability": 8.3,
+        "tool_use": 8.9,
+        "autonomy": 8.2,
+        "human_control": 8.1,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 8.3,
+        "interoperability": 9.6,
+        "maturity": 9.5,
+        "overall": 8.59
+      },
+      "strengths": [
+        "Deep ingestion, indexing, retrieval, tool, workflow, and document-agent primitives in one ecosystem",
+        "Very broad integration catalog across models, embeddings, data sources, and storage backends",
+        "Supports high-level agent construction while preserving lower-level control over data and retrieval"
+      ],
+      "weaknesses": [
+        "The large package and integration ecosystem creates versioning, discovery, and maintenance overhead",
+        "Hosted parsing, extraction, indexing, and deployed-agent capabilities are separate commercial services",
+        "Application teams must design authorization, durable state, evaluation, and recovery policy"
+      ],
+      "why_it_matters": "A foundational framework for data-intensive AI systems where retrieval, documents, structured data, and agents converge.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-24T21:24:35Z",
+      "forks": 8021,
+      "open_issues": 681,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
@@ -1420,6 +2206,106 @@
       "license_review_status": "verified"
     },
     {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "repo": "openclaw/openclaw",
+      "url": "https://github.com/openclaw/openclaw",
+      "description": "Local-first personal agent runtime connecting models, tools, skills, schedules, devices, and messaging channels through one gateway.",
+      "primary_role": "stateful_agent_runtime",
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "local gateway sessions, workspace files, skills, configuration, and channel state",
+      "deployment": [
+        "local_cli",
+        "desktop",
+        "mobile",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 387610,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-26T01:09:21Z",
+      "forks": 81371,
+      "open_issues": 5906,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "NOASSERTION",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 8.7,
+        "autonomy": 8.8,
+        "human_control": 6.8,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 8.8,
+        "interoperability": 9.0,
+        "maturity": 8.4,
+        "overall": 8.01
+      },
+      "strengths": [
+        "Local gateway unifies sessions, tools, events, channels, and companion devices",
+        "Broad provider, channel, skill, plugin, and MCP interoperability",
+        "Schedules and persistent workspace state support proactive personal-agent workflows"
+      ],
+      "weaknesses": [
+        "Host tools and inbound messaging create a large security boundary",
+        "Safe multi-user exposure requires deliberate pairing, sandbox, and gateway configuration",
+        "Breadth increases operational and troubleshooting complexity"
+      ],
+      "why_it_matters": "A prominent open personal-agent runtime whose durable gateway and communication surfaces go well beyond a single coding session.",
+      "research_confidence": "high",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
+    },
+    {
       "id": "opencode",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -1503,6 +2389,297 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "openhands",
+      "name": "OpenHands",
+      "repo": "OpenHands/OpenHands",
+      "url": "https://github.com/OpenHands/OpenHands",
+      "description": "Self-hostable coding-agent platform and control center for interactive work and event- or schedule-driven automations.",
+      "primary_role": "coding_agent",
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "working trees, agent sessions, conversation events, and automation definitions",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 85097,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-25T22:22:08Z",
+      "forks": 11124,
+      "open_issues": 554,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.6,
+        "autonomy": 8.2,
+        "human_control": 7.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.2,
+        "interoperability": 8.5,
+        "maturity": 8.8,
+        "overall": 8.17
+      },
+      "strengths": [
+        "OpenHands agent plus Agent Canvas support self-hosted interactive and automated work",
+        "Agents can run on the host, in containers, on remote machines, or in managed cloud",
+        "ACP support allows alternate coding-agent backends"
+      ],
+      "weaknesses": [
+        "Running without a sandbox grants agent tools the host user's filesystem access",
+        "Multiple backends and automation integrations add deployment complexity"
+      ],
+      "why_it_matters": "A major open alternative for observable coding agents and for operating several agent backends through one control surface.",
+      "research_confidence": "high",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "pi",
+      "name": "Pi",
+      "repo": "earendil-works/pi",
+      "url": "https://github.com/earendil-works/pi",
+      "description": "Minimal, extensible terminal coding agent bundled with a multi-provider API, agent core, and TUI libraries.",
+      "primary_role": "coding_agent",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "local working tree, JSONL sessions, extensions, prompts, and skills",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 97236,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-26T00:08:04Z",
+      "forks": 12021,
+      "open_issues": 139,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "score": {
+        "task_reliability": 8.1,
+        "tool_use": 8.5,
+        "autonomy": 7.8,
+        "human_control": 6.8,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 9.1,
+        "interoperability": 9.2,
+        "maturity": 8.4,
+        "overall": 8.03
+      },
+      "strengths": [
+        "Small agent loop with first-party libraries for models, state, and terminal UI",
+        "Extensions, prompts, skills, and themes make the harness deeply adaptable",
+        "First-class Anthropic, OpenAI, and Google model support"
+      ],
+      "weaknesses": [
+        "No built-in permission system for filesystem, process, network, or credentials",
+        "Safe use on untrusted repositories requires external containerization or sandboxing"
+      ],
+      "why_it_matters": "A compact open coding-agent harness that exposes reusable runtime components instead of prescribing a large platform.",
+      "research_confidence": "high",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [
+        "coding_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-25",
+      "id": "prime-agent",
+      "name": "Prime Agent",
+      "repo": "PrimeIntellect-ai/prime-agent",
+      "url": "https://github.com/PrimeIntellect-ai/prime-agent",
+      "description": "Long-running coding and research harness built around persistent IPython, recursive subagents, durable state, and bounded autonomy.",
+      "primary_role": "stateful_agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "daemon-backed sessions, persistent IPython state, goals, memories, skills, and versioned harness refinements",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 18412,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-25T23:39:54Z",
+      "forks": 1989,
+      "open_issues": 93,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "score": {
+        "task_reliability": 8.4,
+        "tool_use": 9.0,
+        "autonomy": 9.4,
+        "human_control": 6.8,
+        "observability_recovery": 8.5,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.8,
+        "maturity": 7.8,
+        "overall": 8.35
+      },
+      "strengths": [
+        "Persistent Python control environment makes tools and context programmable",
+        "Recursive subagents, background sessions, schedules, goals, and heartbeats support long work",
+        "Harness refinements are bounded, evidence-backed, versioned, and reversible"
+      ],
+      "weaknesses": [
+        "Generated Python and commands run with the user's permissions rather than a security sandbox",
+        "Persistent and self-editing state demand careful inspection and trust boundaries",
+        "The project is new despite rapid adoption"
+      ],
+      "why_it_matters": "A distinctive open harness for durable, recursively delegated agent work where lifecycle and recovery are first-class.",
+      "research_confidence": "high",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
     },
     {
       "id": "pydantic-ai",
@@ -1667,6 +2844,104 @@
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "vanna",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Vanna",
+      "repo": "vanna-ai/vanna",
+      "url": "https://github.com/vanna-ai/vanna",
+      "description": "User-aware SQL agent framework with executable database tools, permission-aware identity, tool memory, streaming UI components, and customizable lifecycle hooks.",
+      "primary_role": "data_analysis_agent",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "connectors",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "database schemas, tool-use memories, conversation state, permissions, and application-defined context",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "archived",
+      "stars": 23818,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "GitHub marks the repository archived; the reviewed Vanna 2.0 code and documentation remain available.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.4,
+        "autonomy": 7.8,
+        "human_control": 8.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.7,
+        "interoperability": 8.8,
+        "maturity": 7.7,
+        "overall": 8.21
+      },
+      "strengths": [
+        "Executes and verifies SQL through explicit tools instead of returning text-only query suggestions",
+        "Propagates user identity and access groups through prompts, tools, and SQL filtering",
+        "Tool memory, custom tools, lifecycle hooks, and multiple model/database integrations are first-class"
+      ],
+      "weaknesses": [
+        "The public repository is archived, making its maintenance and successor path uncertain",
+        "Production safety depends on application-defined authentication, permissions, and database runner policy",
+        "The 2.0 rewrite increases migration cost for applications built on the older retrieval API"
+      ],
+      "why_it_matters": "Demonstrates how a text-to-SQL agent can combine execution, learned examples, identity-aware permissions, and a production-facing interface.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-02-02T14:14:20Z",
+      "forks": 2484,
+      "open_issues": 289,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
       ],
       "source_model": "open_source",
       "license_review_status": "verified"

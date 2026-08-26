@@ -1,6 +1,6 @@
-# Agent Systems Atlas
+# AI Systems Atlas
 
-Agent Systems Atlas is a curated directory of operational memory systems and AI agent systems across source models. It separates what a system is for from how it works, makes licensing explicit, and compares scores only inside the appropriate system family.
+AI Systems Atlas is a curated directory of operational AI systems, currently organized around memory systems and agent systems across source models. It separates what a system is for from how it works, makes licensing explicit, and compares scores only inside the appropriate system family.
 
 The repository contains the canonical editorial catalog, its validation and refresh automation, and a dependency-free static web interface. The local-first second-brain implementation informed by this research lives in [Cognosaic](https://github.com/embark-delve/cognosaic).
 
@@ -24,6 +24,7 @@ Read only what your task needs:
 |---|---|
 | Understand direction and sequencing | [`ROADMAP.md`](ROADMAP.md) |
 | Understand families, roles, and scores | [`docs/TAXONOMY.md`](docs/TAXONOMY.md) |
+| Understand coverage and choose a research batch | [`docs/COVERAGE.md`](docs/COVERAGE.md) |
 | Add, remove, classify, or rescore a project | [`docs/CURATION.md`](docs/CURATION.md) |
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
 | Run refreshes or review candidate/license incidents | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |

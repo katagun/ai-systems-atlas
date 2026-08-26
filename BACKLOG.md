@@ -4,7 +4,9 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the 72 provisional records in small, evidence-backed batches, starting with data-analysis agents.
+- [ ] Review the 71 provisional records in small, evidence-backed batches; next prioritize Claude Agent SDKs, Google ADK, and Mastra.
+- [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
+- [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Decide whether the static site needs a repository-owned deployment workflow and document the chosen hosting path.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
 
@@ -22,6 +24,12 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Publish Claude Code, Devin, Kiro, OpenHands, OpenClaw, Pi, and Prime Agent with source-model-appropriate license or terms evidence.
+- [x] Add the next major coding-agent comparison batch to the provisional queue instead of treating the first expansion as comprehensive.
+- [x] Rebrand product-facing copy and metadata from Agent Systems Atlas to AI Systems Atlas while retaining the repository URL.
+- [x] Publish DB-GPT and Vanna as reviewed data-analysis systems; exclude SQL Chat on the operational-agent boundary.
+- [x] Publish Agno, Haystack, LlamaIndex, and DSPy as reviewed framework systems with pinned license evidence.
+- [x] Add a coverage matrix and batch-selection guidance for systematic expansion.
 - [x] Replace license-gated inclusion with reviewed source-model and multi-license classification across policy, data, automation, and UI.
 - [x] Publish WrenAI as the first reviewed open-core data-analysis agent with scoped Apache, CC BY, and commercial evidence.
 - [x] Return ten license-only exclusions to the provisional queue; reserve exclusions for family and role boundaries.

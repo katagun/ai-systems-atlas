@@ -24,19 +24,24 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Project | Primary lesson | Strongest contribution | Principal weakness |
 |---|---|---|---|
 | Codex | Controlled coding agency | Repository-scale execution with approvals, sandboxing, IDE/CLI/SDK, and MCP | Strongest model experience is hosted; output still needs review |
+| Claude Code | Provider-native coding agency | Mature permissions, hooks, MCP, subagents, and terminal/IDE/SDK surfaces | Proprietary implementation coupled to Anthropic models |
+| Devin | Delegated cloud engineering | Long-running observable workspaces, takeover, parallel sessions, API, and team integrations | Proprietary cloud execution reduces inspectability and sovereignty |
 | Cline | Human control | Visible plans, diffs, approval-gated tools, browser use, and MCP | IDE-centered; safety rests heavily on operator attention |
 | Aider | Auditable pair programming | Git-native edits and broad provider support with a mature operational history | Narrower tool surface and less autonomy than newer harnesses |
 | OpenCode | Provider-neutral coding agent | Model portability, multiple interfaces, and an open extension surface | Rapid interface evolution and configuration-dependent safety |
+| OpenHands | Coding-agent operations | Self-hosted agent control, automations, execution backends, and ACP interoperability | Safe deployment depends on deliberate sandbox and backend configuration |
+| Pi | Minimal extensible harness | Small reusable agent/model/TUI packages with deep extension seams | No built-in permission boundary; sandboxing is external |
 | Goose | Local extensible agent | MCP-native local tools for code and general tasks | Reliability and observability vary with extensions and models |
+| Kiro | Spec-driven coding | Reviewable specs, steering files, hooks, powers, IDE/CLI, and MCP | Proprietary AWS service with remote model processing |
 | Browser Use | Browser agency | Rich browser-control primitives and local/cloud execution choices | Websites are nondeterministic and remote browsers complicate privacy |
 | GPT Researcher | Research agency | Multi-step web research with cited report artifacts | Source judgment and steering still require a human |
+| OpenClaw | Personal agent runtime | Local gateway joins durable sessions, tools, schedules, channels, skills, and devices | Host tools and inbound messages create a broad security boundary |
+| Prime Agent | Long-running recursive harness | Persistent IPython, subagents, background sessions, goals, schedules, and reversible refinement | Host execution and self-editing durable state require careful trust controls |
 | LangGraph | Durable agent runtime | Checkpoints, resumability, explicit graphs, and human-in-the-loop control | Substantial framework and workflow-design complexity |
 | Pydantic AI | Typed agent engineering | Contracts, validation, evaluation, observability, and provider portability | Python-focused; execution policy remains application-owned |
 | CrewAI | Multi-agent coordination | Accessible role-based crews plus explicit flows | Extra agents can amplify nondeterminism and debugging cost |
 | Microsoft Agent Framework | Workflow convergence | Multi-agent workflows, state, observability, and .NET/Python support | Newer consolidated framework with cloud-oriented integrations |
 | smolagents | Minimal agent abstraction | Understandable code-agent design and flexible local/sandbox execution | Persistence, recovery, and policy are mostly left to applications |
-
-OpenHands is architecturally relevant but excluded from the main directory because the repository contains MIT core code alongside source-available enterprise code.
 
 ## Architectural synthesis for local-first memory
 

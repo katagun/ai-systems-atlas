@@ -1,4 +1,4 @@
-# AGENTS.md — Agent Systems Atlas
+# AGENTS.md — AI Systems Atlas
 
 This repository is a curated directory of operational memory systems and AI agent systems across open-source, mixed, open-core, source-available, and proprietary source models. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
@@ -13,6 +13,7 @@ Read only the documents required by the change:
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
 | finder, filters, details, styles, or accessibility | `docs/WEB.md` |
 | taxonomy or family boundaries | relevant files in `docs/adr/` |
+| coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 

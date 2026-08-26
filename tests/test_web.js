@@ -44,3 +44,14 @@ test("multi-license projects match any reviewed license", () => {
   const results = filterAndSortProjects(projects, { license: "CC-BY-4.0", sort: "name" });
   assert.deepEqual(results.map(project => project.name), ["Service"]);
 });
+
+test("short searches match words instead of fragments such as pi in API", () => {
+  const searchable = [
+    { ...projects[3], name: "Pi", description: "Minimal coding agent" },
+    { ...projects[3], name: "Framework", description: "Agent API and SDK" },
+  ];
+
+  const results = filterAndSortProjects(searchable, { term: "Pi", sort: "name" });
+
+  assert.deepEqual(results.map(project => project.name), ["Pi"]);
+});

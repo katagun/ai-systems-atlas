@@ -63,7 +63,6 @@ class DirectoryTests(unittest.TestCase):
         candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
         exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
         requeued = {
-            "OpenHands/OpenHands",
             "anthropics/claude-agent-sdk-python",
             "anthropics/claude-agent-sdk-typescript",
             "mastra-ai/mastra",
@@ -74,6 +73,27 @@ class DirectoryTests(unittest.TestCase):
 
         self.assertLessEqual(requeued, {candidate["repo"] for candidate in candidates["candidates"]})
         self.assertTrue(requeued.isdisjoint({entry["repo"] for entry in exclusions["entries"]}))
+
+    def test_major_coding_agent_and_runtime_batch_is_reviewed(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        projects = {project["id"]: project for project in self.document["projects"]}
+        expected = {
+            "claude-code": "proprietary",
+            "devin": "proprietary",
+            "kiro": "proprietary",
+            "openhands": "open_source",
+            "openclaw": "open_source",
+            "pi": "open_source",
+            "prime-agent": "open_source",
+        }
+
+        self.assertLessEqual(expected.keys(), projects.keys())
+        for project_id, source_model in expected.items():
+            self.assertEqual(source_model, projects[project_id]["source_model"], project_id)
+        self.assertNotIn(
+            "OpenHands/OpenHands",
+            {candidate["repo"] for candidate in candidates["candidates"]},
+        )
 
     def test_wrenai_is_reviewed_as_open_core_not_excluded(self) -> None:
         exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
@@ -89,8 +109,12 @@ class DirectoryTests(unittest.TestCase):
     def test_reviewed_framework_batch_leaves_the_candidate_queue(self) -> None:
         candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
         reviewed_repos = {
+            "agno-agi/agno",
+            "deepset-ai/haystack",
             "langchain-ai/langchain",
             "openai/openai-agents-python",
+            "run-llama/llama_index",
+            "stanfordnlp/dspy",
         }
 
         self.assertLessEqual(
@@ -100,6 +124,15 @@ class DirectoryTests(unittest.TestCase):
         self.assertTrue(
             reviewed_repos.isdisjoint({candidate["repo"] for candidate in candidates["candidates"]})
         )
+
+    def test_data_analysis_batch_has_evidence_backed_dispositions(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        reviewed = {"eosphoros-ai/DB-GPT", "vanna-ai/vanna"}
+
+        self.assertLessEqual(reviewed, {project["repo"] for project in self.document["projects"]})
+        self.assertTrue(reviewed.isdisjoint({candidate["repo"] for candidate in candidates["candidates"]}))
+        self.assertIn("sqlchat/sqlchat", {entry["repo"] for entry in exclusions["entries"]})
 
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}

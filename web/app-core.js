@@ -3,11 +3,18 @@
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.AtlasCore = api;
 })(typeof globalThis === "undefined" ? this : globalThis, function createAtlasCore() {
+  function matchesSearchTerm(haystack, term) {
+    if (!term) return true;
+    if (term.length > 2) return haystack.includes(term);
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(haystack);
+  }
+
   function matchesProject(project, filters) {
     const term = (filters.term || "").trim().toLowerCase();
     const roles = filters.roles || [];
     const haystack = JSON.stringify(project).toLowerCase();
-    return (!term || haystack.includes(term)) &&
+    return matchesSearchTerm(haystack, term) &&
       (!filters.family || project.system_family === filters.family) &&
       (!filters.role || project.primary_role === filters.role) &&
       (!roles.length || roles.includes(project.primary_role)) &&

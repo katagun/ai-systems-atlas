@@ -87,7 +87,7 @@ def github_get(
     url = path if path.startswith("https://") else f"https://api.github.com{path}"
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "agent-systems-atlas-updater/0.3",
+        "User-Agent": "ai-systems-atlas-updater/0.4",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:

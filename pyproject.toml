@@ -1,5 +1,5 @@
 [project]
-name = "agent-systems-atlas"
+name = "ai-systems-atlas"
 version = "0.1.0"
 description = "A reviewed atlas of operational memory and AI agent systems"
 readme = "README.md"

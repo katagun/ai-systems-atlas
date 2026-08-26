@@ -2,16 +2,17 @@
 
 This roadmap describes outcomes and sequencing. [`BACKLOG.md`](BACKLOG.md) is the source of truth for executable work; policy and architectural decisions live in `docs/`.
 
-## Current: representative, transparent coverage
+## Current: representative, transparent AI-system coverage
 
 Make the Atlas broad enough to represent important memory and agent-system choices without hiding systems because of their source model.
 
 - Separate relevance from licensing: include by operational role and expose source model, licenses, and evidence as filters and labels.
 - Represent model-provider coupling as reviewed traits, not as a third system family.
-- Review provisional projects in small domain batches, beginning with agent SDKs and data-analysis agents.
+- Review provisional projects in small domain batches, continuing with provider SDKs, the coding-agent second pass, and thin operational roles.
+- Measure coverage by operational role, source-model diversity, and meaningful alternatives—not one misleading project total.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 
-Exit signal: priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
+Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
 
 ## Next: efficient curation
 
@@ -26,6 +27,8 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 ## Later: ecosystem context
 
 Evaluate a separate, unscored ecosystem index for adjacent model providers, API clients, adapters, and observability SDKs. Build it only when concrete user questions cannot be answered by traits on operational systems.
+
+Evaluate additional scored families only when a distinct operational outcome cannot fit the memory or agent profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
 
 Exit signal: evidence of user value justifies the additional model and maintenance surface.
 
