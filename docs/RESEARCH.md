@@ -53,8 +53,12 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Microsoft Copilot | Ubiquitous personal companion | Reach across standalone apps, Windows, mobile, web, and Microsoft surfaces | The Copilot brand spans many separately governed products and capability sets |
 | DeepSeek | Open-model/closed-product boundary | Accessible reasoning, search, files, and synchronized web/mobile chat | Hosted product governance and continuity controls are comparatively limited |
 | Z.ai | Regional provider coverage | GLM-native chat, file input, deliberate reasoning, and an integrated coding entry point | Thin public product documentation and limited evidence for durable context or portability |
+| Grok | Real-time provider-native assistance | Current-information retrieval, research, files, creation, and optional agentic actions | Overlapping consumer, X, bot, API, and model boundaries require careful separation |
 | Amazon Quick | Governed enterprise assistance | Organizational knowledge, analytics, actions, custom agents, and AWS administration | Broad evolving bundle with proprietary cloud operation |
+| Microsoft 365 Copilot | Tenant-grounded work assistance | Microsoft 365 context, enterprise search, notebooks, applications, agents, and governance | Licensing and capability surfaces vary across plans, tenant configuration, and the wider Copilot brand |
 | T3 Chat | Multi-provider workspace | First-class model choice in a simple persistent client | Narrower tools, governance, and autonomous workflows than major provider assistants |
+
+GroqChat remains provisional. Groq's current first-party agreement establishes a governed cloud service with access to multiple model services, but the public product material does not yet establish the durable workspace or boundary from Groq Playground and GroqCloud required for the multi-model chat-client role.
 
 ## Architectural synthesis for local-first memory
 

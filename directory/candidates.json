@@ -2732,21 +2732,6 @@
     },
     {
       "repo": null,
-      "name": "Grok",
-      "url": "https://grok.com/",
-      "description": "xAI's general assistant with real-time information access, files, creation, and DeepSearch research workflows.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.86,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": ["assistant", "xai", "official-product"],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
-    },
-    {
-      "repo": null,
       "name": "GroqChat",
       "url": "https://chat.groq.com/",
       "description": "Groq-hosted end-user chat interface for interacting with supported models through Groq's inference platform.",
@@ -2756,21 +2741,6 @@
       "github_detected_license": null,
       "stars": null,
       "topics": ["assistant", "chat", "groq", "official-product"],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
-    },
-    {
-      "repo": null,
-      "name": "Microsoft 365 Copilot",
-      "url": "https://www.microsoft.com/en-us/microsoft-365/copilot/meet-copilot",
-      "description": "Microsoft's organizational work assistant across Microsoft 365 data, applications, search, research, and custom agents.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "enterprise_work_assistant",
-      "classification_confidence": 0.9,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": ["assistant", "enterprise", "microsoft", "official-product"],
       "status": "provisional",
       "discovered_at": "2026-08-26",
       "review_required": ["licensing", "classification", "traits", "editorial_score"]

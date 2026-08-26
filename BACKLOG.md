@@ -4,8 +4,8 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 105 provisional records in small, evidence-backed batches.
-- [ ] Review the assistant third pass: Grok, GroqChat, and Microsoft 365 Copilot.
+- [ ] Review the remaining 103 provisional records in small, evidence-backed batches.
+- [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 - [ ] Review the proprietary memory batch: NotebookLM and Zep Cloud, preserving their product boundaries from Open Notebook and Graphiti.
 - [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
@@ -29,6 +29,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-26
 
+- [x] Publish Grok and Microsoft 365 Copilot with explicit consumer, enterprise, agent, API, and model boundaries; retain GroqChat as provisional after its workspace boundary remained unproven.
 - [x] Publish Claude, Gemini Apps, Microsoft Copilot, DeepSeek, and Z.ai as evidence-backed general assistants with explicit product boundaries.
 - [x] Add assistant systems as a separately scored family with general, enterprise-work, and multi-model-chat roles.
 - [x] Publish ChatGPT, Amazon Quick, and T3 Chat as the first evidence-backed assistant comparison across all three roles.
