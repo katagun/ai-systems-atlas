@@ -17,6 +17,7 @@ Use progressive disclosure for explanation and specialist controls:
 - State the family-scoped score rule beside the filters where it affects a choice.
 - Put definitions and classification rationale in Taxonomy.
 - Put evidence, score dimensions, strengths, and weaknesses in project details.
+- Keep Specifications as a sibling view with direct filters; show contract boundaries and evidence only on demand.
 
 Prefer plain interface labels over methodology language. Use exact taxonomy terms when changing their meaning would introduce ambiguity, but do not repeat the taxonomy thesis in the hero, filters, and footer.
 
@@ -33,6 +34,9 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Every card displays its reviewed license identifiers and source model.
 - License and source-model filters are taxonomy-driven and combine with every existing filter.
 - Project details show scoped license evidence; Git-hosted evidence links both immutable blobs and human-readable source paths.
+- Specification cards show type, integration scope, status or version, steward, and every reviewed license.
+- Specification filters combine search, type, scope, status, and license. Results are alphabetic and explicitly unscored.
+- Specification details distinguish what the artifact standardizes from what it does not, and link reviewed specification and license evidence.
 
 ## Change surfaces
 
@@ -69,5 +73,6 @@ Then verify in a browser:
 7. inspect project details and evidence links;
 8. navigate taxonomy groups;
 9. check narrow and wide layouts and browser console errors.
+10. search and combine filters in Specifications; open a protocol and instruction-convention detail view.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

@@ -10,7 +10,10 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
-PUBLISHED_DATA = ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json")
+PUBLISHED_DATA = (
+    "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
+    "specifications.json",
+)
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
@@ -21,6 +24,9 @@ TAXONOMY_GROUPS = (
     "agent_relations",
     "provider_relationships",
     "model_backends",
+    "specification_types",
+    "specification_scopes",
+    "specification_statuses",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -51,6 +57,13 @@ PROJECT_OPTIONAL = {
     "agent_interfaces", "execution_boundaries", "agent_capabilities", "pushed_at", "forks",
     "open_issues", "metadata_verified_at", "github_detected_license", "provider_relationship",
     "model_backends",
+}
+
+SPECIFICATION_REQUIRED = {
+    "id", "name", "short_name", "specification_type", "scope", "status",
+    "current_version", "stewards", "repo", "url", "description", "standardizes",
+    "does_not_standardize", "licenses", "license_note", "related_specifications",
+    "evidence", "license_evidence", "verified_at",
 }
 
 
@@ -121,6 +134,7 @@ def validate(root: Path = ROOT) -> list[str]:
         candidates_data = load("candidates.json")
         license_review_data = load("license-review.json")
         exclusions_data = load("exclusions.json")
+        specifications_data = load("specifications.json")
     finally:
         DIRECTORY = original_directory
 
@@ -415,6 +429,129 @@ def validate(root: Path = ROOT) -> list[str]:
             else:
                 errors.append(f"{prefix}: unknown license evidence kind {kind!r}")
 
+    specifications_value = specifications_data.get("specifications")
+    if specifications_data.get("version") != "1.0":
+        errors.append("specifications.json: unsupported version")
+    if not valid_date(specifications_data.get("verified_at")):
+        errors.append("specifications.json: verified_at must be an ISO date")
+    if not isinstance(specifications_value, list):
+        errors.append("specifications.json: specifications must be a list")
+        specifications_value = []
+    specification_ids = {
+        item.get("id") for item in specifications_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    if len(specification_ids) != len(specifications_value):
+        errors.append("specifications.json: ids must be present and unique")
+    for specification in specifications_value:
+        if not isinstance(specification, dict):
+            errors.append("specifications.json: every specification must be an object")
+            continue
+        prefix = f"specification {specification.get('id', 'unknown')}"
+        if set(specification) != SPECIFICATION_REQUIRED:
+            missing = sorted(SPECIFICATION_REQUIRED - set(specification))
+            extra = sorted(set(specification) - SPECIFICATION_REQUIRED)
+            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+        specification_id = specification.get("id")
+        if not isinstance(specification_id, str) or not ID_PATTERN.fullmatch(specification_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name", "short_name", "url", "description", "standardizes",
+            "does_not_standardize", "license_note",
+        ):
+            if not isinstance(specification.get(field), str) or not specification[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        if not isinstance(specification.get("url"), str) or not specification["url"].startswith("https://"):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        repo = specification.get("repo")
+        if repo is not None and (not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)):
+            errors.append(f"{prefix}: invalid GitHub repository")
+        if specification.get("current_version") is not None and not isinstance(
+            specification["current_version"], str
+        ):
+            errors.append(f"{prefix}: current_version must be a string or null")
+        if specification.get("specification_type") not in enum_ids["specification_types"]:
+            errors.append(f"{prefix}: unknown specification type")
+        if specification.get("scope") not in enum_ids["specification_scopes"]:
+            errors.append(f"{prefix}: unknown specification scope")
+        if specification.get("status") not in enum_ids["specification_statuses"]:
+            errors.append(f"{prefix}: unknown specification status")
+        validate_string_list(specification, "stewards", None, prefix, errors)
+        validate_string_list(specification, "licenses", enum_ids["licenses"], prefix, errors)
+        validate_string_list(
+            specification, "related_specifications", specification_ids, prefix, errors,
+            allow_empty=True,
+        )
+        if specification_id in specification.get("related_specifications", []):
+            errors.append(f"{prefix}: cannot relate to itself")
+        if not valid_date(specification.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+
+        evidence_items = specification.get("evidence")
+        if not isinstance(evidence_items, list) or not evidence_items:
+            errors.append(f"{prefix}: evidence must be a non-empty list")
+            evidence_items = []
+        for item in evidence_items:
+            if not isinstance(item, dict) or not isinstance(item.get("label"), str):
+                errors.append(f"{prefix}: evidence requires an object with a label")
+                continue
+            if item.get("kind") == "git_blob":
+                blob_sha = item.get("blob_sha")
+                if not repo:
+                    errors.append(f"{prefix}: git-blob evidence requires a repository")
+                elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                    errors.append(f"{prefix}: invalid evidence blob SHA")
+                elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                    errors.append(f"{prefix}: immutable evidence URL must address the blob SHA")
+                if not isinstance(item.get("path"), str) or not item["path"]:
+                    errors.append(f"{prefix}: git-blob evidence requires a path")
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    f"https://github.com/{repo}/blob/"
+                ):
+                    errors.append(f"{prefix}: evidence source must be a GitHub blob URL")
+            elif item.get("kind") == "web":
+                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                    errors.append(f"{prefix}: web evidence requires an authoritative HTTPS URL")
+                if not valid_date(item.get("verified_at")):
+                    errors.append(f"{prefix}: web evidence requires verified_at")
+            else:
+                errors.append(f"{prefix}: unknown evidence kind {item.get('kind')!r}")
+
+        license_items = specification.get("license_evidence")
+        if not isinstance(license_items, list) or not license_items:
+            errors.append(f"{prefix}: license_evidence must be a non-empty list")
+            license_items = []
+        evidence_licenses = {
+            item.get("license_id") for item in license_items if isinstance(item, dict)
+        }
+        if evidence_licenses != set(specification.get("licenses", [])):
+            errors.append(f"{prefix}: license evidence does not match licenses")
+        for item in license_items:
+            if not isinstance(item, dict) or not isinstance(item.get("scope"), str) or not item["scope"].strip():
+                errors.append(f"{prefix}: license evidence requires a scope")
+                continue
+            if item.get("kind") == "git_blob":
+                blob_sha = item.get("blob_sha")
+                if not repo:
+                    errors.append(f"{prefix}: git-blob license evidence requires a repository")
+                elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                    errors.append(f"{prefix}: invalid license blob SHA")
+                elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                    errors.append(f"{prefix}: immutable license URL must address the blob SHA")
+                if not isinstance(item.get("path"), str) or not item["path"]:
+                    errors.append(f"{prefix}: git-blob license evidence requires a path")
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    f"https://github.com/{repo}/blob/"
+                ):
+                    errors.append(f"{prefix}: license source must be a GitHub blob URL")
+            elif item.get("kind") == "web_terms":
+                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                    errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
+                if not valid_date(item.get("verified_at")):
+                    errors.append(f"{prefix}: web terms require verified_at")
+            else:
+                errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
+
     candidate_entries = candidates_data.get("candidates")
     if not isinstance(candidate_entries, list):
         errors.append("candidates.json: candidates must be a list")
@@ -532,7 +669,11 @@ def main() -> int:
     data = load("projects.json")
     families = sorted({project["system_family"] for project in data["projects"]})
     counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
-    print(f"validated {len(data['projects'])} projects with reviewed license evidence: {counts}")
+    specification_count = len(load("specifications.json")["specifications"])
+    print(
+        f"validated {len(data['projects'])} projects with reviewed license evidence: "
+        f"{counts}; {specification_count} unscored specifications"
+    )
     return 0
 
 

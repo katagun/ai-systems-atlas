@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of four files:
+`directory/` is canonical. The browser consumes synchronized copies of five files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -12,6 +12,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `taxonomy.json` | Enums, source models, licenses, and score profiles | Yes |
 | `license-evidence.json` | Scoped reviewed license and terms evidence | Yes |
 | `exclusions.json` | Reviewed scope-boundary decisions | Yes |
+| `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 
@@ -73,3 +74,17 @@ Candidate records contain discovery facts and proposed classification only. They
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
 See `OPERATIONS.md` for promotion and resolution procedures.
+
+## Specification record
+
+Specification records are intentionally independent from project records. They contain no `system_family`, role, score profile, score, or popularity metric.
+
+- **Identity:** `id`, `name`, `short_name`, optional GitHub `repo`, authoritative `url`, and `description`.
+- **Classification:** taxonomy-backed `specification_type`, integration `scope`, and `status`.
+- **Release:** nullable `current_version` and one or more `stewards`.
+- **Boundary:** `standardizes` and `does_not_standardize` state the contract's limits.
+- **Licensing:** complete `licenses`, `license_note`, and scoped `license_evidence`.
+- **Relationships:** `related_specifications` references other records by ID without implying compatibility.
+- **Review:** authoritative `evidence` plus human-owned `verified_at`.
+
+Evidence is either an immutable Git blob or a dated authoritative web source. Every listed license must have one scoped evidence item. `LicenseRef-Unclear` is valid when the artifact is documented but no standalone reusable format license can be established; it must not be rewritten as open source by inference.

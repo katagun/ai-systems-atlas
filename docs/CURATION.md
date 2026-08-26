@@ -2,7 +2,7 @@
 
 ## Scope
 
-The main catalog covers reviewed operational memory systems and AI agent systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion.
+The scored catalog covers reviewed operational memory systems and AI agent systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md).
 
 ## Inclusion gate
 

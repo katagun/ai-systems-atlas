@@ -1,0 +1,219 @@
+{
+  "version": "1.0",
+  "verified_at": "2026-08-25",
+  "specifications": [
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol",
+      "short_name": "MCP",
+      "specification_type": "protocol",
+      "scope": "tool_data_integration",
+      "status": "published",
+      "current_version": "2026-07-28",
+      "stewards": ["Model Context Protocol project"],
+      "repo": "modelcontextprotocol/modelcontextprotocol",
+      "url": "https://modelcontextprotocol.io/specification/latest",
+      "description": "A client–server protocol for connecting AI applications to tools, resources, prompts, and external context.",
+      "standardizes": "Capability negotiation, lifecycle, JSON-RPC messages, tools, resources, prompts, sampling, and related client–server features.",
+      "does_not_standardize": "Agent-to-agent task delegation, an agent runtime, or how applications rank and use retrieved context.",
+      "licenses": ["Apache-2.0", "MIT", "CC-BY-4.0"],
+      "license_note": "The repository documents a transition: the current specification and new contributions use Apache-2.0, earlier contributions retain MIT, and non-specification documentation uses CC BY 4.0.",
+      "related_specifications": ["a2a", "ag-ui"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification/2026-07-28/index.mdx", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/index.mdx", "blob_sha": "452d78601b135b95bbe45287e756c0579534096b", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/452d78601b135b95bbe45287e756c0579534096b"},
+        {"kind": "web", "label": "Current specification", "url": "https://modelcontextprotocol.io/specification/latest", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Current specification and new repository contributions", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"},
+        {"license_id": "MIT", "scope": "Contributions predating the documented license transition", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"},
+        {"license_id": "CC-BY-4.0", "scope": "Repository documentation outside the normative specification", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "a2a",
+      "name": "Agent2Agent Protocol",
+      "short_name": "A2A",
+      "specification_type": "protocol",
+      "scope": "agent_interaction",
+      "status": "published",
+      "current_version": "1.0.0",
+      "stewards": ["A2A Project", "Linux Foundation"],
+      "repo": "a2aproject/A2A",
+      "url": "https://a2a-protocol.org/latest/specification/",
+      "description": "An interoperability protocol for discovering independent agents, delegating tasks, and exchanging messages and artifacts.",
+      "standardizes": "Agent cards, task lifecycle, messages, artifacts, streaming, push notifications, and authenticated agent-to-agent interaction.",
+      "does_not_standardize": "Tool access inside an agent, the agent's internal planner, or front-end event rendering.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The specification repository is licensed under Apache-2.0.",
+      "related_specifications": ["mcp", "ag-ui"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.md", "url": "https://github.com/a2aproject/A2A/blob/main/docs/specification.md", "blob_sha": "6d38bbfb03a036371cf03cca1331a510f603c1e9", "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/6d38bbfb03a036371cf03cca1331a510f603c1e9"},
+        {"kind": "web", "label": "Published specification", "url": "https://a2a-protocol.org/latest/specification/", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Specification repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/a2aproject/A2A/blob/main/LICENSE", "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7", "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "ag-ui",
+      "name": "Agent–User Interaction Protocol",
+      "short_name": "AG-UI",
+      "specification_type": "protocol",
+      "scope": "agent_user_interaction",
+      "status": "evolving",
+      "current_version": null,
+      "stewards": ["AG-UI project", "CopilotKit"],
+      "repo": "ag-ui-protocol/ag-ui",
+      "url": "https://docs.ag-ui.com/introduction",
+      "description": "An event-based protocol for connecting agent runtimes to user-facing applications and interactive front ends.",
+      "standardizes": "Streaming events for messages, tools, state, lifecycle, and human-in-the-loop interaction between agents and applications.",
+      "does_not_standardize": "Agent-to-agent delegation, model-to-tool discovery, or a specific component library and visual design.",
+      "licenses": ["MIT"],
+      "license_note": "The reference repository is licensed under MIT.",
+      "related_specifications": ["mcp", "a2a"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed project overview", "path": "README.md", "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/README.md", "blob_sha": "5978215532f62a0a13e6a4a577c08a35c1638c09", "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/5978215532f62a0a13e6a4a577c08a35c1638c09"},
+        {"kind": "web", "label": "Current protocol documentation", "url": "https://docs.ag-ui.com/introduction", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "MIT", "scope": "Protocol repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/LICENSE", "blob_sha": "b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d", "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "acp",
+      "name": "Agent Client Protocol",
+      "short_name": "ACP",
+      "specification_type": "protocol",
+      "scope": "agent_client_integration",
+      "status": "evolving",
+      "current_version": "2",
+      "stewards": ["Agent Client Protocol project", "Zed Industries"],
+      "repo": "agentclientprotocol/agent-client-protocol",
+      "url": "https://agentclientprotocol.com/get-started/introduction",
+      "description": "A protocol for connecting coding agents to editors, IDEs, and other interactive clients.",
+      "standardizes": "Session setup, prompts, streamed updates, tool calls, permissions, files, terminals, and client–agent capabilities.",
+      "does_not_standardize": "Agent-to-agent coordination, general model tool discovery, or repository instruction-file semantics.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The protocol repository is licensed under Apache-2.0.",
+      "related_specifications": ["agents-md", "claude-md"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed protocol v2 overview", "path": "docs/protocol/v2/overview.mdx", "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/docs/protocol/v2/overview.mdx", "blob_sha": "8887dce3b0ab47af291c68e6bdab51fc1f5fa510", "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/8887dce3b0ab47af291c68e6bdab51fc1f5fa510"},
+        {"kind": "web", "label": "Current protocol documentation", "url": "https://agentclientprotocol.com/get-started/introduction", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Protocol repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/LICENSE", "blob_sha": "1de02305f81f6dc087b6229a1d86a31774d2fa31", "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/1de02305f81f6dc087b6229a1d86a31774d2fa31"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "agents-md",
+      "name": "AGENTS.md",
+      "short_name": "AGENTS.md",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "evolving",
+      "current_version": null,
+      "stewards": ["AGENTS.md community", "OpenAI"],
+      "repo": "agentsmd/agents.md",
+      "url": "https://agents.md/",
+      "description": "An open Markdown convention for giving coding agents persistent, repository-scoped instructions.",
+      "standardizes": "A discoverable filename and hierarchical placement pattern for human-authored project guidance consumed by compatible agents.",
+      "does_not_standardize": "A front-matter schema, an agent wire protocol, tool permissions, or a universal instruction vocabulary.",
+      "licenses": ["MIT"],
+      "license_note": "The reference repository and site source are licensed under MIT.",
+      "related_specifications": ["claude-md", "agent-skills", "acp"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed convention overview", "path": "README.md", "url": "https://github.com/agentsmd/agents.md/blob/main/README.md", "blob_sha": "8ce701e74909d5f08e2810380e0ff15f547aa0c8", "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/8ce701e74909d5f08e2810380e0ff15f547aa0c8"},
+        {"kind": "web", "label": "Open convention site", "url": "https://agents.md/", "verified_at": "2026-08-25"},
+        {"kind": "web", "label": "OpenAI implementation guide", "url": "https://developers.openai.com/codex/guides/agents-md", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "MIT", "scope": "Reference repository and site source", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentsmd/agents.md/blob/main/LICENSE", "blob_sha": "e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4", "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "claude-md",
+      "name": "CLAUDE.md",
+      "short_name": "CLAUDE.md",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Anthropic"],
+      "repo": null,
+      "url": "https://code.claude.com/docs/en/memory",
+      "description": "Claude Code's documented Markdown convention for persistent project and user instructions.",
+      "standardizes": "Where Claude Code discovers project memory, user instructions, imports, and directory-scoped guidance inside its own product ecosystem.",
+      "does_not_standardize": "A vendor-neutral repository instruction format, a wire protocol, or behavior in agents that do not implement Claude Code's convention.",
+      "licenses": ["LicenseRef-Unclear"],
+      "license_note": "The product documentation defines the convention, but no standalone reusable format license was identified during review.",
+      "related_specifications": ["agents-md", "agent-skills", "acp"],
+      "evidence": [
+        {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "LicenseRef-Unclear", "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "agent-skills",
+      "name": "Agent Skills",
+      "short_name": "SKILL.md",
+      "specification_type": "capability_format",
+      "scope": "capability_packaging",
+      "status": "evolving",
+      "current_version": null,
+      "stewards": ["Agent Skills project", "Anthropic"],
+      "repo": "agentskills/agentskills",
+      "url": "https://agentskills.io/specification",
+      "description": "An open folder format for packaging reusable agent instructions, metadata, scripts, and supporting resources.",
+      "standardizes": "A SKILL.md manifest, required metadata, optional resources, discovery, and progressive loading of capability instructions.",
+      "does_not_standardize": "A marketplace, runtime permission model, inter-agent messaging, or the quality and safety of bundled scripts.",
+      "licenses": ["Apache-2.0", "CC-BY-4.0"],
+      "license_note": "Repository code is Apache-2.0; the specification documentation is licensed under CC BY 4.0.",
+      "related_specifications": ["agents-md", "claude-md", "agent-plugins"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.mdx", "url": "https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx", "blob_sha": "d9a2db099d905da8b879a5c6f996728073985279", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/d9a2db099d905da8b879a5c6f996728073985279"},
+        {"kind": "web", "label": "Current specification", "url": "https://agentskills.io/specification", "verified_at": "2026-08-25"},
+        {"kind": "web", "label": "OpenAI implementation guide", "url": "https://developers.openai.com/codex/skills", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Repository code outside the documentation-specific license", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentskills/agentskills/blob/main/LICENSE", "blob_sha": "a20f4476df158a57a68409015ea607c738856f57", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/a20f4476df158a57a68409015ea607c738856f57"},
+        {"license_id": "CC-BY-4.0", "scope": "Specification documentation under docs/", "kind": "git_blob", "path": "docs/LICENSE", "url": "https://github.com/agentskills/agentskills/blob/main/docs/LICENSE", "blob_sha": "4ea99c213c5c0c005ae4e80df8e52169d06896ec", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/4ea99c213c5c0c005ae4e80df8e52169d06896ec"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "agent-plugins",
+      "name": "Agent Plugins",
+      "short_name": "Agent Plugins",
+      "specification_type": "package_format",
+      "scope": "plugin_packaging",
+      "status": "published",
+      "current_version": "1.0.0",
+      "stewards": ["Agent Plugins project"],
+      "repo": "agentplugins/agent-plugins-spec",
+      "url": "https://agent-plugins.org/specification",
+      "description": "An open package format for distributing commands, agents, skills, hooks, and integrations as one installable plugin.",
+      "standardizes": "Plugin manifests, directory layout, component discovery, validation, naming, and composition of agent extensions.",
+      "does_not_standardize": "A plugin marketplace, runtime sandbox, universal permission system, or inter-agent communication.",
+      "licenses": ["Apache-2.0", "CC-BY-4.0"],
+      "license_note": "Schemas and code samples are Apache-2.0; the specification and documentation are CC BY 4.0.",
+      "related_specifications": ["agent-skills"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Published 1.0.0 specification snapshot", "path": "spec/1.0.0.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md", "blob_sha": "c95263bd61fc16608390006bc461e964ce21cd12", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/c95263bd61fc16608390006bc461e964ce21cd12"},
+        {"kind": "web", "label": "Published specification", "url": "https://agent-plugins.org/specification", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Schemas and code samples", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"},
+        {"license_id": "CC-BY-4.0", "scope": "Specification and documentation", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"}
+      ],
+      "verified_at": "2026-08-25"
+    }
+  ]
+}

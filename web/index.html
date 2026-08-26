@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI Systems Atlas: reviewed operational AI systems compared by capability, source model, license, and family-specific scores.">
+  <meta name="description" content="AI Systems Atlas: reviewed AI systems, specifications, protocols, and conventions with explicit licensing and evidence.">
   <meta name="theme-color" content="#f3f1eb">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AI Systems Atlas">
-  <meta property="og:description" content="Reviewed operational AI systems compared by capability, source model, license, and family-specific scores.">
+  <meta property="og:description" content="Reviewed AI systems, specifications, protocols, and conventions with explicit licensing and evidence.">
   <meta property="og:url" content="https://katagun.github.io/agent-systems-atlas/">
   <title>AI Systems Atlas</title>
   <link rel="canonical" href="https://katagun.github.io/agent-systems-atlas/">
-  <link rel="stylesheet" href="styles.css?v=3.1">
+  <link rel="stylesheet" href="styles.css?v=3.2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="brand" aria-label="AI Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>AI Systems Atlas</strong><small>memory · agents · frameworks</small></span>
+      <span><strong>AI Systems Atlas</strong><small>systems · specs · protocols</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="finder">Finder</button>
+      <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
     <a class="github-link" href="https://github.com/katagun/agent-systems-atlas" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -73,6 +74,23 @@
       </section>
     </section>
 
+    <section id="specifications" class="view" aria-labelledby="specifications-title">
+      <div class="section-heading specifications-heading">
+        <p class="eyebrow" id="specifications-kicker">Interoperability artifacts</p>
+        <h1 id="specifications-title">The contracts between systems.</h1>
+        <p>Protocols, instruction conventions, and package formats—classified by what they connect, with no cross-purpose score.</p>
+      </div>
+      <section class="control-panel specification-controls" aria-label="Specification filters">
+        <label class="search-field"><span>Search</span><input id="specification-search" type="search" placeholder="Search specifications and purposes" autocomplete="off"></label>
+        <label><span>Type</span><select id="specification-type-filter"><option value="">All types</option></select></label>
+        <label><span>Scope</span><select id="specification-scope-filter"><option value="">All scopes</option></select></label>
+        <label><span>Status</span><select id="specification-status-filter"><option value="">All statuses</option></select></label>
+        <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
+      </section>
+      <div class="result-row"><p id="specification-result-count" aria-live="polite"></p><button id="reset-specification-filters" class="ghost-button">Clear</button></div>
+      <section id="specification-grid" class="project-grid specification-grid" aria-label="Reviewed specifications"></section>
+    </section>
+
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">
       <div class="section-heading">
         <p class="eyebrow">A multi-axis model</p>
@@ -94,8 +112,13 @@
     <div id="dialog-content"></div>
   </dialog>
 
-  <footer><span>AI Systems Atlas</span><span>Compared within families.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=3.1" defer></script>
-  <script src="app.js?v=3.3" defer></script>
+  <dialog id="specification-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="specification-dialog-content"></div>
+  </dialog>
+
+  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Specifications unscored.</span><span id="data-date"></span></footer>
+  <script src="app-core.js?v=3.2" defer></script>
+  <script src="app.js?v=3.4" defer></script>
 </body>
 </html>

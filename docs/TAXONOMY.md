@@ -1,4 +1,4 @@
-# Systems taxonomy
+# Atlas taxonomy
 
 ## Why two families
 
@@ -12,6 +12,8 @@ Every catalog entry therefore receives:
 4. the score profile assigned to its family.
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
+
+Specifications are a separate collection, not a third system family. They are classified by artifact type, integration scope, and publication status, and never receive an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md) and [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
 
 ## Family 1: memory systems
 
@@ -40,6 +42,8 @@ Include a framework when building or running tool-using agents is a primary prod
 ## No cross-family ranking
 
 An 8.4 agent score and an 8.4 memory score answer different questions. The web directory shows editorial scores only when one family is selected. “All families” supports discovery by name or GitHub stars, not a synthetic best-overall list.
+
+Specifications are also never inserted into this ranking. A protocol can be mature and widely adopted without being a deployable agent, and an instruction convention cannot be meaningfully scored against a memory service.
 
 ## Guided finder
 

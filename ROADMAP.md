@@ -11,6 +11,7 @@ Make the Atlas broad enough to represent important memory and agent-system choic
 - Review provisional projects in small domain batches, continuing with provider SDKs, the coding-agent second pass, and thin operational roles.
 - Measure coverage by operational role, source-model diversity, and meaningful alternatives—not one misleading project total.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
+- Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
 
 Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
 
@@ -27,6 +28,8 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 ## Later: ecosystem context
 
 Evaluate a separate, unscored ecosystem index for adjacent model providers, API clients, adapters, and observability SDKs. Build it only when concrete user questions cannot be answered by traits on operational systems.
+
+Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 
 Evaluate additional scored families only when a distinct operational outcome cannot fit the memory or agent profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
 
