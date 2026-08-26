@@ -16,6 +16,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.
 - [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
 - [ ] Add provider-relationship UI detail only after enough reviewed projects carry the trait; add a filter only when it yields meaningful choices.
+- [ ] Review a second specification batch around agent identity, discovery, authentication, and workflow exchange after concrete candidates are evidence-backed.
 
 ## Later
 
@@ -23,6 +24,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Add an unscored Specifications catalog with MCP, A2A, AG-UI, ACP, AGENTS.md, CLAUDE.md, Agent Skills, and Agent Plugins; include taxonomy-backed filters and pinned evidence.
 - [x] Publish the static site through a validated, least-privilege GitHub Pages workflow and document repository safeguards.
 - [x] Publish Claude Code, Devin, Kiro, OpenHands, OpenClaw, Pi, and Prime Agent with source-model-appropriate license or terms evidence.
 - [x] Add the next major coding-agent comparison batch to the provisional queue instead of treating the first expansion as comprehensive.

@@ -6,7 +6,10 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLISHED_DATA = ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json")
+PUBLISHED_DATA = (
+    "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
+    "specifications.json",
+)
 
 
 def main() -> int:

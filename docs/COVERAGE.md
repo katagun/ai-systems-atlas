@@ -16,7 +16,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-25
 
-The reviewed catalog contains 57 systems: 24 memory systems and 33 agent systems. Fifty-three are represented by open-source operational code, one is open-core, and three are proprietary. The provisional queue contains 94 records.
+The reviewed catalog contains 57 systems: 24 memory systems and 33 agent systems. Fifty-three are represented by open-source operational code, one is open-core, and three are proprietary. The provisional queue contains 94 records. The separate unscored collection contains eight specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -47,5 +47,6 @@ Choose small batches with one coherent boundary question:
 3. **Source-model diversity:** screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless. Review product terms and operational evidence without treating license as eligibility.
 4. **Thin agent roles:** browser/computer use, research, and coding workflows. Prefer candidates that create a genuinely different operational choice.
 5. **Thin memory roles:** agent memory, context graphs, ambient capture, and human–agent bridges.
+6. **Specification second pass:** evaluate OpenAPI, JSON-RPC, Arazzo, AIP, NLIP, and other agent-specific formats only when they answer a distinct integration question; avoid cataloging generic web standards merely because agents use them.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

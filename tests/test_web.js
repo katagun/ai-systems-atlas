@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { filterAndSortProjects, matchesProject } = require("../web/app-core.js");
+const { filterAndSortProjects, filterSpecifications, matchesProject } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -54,4 +54,31 @@ test("short searches match words instead of fragments such as pi in API", () => 
   const results = filterAndSortProjects(searchable, { term: "Pi", sort: "name" });
 
   assert.deepEqual(results.map(project => project.name), ["Pi"]);
+});
+
+const specifications = [
+  { name: "Model Context Protocol", short_name: "MCP", description: "Connect models to tools and data.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"] },
+  { name: "AGENTS.md", short_name: "AGENTS.md", description: "Repository instructions for coding agents.", specification_type: "instruction_convention", scope: "project_instructions", status: "evolving", licenses: ["MIT"] },
+  { name: "CLAUDE.md", short_name: "CLAUDE.md", description: "Claude Code project memory.", specification_type: "instruction_convention", scope: "project_instructions", status: "vendor_specific", licenses: ["LicenseRef-Unclear"] },
+];
+
+test("specification search includes names, descriptions, and identifiers", () => {
+  assert.deepEqual(
+    filterSpecifications(specifications, { term: "MCP" }).map(item => item.name),
+    ["Model Context Protocol"],
+  );
+  assert.deepEqual(
+    filterSpecifications(specifications, { term: "repository" }).map(item => item.name),
+    ["AGENTS.md"],
+  );
+});
+
+test("specification filters combine type, scope, status, and license", () => {
+  const results = filterSpecifications(specifications, {
+    type: "instruction_convention",
+    scope: "project_instructions",
+    status: "vendor_specific",
+    license: "LicenseRef-Unclear",
+  });
+  assert.deepEqual(results.map(item => item.name), ["CLAUDE.md"]);
 });

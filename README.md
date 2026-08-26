@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, currently organized around memory systems and agent systems across source models. It separates what a system is for from how it works, makes licensing explicit, and compares scores only inside the appropriate system family.
+AI Systems Atlas is a curated directory of operational AI systems and the specifications that connect them. Memory and agent systems are compared only inside their family; protocols, conventions, and package formats are classified separately and left unscored. Licensing and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [katagun.github.io/agent-systems-atlas](https://katagun.github.io/agent-systems-atlas/).
 
@@ -26,6 +26,7 @@ Read only what your task needs:
 |---|---|
 | Understand direction and sequencing | [`ROADMAP.md`](ROADMAP.md) |
 | Understand families, roles, and scores | [`docs/TAXONOMY.md`](docs/TAXONOMY.md) |
+| Add or understand a protocol, convention, or format | [`docs/SPECIFICATIONS.md`](docs/SPECIFICATIONS.md) |
 | Understand coverage and choose a research batch | [`docs/COVERAGE.md`](docs/COVERAGE.md) |
 | Add, remove, classify, or rescore a project | [`docs/CURATION.md`](docs/CURATION.md) |
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
@@ -42,6 +43,7 @@ AI coding agents should begin with [`AGENTS.md`](AGENTS.md), which provides the 
 directory/projects.json         reviewed projects and editorial scores
 directory/taxonomy.json         enum definitions, license catalog, score profiles
 directory/license-evidence.json reviewed source paths and immutable blob evidence
+directory/specifications.json  reviewed unscored protocols, conventions, and formats
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
@@ -59,6 +61,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Automated discoveries remain provisional and receive no editorial score or review date.
 - Editorial verification dates are separate from live GitHub metadata dates.
 - Memory and agent scores are never ranked across families.
+- Specifications are classified by type, integration scope, and status; they are never operationally scored.
 
 The weekly workflow refreshes live metadata, preserves candidate and license-review queues, validates the complete catalog, runs tests, and commits only verified data changes.
 

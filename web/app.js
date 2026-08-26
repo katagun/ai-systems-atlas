@@ -1,4 +1,4 @@
-const state = { projects: [], taxonomy: null, licenses: new Map(), directoryRoles: null, finder: { step: 0, answers: {} } };
+const state = { projects: [], specifications: [], taxonomy: null, licenses: new Map(), directoryRoles: null, finder: { step: 0, answers: {} } };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -54,17 +54,21 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence] = await Promise.all([
-    loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json")
+  const [directory, taxonomy, licenseEvidence, specificationDirectory] = await Promise.all([
+    loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
+    loadJSON("specifications.json")
   ]);
   state.projects = directory.projects;
+  state.specifications = specificationDirectory.specifications;
   state.taxonomy = taxonomy;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
   $("#data-date").textContent = `Data updated ${directory.generated_at}`;
   populateFilters();
+  populateSpecificationFilters();
   renderStats();
   renderProjects();
   renderFinder();
+  renderSpecifications();
   renderTaxonomy();
   bindEvents();
 }
@@ -103,6 +107,27 @@ function populateRoleFilter() {
   const roles = state.taxonomy.primary_roles.filter(item => publishedRoles.has(item.id));
   role.innerHTML = '<option value="">All roles</option>' + roles.map(item => `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`).join("");
   if (roles.some(item => item.id === selected)) role.value = selected;
+}
+
+function populateSpecificationFilters() {
+  const published = {
+    specification_types: new Set(state.specifications.map(item => item.specification_type)),
+    specification_scopes: new Set(state.specifications.map(item => item.scope)),
+    specification_statuses: new Set(state.specifications.map(item => item.status)),
+  };
+  for (const [group, selector] of [
+    ["specification_types", "#specification-type-filter"],
+    ["specification_scopes", "#specification-scope-filter"],
+    ["specification_statuses", "#specification-status-filter"],
+  ]) {
+    state.taxonomy[group].filter(item => published[group].has(item.id)).forEach(item =>
+      $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`)
+    );
+  }
+  const licenses = new Set(state.specifications.flatMap(item => item.licenses));
+  state.taxonomy.licenses.filter(item => licenses.has(item.id)).forEach(item =>
+    $("#specification-license-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`)
+  );
 }
 
 function updateScoreSortAvailability() {
@@ -158,6 +183,30 @@ function renderProjects() {
     </article>`;
   }).join("") || '<div class="notice">No projects match these filters.</div>';
   $$('[data-project]').forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
+}
+
+function renderSpecifications() {
+  const specifications = AtlasCore.filterSpecifications(state.specifications, {
+    term: $("#specification-search").value,
+    type: $("#specification-type-filter").value,
+    scope: $("#specification-scope-filter").value,
+    status: $("#specification-status-filter").value,
+    license: $("#specification-license-filter").value,
+  });
+  $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
+  $("#specification-result-count").textContent = `${specifications.length} ${specifications.length === 1 ? "artifact" : "artifacts"} · Unscored`;
+  $("#specification-grid").innerHTML = specifications.map(specification => {
+    const version = specification.current_version ? `Version ${specification.current_version}` : taxonomyName("specification_statuses", specification.status);
+    return `<article class="project-card specification-card">
+      <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${escapeHTML(version)}</span></div>
+      <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
+      <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <p>${escapeHTML(specification.description)}</p>
+      <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
+      <div class="card-footer"><span>No editorial score</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
+    </article>`;
+  }).join("") || '<div class="notice">No specifications match these filters.</div>';
+  $$('[data-specification]').forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
 }
 
 function finderChoice(key, item) {
@@ -292,7 +341,9 @@ function renderTaxonomy() {
     ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities],
     ["Deployment modes", state.taxonomy.deployment_modes], ["Project statuses", state.taxonomy.project_statuses],
     ["Provenance levels", state.taxonomy.provenance_levels], ["Research confidence", state.taxonomy.research_confidence_levels],
-    ["Source models", state.taxonomy.source_models], ["Licenses and terms", state.taxonomy.licenses]
+    ["Source models", state.taxonomy.source_models], ["Specification types", state.taxonomy.specification_types],
+    ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
+    ["Licenses and terms", state.taxonomy.licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
@@ -322,6 +373,29 @@ function openProject(id) {
   $("#project-dialog").showModal();
 }
 
+function specificationEvidenceLink(item) {
+  if (item.kind === "git_blob") {
+    return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`;
+  }
+  return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>`;
+}
+
+function openSpecification(id) {
+  const specification = state.specifications.find(item => item.id === id);
+  if (!specification) return;
+  const related = specification.related_specifications.map(relatedId => state.specifications.find(item => item.id === relatedId)).filter(Boolean);
+  $("#specification-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>What it standardizes</h3><p>${escapeHTML(specification.standardizes)}</p></section>
+      <section class="detail-block"><h3>What it does not standardize</h3><p>${escapeHTML(specification.does_not_standardize)}</p></section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p>${escapeHTML(specification.license_note)}</p>${specification.license_evidence.map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${specification.evidence.map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
+    </div>`;
+  $("#specification-dialog").showModal();
+}
+
 function activateView(id) {
   $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
@@ -339,6 +413,15 @@ function bindEvents() {
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
+  ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
+  $("#reset-specification-filters").addEventListener("click", () => {
+    $("#specification-search").value = "";
+    $("#specification-type-filter").value = "";
+    $("#specification-scope-filter").value = "";
+    $("#specification-status-filter").value = "";
+    $("#specification-license-filter").value = "";
+    renderSpecifications();
+  });
   $("#reset-filters").addEventListener("click", () => {
     state.directoryRoles = null; $("#project-search").value = ""; $("#family-filter").value = "memory_system"; populateRoleFilter();
     $("#role-filter").value = ""; $("#source-model-filter").value = ""; $("#license-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
@@ -379,8 +462,10 @@ function bindEvents() {
     }
     if (event.target.closest("[data-finder-directory]")) applyFinderToDirectory();
   });
-  $(".dialog-close").addEventListener("click", () => $("#project-dialog").close());
+  $("#project-dialog .dialog-close").addEventListener("click", () => $("#project-dialog").close());
   $("#project-dialog").addEventListener("click", event => { if (event.target === $("#project-dialog")) $("#project-dialog").close(); });
+  $("#specification-dialog .dialog-close").addEventListener("click", () => $("#specification-dialog").close());
+  $("#specification-dialog").addEventListener("click", event => { if (event.target === $("#specification-dialog")) $("#specification-dialog").close(); });
 }
 
 bootstrap().catch(error => {

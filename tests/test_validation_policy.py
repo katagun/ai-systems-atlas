@@ -177,6 +177,32 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("provider_native requires exactly one model backend" in error for error in errors), errors)
 
+    def test_unknown_specification_type_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "specifications.json"
+        specifications = json.loads(path.read_text(encoding="utf-8"))
+        specifications["specifications"][0]["specification_type"] = "marketing_label"
+        self.write_json(path, specifications)
+        self.write_json(root / "web" / "specifications.json", specifications)
+
+        errors = validate(root)
+
+        self.assertTrue(any("unknown specification type" in error for error in errors), errors)
+
+    def test_specification_score_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "specifications.json"
+        specifications = json.loads(path.read_text(encoding="utf-8"))
+        specifications["specifications"][0]["score"] = {"overall": 10}
+        self.write_json(path, specifications)
+        self.write_json(root / "web" / "specifications.json", specifications)
+
+        errors = validate(root)
+
+        self.assertTrue(any("fields differ from schema" in error and "score" in error for error in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

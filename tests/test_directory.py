@@ -13,6 +13,7 @@ class DirectoryTests(unittest.TestCase):
         cls.taxonomy = json.loads((ROOT / "directory" / "taxonomy.json").read_text(encoding="utf-8"))
         cls.document = json.loads((ROOT / "directory" / "projects.json").read_text(encoding="utf-8"))
         cls.evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text(encoding="utf-8"))
+        cls.specifications = json.loads((ROOT / "directory" / "specifications.json").read_text(encoding="utf-8"))
 
     def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]
@@ -165,8 +166,35 @@ class DirectoryTests(unittest.TestCase):
                     self.assertEqual(40, len(item["blob_sha"]))
 
     def test_web_data_matches_directory_data(self) -> None:
-        for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json"):
+        for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json", "specifications.json"):
             self.assertEqual((ROOT / "directory" / name).read_bytes(), (ROOT / "web" / name).read_bytes(), name)
+
+    def test_specifications_are_a_separate_unscored_collection(self) -> None:
+        records = self.specifications["specifications"]
+        expected = {"mcp", "a2a", "ag-ui", "acp", "agents-md", "claude-md", "agent-skills", "agent-plugins"}
+        self.assertLessEqual(expected, {record["id"] for record in records})
+        for record in records:
+            self.assertNotIn("system_family", record, record["id"])
+            self.assertNotIn("score_profile", record, record["id"])
+            self.assertNotIn("score", record, record["id"])
+
+    def test_specification_classification_and_evidence_are_taxonomy_backed(self) -> None:
+        types = {item["id"] for item in self.taxonomy["specification_types"]}
+        scopes = {item["id"] for item in self.taxonomy["specification_scopes"]}
+        statuses = {item["id"] for item in self.taxonomy["specification_statuses"]}
+        licenses = {item["id"] for item in self.taxonomy["licenses"]}
+        records = self.specifications["specifications"]
+        ids = {record["id"] for record in records}
+
+        self.assertEqual(len(records), len(ids))
+        for record in records:
+            self.assertIn(record["specification_type"], types, record["id"])
+            self.assertIn(record["scope"], scopes, record["id"])
+            self.assertIn(record["status"], statuses, record["id"])
+            self.assertTrue(record["evidence"], record["id"])
+            self.assertEqual(set(record["licenses"]), {item["license_id"] for item in record["license_evidence"]})
+            self.assertFalse(set(record["licenses"]) - licenses, record["id"])
+            self.assertFalse(set(record["related_specifications"]) - ids, record["id"])
 
 
 if __name__ == "__main__":

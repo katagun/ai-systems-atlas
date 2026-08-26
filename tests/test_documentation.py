@@ -32,11 +32,13 @@ class DocumentationTests(unittest.TestCase):
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
             "docs/OPERATIONS.md",
+            "docs/SPECIFICATIONS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
             "docs/adr/005-fail-closed-license-drift.md",
             "docs/adr/006-provider-relationships-are-orthogonal.md",
             "docs/adr/007-licenses-are-classification-not-inclusion.md",
+            "docs/adr/008-specifications-are-unscored-artifacts.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

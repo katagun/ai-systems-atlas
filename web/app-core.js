@@ -36,5 +36,17 @@
     return projects.filter(project => matchesProject(project, filters)).sort(compareProjects(filters.sort));
   }
 
-  return { compareProjects, filterAndSortProjects, matchesProject };
+  function filterSpecifications(specifications, filters = {}) {
+    const term = (filters.term || "").trim().toLowerCase();
+    return specifications.filter(specification => {
+      const haystack = JSON.stringify(specification).toLowerCase();
+      return matchesSearchTerm(haystack, term) &&
+        (!filters.type || specification.specification_type === filters.type) &&
+        (!filters.scope || specification.scope === filters.scope) &&
+        (!filters.status || specification.status === filters.status) &&
+        (!filters.license || specification.licenses.includes(filters.license));
+    }).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  return { compareProjects, filterAndSortProjects, filterSpecifications, matchesProject };
 });
