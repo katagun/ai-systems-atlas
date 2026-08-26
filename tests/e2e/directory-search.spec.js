@@ -10,3 +10,16 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await expect(resultNames.filter({ hasText: /^GBrain$/ })).toHaveCount(1);
   await expect(resultNames.filter({ hasText: /^GStack$/ })).toHaveCount(1);
 });
+
+test("canonical and repository links use the AI Systems Atlas slug", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://katagun.github.io/ai-systems-atlas/",
+  );
+  await expect(page.getByRole("link", { name: "GitHub ↗" })).toHaveAttribute(
+    "href",
+    "https://github.com/katagun/ai-systems-atlas",
+  );
+});
