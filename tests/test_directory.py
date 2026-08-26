@@ -147,6 +147,25 @@ class DirectoryTests(unittest.TestCase):
             {item["repo"] for item in exclusions["entries"]},
         )
 
+    def test_gbrain_and_gstack_are_distinct_reviewed_systems(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        projects = {project["id"]: project for project in self.document["projects"]}
+
+        self.assertEqual("agent_memory_service", projects["gbrain"]["primary_role"])
+        self.assertEqual("memory_system", projects["gbrain"]["system_family"])
+        self.assertEqual("open_source", projects["gbrain"]["source_model"])
+        self.assertEqual("provider_agnostic", projects["gbrain"]["provider_relationship"])
+        self.assertTrue(projects["gbrain"]["local_first"])
+        self.assertEqual("coding_agent_workflow", projects["gstack"]["primary_role"])
+        self.assertEqual("agent_system", projects["gstack"]["system_family"])
+        self.assertEqual("mixed_open_source", projects["gstack"]["source_model"])
+        self.assertEqual({"MIT", "OFL-1.1"}, set(projects["gstack"]["licenses"]))
+        self.assertEqual("garrytan/gbrain", projects["gbrain"]["repo"])
+        self.assertEqual("garrytan/gstack", projects["gstack"]["repo"])
+        self.assertNotIn("garrytan/gbrain", {item["repo"] for item in candidates["candidates"]})
+        self.assertNotIn("garrytan/gbrain", {item["repo"] for item in exclusions["entries"]})
+
     def test_data_analysis_batch_has_evidence_backed_dispositions(self) -> None:
         candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
         exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))

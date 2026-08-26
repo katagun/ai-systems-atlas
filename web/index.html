@@ -39,10 +39,10 @@
       </div>
 
       <section class="control-panel" id="directory-controls" aria-label="Directory filters">
-        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search projects and traits" autocomplete="off"></label>
+        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"></label>
         <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
         <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
-        <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name">Name</option></select></label>
+        <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
         <details class="advanced-filter-shell">
           <summary>More filters</summary>
           <div class="advanced-filters">
@@ -54,11 +54,11 @@
             <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
           </div>
         </details>
-        <p class="filter-guidance">Scores compare projects only within the selected family. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+        <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
       </section>
 
       <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
-      <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear</button></div>
+      <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
       <section id="project-grid" class="project-grid" aria-label="Reviewed projects"></section>
     </section>
 
@@ -118,7 +118,7 @@
   </dialog>
 
   <footer><span>AI Systems Atlas</span><span>Systems scored within families. Specifications unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=3.2" defer></script>
-  <script src="app.js?v=3.4" defer></script>
+  <script src="app-core.js?v=3.3" defer></script>
+  <script src="app.js?v=3.5" defer></script>
 </body>
 </html>

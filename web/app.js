@@ -85,9 +85,11 @@ const licenseName = id => taxonomyName("licenses", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
 function populateFilters() {
+  const defaults = AtlasCore.directoryDefaults();
   const family = $("#family-filter");
   state.taxonomy.system_families.forEach(item => family.insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
-  family.value = "memory_system";
+  family.value = defaults.family;
+  $("#sort-filter").value = defaults.sort;
   populateRoleFilter();
   state.taxonomy.agent_relations.forEach(item => $("#agent-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   state.taxonomy.architectures.forEach(item => $("#architecture-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
@@ -95,6 +97,7 @@ function populateFilters() {
   state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
   state.taxonomy.licenses.filter(item => publishedLicenses.has(item.id)).forEach(item => $("#license-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`));
+  updateScoreSortAvailability();
 }
 
 function populateRoleFilter() {
@@ -137,6 +140,35 @@ function updateScoreSortAvailability() {
   if (!hasFamily && $("#sort-filter").value === "score") $("#sort-filter").value = "name";
 }
 
+function updateAdvancedFilterSummary() {
+  const active = [
+    $("#source-model-filter").value,
+    $("#license-filter").value,
+    $("#agent-filter").value,
+    $("#architecture-filter").value,
+    $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
+    $("#local-filter").checked ? "local" : "",
+  ].filter(Boolean).length;
+  $(".advanced-filter-shell summary").textContent = active ? `More filters · ${active} active` : "More filters";
+}
+
+function applyDirectoryDefaults() {
+  const defaults = AtlasCore.directoryDefaults();
+  state.directoryRoles = null;
+  $("#project-search").value = defaults.term;
+  $("#family-filter").value = defaults.family;
+  $("#role-filter").value = defaults.role;
+  populateRoleFilter();
+  $("#source-model-filter").value = defaults.sourceModel;
+  $("#license-filter").value = defaults.license;
+  $("#agent-filter").value = defaults.agent;
+  $("#architecture-filter").value = defaults.architecture;
+  $("#status-filter").value = defaults.status;
+  $("#sort-filter").value = defaults.sort;
+  $("#local-filter").checked = defaults.localOnly;
+  updateScoreSortAvailability();
+}
+
 function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
@@ -164,6 +196,7 @@ function filteredProjects() {
 }
 
 function renderProjects() {
+  updateAdvancedFilterSummary();
   const projects = filteredProjects();
   const family = $("#family-filter").value;
   const finderContext = state.directoryRoles ? " · Finder match" : "";
@@ -407,6 +440,7 @@ function bindEvents() {
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $("#family-filter").addEventListener("input", () => {
     state.directoryRoles = null;
+    $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
     renderProjects();
@@ -423,9 +457,7 @@ function bindEvents() {
     renderSpecifications();
   });
   $("#reset-filters").addEventListener("click", () => {
-    state.directoryRoles = null; $("#project-search").value = ""; $("#family-filter").value = "memory_system"; populateRoleFilter();
-    $("#role-filter").value = ""; $("#source-model-filter").value = ""; $("#license-filter").value = ""; $("#agent-filter").value = ""; $("#architecture-filter").value = "";
-    $("#status-filter").value = "active"; $("#sort-filter").value = "score"; updateScoreSortAvailability(); $("#local-filter").checked = false;
+    applyDirectoryDefaults();
     renderProjects();
   });
   $("#finder-content").addEventListener("click", event => {

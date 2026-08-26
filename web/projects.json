@@ -1489,12 +1489,16 @@
       "name": "GStack",
       "repo": "garrytan/gstack",
       "url": "https://github.com/garrytan/gstack",
-      "description": "Opinionated roles, skills, QA, review, and release workflows for coding agents.",
+      "description": "Cross-host AI engineering workflow with generated skills, browser automation, QA, security, release, and persistent-learning integrations.",
       "primary_role": "coding_agent_workflow",
-      "secondary_roles": [],
+      "secondary_roles": [
+        "browser_computer_agent",
+        "multi_agent_orchestrator"
+      ],
       "agent_relation": "coding_workflow",
       "architectures": [
         "plain_files",
+        "event_log",
         "git_versioned"
       ],
       "retrieval_modes": [
@@ -1506,65 +1510,73 @@
       ],
       "memory_lifecycle": [
         "human_curated",
-        "versioned"
+        "append_only",
+        "versioned",
+        "decay"
       ],
-      "canonical_data": "Git-versioned workflow files and agent artifacts",
+      "canonical_data": "Git-versioned skills, plans, review and QA artifacts, browser evidence, and append-only learning records",
       "deployment": [
-        "self_hosted"
+        "local_cli",
+        "cloud_optional"
       ],
       "agent_interfaces": [
-        "terminal"
+        "terminal",
+        "ide"
       ],
       "execution_boundaries": [
-        "host"
+        "host",
+        "remote_cloud"
       ],
       "agent_capabilities": [
         "code_editing",
         "shell_execution",
+        "browser_control",
         "multi_agent",
+        "persistent_state",
         "workflows"
       ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 129581,
+      "stars": 129670,
       "stars_verified_at": "2026-08-25",
       "historical_stars": null,
-      "current_repo_note": null,
+      "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged.",
       "score": {
-        "task_reliability": 7.8,
-        "tool_use": 8.4,
-        "autonomy": 7.3,
-        "human_control": 8.7,
-        "observability_recovery": 8.4,
-        "data_sovereignty": 8.8,
-        "interoperability": 8.2,
-        "maturity": 8.6,
-        "overall": 8.26
+        "task_reliability": 8.0,
+        "tool_use": 9.2,
+        "autonomy": 8.2,
+        "human_control": 9.0,
+        "observability_recovery": 8.9,
+        "data_sovereignty": 8.7,
+        "interoperability": 9.0,
+        "maturity": 8.2,
+        "overall": 8.63
       },
       "strengths": [
-        "Excellent end-to-end software process",
-        "Strong role separation and artifact handoffs",
-        "Codex and multi-agent support"
+        "End-to-end, evidence-bearing delivery process from product framing through review, QA, release, and retrospection",
+        "Local browser automation, security review, verification gates, and recovery-oriented tooling",
+        "Generated support across ten coding-agent hosts plus pair-agent and cross-model review workflows"
       ],
       "weaknesses": [
-        "Not a knowledge store",
-        "Memory is workflow-specific",
-        "Large opinionated surface area"
+        "The large workflow and skill surface is strongly opinionated and requires deliberate adoption",
+        "The primary experience remains Claude Code-oriented despite generated multi-host support",
+        "A fast-moving main branch, no formal GitHub releases, and partial Windows support increase upgrade risk"
       ],
-      "why_it_matters": "Provides the orchestration discipline Cognosaic should borrow without confusing coding workflow with memory.",
+      "why_it_matters": "Shows how structured roles, artifacts, safety gates, and verification turn general coding agents into a repeatable software-delivery system.",
       "research_confidence": "high",
-      "verified_at": "2026-08-23",
-      "pushed_at": "2026-08-25T03:35:13Z",
-      "forks": 19509,
-      "open_issues": 794,
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-25T21:14:53Z",
+      "forks": 19518,
+      "open_issues": 796,
       "metadata_verified_at": "2026-08-25",
       "github_detected_license": "MIT",
       "licenses": [
-        "MIT"
+        "MIT",
+        "OFL-1.1"
       ],
-      "source_model": "open_source",
+      "source_model": "mixed_open_source",
       "license_review_status": "verified"
     },
     {
@@ -3887,6 +3899,111 @@
       "open_issues": 30,
       "metadata_verified_at": "2026-08-25",
       "github_detected_license": "NOASSERTION",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "gbrain",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "GBrain",
+      "repo": "garrytan/gbrain",
+      "url": "https://github.com/garrytan/gbrain",
+      "description": "Local-first agent memory service with Git-versioned Markdown, hybrid retrieval, typed knowledge graphs, synthesis, citations, gap analysis, and MCP access.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [
+        "memory_bridge",
+        "context_graph_engine"
+      ],
+      "agent_relation": "external_memory",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "vector_index",
+        "graph_db",
+        "full_text",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal",
+        "structured_query",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors",
+        "scheduled",
+        "audio",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "upsert_rewrite",
+        "supersession",
+        "versioned",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "Git-versioned Markdown brain repositories, with PGLite or Postgres retrieval projections, typed links, citations, and durable background-job state",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 29088,
+      "stars_verified_at": "2026-08-25",
+      "historical_stars": null,
+      "current_repo_note": "The Git repository is the canonical project and install source; the unrelated npm package named gbrain is not this system.",
+      "score": {
+        "second_brain_fit": 9.0,
+        "data_sovereignty": 9.5,
+        "interoperability": 9.5,
+        "memory_intelligence": 9.5,
+        "operational_simplicity": 7.0,
+        "maturity": 7.0,
+        "overall": 8.74
+      },
+      "strengths": [
+        "Git-versioned Markdown remains the system of record while PGLite or Postgres provides hybrid lexical, vector, and graph retrieval",
+        "Synthesis, citations, gap analysis, contradiction checks, consolidation jobs, and durable agent-facing memory operations go beyond raw chunk search",
+        "Local CLI, stdio and HTTP MCP, broad model and embedding providers, and self-hosted deployment preserve strong portability"
+      ],
+      "weaknesses": [
+        "The very broad CLI, server, graph, job, skill, evaluation, and integration surface creates meaningful setup and upgrade complexity",
+        "Semantic retrieval, extraction, synthesis, and some ingestion paths depend on optional external model or SaaS providers",
+        "The project is young and changing quickly despite strong adoption, extensive tests, and unusually detailed operational documentation",
+        "Some enrichment paths need paid model services, and durable subagent loops remain Anthropic-specific"
+      ],
+      "why_it_matters": "Combines human-owned, Git-versioned memory with production-oriented retrieval, graph, synthesis, provenance, and agent integration in one local-first system.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-25",
+      "pushed_at": "2026-08-26T02:27:59Z",
+      "forks": 4308,
+      "open_issues": 184,
+      "metadata_verified_at": "2026-08-25",
+      "github_detected_license": "MIT",
       "licenses": [
         "MIT"
       ],
