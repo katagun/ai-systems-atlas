@@ -1,7 +1,7 @@
 [project]
 name = "ai-systems-atlas"
 version = "0.1.0"
-description = "A reviewed atlas of operational memory and AI agent systems"
+description = "A reviewed atlas of operational memory, agent, and assistant systems"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"

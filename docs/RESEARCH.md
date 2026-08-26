@@ -2,13 +2,12 @@
 
 ## Selection method
 
-The catalog is coverage-weighted rather than a naïve star leaderboard. Popularity is tracked separately, but a selected project must contribute a distinct architectural or operational lesson. Memory and agent projects are evaluated within separate families.
+The catalog is coverage-weighted rather than a naïve star leaderboard. Popularity is tracked separately, but a selected project must contribute a distinct architectural or operational lesson. Memory, agent, and assistant projects are evaluated only within their separate families and score profiles.
 
 ### Memory-system research set
 
 | Project | Primary lesson | Strongest contribution | Principal weakness |
 |---|---|---|---|
-| GStack | Coding-agent process | Role separation and artifact handoffs from discovery through release | It is not a durable knowledge store |
 | Letta Code | Embedded stateful agents | Memory, identity, skills, schedules, dreaming, and Git-tracked agent state | Self-editing memory can drift; current codebase is newer than the historically popular repository |
 | Mem0 | External agent memory | Simple production-oriented API, scoped memories, multi-signal retrieval | Opaque extracted facts can become a second source of truth |
 | Graphiti | Temporal context graph | Provenance, validity windows, changing truth, and as-of queries | Operational graph/LLM complexity |
@@ -33,6 +32,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Pi | Minimal extensible harness | Small reusable agent/model/TUI packages with deep extension seams | No built-in permission boundary; sandboxing is external |
 | Goose | Local extensible agent | MCP-native local tools for code and general tasks | Reliability and observability vary with extensions and models |
 | Kiro | Spec-driven coding | Reviewable specs, steering files, hooks, powers, IDE/CLI, and MCP | Proprietary AWS service with remote model processing |
+| GStack | Coding-agent process | Role separation and artifact handoffs from discovery through release | It is a workflow layer rather than a durable knowledge store or full runtime |
 | Browser Use | Browser agency | Rich browser-control primitives and local/cloud execution choices | Websites are nondeterministic and remote browsers complicate privacy |
 | GPT Researcher | Research agency | Multi-step web research with cited report artifacts | Source judgment and steering still require a human |
 | OpenClaw | Personal agent runtime | Local gateway joins durable sessions, tools, schedules, channels, skills, and devices | Host tools and inbound messages create a broad security boundary |
@@ -42,6 +42,19 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | CrewAI | Multi-agent coordination | Accessible role-based crews plus explicit flows | Extra agents can amplify nondeterminism and debugging cost |
 | Microsoft Agent Framework | Workflow convergence | Multi-agent workflows, state, observability, and .NET/Python support | Newer consolidated framework with cloud-oriented integrations |
 | smolagents | Minimal agent abstraction | Understandable code-agent design and flexible local/sandbox execution | Persistence, recovery, and policy are mostly left to applications |
+
+### Assistant-system research set
+
+| Product | Primary lesson | Strongest contribution | Principal weakness |
+|---|---|---|---|
+| ChatGPT | Mature general assistant | Broad tools, projects, memory, research, and cross-device product maturity | Provider-native service with limited portability and inspectability |
+| Claude | Controlled contextual collaboration | Explicit projects, editable memory, citations, connected research, and context import/export | Features and limits vary by plan; all operational state remains service-managed |
+| Gemini Apps | Ecosystem-integrated assistance | Deep Research, Google-connected context, Gems, personalization, and scheduled or multi-step work | Consumer, Workspace, and experimental product boundaries are easy to conflate |
+| Microsoft Copilot | Ubiquitous personal companion | Reach across standalone apps, Windows, mobile, web, and Microsoft surfaces | The Copilot brand spans many separately governed products and capability sets |
+| DeepSeek | Open-model/closed-product boundary | Accessible reasoning, search, files, and synchronized web/mobile chat | Hosted product governance and continuity controls are comparatively limited |
+| Z.ai | Regional provider coverage | GLM-native chat, file input, deliberate reasoning, and an integrated coding entry point | Thin public product documentation and limited evidence for durable context or portability |
+| Amazon Quick | Governed enterprise assistance | Organizational knowledge, analytics, actions, custom agents, and AWS administration | Broad evolving bundle with proprietary cloud operation |
+| T3 Chat | Multi-provider workspace | First-class model choice in a simple persistent client | Narrower tools, governance, and autonomous workflows than major provider assistants |
 
 ## Architectural synthesis for local-first memory
 

@@ -4,7 +4,7 @@
 
 ## Context
 
-The Atlas needs to explain the contracts that connect agents, tools, clients, repositories, and extension packages. MCP, A2A, AGENTS.md, and SKILL.md are important to system selection, but they are not deployable memory or agent systems. Forcing them into `system_family` would break the operational taxonomy; giving them scores would create meaningless comparisons between wire protocols and Markdown conventions.
+The Atlas needs to explain the contracts that connect agents, tools, clients, repositories, and extension packages. MCP, A2A, AGENTS.md, and SKILL.md are important to system selection, but they are not deployable memory, agent, or assistant systems. Forcing them into `system_family` would break the operational taxonomy; giving them scores would create meaningless comparisons between wire protocols and Markdown conventions.
 
 ## Decision
 

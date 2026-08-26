@@ -22,19 +22,20 @@ Synchronization is a write operation; the remaining commands are verification.
 GITHUB_TOKEN=... uv run python scripts/update_directory.py
 ```
 
-The token is optional locally but recommended because GitHub search has a low anonymous rate limit. Never print or commit the token.
+The token is optional locally but recommended because GitHub search has a low anonymous rate limit. Never print or commit the token. Official non-GitHub discovery feeds are allowlisted in `directory/discovery-sources.json` and require no credentials.
 
 The refresh is transactional at the repository level:
 
 1. update live metadata in memory for projects with GitHub repositories;
 2. require at least 80% project metadata success;
-3. require at least one successful discovery query;
-4. detect license drift, mark evidence `review_required`, and open a durable incident;
-5. preserve prior candidates and unresolved license-review incidents;
-6. write canonical JSON and synchronize published web copies;
-7. validate and test in CI before committing.
+3. require at least one successful GitHub discovery query and one successful official feed when sources are configured;
+4. validate source and redirect hosts before parsing only recent official feed items through bounded, doctype-free XML, launch-signal, and relevance checks;
+5. detect license drift, mark evidence `review_required`, and open a durable incident;
+6. preserve prior candidates and unresolved license-review incidents;
+7. write canonical JSON and synchronize published web copies;
+8. validate and test in CI before committing.
 
-Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Automated refreshes never edit editorial fields.
+Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages. Automated refreshes never edit editorial fields.
 
 ## Review a candidate
 

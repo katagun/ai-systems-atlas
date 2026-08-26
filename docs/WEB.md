@@ -23,13 +23,13 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 
 ## Behavioral contracts
 
-- The default directory shows every active family alphabetically, with cross-family scores hidden.
+- The default directory shows every active memory, agent, and assistant family alphabetically, with cross-family scores hidden.
 - A one-character directory search matches prefixes of words in system names; two-character searches require a complete word to avoid false positives such as `Pi` inside `API`.
 - Choosing a family clears any role or Finder-role constraint; “Clear filters” restores the all-family active-system default.
 - “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.
 - Directory role filters list only roles represented by published projects; candidate-only taxonomy roles remain discoverable in Taxonomy without offering empty filters.
 - Selecting all families hides score values and disables score sorting.
-- Finder recommendations consider only active projects in the selected family and role set.
+- Finder recommendations consider only active projects in the selected family and role set. Family-specific ranking code must use an explicit branch; never assume every non-memory project has agent-operation fields.
 - Add a Finder goal for a new role only after at least one active reviewed project can satisfy it.
 - Finder priorities affect the shortlist; they are preferences, not hard eligibility filters.
 - “Browse matches” preserves every eligible finder role. A manual family or role change clears that temporary role set.
@@ -82,10 +82,10 @@ uv run python -m http.server 8765 --directory web
 Then verify in a browser:
 
 1. search by name and editorial text;
-2. switch memory, agent, and all-family views;
+2. switch memory, agent, assistant, and all-family views;
 3. confirm all-family scores are hidden;
 4. combine role, source-model, license, architecture, status, and local-first filters;
-5. complete at least one memory and one agent finder path;
+5. complete at least one memory, agent, and assistant finder path;
 6. open the matching directory and confirm its role set;
 7. inspect project details and evidence links;
 8. navigate taxonomy groups;

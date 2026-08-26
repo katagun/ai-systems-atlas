@@ -4,7 +4,10 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 89 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 105 provisional records in small, evidence-backed batches.
+- [ ] Review the assistant third pass: Grok, GroqChat, and Microsoft 365 Copilot.
+- [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
+- [ ] Review the proprietary memory batch: NotebookLM and Zep Cloud, preserving their product boundaries from Open Notebook and Graphiti.
 - [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
@@ -23,6 +26,14 @@ This is the source of truth for actionable repository work. Policy and field def
 ## Later
 
 - [ ] Reassess an unscored ecosystem index for model providers, plain API SDKs, adapters, and observability clients after provider traits have been used in real reviews.
+
+## Completed on 2026-08-26
+
+- [x] Publish Claude, Gemini Apps, Microsoft Copilot, DeepSeek, and Z.ai as evidence-backed general assistants with explicit product boundaries.
+- [x] Add assistant systems as a separately scored family with general, enterprise-work, and multi-model-chat roles.
+- [x] Publish ChatGPT, Amazon Quick, and T3 Chat as the first evidence-backed assistant comparison across all three roles.
+- [x] Add authoritative feed discovery for non-GitHub launches without allowing automation to make editorial conclusions.
+- [x] Seed assistant, managed-platform, memory, agent-workflow, and framework candidates from authoritative product boundaries.
 
 ## Completed on 2026-08-25
 

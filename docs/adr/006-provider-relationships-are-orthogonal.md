@@ -1,14 +1,14 @@
 # ADR 006: Model-provider relationships are orthogonal traits
 
-**Status:** Accepted
+**Status:** Accepted; family count extended by [ADR 009](009-assistant-systems-are-a-distinct-family.md)
 
 ## Context
 
-Operational agent systems range from provider-native SDKs to runtimes that support several model backends. Plain model API clients, providers, and observability clients are adjacent ecosystem components, but they do not independently plan or act through tools. Treating a provider or its SDK as a third system family would mix vendor identity with system outcome and would require a score profile that has no coherent comparison target.
+Operational agent systems range from provider-native SDKs to runtimes that support several model backends. Plain model API clients, providers, and observability clients are adjacent ecosystem components, but they do not independently plan or act through tools. Treating a provider or its SDK as another system family would mix vendor identity with system outcome and would require a score profile that has no coherent comparison target.
 
 ## Decision
 
-Keep `memory_system` and `agent_system` as the only system families. Describe a reviewed project's coupling with two optional, orthogonal fields:
+Keep provider identity out of system-family classification. The operational families are defined by outcome—initially `memory_system` and `agent_system`, with `assistant_system` added by ADR 009. Describe a reviewed project's coupling with two optional, orthogonal fields:
 
 - `provider_relationship`: `provider_native`, `multi_provider`, or `provider_agnostic`;
 - `model_backends`: one or more reviewed backend identifiers from the taxonomy.

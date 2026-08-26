@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25",
+  "generated_at": "2026-08-26",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -3385,6 +3385,638 @@
         "LicenseRef-Commercial"
       ],
       "source_model": "open_core",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "amazon-quick",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Amazon Quick",
+      "repo": null,
+      "url": "https://aws.amazon.com/quick/",
+      "description": "AWS work assistant combining organizational knowledge, research, analytics, actions, custom agents, skills, and scheduled workflows.",
+      "primary_role": "enterprise_work_assistant",
+      "secondary_roles": [
+        "general_ai_assistant"
+      ],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "architectures": [
+        "graph_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "hybrid",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, spaces, organizational indexes, knowledge graph, agent configurations, and workflow artifacts",
+      "deployment": [
+        "desktop",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Amazon Quick is the current product boundary that evolved from QuickSight; it also integrates Amazon Q Business indexes and capabilities.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.6,
+        "context_continuity": 8.8,
+        "tools_integrations": 9.2,
+        "human_control": 8.6,
+        "data_governance": 9.0,
+        "interoperability": 8.5,
+        "usability_access": 8.2,
+        "maturity": 8.1,
+        "overall": 8.67
+      },
+      "strengths": [
+        "Combines enterprise search, cited research, analytics, applications, and actions in one governed workspace",
+        "Custom agents, scheduled work, MCP and OpenAPI connections, and human-in-the-loop automation cover broad work patterns",
+        "Permission-aware organizational data and AWS administration provide a strong enterprise control boundary"
+      ],
+      "weaknesses": [
+        "Proprietary managed service with limited implementation inspectability",
+        "The broad product bundle and evolving desktop preview make capability boundaries and maturity uneven",
+        "Organizational context and long-term personalization are service-managed rather than local-first"
+      ],
+      "why_it_matters": "A major hyperscaler reference for an enterprise assistant that unifies knowledge, agent creation, business actions, analytics, and persistent work context.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "chatgpt",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "ChatGPT",
+      "repo": null,
+      "url": "https://chatgpt.com/",
+      "description": "OpenAI's general-purpose assistant for conversation, files, research, connected applications, memory, projects, and tool-using work.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, saved memory, projects, connected-app context, tasks, and generated work artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the end-user ChatGPT product; Codex and OpenAI Agents SDK remain distinct operational systems.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.1,
+        "context_continuity": 8.8,
+        "tools_integrations": 9.3,
+        "human_control": 8.4,
+        "data_governance": 7.6,
+        "interoperability": 7.8,
+        "usability_access": 9.2,
+        "maturity": 9.6,
+        "overall": 8.73
+      },
+      "strengths": [
+        "Broad, mature assistant experience spanning research, files, creation, connected applications, and tool-using work",
+        "Projects, saved memory, recurring tasks, and cross-device clients support continuity across sessions",
+        "Strong usability, documentation, and ecosystem adoption"
+      ],
+      "weaknesses": [
+        "Operational implementation and model runtime are proprietary and provider-native",
+        "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
+        "Service-managed context and memory reduce data portability and local control"
+      ],
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "claude",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Claude",
+      "repo": null,
+      "url": "https://claude.ai/",
+      "description": "Anthropic's consumer assistant for conversation, projects, files, research, connected applications, artifacts, and cross-chat memory.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, editable memory entries, project knowledge, connected-app context, files, and artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the Claude Free, Pro, and Max end-user product; Claude for Work, Claude Code, and Claude Agent SDK have distinct operational and contractual boundaries.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.2,
+        "context_continuity": 9.2,
+        "tools_integrations": 9.1,
+        "human_control": 9.1,
+        "data_governance": 8.3,
+        "interoperability": 8.5,
+        "usability_access": 9.2,
+        "maturity": 9.4,
+        "overall": 9.01
+      },
+      "strengths": [
+        "Projects, project knowledge, cross-chat search, and editable memory provide strong continuity with visible user controls",
+        "Research combines iterative web and connected-app retrieval with citations and explicit steering",
+        "Files, artifacts, connected applications, and memory import/export support broad knowledge-work workflows"
+      ],
+      "weaknesses": [
+        "The operational implementation and model runtime are proprietary and provider-native",
+        "Memory, research, integrations, and usage limits vary by plan and rollout stage",
+        "Service-managed context and project knowledge are not local-first despite export and deletion controls"
+      ],
+      "why_it_matters": "A leading general assistant reference for explicit projects, inspectable memory controls, connected research, and portable user context within a polished conversational workspace.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "deepseek",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "DeepSeek",
+      "repo": null,
+      "url": "https://chat.deepseek.com/",
+      "description": "DeepSeek's hosted web and mobile assistant with synchronized conversations, reasoning modes, web search, and file upload.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "deepseek"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "service-managed account, synchronized chat history, uploaded files, and generated responses",
+      "deployment": [
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "partial",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the proprietary DeepSeek Web and App product; open model weights, the API platform, DeepSeek Harness, and downstream deployments are separate boundaries.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.4,
+        "context_continuity": 7.0,
+        "tools_integrations": 7.4,
+        "human_control": 7.6,
+        "data_governance": 5.9,
+        "interoperability": 6.2,
+        "usability_access": 8.5,
+        "maturity": 8.2,
+        "overall": 7.41
+      },
+      "strengths": [
+        "Reasoning and non-reasoning modes cover both concise conversation and more deliberate problem solving",
+        "Web search, file upload, text extraction, and cross-platform history provide a practical general-assistant baseline",
+        "Free web and mobile access makes the hosted product unusually accessible"
+      ],
+      "weaknesses": [
+        "The assistant service is proprietary even though separate DeepSeek model releases use open-weight licenses",
+        "Durable projects, editable extracted memory, connectors, and broad action integrations are not documented",
+        "Service-managed data and limited operational transparency constrain governance and portability"
+      ],
+      "why_it_matters": "A significant provider-native assistant whose open-weight model ecosystem and proprietary hosted product must be represented as separate licensing and operational boundaries.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "gemini-apps",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Gemini Apps",
+      "repo": null,
+      "url": "https://gemini.google.com/",
+      "description": "Google's general assistant for conversation, files, Deep Research, connected applications, personalization, Gems, and scheduled or multi-step work.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "google"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "hybrid",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, activity, personalization, Gems, notebooks, connected-app context, files, schedules, and generated artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers Gemini Apps for individual users; Gemini in Workspace, Gemini Enterprise, Gemini CLI, Google ADK, and the Gemini API remain distinct products.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 9.0,
+        "context_continuity": 9.0,
+        "tools_integrations": 9.5,
+        "human_control": 8.7,
+        "data_governance": 8.1,
+        "interoperability": 8.4,
+        "usability_access": 9.2,
+        "maturity": 9.5,
+        "overall": 8.92
+      },
+      "strengths": [
+        "Deep Research can combine web, file, Gmail, Drive, and NotebookLM sources with an editable research plan",
+        "Connected Apps, Gems, personalization, schedules, and multi-step mobile actions span a broad assistant surface",
+        "Activity, personalization, exports, and connected-app controls provide meaningful user management options"
+      ],
+      "weaknesses": [
+        "The operational implementation and model runtime are proprietary and Google-native",
+        "Capabilities and data treatment vary across personal, work, school, plan, region, and experimental surfaces",
+        "The breadth of overlapping Google AI products makes the individual Gemini Apps boundary easy to conflate with Workspace or enterprise offerings"
+      ],
+      "why_it_matters": "A leading ecosystem assistant that joins web research, personal Google context, reusable Gems, multimodal creation, and scheduled or multi-step actions.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "microsoft-copilot",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Microsoft Copilot",
+      "repo": null,
+      "url": "https://copilot.microsoft.com/",
+      "description": "Microsoft's personal AI companion across web, desktop, mobile, and selected Microsoft surfaces, with files, creation, search, memory, and multi-step tasks.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed conversations, activity history, personalization, uploaded files, connected Microsoft context, tasks, and generated content",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers consumer Microsoft Copilot under its individual-use terms; Microsoft 365 Copilot, Copilot Studio, Security Copilot, GitHub Copilot, and Azure agent services remain distinct products.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.7,
+        "context_continuity": 8.5,
+        "tools_integrations": 9.1,
+        "human_control": 8.4,
+        "data_governance": 7.9,
+        "interoperability": 7.8,
+        "usability_access": 9.1,
+        "maturity": 9.3,
+        "overall": 8.58
+      },
+      "strengths": [
+        "Broad availability across standalone apps, web, Windows, mobile, and conversations embedded in other Microsoft surfaces",
+        "Files, creation, web-grounded answers, personalization, and multi-step tasks support varied everyday work",
+        "Dedicated Copilot terms and privacy controls make the consumer product boundary more explicit than the wider Copilot brand"
+      ],
+      "weaknesses": [
+        "The Copilot brand spans many separately governed products, making capability and data-boundary communication difficult",
+        "Features, models, integrations, and memory behavior vary by account, subscription, platform, and region",
+        "The operational implementation is proprietary and service-managed with limited portability"
+      ],
+      "why_it_matters": "A major consumer assistant reference whose reach across Microsoft devices and applications is operationally distinct from the enterprise Microsoft 365 Copilot product.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "t3-chat",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "T3 Chat",
+      "repo": null,
+      "url": "https://t3.chat/",
+      "description": "Multi-model chat workspace with provider choice, persistent and temporary threads, attachments, profiles, and optional web search.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "google",
+        "openai",
+        "openrouter"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "service-managed threads, attachments, profiles, preferences, and generated chat artifacts",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "T3 Chat is the hosted assistant product; the separately open-source T3 Code control plane is a coding-agent workflow candidate.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.1,
+        "context_continuity": 7.8,
+        "tools_integrations": 6.8,
+        "human_control": 7.8,
+        "data_governance": 7.0,
+        "interoperability": 9.0,
+        "usability_access": 8.7,
+        "maturity": 7.8,
+        "overall": 7.82
+      },
+      "strengths": [
+        "First-class choice across several major model-provider ecosystems",
+        "Clean persistent and temporary chat workflows with attachments and reusable profiles",
+        "Simple interface lowers the friction of comparing and switching models"
+      ],
+      "weaknesses": [
+        "Bounded search and tool calls do not provide the autonomous work loop of a general agent",
+        "Hosted proprietary service with limited implementation and storage inspectability",
+        "Tool and enterprise-integration breadth is narrower than larger assistant platforms"
+      ],
+      "why_it_matters": "A useful comparison point for assistant products whose primary value is a consistent multi-provider workspace rather than owning a model or autonomous runtime.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "z-ai",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Z.ai",
+      "repo": null,
+      "url": "https://chat.z.ai/",
+      "description": "Z.ai's hosted GLM assistant for conversation, file input, deliberate reasoning, model selection, and integrated coding work.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "z_ai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "service-managed account, chat history, uploaded files, preferences, and generated conversation or coding artifacts",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "limited",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the hosted chat.z.ai assistant surface; Z.ai's API services, ZCode product boundary, and separately licensed GLM model releases require independent review.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.0,
+        "context_continuity": 6.8,
+        "tools_integrations": 7.7,
+        "human_control": 7.4,
+        "data_governance": 6.4,
+        "interoperability": 6.8,
+        "usability_access": 8.2,
+        "maturity": 7.5,
+        "overall": 7.35
+      },
+      "strengths": [
+        "A low-friction hosted assistant exposes model selection, file input, and deliberate reasoning without requiring API setup",
+        "The integrated ZCode entry point connects general conversation with a more focused coding workflow",
+        "The public product exposes current terms, privacy information, and chat-history management"
+      ],
+      "weaknesses": [
+        "Public product documentation does not yet establish durable projects, extracted memory, rich connectors, or broad action tools",
+        "The relationship among chat.z.ai, ZCode, API services, and separately released GLM models requires careful boundary maintenance",
+        "Hosted internals and data portability are limited, and operational evidence is thinner than for more established assistants"
+      ],
+      "why_it_matters": "A notable GLM-native assistant and useful coverage point for an ecosystem that is underrepresented by directories focused only on US provider products.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-26",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
       "license_review_status": "verified"
     },
     {

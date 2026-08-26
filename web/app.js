@@ -9,7 +9,8 @@ const projectLocation = project => project.repo || new URL(project.url).hostname
 
 const FINDER_FAMILIES = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
-  { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" }
+  { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
+  { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" }
 ];
 
 const FINDER_GOALS = {
@@ -27,6 +28,11 @@ const FINDER_GOALS = {
     { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
     { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
     { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
+  ],
+  assistant_system: [
+    { id: "general_assistance", label: "Use one broad AI workspace", description: "A general assistant for research, files, creation, memory, and connected tools.", roles: ["general_ai_assistant"] },
+    { id: "enterprise_work", label: "Work across organizational context", description: "A governed assistant grounded in company data, applications, and business actions.", roles: ["enterprise_work_assistant"] },
+    { id: "model_choice", label: "Use several models in one place", description: "A consistent chat workspace with first-class model and provider choice.", roles: ["multi_model_chat_client"] }
   ]
 };
 
@@ -43,6 +49,13 @@ const FINDER_PRIORITIES = {
     { id: "developer", label: "Composable developer framework", description: "Prefer libraries and APIs for building a custom agent product." },
     { id: "local", label: "Local execution and control", description: "Prefer local-first agents that can operate on the host." },
     { id: "control", label: "Human control and recovery", description: "Prefer approvals, observability, checkpoints, and recoverability." },
+    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+  ],
+  assistant_system: [
+    { id: "tools", label: "Tools and connected apps", description: "Prefer assistants that work across files, search, applications, and actions." },
+    { id: "continuity", label: "Context and memory", description: "Prefer durable projects, conversation continuity, memory controls, and provenance." },
+    { id: "governance", label: "Control and governance", description: "Prefer strong consent, retention, administration, privacy, and deletion controls." },
+    { id: "portable", label: "Model and data portability", description: "Prefer model choice, export, APIs, protocols, and open connectors." },
     { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
   ]
 };
@@ -82,6 +95,7 @@ const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
 const sourceModelName = id => taxonomyName("source_models", id);
 const licenseName = id => taxonomyName("licenses", id);
+const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
 function populateFilters() {
@@ -172,10 +186,11 @@ function applyDirectoryDefaults() {
 function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
+  const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
   const licensed = state.projects.filter(project => project.license_review_status === "verified").length;
   $("#hero-kicker").textContent = `${state.projects.length} reviewed systems`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [licensed, "license-reviewed"]
+    [memories, "memory"], [agents, "agents"], [assistants, "assistants"], [licensed, "license-reviewed"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
 }
 
@@ -200,7 +215,8 @@ function renderProjects() {
   const projects = filteredProjects();
   const family = $("#family-filter").value;
   const finderContext = state.directoryRoles ? " · Finder match" : "";
-  const scoreContext = family ? ` · ${family === "memory_system" ? "Memory" : "Agent"} score${finderContext}` : " · Scores hidden across families";
+  const selectedProfile = state.taxonomy.score_profiles.find(profile => profile.family === family);
+  const scoreContext = family ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}` : " · Scores hidden across families";
   $("#result-count").textContent = `${projects.length} ${projects.length === 1 ? "project" : "projects"}${scoreContext}`;
   $("#project-grid").innerHTML = projects.map(project => {
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
@@ -264,8 +280,8 @@ function renderFinder() {
   const { step, answers } = state.finder;
   let content;
   if (step === 0) {
-    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Memory systems preserve knowledge. Agent systems plan and act through tools.</p></div>
-      <div class="finder-choice-grid two-up">${FINDER_FAMILIES.map(item => finderChoice("family", item)).join("")}</div>`;
+    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, or assist interactively across everyday tasks.</p></div>
+      <div class="finder-choice-grid family-grid">${FINDER_FAMILIES.map(item => finderChoice("family", item)).join("")}</div>`;
   } else if (step === 1) {
     const choices = FINDER_GOALS[answers.family];
     content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(familyName(answers.family))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
@@ -289,10 +305,17 @@ function priorityBoost(project, priority) {
     if (priority === "portable") return project.score.interoperability / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
     return project.score.overall / 3;
   }
-  if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
-  if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-  if (priority === "local") return (project.local_first ? 3 : 0) + (project.execution_boundaries.includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
-  if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
+  if (project.system_family === "agent_system") {
+    if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
+    if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
+    if (priority === "local") return (project.local_first ? 3 : 0) + (project.execution_boundaries.includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
+    if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
+    return project.score.overall / 3;
+  }
+  if (priority === "tools") return project.score.tools_integrations / 2;
+  if (priority === "continuity") return project.score.context_continuity / 2;
+  if (priority === "governance") return project.score.data_governance / 3 + project.score.human_control / 4;
+  if (priority === "portable") return project.score.interoperability / 1.8;
   return project.score.overall / 3;
 }
 
@@ -303,10 +326,15 @@ function recommendationReasons(project, priority) {
     if (project.human_editable) reasons.push("Human-editable data");
     if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity}/10`);
     if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
-  } else {
+  } else if (project.system_family === "agent_system") {
     const interfaces = project.agent_interfaces.slice(0, 2).map(item => taxonomyName("agent_interfaces", item));
     reasons.push(...interfaces);
     if (priority === "control") reasons.push(`Human control ${project.score.human_control}/10`);
+  } else {
+    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations}/10`);
+    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity}/10`);
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
   }
   return [...new Set(reasons)].slice(0, 4);
 }
@@ -364,11 +392,13 @@ function applyFinderToDirectory() {
 }
 
 function renderTaxonomy() {
-  const memoryRoles = state.taxonomy.primary_roles.filter(item => item.family === "memory_system");
-  const agentRoles = state.taxonomy.primary_roles.filter(item => item.family === "agent_system");
+  const roleGroups = state.taxonomy.system_families.map(family => [
+    `${family.name} roles`,
+    state.taxonomy.primary_roles.filter(item => item.family === family.id),
+  ]);
   const groups = [
-    ["System families", state.taxonomy.system_families], ["Memory-system roles", memoryRoles], ["Agent-system roles", agentRoles],
-    ["Agent relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
+    ["System families", state.taxonomy.system_families], ...roleGroups,
+    ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
     ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities],
@@ -386,18 +416,23 @@ function openProject(id) {
   if (!project) return;
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
-  const familyDetail = project.system_family === "agent_system"
-    ? `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`
-    : `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+  let familyDetail;
+  if (project.system_family === "agent_system") {
+    familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
+  } else if (project.system_family === "memory_system") {
+    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+  } else {
+    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Continuity:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+  }
   const licenseLinks = proof ? proof.items.map(item => item.kind === "git_blob"
     ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
     : `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a></p>`
   ).join("") : `<p>${project.licenses.map(escapeHTML).join(" · ")}</p>`;
   $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>System identity</h3><p><strong>Agent relation:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
-      <section class="detail-block"><h3>${escapeHTML(project.score_profile === "agent" ? "Agent-system" : "Memory-system")} score</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
+      <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Weaknesses</h3><ul>${project.weaknesses.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${project.retrieval_modes.map(label).map(escapeHTML).join(" · ")}</p></section>

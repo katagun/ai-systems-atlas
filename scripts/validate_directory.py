@@ -8,6 +8,11 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+try:
+    from .discovery_sources import canonical_url_key, validate_discovery_sources
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from discovery_sources import canonical_url_key, validate_discovery_sources
+
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
@@ -135,10 +140,16 @@ def validate(root: Path = ROOT) -> list[str]:
         license_review_data = load("license-review.json")
         exclusions_data = load("exclusions.json")
         specifications_data = load("specifications.json")
+        discovery_sources_data = load("discovery-sources.json")
     finally:
         DIRECTORY = original_directory
 
     errors: list[str] = []
+
+    errors.extend(validate_discovery_sources(discovery_sources_data))
+    if (root / "web" / "discovery-sources.json").exists():
+        errors.append("discovery-sources.json: operational discovery sources must not be published")
+
     enum_ids = {group: ids_for(taxonomy, group, errors) for group in TAXONOMY_GROUPS}
     families = enum_ids["system_families"]
     roles = {
@@ -155,6 +166,7 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in taxonomy.get("score_profiles", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
+    profiles_by_family: dict[str, list[str]] = {family: [] for family in families}
     license_kinds = {
         item["id"]: item.get("kind")
         for item in taxonomy.get("licenses", [])
@@ -165,8 +177,11 @@ def validate(root: Path = ROOT) -> list[str]:
         if kind not in known_license_kinds:
             errors.append(f"taxonomy: license {license_id!r} has unknown kind {kind!r}")
     for profile_id, profile in profiles.items():
-        if profile.get("family") not in families:
+        profile_family = profile.get("family")
+        if profile_family not in families:
             errors.append(f"taxonomy: score profile {profile_id!r} has unknown family")
+        else:
+            profiles_by_family[profile_family].append(profile_id)
         dimensions = profile.get("dimensions")
         if not isinstance(dimensions, list) or not dimensions:
             errors.append(f"taxonomy: score profile {profile_id!r} requires dimensions")
@@ -179,6 +194,12 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"taxonomy: score profile {profile_id!r} has invalid weights")
         elif abs(sum(weights) - 1.0) > 1e-9:
             errors.append(f"taxonomy: score profile {profile_id!r} weights do not total 1")
+    for family, family_profiles in profiles_by_family.items():
+        if len(family_profiles) != 1:
+            errors.append(
+                f"taxonomy: family {family!r} requires exactly one score profile; "
+                f"found {sorted(family_profiles)}"
+            )
 
     projects_value = data.get("projects")
     if not valid_date(data.get("generated_at")):
@@ -188,6 +209,7 @@ def validate(root: Path = ROOT) -> list[str]:
     projects: list[dict[str, Any]] = projects_value
     ids: set[str] = set()
     repos: set[str] = set()
+    project_url_keys: set[str] = set()
 
     for project in projects:
         if not isinstance(project, dict):
@@ -222,6 +244,8 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f"{prefix}: url must be the canonical GitHub repository URL")
         elif not isinstance(project.get("url"), str) or not project["url"].startswith("https://"):
             errors.append(f"{prefix}: non-GitHub systems require an authoritative HTTPS URL")
+        if isinstance(project.get("url"), str):
+            project_url_keys.add(canonical_url_key(project["url"]))
 
         for field in ("name", "description", "canonical_data", "why_it_matters"):
             if not isinstance(project.get(field), str) or not project[field].strip():
@@ -241,6 +265,16 @@ def validate(root: Path = ROOT) -> list[str]:
         validate_string_list(project, "secondary_roles", set(roles), prefix, errors, allow_empty=True)
         if role in project.get("secondary_roles", []):
             errors.append(f"{prefix}: primary role must not be repeated as a secondary role")
+        incompatible_secondary_roles = sorted(
+            secondary_role
+            for secondary_role in project.get("secondary_roles", [])
+            if roles.get(secondary_role) != family
+        )
+        if incompatible_secondary_roles:
+            errors.append(
+                f"{prefix}: secondary roles must belong to {family!r}: "
+                f"{incompatible_secondary_roles}"
+            )
 
         profile_id = project.get("score_profile")
         profile = profiles.get(profile_id)
@@ -572,7 +606,7 @@ def validate(root: Path = ROOT) -> list[str]:
             continue
         candidate_repo = candidate["repo"]
         repo_key = candidate_repo.lower() if isinstance(candidate_repo, str) else ""
-        candidate_key = repo_key or str(candidate.get("url", "")).lower()
+        candidate_key = repo_key or canonical_url_key(candidate.get("url", ""))
         if candidate_key in candidate_keys:
             errors.append(f"candidate {prefix}: duplicate candidate identity")
         candidate_keys.add(candidate_key)
@@ -580,6 +614,8 @@ def validate(root: Path = ROOT) -> list[str]:
             if repo_key in candidate_repos or repo_key in repos:
                 errors.append(f"candidate {prefix}: duplicate or already curated repository")
             candidate_repos.add(repo_key)
+        elif candidate_key in project_url_keys:
+            errors.append(f"candidate {prefix}: URL is already curated")
         if candidate["status"] != "provisional":
             errors.append(f"candidate {prefix}: status must be provisional")
         if candidate_repo and candidate["url"] != f"https://github.com/{candidate_repo}":
