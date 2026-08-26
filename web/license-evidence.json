@@ -50,6 +50,72 @@
       ]
     },
     {
+      "project_id": "claude",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Claude Free, Pro, and Max consumer service and software",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/consumer-terms",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "deepseek",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "DeepSeek Web and App hosted products and services",
+          "kind": "web_terms",
+          "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "gemini-apps",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Google Terms of Service governing individual use of Gemini Apps",
+          "kind": "web_terms",
+          "url": "https://policies.google.com/terms",
+          "verified_at": "2026-08-26"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Service-specific prohibited-use rules incorporated for Gemini Apps",
+          "kind": "web_terms",
+          "url": "https://policies.google.com/terms/generative-ai/use-policy",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "microsoft-copilot",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Individual-use Microsoft Copilot apps, web services, and integrated conversations",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/en-us/microsoft-copilot/for-individuals/termsofuse",
+          "verified_at": "2026-08-26"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Underlying Microsoft Services Agreement incorporated by Copilot terms",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/en-us/servicesagreement/",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
       "project_id": "t3-chat",
       "repo": null,
       "items": [
@@ -58,6 +124,19 @@
           "scope": "T3 Chat hosted service and access rights",
           "kind": "web_terms",
           "url": "https://t3.chat/terms-of-service",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "z-ai",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Z.ai hosted assistant service and access rights",
+          "kind": "web_terms",
+          "url": "https://chat.z.ai/legal-agreement/terms-of-service",
           "verified_at": "2026-08-26"
         }
       ]

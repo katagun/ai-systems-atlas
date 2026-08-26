@@ -67,8 +67,19 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(3);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(8);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
+});
+
+test("notable provider assistants are searchable and license-labeled", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#family-filter").selectOption("assistant_system");
+
+  for (const name of ["Claude", "DeepSeek", "Gemini Apps", "Microsoft Copilot", "Z.ai"]) {
+    await page.locator("#project-search").fill(name);
+    await expect(page.locator("#project-grid .project-card h2")).toHaveText(name);
+    await expect(page.locator("#project-grid .license-badge")).toContainText("LicenseRef-Proprietary");
+  }
 });
 
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {

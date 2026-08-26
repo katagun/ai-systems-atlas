@@ -81,6 +81,27 @@ class DirectoryTests(unittest.TestCase):
             self.assertEqual(role, projects[project_id]["primary_role"])
             self.assertEqual("proprietary", projects[project_id]["source_model"])
 
+    def test_notable_general_assistant_batch_is_reviewed(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+        expected = {"claude", "deepseek", "gemini-apps", "microsoft-copilot", "z-ai"}
+
+        for project_id in expected:
+            project = projects[project_id]
+            self.assertEqual("assistant_system", project["system_family"])
+            self.assertEqual("general_ai_assistant", project["primary_role"])
+            self.assertEqual("assistant", project["score_profile"])
+            self.assertEqual("proprietary", project["source_model"])
+            self.assertEqual("verified", project["license_review_status"])
+
+        candidate_names = {
+            candidate["name"]
+            for candidate in json.loads(
+                (ROOT / "directory" / "candidates.json").read_text(encoding="utf-8")
+            )["candidates"]
+        }
+        self.assertNotIn("Claude.ai", candidate_names)
+        self.assertNotIn("Gemini Apps", candidate_names)
+
     def test_reviewed_provider_traits_are_atomic_and_taxonomy_backed(self) -> None:
         relationships = {item["id"] for item in self.taxonomy["provider_relationships"]}
         backends = {item["id"] for item in self.taxonomy["model_backends"]}
