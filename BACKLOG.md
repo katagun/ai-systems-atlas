@@ -32,7 +32,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Publish the static site through a validated, least-privilege GitHub Pages workflow and document repository safeguards.
 - [x] Publish Claude Code, Devin, Kiro, OpenHands, OpenClaw, Pi, and Prime Agent with source-model-appropriate license or terms evidence.
 - [x] Add the next major coding-agent comparison batch to the provisional queue instead of treating the first expansion as comprehensive.
-- [x] Rebrand product-facing copy and metadata from Agent Systems Atlas to AI Systems Atlas while retaining the historical repository name.
+- [x] Rebrand product-facing copy and metadata from Agent Systems Atlas to AI Systems Atlas, then rename the public repository and Pages site to match.
 - [x] Publish DB-GPT and Vanna as reviewed data-analysis systems; exclude SQL Chat on the operational-agent boundary.
 - [x] Publish Agno, Haystack, LlamaIndex, and DSPy as reviewed framework systems with pinned license evidence.
 - [x] Add a coverage matrix and batch-selection guidance for systematic expansion.
