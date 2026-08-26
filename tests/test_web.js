@@ -8,6 +8,7 @@ const projects = [
   { name: "Service", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["vector_index"], source_model: "mixed_open_source", licenses: ["Apache-2.0", "CC-BY-4.0"], status: "active", local_first: false, stars: null, score: { overall: 7 } },
   { name: "Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["git_versioned"], source_model: "open_core", licenses: ["MIT", "LicenseRef-Commercial"], status: "active", local_first: true, stars: 20, score: { overall: 10 } },
   { name: "SDK", primary_role: "agent_framework_sdk", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["event_log"], source_model: "mixed_source", licenses: ["MIT", "LicenseRef-Proprietary"], status: "active", local_first: false, stars: 15, score: { overall: 8.5 } },
+  { name: "GBrain", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["git_versioned"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 24, score: { overall: 8.7 } },
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
 ];
 
@@ -20,7 +21,7 @@ test("finder role sets exclude unrelated projects without imposing a local-only 
     sort: "score",
   });
 
-  assert.deepEqual(results.map(project => project.name), ["Bridge", "Service"]);
+  assert.deepEqual(results.map(project => project.name), ["GBrain", "Bridge", "Service"]);
 });
 
 test("family matching keeps score comparisons inside one family", () => {
@@ -52,9 +53,17 @@ test("all-family search finds agent workflows by name", () => {
   assert.deepEqual(results.map(project => project.name), ["GStack"]);
 });
 
+test("single-character search finds matching system-name prefixes across families", () => {
+  const results = filterAndSortProjects(projects, {
+    ...directoryDefaults(),
+    term: "G",
+  });
+  assert.deepEqual(results.map(project => project.name), ["GBrain", "GStack"]);
+});
+
 test("unknown stars sort behind verified star counts", () => {
   const results = filterAndSortProjects(projects, { sort: "stars" });
-  assert.deepEqual(results.map(project => project.name), ["GStack", "Agent", "SDK", "Bridge", "PKM", "Service"]);
+  assert.deepEqual(results.map(project => project.name), ["GStack", "GBrain", "Agent", "SDK", "Bridge", "PKM", "Service"]);
 });
 
 test("license and source-model filters combine", () => {
@@ -63,7 +72,7 @@ test("license and source-model filters combine", () => {
     sourceModel: "open_source",
     sort: "name",
   });
-  assert.deepEqual(results.map(project => project.name), ["Bridge"]);
+  assert.deepEqual(results.map(project => project.name), ["Bridge", "GBrain"]);
 });
 
 test("mixed-source projects remain independently filterable", () => {
