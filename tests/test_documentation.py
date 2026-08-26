@@ -7,13 +7,14 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+GENERATED_DIRECTORIES = {".git", ".venv", "node_modules", "playwright-report", "test-results"}
 
 
 class DocumentationTests(unittest.TestCase):
     def test_relative_markdown_links_resolve(self) -> None:
         broken: list[str] = []
         for document in ROOT.rglob("*.md"):
-            if ".git" in document.parts or ".venv" in document.parts:
+            if GENERATED_DIRECTORIES.intersection(document.parts):
                 continue
             text = document.read_text(encoding="utf-8")
             for target in MARKDOWN_LINK.findall(text):

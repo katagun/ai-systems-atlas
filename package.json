@@ -1,0 +1,11 @@
+{
+  "name": "ai-systems-atlas-web-tests",
+  "private": true,
+  "scripts": {
+    "test:web": "node --test tests/test_web.js",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

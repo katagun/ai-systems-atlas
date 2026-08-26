@@ -24,6 +24,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 ## Behavioral contracts
 
 - The default directory shows every active family alphabetically, with cross-family scores hidden.
+- A one-character directory search matches prefixes of words in system names; two-character searches require a complete word to avoid false positives such as `Pi` inside `API`.
 - Choosing a family clears any role or Finder-role constraint; “Clear filters” restores the all-family active-system default.
 - “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.
 - Directory role filters list only roles represented by published projects; candidate-only taxonomy roles remain discoverable in Taxonomy without offering empty filters.
@@ -61,6 +62,19 @@ Run the dependency-free logic suite:
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
+```
+
+Run the rendered browser regression suite (install Chromium once per environment):
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:e2e
+```
+
+For exploratory browser verification, serve the static application:
+
+```bash
 uv run python -m http.server 8765 --directory web
 ```
 

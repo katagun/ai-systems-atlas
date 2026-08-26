@@ -33,6 +33,9 @@ uv run python -m compileall scripts tests
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
+npm ci
+npx playwright install chromium
+npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 

@@ -13,6 +13,9 @@ uv sync --locked
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 node --test tests/test_web.js
+npm ci
+npx playwright install chromium
+npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
@@ -48,7 +51,7 @@ directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
 scripts/                        refresh, synchronization, and validation
-tests/                          Python invariants and dependency-free web logic tests
+tests/                          Python invariants, web logic tests, and browser E2E tests
 web/                            static directory UI and published data copies
 docs/                           task-focused policy, model, operations, and ADRs
 ```

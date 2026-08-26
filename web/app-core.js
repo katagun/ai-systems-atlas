@@ -26,11 +26,18 @@
     return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(haystack);
   }
 
+  function matchesProjectSearch(project, term) {
+    if (term.length === 1) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`(^|[^a-z0-9])${escaped}`).test(project.name.toLowerCase());
+    }
+    return matchesSearchTerm(JSON.stringify(project).toLowerCase(), term);
+  }
+
   function matchesProject(project, filters) {
     const term = (filters.term || "").trim().toLowerCase();
     const roles = filters.roles || [];
-    const haystack = JSON.stringify(project).toLowerCase();
-    return matchesSearchTerm(haystack, term) &&
+    return matchesProjectSearch(project, term) &&
       (!filters.family || project.system_family === filters.family) &&
       (!filters.role || project.primary_role === filters.role) &&
       (!roles.length || roles.includes(project.primary_role)) &&
