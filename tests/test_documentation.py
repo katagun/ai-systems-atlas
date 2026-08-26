@@ -43,6 +43,22 @@ class DocumentationTests(unittest.TestCase):
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
+    def test_pages_deploy_accepts_only_trusted_main_verification(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        match = re.search(r"(?m)^  build:\n    if: >-\n((?:      .*\n)+)", workflow)
+        self.assertIsNotNone(match)
+        condition = " ".join(line.strip() for line in match.group(1).splitlines())
+        expected = (
+            "(github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || "
+            "(github.event_name == 'workflow_run' && "
+            "github.event.workflow_run.event == 'push' && "
+            "github.event.workflow_run.conclusion == 'success' && "
+            "github.event.workflow_run.head_repository.full_name == github.repository && "
+            "github.event.workflow_run.head_branch == github.event.repository.default_branch)"
+        )
+
+        self.assertEqual(expected, condition)
+
 
 if __name__ == "__main__":
     unittest.main()

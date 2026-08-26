@@ -62,7 +62,16 @@
   function filterSpecifications(specifications, filters = {}) {
     const term = (filters.term || "").trim().toLowerCase();
     return specifications.filter(specification => {
-      const haystack = JSON.stringify(specification).toLowerCase();
+      const haystack = [
+        specification.id,
+        specification.name,
+        specification.short_name,
+        specification.description,
+        specification.standardizes,
+        specification.does_not_standardize,
+        specification.repo,
+        ...(specification.stewards || []),
+      ].filter(Boolean).join(" ").toLowerCase();
       return matchesSearchTerm(haystack, term) &&
         (!filters.type || specification.specification_type === filters.type) &&
         (!filters.scope || specification.scope === filters.scope) &&

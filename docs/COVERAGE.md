@@ -16,7 +16,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-25
 
-The reviewed catalog contains 61 systems: 25 memory systems and 36 agent systems. Fifty-five are open-source, two are open-core, one is mixed-source, and three are proprietary. The provisional queue contains 89 records. The separate unscored collection contains eight specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
+The reviewed catalog contains 61 systems: 25 memory systems and 36 agent systems. Fifty-five are open-source, two are open-core, one is mixed-source, and three are proprietary. The provisional queue contains 89 records. The separate unscored collection contains 15 specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -46,6 +46,7 @@ Choose small batches with one coherent boundary question:
 2. **Source-model diversity:** screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless. Review product terms and operational evidence without treating license as eligibility.
 3. **Thin agent roles:** browser/computer use, research, and coding workflows. Prefer candidates that create a genuinely different operational choice.
 4. **Thin memory roles:** agent memory, context graphs, ambient capture, and human–agent bridges.
-5. **Specification second pass:** evaluate OpenAPI, JSON-RPC, Arazzo, AIP, NLIP, and other agent-specific formats only when they answer a distinct integration question; avoid cataloging generic web standards merely because agents use them.
+5. **Specification second pass:** evaluate agent identity, discovery, authentication, and workflow exchange only when candidates answer a distinct integration question; avoid cataloging generic web standards merely because agents use them.
+6. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

@@ -70,12 +70,16 @@ The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-req
 
 ## GitHub Pages
 
-`.github/workflows/deploy-pages.yml` validates the published catalog and deploys only `web/` after a push to `main` or a manual run. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its deployment protection rules enabled.
+`.github/workflows/deploy-pages.yml` deploys only `web/` after the exact `main` revision passes the complete `verify` workflow. A manual run is accepted only from `main` and performs the deployment workflow's local validation before publishing. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.
 
 The site URL follows the repository owner and name. After a transfer or rename, update any explicit links or custom-domain configuration separately; the deployment workflow itself is owner-independent.
 
 ## Repository safeguards
 
-`.github/workflows/verify.yml` is the required CI check. Configure a `main` ruleset that requires pull requests, the `verify` job, conversation resolution, and a current branch before merge. Keep force-pushes and branch deletion disabled. Enable secret scanning, push protection, Dependabot alerts, and CodeQL default setup for the public repository.
+`.github/workflows/verify.yml` is the required CI check. Classic `main` protection requires pull requests, a current `verify` result, conversation resolution, and an up-to-date branch; it blocks force-pushes and deletion. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
 
-All third-party actions are pinned to immutable commit SHAs. `.github/dependabot.yml` opens weekly pull requests to keep those pins current. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.
+All actions are pinned to immutable commit SHAs, and repository settings enforce those pins while allowing only GitHub-owned actions plus `astral-sh/setup-uv`. The required verification job includes dependency review for pull requests. `.github/dependabot.yml` opens weekly pull requests for Actions and npm updates. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.
+
+Secret scanning, push protection, Dependabot alerts and security updates, private vulnerability reporting, and CodeQL default setup are enabled. Secret validity checks and non-provider patterns remain disabled; enable them if the repository settings expose those controls later. See [`SECURITY.md`](../SECURITY.md) for reporting; do not put suspected vulnerabilities in public issues.
+
+Use squash merges and linear history; merge commits and rebase merges are disabled. Automatic merge and the update-branch button are enabled. Keep zero required approvals only while the repository has one maintainer.

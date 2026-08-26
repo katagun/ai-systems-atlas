@@ -211,12 +211,57 @@ class DirectoryTests(unittest.TestCase):
 
     def test_specifications_are_a_separate_unscored_collection(self) -> None:
         records = self.specifications["specifications"]
-        expected = {"mcp", "a2a", "ag-ui", "acp", "agents-md", "claude-md", "agent-skills", "agent-plugins"}
+        expected = {
+            "mcp",
+            "a2a",
+            "ag-ui",
+            "acp",
+            "agents-md",
+            "claude-md",
+            "github-copilot-instructions",
+            "gemini-md",
+            "cline-rules",
+            "cursor-rules",
+            "continue-rules",
+            "roo-code-rules",
+            "devin-desktop-rules",
+            "agent-skills",
+            "agent-plugins",
+        }
         self.assertLessEqual(expected, {record["id"] for record in records})
         for record in records:
             self.assertNotIn("system_family", record, record["id"])
             self.assertNotIn("score_profile", record, record["id"])
             self.assertNotIn("score", record, record["id"])
+
+    def test_vendor_instruction_conventions_are_explicitly_classified(self) -> None:
+        records = {record["id"]: record for record in self.specifications["specifications"]}
+        expected = {
+            "claude-md",
+            "github-copilot-instructions",
+            "gemini-md",
+            "cline-rules",
+            "cursor-rules",
+            "continue-rules",
+            "roo-code-rules",
+            "devin-desktop-rules",
+        }
+
+        self.assertLessEqual(expected, records.keys())
+        for specification_id in expected:
+            record = records[specification_id]
+            self.assertEqual("instruction_convention", record["specification_type"])
+            self.assertEqual("project_instructions", record["scope"])
+            self.assertEqual("vendor_specific", record["status"])
+
+        copilot = records["github-copilot-instructions"]
+        self.assertIn(".github/instructions/**/*.instructions.md", copilot["standardizes"])
+        self.assertIn("excludeAgent", copilot["standardizes"])
+        self.assertIn("README.md", {item.get("path") for item in copilot["evidence"]})
+        self.assertIn(
+            "https://prod.cursor.com/help/customization/rules",
+            {item["url"] for item in records["cursor-rules"]["evidence"]},
+        )
 
     def test_specification_classification_and_evidence_are_taxonomy_backed(self) -> None:
         types = {item["id"] for item in self.taxonomy["specification_types"]}
@@ -235,6 +280,17 @@ class DirectoryTests(unittest.TestCase):
             self.assertEqual(set(record["licenses"]), {item["license_id"] for item in record["license_evidence"]})
             self.assertFalse(set(record["licenses"]) - licenses, record["id"])
             self.assertFalse(set(record["related_specifications"]) - ids, record["id"])
+
+    def test_specification_relations_are_reciprocal(self) -> None:
+        records = {record["id"]: record for record in self.specifications["specifications"]}
+
+        for specification_id, record in records.items():
+            for related_id in record["related_specifications"]:
+                self.assertIn(
+                    specification_id,
+                    records[related_id]["related_specifications"],
+                    f"{specification_id} -> {related_id}",
+                )
 
 
 if __name__ == "__main__":

@@ -124,7 +124,7 @@
       "does_not_standardize": "A front-matter schema, an agent wire protocol, tool permissions, or a universal instruction vocabulary.",
       "licenses": ["MIT"],
       "license_note": "The reference repository and site source are licensed under MIT.",
-      "related_specifications": ["claude-md", "agent-skills", "acp"],
+      "related_specifications": ["claude-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md", "cline-rules", "cursor-rules", "continue-rules", "roo-code-rules", "devin-desktop-rules"],
       "evidence": [
         {"kind": "git_blob", "label": "Reviewed convention overview", "path": "README.md", "url": "https://github.com/agentsmd/agents.md/blob/main/README.md", "blob_sha": "8ce701e74909d5f08e2810380e0ff15f547aa0c8", "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/8ce701e74909d5f08e2810380e0ff15f547aa0c8"},
         {"kind": "web", "label": "Open convention site", "url": "https://agents.md/", "verified_at": "2026-08-25"},
@@ -151,12 +151,197 @@
       "does_not_standardize": "A vendor-neutral repository instruction format, a wire protocol, or behavior in agents that do not implement Claude Code's convention.",
       "licenses": ["LicenseRef-Unclear"],
       "license_note": "The product documentation defines the convention, but no standalone reusable format license was identified during review.",
-      "related_specifications": ["agents-md", "agent-skills", "acp"],
+      "related_specifications": ["agents-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md"],
       "evidence": [
         {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
       ],
       "license_evidence": [
         {"license_id": "LicenseRef-Unclear", "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "github-copilot-instructions",
+      "name": "GitHub Copilot repository instructions",
+      "short_name": "copilot-instructions.md",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["GitHub"],
+      "repo": "github/docs",
+      "url": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions",
+      "description": "GitHub Copilot's documented convention for persistent repository-wide and path-specific instructions.",
+      "standardizes": "Discovery of .github/copilot-instructions.md and recursive .github/instructions/**/*.instructions.md files, per-surface support for applyTo glob front matter, GitHub.com excludeAgent controls, and documented instruction combination behavior inside Copilot.",
+      "does_not_standardize": "Vendor-neutral instruction semantics, AGENTS.md itself, agent execution, permissions, or a wire protocol.",
+      "licenses": ["CC-BY-4.0"],
+      "license_note": "The reviewed GitHub Docs content is licensed under CC BY 4.0; Copilot as a service remains governed separately.",
+      "related_specifications": ["agents-md", "claude-md", "gemini-md"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed repository-instructions documentation", "path": "content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md", "url": "https://github.com/github/docs/blob/main/content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md", "blob_sha": "7ea3a079698fc014295b245abfcd82bb67a2b243", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/7ea3a079698fc014295b245abfcd82bb67a2b243"},
+        {"kind": "git_blob", "label": "Reviewed support matrix", "path": "content/copilot/reference/custom-instructions-support.md", "url": "https://github.com/github/docs/blob/main/content/copilot/reference/custom-instructions-support.md", "blob_sha": "88476f69c24e614004063ee3741f712a968425ae", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/88476f69c24e614004063ee3741f712a968425ae"},
+        {"kind": "git_blob", "label": "Reviewed GitHub Docs content-license scope", "path": "README.md", "url": "https://github.com/github/docs/blob/main/README.md", "blob_sha": "f5730b788246d0e5ffab4e636fefdc4caab31ad0", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/f5730b788246d0e5ffab4e636fefdc4caab31ad0"},
+        {"kind": "web", "label": "Current GitHub Copilot documentation", "url": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "CC-BY-4.0", "scope": "GitHub Docs content defining the instruction convention", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/github/docs/blob/main/LICENSE", "blob_sha": "9238c8f9388066fe7cb3b308de35104bb3c9596b", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/9238c8f9388066fe7cb3b308de35104bb3c9596b"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "gemini-md",
+      "name": "GEMINI.md",
+      "short_name": "GEMINI.md",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Google"],
+      "repo": "google-gemini/gemini-cli",
+      "url": "https://geminicli.com/docs/cli/gemini-md/",
+      "description": "Gemini CLI's documented convention for persistent user, workspace, and component-level instructional context.",
+      "standardizes": "GEMINI.md discovery, global and workspace hierarchy, just-in-time directory loading, concatenation, @ imports, memory commands, and configurable context filenames inside Gemini CLI.",
+      "does_not_standardize": "Vendor-neutral precedence, model memory storage, permissions, a wire protocol, or behavior in other agents.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The Gemini CLI repository and reviewed documentation are licensed under Apache-2.0; Gemini service terms remain separate.",
+      "related_specifications": ["agents-md", "claude-md", "github-copilot-instructions"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed GEMINI.md documentation", "path": "docs/cli/gemini-md.md", "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md", "blob_sha": "1e3cdad3b7934a54d78d30083558c80e1b03d3db", "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/1e3cdad3b7934a54d78d30083558c80e1b03d3db"},
+        {"kind": "web", "label": "Current Gemini CLI documentation", "url": "https://geminicli.com/docs/cli/gemini-md/", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Gemini CLI repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/google-gemini/gemini-cli/blob/main/LICENSE", "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835", "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "cline-rules",
+      "name": "Cline Rules",
+      "short_name": ".clinerules/",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Cline project", "Cline Bot Inc."],
+      "repo": "cline/cline",
+      "url": "https://docs.cline.bot/customization/cline-rules",
+      "description": "Cline's product convention for persistent workspace and global agent guidance.",
+      "standardizes": "Discovery and aggregation of Markdown or text rules under .clinerules/, workspace and global precedence, rule toggles, and optional path-conditional YAML front matter; Cline CLI documents .cline/rules/ separately.",
+      "does_not_standardize": "Vendor-neutral instruction semantics, execution permissions, a tool protocol, or a universal instruction vocabulary.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The Cline repository and reviewed documentation are licensed under Apache-2.0.",
+      "related_specifications": ["agents-md", "cursor-rules", "devin-desktop-rules", "continue-rules", "roo-code-rules"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed Cline Rules documentation", "path": "docs/customization/cline-rules.mdx", "url": "https://github.com/cline/cline/blob/main/docs/customization/cline-rules.mdx", "blob_sha": "24825e05810b86a15e984de1969dcd640af01634", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/24825e05810b86a15e984de1969dcd640af01634"},
+        {"kind": "git_blob", "label": "Reviewed Cline CLI layout", "path": "docs/cli/cli-reference.mdx", "url": "https://github.com/cline/cline/blob/main/docs/cli/cli-reference.mdx", "blob_sha": "b49b5f12c04a6337d081fd18994ee0bbfa22ca25", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/b49b5f12c04a6337d081fd18994ee0bbfa22ca25"},
+        {"kind": "web", "label": "Current Cline Rules documentation", "url": "https://docs.cline.bot/customization/cline-rules", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Cline repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/cline/cline/blob/main/LICENSE", "blob_sha": "05ae14a377caf4df24e26edde0c4f7b22ef3ef30", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/05ae14a377caf4df24e26edde0c4f7b22ef3ef30"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "cursor-rules",
+      "name": "Cursor Project Rules",
+      "short_name": ".cursor/rules/*.mdc",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Anysphere"],
+      "repo": null,
+      "url": "https://cursor.com/docs/rules",
+      "description": "Cursor's documented convention for persistent and context-sensitive project instructions.",
+      "standardizes": ".cursor/rules/*.mdc placement, activation front matter, four activation modes, nested rule discovery, and file or rule references inside Cursor.",
+      "does_not_standardize": "Cross-agent instruction behavior, agent or tool protocols, permission policy, or a universal content vocabulary; the older .cursorrules file is deprecated.",
+      "licenses": ["LicenseRef-Unclear"],
+      "license_note": "No standalone reusable-format license was identified in the reviewed product documentation; Cursor's service and documentation terms apply separately.",
+      "related_specifications": ["agents-md", "cline-rules", "devin-desktop-rules"],
+      "evidence": [
+        {"kind": "web", "label": "Current Cursor Rules documentation", "url": "https://cursor.com/docs/rules", "verified_at": "2026-08-25"},
+        {"kind": "web", "label": "Official legacy .cursorrules migration guidance", "url": "https://prod.cursor.com/help/customization/rules", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "LicenseRef-Unclear", "scope": "Cursor project-rules convention; no standalone reusable-format license identified", "kind": "web_terms", "url": "https://cursor.com/en-US/terms-of-service", "verified_at": "2026-08-25"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "continue-rules",
+      "name": "Continue Rules",
+      "short_name": ".continue/rules/",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Continue project", "Continue Dev"],
+      "repo": "continuedev/continue",
+      "url": "https://docs.continue.dev/customize/rules",
+      "description": "Continue's product convention for project-local Markdown and YAML instructions used across its interaction modes.",
+      "standardizes": "Rule discovery under .continue/rules/, lexicographic loading, and front-matter controls for names, globs, regular expressions, descriptions, and unconditional activation.",
+      "does_not_standardize": "Universal agent instructions, permission or tool execution, a wire protocol, or other products' interpretation.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The Continue repository and reviewed documentation are licensed under Apache-2.0.",
+      "related_specifications": ["agents-md", "cline-rules", "roo-code-rules"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed Continue Rules overview", "path": "docs/customize/rules.mdx", "url": "https://github.com/continuedev/continue/blob/main/docs/customize/rules.mdx", "blob_sha": "7eaede59c8e550f1d49747f1b56181db4c75e5c0", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/7eaede59c8e550f1d49747f1b56181db4c75e5c0"},
+        {"kind": "git_blob", "label": "Reviewed Continue Rules reference", "path": "docs/customize/deep-dives/rules.mdx", "url": "https://github.com/continuedev/continue/blob/main/docs/customize/deep-dives/rules.mdx", "blob_sha": "f5f52955dec2ab624d8689d925b205ef4149ec76", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/f5f52955dec2ab624d8689d925b205ef4149ec76"},
+        {"kind": "web", "label": "Current Continue Rules documentation", "url": "https://docs.continue.dev/customize/rules", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Continue repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/continuedev/continue/blob/main/LICENSE", "blob_sha": "c25dc1768217ba50d454fcc06290d66886512872", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/c25dc1768217ba50d454fcc06290d66886512872"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "roo-code-rules",
+      "name": "Roo Code Rules",
+      "short_name": ".roo/rules/",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Roo Code project", "Roo Code, Inc."],
+      "repo": "RooCodeInc/Roo-Code",
+      "url": "https://docs.roocode.com/features/custom-instructions",
+      "description": "Roo Code's convention for global, workspace, and mode-specific persistent instructions.",
+      "standardizes": "Discovery under .roo/rules/ and mode-specific directories, recursive alphabetical aggregation and precedence, plus fallback .roorules files inside Roo Code.",
+      "does_not_standardize": "Cross-agent interpretation, mode definitions, permissions, or machine-to-machine protocols.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The Roo Code documentation subtree reviewed for this convention is licensed under Apache-2.0.",
+      "related_specifications": ["agents-md", "continue-rules", "cline-rules"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed Roo Code custom-instructions documentation", "path": "apps/docs/docs/features/custom-instructions.md", "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/docs/features/custom-instructions.md", "blob_sha": "5a44a5f98f76b989af93bfca7a947b492b9b5a12", "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/5a44a5f98f76b989af93bfca7a947b492b9b5a12"},
+        {"kind": "web", "label": "Current Roo Code documentation", "url": "https://docs.roocode.com/features/custom-instructions", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Roo Code documentation subtree", "kind": "git_blob", "path": "apps/docs/LICENSE", "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/LICENSE", "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64", "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"}
+      ],
+      "verified_at": "2026-08-25"
+    },
+    {
+      "id": "devin-desktop-rules",
+      "name": "Devin Desktop Rules",
+      "short_name": ".devin/rules/",
+      "specification_type": "instruction_convention",
+      "scope": "project_instructions",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Cognition"],
+      "repo": null,
+      "url": "https://docs.devin.ai/desktop/cascade/memories",
+      "description": "Devin Desktop's current convention for persistent Cascade instructions, including legacy Windsurf compatibility paths.",
+      "standardizes": "Rule discovery across workspace and parent directories, trigger-based activation, current .devin/rules/*.md placement, and fallback .windsurf/rules/*.md or .windsurfrules paths.",
+      "does_not_standardize": "Instruction behavior in other agents, workflows or skills, permissions, or wire protocols.",
+      "licenses": ["LicenseRef-Unclear"],
+      "license_note": "No standalone reusable-format license was identified in the reviewed product documentation; the legacy Windsurf names describe compatibility paths, not a separate current convention.",
+      "related_specifications": ["agents-md", "cursor-rules", "cline-rules"],
+      "evidence": [
+        {"kind": "web", "label": "Current Devin Desktop rules documentation", "url": "https://docs.devin.ai/desktop/cascade/memories", "verified_at": "2026-08-25"}
+      ],
+      "license_evidence": [
+        {"license_id": "LicenseRef-Unclear", "scope": "Devin Desktop and legacy Windsurf rules convention; no standalone reusable-format license identified", "kind": "web_terms", "url": "https://docs.devin.ai/desktop/cascade/memories", "verified_at": "2026-08-25"}
       ],
       "verified_at": "2026-08-25"
     },
