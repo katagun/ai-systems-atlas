@@ -39,7 +39,7 @@ Assistant-system roles are general AI assistant, enterprise work assistant, and 
 
 The assistant score measures task reliability, context continuity, tools and integrations, human control, data governance, interoperability, usability and access, and maturity. It evaluates the product-level experience and controls, not a transient leaderboard of its underlying models.
 
-Keep product boundaries explicit. ChatGPT is distinct from Codex and OpenAI Agents SDK; Claude is distinct from Claude Code and Claude Agent SDK; Gemini Apps is distinct from Gemini in Workspace, Gemini CLI, and Google ADK; consumer Microsoft Copilot is distinct from Microsoft 365 Copilot and Copilot Studio; DeepSeek Web/App is distinct from its model weights, API, and harness; and Z.ai Chat is distinct from its API and separately licensed GLM releases. T3 Chat is likewise distinct from T3 Code. A thin prompt wrapper, API playground, provider, or model repository is not an assistant system.
+Keep product boundaries explicit. ChatGPT is distinct from Codex and OpenAI Agents SDK; Claude is distinct from Claude Code and Claude Agent SDK; Gemini Apps is distinct from Gemini in Workspace, Gemini CLI, and Google ADK; consumer Microsoft Copilot is distinct from Microsoft 365 Copilot and Copilot Studio; Grok is distinct from Grok on X, Grok Bot, developer APIs, and model releases; DeepSeek Web/App is distinct from its model weights, API, and harness; and Z.ai Chat is distinct from its API and separately licensed GLM releases. T3 Chat is likewise distinct from T3 Code. A thin prompt wrapper, API playground, provider, or model repository is not an assistant system.
 
 ### Vertical agents and framework boundaries
 

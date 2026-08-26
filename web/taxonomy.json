@@ -49,6 +49,7 @@
     {"id": "openrouter", "name": "OpenRouter"},
     {"id": "openai_compatible", "name": "OpenAI-compatible endpoint"},
     {"id": "local_runtime", "name": "Local model runtime"},
+    {"id": "x_ai", "name": "SpaceXAI / xAI"},
     {"id": "z_ai", "name": "Z.ai"}
   ],
   "specification_types": [

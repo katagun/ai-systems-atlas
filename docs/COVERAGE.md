@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-26
 
-The reviewed catalog contains 69 systems: 25 memory systems, 36 agent systems, and 8 assistant systems. Fifty-four are open-source, one uses mixed open licenses, two are open-core, one is mixed-source, and eleven are proprietary. The provisional queue contains 105 records. The separate unscored collection contains 15 specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
+The reviewed catalog contains 71 systems: 25 memory systems, 36 agent systems, and 10 assistant systems. Fifty-four are open-source, one uses mixed open licenses, two are open-core, one is mixed-source, and thirteen are proprietary. The provisional queue contains 103 records. The separate unscored collection contains 15 specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -37,8 +37,8 @@ The reviewed catalog contains 69 systems: 25 memory systems, 36 agent systems, a
 | Coding-agent workflow | 1 | 1 | Priority gap |
 | Human–agent memory bridge | 1 | 1 | Priority gap |
 | Research agent | 1 | 1 | Priority gap |
-| General AI assistant | 6 | 6 | Representative provider baseline; add products only when their workspace, governance, or regional ecosystem is materially distinct |
-| Enterprise work assistant | 1 | 1 | New baseline; proprietary hyperscaler and SaaS diversity is a priority |
+| General AI assistant | 7 | 7 | Representative provider baseline; add products only when their workspace, governance, or regional ecosystem is materially distinct |
+| Enterprise work assistant | 2 | 2 | Improved Microsoft/AWS baseline; broader enterprise SaaS diversity remains a priority |
 | Multi-model chat client | 1 | 1 | New baseline; review product depth and hosted/open-client boundaries |
 
 Archived systems remain reviewed historical references but do not satisfy active-choice coverage.
@@ -47,7 +47,7 @@ Archived systems remain reviewed historical references but do not satisfy active
 
 Choose small batches with one coherent boundary question:
 
-1. **Assistant third pass:** Grok, GroqChat, and Microsoft 365 Copilot. Preserve consumer, enterprise, playground, model, API, and agent-mode boundaries rather than comparing transient model benchmarks.
+1. **Assistant boundary follow-up:** keep GroqChat provisional until first-party evidence establishes a durable end-user workspace distinct from Groq Playground and GroqCloud. Preserve consumer, enterprise, playground, model, API, and agent-mode boundaries rather than comparing transient model benchmarks.
 2. **Managed agent platforms:** Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 3. **Coding-agent second pass:** Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, Windsurf, and T3 Code. Resolve editor, cloud-delegation, and workflow boundaries without duplicating represented products.
 4. **Proprietary memory and knowledge:** NotebookLM, Zep Cloud, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary.

@@ -96,6 +96,46 @@
       ]
     },
     {
+      "project_id": "grok",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Grok consumer service at grok.com and associated mobile applications",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "microsoft-365-copilot",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Commercial licensing framework applicable to Microsoft 365 Copilot and Copilot Chat",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/faqs/123",
+          "verified_at": "2026-08-26"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Microsoft 365 online-service product terms and offering-specific use rights",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/terms/productoffering/Microsoft365/all",
+          "verified_at": "2026-08-26"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Data processing and security terms incorporated into Microsoft commercial licensing agreements",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/docs/view/Microsoft-Products-and-Services-Data-Protection-Addendum-DPA",
+          "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
       "project_id": "microsoft-copilot",
       "repo": null,
       "items": [

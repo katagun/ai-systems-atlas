@@ -102,6 +102,30 @@ class DirectoryTests(unittest.TestCase):
         self.assertNotIn("Claude.ai", candidate_names)
         self.assertNotIn("Gemini Apps", candidate_names)
 
+    def test_third_assistant_batch_preserves_product_boundaries(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+        candidates = json.loads(
+            (ROOT / "directory" / "candidates.json").read_text(encoding="utf-8")
+        )["candidates"]
+        candidate_names = {candidate["name"] for candidate in candidates}
+
+        self.assertEqual("general_ai_assistant", projects["grok"]["primary_role"])
+        self.assertEqual(
+            "enterprise_work_assistant",
+            projects["microsoft-365-copilot"]["primary_role"],
+        )
+        for project_id in ("grok", "microsoft-365-copilot"):
+            project = projects[project_id]
+            self.assertEqual("assistant_system", project["system_family"])
+            self.assertEqual("assistant", project["score_profile"])
+            self.assertEqual("proprietary", project["source_model"])
+            self.assertEqual("verified", project["license_review_status"])
+
+        self.assertNotIn("Grok", candidate_names)
+        self.assertNotIn("Microsoft 365 Copilot", candidate_names)
+        self.assertIn("GroqChat", candidate_names)
+        self.assertNotIn("groqchat", projects)
+
     def test_reviewed_provider_traits_are_atomic_and_taxonomy_backed(self) -> None:
         relationships = {item["id"] for item in self.taxonomy["provider_relationships"]}
         backends = {item["id"] for item in self.taxonomy["model_backends"]}
