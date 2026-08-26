@@ -104,6 +104,9 @@ const specifications = [
   { name: "Model Context Protocol", short_name: "MCP", description: "Connect models to tools and data.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"] },
   { name: "AGENTS.md", short_name: "AGENTS.md", description: "Repository instructions for coding agents.", specification_type: "instruction_convention", scope: "project_instructions", status: "evolving", licenses: ["MIT"] },
   { name: "CLAUDE.md", short_name: "CLAUDE.md", description: "Claude Code project memory.", specification_type: "instruction_convention", scope: "project_instructions", status: "vendor_specific", licenses: ["LicenseRef-Unclear"] },
+  { name: "GitHub Copilot repository instructions", short_name: "copilot-instructions.md", description: "Persistent GitHub Copilot repository guidance.", specification_type: "instruction_convention", scope: "project_instructions", status: "vendor_specific", licenses: ["CC-BY-4.0"] },
+  { name: "GEMINI.md", short_name: "GEMINI.md", description: "Gemini CLI project instructions.", specification_type: "instruction_convention", scope: "project_instructions", status: "vendor_specific", licenses: ["Apache-2.0"], related_specifications: ["github-copilot-instructions"] },
+  { name: "Cline Rules", short_name: ".clinerules/", description: "Cline workspace and global guidance.", specification_type: "instruction_convention", scope: "project_instructions", status: "vendor_specific", licenses: ["Apache-2.0"] },
 ];
 
 test("specification search includes names, descriptions, and identifiers", () => {
@@ -112,7 +115,7 @@ test("specification search includes names, descriptions, and identifiers", () =>
     ["Model Context Protocol"],
   );
   assert.deepEqual(
-    filterSpecifications(specifications, { term: "repository" }).map(item => item.name),
+    filterSpecifications(specifications, { term: "coding agents" }).map(item => item.name),
     ["AGENTS.md"],
   );
 });
@@ -125,4 +128,17 @@ test("specification filters combine type, scope, status, and license", () => {
     license: "LicenseRef-Unclear",
   });
   assert.deepEqual(results.map(item => item.name), ["CLAUDE.md"]);
+});
+
+test("vendor instruction search finds Copilot, Gemini, and Cline conventions", () => {
+  const filters = {
+    type: "instruction_convention",
+    scope: "project_instructions",
+    status: "vendor_specific",
+  };
+
+  for (const term of ["Copilot", "GEMINI.md", "Cline"]) {
+    const results = filterSpecifications(specifications, { ...filters, term });
+    assert.equal(results.length, 1, term);
+  }
 });

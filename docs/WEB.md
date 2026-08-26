@@ -39,6 +39,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Project details show scoped license evidence; Git-hosted evidence links both immutable blobs and human-readable source paths.
 - Specification cards show type, integration scope, status or version, steward, and every reviewed license.
 - Specification filters combine search, type, scope, status, and license. Results are alphabetic and explicitly unscored.
+- Specification search indexes visible identity, steward, repository, and boundary prose; hidden relationship and evidence URLs must not create false-positive cards.
 - Specification details distinguish what the artifact standardizes from what it does not, and link reviewed specification and license evidence.
 
 ## Change surfaces

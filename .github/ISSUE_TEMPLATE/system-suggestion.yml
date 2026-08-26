@@ -1,0 +1,45 @@
+name: Suggest a system or specification
+description: Propose an item for evidence-backed editorial review.
+title: "[Suggestion]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: Suggestions enter the review queue; they are not published or scored automatically.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+    validations:
+      required: true
+  - type: input
+    id: official_url
+    attributes:
+      label: Official URL
+      description: Prefer the canonical repository, specification, or product documentation.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Operational AI system
+        - Protocol, convention, or package format
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Distinct outcome or boundary
+      description: What does it do or standardize that current entries do not?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: License or terms evidence
+      description: Link authoritative files or terms and note relevant component scope.
+    validations:
+      required: true

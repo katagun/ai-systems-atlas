@@ -8,6 +8,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
+- [ ] Disable administrator bypass for the `github-pages` environment in GitHub's UI; the setting has no supported API mutation.
 
 ## Next
 
@@ -17,6 +18,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
 - [ ] Add provider-relationship UI detail only after enough reviewed projects carry the trait; add a filter only when it yields meaningful choices.
 - [ ] Review a second specification batch around agent identity, discovery, authentication, and workflow exchange after concrete candidates are evidence-backed.
+- [ ] Review Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as the next bounded instruction-convention batch.
 
 ## Later
 
@@ -24,6 +26,8 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-25
 
+- [x] Add evidence-backed instruction conventions for GitHub Copilot, Gemini CLI, Cline, Cursor, Continue, Roo Code, and Devin Desktop; keep deprecated Cursor and Windsurf paths from becoming duplicate records.
+- [x] Harden repository automation with dependency review, npm Dependabot coverage, immutable-action enforcement, a deployment gate, and concise security and contribution guidance.
 - [x] Make all active families the clear/default directory state, clear family-scoped roles on family changes, and surface hidden advanced-filter counts.
 - [x] Publish GBrain as a local-first external agent-memory service with scoped MIT evidence; confirm GStack remains separately represented as a coding-agent workflow.
 - [x] Publish Claude Agent SDK, Google ADK, and Mastra as one-record-per-product framework systems with provider traits, scoped license evidence, and duplicate language-binding dispositions.

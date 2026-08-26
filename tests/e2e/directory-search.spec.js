@@ -23,3 +23,18 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
     "https://github.com/katagun/ai-systems-atlas",
   );
 });
+
+test("vendor instruction conventions are searchable and inspectable", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Specifications" }).click();
+
+  for (const name of ["copilot-instructions.md", "GEMINI.md", ".clinerules/"]) {
+    await page.locator("#specification-search").fill(name);
+    await expect(page.locator("#specification-grid .project-card h2")).toHaveText(name);
+  }
+
+  await page.locator("#specification-search").fill("GEMINI.md");
+  await page.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#specification-dialog")).toContainText("Gemini CLI");
+  await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
+});

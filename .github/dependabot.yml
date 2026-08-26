@@ -13,3 +13,16 @@ updates:
       prefix: "chore(actions)"
     labels:
       - dependencies
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:30"
+      timezone: America/Denver
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    commit-message:
+      prefix: "chore(npm)"
+    labels:
+      - dependencies

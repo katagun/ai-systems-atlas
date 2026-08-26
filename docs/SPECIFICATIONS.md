@@ -14,6 +14,8 @@ Add an artifact to `directory/specifications.json` when it defines a reusable co
 
 Do not add a general transport, serialization format, or API description language solely because an agent uses it. Do not list a product feature with no reusable contract. Vendor-specific conventions may be included when users must understand them, but label them `vendor_specific` rather than implying open governance.
 
+For instruction conventions, curate the current primary format rather than every compatibility filename. Record legacy paths in the current convention when the same steward and product still interpret them. Keep similarly named products separate when discovery, precedence, or activation semantics differ. Examples include `.cursor/rules/*.mdc` as Cursor's current format and legacy Windsurf paths as compatibility behavior under Devin Desktop Rules.
+
 ## Classification order
 
 Choose one artifact type:
@@ -35,3 +37,7 @@ Then choose the single integration scope that best answers “what boundary does
 6. Run synchronization, validation, all tests, and the specification browser checks in [`WEB.md`](WEB.md).
 
 Specifications are never scored, sorted by popularity, or assigned a system family. See [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
+
+## Current coverage
+
+The catalog covers open protocols and package formats plus a bounded set of repository-instruction conventions: AGENTS.md, CLAUDE.md, GitHub Copilot repository instructions, GEMINI.md, Cline, Cursor, Continue, Roo Code, and Devin Desktop rules. This is representative coverage, not a claim that every agent-specific settings file is a reusable specification. Use [`COVERAGE.md`](COVERAGE.md) and [`BACKLOG.md`](../BACKLOG.md) for the next research boundary.
