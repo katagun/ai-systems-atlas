@@ -43,6 +43,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/008-specifications-are-unscored-artifacts.md",
             "docs/adr/010-inference-services-are-unscored-service-records.md",
             "docs/adr/011-inference-services-use-a-dedicated-score-profile.md",
+            "docs/adr/012-distinct-collections-share-one-directory-surface.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

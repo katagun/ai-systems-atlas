@@ -14,7 +14,7 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Combine GitHub repository discovery with a conservative allowlist of authoritative vendor feeds so proprietary products can enter the same provisional queue.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
-- Maintain a bounded inference-service collection with a dedicated operational score, without treating providers as a fourth system family or ranking model quality, price, and transient performance.
+- Maintain a bounded inference-service collection with a dedicated operational score, surfaced alongside systems in one Directory without treating providers as a fourth system family or ranking model quality, price, and transient performance.
 
 Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
 

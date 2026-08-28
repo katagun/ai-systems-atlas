@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, and the managed services that run model inference. Memory, agent, and assistant systems are compared only inside their family; inference services use a separate operational-service score, while specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, and the managed services that run model inference. One Directory surface discovers systems and inference services while preserving their separate schemas and score profiles; specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [katagun.github.io/ai-systems-atlas](https://katagun.github.io/ai-systems-atlas/).
 

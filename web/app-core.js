@@ -34,6 +34,21 @@
     return matchesSearchTerm(JSON.stringify(project).toLowerCase(), term);
   }
 
+  function matchesDirectoryProjectSearch(project, term) {
+    if (term.length === 1) return matchesProjectSearch(project, term);
+    const haystack = [
+      project.id,
+      project.name,
+      project.description,
+      project.repo,
+      project.url,
+      project.why_it_matters,
+      ...(project.strengths || []),
+      ...(project.weaknesses || []),
+    ].filter(Boolean).join(" ").toLowerCase();
+    return matchesSearchTerm(haystack, term);
+  }
+
   function matchesProject(project, filters) {
     const term = (filters.term || "").trim().toLowerCase();
     const roles = filters.roles || [];
@@ -106,10 +121,20 @@
       : (a, b) => a.name.localeCompare(b.name));
   }
 
+  function filterDirectoryEntries(projects, services, filters = {}) {
+    const term = (filters.term || "").trim().toLowerCase();
+    const entries = [
+      ...projects.filter(project => matchesDirectoryProjectSearch(project, term)).map(record => ({ kind: "system", record })),
+      ...filterInferenceServices(services, { term, sort: "name" }).map(record => ({ kind: "inference", record })),
+    ];
+    return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
+  }
+
   return {
     compareProjects,
     directoryDefaults,
     filterAndSortProjects,
+    filterDirectoryEntries,
     filterInferenceServices,
     filterSpecifications,
     matchesProject,

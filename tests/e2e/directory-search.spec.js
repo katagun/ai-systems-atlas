@@ -3,10 +3,12 @@ const { test, expect } = require("@playwright/test");
 test("searching G finds GBrain and GStack across all families", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.locator("#family-filter")).toHaveValue("");
-  await page.locator("#project-search").fill("G");
+  await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#all-directory-result-count")).toContainText("120 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
+  await page.locator("#all-directory-search").fill("G");
 
-  const resultNames = page.locator("#project-grid .project-card h2");
+  const resultNames = page.locator("#all-directory-grid .project-card h2");
   await expect(resultNames.filter({ hasText: /^GBrain$/ })).toHaveCount(1);
   await expect(resultNames.filter({ hasText: /^GStack$/ })).toHaveCount(1);
 });
@@ -22,6 +24,39 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
     "href",
     "https://github.com/katagun/ai-systems-atlas",
   );
+});
+
+test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#all-directory-search").fill("AI21 Studio");
+  const serviceCard = page.locator("#all-directory-grid .project-card");
+  await expect(serviceCard).toHaveCount(1);
+  await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
+  await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
+  await serviceCard.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
+  await page.locator("#inference-dialog .dialog-close").click();
+
+  await page.locator("#all-directory-search").fill("Kilo Code");
+  const systemCard = page.locator("#all-directory-grid .project-card");
+  await expect(systemCard).toHaveCount(1);
+  await expect(systemCard.locator(".family-label")).toContainText("System · Agent system");
+  await systemCard.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#project-dialog")).toContainText("Kilo Code");
+});
+
+test("the unified Directory remains usable at a narrow viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await expect(page.getByRole("button", { name: /^All / })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Inference services / })).toBeVisible();
+  await page.locator("#all-directory-search").fill("AI21 Studio");
+  await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText("AI21 Studio");
+  await page.getByRole("button", { name: /^Inference services / }).click();
+  await expect(page.locator("#inference-search")).toBeVisible();
+  await expect(page.locator("#inference-grid .score-ring").first()).toBeVisible();
 });
 
 test("vendor instruction conventions are searchable and inspectable", async ({ page }) => {
@@ -41,8 +76,9 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
 
 test("reviewed provider traits appear only in project details", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
   await page.locator("#project-search").fill("Claude Code");
-  await page.locator('button[data-project="claude-code"]').click();
+  await page.locator('#project-grid button[data-project="claude-code"]').click();
 
   await expect(page.locator("#project-dialog")).toContainText("Model provider support");
   await expect(page.locator("#project-dialog")).toContainText("Provider-native");
@@ -52,10 +88,11 @@ test("reviewed provider traits appear only in project details", async ({ page })
 
 test("inference services combine filters and expose the dedicated service score", async ({ page }) => {
   await page.goto("/");
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-  await page.getByRole("button", { name: "Inference Services" }).click();
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await page.getByRole("button", { name: /^Inference services / }).click();
+  await expect(page).toHaveURL(/collection=inference/);
+  await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
 
   await expect(page.locator("#inference-result-count")).toContainText("36 services · Inference-service score");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
@@ -80,6 +117,7 @@ test("inference services combine filters and expose the dedicated service score"
 
 test("assistant systems filter, score, and open without agent-only fields", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
 
   await page.locator("#family-filter").selectOption("assistant_system");
   await expect(page.locator("#result-count")).toContainText("Assistant-system score");
@@ -92,7 +130,7 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
 
   await page.locator("#role-filter").selectOption("multi_model_chat_client");
   await expect(page.locator("#project-grid .project-card h2")).toHaveText(["T3 Chat", "Venice.ai"]);
-  await page.locator('button[data-project="t3-chat"]').click();
+  await page.locator('#project-grid button[data-project="t3-chat"]').click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Context & continuity");
   await expect(page.locator("#project-dialog")).toContainText("LicenseRef-Proprietary");
@@ -100,6 +138,7 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
 
 test("scores remain hidden across families and visible within the assistant family", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
 
   await expect(page.locator("#family-filter")).toHaveValue("");
   await expect(page.locator("#project-grid .score-ring")).toHaveCount(0);
@@ -112,6 +151,7 @@ test("scores remain hidden across families and visible within the assistant fami
 
 test("notable provider assistants are searchable and license-labeled", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
   await page.locator("#family-filter").selectOption("assistant_system");
 
   for (const name of [
@@ -134,6 +174,7 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
 
 test("reviewed named agent additions are searchable", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
 
   for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent", "Cua", "PRAXIST Beta", "Open Grok", "Warp", "Higgsfield Supercomputer"]) {
     await page.locator("#project-search").fill(name);
@@ -143,13 +184,15 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Finder" }).click();
+  await page.getByRole("button", { name: "System Finder" }).click();
   await page.getByRole("button", { name: /I need an assistant/ }).click();
   await page.getByRole("button", { name: /Use several models in one place/ }).click();
   await page.getByRole("button", { name: /Model and data portability/ }).click();
 
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await page.getByRole("button", { name: "Browse matches →" }).click();
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page).toHaveURL(/collection=systems/);
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");
 });

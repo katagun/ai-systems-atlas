@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6.1">
+  <link rel="stylesheet" href="styles.css?v=6.2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -25,8 +25,7 @@
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
-      <button class="tab" data-tab="finder">Finder</button>
-      <button class="tab" data-tab="inference-services">Inference Services</button>
+      <button class="tab" data-tab="finder">System Finder</button>
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
@@ -37,17 +36,18 @@
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
         <div class="hero-copy-block">
-          <p class="eyebrow" id="hero-kicker">Reviewed systems</p>
-          <h1 id="directory-title">Find a system <span>that fits.</span></h1>
-          <p class="hero-copy">Explore memory, agent, and assistant systems by role, architecture, deployment, and fit.</p>
-          <button class="hero-action" data-open-tab="finder">Not sure? Help me choose <span aria-hidden="true">→</span></button>
+          <p class="eyebrow" id="hero-kicker">Reviewed systems and services</p>
+          <h1 id="directory-title">Find the AI layer <span>that fits.</span></h1>
+          <p class="hero-copy">Explore operational systems and the managed services that run model inference—without mixing their score profiles.</p>
+          <button class="hero-action" data-open-tab="finder">Need a system? Use the finder <span aria-hidden="true">→</span></button>
         </div>
         <div class="atlas-map" aria-hidden="true">
           <div class="map-toolbar"><span>ATLAS / LIVE INDEX</span><span class="map-status">EVIDENCE REVIEWED</span></div>
           <div class="map-field">
-            <span class="map-axis map-axis-x">SYSTEM LANDSCAPE</span>
+            <span class="map-axis map-axis-x">SYSTEM + SERVICE LANDSCAPE</span>
             <span class="map-axis map-axis-y">OPERATIONAL FIT</span>
             <span class="map-node map-memory"><i></i><b>MEMORY</b><small>retain · retrieve</small></span>
+            <span class="map-node map-inference"><i></i><b>INFERENCE</b><small>serve · route</small></span>
             <span class="map-node map-agent"><i></i><b>AGENTS</b><small>plan · execute</small></span>
             <span class="map-node map-assistant"><i></i><b>ASSISTANTS</b><small>interact · create</small></span>
             <span class="map-orbit orbit-one"></span>
@@ -57,28 +57,58 @@
         </div>
       </div>
 
-      <section class="control-panel" id="directory-controls" aria-label="Directory filters">
-        <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"></label>
-        <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
-        <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
-        <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
-        <details class="advanced-filter-shell">
-          <summary>More filters</summary>
-          <div class="advanced-filters">
-            <label><span>Source model</span><select id="source-model-filter"><option value="">All source models</option></select></label>
-            <label><span>License</span><select id="license-filter"><option value="">All licenses</option></select></label>
-            <label><span>AI relationship</span><select id="agent-filter"><option value="">All relationships</option></select></label>
-            <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
-            <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="removed">Unavailable</option></select></label>
-            <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
-          </div>
-        </details>
-        <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
-      </section>
-
       <div class="hero-stats" id="hero-stats" aria-live="polite"></div>
-      <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
-      <section id="project-grid" class="project-grid" aria-label="Reviewed projects"></section>
+      <nav class="collection-switcher" aria-label="Directory collections">
+        <button class="is-active" data-directory-collection="all" aria-pressed="true"><span>All</span><strong id="all-collection-count"></strong></button>
+        <button data-directory-collection="systems" aria-pressed="false"><span>Systems</span><strong id="system-collection-count"></strong></button>
+        <button data-directory-collection="inference" aria-pressed="false"><span>Inference services</span><strong id="inference-collection-count"></strong></button>
+      </nav>
+
+      <div id="all-directory-panel" class="collection-panel">
+        <section class="control-panel mixed-directory-controls" aria-label="All directory search">
+          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems and inference services" autocomplete="off"></label>
+          <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose Systems or Inference services for specialist filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+        </section>
+        <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
+        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems and inference services"></section>
+      </div>
+
+      <div id="systems-directory-panel" class="collection-panel" hidden>
+        <section class="control-panel" id="directory-controls" aria-label="System filters">
+          <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"></label>
+          <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
+          <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
+          <label><span>Sort</span><select id="sort-filter"><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
+          <details class="advanced-filter-shell">
+            <summary>More filters</summary>
+            <div class="advanced-filters">
+              <label><span>Source model</span><select id="source-model-filter"><option value="">All source models</option></select></label>
+              <label><span>License</span><select id="license-filter"><option value="">All licenses</option></select></label>
+              <label><span>AI relationship</span><select id="agent-filter"><option value="">All relationships</option></select></label>
+              <label><span>Architecture</span><select id="architecture-filter"><option value="">All architectures</option></select></label>
+              <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="removed">Unavailable</option></select></label>
+              <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
+            </div>
+          </details>
+          <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+        </section>
+        <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
+        <section id="project-grid" class="project-grid" aria-label="Reviewed systems"></section>
+      </div>
+
+      <div id="inference-directory-panel" class="collection-panel" hidden>
+        <section class="control-panel inference-controls" aria-label="Inference service filters">
+          <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"></label>
+          <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
+          <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
+          <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
+          <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
+          <label><span>Sort</span><select id="inference-sort-filter"><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
+          <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
+        </section>
+        <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
+        <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
+      </div>
     </section>
 
     <section id="finder" class="view" aria-labelledby="finder-title">
@@ -91,25 +121,6 @@
         <div id="finder-progress" class="finder-progress" aria-label="Finder progress"></div>
         <div id="finder-content" class="finder-content" aria-live="polite"></div>
       </section>
-    </section>
-
-    <section id="inference-services" class="view" aria-labelledby="inference-title">
-      <div class="section-heading inference-heading">
-        <p class="eyebrow" id="inference-kicker">Reviewed inference services</p>
-        <h1 id="inference-title">Where model requests run.</h1>
-        <p>Direct APIs, cloud model platforms, managed hosts, and routing services—scored on stable operational controls, never model intelligence or transient price and performance.</p>
-      </div>
-      <section class="control-panel inference-controls" aria-label="Inference service filters">
-        <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"></label>
-        <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
-        <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
-        <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
-        <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
-        <label><span>Sort</span><select id="inference-sort-filter"><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
-        <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
-      </section>
-      <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear</button></div>
-      <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
     </section>
 
     <section id="specifications" class="view" aria-labelledby="specifications-title">
@@ -163,7 +174,7 @@
   </dialog>
 
   <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services use a separate score. Specifications remain unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=6.1" defer></script>
-  <script src="app.js?v=6.1" defer></script>
+  <script src="app-core.js?v=6.2" defer></script>
+  <script src="app.js?v=6.2" defer></script>
 </body>
 </html>
