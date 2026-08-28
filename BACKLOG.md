@@ -4,7 +4,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 104 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 102 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
@@ -34,7 +34,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Show reviewed provider relationship and model-backend traits in project details without adding a sparse directory filter.
 - [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
 - [x] Add an unscored six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views.
-- [x] Expand the pilot to a 34-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
+- [x] Expand the pilot to a 36-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
 - [ ] Revisit inference-service information architecture after the expanded collection yields real navigation evidence; do not assume a permanent standalone page solely from the pilot design.
 
 ## Completed on 2026-08-26

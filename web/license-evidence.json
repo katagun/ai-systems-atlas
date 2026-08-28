@@ -1262,6 +1262,101 @@
           "verified_at": "2026-08-28"
         }
       ]
+    },
+    {
+      "project_id": "cua",
+      "repo": "trycua/cua",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Cua repository and project packages, excluding separately licensed vendored third-party components",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/trycua/cua/blob/main/LICENSE.md",
+          "blob_sha": "b8b198ce3ebaa22c9f59588a80f9f1875d85b34a",
+          "immutable_url": "https://api.github.com/repos/trycua/cua/git/blobs/b8b198ce3ebaa22c9f59588a80f9f1875d85b34a"
+        }
+      ]
+    },
+    {
+      "project_id": "praxist",
+      "repo": "sapientinc/PRAXIST",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "PRAXIST source and operational system under the Fair Source License Agreement Version 1.0, including internal-use, distribution, revenue, and commercial-license conditions",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/sapientinc/PRAXIST/blob/main/LICENSE.md",
+          "blob_sha": "be0ab69cae032815863afb58c5ee6c16e9af98e0",
+          "immutable_url": "https://api.github.com/repos/sapientinc/PRAXIST/git/blobs/be0ab69cae032815863afb58c5ee6c16e9af98e0"
+        }
+      ]
+    },
+    {
+      "project_id": "open-grok",
+      "repo": "mweinbach/open-grok",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mweinbach/open-grok/blob/main/LICENSE",
+          "blob_sha": "90b1793cf8eb2d6444863591e8405ecc707dc62d",
+          "immutable_url": "https://api.github.com/repos/mweinbach/open-grok/git/blobs/90b1793cf8eb2d6444863591e8405ecc707dc62d"
+        }
+      ]
+    },
+    {
+      "project_id": "warp",
+      "repo": "warpdotdev/Warp",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Warp repository except the warpui_core and warpui UI framework packages",
+          "kind": "git_blob",
+          "path": "LICENSE-AGPL",
+          "url": "https://github.com/warpdotdev/Warp/blob/master/LICENSE-AGPL",
+          "blob_sha": "3ef47927440e8c48827e853d5b6a31b5bd4474b2",
+          "immutable_url": "https://api.github.com/repos/warpdotdev/Warp/git/blobs/3ef47927440e8c48827e853d5b6a31b5bd4474b2"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "warpui_core and warpui UI framework packages",
+          "kind": "git_blob",
+          "path": "LICENSE-MIT",
+          "url": "https://github.com/warpdotdev/Warp/blob/master/LICENSE-MIT",
+          "blob_sha": "30f8afaa118da0eb34a2455a02c7e9e09f61afb3",
+          "immutable_url": "https://api.github.com/repos/warpdotdev/Warp/git/blobs/30f8afaa118da0eb34a2455a02c7e9e09f61afb3"
+        }
+      ]
+    },
+    {
+      "project_id": "higgsfield-supercomputer",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Higgsfield Supercomputer Agent, skills, storage, credits, automations, connectors, and related managed services",
+          "kind": "web_terms",
+          "url": "https://higgsfield.ai/terms-of-use-agreement",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "project_id": "venice-ai",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Venice.ai end-user assistant, applications, content-generation features, and related service software",
+          "kind": "web_terms",
+          "url": "https://venice.ai/legal/tos",
+          "verified_at": "2026-08-28"
+        }
+      ]
     }
   ]
 }

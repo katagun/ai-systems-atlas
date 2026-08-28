@@ -18,13 +18,13 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-28
 
-The reviewed catalog contains 78 systems: 27 memory systems, 41 agent systems, and 10 assistant systems. Fifty-six are open-source, one uses mixed open licenses, two are open-core, one is mixed-source, and eighteen are proprietary. The provisional queue contains 102 records. The unscored collections contain 15 specifications plus 34 inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
+The reviewed catalog contains 84 systems: 27 memory systems, 46 agent systems, and 11 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty are proprietary. The provisional queue contains 102 records. The unscored collections contain 15 specifications plus 36 inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
-| General work agent | 2 | 2 | New proprietary baseline; review control, recovery, permission, and execution boundaries as the category matures |
+| General work agent | 3 | 3 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
 | Agent framework / SDK | 12 | 12 | Broad across provider-native, provider-published, provider-agnostic, and open-core approaches |
-| Coding agent | 14 | 14 | Broad across local, self-hosted, and managed-cloud operation |
+| Coding agent | 16 | 16 | Broad across local, self-hosted, managed-cloud, terminal-native, and community-fork operation |
 | Human-first PKM | 8 | 8 | Broad, but proprietary reference products remain provisional |
 | AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
 | Retrieval infrastructure | 4 | 4 | Adequate baseline |
@@ -34,13 +34,13 @@ The reviewed catalog contains 78 systems: 27 memory systems, 41 agent systems, a
 | Context graph engine | 2 | 2 | Thin |
 | Multi-agent orchestrator | 2 | 2 | Thin relative to ecosystem size |
 | Stateful agent runtime | 5 | 5 | Improved with a self-editing personal-agent runtime; compare persistence and execution-policy boundaries |
-| Browser/computer agent | 1 | 1 | Priority gap |
+| Browser/computer agent | 2 | 2 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
 | Coding-agent workflow | 1 | 1 | Priority gap |
 | Human–agent memory bridge | 1 | 1 | Priority gap |
-| Research agent | 1 | 1 | Priority gap |
+| Research agent | 2 | 2 | Improved with a source-available executable-evidence approach; broader production evidence remains thin |
 | General AI assistant | 7 | 7 | Representative provider baseline; add products only when their workspace, governance, or regional ecosystem is materially distinct |
 | Enterprise work assistant | 2 | 2 | Improved Microsoft/AWS baseline; broader enterprise SaaS diversity remains a priority |
-| Multi-model chat client | 1 | 1 | New baseline; review product depth and hosted/open-client boundaries |
+| Multi-model chat client | 2 | 2 | Improved across conventional and privacy-oriented hosted approaches; open-client boundaries remain thin |
 
 Archived systems remain reviewed historical references but do not satisfy active-choice coverage.
 
