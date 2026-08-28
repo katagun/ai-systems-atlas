@@ -30,6 +30,19 @@ Use authoritative service documentation and governing service terms. Every mutab
 
 Do not copy per-token prices, rate limits, exhaustive model inventories, or benchmark results into the curated record. Link the official service documentation and describe only the stable decision boundary. Future automation may refresh clearly identified live metadata, but it must never rewrite editorial boundary prose or infer a service-wide conclusion from one endpoint.
 
+## Coverage discovery
+
+No one external directory defines the Atlas universe. Use several current discovery sources because each counts a different unit:
+
+- provider routers describe the upstream operators reachable through that router;
+- inference-client adapter lists mix managed services with gateways, local runtimes, and compatibility aliases;
+- model hubs list their integrated inference partners rather than the whole market; and
+- benchmark directories count model endpoints, which can produce many rows for one operational service.
+
+Build the discovery union, normalize aliases to a named service boundary, and then apply the inclusion test above. Use third-party or ecosystem catalogs only to find candidates. Promotion still requires first-party product documentation and governing terms. Coverage is representative of material operational choices, not a claim that every regional cloud, reseller, white-label endpoint, or transient model host has been enumerated.
+
+For geographically broad batches, explicitly screen direct model developers, hyperscale and regional cloud model platforms, independent managed hosts, and routing aggregators. Do not treat a model's country of origin as the service operator's processing location, and do not infer residency from a company's headquarters.
+
 ## Review workflow
 
 1. Establish the exact service and operator boundary.

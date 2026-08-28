@@ -820,29 +820,6 @@
     },
     {
       "repo": null,
-      "name": "Replit Agent",
-      "url": "https://replit.com/ai",
-      "description": "Hosted coding agent for planning, building, testing, and deploying applications in Replit workspaces.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "cloud"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
       "name": "Microsoft Recall",
       "url": "https://support.microsoft.com/en-us/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c",
       "description": "Opt-in Windows activity capture with a searchable timeline of encrypted local snapshots.",
@@ -1085,39 +1062,6 @@
         "digital-garden",
         "second-brain",
         "zettelkasten"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "Kilo-Org/kilocode",
-      "name": "kilocode",
-      "url": "https://github.com/Kilo-Org/kilocode",
-      "description": "Kilo is the all-in-one agentic engineering platform. Build, ship, and iterate faster with the most popular open source coding agent.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 27013,
-      "topics": [
-        "ai",
-        "ai-age",
-        "ai-coding",
-        "ai-developer-tools",
-        "chatgpt",
-        "claude",
-        "cli",
-        "gemini",
-        "jetbrains",
-        "sonnet",
-        "vscode",
-        "vscode-extension"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",

@@ -75,8 +75,10 @@
     {"id": "openai_native", "name": "OpenAI API", "definition": "OpenAI's first-party API contract."},
     {"id": "openai_compatible", "name": "OpenAI-compatible", "definition": "A service implements a documented subset or adaptation of OpenAI API conventions."},
     {"id": "anthropic_native", "name": "Anthropic API", "definition": "Anthropic's first-party Messages and related API contracts."},
+    {"id": "anthropic_compatible", "name": "Anthropic-compatible", "definition": "A service implements a documented subset or adaptation of Anthropic API conventions."},
     {"id": "aws_native", "name": "AWS-native", "definition": "Amazon Bedrock APIs and AWS SDK contracts."},
-    {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."}
+    {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."},
+    {"id": "service_native", "name": "Service-native", "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."}
   ],
   "specification_types": [
     {"id": "protocol", "name": "Protocol", "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."},

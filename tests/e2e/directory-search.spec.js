@@ -57,7 +57,8 @@ test("inference services combine dedicated filters and remain unscored", async (
   await page.getByRole("button", { name: "Inference Services" }).click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 
-  await expect(page.locator("#inference-result-count")).toContainText("6 services · Unscored");
+  await expect(page.locator("#inference-result-count")).toContainText("34 services · Unscored");
+  await page.locator("#inference-search").fill("Bedrock");
   await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
   await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
   await page.locator("#inference-model-source-filter").selectOption("customer_supplied");
@@ -122,6 +123,15 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
       .filter({ has: page.getByRole("heading", { name, exact: true }) });
     await expect(exactCard).toHaveCount(1);
     await expect(exactCard.locator(".license-badge")).toContainText("LicenseRef-Proprietary");
+  }
+});
+
+test("reviewed coding and stateful agent additions are searchable", async ({ page }) => {
+  await page.goto("/");
+
+  for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent"]) {
+    await page.locator("#project-search").fill(name);
+    await expect(page.locator("#project-grid .project-card h2")).toHaveText(name);
   }
 });
 
