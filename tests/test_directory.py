@@ -284,6 +284,21 @@ class DirectoryTests(unittest.TestCase):
         self.assertEqual("proprietary", projects["replit-agent"]["source_model"])
         self.assertNotIn("Replit Agent", {candidate["name"] for candidate in candidates["candidates"]})
 
+    def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+
+        self.assertEqual("browser_computer_agent", projects["cua"]["primary_role"])
+        self.assertEqual("open_source", projects["cua"]["source_model"])
+        self.assertEqual("research_agent", projects["praxist"]["primary_role"])
+        self.assertEqual("source_available", projects["praxist"]["source_model"])
+        self.assertEqual("coding_agent", projects["open-grok"]["primary_role"])
+        self.assertIn("unrelated", projects["open-grok"]["current_repo_note"])
+        self.assertEqual("coding_agent", projects["warp"]["primary_role"])
+        self.assertEqual({"AGPL-3.0", "MIT"}, set(projects["warp"]["licenses"]))
+        self.assertEqual("general_work_agent", projects["higgsfield-supercomputer"]["primary_role"])
+        self.assertEqual("multi_model_chat_client", projects["venice-ai"]["primary_role"])
+        self.assertIn("Venice API", projects["venice-ai"]["current_repo_note"])
+
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}
         for project in self.document["projects"]:
@@ -334,7 +349,8 @@ class DirectoryTests(unittest.TestCase):
             "nvidia-api-catalog", "hugging-face-inference-providers",
             "hugging-face-inference-endpoints", "together-ai",
             "fireworks-ai", "cerebras-inference", "sambanova-cloud",
-            "deepinfra", "replicate",
+            "deepinfra", "replicate", "venice-api",
+            "stability-ai-developer-platform",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(

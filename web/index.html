@@ -4,14 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AI Systems Atlas: reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
-  <meta name="theme-color" content="#f3f1eb">
+  <meta name="theme-color" content="#f7f9fc">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AI Systems Atlas">
   <meta property="og:description" content="Reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
   <meta property="og:url" content="https://katagun.github.io/ai-systems-atlas/">
   <title>AI Systems Atlas</title>
   <link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/">
-  <link rel="stylesheet" href="styles.css?v=5.2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=6.0">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -33,10 +36,25 @@
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
-        <p class="eyebrow" id="hero-kicker">Reviewed systems</p>
-        <h1 id="directory-title">Find a system that fits.</h1>
-        <p class="hero-copy">Explore memory, agent, and assistant systems by role, architecture, deployment, and fit.</p>
-        <button class="hero-action" data-open-tab="finder">Not sure? Help me choose →</button>
+        <div class="hero-copy-block">
+          <p class="eyebrow" id="hero-kicker">Reviewed systems</p>
+          <h1 id="directory-title">Find a system <span>that fits.</span></h1>
+          <p class="hero-copy">Explore memory, agent, and assistant systems by role, architecture, deployment, and fit.</p>
+          <button class="hero-action" data-open-tab="finder">Not sure? Help me choose <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="atlas-map" aria-hidden="true">
+          <div class="map-toolbar"><span>ATLAS / LIVE INDEX</span><span class="map-status">EVIDENCE REVIEWED</span></div>
+          <div class="map-field">
+            <span class="map-axis map-axis-x">SYSTEM LANDSCAPE</span>
+            <span class="map-axis map-axis-y">OPERATIONAL FIT</span>
+            <span class="map-node map-memory"><i></i><b>MEMORY</b><small>retain · retrieve</small></span>
+            <span class="map-node map-agent"><i></i><b>AGENTS</b><small>plan · execute</small></span>
+            <span class="map-node map-assistant"><i></i><b>ASSISTANTS</b><small>interact · create</small></span>
+            <span class="map-orbit orbit-one"></span>
+            <span class="map-orbit orbit-two"></span>
+          </div>
+          <div class="map-legend"><span><i class="legend-memory"></i> systems</span><span><i class="legend-inference"></i> inference</span><span><i class="legend-specs"></i> specs</span></div>
+        </div>
       </div>
 
       <section class="control-panel" id="directory-controls" aria-label="Directory filters">

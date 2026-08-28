@@ -57,7 +57,7 @@ test("inference services combine dedicated filters and remain unscored", async (
   await page.getByRole("button", { name: "Inference Services" }).click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 
-  await expect(page.locator("#inference-result-count")).toContainText("34 services · Unscored");
+  await expect(page.locator("#inference-result-count")).toContainText("36 services · Unscored");
   await page.locator("#inference-search").fill("Bedrock");
   await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
   await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
@@ -85,8 +85,8 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
   ]);
 
   await page.locator("#role-filter").selectOption("multi_model_chat_client");
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText("T3 Chat");
-  await page.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["T3 Chat", "Venice.ai"]);
+  await page.locator('button[data-project="t3-chat"]').click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Context & continuity");
   await expect(page.locator("#project-dialog")).toContainText("LicenseRef-Proprietary");
@@ -100,7 +100,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(10);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(11);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
@@ -126,10 +126,10 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
   }
 });
 
-test("reviewed coding and stateful agent additions are searchable", async ({ page }) => {
+test("reviewed named agent additions are searchable", async ({ page }) => {
   await page.goto("/");
 
-  for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent"]) {
+  for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent", "Cua", "PRAXIST Beta", "Open Grok", "Warp", "Higgsfield Supercomputer"]) {
     await page.locator("#project-search").fill(name);
     await expect(page.locator("#project-grid .project-card h2")).toHaveText(name);
   }
@@ -142,7 +142,7 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await page.getByRole("button", { name: /Use several models in one place/ }).click();
   await page.getByRole("button", { name: /Model and data portability/ }).click();
 
-  await expect(page.locator(".finder-results h3")).toHaveText("T3 Chat");
+  await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await page.getByRole("button", { name: "Browse matches →" }).click();
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");

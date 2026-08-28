@@ -848,6 +848,69 @@
         {"kind": "web", "label": "Deployments", "url": "https://replicate.com/docs/topics/deployments", "verified_at": "2026-08-28"}
       ],
       "verified_at": "2026-08-28"
+    },
+    {
+      "id": "venice-api",
+      "name": "Venice API",
+      "operator": "Venice.ai",
+      "service_type": "routing_aggregator",
+      "url": "https://docs.venice.ai/",
+      "description": "Venice.ai's cross-modal inference API for private and anonymized access to open-weight and proprietary text, image, video, audio, embedding, and related models.",
+      "service_boundary": "Represents the Venice developer API and its decentralized or upstream inference routing, not the Venice.ai end-user assistant, upstream model publishers, or customer-operated model deployments.",
+      "delivery_modes": ["on_demand"],
+      "model_sources": ["third_party_proprietary", "open_weight"],
+      "api_styles": ["openai_compatible", "service_native"],
+      "regional_controls": "The reviewed public documentation does not establish customer-selected processing regions; private models run across Venice's decentralized provider fleet, while anonymized models can reach third-party frontier providers.",
+      "retention_controls": "Venice states that it does not store or log API prompts or model responses. Effective privacy still depends on the selected model tier: private models use Venice-routed GPU capacity, while anonymized frontier models are proxied to third parties under different upstream handling, and selected models offer TEE or client-side E2EE.",
+      "routing": "Customers select models from a cross-provider catalog. Venice routes private requests across decentralized GPU providers and proxies anonymized requests to frontier providers; response headers can identify the model and router when available.",
+      "customization": "The service exposes model selection, system-prompt behavior, tools, structured output, and modality-specific generation parameters; arbitrary customer-weight deployment is not established as a public API capability.",
+      "strengths": [
+        "One compatible API spans a large cross-provider and cross-modal model catalog.",
+        "Per-model privacy labels plus TEE and E2EE options make inference-boundary differences unusually visible."
+      ],
+      "tradeoffs": [
+        "Private and anonymized model modes have materially different upstream boundaries and privacy properties.",
+        "The broad, frequently changing catalog requires model-level capability, terms, and retention review."
+      ],
+      "terms": {"kind": "web_terms", "label": "Venice Terms of Service", "url": "https://venice.ai/legal/tos", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "Venice API reference", "url": "https://docs.venice.ai/api-reference/api-spec", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Model catalog and privacy labels", "url": "https://docs.venice.ai/models/overview", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Privacy architecture", "url": "https://docs.venice.ai/welcome/privacy", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "TEE and E2EE model operation", "url": "https://docs.venice.ai/guides/features/tee-e2ee-models", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "stability-ai-developer-platform",
+      "name": "Stability AI Developer Platform",
+      "operator": "Stability AI",
+      "service_type": "direct_model_api",
+      "url": "https://platform.stability.ai/docs",
+      "description": "Stability AI's first-party managed API for generating, editing, controlling, and upscaling images with Stable Image and related creative models.",
+      "service_boundary": "Represents the managed Stability AI API, not Stable Assistant, DreamStudio, downloadable model weights, model licenses, or separately contracted on-premises and self-hosted enterprise deployments.",
+      "delivery_modes": ["on_demand"],
+      "model_sources": ["first_party"],
+      "api_styles": ["service_native"],
+      "regional_controls": "The reviewed public API documentation does not establish customer-selected processing regions; on-premises and self-hosted enterprise options are separate deployment boundaries.",
+      "retention_controls": "Inputs, outputs, account data, moderation, and service telemetry are governed by Stability AI's current terms and privacy policy; the reviewed API docs do not support a universal customer-configurable zero-retention claim.",
+      "routing": "Customers call named Stability endpoints and models; the service is not a cross-provider router.",
+      "customization": "API parameters cover generation, image-to-image, masks, structure and style control, background and object edits, relighting, and several upscale modes. Enterprise self-hosting is documented separately from the managed API.",
+      "strengths": [
+        "A focused first-party API exposes a deep set of image generation, control, editing, and upscale operations.",
+        "Synchronous and asynchronous REST workflows cover both interactive transforms and heavier creative operations."
+      ],
+      "tradeoffs": [
+        "The API is specialized for creative media rather than a general text or agent inference catalog.",
+        "Public regional and retention controls are less explicit than the feature-level image documentation."
+      ],
+      "terms": {"kind": "web_terms", "label": "Stability AI Terms of Service", "url": "https://stability.ai/terms-of-service", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "Developer Platform documentation", "url": "https://platform.stability.ai/docs", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Stability API reference", "url": "https://platform.stability.ai/docs/api-reference", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Stable Image service overview", "url": "https://platform.stability.ai/docs/getting-started/stable-image", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
     }
   ]
 }
