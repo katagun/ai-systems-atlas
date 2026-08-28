@@ -11,7 +11,7 @@ Read only the documents required by the change:
 | project inclusion, classification, prose, or scores | `docs/CURATION.md`, then `docs/TAXONOMY.md` |
 | JSON fields, enums, queues, or timestamps | `docs/DATA_MODEL.md` |
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
-| finder, Directory collections, filters, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/012-distinct-collections-share-one-directory-surface.md` for collection boundaries |
+| finder, Directory collections, filters, comparison, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/012-distinct-collections-share-one-directory-surface.md` for collection boundaries and `docs/adr/013-comparisons-are-scoped-to-one-score-profile.md` for comparison |
 | taxonomy or family boundaries | relevant files in `docs/adr/` |
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
@@ -40,7 +40,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, and inference-service search/filters, cross-family score hiding, the finder handoff, taxonomy, and all three detail dialogs in a browser.
+Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, and inference-service search/filters, cross-family score hiding, scoped comparison and URL restoration, the finder handoff, taxonomy, and all four dialogs in a browser.
 
 ## Hard rules
 

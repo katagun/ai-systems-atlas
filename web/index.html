@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6.2">
+  <link rel="stylesheet" href="styles.css?v=6.4">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -173,8 +173,26 @@
     <div id="inference-dialog-content"></div>
   </dialog>
 
+  <aside id="comparison-tray" class="comparison-tray" aria-label="Comparison selection" hidden>
+    <div class="comparison-tray-copy">
+      <p class="eyebrow">Scoped comparison</p>
+      <strong id="comparison-tray-title"></strong>
+      <span id="comparison-tray-items"></span>
+      <small id="comparison-status" aria-live="polite"></small>
+    </div>
+    <div class="comparison-tray-actions">
+      <button id="comparison-clear" class="ghost-button">Clear</button>
+      <button id="comparison-open" class="primary-button" disabled>Compare selected</button>
+    </div>
+  </aside>
+
+  <dialog id="comparison-dialog" class="comparison-dialog">
+    <button class="dialog-close" aria-label="Close comparison">×</button>
+    <div id="comparison-dialog-content"></div>
+  </dialog>
+
   <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services use a separate score. Specifications remain unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=6.2" defer></script>
-  <script src="app.js?v=6.2" defer></script>
+  <script src="app-core.js?v=6.4" defer></script>
+  <script src="app.js?v=6.4" defer></script>
 </body>
 </html>

@@ -17,6 +17,7 @@ Use progressive disclosure for explanation and specialist controls:
 - In Systems, keep Search, Family, Role, and Sort visible; keep source model, license, agent relation, architecture, status, and local-first under “More filters.”
 - In Inference services, keep search, service type, delivery, model source, API style, and score sort visible.
 - State the applicable score-scope rule beside each collection's controls.
+- Offer comparison only after the user enters one comparable scope: a selected system family or Inference services.
 - Put definitions and classification rationale in Taxonomy.
 - Put evidence, score dimensions, strengths, and weaknesses in project details.
 - Keep Specifications as a sibling view with direct filters; show contract boundaries and evidence only on demand.
@@ -51,6 +52,11 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Inference-service filters combine search, type, delivery mode, model source, and API style inside the Inference services Directory scope. Results default to inference-service score and can be sorted alphabetically.
 - Inference-service search indexes visible identity and boundary prose; terms and evidence URLs must not create false-positive cards.
 - Inference-service details show the dedicated score dimensions, service/company/model/runtime boundary, regional and retention controls, routing, customization, terms, and reviewed evidence. The score language must exclude model quality, current price, and transient performance.
+- Comparison selection is available for two to four records in one score profile. Mixed results, all-family Systems, and Specifications never expose comparison controls.
+- System comparisons align the family score with role, source model, licenses or terms, deployment, architecture, strengths, and watchouts. Inference-service comparisons align the service score with delivery, model sources, API styles, operational controls, strengths, and tradeoffs.
+- The `compare` URL parameter uses `system:id,id` or `inference:id,id`. Restoration requires every ID to exist and share one compatible profile; invalid or incompatible state is removed rather than partially restored.
+- Changing collection or system family clears an incompatible comparison. Filters within the same profile may hide a selected card but must not discard the selection.
+- Comparison tables remain fully keyboard operable and horizontally scroll inside their dialog on narrow screens. The current URL is the shareable state; no account or server persistence is implied.
 
 ## Change surfaces
 
@@ -59,6 +65,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 | filters and sorting | `web/app-core.js` |
 | finder questions and ranking | `web/app.js` finder constants and functions |
 | rendering and detail dialog | `web/app.js` |
+| comparison eligibility and selection | `web/app-core.js` and `web/app.js` |
 | layout and responsive behavior | `web/styles.css` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
@@ -103,5 +110,7 @@ Then verify in a browser:
 10. search and combine filters in Specifications; open a protocol and instruction-convention detail view.
 11. search the mixed Directory for both a system and an inference service; confirm mixed cards hide scores and open the correct detail dialogs.
 12. switch to Inference services, reload the scoped URL, combine every filter, verify score and name sorting, and open direct API, cloud platform, inference host, and routing-aggregator details.
+13. confirm comparison controls are hidden in mixed and all-family views, then compare two to four systems within each family.
+14. compare inference services, reload a comparison URL, test an invalid or cross-family URL, clear or change scope, and inspect the table at narrow and wide widths.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

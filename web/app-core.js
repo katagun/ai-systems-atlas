@@ -130,6 +130,21 @@
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
 
+  function updateComparisonSelection(current = {}, candidate, maxItems = 4) {
+    const sameProfile = current.kind === candidate.kind && current.profile === candidate.profile;
+    const ids = sameProfile ? [...(current.ids || [])] : [];
+    const selectedIndex = ids.indexOf(candidate.id);
+    if (selectedIndex >= 0) ids.splice(selectedIndex, 1);
+    else if (ids.length >= maxItems) return { ...current, limitReached: true };
+    else ids.push(candidate.id);
+    return {
+      kind: ids.length ? candidate.kind : null,
+      profile: ids.length ? candidate.profile : null,
+      ids,
+      limitReached: false,
+    };
+  }
+
   return {
     compareProjects,
     directoryDefaults,
@@ -138,5 +153,6 @@
     filterInferenceServices,
     filterSpecifications,
     matchesProject,
+    updateComparisonSelection,
   };
 });
