@@ -271,6 +271,19 @@ class DirectoryTests(unittest.TestCase):
         )
         self.assertIn("Gorgias Cortex", {entry["name"] for entry in exclusions["entries"]})
 
+    def test_named_agent_additions_have_reviewed_product_boundaries(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+
+        self.assertEqual("coding_agent", projects["kilo-code"]["primary_role"])
+        self.assertEqual("open_source", projects["kilo-code"]["source_model"])
+        self.assertIn("Cloud Agent", projects["kilo-code"]["current_repo_note"])
+        self.assertEqual("stateful_agent_runtime", projects["hermes-agent"]["primary_role"])
+        self.assertIn("self_editing", projects["hermes-agent"]["memory_lifecycle"])
+        self.assertEqual("coding_agent", projects["replit-agent"]["primary_role"])
+        self.assertEqual("proprietary", projects["replit-agent"]["source_model"])
+        self.assertNotIn("Replit Agent", {candidate["name"] for candidate in candidates["candidates"]})
+
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}
         for project in self.document["projects"]:
@@ -310,6 +323,18 @@ class DirectoryTests(unittest.TestCase):
         expected = {
             "openai-api", "anthropic-api", "amazon-bedrock",
             "vertex-ai-generative-ai", "openrouter", "groqcloud",
+            "google-gemini-api", "xai-api", "mistral-ai-studio",
+            "cohere-api", "deepseek-api", "moonshot-ai-open-platform",
+            "zai-model-api", "ai21-studio", "minimax-open-platform",
+            "perplexity-api", "alibaba-cloud-model-studio",
+            "baidu-qianfan-modelbuilder", "byteplus-modelark",
+            "azure-ai-foundry-models", "oci-generative-ai",
+            "databricks-foundation-model-apis", "ibm-watsonx-ai",
+            "cloudflare-workers-ai", "tencent-cloud-tokenhub",
+            "nvidia-api-catalog", "hugging-face-inference-providers",
+            "hugging-face-inference-endpoints", "together-ai",
+            "fireworks-ai", "cerebras-inference", "sambanova-cloud",
+            "deepinfra", "replicate",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
@@ -321,6 +346,20 @@ class DirectoryTests(unittest.TestCase):
             self.assertTrue(record["service_boundary"], record["id"])
             self.assertTrue(record["evidence"], record["id"])
             self.assertEqual("web_terms", record["terms"]["kind"], record["id"])
+
+    def test_inference_service_baseline_covers_named_ecosystem_gaps(self) -> None:
+        records = {record["id"]: record for record in self.inference_services["services"]}
+        named_gaps = {
+            "deepseek-api", "moonshot-ai-open-platform", "zai-model-api",
+            "alibaba-cloud-model-studio", "mistral-ai-studio",
+            "hugging-face-inference-providers", "nvidia-api-catalog", "xai-api",
+            "azure-ai-foundry-models", "oci-generative-ai",
+            "databricks-foundation-model-apis", "cohere-api",
+        }
+        self.assertFalse(named_gaps - records.keys())
+        self.assertGreaterEqual(len(records), 30)
+        self.assertTrue(any(record["operator"] == "Baidu AI Cloud" for record in records.values()))
+        self.assertTrue(any(record["operator"] == "Tencent Cloud" for record in records.values()))
 
     def test_inference_service_traits_are_taxonomy_backed(self) -> None:
         service_types = {item["id"] for item in self.taxonomy["inference_service_types"]}

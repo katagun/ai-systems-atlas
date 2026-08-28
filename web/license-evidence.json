@@ -1219,6 +1219,49 @@
           "verified_at": "2026-08-25"
         }
       ]
+    },
+    {
+      "project_id": "kilo-code",
+      "repo": "Kilo-Org/kilocode",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Kilo Code IDE extensions and CLI repository; optional Kilo Gateway and Cloud Agent services are outside this code-license scope",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Kilo-Org/kilocode/blob/main/LICENSE",
+          "blob_sha": "c5762eb3ad5a0e1788ef155772fe3c240ab23e42",
+          "immutable_url": "https://api.github.com/repos/Kilo-Org/kilocode/git/blobs/c5762eb3ad5a0e1788ef155772fe3c240ab23e42"
+        }
+      ]
+    },
+    {
+      "project_id": "hermes-agent",
+      "repo": "NousResearch/hermes-agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/NousResearch/hermes-agent/blob/main/LICENSE",
+          "blob_sha": "75410e73319c72cd3e991a501c5455eb78f38375",
+          "immutable_url": "https://api.github.com/repos/NousResearch/hermes-agent/git/blobs/75410e73319c72cd3e991a501c5455eb78f38375"
+        }
+      ]
+    },
+    {
+      "project_id": "replit-agent",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Replit Agent and the managed Replit service under the consumer terms; Pro and Enterprise use is governed by the referenced commercial agreement",
+          "kind": "web_terms",
+          "url": "https://replit.com/terms-of-service",
+          "verified_at": "2026-08-28"
+        }
+      ]
     }
   ]
 }

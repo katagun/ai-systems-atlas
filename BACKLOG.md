@@ -8,7 +8,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
-- [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
+- [ ] Review the remaining coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, and Windsurf. Replit Agent now provides the managed-workspace baseline.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
 - [ ] Disable administrator bypass for the `github-pages` environment in GitHub's UI; the setting has no supported API mutation.
@@ -34,6 +34,8 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Show reviewed provider relationship and model-backend traits in project details without adding a sparse directory filter.
 - [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
 - [x] Add an unscored six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views.
+- [x] Expand the pilot to a 34-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
+- [ ] Revisit inference-service information architecture after the expanded collection yields real navigation evidence; do not assume a permanent standalone page solely from the pilot design.
 
 ## Completed on 2026-08-26
 
