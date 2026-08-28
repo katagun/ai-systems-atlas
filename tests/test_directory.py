@@ -333,7 +333,7 @@ class DirectoryTests(unittest.TestCase):
         for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json", "specifications.json", "inference-services.json"):
             self.assertEqual((ROOT / "directory" / name).read_bytes(), (ROOT / "web" / name).read_bytes(), name)
 
-    def test_inference_services_are_separate_unscored_service_records(self) -> None:
+    def test_inference_services_are_separate_scored_service_records(self) -> None:
         records = self.inference_services["services"]
         expected = {
             "openai-api", "anthropic-api", "amazon-bedrock",
@@ -358,10 +358,25 @@ class DirectoryTests(unittest.TestCase):
             {record["service_type"] for record in records},
         )
         for record in records:
-            self.assertFalse({"system_family", "score_profile", "score", "models", "pricing"} & set(record), record["id"])
+            self.assertFalse({"system_family", "models", "pricing"} & set(record), record["id"])
+            self.assertEqual("inference_service", record["score_profile"], record["id"])
             self.assertTrue(record["service_boundary"], record["id"])
             self.assertTrue(record["evidence"], record["id"])
             self.assertEqual("web_terms", record["terms"]["kind"], record["id"])
+
+    def test_inference_service_scores_match_the_dedicated_profile(self) -> None:
+        profile = self.taxonomy["inference_service_score_profile"]
+        dimensions = {item["id"]: item["weight"] for item in profile["dimensions"]}
+
+        self.assertEqual("inference_service", profile["id"])
+        self.assertAlmostEqual(1.0, sum(dimensions.values()))
+        for record in self.inference_services["services"]:
+            self.assertEqual(set(dimensions) | {"overall"}, set(record["score"]), record["id"])
+            calculated = round(sum(
+                record["score"][name] * weight for name, weight in dimensions.items()
+            ), 2)
+            self.assertEqual(calculated, record["score"]["overall"], record["id"])
+            self.assertTrue(all(0 <= record["score"][name] <= 10 for name in dimensions), record["id"])
 
     def test_inference_service_baseline_covers_named_ecosystem_gaps(self) -> None:
         records = {record["id"]: record for record in self.inference_services["services"]}

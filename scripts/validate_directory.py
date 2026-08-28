@@ -79,7 +79,7 @@ INFERENCE_SERVICE_REQUIRED = {
     "id", "name", "operator", "service_type", "url", "description", "service_boundary",
     "delivery_modes", "model_sources", "api_styles", "regional_controls",
     "retention_controls", "routing", "customization", "strengths", "tradeoffs",
-    "terms", "evidence", "verified_at",
+    "score_profile", "score", "terms", "evidence", "verified_at",
 }
 
 
@@ -212,6 +212,35 @@ def validate(root: Path = ROOT) -> list[str]:
                 f"taxonomy: family {family!r} requires exactly one score profile; "
                 f"found {sorted(family_profiles)}"
             )
+
+    inference_score_profile = taxonomy.get("inference_service_score_profile")
+    inference_score_dimensions: dict[str, float] = {}
+    if not isinstance(inference_score_profile, dict):
+        errors.append("taxonomy: inference_service_score_profile must be an object")
+    else:
+        if inference_score_profile.get("id") != "inference_service":
+            errors.append("taxonomy: inference service score profile requires id 'inference_service'")
+        if not isinstance(inference_score_profile.get("name"), str) or not inference_score_profile["name"].strip():
+            errors.append("taxonomy: inference service score profile requires a name")
+        dimensions = inference_score_profile.get("dimensions")
+        if not isinstance(dimensions, list) or not dimensions:
+            errors.append("taxonomy: inference service score profile requires dimensions")
+        else:
+            for item in dimensions:
+                if not isinstance(item, dict) or not isinstance(item.get("id"), str):
+                    errors.append("taxonomy: inference service score dimensions require string ids")
+                    continue
+                weight = item.get("weight")
+                if not is_number(weight) or weight <= 0:
+                    errors.append("taxonomy: inference service score dimensions require positive weights")
+                    continue
+                if item["id"] in inference_score_dimensions:
+                    errors.append("taxonomy: inference service score profile has duplicate dimensions")
+                inference_score_dimensions[item["id"]] = weight
+                if not isinstance(item.get("definition"), str) or not item["definition"].strip():
+                    errors.append("taxonomy: inference service score dimensions require definitions")
+            if inference_score_dimensions and abs(sum(inference_score_dimensions.values()) - 1.0) > 1e-9:
+                errors.append("taxonomy: inference service score profile weights do not total 1")
 
     projects_value = data.get("projects")
     if not valid_date(data.get("generated_at")):
@@ -601,7 +630,7 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
 
     inference_services_value = inference_services_data.get("services")
-    if inference_services_data.get("version") != "1.0":
+    if inference_services_data.get("version") != "2.0":
         errors.append("inference-services.json: unsupported version")
     if not valid_date(inference_services_data.get("verified_at")):
         errors.append("inference-services.json: verified_at must be an ISO date")
@@ -647,6 +676,26 @@ def validate(root: Path = ROOT) -> list[str]:
             validate_string_list(service, field, enum_ids[group], prefix, errors)
         for field in ("strengths", "tradeoffs"):
             validate_string_list(service, field, None, prefix, errors)
+        if service.get("score_profile") != "inference_service":
+            errors.append(f"{prefix}: score_profile must be 'inference_service'")
+        score = service.get("score")
+        if not isinstance(score, dict) or set(score) != set(inference_score_dimensions) | {"overall"}:
+            errors.append(f"{prefix}: score keys must exactly match the inference service profile")
+        elif any(
+            not is_number(score[key]) or not 0 <= score[key] <= 10
+            for key in inference_score_dimensions
+        ):
+            errors.append(f"{prefix}: score dimensions must be numbers between 0 and 10")
+        elif not is_number(score["overall"]):
+            errors.append(f"{prefix}: score overall must be numeric")
+        else:
+            calculated = round(sum(
+                score[key] * weight for key, weight in inference_score_dimensions.items()
+            ), 2)
+            if score["overall"] != calculated:
+                errors.append(
+                    f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
+                )
         if not valid_date(service.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
 
@@ -813,7 +862,7 @@ def main() -> int:
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
-        f"{inference_service_count} unscored inference services"
+        f"{inference_service_count} scored inference services"
     )
     return 0
 

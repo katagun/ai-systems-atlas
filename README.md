@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, and the managed services that run model inference. Memory, agent, and assistant systems are compared only inside their family; specifications and inference services are classified separately and left unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, and the managed services that run model inference. Memory, agent, and assistant systems are compared only inside their family; inference services use a separate operational-service score, while specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [katagun.github.io/ai-systems-atlas](https://katagun.github.io/ai-systems-atlas/).
 
@@ -50,7 +50,7 @@ directory/projects.json         reviewed projects and editorial scores
 directory/taxonomy.json         enum definitions, license catalog, score profiles
 directory/license-evidence.json reviewed source paths and immutable blob evidence
 directory/specifications.json  reviewed unscored protocols, conventions, and formats
-directory/inference-services.json reviewed unscored managed inference services
+directory/inference-services.json reviewed and separately scored managed inference services
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
@@ -70,7 +70,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Editorial verification dates are separate from live GitHub metadata dates.
 - Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.
-- Inference services are classified by service boundary, delivery, model sources, and API style; they are never scored or used as a fourth system family.
+- Inference services are classified by service boundary, delivery, model sources, and API style, then scored only on stable operational-service traits; their scores are not comparable to system-family scores.
 
 The weekly workflow refreshes live metadata, preserves candidate and license-review queues, validates the complete catalog, runs tests, and commits only verified data changes.
 

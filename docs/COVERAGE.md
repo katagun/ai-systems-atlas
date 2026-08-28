@@ -6,7 +6,7 @@ Use this document to choose research batches. The canonical project and candidat
 
 AI Systems Atlas aims to be comprehensive within its declared operational scope, not an indiscriminate list of every model, API, prompt wrapper, or branded feature. Coverage is healthy when a user can compare materially different approaches within a supported role, understand source-model and licensing tradeoffs, and see important systems that failed review with a concrete reason.
 
-The scored universe is deployable or directly usable memory, agent, and assistant systems. Managed inference services and specifications are separate unscored collections. Plain inference clients, model repositories, local runtimes, and observability-only services remain adjacent components unless a future collection defines their distinct user question and boundary.
+The operational-system universe is deployable or directly usable memory, agent, and assistant systems. Managed inference services form a separately scored collection with a service-specific rubric; specifications remain separate and unscored. Plain inference clients, model repositories, local runtimes, and observability-only services remain adjacent components unless a future collection defines their distinct user question and boundary.
 
 Measure coverage across three axes:
 
@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-28
 
-The reviewed catalog contains 84 systems: 27 memory systems, 46 agent systems, and 11 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty are proprietary. The provisional queue contains 102 records. The unscored collections contain 15 specifications plus 36 inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
+The reviewed catalog contains 84 systems: 27 memory systems, 46 agent systems, and 11 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty are proprietary. The provisional queue contains 102 records. The separate collections contain 15 unscored specifications plus 36 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|

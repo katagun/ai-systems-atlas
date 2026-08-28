@@ -291,18 +291,18 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("unknown inference service type" in error for error in errors), errors)
 
-    def test_inference_service_score_is_rejected(self) -> None:
+    def test_invalid_inference_service_score_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "inference-services.json"
         services = json.loads(path.read_text(encoding="utf-8"))
-        services["services"][0]["score"] = {"overall": 10}
+        services["services"][0]["score"]["operational_maturity"] = 11
         self.write_json(path, services)
         self.write_json(root / "web" / "inference-services.json", services)
 
         errors = validate(root)
 
-        self.assertTrue(any("fields differ from schema" in error and "score" in error for error in errors), errors)
+        self.assertTrue(any("score dimensions must be numbers between 0 and 10" in error for error in errors), errors)
 
     def test_inference_service_requires_dated_terms_and_evidence(self) -> None:
         temporary, root = self.temporary_catalog()

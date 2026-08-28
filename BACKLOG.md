@@ -33,7 +33,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Reconcile Mem0, Letta Code, Graphiti, Sylph, Pletor, Gorgias Cortex, and Slite Agent with reviewed, provisional, or exclusion dispositions instead of forcing every name into a scored record.
 - [x] Show reviewed provider relationship and model-backend traits in project details without adding a sparse directory filter.
 - [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
-- [x] Add an unscored six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views.
+- [x] Add a six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views; later superseded its unscored treatment with ADR 011's dedicated service rubric.
 - [x] Expand the pilot to a 36-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
 - [ ] Revisit inference-service information architecture after the expanded collection yields real navigation evidence; do not assume a permanent standalone page solely from the pilot design.
 

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6.0">
+  <link rel="stylesheet" href="styles.css?v=6.1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -97,7 +97,7 @@
       <div class="section-heading inference-heading">
         <p class="eyebrow" id="inference-kicker">Reviewed inference services</p>
         <h1 id="inference-title">Where model requests run.</h1>
-        <p>Direct APIs, cloud model platforms, managed hosts, and routing services—classified by operational boundary, with no provider score.</p>
+        <p>Direct APIs, cloud model platforms, managed hosts, and routing services—scored on stable operational controls, never model intelligence or transient price and performance.</p>
       </div>
       <section class="control-panel inference-controls" aria-label="Inference service filters">
         <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"></label>
@@ -105,6 +105,8 @@
         <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
         <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
         <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
+        <label><span>Sort</span><select id="inference-sort-filter"><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
+        <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
       </section>
       <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear</button></div>
       <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
@@ -139,6 +141,7 @@
         <article><h2>Ambient capture</h2><p>Passive collection of digital activity—screenshots, audio, active apps, window titles, or events—without deliberate note taking. It minimizes capture friction but creates severe privacy, noise, retention, and consent obligations.</p></article>
         <article><h2>Agent-system score</h2><p>Rates reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity. It is not comparable to the memory-system score.</p></article>
         <article><h2>Assistant-system score</h2><p>Rates product-level reliability, context continuity, tools and integrations, human control, data governance, interoperability, usability, and maturity. It does not rank underlying models.</p></article>
+        <article><h2>Inference-service score</h2><p>Rates operational maturity, governance, regional control, serving flexibility, interoperability, traffic resilience, customization, and documentation. It excludes model quality, current price, and transient performance.</p></article>
         <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. PKM tools, RAG apps, memory services, and agents can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
@@ -159,8 +162,8 @@
     <div id="inference-dialog-content"></div>
   </dialog>
 
-  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services and specifications unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=5.2" defer></script>
-  <script src="app.js?v=5.2" defer></script>
+  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services use a separate score. Specifications remain unscored.</span><span id="data-date"></span></footer>
+  <script src="app-core.js?v=6.1" defer></script>
+  <script src="app.js?v=6.1" defer></script>
 </body>
 </html>

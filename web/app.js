@@ -4,7 +4,11 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
-const label = value => String(value || "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
+const label = value => String(value || "")
+  .replaceAll("_", " ")
+  .replace(/\b\w/g, letter => letter.toUpperCase())
+  .replace(/\bApi\b/g, "API")
+  .replace(/\bAi\b/g, "AI");
 const projectLocation = project => project.repo || new URL(project.url).hostname.replace(/^www\./, "");
 
 const FINDER_FAMILIES = [
@@ -292,11 +296,12 @@ function renderInferenceServices() {
     delivery: $("#inference-delivery-filter").value,
     modelSource: $("#inference-model-source-filter").value,
     apiStyle: $("#inference-api-filter").value,
+    sort: $("#inference-sort-filter").value,
   });
   $("#inference-kicker").textContent = `${state.inferenceServices.length} reviewed inference services`;
-  $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · Unscored`;
+  $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · ${state.taxonomy.inference_service_score_profile.name}`;
   $("#inference-grid").innerHTML = services.map(service => `<article class="project-card inference-service-card">
-    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div><span class="status-badge">Unscored</span></div>
+    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
@@ -453,7 +458,9 @@ function renderTaxonomy() {
     ["Provenance levels", state.taxonomy.provenance_levels], ["Research confidence", state.taxonomy.research_confidence_levels],
     ["Source models", state.taxonomy.source_models], ["Inference service types", state.taxonomy.inference_service_types],
     ["Inference delivery modes", state.taxonomy.inference_delivery_modes], ["Inference model sources", state.taxonomy.inference_model_sources],
-    ["Inference API styles", state.taxonomy.inference_api_styles], ["Specification types", state.taxonomy.specification_types],
+    ["Inference API styles", state.taxonomy.inference_api_styles],
+    ["Inference-service score", state.taxonomy.inference_service_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
@@ -524,10 +531,13 @@ function inferenceEvidenceLink(item) {
 function openInferenceService(id) {
   const service = state.inferenceServices.find(item => item.id === id);
   if (!service) return;
-  $("#inference-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · Unscored</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
+  const profile = state.taxonomy.inference_service_score_profile;
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(service.score[dimension.id])}</td></tr>`).join("");
+  $("#inference-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
-      <section class="detail-block"><h3>Service boundary</h3><p>${escapeHTML(service.service_boundary)}</p><p class="unscored-note">Inference services are classified, not scored. Companies, models, and local runtimes are separate boundaries.</p></section>
+      <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(service.score.overall)}</td></tr></table><p class="unscored-note">Operational service score only. It excludes model quality, current price, and transient latency or throughput.</p></section>
+      <section class="detail-block"><h3>Service boundary</h3><p>${escapeHTML(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Delivery and model sources</h3><p><strong>Delivery:</strong> ${escapeHTML(service.delivery_modes.map(item => taxonomyName("inference_delivery_modes", item)).join(" · "))}</p><p><strong>Model sources:</strong> ${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</p><p><strong>API styles:</strong> ${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p></section>
       <section class="detail-block"><h3>Regional controls</h3><p>${escapeHTML(service.regional_controls)}</p></section>
       <section class="detail-block"><h3>Retention controls</h3><p>${escapeHTML(service.retention_controls)}</p></section>
@@ -559,7 +569,7 @@ function bindEvents() {
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
-  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
+  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -574,6 +584,7 @@ function bindEvents() {
     $("#inference-delivery-filter").value = "";
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
+    $("#inference-sort-filter").value = "score";
     renderInferenceServices();
   });
   $("#reset-filters").addEventListener("click", () => {

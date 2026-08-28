@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "verified_at": "2026-08-28",
   "services": [
     {
@@ -25,6 +25,8 @@
         "Regional processing, Zero Data Retention, and some enterprise controls require eligibility and do not cover every endpoint or feature.",
         "The service exposes OpenAI models rather than a vendor-neutral catalog."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.2, "data_governance": 9.0, "regional_deployment_control": 7.8, "serving_flexibility": 7.6, "api_interoperability": 9.2, "traffic_resilience": 6.5, "customization_lifecycle": 8.2, "documentation_transparency": 9.2, "overall": 8.40},
       "terms": {"kind": "web_terms", "label": "OpenAI Services Agreement", "url": "https://openai.com/policies/services-agreement/", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "API platform documentation", "url": "https://developers.openai.com/api/docs/", "verified_at": "2026-08-28"},
@@ -56,6 +58,8 @@
         "The direct service is limited to Anthropic model families.",
         "Zero Data Retention is approval-based and feature-specific exceptions still require review."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.9, "data_governance": 9.0, "regional_deployment_control": 5.8, "serving_flexibility": 7.2, "api_interoperability": 8.7, "traffic_resilience": 5.5, "customization_lifecycle": 5.8, "documentation_transparency": 9.0, "overall": 7.63},
       "terms": {"kind": "web_terms", "label": "Anthropic Commercial Terms of Service", "url": "https://www.anthropic.com/legal/commercial-terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "API overview", "url": "https://docs.anthropic.com/en/api/overview", "verified_at": "2026-08-28"},
@@ -88,6 +92,8 @@
         "Availability and API compatibility vary by model, endpoint, feature, and AWS region.",
         "Third-party models can add publisher-specific terms on top of the AWS agreement."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.3, "data_governance": 8.8, "regional_deployment_control": 9.0, "serving_flexibility": 9.0, "api_interoperability": 8.5, "traffic_resilience": 8.6, "customization_lifecycle": 8.8, "documentation_transparency": 9.0, "overall": 8.90},
       "terms": {"kind": "web_terms", "label": "AWS Service Terms", "url": "https://aws.amazon.com/service-terms/", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Bedrock overview", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html", "verified_at": "2026-08-28"},
@@ -121,6 +127,8 @@
         "Serving mode, region support, terms, and operational responsibility differ substantially across model categories.",
         "The broad platform boundary requires model-specific review before treating any capability as universal."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.2, "data_governance": 8.6, "regional_deployment_control": 9.2, "serving_flexibility": 9.4, "api_interoperability": 8.2, "traffic_resilience": 7.5, "customization_lifecycle": 9.2, "documentation_transparency": 9.0, "overall": 8.81},
       "terms": {"kind": "web_terms", "label": "Google Cloud Service Specific Terms", "url": "https://cloud.google.com/terms/service-terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Generative AI on Vertex AI overview", "url": "https://cloud.google.com/vertex-ai/generative-ai/docs", "verified_at": "2026-08-28"},
@@ -154,6 +162,8 @@
         "Requests cross an additional service boundary before reaching an upstream inference provider.",
         "Effective terms, availability, and data handling depend on both OpenRouter and the selected upstream endpoint."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.3, "data_governance": 8.0, "regional_deployment_control": 6.8, "serving_flexibility": 5.5, "api_interoperability": 9.0, "traffic_resilience": 9.6, "customization_lifecycle": 4.5, "documentation_transparency": 9.0, "overall": 7.59},
       "terms": {"kind": "web_terms", "label": "OpenRouter Terms of Service", "url": "https://openrouter.ai/terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "API quickstart", "url": "https://openrouter.ai/docs/quickstart", "verified_at": "2026-08-28"},
@@ -186,6 +196,8 @@
         "The hosted catalog is selective and preview models may be discontinued on short notice.",
         "Regional choice is narrower than multi-region cloud platforms in the reviewed documentation."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.2, "data_governance": 9.0, "regional_deployment_control": 4.8, "serving_flexibility": 7.3, "api_interoperability": 8.5, "traffic_resilience": 6.0, "customization_lifecycle": 7.0, "documentation_transparency": 8.8, "overall": 7.50},
       "terms": {"kind": "web_terms", "label": "Groq Services Agreement", "url": "https://console.groq.com/docs/legal/services-agreement", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "GroqCloud overview", "url": "https://console.groq.com/docs/overview", "verified_at": "2026-08-28"},
@@ -213,6 +225,8 @@
       "customization": "The reviewed direct API supports prompting, caching, files, tools, and tuned-model features where documented, not customer-managed serving infrastructure.",
       "strengths": ["Direct access to Google's multimodal model APIs and developer tooling.", "Native and OpenAI-compatible integration paths are documented."],
       "tradeoffs": ["Its governance boundary differs from Vertex AI.", "Feature availability and data behavior vary across free, paid, and stateful features."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.7, "data_governance": 7.0, "regional_deployment_control": 4.5, "serving_flexibility": 7.2, "api_interoperability": 8.6, "traffic_resilience": 5.5, "customization_lifecycle": 6.5, "documentation_transparency": 8.2, "overall": 7.05},
       "terms": {"kind": "web_terms", "label": "Gemini API Additional Terms", "url": "https://ai.google.dev/gemini-api/terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Gemini API documentation", "url": "https://ai.google.dev/gemini-api/docs", "verified_at": "2026-08-28"},
@@ -237,6 +251,8 @@
       "customization": "The public API emphasizes model and tool invocation rather than imported customer weights.",
       "strengths": ["Direct API access to Grok models and xAI-operated web and X search tools.", "Self-service Zero Data Retention behavior is documented."],
       "tradeoffs": ["The catalog is limited to xAI-operated models and tools.", "Zero Data Retention disables several stateful API features."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.8, "data_governance": 8.5, "regional_deployment_control": 4.8, "serving_flexibility": 7.0, "api_interoperability": 8.5, "traffic_resilience": 5.8, "customization_lifecycle": 5.0, "documentation_transparency": 8.0, "overall": 7.05},
       "terms": {"kind": "web_terms", "label": "xAI Enterprise Terms of Service", "url": "https://x.ai/legal/terms-of-service-enterprise", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "xAI API quickstart", "url": "https://docs.x.ai/developers/quickstart", "verified_at": "2026-08-28"},
@@ -261,6 +277,8 @@
       "customization": "Fine-tuning and agent-building paths are documented for eligible models and accounts.",
       "strengths": ["A European-operated direct platform spans proprietary and open model families.", "The platform includes model APIs, tuning, OCR, audio, and agent services."],
       "tradeoffs": ["The broad platform includes features with different storage behavior.", "Partner-hosted and customer-infrastructure deployments have separate terms and boundaries."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.2, "data_governance": 6.8, "regional_deployment_control": 6.5, "serving_flexibility": 7.2, "api_interoperability": 8.5, "traffic_resilience": 5.5, "customization_lifecycle": 7.5, "documentation_transparency": 7.8, "overall": 7.25},
       "terms": {"kind": "web_terms", "label": "Mistral AI Legal Center", "url": "https://legal.mistral.ai/terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Mistral AI documentation", "url": "https://docs.mistral.ai/", "verified_at": "2026-08-28"},
@@ -285,6 +303,8 @@
       "customization": "Fine-tuning and private deployment options are available under separate eligibility and deployment paths.",
       "strengths": ["First-party generation, embedding, and reranking APIs share one enterprise-oriented platform.", "The service supports retrieval-heavy application patterns beyond generation alone."],
       "tradeoffs": ["Deployment and data commitments differ between trial, production, private, and partner paths.", "The direct catalog is Cohere-centered rather than vendor-neutral."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.4, "data_governance": 7.5, "regional_deployment_control": 6.5, "serving_flexibility": 7.2, "api_interoperability": 7.5, "traffic_resilience": 5.5, "customization_lifecycle": 8.0, "documentation_transparency": 8.0, "overall": 7.35},
       "terms": {"kind": "web_terms", "label": "Cohere Terms of Use", "url": "https://cohere.com/terms-of-use", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Cohere documentation", "url": "https://docs.cohere.com/", "verified_at": "2026-08-28"},
@@ -309,6 +329,8 @@
       "customization": "The reviewed public direct API does not document customer-imported weights or dedicated deployments.",
       "strengths": ["Direct first-party access with widely used compatible API conventions.", "Technical documentation identifies model versions, limits, and isolation behavior."],
       "tradeoffs": ["Public regional and retention controls are less explicit than major cloud platforms.", "The direct service is limited to DeepSeek model families."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.2, "data_governance": 5.5, "regional_deployment_control": 3.5, "serving_flexibility": 5.2, "api_interoperability": 8.8, "traffic_resilience": 4.5, "customization_lifecycle": 3.5, "documentation_transparency": 6.8, "overall": 5.68},
       "terms": {"kind": "web_terms", "label": "DeepSeek Open Platform Terms of Service", "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "DeepSeek API documentation", "url": "https://api-docs.deepseek.com/api/deepseek-api/", "verified_at": "2026-08-28"},
@@ -333,6 +355,8 @@
       "customization": "The reviewed public API is a managed model-access service and does not establish imported customer-weight deployment.",
       "strengths": ["Direct access to Moonshot's Kimi model family.", "OpenAI-compatible access lowers integration friction."],
       "tradeoffs": ["Public regional controls are not clearly exposed.", "The service boundary differs from Kimi access through routers and other hosts."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 6.8, "data_governance": 5.0, "regional_deployment_control": 3.5, "serving_flexibility": 5.0, "api_interoperability": 7.8, "traffic_resilience": 4.5, "customization_lifecycle": 3.5, "documentation_transparency": 6.5, "overall": 5.35},
       "terms": {"kind": "web_terms", "label": "Moonshot Open Platform Model Use Agreement", "url": "https://platform.moonshot.ai/docs/agreement/modeluse", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Moonshot Open Platform introduction", "url": "https://platform.moonshot.ai/docs/intro", "verified_at": "2026-08-28"},
@@ -357,6 +381,8 @@
       "customization": "The reviewed public Model API focuses on hosted models and does not establish customer-supplied weight deployment.",
       "strengths": ["Direct access to the GLM family across several modalities.", "Official examples document both native HTTP and OpenAI SDK access."],
       "tradeoffs": ["Public regional and retention controls require further contract-level review.", "The direct service is limited to Z.ai-operated model families."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.0, "data_governance": 5.2, "regional_deployment_control": 3.5, "serving_flexibility": 5.2, "api_interoperability": 8.2, "traffic_resilience": 4.5, "customization_lifecycle": 3.5, "documentation_transparency": 6.8, "overall": 5.52},
       "terms": {"kind": "web_terms", "label": "Z.ai Model API Terms of Use", "url": "https://docs.z.ai/legal-agreement/terms-of-use", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Z.ai API introduction", "url": "https://docs.z.ai/api-reference/introduction", "verified_at": "2026-08-28"},
@@ -381,6 +407,8 @@
       "customization": "Customization and enterprise deployment options are eligibility- and contract-dependent.",
       "strengths": ["Direct access to AI21's first-party language models.", "Official compatibility guidance supports common client conventions."],
       "tradeoffs": ["The direct catalog is narrower than multi-publisher clouds.", "Public residency details are limited."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.5, "data_governance": 6.2, "regional_deployment_control": 4.0, "serving_flexibility": 6.5, "api_interoperability": 8.0, "traffic_resilience": 4.8, "customization_lifecycle": 6.0, "documentation_transparency": 7.2, "overall": 6.28},
       "terms": {"kind": "web_terms", "label": "AI21 Terms of Service", "url": "https://www.ai21.com/terms-of-service/", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "AI21 developer documentation", "url": "https://docs.ai21.com/", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -402,6 +430,8 @@
       "customization": "The reviewed public API focuses on managed capability endpoints rather than customer-supplied model deployment.",
       "strengths": ["A single direct platform spans several generative media modalities.", "Official documentation provides native and compatible integration guidance."],
       "tradeoffs": ["Media APIs introduce capability-specific storage and rights considerations.", "Public regional-control documentation is limited."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.0, "data_governance": 5.5, "regional_deployment_control": 3.5, "serving_flexibility": 5.3, "api_interoperability": 8.0, "traffic_resilience": 4.5, "customization_lifecycle": 4.0, "documentation_transparency": 6.8, "overall": 5.61},
       "terms": {"kind": "web_terms", "label": "MiniMax Open Platform Terms of Service", "url": "https://platform.minimax.io/protocol/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "MiniMax API quickstart", "url": "https://platform.minimax.io/docs/guides/quickstart", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -423,6 +453,8 @@
       "customization": "The service exposes search, research, and model parameters rather than customer-imported model serving.",
       "strengths": ["Search-grounded APIs combine inference with web retrieval and citations.", "Compatibility endpoints support common integration patterns."],
       "tradeoffs": ["Search-grounded requests have a broader data and source boundary than raw generation.", "Regional controls are not prominent in the public docs."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.0, "data_governance": 6.8, "regional_deployment_control": 4.0, "serving_flexibility": 7.0, "api_interoperability": 8.3, "traffic_resilience": 6.5, "customization_lifecycle": 5.0, "documentation_transparency": 8.0, "overall": 6.71},
       "terms": {"kind": "web_terms", "label": "Perplexity API Terms of Service", "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "Perplexity API overview", "url": "https://docs.perplexity.ai/getting-started/overview", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -444,6 +476,8 @@
       "customization": "The platform supports tuning, application building, and deployment paths for eligible models and customer artifacts.",
       "strengths": ["Broad access to Qwen and other models through region-scoped cloud controls.", "OpenAI- and Anthropic-compatible protocols are documented."],
       "tradeoffs": ["Model and feature availability vary substantially by region.", "The platform's broad scope requires model-specific terms and deployment review."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.0, "data_governance": 8.5, "regional_deployment_control": 9.0, "serving_flexibility": 9.3, "api_interoperability": 9.2, "traffic_resilience": 7.5, "customization_lifecycle": 9.0, "documentation_transparency": 9.0, "overall": 8.82},
       "terms": {"kind": "web_terms", "label": "Alibaba Cloud Product Terms of Service", "url": "https://www.alibabacloud.com/help/en/legal/latest/alibaba-cloud-international-website-product-terms-of-service-v-3-8-0", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Model Studio overview", "url": "https://www.alibabacloud.com/help/en/model-studio/", "verified_at": "2026-08-28"},
@@ -469,6 +503,8 @@
       "customization": "Qianfan supports data management, training, tuning, model management, and cloud deployment of inference services.",
       "strengths": ["Combines Baidu's first-party models with third-party and open-model services.", "Provides an end-to-end enterprise model development and serving path."],
       "tradeoffs": ["International and mainland service boundaries differ.", "Most detailed operational documentation is Chinese-language and feature-specific."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.3, "data_governance": 7.2, "regional_deployment_control": 7.0, "serving_flexibility": 8.6, "api_interoperability": 8.3, "traffic_resilience": 6.0, "customization_lifecycle": 9.0, "documentation_transparency": 7.2, "overall": 7.72},
       "terms": {"kind": "web_terms", "label": "Qianfan Platform User Agreement", "url": "https://intl.cloud.baidu.com/en/doc/qianfan/s/Cmn5zc5tn", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Qianfan ModelBuilder overview", "url": "https://cloud.baidu.com/doc/wenxinworkshop/index.html", "verified_at": "2026-08-28"},
@@ -493,6 +529,8 @@
       "customization": "Tuning, datasets, online endpoints, and batch inference are documented, with capability differences by region.",
       "strengths": ["International AP and EU endpoints are explicitly documented.", "The service spans first-party Seed models and broader managed model workflows."],
       "tradeoffs": ["EU feature and model coverage is narrower than AP coverage.", "Cross-region spillover behavior must be checked for residency-sensitive workloads."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.2, "data_governance": 7.5, "regional_deployment_control": 8.0, "serving_flexibility": 8.5, "api_interoperability": 8.2, "traffic_resilience": 6.5, "customization_lifecycle": 8.5, "documentation_transparency": 8.0, "overall": 7.93},
       "terms": {"kind": "web_terms", "label": "ModelArk Terms and Conditions", "url": "https://docs.byteplus.com/api/docs/ModelArk/Terms_and_Conditions", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "ModelArk overview", "url": "https://docs.byteplus.com/en/docs/modelark/1099455", "verified_at": "2026-08-28"},
@@ -517,6 +555,8 @@
       "customization": "Fine-tuning, provisioned deployments, managed compute, and customer model deployments are available for eligible models.",
       "strengths": ["A large multi-publisher catalog is integrated with Azure identity, networking, and geography controls.", "Common inference APIs reduce integration differences across supported models."],
       "tradeoffs": ["Model availability, terms, and processing geography vary by deployment type.", "The product boundary and naming evolve quickly and require careful distinction from direct vendor APIs."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.4, "data_governance": 9.2, "regional_deployment_control": 9.5, "serving_flexibility": 9.5, "api_interoperability": 8.8, "traffic_resilience": 8.8, "customization_lifecycle": 9.2, "documentation_transparency": 9.2, "overall": 9.23},
       "terms": {"kind": "web_terms", "label": "Microsoft Product Terms for Azure", "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/all", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Azure AI Model Inference API", "url": "https://learn.microsoft.com/en-us/rest/api/aifoundry/modelinference/", "verified_at": "2026-08-28"},
@@ -542,6 +582,8 @@
       "customization": "Fine-tuned and imported models can run on dedicated AI clusters with customer-tenancy controls.",
       "strengths": ["On-demand and dedicated serving coexist with imported-model and fine-tuning paths.", "Oracle publishes explicit stateless inference data-handling guidance."],
       "tradeoffs": ["Model and capacity support varies by OCI region.", "Dedicated clusters require commitments and service-limit planning."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.8, "data_governance": 9.2, "regional_deployment_control": 8.8, "serving_flexibility": 8.8, "api_interoperability": 8.3, "traffic_resilience": 6.5, "customization_lifecycle": 9.0, "documentation_transparency": 8.8, "overall": 8.60},
       "terms": {"kind": "web_terms", "label": "Oracle Cloud Services Contracts", "url": "https://www.oracle.com/contracts/cloud-services/", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "OCI Generative AI overview", "url": "https://docs.oracle.com/en-us/iaas/Content/generative-ai/", "verified_at": "2026-08-28"},
@@ -567,6 +609,8 @@
       "customization": "Provisioned throughput supports fine-tuned variants, supported architectures, and customer model weights registered through Unity Catalog.",
       "strengths": ["Inference integrates with Unity Catalog governance and Databricks data workflows.", "Pay-per-token, priority, provisioned, and batch modes cover distinct workloads."],
       "tradeoffs": ["Capabilities and model catalogs differ across AWS, Azure, GCP, and regions.", "External model routing can add separate provider terms beyond the hosted-service boundary."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 9.0, "data_governance": 8.8, "regional_deployment_control": 8.6, "serving_flexibility": 9.4, "api_interoperability": 8.5, "traffic_resilience": 7.8, "customization_lifecycle": 9.3, "documentation_transparency": 8.8, "overall": 8.79},
       "terms": {"kind": "web_terms", "label": "Databricks Terms of Use", "url": "https://www.databricks.com/legal/terms-of-use", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Foundation Model APIs overview", "url": "https://docs.databricks.com/aws/en/machine-learning/foundation-model-apis", "verified_at": "2026-08-28"},
@@ -592,6 +636,8 @@
       "customization": "Prompt tuning, fine-tuning, custom foundation models, and deployment spaces are available for supported workflows.",
       "strengths": ["IBM Granite and third-party models integrate with IBM Cloud governance and deployment spaces.", "The service covers hosted APIs and customer deployment workflows."],
       "tradeoffs": ["Availability and feature support vary by region and cloud plan.", "The API surface spans several watsonx resource types rather than one universal endpoint."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.7, "data_governance": 8.5, "regional_deployment_control": 8.2, "serving_flexibility": 8.7, "api_interoperability": 7.5, "traffic_resilience": 6.2, "customization_lifecycle": 9.0, "documentation_transparency": 8.3, "overall": 8.20},
       "terms": {"kind": "web_terms", "label": "IBM Cloud Service Agreement", "url": "https://www.ibm.com/support/customer/csol/terms/", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "Foundation model API", "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-api.html?context=wx", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -613,6 +659,8 @@
       "customization": "Fine-tunes and model catalog features are model-specific; arbitrary customer weight deployment is not claimed here.",
       "strengths": ["Inference can be invoked directly from Cloudflare Workers near application logic.", "A serverless API removes endpoint-capacity management for supported models."],
       "tradeoffs": ["The model catalog is curated rather than arbitrary.", "Distributed execution is different from fixed-region residency."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.7, "data_governance": 7.8, "regional_deployment_control": 5.8, "serving_flexibility": 7.2, "api_interoperability": 8.4, "traffic_resilience": 6.8, "customization_lifecycle": 5.5, "documentation_transparency": 8.2, "overall": 7.39},
       "terms": {"kind": "web_terms", "label": "Cloudflare Developer Platform Terms", "url": "https://www.cloudflare.com/service-specific-terms-developer-platform/", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Workers AI overview", "url": "https://developers.cloudflare.com/workers-ai/", "verified_at": "2026-08-28"},
@@ -637,6 +685,8 @@
       "customization": "The platform documents pay-as-you-go, guaranteed resources, and exclusive deployment; availability is model- and region-specific.",
       "strengths": ["A current unified Tencent Cloud service spans Hunyuan and several major third-party model families.", "Official docs expose regional endpoints and automatic model-selection behavior."],
       "tradeoffs": ["Third-party models add publisher-specific terms and downstream processing boundaries.", "The predecessor APIs are being migrated, so integrations must target the current TokenHub endpoints."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.5, "data_governance": 6.8, "regional_deployment_control": 8.5, "serving_flexibility": 9.1, "api_interoperability": 9.2, "traffic_resilience": 8.5, "customization_lifecycle": 7.5, "documentation_transparency": 8.0, "overall": 8.23},
       "terms": {"kind": "web_terms", "label": "LLM Service TokenHub Terms of Service", "url": "https://www.tencentcloud.com/document/product/301/78869", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "TokenHub API usage and regions", "url": "https://intl.cloud.tencent.com/document/product/1300/78941?lang=en", "verified_at": "2026-08-28"},
@@ -661,6 +711,8 @@
       "customization": "Portable NIM microservices can be deployed elsewhere, but that customer- or partner-hosted path is outside this hosted-service record.",
       "strengths": ["A broad multimodal catalog exposes documented APIs backed by NVIDIA's inference stack.", "The same NIM packaging concept supports later migration to controlled deployments."],
       "tradeoffs": ["Catalog-hosted endpoints and self-hosted NIM are materially different service boundaries.", "Hosted catalog access may be evaluation-oriented or subject to model-specific availability."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.2, "data_governance": 5.8, "regional_deployment_control": 4.0, "serving_flexibility": 5.0, "api_interoperability": 8.2, "traffic_resilience": 4.5, "customization_lifecycle": 4.5, "documentation_transparency": 7.8, "overall": 5.86},
       "terms": {"kind": "web_terms", "label": "NVIDIA API Trial Terms", "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-api-trial-terms-of-use/", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "API Catalog quickstart", "url": "https://docs.api.nvidia.com/nim/docs/api-quickstart", "verified_at": "2026-08-28"},
@@ -685,6 +737,8 @@
       "customization": "The service routes existing provider-model combinations and is not a customer-weight deployment product.",
       "strengths": ["One token and client can access many integrated providers and models.", "Explicit fastest, cheapest, preferred, and provider-specific selection policies are documented."],
       "tradeoffs": ["Requests add a proxy boundary and may reach different upstream operators.", "Residency, retention, capabilities, and availability remain provider-specific."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.0, "data_governance": 6.5, "regional_deployment_control": 5.0, "serving_flexibility": 5.5, "api_interoperability": 8.7, "traffic_resilience": 9.0, "customization_lifecycle": 4.0, "documentation_transparency": 8.7, "overall": 6.86},
       "terms": {"kind": "web_terms", "label": "Hugging Face Terms of Service", "url": "https://huggingface.co/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Inference Providers overview", "url": "https://huggingface.co/docs/inference-providers/index", "verified_at": "2026-08-28"},
@@ -709,6 +763,8 @@
       "customization": "Customers choose model repositories, revisions, inference engines, containers, hardware, scaling, and custom handlers.",
       "strengths": ["Dedicated model deployments combine Hub artifacts with managed infrastructure and autoscaling.", "Cloud, region, hardware, access, and private-network choices are explicit."],
       "tradeoffs": ["Customers retain more deployment and model-compatibility responsibility than serverless catalogs.", "Available regions and private connectivity differ by underlying cloud."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.7, "data_governance": 9.0, "regional_deployment_control": 9.0, "serving_flexibility": 8.5, "api_interoperability": 8.4, "traffic_resilience": 7.0, "customization_lifecycle": 9.6, "documentation_transparency": 9.0, "overall": 8.67},
       "terms": {"kind": "web_terms", "label": "Hugging Face Terms of Service", "url": "https://huggingface.co/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Inference Endpoints overview", "url": "https://huggingface.co/docs/inference-endpoints/index", "verified_at": "2026-08-28"},
@@ -734,6 +790,8 @@
       "customization": "Fine-tuning, LoRA, dedicated endpoints, and customer model deployment are available for supported architectures.",
       "strengths": ["Serverless and dedicated paths cover experimentation through reserved production capacity.", "A broad open-model catalog uses a common compatible API."],
       "tradeoffs": ["Catalog, lifecycle, and capacity guarantees differ between serverless and dedicated modes.", "Model terms remain publisher-specific."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.5, "data_governance": 6.8, "regional_deployment_control": 6.3, "serving_flexibility": 9.2, "api_interoperability": 8.6, "traffic_resilience": 6.2, "customization_lifecycle": 9.3, "documentation_transparency": 8.2, "overall": 7.81},
       "terms": {"kind": "web_terms", "label": "Together AI Terms of Service", "url": "https://www.together.ai/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "Together AI documentation", "url": "https://docs.together.ai/docs/introduction", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -755,6 +813,8 @@
       "customization": "Fine-tuning, LoRA, custom models, and dedicated deployments are documented for supported formats.",
       "strengths": ["Multiple capacity modes support both bursty and predictable workloads.", "OpenAI-compatible APIs cover a broad hosted model catalog."],
       "tradeoffs": ["Production controls depend on deployment tier and contract.", "Publisher terms and model lifecycle remain model-specific."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.7, "data_governance": 7.0, "regional_deployment_control": 6.5, "serving_flexibility": 9.2, "api_interoperability": 8.6, "traffic_resilience": 6.3, "customization_lifecycle": 9.2, "documentation_transparency": 8.3, "overall": 7.92},
       "terms": {"kind": "web_terms", "label": "Fireworks AI Terms of Service", "url": "https://fireworks.ai/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "Fireworks platform introduction", "url": "https://docs.fireworks.ai/getting-started/introduction", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -776,6 +836,8 @@
       "customization": "Enterprise plans document fine-tuned models, uploaded model versions, and dedicated endpoints.",
       "strengths": ["The service is optimized for high token throughput on Cerebras infrastructure.", "Shared, batch, priority, and dedicated paths are documented."],
       "tradeoffs": ["The shared production catalog is selective.", "Regional placement and custom endpoints require enterprise coordination."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.2, "data_governance": 7.5, "regional_deployment_control": 5.8, "serving_flexibility": 9.0, "api_interoperability": 8.5, "traffic_resilience": 6.0, "customization_lifecycle": 8.3, "documentation_transparency": 8.5, "overall": 7.69},
       "terms": {"kind": "web_terms", "label": "Cerebras Terms of Service", "url": "https://www.cerebras.ai/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Supported models", "url": "https://inference-docs.cerebras.ai/models/overview", "verified_at": "2026-08-28"},
@@ -800,6 +862,8 @@
       "customization": "Reserved and private capacity arrangements are enterprise paths; arbitrary public customer-weight upload is not claimed here.",
       "strengths": ["OpenAI-compatible access simplifies adoption of its hosted model catalog.", "SambaNova-operated infrastructure provides a distinct accelerator path."],
       "tradeoffs": ["The hosted catalog and public regional controls are limited compared with hyperscale clouds.", "Private deployment capabilities belong to separate commercial arrangements."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.5, "data_governance": 5.8, "regional_deployment_control": 4.0, "serving_flexibility": 7.0, "api_interoperability": 7.8, "traffic_resilience": 5.0, "customization_lifecycle": 5.5, "documentation_transparency": 7.0, "overall": 6.21},
       "terms": {"kind": "web_terms", "label": "SambaNova Terms and Conditions", "url": "https://sambanova.ai/terms-and-conditions", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "SambaNova Cloud overview", "url": "https://docs.sambanova.ai/cloud/docs/get-started/overview", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -821,6 +885,8 @@
       "customization": "Dedicated deployments and custom model hosting are available for supported artifacts.",
       "strengths": ["A broad open-model catalog is available through compatible and task-specific APIs.", "Serverless and dedicated paths address different capacity needs."],
       "tradeoffs": ["Catalog lifecycle follows upstream model availability.", "Enterprise regional and retention controls require plan-specific confirmation."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.8, "data_governance": 5.8, "regional_deployment_control": 5.5, "serving_flexibility": 7.8, "api_interoperability": 8.4, "traffic_resilience": 5.2, "customization_lifecycle": 8.0, "documentation_transparency": 7.2, "overall": 6.91},
       "terms": {"kind": "web_terms", "label": "DeepInfra Terms of Use", "url": "https://deepinfra.com/terms", "verified_at": "2026-08-28"},
       "evidence": [{"kind": "web", "label": "DeepInfra documentation", "url": "https://deepinfra.com/docs", "verified_at": "2026-08-28"}],
       "verified_at": "2026-08-28"
@@ -842,6 +908,8 @@
       "customization": "Customers can package models with Cog, push private models, and create deployments with chosen hardware and scaling settings.",
       "strengths": ["A large cross-modal model catalog shares a consistent prediction lifecycle.", "Custom model packaging and managed deployments are first-class paths."],
       "tradeoffs": ["Individual public models differ in ownership, terms, interface, and maintenance.", "Prediction artifacts and asynchronous workflows require explicit retention review."],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 8.5, "data_governance": 7.2, "regional_deployment_control": 5.8, "serving_flexibility": 8.7, "api_interoperability": 7.5, "traffic_resilience": 6.5, "customization_lifecycle": 9.5, "documentation_transparency": 8.8, "overall": 7.71},
       "terms": {"kind": "web_terms", "label": "Replicate Terms of Service", "url": "https://replicate.com/terms", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Replicate documentation", "url": "https://replicate.com/docs", "verified_at": "2026-08-28"},
@@ -872,6 +940,8 @@
         "Private and anonymized model modes have materially different upstream boundaries and privacy properties.",
         "The broad, frequently changing catalog requires model-level capability, terms, and retention review."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.6, "data_governance": 9.0, "regional_deployment_control": 4.0, "serving_flexibility": 5.5, "api_interoperability": 8.5, "traffic_resilience": 8.0, "customization_lifecycle": 4.5, "documentation_transparency": 9.0, "overall": 7.04},
       "terms": {"kind": "web_terms", "label": "Venice Terms of Service", "url": "https://venice.ai/legal/tos", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Venice API reference", "url": "https://docs.venice.ai/api-reference/api-spec", "verified_at": "2026-08-28"},
@@ -904,6 +974,8 @@
         "The API is specialized for creative media rather than a general text or agent inference catalog.",
         "Public regional and retention controls are less explicit than the feature-level image documentation."
       ],
+      "score_profile": "inference_service",
+      "score": {"operational_maturity": 7.8, "data_governance": 5.8, "regional_deployment_control": 4.0, "serving_flexibility": 5.2, "api_interoperability": 7.0, "traffic_resilience": 4.5, "customization_lifecycle": 7.2, "documentation_transparency": 8.0, "overall": 6.10},
       "terms": {"kind": "web_terms", "label": "Stability AI Terms of Service", "url": "https://stability.ai/terms-of-service", "verified_at": "2026-08-28"},
       "evidence": [
         {"kind": "web", "label": "Developer Platform documentation", "url": "https://platform.stability.ai/docs", "verified_at": "2026-08-28"},

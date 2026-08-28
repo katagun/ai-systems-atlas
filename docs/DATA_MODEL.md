@@ -13,7 +13,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `license-evidence.json` | Scoped reviewed license and terms evidence | Yes |
 | `exclusions.json` | Reviewed scope-boundary decisions | Yes |
 | `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
-| `inference-services.json` | Reviewed, unscored managed inference services and evidence | Yes |
+| `inference-services.json` | Reviewed managed inference services, dedicated service scores, and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
@@ -99,13 +99,14 @@ Evidence is either an immutable Git blob or a dated authoritative web source. Ev
 
 ## Inference service record
 
-Inference-service records are independent from project and specification records. They contain no `system_family`, role, score profile, score, popularity metric, or model-quality ranking.
+Inference-service records are independent from project and specification records. They contain no `system_family`, role, popularity metric, or model-quality ranking. Every record uses the dedicated `inference_service` score profile.
 
 - **Identity and boundary:** `id`, `name`, `operator`, authoritative `url`, `description`, and `service_boundary`.
 - **Classification:** one taxonomy-backed `service_type` plus non-empty `delivery_modes`, `model_sources`, and `api_styles`.
 - **Operational constraints:** regional controls, retention controls, routing, and customization are reviewed prose because their exceptions cannot be represented safely as one boolean.
 - **Editorial analysis:** strengths and tradeoffs describe the represented service boundary without ranking it.
+- **Editorial score:** `score_profile` identifies the inference-service rubric and `score` contains every weighted operational dimension plus the calculated overall; it never scores model quality, price, or transient performance.
 - **Terms and evidence:** one dated governing-terms record plus non-empty dated authoritative evidence.
 - **Review:** both the record and collection carry `verified_at` dates.
 
-Strict validation rejects extra fields such as `score`, copied price tables, or model inventories. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md) and [ADR 010](adr/010-inference-services-are-unscored-service-records.md).
+Strict validation rejects extra fields such as copied price tables or model inventories and verifies every score against the taxonomy weights. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), and [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md).

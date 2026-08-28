@@ -305,7 +305,7 @@ h1 {
   position: static;
 }
 .inference-controls {
-  grid-template-columns: minmax(230px, 2fr) repeat(4, minmax(130px, 1fr));
+  grid-template-columns: minmax(230px, 2fr) repeat(5, minmax(120px, 1fr));
   position: static;
 }
 .advanced-filter-shell,

@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status. Inference services are classified by service type, delivery mode, model-source scope, and API style. Neither receives an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), and [ADR 010](adr/010-inference-services-are-unscored-service-records.md).
+Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status and remain unscored. Inference services are classified by service type, delivery mode, model-source scope, and API style, then compared through their own operational-service score profile. That score is not comparable to any system-family score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), and [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md).
 
 ## Family 1: memory systems
 
@@ -81,7 +81,7 @@ Provider coupling is also orthogonal. `provider_native` identifies a primary pat
 
 Providers and plain model API clients are not operational system families. An official SDK can qualify as an agent framework or runtime only when it materially owns a tool-using agent loop.
 
-Named managed inference services live in a separate unscored collection. The record unit is the service boundary—not the company, model, local runtime, or client SDK. These records explain who operates inference and under what delivery, data, routing, and terms boundary; they do not rank model quality or provider performance.
+Named managed inference services live in a separate collection with a dedicated operational-service score. The record unit is the service boundary—not the company, model, local runtime, or client SDK. These records explain who operates inference and under what delivery, data, routing, and terms boundary; their score compares documented service controls without ranking model quality, price, or transient provider performance.
 
 ### External agent memory
 
