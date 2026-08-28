@@ -4,7 +4,7 @@ The `web/` directory is a dependency-free static application. `app-core.js` cont
 
 ## Visual language
 
-The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The decorative atlas map in the directory hero expresses the catalog's three system families without becoming another navigation surface. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence.
+The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The decorative atlas map in the directory hero expresses the three system families and inference-service layer without becoming another navigation surface. Its faint orbital ellipses span all four nodes so no subset reads as a separate cluster. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence.
 
 ## Content hierarchy
 
