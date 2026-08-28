@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterInferenceServices, filterSpecifications, matchesProject } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterSpecifications, matchesProject } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -193,4 +193,19 @@ test("inference services can sort by their dedicated score", () => {
     filterInferenceServices(inferenceServices, { sort: "score" }).map(item => item.name),
     ["Amazon Bedrock", "OpenAI API", "OpenRouter"],
   );
+});
+
+test("the unified directory discovers both collections without indexing hidden provider metadata", () => {
+  const combinedProjects = [
+    { ...projects[3], id: "agent", description: "Coding system", model_backends: ["hidden-provider"] },
+  ];
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, {}).map(item => [item.kind, item.record.name]),
+    [["system", "Agent"], ["inference", "Amazon Bedrock"], ["inference", "OpenAI API"], ["inference", "OpenRouter"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, { term: "Bedrock" }).map(item => item.record.name),
+    ["Amazon Bedrock"],
+  );
+  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, { term: "hidden-provider" }), []);
 });

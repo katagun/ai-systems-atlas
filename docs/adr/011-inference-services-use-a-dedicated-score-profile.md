@@ -30,7 +30,7 @@ The score evaluates the managed operational service—not its parent company, un
 ## Consequences
 
 - Direct APIs, cloud platforms, managed hosts, and routers share one type-neutral operational rubric.
-- The UI may sort inference services by overall score and displays all dimension values and definitions.
+- The inference-services scope of the Directory may sort services by overall score and displays all dimension values and definitions; mixed browsing hides the score under ADR 012.
 - Model quality, latency, throughput, uptime, and price remain outside the score unless stable, independently supportable service-level evidence is added through a future decision.
 - Changing a dimension or weight requires a taxonomy and documentation change plus recomputation of every inference-service score.
 - New services require a complete score at promotion; automation may not change editorial scores.

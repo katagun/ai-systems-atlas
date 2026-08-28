@@ -247,6 +247,8 @@ h1 {
 .map-node b { display: block; color: var(--text); font: 700 .65rem var(--font-mono); letter-spacing: .06em; }
 .map-node small { display: block; margin-top: .14rem; color: var(--muted); font: .54rem var(--font-mono); }
 .map-memory { top: 18%; left: 16%; }
+.map-inference { top: 14%; right: 8%; }
+.map-inference i { background: #377db1; box-shadow: 0 0 0 4px rgba(55, 125, 177, .12); }
 .map-agent { top: 47%; right: 14%; }
 .map-agent i { background: var(--coral); box-shadow: 0 0 0 4px rgba(213, 105, 81, .12); }
 .map-assistant { bottom: 13%; left: 24%; }
@@ -285,6 +287,36 @@ h1 {
   text-transform: uppercase;
 }
 
+.collection-switcher {
+  display: flex;
+  gap: .55rem;
+  margin-top: 1.25rem;
+  padding: .35rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .58);
+}
+.collection-switcher button {
+  min-height: 44px;
+  padding: .65rem .85rem;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .55rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 600;
+}
+.collection-switcher button:hover { border-color: var(--line); color: var(--text); background: rgba(255, 255, 255, .72); }
+.collection-switcher button.is-active { border-color: var(--text); background: var(--text); color: white; box-shadow: var(--shadow-small); }
+.collection-switcher strong { min-width: 2ch; color: var(--cyan-bright); font: 700 .7rem var(--font-mono); }
+.collection-switcher button:not(.is-active) strong { color: var(--cyan); }
+.collection-panel[hidden] { display: none; }
+
 .control-panel {
   display: grid;
   grid-template-columns: minmax(240px, 2fr) repeat(3, minmax(130px, 1fr));
@@ -306,6 +338,10 @@ h1 {
 }
 .inference-controls {
   grid-template-columns: minmax(230px, 2fr) repeat(5, minmax(120px, 1fr));
+  position: static;
+}
+.mixed-directory-controls {
+  grid-template-columns: 1fr;
   position: static;
 }
 .advanced-filter-shell,
@@ -423,6 +459,7 @@ input:focus, select:focus {
 .specification-card::before { background: var(--violet); }
 .inference-service-card { min-height: 380px; background: linear-gradient(145deg, #f9fdff, #fff 68%); }
 .inference-service-card::before { background: #377db1; }
+.mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);
   border-color: #a7b6c7;

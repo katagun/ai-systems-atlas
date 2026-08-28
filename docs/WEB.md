@@ -8,23 +8,28 @@ The interface uses a technical editorial system: cool paper backgrounds, crisp w
 
 ## Content hierarchy
 
-The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Finder action. Put the primary browsing controls immediately after it.
+The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional system-Finder action. It presents systems and inference services through collection scopes without merging their canonical records or scores.
 
 Use progressive disclosure for explanation and specialist controls:
 
-- Keep Search, Family, Role, and Sort visible.
-- Keep source model, license, agent relation, architecture, status, and local-first under “More filters.”
-- State the family-scoped score rule beside the filters where it affects a choice.
+- Keep the All, Systems, and Inference services collection switcher visible.
+- In All, expose one shared search, sort alphabetically, and hide numeric scores.
+- In Systems, keep Search, Family, Role, and Sort visible; keep source model, license, agent relation, architecture, status, and local-first under “More filters.”
+- In Inference services, keep search, service type, delivery, model source, API style, and score sort visible.
+- State the applicable score-scope rule beside each collection's controls.
 - Put definitions and classification rationale in Taxonomy.
 - Put evidence, score dimensions, strengths, and weaknesses in project details.
 - Keep Specifications as a sibling view with direct filters; show contract boundaries and evidence only on demand.
-- Keep Inference Services as a sibling view with direct service-type, delivery, model-source, API-style, and score-sort controls; show operational constraints, score dimensions, terms, and evidence on demand.
+- Keep inference-service constraints, score dimensions, terms, and evidence in its record-specific detail dialog even though discovery shares the Directory surface.
 
 Prefer plain interface labels over methodology language. Use exact taxonomy terms when changing their meaning would introduce ambiguity, but do not repeat the taxonomy thesis in the hero, filters, and footer.
 
 ## Behavioral contracts
 
-- The default directory shows every active memory, agent, and assistant family alphabetically, with cross-family scores hidden.
+- The default Directory scope shows every reviewed system and inference service alphabetically, including archived system references, with scores hidden across collections.
+- Mixed Directory search indexes visible identity, editorial, and boundary prose rather than hidden provider metadata or evidence URLs.
+- Collection controls are mutually exclusive, expose their selected state accessibly, and preserve the selected Systems or Inference services scope in the `collection` URL parameter.
+- The Systems scope defaults to every active memory, agent, and assistant family alphabetically, with cross-family scores hidden.
 - A one-character directory search matches prefixes of words in system names; two-character searches require a complete word to avoid false positives such as `Pi` inside `API`.
 - Choosing a family clears any role or Finder-role constraint; “Clear filters” restores the all-family active-system default.
 - “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.
@@ -43,7 +48,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Specification search indexes visible identity, steward, repository, and boundary prose; hidden relationship and evidence URLs must not create false-positive cards.
 - Specification details distinguish what the artifact standardizes from what it does not, and link reviewed specification and license evidence.
 - Reviewed provider traits appear in project details only; do not add a directory provider filter until coverage is representative.
-- Inference-service filters combine search, type, delivery mode, model source, and API style. Results default to inference-service score and can be sorted alphabetically.
+- Inference-service filters combine search, type, delivery mode, model source, and API style inside the Inference services Directory scope. Results default to inference-service score and can be sorted alphabetically.
 - Inference-service search indexes visible identity and boundary prose; terms and evidence URLs must not create false-positive cards.
 - Inference-service details show the dedicated score dimensions, service/company/model/runtime boundary, regional and retention controls, routing, customization, terms, and reviewed evidence. The score language must exclude model quality, current price, and transient performance.
 
@@ -96,6 +101,7 @@ Then verify in a browser:
 8. navigate taxonomy groups;
 9. check narrow and wide layouts and browser console errors.
 10. search and combine filters in Specifications; open a protocol and instruction-convention detail view.
-11. search and combine every Inference Services filter; verify score and name sorting; open direct API, cloud platform, inference host, and routing-aggregator details.
+11. search the mixed Directory for both a system and an inference service; confirm mixed cards hide scores and open the correct detail dialogs.
+12. switch to Inference services, reload the scoped URL, combine every filter, verify score and name sorting, and open direct API, cloud platform, inference host, and routing-aggregator details.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

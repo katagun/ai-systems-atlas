@@ -35,7 +35,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
 - [x] Add a six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views; later superseded its unscored treatment with ADR 011's dedicated service rubric.
 - [x] Expand the pilot to a 36-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
-- [ ] Revisit inference-service information architecture after the expanded collection yields real navigation evidence; do not assume a permanent standalone page solely from the pilot design.
+- [x] Fold inference-service discovery into one Directory surface with systems while preserving separate schemas, filters, detail dialogs, URL state, and score comparability boundaries.
 
 ## Completed on 2026-08-26
 

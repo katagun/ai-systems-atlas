@@ -1,8 +1,8 @@
 # ADR 010: Inference services are unscored service records
 
-**Status:** Amended by [ADR 011](011-inference-services-use-a-dedicated-score-profile.md)
+**Status:** Amended by [ADR 011](011-inference-services-use-a-dedicated-score-profile.md) and [ADR 012](012-distinct-collections-share-one-directory-surface.md)
 
-ADR 011 preserves this record's service boundary and exclusions but replaces the unscored conclusion with a dedicated operational-service score that excludes model quality, price, and performance rankings.
+ADR 011 preserves this record's service boundary and exclusions but replaces the unscored conclusion with a dedicated operational-service score that excludes model quality, price, and performance rankings. ADR 012 preserves the independent collection while moving it into the shared Directory browsing surface.
 
 ## Context
 
@@ -35,12 +35,12 @@ The collection excludes:
 - **agent, assistant, and memory products:** those remain in their scored operational family even when the same vendor operates an inference service; and
 - **volatile leaderboards and copied price tables:** the Atlas links authoritative sources instead of presenting time-sensitive rankings as reviewed editorial truth.
 
-Provider traits remain orthogonal project metadata. They may be shown in project details when reviewed, but provider filtering remains deferred until coverage is representative. Inference-service filters operate only inside the unscored sibling collection.
+Provider traits remain orthogonal project metadata. They may be shown in project details when reviewed, but provider filtering remains deferred until coverage is representative. Inference-service filters operate only inside the service-scoped collection view.
 
 ## Consequences
 
 - Users can compare service and deployment boundaries without turning providers into a fourth system family.
 - The same model can appear behind several service boundaries without duplicating a company or conflating model ownership with inference operation.
-- Specifications, inference services, and operational systems remain distinct collections with distinct inclusion rules.
+- Specifications, inference services, and operational systems remain distinct collections with distinct inclusion rules; ADR 012 later gives systems and inference services a shared Directory surface.
 - Curation must revisit mutable service documentation and terms using explicit verification dates.
 - The collection favors stable capability classes and documented constraints over exhaustive inventories, prices, or performance claims.
