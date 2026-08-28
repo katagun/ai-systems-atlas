@@ -101,7 +101,9 @@
         (!filters.delivery || service.delivery_modes.includes(filters.delivery)) &&
         (!filters.modelSource || service.model_sources.includes(filters.modelSource)) &&
         (!filters.apiStyle || service.api_styles.includes(filters.apiStyle));
-    }).sort((a, b) => a.name.localeCompare(b.name));
+    }).sort(filters.sort === "score"
+      ? (a, b) => b.score.overall - a.score.overall || a.name.localeCompare(b.name)
+      : (a, b) => a.name.localeCompare(b.name));
   }
 
   return {

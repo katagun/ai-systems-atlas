@@ -1,6 +1,8 @@
 # ADR 010: Inference services are unscored service records
 
-**Status:** Accepted
+**Status:** Amended by [ADR 011](011-inference-services-use-a-dedicated-score-profile.md)
+
+ADR 011 preserves this record's service boundary and exclusions but replaces the unscored conclusion with a dedicated operational-service score that excludes model quality, price, and performance rankings.
 
 ## Context
 

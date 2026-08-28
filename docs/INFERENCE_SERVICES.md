@@ -24,6 +24,31 @@ API compatibility is a documented trait, not an equivalence guarantee. `openai_c
 
 Model-source scope records whose models the service can operate. It does not classify model licenses. “Open-weight” is intentionally not rewritten as “open source,” and customer-supplied support must be documented for the reviewed service path.
 
+## Scoring
+
+Inference services use one dedicated operational-service profile. It is comparable only inside this collection; it is not comparable to memory, agent, or assistant scores. The profile deliberately does not score model intelligence, benchmark results, current price, raw latency, token throughput, or the prestige of a catalog. Those properties are model-, workload-, region-, tier-, and time-specific.
+
+| Dimension | Weight | What earns a high score |
+|---|---:|---|
+| Operational maturity | 17% | Documented production controls, stable lifecycle practices, administration, support, capacity isolation, and a credible sustained-service surface |
+| Data governance | 18% | Explicit retention and training-use rules, deletion or zero-retention controls, tenant isolation, and clear exceptions for stateful features |
+| Regional and deployment control | 14% | Customer-selected processing geography, regional endpoints, private networking, and isolated or dedicated placement with explicit boundaries |
+| Serving flexibility | 13% | Complementary on-demand, batch, reserved, dedicated, priority, and scaling paths rather than one undifferentiated endpoint |
+| API interoperability | 12% | Well-documented native or compatible contracts, SDK portability, and low-friction movement across supported integration paths |
+| Traffic resilience | 10% | Explicit fallback, regional capacity routing, replicas, traffic steering, priority controls, or recovery behavior |
+| Customization and lifecycle | 9% | Fine-tuning, customer models, version pinning, deployment configuration, and lifecycle control for supported artifacts |
+| Documentation transparency | 7% | Specific, current, authoritative documentation for terms, data handling, regions, availability, limits, and exceptions |
+
+Score each dimension from 0 to 10 using common anchors:
+
+- **0–2:** absent, non-operational, or too opaque to support a useful claim;
+- **3–4:** minimal capability or public evidence, with major limitations;
+- **5–6:** a documented baseline with material gaps or plan-specific uncertainty;
+- **7–8:** strong production capability with clear controls and bounded exceptions; and
+- **9–10:** unusually comprehensive, explicit, and mature coverage of the dimension.
+
+Use decimal values when evidence falls between anchors. Missing evidence lowers the relevant score; never substitute company reputation or an adjacent product's controls. Compute `overall` as the weighted sum rounded to two decimals. A specialist service can be the right workload fit even when its overall is lower, so service type, model source, API style, region, and delivery-mode filters remain primary decision tools.
+
 ## Evidence and freshness
 
 Use authoritative service documentation and governing service terms. Every mutable source carries `verified_at`. State feature-specific exceptions in prose rather than compressing them into a misleading boolean. In particular, retention, residency, capacity, and availability often vary by endpoint, model, region, feature, or negotiated agreement.
@@ -49,7 +74,8 @@ For geographically broad batches, explicitly screen direct model developers, hyp
 2. Review current product documentation, data controls, and service terms.
 3. Classify type, delivery modes, model sources, and API styles from those sources.
 4. Write regional, retention, routing, customization, strengths, and tradeoffs with explicit limits.
-5. Add dated evidence and terms, then run synchronization and the complete verification suite.
-6. Exercise search, every inference-service filter, and the detail dialog in a browser.
+5. Score every dimension from the same evidence, calculate the weighted overall, and check that no value imports model quality, price, or unverified performance.
+6. Add dated evidence and terms, then run synchronization and the complete verification suite.
+7. Exercise search, every inference-service filter, score sorting, and the detail dialog in a browser.
 
-Inference services are always unscored and alphabetically ordered after filtering. See [ADR 010](adr/010-inference-services-are-unscored-service-records.md).
+Inference services use a dedicated score profile and default to score sorting. See [ADR 010](adr/010-inference-services-are-unscored-service-records.md) and [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md).

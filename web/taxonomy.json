@@ -80,6 +80,20 @@
     {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."},
     {"id": "service_native", "name": "Service-native", "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."}
   ],
+  "inference_service_score_profile": {
+    "id": "inference_service",
+    "name": "Inference-service score",
+    "dimensions": [
+      {"id": "operational_maturity", "weight": 0.17, "definition": "Documented production controls, lifecycle stability, administration, support, and readiness for sustained service use; it does not infer unreported uptime or throughput."},
+      {"id": "data_governance", "weight": 0.18, "definition": "Documented retention, training-use, deletion, isolation, tenant, and privacy controls across the represented service boundary."},
+      {"id": "regional_deployment_control", "weight": 0.14, "definition": "Customer control over processing geography, network boundaries, regional endpoints, and isolated or dedicated placement."},
+      {"id": "serving_flexibility", "weight": 0.13, "definition": "Documented on-demand, batch, reserved, dedicated, and scaling paths for materially different workload shapes."},
+      {"id": "api_interoperability", "weight": 0.12, "definition": "Portability and integration quality across documented APIs, compatibility contracts, SDK conventions, and deployment interfaces."},
+      {"id": "traffic_resilience", "weight": 0.10, "definition": "Documented traffic steering, fallback, multi-region capacity, replica, priority, or recovery controls without treating raw latency as stable."},
+      {"id": "customization_lifecycle", "weight": 0.09, "definition": "Fine-tuning, customer models, version control, deployment configuration, and lifecycle management for supported model artifacts."},
+      {"id": "documentation_transparency", "weight": 0.07, "definition": "Clarity and specificity of authoritative documentation for terms, data handling, regions, limits, availability, and operational exceptions."}
+    ]
+  },
   "specification_types": [
     {"id": "protocol", "name": "Protocol", "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."},
     {"id": "instruction_convention", "name": "Instruction convention", "definition": "A file-naming and discovery convention that gives agents repository or project guidance without defining a wire protocol."},

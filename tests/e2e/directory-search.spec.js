@@ -50,26 +50,32 @@ test("reviewed provider traits appear only in project details", async ({ page })
   await expect(page.locator("#directory-controls")).not.toContainText("Provider relationship");
 });
 
-test("inference services combine dedicated filters and remain unscored", async ({ page }) => {
+test("inference services combine filters and expose the dedicated service score", async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   await page.getByRole("button", { name: "Inference Services" }).click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 
-  await expect(page.locator("#inference-result-count")).toContainText("36 services · Unscored");
+  await expect(page.locator("#inference-result-count")).toContainText("36 services · Inference-service score");
+  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
+  await page.locator("#inference-sort-filter").selectOption("name");
+  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("AI21 Studio");
+  await page.locator("#inference-sort-filter").selectOption("score");
   await page.locator("#inference-search").fill("Bedrock");
   await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
   await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
   await page.locator("#inference-model-source-filter").selectOption("customer_supplied");
   await page.locator("#inference-api-filter").selectOption("openai_compatible");
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText("Amazon Bedrock");
+  await expect(page.locator("#inference-grid .score-ring")).toHaveText("8.9");
 
   await page.getByRole("button", { name: "View details →" }).click();
   await expect(page.locator("#inference-dialog")).toContainText("Service boundary");
   await expect(page.locator("#inference-dialog")).toContainText("Governing terms");
-  await expect(page.locator("#inference-dialog")).toContainText("Inference services are classified, not scored");
-  await expect(page.locator("#inference-dialog")).not.toContainText("Overall");
+  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
+  await expect(page.locator("#inference-dialog")).toContainText("Overall");
+  await expect(page.locator("#inference-dialog")).toContainText("excludes model quality");
 });
 
 test("assistant systems filter, score, and open without agent-only fields", async ({ page }) => {

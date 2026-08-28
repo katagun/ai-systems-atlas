@@ -15,7 +15,7 @@ Read only the documents required by the change:
 | taxonomy or family boundaries | relevant files in `docs/adr/` |
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
-| inference services, model APIs, managed inference, or routing platforms | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md` |
+| inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md` and `docs/adr/011-inference-services-use-a-dedicated-score-profile.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
