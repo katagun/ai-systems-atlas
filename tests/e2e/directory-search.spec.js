@@ -149,6 +149,58 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
+test("system comparisons require one family and restore from a shareable URL", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /^Systems / }).click();
+  await expect(page.locator("#project-grid .compare-toggle")).toHaveCount(0);
+
+  await page.locator("#family-filter").selectOption("agent_system");
+  await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
+  await page.locator('#project-grid [data-compare-id="hermes-agent"]').click();
+  await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
+  await expect(page.locator("#comparison-tray-items")).toContainText("Kilo Code");
+  await expect(page).toHaveURL(/compare=system%3Akilo-code%2Chermes-agent/);
+
+  await page.locator("#comparison-open").click();
+  await expect(page.locator("#comparison-dialog")).toBeVisible();
+  await expect(page.locator("#comparison-dialog")).toContainText("Agent-system score");
+  await expect(page.locator("#comparison-dialog thead")).toContainText("Kilo Code");
+  await expect(page.locator("#comparison-dialog thead")).toContainText("Hermes Agent");
+  await expect(page.locator("#comparison-dialog")).toContainText("Task Reliability · 20%");
+  await page.locator("#comparison-dialog .dialog-close").click();
+
+  await page.reload();
+  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expect(page.locator("#comparison-dialog")).toBeVisible();
+  await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
+  await page.locator("#comparison-dialog .dialog-close").click();
+  await page.getByRole("button", { name: /^All / }).click();
+  await expect(page.locator("#comparison-tray")).toBeHidden();
+  await expect(page).not.toHaveURL(/compare=/);
+});
+
+test("inference-service comparison uses its dedicated decision context", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await page.locator('#inference-grid [data-compare-id="openai-api"]').click();
+  await page.locator('#inference-grid [data-compare-id="amazon-bedrock"]').click();
+  await page.locator("#comparison-open").click();
+
+  await expect(page.locator("#comparison-dialog")).toContainText("Inference-service score");
+  await expect(page.locator("#comparison-dialog")).toContainText("OpenAI API");
+  await expect(page.locator("#comparison-dialog")).toContainText("Amazon Bedrock");
+  await expect(page.locator("#comparison-dialog")).toContainText("Regional controls");
+  await expect(page.locator("#comparison-dialog")).toContainText("excludes model quality");
+});
+
+test("comparison URLs reject cross-profile selections", async ({ page }) => {
+  await page.goto("/?collection=systems&compare=system:kilo-code,t3-chat");
+
+  await expect(page).not.toHaveURL(/compare=/);
+  await expect(page.locator("#comparison-tray")).toBeHidden();
+  await expect(page.locator("#comparison-dialog")).toBeHidden();
+  await expect(page.locator("#family-filter")).toHaveValue("");
+});
+
 test("notable provider assistants are searchable and license-labeled", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /^Systems / }).click();

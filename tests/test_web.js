@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterSpecifications, matchesProject } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterSpecifications, matchesProject, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -208,4 +208,27 @@ test("the unified directory discovers both collections without indexing hidden p
     ["Amazon Bedrock"],
   );
   assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, { term: "hidden-provider" }), []);
+});
+
+test("comparison selection stays inside one score profile and supports toggling", () => {
+  const empty = { kind: null, profile: null, ids: [] };
+  const first = updateComparisonSelection(empty, { kind: "system", profile: "memory", id: "mem0" });
+  const second = updateComparisonSelection(first, { kind: "system", profile: "memory", id: "letta" });
+  assert.deepEqual(second, { kind: "system", profile: "memory", ids: ["mem0", "letta"], limitReached: false });
+  assert.deepEqual(
+    updateComparisonSelection(second, { kind: "system", profile: "memory", id: "mem0" }),
+    { kind: "system", profile: "memory", ids: ["letta"], limitReached: false },
+  );
+  assert.deepEqual(
+    updateComparisonSelection(second, { kind: "inference", profile: "inference_service", id: "openai-api" }),
+    { kind: "inference", profile: "inference_service", ids: ["openai-api"], limitReached: false },
+  );
+});
+
+test("comparison selection enforces the four-entry limit", () => {
+  const selected = { kind: "inference", profile: "inference_service", ids: ["one", "two", "three", "four"] };
+  assert.deepEqual(
+    updateComparisonSelection(selected, { kind: "inference", profile: "inference_service", id: "five" }),
+    { ...selected, limitReached: true },
+  );
 });

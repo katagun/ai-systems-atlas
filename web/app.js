@@ -1,4 +1,9 @@
-const state = { projects: [], specifications: [], inferenceServices: [], taxonomy: null, licenses: new Map(), directoryCollection: "all", directoryRoles: null, finder: { step: 0, answers: {} } };
+const state = {
+  projects: [], specifications: [], inferenceServices: [], taxonomy: null, licenses: new Map(),
+  directoryCollection: "all", directoryRoles: null,
+  comparison: { kind: null, profile: null, ids: [], limitReached: false },
+  finder: { step: 0, answers: {} },
+};
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -94,7 +99,9 @@ async function bootstrap() {
   renderSpecifications();
   renderTaxonomy();
   bindEvents();
-  setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
+  if (!restoreComparisonFromURL()) {
+    setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
+  }
 }
 
 function taxonomyName(group, id) {
@@ -108,6 +115,98 @@ const sourceModelName = id => taxonomyName("source_models", id);
 const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
+
+function comparisonRecords() {
+  const records = state.comparison.kind === "system" ? state.projects : state.inferenceServices;
+  return state.comparison.ids.map(id => records.find(item => item.id === id)).filter(Boolean);
+}
+
+function writeDirectoryURL() {
+  const url = new URL(window.location.href);
+  if (state.directoryCollection === "all") url.searchParams.delete("collection");
+  else url.searchParams.set("collection", state.directoryCollection);
+  if (state.comparison.ids.length) {
+    url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
+  } else {
+    url.searchParams.delete("compare");
+  }
+  window.history.replaceState(null, "", url);
+}
+
+function clearComparison({ updateURL = true } = {}) {
+  state.comparison = { kind: null, profile: null, ids: [], limitReached: false };
+  if ($("#comparison-dialog")?.open) $("#comparison-dialog").close();
+  renderComparisonControls();
+  if (updateURL) writeDirectoryURL();
+}
+
+function renderComparisonControls() {
+  const records = comparisonRecords();
+  $$('[data-compare-kind]').forEach(button => {
+    const selected = button.dataset.compareKind === state.comparison.kind && state.comparison.ids.includes(button.dataset.compareId);
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+    const record = (button.dataset.compareKind === "system" ? state.projects : state.inferenceServices)
+      .find(item => item.id === button.dataset.compareId);
+    button.setAttribute("aria-label", `${selected ? "Remove" : "Add"} ${record?.name || "item"} ${selected ? "from" : "to"} comparison`);
+    button.textContent = selected ? "Selected" : "Compare";
+  });
+  const tray = $("#comparison-tray");
+  if (!tray) return;
+  tray.hidden = records.length === 0;
+  $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
+  $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
+  $("#comparison-open").disabled = records.length < 2;
+  $("#comparison-status").textContent = state.comparison.limitReached
+    ? "Four is the maximum. Remove an item before adding another."
+    : records.length === 1 ? "Choose at least one more item from this score profile." : "";
+}
+
+function toggleComparison(kind, id) {
+  const record = kind === "system"
+    ? state.projects.find(item => item.id === id)
+    : state.inferenceServices.find(item => item.id === id);
+  if (!record) return;
+  const profile = kind === "system" ? record.score_profile : state.taxonomy.inference_service_score_profile.id;
+  state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile, id });
+  renderComparisonControls();
+  writeDirectoryURL();
+}
+
+function restoreComparisonFromURL() {
+  const url = new URL(window.location.href);
+  const raw = url.searchParams.get("compare");
+  if (!raw) return false;
+  const separator = raw.indexOf(":");
+  const kind = raw.slice(0, separator);
+  const referencedIds = raw.slice(separator + 1).split(",").filter(Boolean);
+  const ids = [...new Set(referencedIds)];
+  const records = kind === "system"
+    ? ids.map(id => state.projects.find(item => item.id === id)).filter(Boolean)
+    : kind === "inference" ? ids.map(id => state.inferenceServices.find(item => item.id === id)).filter(Boolean) : [];
+  const profiles = new Set(records.map(item => kind === "system" ? item.score_profile : state.taxonomy.inference_service_score_profile.id));
+  if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1) {
+    url.searchParams.delete("compare");
+    window.history.replaceState(null, "", url);
+    return false;
+  }
+  const profile = [...profiles][0];
+  state.comparison = { kind, profile, ids, limitReached: false };
+  if (kind === "system") {
+    state.directoryRoles = null;
+    $("#family-filter").value = records[0].system_family;
+    $("#role-filter").value = "";
+    populateRoleFilter();
+    updateScoreSortAvailability();
+    setDirectoryCollection("systems", { updateURL: false });
+  } else {
+    setDirectoryCollection("inference", { updateURL: false });
+  }
+  renderComparisonControls();
+  writeDirectoryURL();
+  if (ids.length >= 2) openComparison();
+  return true;
+}
 
 function populateFilters() {
   const defaults = AtlasCore.directoryDefaults();
@@ -197,6 +296,7 @@ function updateAdvancedFilterSummary() {
 }
 
 function applyDirectoryDefaults() {
+  clearComparison();
   const defaults = AtlasCore.directoryDefaults();
   state.directoryRoles = null;
   $("#project-search").value = defaults.term;
@@ -228,6 +328,9 @@ function renderStats() {
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
   const selected = ["all", "systems", "inference"].includes(collection) ? collection : "all";
+  const compatible = (selected === "systems" && state.comparison.kind === "system")
+    || (selected === "inference" && state.comparison.kind === "inference");
+  if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
   $$('[data-directory-collection]').forEach(button => {
     const active = button.dataset.directoryCollection === selected;
@@ -250,12 +353,7 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
     $("#project-grid").innerHTML = "";
     renderInferenceServices();
   }
-  if (updateURL) {
-    const url = new URL(window.location.href);
-    if (selected === "all") url.searchParams.delete("collection");
-    else url.searchParams.set("collection", selected);
-    window.history.replaceState(null, "", url);
-  }
+  if (updateURL) writeDirectoryURL();
 }
 
 function renderAllDirectoryEntries() {
@@ -321,10 +419,12 @@ function renderProjects() {
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
-      <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><button data-project="${escapeHTML(project.id)}">View details →</button></div>
+      <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
     </article>`;
   }).join("") || '<div class="notice">No projects match these filters.</div>';
   $$('[data-project]', $("#project-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
+  bindComparisonButtons($("#project-grid"));
+  renderComparisonControls();
 }
 
 function renderSpecifications() {
@@ -366,9 +466,17 @@ function renderInferenceServices() {
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
-    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div>
+    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div></div>
   </article>`).join("") || '<div class="notice">No inference services match these filters.</div>';
   $$('[data-inference-service]', $("#inference-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
+  bindComparisonButtons($("#inference-grid"));
+  renderComparisonControls();
+}
+
+function bindComparisonButtons(root) {
+  $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
+    toggleComparison(button.dataset.compareKind, button.dataset.compareId);
+  }));
 }
 
 function finderChoice(key, item) {
@@ -487,6 +595,7 @@ function renderFinderResults() {
 function applyFinderToDirectory() {
   const { family, goal, priority } = state.finder.answers;
   const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
+  clearComparison();
   $("#project-search").value = "";
   $("#family-filter").value = family;
   populateRoleFilter();
@@ -611,6 +720,81 @@ function openInferenceService(id) {
   $("#inference-dialog").showModal();
 }
 
+function comparisonTable(records, rows) {
+  return `<div class="comparison-table-wrap"><table class="comparison-table">
+    <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
+    <tbody>${rows.map(([name, values]) => `<tr><th scope="row">${escapeHTML(name)}</th>${values.map(value => `<td>${escapeHTML(value ?? "—")}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+function openComparison() {
+  const records = comparisonRecords();
+  if (records.length < 2) return;
+  let profile;
+  let rows;
+  let eyebrow;
+  let note;
+  if (state.comparison.kind === "system") {
+    profile = state.taxonomy.score_profiles.find(item => item.id === state.comparison.profile);
+    eyebrow = `${familyName(records[0].system_family)} · ${profile.name}`;
+    note = "Scores and weights are comparable only inside this system family. They are editorial judgments—not workload benchmarks.";
+    rows = [
+      ["Primary role", records.map(item => roleName(item.primary_role))],
+      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ...profile.dimensions.map(dimension => [
+        `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
+        records.map(item => `${item.score[dimension.id]} / 10`),
+      ]),
+      ["Source model", records.map(item => sourceModelName(item.source_model))],
+      ["Licenses / terms", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
+      ["Deployment", records.map(item => item.deployment.map(value => taxonomyName("deployment_modes", value)).join(" · "))],
+      ["Local-first", records.map(item => item.local_first ? "Yes" : "No")],
+      ["Architecture", records.map(item => item.architectures.map(architectureName).join(" · "))],
+      ["Strengths", records.map(item => item.strengths.join(" • "))],
+      ["Watchouts", records.map(item => item.weaknesses.join(" • "))],
+      ["Editorially verified", records.map(item => item.verified_at)],
+    ];
+  } else {
+    profile = state.taxonomy.inference_service_score_profile;
+    eyebrow = profile.name;
+    note = "This comparison covers operational service characteristics. It excludes model quality, current price, and transient latency or throughput.";
+    rows = [
+      ["Operator", records.map(item => item.operator)],
+      ["Service type", records.map(item => taxonomyName("inference_service_types", item.service_type))],
+      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ...profile.dimensions.map(dimension => [
+        `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
+        records.map(item => `${item.score[dimension.id]} / 10`),
+      ]),
+      ["Delivery", records.map(item => item.delivery_modes.map(value => taxonomyName("inference_delivery_modes", value)).join(" · "))],
+      ["Model sources", records.map(item => item.model_sources.map(value => taxonomyName("inference_model_sources", value)).join(" · "))],
+      ["API styles", records.map(item => item.api_styles.map(value => taxonomyName("inference_api_styles", value)).join(" · "))],
+      ["Regional controls", records.map(item => item.regional_controls)],
+      ["Retention controls", records.map(item => item.retention_controls)],
+      ["Routing", records.map(item => item.routing)],
+      ["Customization", records.map(item => item.customization)],
+      ["Strengths", records.map(item => item.strengths.join(" • "))],
+      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Editorially verified", records.map(item => item.verified_at)],
+    ];
+  }
+  $("#comparison-dialog-content").innerHTML = `<div class="comparison-heading">
+    <div><p class="eyebrow">${escapeHTML(eyebrow)}</p><h1>Compare ${records.length} choices</h1><p>${escapeHTML(note)}</p></div>
+    <button id="comparison-copy-link" class="ghost-button">Copy comparison link</button>
+  </div>
+  <p id="comparison-copy-status" class="comparison-copy-status" aria-live="polite">The current URL restores this exact comparison.</p>
+  ${comparisonTable(records, rows)}`;
+  $("#comparison-copy-link").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      $("#comparison-copy-status").textContent = "Comparison link copied.";
+    } catch {
+      $("#comparison-copy-status").textContent = "Copy the current browser URL to share this comparison.";
+    }
+  });
+  $("#comparison-dialog").showModal();
+}
+
 function activateView(id) {
   if (id === "inference-services") {
     setDirectoryCollection("inference");
@@ -618,6 +802,8 @@ function activateView(id) {
   }
   $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  if (id === "directory") renderComparisonControls();
+  else $("#comparison-tray").hidden = true;
   window.scrollTo({ top: 0 });
 }
 
@@ -627,6 +813,7 @@ function bindEvents() {
   $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => setDirectoryCollection(button.dataset.directoryCollection)));
   $("#all-directory-search").addEventListener("input", renderAllDirectoryEntries);
   $("#family-filter").addEventListener("input", () => {
+    clearComparison();
     state.directoryRoles = null;
     $("#role-filter").value = "";
     populateRoleFilter();
@@ -702,6 +889,10 @@ function bindEvents() {
   $("#specification-dialog").addEventListener("click", event => { if (event.target === $("#specification-dialog")) $("#specification-dialog").close(); });
   $("#inference-dialog .dialog-close").addEventListener("click", () => $("#inference-dialog").close());
   $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
+  $("#comparison-open").addEventListener("click", openComparison);
+  $("#comparison-clear").addEventListener("click", () => clearComparison());
+  $("#comparison-dialog .dialog-close").addEventListener("click", () => $("#comparison-dialog").close());
+  $("#comparison-dialog").addEventListener("click", event => { if (event.target === $("#comparison-dialog")) $("#comparison-dialog").close(); });
 }
 
 bootstrap().catch(error => {

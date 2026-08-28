@@ -32,3 +32,4 @@ Specifications remain a sibling view because they are interoperability artifacts
 - Filters change with the selected collection instead of exposing controls that do not apply to most records.
 - New operational collections can share the Directory only when they retain an explicit schema, boundary, and comparison policy.
 - Web tests must cover mixed search, score hiding, scope-specific controls, URL restoration, the Finder handoff, and both record-specific detail dialogs.
+- Side-by-side evaluation follows ADR 013: selection is available only inside one score profile and never in mixed browsing.
