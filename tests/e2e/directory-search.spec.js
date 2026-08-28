@@ -39,6 +39,38 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
   await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
 });
 
+test("reviewed provider traits appear only in project details", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#project-search").fill("Claude Code");
+  await page.locator('button[data-project="claude-code"]').click();
+
+  await expect(page.locator("#project-dialog")).toContainText("Model provider support");
+  await expect(page.locator("#project-dialog")).toContainText("Provider-native");
+  await expect(page.locator("#project-dialog")).toContainText("Anthropic");
+  await expect(page.locator("#directory-controls")).not.toContainText("Provider relationship");
+});
+
+test("inference services combine dedicated filters and remain unscored", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await page.getByRole("button", { name: "Inference Services" }).click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  await expect(page.locator("#inference-result-count")).toContainText("6 services · Unscored");
+  await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
+  await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
+  await page.locator("#inference-model-source-filter").selectOption("customer_supplied");
+  await page.locator("#inference-api-filter").selectOption("openai_compatible");
+  await expect(page.locator("#inference-grid .project-card h2")).toHaveText("Amazon Bedrock");
+
+  await page.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#inference-dialog")).toContainText("Service boundary");
+  await expect(page.locator("#inference-dialog")).toContainText("Governing terms");
+  await expect(page.locator("#inference-dialog")).toContainText("Inference services are classified, not scored");
+  await expect(page.locator("#inference-dialog")).not.toContainText("Overall");
+});
+
 test("assistant systems filter, score, and open without agent-only fields", async ({ page }) => {
   await page.goto("/");
 

@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications are a separate collection, not another system family. They are classified by artifact type, integration scope, and publication status, and never receive an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md) and [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
+Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status. Inference services are classified by service type, delivery mode, model-source scope, and API style. Neither receives an operational-system score. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), and [ADR 010](adr/010-inference-services-are-unscored-service-records.md).
 
 ## Family 1: memory systems
 
@@ -23,7 +23,9 @@ The memory score measures second-brain fit, data sovereignty, interoperability, 
 
 ## Family 2: agent systems
 
-Agent-system roles are coding agent, research agent, browser / computer-use agent, data-analysis / text-to-SQL agent, stateful agent runtime, coding-agent workflow, multi-agent orchestrator, and agent framework / SDK.
+Agent-system roles are general work agent, coding agent, research agent, browser / computer-use agent, data-analysis / text-to-SQL agent, stateful agent runtime, coding-agent workflow, multi-agent orchestrator, and agent framework / SDK.
+
+General work agents accept broad end-user outcomes and carry out multi-step knowledge work across files, web sources, applications, or schedules. This is distinct from a general assistant's primarily conversational workspace, a computer-use agent's interaction specialization, and a developer runtime or framework. Named modes are separate records only when authoritative evidence establishes a distinct product workflow or execution boundary; see [ADR 011](adr/011-delegated-work-agents-are-agent-systems.md).
 
 Agent projects also record:
 
@@ -78,6 +80,8 @@ An open-source-only view is a user-selected filter. Mixed licenses retain their 
 Provider coupling is also orthogonal. `provider_native` identifies a primary path coupled to one provider, `multi_provider` identifies several maintained first-class integrations, and `provider_agnostic` requires a substitutable backend contract. Reviewed backend identifiers live in the taxonomy. These optional fields roll out through deliberate project review; their absence means “not reviewed.” See [ADR 006](adr/006-provider-relationships-are-orthogonal.md).
 
 Providers and plain model API clients are not operational system families. An official SDK can qualify as an agent framework or runtime only when it materially owns a tool-using agent loop.
+
+Named managed inference services live in a separate unscored collection. The record unit is the service boundary—not the company, model, local runtime, or client SDK. These records explain who operates inference and under what delivery, data, routing, and terms boundary; they do not rank model quality or provider performance.
 
 ### External agent memory
 

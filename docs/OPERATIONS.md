@@ -52,6 +52,12 @@ Never copy proposed classification into the catalog without human confirmation. 
 
 Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
 
+## Review an inference service
+
+Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.
+
+Do not copy prices, rate limits, model leaderboards, or exhaustive model inventories into the editorial record. A model offered by several services remains one model behind several operational and contractual boundaries; it does not merge those service records.
+
 ## Resolve a license review
 
 Inspect the authoritative license or terms sources again; GitHub's detected SPDX value is only the trigger.

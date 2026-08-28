@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
-    "specifications.json",
+    "specifications.json", "inference-services.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -29,6 +29,10 @@ TAXONOMY_GROUPS = (
     "agent_relations",
     "provider_relationships",
     "model_backends",
+    "inference_service_types",
+    "inference_delivery_modes",
+    "inference_model_sources",
+    "inference_api_styles",
     "specification_types",
     "specification_scopes",
     "specification_statuses",
@@ -69,6 +73,13 @@ SPECIFICATION_REQUIRED = {
     "current_version", "stewards", "repo", "url", "description", "standardizes",
     "does_not_standardize", "licenses", "license_note", "related_specifications",
     "evidence", "license_evidence", "verified_at",
+}
+
+INFERENCE_SERVICE_REQUIRED = {
+    "id", "name", "operator", "service_type", "url", "description", "service_boundary",
+    "delivery_modes", "model_sources", "api_styles", "regional_controls",
+    "retention_controls", "routing", "customization", "strengths", "tradeoffs",
+    "terms", "evidence", "verified_at",
 }
 
 
@@ -140,6 +151,7 @@ def validate(root: Path = ROOT) -> list[str]:
         license_review_data = load("license-review.json")
         exclusions_data = load("exclusions.json")
         specifications_data = load("specifications.json")
+        inference_services_data = load("inference-services.json")
         discovery_sources_data = load("discovery-sources.json")
     finally:
         DIRECTORY = original_directory
@@ -588,6 +600,95 @@ def validate(root: Path = ROOT) -> list[str]:
             else:
                 errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
 
+    inference_services_value = inference_services_data.get("services")
+    if inference_services_data.get("version") != "1.0":
+        errors.append("inference-services.json: unsupported version")
+    if not valid_date(inference_services_data.get("verified_at")):
+        errors.append("inference-services.json: verified_at must be an ISO date")
+    if not isinstance(inference_services_value, list):
+        errors.append("inference-services.json: services must be a list")
+        inference_services_value = []
+    inference_service_ids = [
+        item.get("id") for item in inference_services_value if isinstance(item, dict)
+    ]
+    if (
+        any(not isinstance(item, str) for item in inference_service_ids)
+        or len(inference_service_ids) != len(set(inference_service_ids))
+        or len(inference_service_ids) != len(inference_services_value)
+    ):
+        errors.append("inference-services.json: ids must be present and unique")
+    for service in inference_services_value:
+        if not isinstance(service, dict):
+            errors.append("inference-services.json: every service must be an object")
+            continue
+        prefix = f"inference service {service.get('id', 'unknown')}"
+        if set(service) != INFERENCE_SERVICE_REQUIRED:
+            missing = sorted(INFERENCE_SERVICE_REQUIRED - set(service))
+            extra = sorted(set(service) - INFERENCE_SERVICE_REQUIRED)
+            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+        service_id = service.get("id")
+        if not isinstance(service_id, str) or not ID_PATTERN.fullmatch(service_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name", "operator", "url", "description", "service_boundary",
+            "regional_controls", "retention_controls", "routing", "customization",
+        ):
+            if not isinstance(service.get(field), str) or not service[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        if not isinstance(service.get("url"), str) or not service["url"].startswith("https://"):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        if service.get("service_type") not in enum_ids["inference_service_types"]:
+            errors.append(f"{prefix}: unknown inference service type")
+        for field, group in (
+            ("delivery_modes", "inference_delivery_modes"),
+            ("model_sources", "inference_model_sources"),
+            ("api_styles", "inference_api_styles"),
+        ):
+            validate_string_list(service, field, enum_ids[group], prefix, errors)
+        for field in ("strengths", "tradeoffs"):
+            validate_string_list(service, field, None, prefix, errors)
+        if not valid_date(service.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+
+        terms = service.get("terms")
+        if not isinstance(terms, dict) or set(terms) != {
+            "kind", "label", "url", "verified_at",
+        }:
+            errors.append(f"{prefix}: terms must match the web-terms evidence schema")
+        else:
+            if terms.get("kind") != "web_terms":
+                errors.append(f"{prefix}: terms kind must be web_terms")
+            if not isinstance(terms.get("label"), str) or not terms["label"].strip():
+                errors.append(f"{prefix}: terms require a label")
+            if not isinstance(terms.get("url"), str) or not terms["url"].startswith("https://"):
+                errors.append(f"{prefix}: terms require an authoritative HTTPS URL")
+            if not valid_date(terms.get("verified_at")):
+                errors.append(f"{prefix}: terms require verified_at")
+
+        evidence_items = service.get("evidence")
+        if not isinstance(evidence_items, list) or not evidence_items:
+            errors.append(f"{prefix}: evidence must be a non-empty list")
+            evidence_items = []
+        evidence_urls: set[str] = set()
+        for item in evidence_items:
+            if not isinstance(item, dict) or set(item) != {
+                "kind", "label", "url", "verified_at",
+            }:
+                errors.append(f"{prefix}: evidence must match the web evidence schema")
+                continue
+            if item.get("kind") != "web":
+                errors.append(f"{prefix}: evidence kind must be web")
+            if not isinstance(item.get("label"), str) or not item["label"].strip():
+                errors.append(f"{prefix}: evidence requires a label")
+            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                errors.append(f"{prefix}: evidence requires an authoritative HTTPS URL")
+            elif item["url"] in evidence_urls:
+                errors.append(f"{prefix}: evidence URLs must be unique")
+            else:
+                evidence_urls.add(item["url"])
+            if not valid_date(item.get("verified_at")):
+                errors.append(f"{prefix}: evidence requires verified_at")
+
     candidate_entries = candidates_data.get("candidates")
     if not isinstance(candidate_entries, list):
         errors.append("candidates.json: candidates must be a list")
@@ -708,9 +809,11 @@ def main() -> int:
     families = sorted({project["system_family"] for project in data["projects"]})
     counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
     specification_count = len(load("specifications.json")["specifications"])
+    inference_service_count = len(load("inference-services.json")["services"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
-        f"{counts}; {specification_count} unscored specifications"
+        f"{counts}; {specification_count} unscored specifications; "
+        f"{inference_service_count} unscored inference services"
     )
     return 0
 

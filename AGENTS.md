@@ -15,6 +15,7 @@ Read only the documents required by the change:
 | taxonomy or family boundaries | relevant files in `docs/adr/` |
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
+| inference services, model APIs, managed inference, or routing platforms | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
@@ -53,6 +54,7 @@ Run synchronization after changing any published `directory/*.json` file. Run al
 - Never let automated refreshes change editorial prose, scores, evidence, confidence, or `verified_at`.
 - Never promote `directory/candidates.json` records without the complete curation workflow.
 - Keep specifications outside `system_family` and score profiles; classify their type, integration scope, and maturity without ranking unlike artifacts.
+- Keep inference services outside `system_family` and score profiles; curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
 - Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
 - Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, and `specifications.json` synchronized into `web/`; candidate and license-review queues are not published.
 - Never report checks as passing unless you ran them.

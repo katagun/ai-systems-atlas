@@ -20,7 +20,7 @@ The assistant profile scores the product-level experience: task reliability, con
 
 Agent-operation traits remain required only for `agent_system`. Assistants use the shared architecture, retrieval, capture, lifecycle, deployment, source-model, license, and provider traits. Each family has exactly one score profile, and secondary roles cannot cross family boundaries.
 
-Plain model APIs, providers, playgrounds, thin prompt wrappers, and model repositories remain outside the scored system catalog. A separate unscored ecosystem index may represent those components later.
+Plain model APIs, providers, playgrounds, thin prompt wrappers, and model repositories remain outside the scored system catalog. ADR 010 later defines managed inference services as a separate unscored collection without changing this scored-family boundary.
 
 ## Consequences
 
@@ -28,4 +28,3 @@ Plain model APIs, providers, playgrounds, thin prompt wrappers, and model reposi
 - Assistant capabilities and terms require dated review because product plans change faster than repository software.
 - Each Finder goal is exposed only after at least one active reviewed system satisfies its role.
 - Adding a future family still requires a distinct outcome, roles, score profile, validation, UI treatment, and reviewed comparison set.
-

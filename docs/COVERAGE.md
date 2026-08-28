@@ -6,7 +6,7 @@ Use this document to choose research batches. The canonical project and candidat
 
 AI Systems Atlas aims to be comprehensive within its declared operational scope, not an indiscriminate list of every model, API, prompt wrapper, or branded feature. Coverage is healthy when a user can compare materially different approaches within a supported role, understand source-model and licensing tradeoffs, and see important systems that failed review with a concrete reason.
 
-The declared universe is deployable or directly usable memory, agent, and assistant systems. Providers, plain inference clients, model repositories, and observability-only services are adjacent ecosystem components. Specifications remain a separate unscored collection.
+The scored universe is deployable or directly usable memory, agent, and assistant systems. Managed inference services and specifications are separate unscored collections. Plain inference clients, model repositories, local runtimes, and observability-only services remain adjacent components unless a future collection defines their distinct user question and boundary.
 
 Measure coverage across three axes:
 
@@ -16,19 +16,20 @@ Measure coverage across three axes:
 
 Do not add a new family merely to fit a famous product. Add one only when its primary operational outcome cannot be scored coherently by an existing family.
 
-## Snapshot — 2026-08-26
+## Snapshot — 2026-08-28
 
-The reviewed catalog contains 71 systems: 25 memory systems, 36 agent systems, and 10 assistant systems. Fifty-four are open-source, one uses mixed open licenses, two are open-core, one is mixed-source, and thirteen are proprietary. The provisional queue contains 103 records. The separate unscored collection contains 15 specifications spanning tool/data integration, agent interaction, agent–user and agent–client integration, project instructions, capabilities, and plugins.
+The reviewed catalog contains 75 systems: 27 memory systems, 38 agent systems, and 10 assistant systems. Fifty-four are open-source, one uses mixed open licenses, two are open-core, one is mixed-source, and seventeen are proprietary. The provisional queue contains 104 records. The unscored collections contain 15 specifications plus an initial six-service inference pilot spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
+| General work agent | 2 | 2 | New proprietary baseline; review control, recovery, permission, and execution boundaries as the category matures |
 | Agent framework / SDK | 12 | 12 | Broad across provider-native, provider-published, provider-agnostic, and open-core approaches |
 | Coding agent | 12 | 12 | Broad across local, self-hosted, and managed-cloud operation |
 | Human-first PKM | 8 | 8 | Broad, but proprietary reference products remain provisional |
-| AI knowledge app / RAG brain | 5 | 4 | Useful baseline; review enterprise/open-core alternatives |
+| AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
 | Retrieval infrastructure | 4 | 4 | Adequate baseline |
 | Data-analysis / text-to-SQL agent | 3 | 2 | Improved; add distinct governed and enterprise approaches |
-| Agent memory service | 3 | 3 | Improved; compare memory ownership, lifecycle, and retrieval intelligence |
+| Agent memory service | 4 | 4 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 2 | 2 | Thin; source-model diversity is missing |
 | Context graph engine | 2 | 2 | Thin |
 | Multi-agent orchestrator | 2 | 2 | Thin relative to ecosystem size |
@@ -50,9 +51,9 @@ Choose small batches with one coherent boundary question:
 1. **Assistant boundary follow-up:** keep GroqChat provisional until first-party evidence establishes a durable end-user workspace distinct from Groq Playground and GroqCloud. Preserve consumer, enterprise, playground, model, API, and agent-mode boundaries rather than comparing transient model benchmarks.
 2. **Managed agent platforms:** Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 3. **Coding-agent second pass:** Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, Windsurf, and T3 Code. Resolve editor, cloud-delegation, and workflow boundaries without duplicating represented products.
-4. **Proprietary memory and knowledge:** NotebookLM, Zep Cloud, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary.
+4. **Proprietary memory and knowledge:** NotebookLM, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary. Zep Cloud and Slite now establish managed agent-memory and self-maintaining knowledge baselines.
 5. **Source-model diversity:** screenpipe, AFFiNE, Onyx, and Obsidian. Review product terms and operational evidence without treating license as eligibility.
-6. **Thin operational roles:** browser/computer use, research, coding workflows, context graphs, ambient capture, and human–agent bridges.
+6. **Thin operational roles:** browser/computer use, research, general work, coding workflows, context graphs, ambient capture, and human–agent bridges. Keep Pletor and Sylph provisional until their license or product-terms evidence meets the full curation standard.
 7. **Specification second pass:** evaluate agent identity, discovery, authentication, and workflow exchange only when candidates answer a distinct integration question; avoid cataloging generic web standards merely because agents use them.
 8. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
 

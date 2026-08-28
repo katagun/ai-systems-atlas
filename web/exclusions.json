@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25",
+  "generated_at": "2026-08-28",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -24,6 +24,12 @@
       "repo": "sqlchat/sqlchat",
       "reason": "The reviewed implementation is a chat-based SQL client that generates and executes user-selected statements, but it does not own an iterative planning, validation, or repair loop required by the data-analysis agent role.",
       "useful_lesson": "Conversational database UX, locally stored connection data, self-hosting, and explicit query execution."
+    },
+    {
+      "name": "Gorgias Cortex",
+      "repo": null,
+      "reason": "Gorgias describes Cortex as its flagship internal AI agent for Gorgias employees rather than a deployable or directly purchasable system available to Atlas users. The public Gorgias AI Agent is a separate customer-facing ecommerce product and is not substituted for Cortex.",
+      "useful_lesson": "Internal agents can demonstrate cross-application work, employee adoption, and operational patterns without establishing a public product boundary."
     }
   ]
 }

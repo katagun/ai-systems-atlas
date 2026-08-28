@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI Systems Atlas: reviewed AI systems, specifications, protocols, and conventions with explicit licensing and evidence.">
+  <meta name="description" content="AI Systems Atlas: reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
   <meta name="theme-color" content="#f3f1eb">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AI Systems Atlas">
-  <meta property="og:description" content="Reviewed AI systems, specifications, protocols, and conventions with explicit licensing and evidence.">
+  <meta property="og:description" content="Reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
   <meta property="og:url" content="https://katagun.github.io/ai-systems-atlas/">
   <title>AI Systems Atlas</title>
   <link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/">
-  <link rel="stylesheet" href="styles.css?v=4.0">
+  <link rel="stylesheet" href="styles.css?v=5.2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="brand" aria-label="AI Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>AI Systems Atlas</strong><small>systems · specs · protocols</small></span>
+      <span><strong>AI Systems Atlas</strong><small>systems · inference · specs</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="finder">Finder</button>
+      <button class="tab" data-tab="inference-services">Inference Services</button>
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
@@ -74,6 +75,23 @@
       </section>
     </section>
 
+    <section id="inference-services" class="view" aria-labelledby="inference-title">
+      <div class="section-heading inference-heading">
+        <p class="eyebrow" id="inference-kicker">Reviewed inference services</p>
+        <h1 id="inference-title">Where model requests run.</h1>
+        <p>Direct APIs, cloud model platforms, managed hosts, and routing services—classified by operational boundary, with no provider score.</p>
+      </div>
+      <section class="control-panel inference-controls" aria-label="Inference service filters">
+        <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"></label>
+        <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
+        <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
+        <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
+        <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
+      </section>
+      <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear</button></div>
+      <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
+    </section>
+
     <section id="specifications" class="view" aria-labelledby="specifications-title">
       <div class="section-heading specifications-heading">
         <p class="eyebrow" id="specifications-kicker">Interoperability artifacts</p>
@@ -118,8 +136,13 @@
     <div id="specification-dialog-content"></div>
   </dialog>
 
-  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Specifications unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=4.0" defer></script>
-  <script src="app.js?v=4.0" defer></script>
+  <dialog id="inference-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="inference-dialog-content"></div>
+  </dialog>
+
+  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services and specifications unscored.</span><span id="data-date"></span></footer>
+  <script src="app-core.js?v=5.2" defer></script>
+  <script src="app.js?v=5.2" defer></script>
 </body>
 </html>

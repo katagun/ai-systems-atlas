@@ -80,5 +80,36 @@
     }).sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  return { compareProjects, directoryDefaults, filterAndSortProjects, filterSpecifications, matchesProject };
+  function filterInferenceServices(services, filters = {}) {
+    const term = (filters.term || "").trim().toLowerCase();
+    return services.filter(service => {
+      const haystack = [
+        service.id,
+        service.name,
+        service.operator,
+        service.description,
+        service.service_boundary,
+        service.regional_controls,
+        service.retention_controls,
+        service.routing,
+        service.customization,
+        ...(service.strengths || []),
+        ...(service.tradeoffs || []),
+      ].filter(Boolean).join(" ").toLowerCase();
+      return matchesSearchTerm(haystack, term) &&
+        (!filters.type || service.service_type === filters.type) &&
+        (!filters.delivery || service.delivery_modes.includes(filters.delivery)) &&
+        (!filters.modelSource || service.model_sources.includes(filters.modelSource)) &&
+        (!filters.apiStyle || service.api_styles.includes(filters.apiStyle));
+    }).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  return {
+    compareProjects,
+    directoryDefaults,
+    filterAndSortProjects,
+    filterInferenceServices,
+    filterSpecifications,
+    matchesProject,
+  };
 });

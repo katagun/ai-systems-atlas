@@ -278,6 +278,47 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("fields differ from schema" in error and "score" in error for error in errors), errors)
 
+    def test_unknown_inference_service_type_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "inference-services.json"
+        services = json.loads(path.read_text(encoding="utf-8"))
+        services["services"][0]["service_type"] = "provider_company"
+        self.write_json(path, services)
+        self.write_json(root / "web" / "inference-services.json", services)
+
+        errors = validate(root)
+
+        self.assertTrue(any("unknown inference service type" in error for error in errors), errors)
+
+    def test_inference_service_score_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "inference-services.json"
+        services = json.loads(path.read_text(encoding="utf-8"))
+        services["services"][0]["score"] = {"overall": 10}
+        self.write_json(path, services)
+        self.write_json(root / "web" / "inference-services.json", services)
+
+        errors = validate(root)
+
+        self.assertTrue(any("fields differ from schema" in error and "score" in error for error in errors), errors)
+
+    def test_inference_service_requires_dated_terms_and_evidence(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "inference-services.json"
+        services = json.loads(path.read_text(encoding="utf-8"))
+        services["services"][0]["terms"]["verified_at"] = None
+        services["services"][0]["evidence"] = []
+        self.write_json(path, services)
+        self.write_json(root / "web" / "inference-services.json", services)
+
+        errors = validate(root)
+
+        self.assertTrue(any("terms require verified_at" in error for error in errors), errors)
+        self.assertTrue(any("evidence must be a non-empty list" in error for error in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

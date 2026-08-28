@@ -1,4 +1,4 @@
-const state = { projects: [], specifications: [], taxonomy: null, licenses: new Map(), directoryRoles: null, finder: { step: 0, answers: {} } };
+const state = { projects: [], specifications: [], inferenceServices: [], taxonomy: null, licenses: new Map(), directoryRoles: null, finder: { step: 0, answers: {} } };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -22,6 +22,7 @@ const FINDER_GOALS = {
     { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
   ],
   agent_system: [
+    { id: "general_work", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work across files, web sources, and applications.", roles: ["general_work_agent"] },
     { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
     { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
     { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
@@ -67,21 +68,28 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory] = await Promise.all([
+  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory] = await Promise.all([
     loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json")
+    loadJSON("specifications.json"), loadJSON("inference-services.json")
   ]);
   state.projects = directory.projects;
   state.specifications = specificationDirectory.specifications;
+  state.inferenceServices = inferenceDirectory.services;
   state.taxonomy = taxonomy;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
-  $("#data-date").textContent = `Data updated ${directory.generated_at}`;
+  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at]
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+  $("#data-date").textContent = `Data updated ${dataDate}`;
   populateFilters();
   populateSpecificationFilters();
+  populateInferenceServiceFilters();
   renderStats();
   renderProjects();
   renderFinder();
   renderSpecifications();
+  renderInferenceServices();
   renderTaxonomy();
   bindEvents();
 }
@@ -145,6 +153,25 @@ function populateSpecificationFilters() {
   state.taxonomy.licenses.filter(item => licenses.has(item.id)).forEach(item =>
     $("#specification-license-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`)
   );
+}
+
+function populateInferenceServiceFilters() {
+  const groups = {
+    inference_service_types: new Set(state.inferenceServices.map(item => item.service_type)),
+    inference_delivery_modes: new Set(state.inferenceServices.flatMap(item => item.delivery_modes)),
+    inference_model_sources: new Set(state.inferenceServices.flatMap(item => item.model_sources)),
+    inference_api_styles: new Set(state.inferenceServices.flatMap(item => item.api_styles)),
+  };
+  for (const [group, selector] of [
+    ["inference_service_types", "#inference-type-filter"],
+    ["inference_delivery_modes", "#inference-delivery-filter"],
+    ["inference_model_sources", "#inference-model-source-filter"],
+    ["inference_api_styles", "#inference-api-filter"],
+  ]) {
+    state.taxonomy[group]
+      .filter(item => groups[group].has(item.id))
+      .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  }
 }
 
 function updateScoreSortAvailability() {
@@ -256,6 +283,26 @@ function renderSpecifications() {
     </article>`;
   }).join("") || '<div class="notice">No specifications match these filters.</div>';
   $$('[data-specification]').forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
+}
+
+function renderInferenceServices() {
+  const services = AtlasCore.filterInferenceServices(state.inferenceServices, {
+    term: $("#inference-search").value,
+    type: $("#inference-type-filter").value,
+    delivery: $("#inference-delivery-filter").value,
+    modelSource: $("#inference-model-source-filter").value,
+    apiStyle: $("#inference-api-filter").value,
+  });
+  $("#inference-kicker").textContent = `${state.inferenceServices.length} reviewed inference services`;
+  $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · Unscored`;
+  $("#inference-grid").innerHTML = services.map(service => `<article class="project-card inference-service-card">
+    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div><span class="status-badge">Unscored</span></div>
+    <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
+    <p>${escapeHTML(service.description)}</p>
+    <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
+    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div>
+  </article>`).join("") || '<div class="notice">No inference services match these filters.</div>';
+  $$('[data-inference-service]').forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
 }
 
 function finderChoice(key, item) {
@@ -404,7 +451,9 @@ function renderTaxonomy() {
     ["Execution boundaries", state.taxonomy.execution_boundaries], ["Agent capabilities", state.taxonomy.agent_capabilities],
     ["Deployment modes", state.taxonomy.deployment_modes], ["Project statuses", state.taxonomy.project_statuses],
     ["Provenance levels", state.taxonomy.provenance_levels], ["Research confidence", state.taxonomy.research_confidence_levels],
-    ["Source models", state.taxonomy.source_models], ["Specification types", state.taxonomy.specification_types],
+    ["Source models", state.taxonomy.source_models], ["Inference service types", state.taxonomy.inference_service_types],
+    ["Inference delivery modes", state.taxonomy.inference_delivery_modes], ["Inference model sources", state.taxonomy.inference_model_sources],
+    ["Inference API styles", state.taxonomy.inference_api_styles], ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
@@ -428,6 +477,9 @@ function openProject(id) {
     ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
     : `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a></p>`
   ).join("") : `<p>${project.licenses.map(escapeHTML).join(" · ")}</p>`;
+  const providerDetail = project.provider_relationship && project.model_backends
+    ? `<section class="detail-block"><h3>Model provider support</h3><p><strong>Relationship:</strong> ${escapeHTML(taxonomyName("provider_relationships", project.provider_relationship))}</p><p><strong>Reviewed backends:</strong> ${escapeHTML(project.model_backends.map(item => taxonomyName("model_backends", item)).join(" · "))}</p><p class="unscored-note">These traits describe reviewed support, not an inference-service score. Missing traits mean not reviewed.</p></section>`
+    : "";
   $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
@@ -436,6 +488,7 @@ function openProject(id) {
       <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Weaknesses</h3><ul>${project.weaknesses.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${project.retrieval_modes.map(label).map(escapeHTML).join(" · ")}</p></section>
+      ${providerDetail}
       ${familyDetail}
     </div>`;
   $("#project-dialog").showModal();
@@ -464,10 +517,33 @@ function openSpecification(id) {
   $("#specification-dialog").showModal();
 }
 
+function inferenceEvidenceLink(item) {
+  return `<p><strong>${escapeHTML(item.label)}:</strong> <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span></p>`;
+}
+
+function openInferenceService(id) {
+  const service = state.inferenceServices.find(item => item.id === id);
+  if (!service) return;
+  $("#inference-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · Unscored</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
+      <section class="detail-block"><h3>Service boundary</h3><p>${escapeHTML(service.service_boundary)}</p><p class="unscored-note">Inference services are classified, not scored. Companies, models, and local runtimes are separate boundaries.</p></section>
+      <section class="detail-block"><h3>Delivery and model sources</h3><p><strong>Delivery:</strong> ${escapeHTML(service.delivery_modes.map(item => taxonomyName("inference_delivery_modes", item)).join(" · "))}</p><p><strong>Model sources:</strong> ${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</p><p><strong>API styles:</strong> ${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p></section>
+      <section class="detail-block"><h3>Regional controls</h3><p>${escapeHTML(service.regional_controls)}</p></section>
+      <section class="detail-block"><h3>Retention controls</h3><p>${escapeHTML(service.retention_controls)}</p></section>
+      <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${escapeHTML(service.routing)}</p><p><strong>Customization:</strong> ${escapeHTML(service.customization)}</p></section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${service.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Tradeoffs</h3><ul>${service.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${service.evidence.map(inferenceEvidenceLink).join("")}</section>
+    </div>`;
+  $("#inference-dialog").showModal();
+}
+
 function activateView(id) {
   $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0 });
 }
 
 function bindEvents() {
@@ -483,6 +559,7 @@ function bindEvents() {
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
+  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -490,6 +567,14 @@ function bindEvents() {
     $("#specification-status-filter").value = "";
     $("#specification-license-filter").value = "";
     renderSpecifications();
+  });
+  $("#reset-inference-filters").addEventListener("click", () => {
+    $("#inference-search").value = "";
+    $("#inference-type-filter").value = "";
+    $("#inference-delivery-filter").value = "";
+    $("#inference-model-source-filter").value = "";
+    $("#inference-api-filter").value = "";
+    renderInferenceServices();
   });
   $("#reset-filters").addEventListener("click", () => {
     applyDirectoryDefaults();
@@ -533,6 +618,8 @@ function bindEvents() {
   $("#project-dialog").addEventListener("click", event => { if (event.target === $("#project-dialog")) $("#project-dialog").close(); });
   $("#specification-dialog .dialog-close").addEventListener("click", () => $("#specification-dialog").close());
   $("#specification-dialog").addEventListener("click", event => { if (event.target === $("#specification-dialog")) $("#specification-dialog").close(); });
+  $("#inference-dialog .dialog-close").addEventListener("click", () => $("#inference-dialog").close());
+  $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
 }
 
 bootstrap().catch(error => {

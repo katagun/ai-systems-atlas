@@ -15,6 +15,7 @@
     {"id": "ambient_capture", "family": "memory_system", "name": "Ambient capture / lifelogging", "definition": "A passive collector that records digital activity without requiring deliberate note creation."},
     {"id": "retrieval_infrastructure", "family": "memory_system", "name": "Retrieval / storage infrastructure", "definition": "A low-level vector, graph, lexical, or multimodal store used to build memory systems."},
     {"id": "research_reference", "family": "memory_system", "name": "Research / benchmark / reference", "definition": "A survey, benchmark, course, template, or catalog that informs memory implementation."},
+    {"id": "general_work_agent", "family": "agent_system", "name": "General work agent", "definition": "An end-user agent that accepts broad delegated outcomes and executes multi-step knowledge work across files, the web, applications, and scheduled workflows."},
     {"id": "coding_agent", "family": "agent_system", "name": "Coding agent", "definition": "An interactive agent that reads, edits, runs, and reasons about software projects."},
     {"id": "research_agent", "family": "agent_system", "name": "Research agent", "definition": "An agent that plans multi-step information gathering and synthesizes cited findings."},
     {"id": "browser_computer_agent", "family": "agent_system", "name": "Browser / computer-use agent", "definition": "An agent specialized in operating browsers, desktops, or other graphical interfaces."},
@@ -51,6 +52,31 @@
     {"id": "local_runtime", "name": "Local model runtime"},
     {"id": "x_ai", "name": "SpaceXAI / xAI"},
     {"id": "z_ai", "name": "Z.ai"}
+  ],
+  "inference_service_types": [
+    {"id": "direct_model_api", "name": "Direct model API", "definition": "A model developer operates the primary API for its own model families."},
+    {"id": "cloud_model_platform", "name": "Cloud model platform", "definition": "A governed cloud platform serves models from multiple publishers alongside cloud-native deployment controls."},
+    {"id": "managed_inference_host", "name": "Managed inference host", "definition": "An infrastructure operator serves selected third-party or open-weight models through a managed API."},
+    {"id": "routing_aggregator", "name": "Routing aggregator", "definition": "A unified API selects among upstream models or inference operators using routing and fallback policy."}
+  ],
+  "inference_delivery_modes": [
+    {"id": "on_demand", "name": "On-demand", "definition": "Shared managed capacity is billed or limited by request or token use."},
+    {"id": "batch", "name": "Batch", "definition": "Asynchronous jobs trade immediate response for separate capacity or pricing."},
+    {"id": "reserved_capacity", "name": "Reserved capacity", "definition": "Customers purchase or reserve a defined throughput tier or capacity allocation."},
+    {"id": "dedicated_endpoint", "name": "Dedicated endpoint", "definition": "A customer-controlled deployment receives isolated serving resources or an endpoint."}
+  ],
+  "inference_model_sources": [
+    {"id": "first_party", "name": "First-party models", "definition": "Models developed by the service operator."},
+    {"id": "third_party_proprietary", "name": "Third-party proprietary models", "definition": "Closed model families supplied by another publisher."},
+    {"id": "open_weight", "name": "Open-weight models", "definition": "Externally published model weights served by the operator; weight terms remain model-specific."},
+    {"id": "customer_supplied", "name": "Customer-supplied models", "definition": "Customers can import or deploy their own eligible model artifacts or weights."}
+  ],
+  "inference_api_styles": [
+    {"id": "openai_native", "name": "OpenAI API", "definition": "OpenAI's first-party API contract."},
+    {"id": "openai_compatible", "name": "OpenAI-compatible", "definition": "A service implements a documented subset or adaptation of OpenAI API conventions."},
+    {"id": "anthropic_native", "name": "Anthropic API", "definition": "Anthropic's first-party Messages and related API contracts."},
+    {"id": "aws_native", "name": "AWS-native", "definition": "Amazon Bedrock APIs and AWS SDK contracts."},
+    {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."}
   ],
   "specification_types": [
     {"id": "protocol", "name": "Protocol", "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."},

@@ -1,0 +1,200 @@
+{
+  "version": "1.0",
+  "verified_at": "2026-08-28",
+  "services": [
+    {
+      "id": "openai-api",
+      "name": "OpenAI API",
+      "operator": "OpenAI",
+      "service_type": "direct_model_api",
+      "url": "https://developers.openai.com/api/docs/",
+      "description": "OpenAI's managed API platform for its text, reasoning, image, audio, realtime, embedding, moderation, and related model families.",
+      "service_boundary": "Represents the developer API platform, not ChatGPT, Codex, individual model releases, or Azure-hosted OpenAI models.",
+      "delivery_modes": ["on_demand", "batch"],
+      "model_sources": ["first_party"],
+      "api_styles": ["openai_native"],
+      "regional_controls": "Eligible API organizations can configure project-level regional storage and, for supported regions, regional processing; eligibility and endpoint coverage vary.",
+      "retention_controls": "API data is not used for model training unless the customer opts in. Default abuse-monitoring and application-state retention vary by endpoint; approved organizations can use Modified Abuse Monitoring or Zero Data Retention with documented feature limitations.",
+      "routing": "Customers select models within OpenAI's catalog; the service is not a cross-provider routing layer.",
+      "customization": "Fine-tuning and stored application resources are available for eligible models and endpoints, with separate retention behavior.",
+      "strengths": [
+        "One first-party platform spans multiple modalities, realtime interaction, tools, batch processing, and model customization.",
+        "Project-level administration, data controls, and regional endpoints are documented in the API platform."
+      ],
+      "tradeoffs": [
+        "Regional processing, Zero Data Retention, and some enterprise controls require eligibility and do not cover every endpoint or feature.",
+        "The service exposes OpenAI models rather than a vendor-neutral catalog."
+      ],
+      "terms": {"kind": "web_terms", "label": "OpenAI Services Agreement", "url": "https://openai.com/policies/services-agreement/", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "API platform documentation", "url": "https://developers.openai.com/api/docs/", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Data controls and regional processing", "url": "https://developers.openai.com/api/docs/guides/your-data", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Batch API reference", "url": "https://platform.openai.com/docs/api-reference/batch", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "anthropic-api",
+      "name": "Anthropic API",
+      "operator": "Anthropic",
+      "service_type": "direct_model_api",
+      "url": "https://docs.anthropic.com/en/api/overview",
+      "description": "Anthropic's managed first-party API for Claude models, including Messages, streaming, prompt caching, files, and asynchronous message batches.",
+      "service_boundary": "Represents Anthropic's direct commercial API, not Claude.ai, Claude Code, model access through Bedrock or Vertex AI, or individual Claude releases.",
+      "delivery_modes": ["on_demand", "batch"],
+      "model_sources": ["first_party"],
+      "api_styles": ["anthropic_native"],
+      "regional_controls": "Commercial API access is limited to Anthropic's supported countries and regions; the reviewed direct-API sources do not establish customer-selected processing regions.",
+      "retention_controls": "Standard API inputs and outputs are deleted from backend systems within 30 days, subject to policy-enforcement and legal exceptions. Approved enterprise API customers may receive Zero Data Retention, with documented exceptions for features such as files and some batch or caching behavior.",
+      "routing": "Customers select Claude models within Anthropic's direct API; access to Claude through other cloud platforms is a separate inference-service boundary.",
+      "customization": "The reviewed API emphasizes prompt caching, files, tools, and batch execution rather than customer-deployed model weights.",
+      "strengths": [
+        "The direct Messages API provides a focused first-party contract for Claude capabilities.",
+        "Anthropic publishes separate commercial retention guidance and a documented enterprise Zero Data Retention boundary."
+      ],
+      "tradeoffs": [
+        "The direct service is limited to Anthropic model families.",
+        "Zero Data Retention is approval-based and feature-specific exceptions still require review."
+      ],
+      "terms": {"kind": "web_terms", "label": "Anthropic Commercial Terms of Service", "url": "https://www.anthropic.com/legal/commercial-terms", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "API overview", "url": "https://docs.anthropic.com/en/api/overview", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Message Batches API", "url": "https://docs.anthropic.com/en/docs/build-with-claude/batch-processing", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Commercial API retention", "url": "https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Zero Data Retention scope", "url": "https://privacy.anthropic.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "amazon-bedrock",
+      "name": "Amazon Bedrock",
+      "operator": "Amazon Web Services",
+      "service_type": "cloud_model_platform",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html",
+      "description": "AWS's managed foundation-model platform for invoking, customizing, evaluating, and governing Amazon and third-party models within AWS accounts and regions.",
+      "service_boundary": "Represents the Amazon Bedrock inference platform, not Amazon's model families, SageMaker-hosted endpoints, Amazon Q, or Bedrock AgentCore.",
+      "delivery_modes": ["on_demand", "batch", "reserved_capacity"],
+      "model_sources": ["first_party", "third_party_proprietary", "open_weight", "customer_supplied"],
+      "api_styles": ["aws_native", "openai_compatible"],
+      "regional_controls": "Model, feature, and endpoint availability is region-specific. Inference profiles can route within a geography or globally, while single-region use and provisioned capacity have separate support matrices.",
+      "retention_controls": "Data handling depends on the selected model, Bedrock feature, region, AWS account controls, and any applicable third-party model terms; cross-region profiles can change the processing locations involved.",
+      "routing": "Bedrock inference profiles can route a selected model across supported AWS regions; this is regional capacity routing rather than arbitrary cross-model selection.",
+      "customization": "Eligible base models can be customized, and imported or custom models use distinct identifiers and capacity requirements.",
+      "strengths": [
+        "One AWS control plane covers models from several publishers, regional IAM boundaries, and multiple capacity modes.",
+        "Inference profiles and provisioned throughput support production capacity and residency choices."
+      ],
+      "tradeoffs": [
+        "Availability and API compatibility vary by model, endpoint, feature, and AWS region.",
+        "Third-party models can add publisher-specific terms on top of the AWS agreement."
+      ],
+      "terms": {"kind": "web_terms", "label": "AWS Service Terms", "url": "https://aws.amazon.com/service-terms/", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "Bedrock overview", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Model availability and compatibility", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/models.html", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Custom model import", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/import-pre-trained-model.html", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Inference profile regional behavior", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Provisioned throughput", "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "vertex-ai-generative-ai",
+      "name": "Vertex AI Generative AI",
+      "operator": "Google Cloud",
+      "service_type": "cloud_model_platform",
+      "url": "https://cloud.google.com/vertex-ai/generative-ai/docs",
+      "description": "Google Cloud's managed generative-AI platform for accessing Google, partner, open, and customer-deployed models through Vertex AI and Model Garden.",
+      "service_boundary": "Represents managed generative inference on Vertex AI, not Gemini Apps, Google AI Studio, individual Gemini releases, or the broader Vertex AI agent platform.",
+      "delivery_modes": ["on_demand", "batch", "reserved_capacity", "dedicated_endpoint"],
+      "model_sources": ["first_party", "third_party_proprietary", "open_weight", "customer_supplied"],
+      "api_styles": ["google_cloud_native"],
+      "regional_controls": "Availability, data residency, and processing location depend on the selected model, endpoint type, and Google Cloud region; serverless and self-deployed Model Garden paths have different boundaries.",
+      "retention_controls": "Data governance follows the selected Vertex AI service, project configuration, model publisher, and Google Cloud terms; customers must review model- and feature-specific documentation rather than infer one platform-wide rule.",
+      "routing": "The platform provides a common cloud control plane across model sources, but the reviewed service is not represented as an automatic latency- or price-based cross-provider router.",
+      "customization": "Model Garden supports managed APIs, tuning, and deployment paths for eligible Google, partner, open, and customer models, including dedicated endpoints for self-deployed models.",
+      "strengths": [
+        "Model Garden combines first-party, partner, open, and customer deployment paths with Google Cloud governance.",
+        "Serverless, provisioned, batch, and dedicated deployment choices cover distinct production needs."
+      ],
+      "tradeoffs": [
+        "Serving mode, region support, terms, and operational responsibility differ substantially across model categories.",
+        "The broad platform boundary requires model-specific review before treating any capability as universal."
+      ],
+      "terms": {"kind": "web_terms", "label": "Google Cloud Service Specific Terms", "url": "https://cloud.google.com/terms/service-terms", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "Generative AI on Vertex AI overview", "url": "https://cloud.google.com/vertex-ai/generative-ai/docs", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Model Garden overview", "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Partner-model deployment", "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/deploy-partner-models", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Custom container inference", "url": "https://cloud.google.com/vertex-ai/docs/predictions/use-custom-container", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Provisioned throughput support", "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/provisioned-throughput/supported-models", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "operator": "OpenRouter",
+      "service_type": "routing_aggregator",
+      "url": "https://openrouter.ai/docs/quickstart",
+      "description": "A unified API and billing layer that routes model requests across multiple upstream inference providers and model publishers.",
+      "service_boundary": "Represents OpenRouter's API routing service, not the upstream providers, the underlying model releases, or OpenRouter's end-user chat interface.",
+      "delivery_modes": ["on_demand"],
+      "model_sources": ["third_party_proprietary", "open_weight"],
+      "api_styles": ["openai_compatible"],
+      "regional_controls": "Enterprise customers can use documented EU in-region routing; provider and endpoint selection otherwise determines where upstream processing occurs.",
+      "retention_controls": "OpenRouter documents opt-in prompt logging and per-request controls that restrict routing by upstream retention or data-collection policy; upstream provider behavior remains part of the effective boundary.",
+      "routing": "Requests can use ordered providers, fallbacks, allowlists, denylists, privacy requirements, price ceilings, and latency or throughput preferences.",
+      "customization": "The public service focuses on routing existing models and provider endpoints; private customer endpoints are documented separately as an enterprise beta and are not treated as a stable catalog capability here.",
+      "strengths": [
+        "A single compatible API can express fallback, cost, latency, throughput, and data-policy constraints across providers.",
+        "Endpoint-level retention metadata makes privacy part of routing rather than a provider-wide assumption."
+      ],
+      "tradeoffs": [
+        "Requests cross an additional service boundary before reaching an upstream inference provider.",
+        "Effective terms, availability, and data handling depend on both OpenRouter and the selected upstream endpoint."
+      ],
+      "terms": {"kind": "web_terms", "label": "OpenRouter Terms of Service", "url": "https://openrouter.ai/terms", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "API quickstart", "url": "https://openrouter.ai/docs/quickstart", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Provider routing controls", "url": "https://openrouter.ai/docs/guides/routing/provider-selection", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Zero Data Retention routing", "url": "https://openrouter.ai/docs/guides/features/zdr", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Data collection policy", "url": "https://openrouter.ai/docs/guides/privacy/data-collection", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "groqcloud",
+      "name": "GroqCloud",
+      "operator": "Groq",
+      "service_type": "managed_inference_host",
+      "url": "https://console.groq.com/docs/overview",
+      "description": "Groq's managed inference service for a selected production and preview catalog of openly available text, audio, safety, and compound AI models and systems.",
+      "service_boundary": "Represents the GroqCloud developer API, not GroqChat, Groq Playground, Groq hardware, individual hosted models, or third-party model publishers.",
+      "delivery_modes": ["on_demand", "batch"],
+      "model_sources": ["open_weight"],
+      "api_styles": ["openai_compatible"],
+      "regional_controls": "Reviewed documentation states that retained customer data is stored in United States Google Cloud buckets; the pilot does not claim customer-selected inference regions.",
+      "retention_controls": "Inference inputs and outputs are not retained by default except for reliability or abuse handling; customers can enable Zero Data Retention. Batch, fine-tuning, and other stateful features have separate retention behavior.",
+      "routing": "Customers select among models hosted by Groq; Flex processing changes capacity behavior but is not a multi-provider routing layer.",
+      "customization": "Fine-tuning and LoRA state are documented as retained until customer deletion; support and availability remain model-specific.",
+      "strengths": [
+        "The service documents production versus preview models, token-speed signals, and OpenAI-compatible access.",
+        "On-demand, Flex, and batch paths expose distinct capacity and workload tradeoffs."
+      ],
+      "tradeoffs": [
+        "The hosted catalog is selective and preview models may be discontinued on short notice.",
+        "Regional choice is narrower than multi-region cloud platforms in the reviewed documentation."
+      ],
+      "terms": {"kind": "web_terms", "label": "Groq Services Agreement", "url": "https://console.groq.com/docs/legal/services-agreement", "verified_at": "2026-08-28"},
+      "evidence": [
+        {"kind": "web", "label": "GroqCloud overview", "url": "https://console.groq.com/docs/overview", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Supported models", "url": "https://console.groq.com/docs/models", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Customer data controls", "url": "https://console.groq.com/docs/your-data", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Batch processing", "url": "https://console.groq.com/docs/batch", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Flex processing", "url": "https://console.groq.com/docs/flex-processing", "verified_at": "2026-08-28"}
+      ],
+      "verified_at": "2026-08-28"
+    }
+  ]
+}

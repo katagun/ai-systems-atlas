@@ -18,6 +18,7 @@ Use progressive disclosure for explanation and specialist controls:
 - Put definitions and classification rationale in Taxonomy.
 - Put evidence, score dimensions, strengths, and weaknesses in project details.
 - Keep Specifications as a sibling view with direct filters; show contract boundaries and evidence only on demand.
+- Keep Inference Services as a sibling unscored view with direct service-type, delivery, model-source, and API-style filters; show operational constraints, terms, and evidence on demand.
 
 Prefer plain interface labels over methodology language. Use exact taxonomy terms when changing their meaning would introduce ambiguity, but do not repeat the taxonomy thesis in the hero, filters, and footer.
 
@@ -41,6 +42,10 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Specification filters combine search, type, scope, status, and license. Results are alphabetic and explicitly unscored.
 - Specification search indexes visible identity, steward, repository, and boundary prose; hidden relationship and evidence URLs must not create false-positive cards.
 - Specification details distinguish what the artifact standardizes from what it does not, and link reviewed specification and license evidence.
+- Reviewed provider traits appear in project details only; do not add a directory provider filter until coverage is representative.
+- Inference-service filters combine search, type, delivery mode, model source, and API style. Results are alphabetic and explicitly unscored.
+- Inference-service search indexes visible identity and boundary prose; terms and evidence URLs must not create false-positive cards.
+- Inference-service details show the service/company/model/runtime boundary, regional and retention controls, routing, customization, terms, and reviewed evidence.
 
 ## Change surfaces
 
@@ -91,5 +96,6 @@ Then verify in a browser:
 8. navigate taxonomy groups;
 9. check narrow and wide layouts and browser console errors.
 10. search and combine filters in Specifications; open a protocol and instruction-convention detail view.
+11. search and combine every Inference Services filter; open direct API, cloud platform, inference host, and routing-aggregator details.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.
