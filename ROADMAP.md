@@ -14,6 +14,7 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Combine GitHub repository discovery with a conservative allowlist of authoritative vendor feeds so proprietary products can enter the same provisional queue.
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
+- Maintain a bounded unscored inference-service collection for operational serving boundaries without treating providers as a fourth system family.
 
 Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
 
@@ -29,7 +30,7 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 
 ## Later: ecosystem context
 
-Evaluate a separate, unscored ecosystem index for adjacent model providers, API clients, adapters, and observability SDKs. Build it only when concrete user questions cannot be answered by traits on operational systems.
+Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, local runtimes, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary.
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 

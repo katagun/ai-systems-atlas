@@ -15,7 +15,7 @@ Keep provider identity out of system-family classification. The operational fami
 
 The fields are optional during rollout so existing records do not acquire inferred claims. When either field is reviewed, both are required. `provider_native` requires exactly one backend; the other relationships may name multiple backends. Absence means “not reviewed,” not “provider agnostic.”
 
-Provider-native agent SDKs and harnesses may qualify when building or running a tool-using agent is their primary outcome. Source ownership and runtime dependencies are recorded through the source model, license evidence, strengths, weaknesses, and research confidence; they are not inclusion gates. Plain inference/API clients, model repositories, adapters, and tracing clients remain outside the scored catalog because they do not independently provide the operational outcome. A future unscored ecosystem index requires separate evidence of user value and is not part of this decision.
+Provider-native agent SDKs and harnesses may qualify when building or running a tool-using agent is their primary outcome. Source ownership and runtime dependencies are recorded through the source model, license evidence, strengths, weaknesses, and research confidence; they are not inclusion gates. Plain inference/API clients, model repositories, adapters, and tracing clients remain outside the scored catalog because they do not independently provide the operational outcome. ADR 010 later defines managed inference services as a separate unscored collection; that collection does not alter this system-classification decision.
 
 Discovery receives role-to-family policy from the taxonomy rather than maintaining its own family list. Automated discovery may propose family and role, but it does not assign provider traits.
 
@@ -23,6 +23,6 @@ Discovery receives role-to-family policy from the taxonomy rather than maintaini
 
 - Provider coupling can be reviewed without changing family, role, or score comparability.
 - Existing projects remain valid until provider evidence is deliberately reviewed.
-- UI detail and filters wait for sufficient reviewed coverage, avoiding sparse or misleading controls.
+- Reviewed provider traits may appear in project details; directory filtering waits for representative coverage, avoiding a sparse or misleading control.
 - Adding a backend requires one taxonomy update rather than free-form project strings.
 - Ordinary model API SDKs do not enter the catalog merely because their publisher also ships agent products.

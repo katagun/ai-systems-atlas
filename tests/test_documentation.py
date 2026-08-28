@@ -33,6 +33,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
             "docs/OPERATIONS.md",
+            "docs/INFERENCE_SERVICES.md",
             "docs/SPECIFICATIONS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
@@ -40,6 +41,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/006-provider-relationships-are-orthogonal.md",
             "docs/adr/007-licenses-are-classification-not-inclusion.md",
             "docs/adr/008-specifications-are-unscored-artifacts.md",
+            "docs/adr/010-inference-services-are-unscored-service-records.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

@@ -4,10 +4,10 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 103 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 104 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
-- [ ] Review the proprietary memory batch: NotebookLM and Zep Cloud, preserving their product boundaries from Open Notebook and Graphiti.
+- [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
 - [ ] Review the coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Replit Agent, Roo Code, SWE-agent, and Windsurf.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
 - [ ] Add automated accessibility checks when a browser test runtime can be introduced without compromising the dependency-free application.
@@ -19,13 +19,21 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Add a stale-review report that distinguishes editorial age from GitHub metadata age without changing either.
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.
 - [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
-- [ ] Add provider-relationship UI detail only after enough reviewed projects carry the trait; add a filter only when it yields meaningful choices.
 - [ ] Review a second specification batch around agent identity, discovery, authentication, and workflow exchange after concrete candidates are evidence-backed.
 - [ ] Review Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as the next bounded instruction-convention batch.
 
 ## Later
 
-- [ ] Reassess an unscored ecosystem index for model providers, plain API SDKs, adapters, and observability clients after provider traits have been used in real reviews.
+- [ ] Reassess local inference runtimes, API clients, adapters, and observability SDKs only after concrete user questions justify another bounded collection.
+
+## Completed on 2026-08-28
+
+- [x] Define delegated general work as an agent-system role and publish Perplexity Computer and Claude Cowork with explicit boundaries from their vendors' conversational assistants.
+- [x] Publish Zep Cloud separately from Graphiti and Slite as a knowledge system whose Agent maintains the product's human-owned knowledge base.
+- [x] Reconcile Mem0, Letta Code, Graphiti, Sylph, Pletor, Gorgias Cortex, and Slite Agent with reviewed, provisional, or exclusion dispositions instead of forcing every name into a scored record.
+- [x] Show reviewed provider relationship and model-backend traits in project details without adding a sparse directory filter.
+- [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
+- [x] Add an unscored six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views.
 
 ## Completed on 2026-08-26
 

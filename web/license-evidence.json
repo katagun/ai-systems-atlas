@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-08-26",
+  "verified_at": "2026-08-28",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -178,6 +178,79 @@
           "kind": "web_terms",
           "url": "https://chat.z.ai/legal-agreement/terms-of-service",
           "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "claude-cowork",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Individual access to Claude services, associated software, delegated actions, and Cowork",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/consumer-terms",
+          "verified_at": "2026-08-28"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Commercial Claude services and software where Cowork is provided under an organization plan",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "project_id": "perplexity-computer",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Individual use of Perplexity services and product functionality, including Computer",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/terms-of-service",
+          "verified_at": "2026-08-28"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Enterprise access to Perplexity services and product functionality",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/enterprise-terms-of-service",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "project_id": "slite",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Slite knowledge-management products, generated outputs, and organizational use",
+          "kind": "web_terms",
+          "url": "https://slite.com/customer-terms",
+          "verified_at": "2026-08-28"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Individual authorized-user access to Slite products",
+          "kind": "web_terms",
+          "url": "https://slite.com/terms",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "project_id": "zep-cloud",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Zep proprietary agent-memory platform, APIs, SDKs, and dashboard",
+          "kind": "web_terms",
+          "url": "https://www.getzep.com/legal/terms/",
+          "verified_at": "2026-08-28"
         }
       ]
     },

@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of five files:
+`directory/` is canonical. The browser consumes synchronized copies of six files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -13,6 +13,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `license-evidence.json` | Scoped reviewed license and terms evidence | Yes |
 | `exclusions.json` | Reviewed scope-boundary decisions | Yes |
 | `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
+| `inference-services.json` | Reviewed, unscored managed inference services and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
@@ -95,3 +96,16 @@ Specification records are intentionally independent from project records. They c
 - **Review:** authoritative `evidence` plus human-owned `verified_at`.
 
 Evidence is either an immutable Git blob or a dated authoritative web source. Every listed license must have one scoped evidence item. `LicenseRef-Unclear` is valid when the artifact is documented but no standalone reusable format license can be established; it must not be rewritten as open source by inference.
+
+## Inference service record
+
+Inference-service records are independent from project and specification records. They contain no `system_family`, role, score profile, score, popularity metric, or model-quality ranking.
+
+- **Identity and boundary:** `id`, `name`, `operator`, authoritative `url`, `description`, and `service_boundary`.
+- **Classification:** one taxonomy-backed `service_type` plus non-empty `delivery_modes`, `model_sources`, and `api_styles`.
+- **Operational constraints:** regional controls, retention controls, routing, and customization are reviewed prose because their exceptions cannot be represented safely as one boolean.
+- **Editorial analysis:** strengths and tradeoffs describe the represented service boundary without ranking it.
+- **Terms and evidence:** one dated governing-terms record plus non-empty dated authoritative evidence.
+- **Review:** both the record and collection carry `verified_at` dates.
+
+Strict validation rejects extra fields such as `score`, copied price tables, or model inventories. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md) and [ADR 010](adr/010-inference-services-are-unscored-service-records.md).

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-08-26",
+  "updated_at": "2026-08-28",
   "candidates": [
     {
       "repo": "agiresearch/A-mem",
@@ -2881,21 +2881,6 @@
       "review_required": ["licensing", "classification", "traits", "editorial_score"]
     },
     {
-      "repo": null,
-      "name": "Zep Cloud",
-      "url": "https://www.getzep.com/",
-      "description": "Managed agent-memory and temporal knowledge-graph service powered in part by the separately reviewed open-source Graphiti engine.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.94,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": ["agent-memory", "knowledge-graph", "managed-service", "official-product"],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
-    },
-    {
       "repo": "FlowiseAI/Flowise",
       "name": "Flowise",
       "url": "https://github.com/FlowiseAI/Flowise",
@@ -2923,6 +2908,36 @@
       "topics": ["agent-framework", "conversational-agent", "workflow"],
       "status": "provisional",
       "discovered_at": "2026-08-26",
+      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+    },
+    {
+      "repo": null,
+      "name": "Pletor",
+      "url": "https://www.pletor.ai/",
+      "description": "No-code creative-production platform for building reusable AI agents and pipelines over multiple text, image, video, and audio models, brand context, APIs, and MCP.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.84,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": ["creative-production", "marketing", "multi-model", "no-code", "workflow"],
+      "status": "provisional",
+      "discovered_at": "2026-08-28",
+      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+    },
+    {
+      "repo": "getnao/sylph",
+      "name": "Sylph",
+      "url": "https://github.com/getnao/sylph",
+      "description": "Git-based company brain of human-owned context, skills, agents, schedules, and self-improving rules designed to work across Claude Code, Codex, Cursor, and other repository-aware agents.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "memory_bridge",
+      "classification_confidence": 0.92,
+      "github_detected_license": null,
+      "stars": 187,
+      "topics": ["agent-skills", "company-brain", "git", "memory", "multi-agent"],
+      "status": "provisional",
+      "discovered_at": "2026-08-28",
       "review_required": ["licensing", "classification", "traits", "editorial_score"]
     },
     {

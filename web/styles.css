@@ -216,6 +216,10 @@ h1 {
   grid-template-columns: minmax(230px, 2fr) repeat(4, minmax(130px, 1fr));
   position: static;
 }
+.inference-controls {
+  grid-template-columns: minmax(230px, 2fr) repeat(4, minmax(130px, 1fr));
+  position: static;
+}
 .advanced-filter-shell,
 .filter-guidance { grid-column: 1 / -1; }
 .advanced-filter-shell {
@@ -330,6 +334,8 @@ input:focus, select:focus {
 .project-card.assistant_system::before { background: #817792; }
 .specification-card { min-height: 360px; background: #f8faf8; }
 .specification-card::before { background: #587785; }
+.inference-service-card { min-height: 380px; background: #f7f9fb; }
+.inference-service-card::before { background: #536f8a; }
 .project-card:hover {
   transform: translateY(-2px);
   border-color: var(--line-strong);
@@ -389,6 +395,7 @@ input:focus, select:focus {
 .agent_system .role-badge { background: var(--sand-soft); color: #76563c; }
 .assistant_system .role-badge { background: #ece8f1; color: #5f536f; }
 .specification-card .role-badge { background: #e7eff0; color: #48636e; }
+.inference-service-card .role-badge { background: #e5edf4; color: #405b73; }
 .license-row {
   display: flex;
   flex-wrap: wrap;
@@ -607,6 +614,7 @@ dialog::backdrop { background: rgba(38, 42, 37, .42); backdrop-filter: blur(3px)
 .score-table td { padding: .45rem; border-bottom: 1px solid var(--line); }
 .score-table td:last-child { color: var(--cyan); font-weight: 600; text-align: right; }
 .unscored-note { padding-top: .8rem; border-top: 1px solid var(--line); font-size: .82rem; }
+.evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
 
 footer {
   width: min(1360px, calc(100% - 3rem));
@@ -639,7 +647,7 @@ footer {
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .brand small { display: none; }
   .tabs { order: 3; width: 100%; min-height: 42px; justify-content: space-around; border-top: 1px solid var(--line); }
-  .tab { flex: 1; font-size: .77rem; }
+  .tab { flex: 1; font-size: .7rem; }
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
   .hero h1 { font-size: clamp(2.55rem, 11vw, 3.7rem); }
   .view, #directory.view { padding: 2.6rem 0; }

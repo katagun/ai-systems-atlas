@@ -14,6 +14,7 @@ class DirectoryTests(unittest.TestCase):
         cls.document = json.loads((ROOT / "directory" / "projects.json").read_text(encoding="utf-8"))
         cls.evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text(encoding="utf-8"))
         cls.specifications = json.loads((ROOT / "directory" / "specifications.json").read_text(encoding="utf-8"))
+        cls.inference_services = json.loads((ROOT / "directory" / "inference-services.json").read_text(encoding="utf-8"))
 
     def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]
@@ -252,6 +253,24 @@ class DirectoryTests(unittest.TestCase):
         self.assertTrue(reviewed.isdisjoint({candidate["repo"] for candidate in candidates["candidates"]}))
         self.assertIn("sqlchat/sqlchat", {entry["repo"] for entry in exclusions["entries"]})
 
+    def test_delegated_work_and_named_memory_products_have_explicit_dispositions(self) -> None:
+        projects = {project["id"]: project for project in self.document["projects"]}
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+
+        self.assertEqual("general_work_agent", projects["claude-cowork"]["primary_role"])
+        self.assertEqual("general_work_agent", projects["perplexity-computer"]["primary_role"])
+        self.assertEqual("ai_knowledge_app", projects["slite"]["primary_role"])
+        self.assertEqual("agent_memory_service", projects["zep-cloud"]["primary_role"])
+        self.assertNotIn("Zep Cloud", {candidate["name"] for candidate in candidates["candidates"]})
+
+        self.assertLessEqual({"mem0", "graphiti", "letta-code"}, set(projects))
+        self.assertLessEqual(
+            {"Pletor", "Sylph"},
+            {candidate["name"] for candidate in candidates["candidates"]},
+        )
+        self.assertIn("Gorgias Cortex", {entry["name"] for entry in exclusions["entries"]})
+
     def test_editorial_scores_match_family_profile(self) -> None:
         profiles = {item["id"]: item for item in self.taxonomy["score_profiles"]}
         for project in self.document["projects"]:
@@ -283,8 +302,36 @@ class DirectoryTests(unittest.TestCase):
                     self.assertEqual(40, len(item["blob_sha"]))
 
     def test_web_data_matches_directory_data(self) -> None:
-        for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json", "specifications.json"):
+        for name in ("projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json", "specifications.json", "inference-services.json"):
             self.assertEqual((ROOT / "directory" / name).read_bytes(), (ROOT / "web" / name).read_bytes(), name)
+
+    def test_inference_services_are_separate_unscored_service_records(self) -> None:
+        records = self.inference_services["services"]
+        expected = {
+            "openai-api", "anthropic-api", "amazon-bedrock",
+            "vertex-ai-generative-ai", "openrouter", "groqcloud",
+        }
+        self.assertEqual(expected, {record["id"] for record in records})
+        self.assertEqual(
+            {"direct_model_api", "cloud_model_platform", "managed_inference_host", "routing_aggregator"},
+            {record["service_type"] for record in records},
+        )
+        for record in records:
+            self.assertFalse({"system_family", "score_profile", "score", "models", "pricing"} & set(record), record["id"])
+            self.assertTrue(record["service_boundary"], record["id"])
+            self.assertTrue(record["evidence"], record["id"])
+            self.assertEqual("web_terms", record["terms"]["kind"], record["id"])
+
+    def test_inference_service_traits_are_taxonomy_backed(self) -> None:
+        service_types = {item["id"] for item in self.taxonomy["inference_service_types"]}
+        delivery_modes = {item["id"] for item in self.taxonomy["inference_delivery_modes"]}
+        model_sources = {item["id"] for item in self.taxonomy["inference_model_sources"]}
+        api_styles = {item["id"] for item in self.taxonomy["inference_api_styles"]}
+        for record in self.inference_services["services"]:
+            self.assertIn(record["service_type"], service_types, record["id"])
+            self.assertFalse(set(record["delivery_modes"]) - delivery_modes, record["id"])
+            self.assertFalse(set(record["model_sources"]) - model_sources, record["id"])
+            self.assertFalse(set(record["api_styles"]) - api_styles, record["id"])
 
     def test_specifications_are_a_separate_unscored_collection(self) -> None:
         records = self.specifications["specifications"]
