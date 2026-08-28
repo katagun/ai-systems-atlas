@@ -26,6 +26,14 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
   );
 });
 
+test("the atlas orbital field spans the four landscape nodes", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.locator(".atlas-map .map-node")).toHaveCount(4);
+  await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(4);
+  await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+});
+
 test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {
   await page.goto("/");
 
