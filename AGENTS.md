@@ -1,6 +1,6 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory, agent, and assistant systems plus unscored interoperability specifications. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory, agent, and assistant systems plus unscored interoperability specifications and managed inference services. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 
@@ -40,7 +40,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For web changes, also exercise system and specification search/filters, cross-family score hiding, the finder handoff, taxonomy, and both detail dialogs in a browser.
+Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, and inference-service search/filters, cross-family score hiding, the finder handoff, taxonomy, and all three detail dialogs in a browser.
 
 ## Hard rules
 
@@ -56,7 +56,7 @@ Run synchronization after changing any published `directory/*.json` file. Run al
 - Keep specifications outside `system_family` and score profiles; classify their type, integration scope, and maturity without ranking unlike artifacts.
 - Keep inference services outside `system_family` and score profiles; curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
 - Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, and `specifications.json` synchronized into `web/`; candidate and license-review queues are not published.
+- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, and `inference-services.json` synchronized into `web/`; candidate and license-review queues are not published.
 - Never report checks as passing unless you ran them.
 
 Existing unrelated changes belong to the user. Preserve them.
