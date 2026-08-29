@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-28
 
-The reviewed catalog contains 84 systems: 27 memory systems, 46 agent systems, and 11 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty are proprietary. The provisional queue contains 102 records. The separate collections contain 15 unscored specifications plus 36 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
+The reviewed catalog contains 85 systems: 27 memory systems, 46 agent systems, and 12 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-one are proprietary. The provisional queue contains 102 records. The separate collections contain 15 unscored specifications plus 36 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|

@@ -260,6 +260,10 @@ class DirectoryTests(unittest.TestCase):
 
         self.assertEqual("general_work_agent", projects["claude-cowork"]["primary_role"])
         self.assertEqual("general_work_agent", projects["perplexity-computer"]["primary_role"])
+        self.assertEqual("general_ai_assistant", projects["perplexity"]["primary_role"])
+        self.assertEqual("assistant_system", projects["perplexity"]["system_family"])
+        self.assertEqual("multi_provider", projects["perplexity"]["provider_relationship"])
+        self.assertIn("Perplexity Computer", projects["perplexity"]["current_repo_note"])
         self.assertEqual("ai_knowledge_app", projects["slite"]["primary_role"])
         self.assertEqual("agent_memory_service", projects["zep-cloud"]["primary_role"])
         self.assertNotIn("Zep Cloud", {candidate["name"] for candidate in candidates["candidates"]})

@@ -4116,6 +4116,94 @@
       "license_review_status": "verified"
     },
     {
+      "id": "perplexity",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Perplexity",
+      "repo": null,
+      "url": "https://www.perplexity.ai/",
+      "description": "Perplexity's general AI assistant for cited conversational answers, research, files, persistent projects, memory, model choice, content creation, and mobile assistance.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "status": "active",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "google",
+        "moonshot_ai",
+        "nvidia",
+        "openai",
+        "perplexity",
+        "x_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed sessions, search history, saved memories, projects, instructions, uploaded and connected files, and generated artifacts",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the core Perplexity web, desktop, and mobile assistant, including the Android Assistant surface. Perplexity Computer, Comet, and the Perplexity API remain distinct operational products.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 8.9,
+        "context_continuity": 8.9,
+        "tools_integrations": 8.8,
+        "human_control": 9.0,
+        "data_governance": 7.7,
+        "interoperability": 8.8,
+        "usability_access": 9.2,
+        "maturity": 9.2,
+        "overall": 8.79
+      },
+      "strengths": [
+        "Search-grounded conversational answers and iterative Research combine visible citations with strong source transparency",
+        "Sessions, editable memory, and persistent Projects support continuity across questions, files, instructions, and ongoing work",
+        "First-class model choice, file and application connectors, exports, asset creation, and mobile assistance provide a broad end-user surface"
+      ],
+      "weaknesses": [
+        "The operational implementation, retrieval stack, and stored context are proprietary and service-managed",
+        "Models, usage limits, memory behavior, connectors, and creation features vary by plan, platform, administrator settings, and rollout stage",
+        "Consumer data controls and portability are less comprehensive than the enterprise governance boundary and remain dependent on Perplexity's service"
+      ],
+      "why_it_matters": "A category-defining answer engine that has grown into a broad, source-aware assistant with durable context, multi-model choice, research, creation, and device-level assistance.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-28",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
       "id": "t3-chat",
       "system_family": "assistant_system",
       "score_profile": "assistant",

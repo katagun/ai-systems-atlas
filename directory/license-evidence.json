@@ -156,6 +156,19 @@
       ]
     },
     {
+      "project_id": "perplexity",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Individual access to the Perplexity web, desktop, and mobile assistant services and product functionality",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/terms-of-service",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
       "project_id": "t3-chat",
       "repo": null,
       "items": [
