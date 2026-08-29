@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-08-28",
+  "updated_at": "2026-08-29",
   "candidates": [
     {
       "repo": "agiresearch/A-mem",
@@ -2684,10 +2684,20 @@
       "classification_confidence": 0.76,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["assistant", "chat", "groq", "official-product"],
+      "topics": [
+        "assistant",
+        "chat",
+        "groq",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2699,10 +2709,20 @@
       "classification_confidence": 0.96,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent", "persistent-state", "xai", "official-product"],
+      "topics": [
+        "agent",
+        "persistent-state",
+        "xai",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "pingdotgg/t3code",
@@ -2714,10 +2734,19 @@
       "classification_confidence": 0.96,
       "github_detected_license": "MIT",
       "stars": null,
-      "topics": ["coding-agent", "workflow", "multi-agent"],
+      "topics": [
+        "coding-agent",
+        "workflow",
+        "multi-agent"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2729,10 +2758,20 @@
       "classification_confidence": 0.96,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-platform", "azure", "managed-runtime", "official-product"],
+      "topics": [
+        "agent-platform",
+        "azure",
+        "managed-runtime",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2744,10 +2783,20 @@
       "classification_confidence": 0.95,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-builder", "low-code", "microsoft", "official-product"],
+      "topics": [
+        "agent-builder",
+        "low-code",
+        "microsoft",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2759,10 +2808,20 @@
       "classification_confidence": 0.97,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-platform", "aws", "managed-runtime", "official-product"],
+      "topics": [
+        "agent-platform",
+        "aws",
+        "managed-runtime",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2774,10 +2833,20 @@
       "classification_confidence": 0.97,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-platform", "google-cloud", "managed-runtime", "official-product"],
+      "topics": [
+        "agent-platform",
+        "google-cloud",
+        "managed-runtime",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2789,10 +2858,20 @@
       "classification_confidence": 0.95,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-platform", "enterprise", "salesforce", "official-product"],
+      "topics": [
+        "agent-platform",
+        "enterprise",
+        "salesforce",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2804,10 +2883,21 @@
       "classification_confidence": 0.96,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-platform", "enterprise", "ibm", "orchestration", "official-product"],
+      "topics": [
+        "agent-platform",
+        "enterprise",
+        "ibm",
+        "orchestration",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2819,10 +2909,20 @@
       "classification_confidence": 0.97,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["knowledge-app", "notebook", "rag", "official-product"],
+      "topics": [
+        "knowledge-app",
+        "notebook",
+        "rag",
+        "official-product"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "FlowiseAI/Flowise",
@@ -2834,10 +2934,21 @@
       "classification_confidence": 0.84,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-framework", "archived", "eol-2026-08-31", "low-code", "workflow"],
+      "topics": [
+        "agent-framework",
+        "archived",
+        "eol-2026-08-31",
+        "low-code",
+        "workflow"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2849,10 +2960,19 @@
       "classification_confidence": 0.82,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-framework", "conversational-agent", "workflow"],
+      "topics": [
+        "agent-framework",
+        "conversational-agent",
+        "workflow"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": null,
@@ -2864,10 +2984,21 @@
       "classification_confidence": 0.84,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["creative-production", "marketing", "multi-model", "no-code", "workflow"],
+      "topics": [
+        "creative-production",
+        "marketing",
+        "multi-model",
+        "no-code",
+        "workflow"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-28",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "getnao/sylph",
@@ -2879,10 +3010,21 @@
       "classification_confidence": 0.92,
       "github_detected_license": null,
       "stars": 187,
-      "topics": ["agent-skills", "company-brain", "git", "memory", "multi-agent"],
+      "topics": [
+        "agent-skills",
+        "company-brain",
+        "git",
+        "memory",
+        "multi-agent"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-28",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "genkit-ai/genkit",
@@ -2894,10 +3036,45 @@
       "classification_confidence": 0.8,
       "github_detected_license": null,
       "stars": null,
-      "topics": ["agent-framework", "google", "workflow"],
+      "topics": [
+        "agent-framework",
+        "google",
+        "workflow"
+      ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
-      "review_required": ["licensing", "classification", "traits", "editorial_score"]
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "janhq/jan",
+      "name": "Jan",
+      "url": "https://github.com/janhq/jan",
+      "description": "Desktop application combining local llama.cpp and MLX execution with cloud model providers, conversations and projects, assistants, autonomous agents, MCP connectors, and a local OpenAI-compatible API server.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "multi_model_chat_client",
+      "classification_confidence": 0.82,
+      "github_detected_license": "NOASSERTION",
+      "stars": 44249,
+      "topics": [
+        "assistant",
+        "desktop",
+        "llama-cpp",
+        "local-first",
+        "mcp"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ]
 }

@@ -1,5 +1,679 @@
 {
   "version": "1.0",
   "verified_at": "2026-08-29",
-  "runtimes": []
+  "runtimes": [
+    {
+      "id": "llama-cpp",
+      "name": "llama.cpp",
+      "maintainer": "ggml-org",
+      "runtime_type": "embedded_library",
+      "repo": "ggml-org/llama.cpp",
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "description": "Dependency-free C/C++ inference implementation for language and vision-language models, consumed as a library, command-line tool, and bundled OpenAI-compatible server across a wide range of hardware backends.",
+      "runtime_boundary": "Represents the llama.cpp project and the tools it ships. Downstream products that embed it, including Ollama, LM Studio, LocalAI, and Jan, are separate boundaries and are not represented by this record.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "metal",
+        "vulkan",
+        "sycl",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "gguf"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "continuous_batching",
+        "parallel_requests",
+        "distributed_serving",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library",
+        "local_cli",
+        "container"
+      ],
+      "model_management": "Models load from local GGUF files or are fetched directly from Hugging Face through a repository flag. The project provides quantization and conversion tooling rather than a managed local model store.",
+      "hardware_requirements": "The project documents a backend matrix spanning CPU vector extensions on x86, ARM, and RISC-V alongside CUDA, HIP, Metal, Vulkan, SYCL, and further vendor backends. CPU and GPU hybrid inference partially accelerates models larger than available accelerator memory.",
+      "operational_controls": "The bundled server exposes configurable parallel slots, continuous batching, multi-GPU split modes, a Prometheus-compatible metrics endpoint, and a slot monitoring endpoint, each settable by flag or environment variable.",
+      "strengths": [
+        "Backend coverage is the broadest in the collection, spanning CPU vector extensions, CUDA, HIP, Metal, Vulkan, SYCL, and additional vendor backends.",
+        "The bundled server documents continuous batching, configurable parallel slots, multi-GPU split modes, and Prometheus-compatible metrics.",
+        "Distributed execution across machines is available through the project's RPC backend."
+      ],
+      "tradeoffs": [
+        "Execution is limited to the project's own GGUF format, so weights published in other formats require a conversion step.",
+        "There is no managed local model store; model retention, naming, and cleanup are the operator's responsibility.",
+        "Capability varies by build configuration, and several documented backends are marked in progress."
+      ],
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single MIT license file covering the inference implementation and bundled tools.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file for llama.cpp and its bundled tools",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ggml-org/llama.cpp/blob/master/LICENSE",
+          "blob_sha": "e7dca554bcb802f98408383a864404e3aa4eacca",
+          "immutable_url": "https://api.github.com/repos/ggml-org/llama.cpp/git/blobs/e7dca554bcb802f98408383a864404e3aa4eacca"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 9.5,
+        "model_format_support": 6.5,
+        "serving_concurrency": 8.0,
+        "api_interoperability": 8.0,
+        "deployment_operations": 7.5,
+        "model_lifecycle_management": 6.0,
+        "observability_control": 7.5,
+        "documentation_transparency": 8.0,
+        "overall": 7.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project overview and backend matrix",
+          "url": "https://github.com/ggml-org/llama.cpp/blob/master/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Server flags, batching, and metrics",
+          "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Build and backend guide",
+          "url": "https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "lm-studio",
+      "name": "LM Studio",
+      "maintainer": "Element Labs",
+      "runtime_type": "desktop_runner",
+      "repo": null,
+      "url": "https://lmstudio.ai/docs/app",
+      "description": "Desktop application and local server for discovering, downloading, and running language models on a personal machine, with a command-line interface and headless mode for unattended hosts.",
+      "runtime_boundary": "Represents the local model runner and its server. Its chat window is how local execution is exercised rather than a broad conversational workspace with durable projects and connected information, so the product is curated as a runtime rather than an assistant.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "metal",
+        "vulkan"
+      ],
+      "model_formats": [
+        "gguf",
+        "mlx"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "parallel_requests"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "desktop_app",
+        "local_cli"
+      ],
+      "model_management": "Models are discovered and downloaded from Hugging Face inside the application and managed through its interface or the lms command-line tool, which also controls the daemon and server.",
+      "hardware_requirements": "Documented requirements cover Apple silicon on macOS 14 or newer, x64 systems with AVX2 and ARM Snapdragon X Elite on Windows, and x64 or ARM64 on Ubuntu 20.04 or newer. Intel-based Macs are not supported and at least 4 GB of dedicated video memory is recommended on Windows.",
+      "operational_controls": "Inference runtimes are selected automatically per model and can be managed and updated from a dedicated runtimes surface. The server can be started and stopped from the application or the command-line tool.",
+      "strengths": [
+        "Ships llama.cpp engine variants for CPU, CUDA, Vulkan, ROCm, and Metal alongside an Apple MLX engine, selecting an engine and offload parameters automatically.",
+        "Model discovery, download, and management are integrated into one interface with a command-line equivalent.",
+        "Provides a headless mode for servers and continuous-integration hosts in addition to the desktop application."
+      ],
+      "tradeoffs": [
+        "The application core is proprietary; only the command-line tool and client SDKs are published under an open license.",
+        "Execution is limited to GGUF and MLX weights, and MLX is available only on Apple silicon.",
+        "Operational visibility is confined to in-application server logs, with no documented metrics endpoint."
+      ],
+      "licenses": [
+        "LicenseRef-Proprietary",
+        "MIT"
+      ],
+      "source_model": "mixed_source",
+      "license_note": "The application and its inference core are governed by proprietary terms that grant a non-transferable license for personal and internal business use. The separately published command-line tool and client SDKs are MIT licensed, which makes the product an open wrapper over a closed operational core.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "LM Studio application, inference core, and documentation governed by the published terms of service",
+          "kind": "web_terms",
+          "url": "https://lmstudio.ai/terms",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "LM Studio command-line tool and client SDKs published in separate repositories",
+          "kind": "web_terms",
+          "url": "https://github.com/lmstudio-ai/lms/blob/main/LICENSE",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 9.0,
+        "model_format_support": 7.0,
+        "serving_concurrency": 5.5,
+        "api_interoperability": 8.0,
+        "deployment_operations": 6.5,
+        "model_lifecycle_management": 8.0,
+        "observability_control": 4.5,
+        "documentation_transparency": 7.5,
+        "overall": 7.05
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Application documentation",
+          "url": "https://lmstudio.ai/docs/app",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "System requirements",
+          "url": "https://lmstudio.ai/docs/app/system-requirements",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Runtime management command reference",
+          "url": "https://lmstudio.ai/docs/cli/runtime/runtime",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "localai",
+      "name": "LocalAI",
+      "maintainer": "Ettore Di Giacinto and contributors",
+      "runtime_type": "compatibility_gateway",
+      "repo": "mudler/LocalAI",
+      "url": "https://localai.io/docs/basics/getting_started/",
+      "description": "Self-hosted server presenting compatible text, embedding, image, and audio APIs over interchangeable local inference backends, with a model gallery and a web interface.",
+      "runtime_boundary": "Represents the self-hosted gateway and the backends it manages, not the individual inference engines it can load and not any hosted service.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "vulkan",
+        "sycl"
+      ],
+      "model_formats": [
+        "gguf",
+        "safetensors"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "parallel_requests",
+        "distributed_serving"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "local_cli",
+        "container",
+        "orchestrated_cluster"
+      ],
+      "model_management": "Models are installed from a built-in gallery through the web interface or the command-line tool, and backends are downloaded automatically to match detected hardware.",
+      "hardware_requirements": "Dedicated container images cover CPU-only operation alongside NVIDIA, AMD, Intel, and Vulkan acceleration. The project documents automatic detection of available GPU capability and states that a GPU is not required.",
+      "operational_controls": "A built-in web interface manages installations and configuration. A distributed mode registers GPU worker nodes with a front-end coordinator for scaling beyond one host.",
+      "strengths": [
+        "Presents OpenAI-compatible, Anthropic Messages, and Open Responses APIs over one self-hosted endpoint, spanning text, embeddings, images, and audio.",
+        "A model gallery plus automatic backend selection removes most manual setup for mixed hardware.",
+        "Documents container, orchestrated, and distributed multi-node deployment paths."
+      ],
+      "tradeoffs": [
+        "Capability depends on which backend serves a given model, so behaviour is not uniform across the catalogue.",
+        "As a gateway it inherits the limits of the engines it loads rather than optimising execution itself.",
+        "Published operational visibility is centred on the web interface rather than a documented metrics surface."
+      ],
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single MIT license file covering the gateway.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file for the LocalAI gateway",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mudler/LocalAI/blob/master/LICENSE",
+          "blob_sha": "65ebf26018f7d8eefefe1741b81009daed03ff93",
+          "immutable_url": "https://api.github.com/repos/mudler/LocalAI/git/blobs/65ebf26018f7d8eefefe1741b81009daed03ff93"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 8.5,
+        "model_format_support": 7.5,
+        "serving_concurrency": 7.0,
+        "api_interoperability": 9.0,
+        "deployment_operations": 8.5,
+        "model_lifecycle_management": 8.0,
+        "observability_control": 5.5,
+        "documentation_transparency": 7.0,
+        "overall": 7.72
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Getting started and deployment guide",
+          "url": "https://localai.io/docs/basics/getting_started/",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Repository overview",
+          "url": "https://github.com/mudler/LocalAI/blob/master/README.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "mlx-lm",
+      "name": "MLX LM",
+      "maintainer": "Apple machine learning research",
+      "runtime_type": "embedded_library",
+      "repo": "ml-explore/mlx-lm",
+      "url": "https://github.com/ml-explore/mlx-lm",
+      "description": "Python package for generating text with and fine-tuning language models on Apple silicon through the MLX array framework, usable as a library, command-line tool, and small local server.",
+      "runtime_boundary": "Represents the language-model package rather than the underlying MLX array framework, and covers Apple silicon execution only.",
+      "accelerators": [
+        "metal"
+      ],
+      "model_formats": [
+        "mlx",
+        "safetensors"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "distributed_serving"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library",
+        "local_cli"
+      ],
+      "model_management": "Models are fetched from the Hugging Face Hub by identifier, and the package can quantize models and upload the result back to the Hub. Prompt caches persist to disk for reuse across generations.",
+      "hardware_requirements": "Execution targets Apple silicon through MLX. No other accelerator or operating system is supported.",
+      "operational_controls": "Generation and sampling parameters are set per command or per call. Distributed execution is available through the MLX distributed interface.",
+      "strengths": [
+        "First-party Apple silicon execution path with quantization, upload, and low-rank or full fine-tuning in one package.",
+        "Hugging Face Hub integration reaches a large published catalogue of MLX-compatible models with a single command.",
+        "Usable as a Python module, a set of command-line tools, and a local server without additional components."
+      ],
+      "tradeoffs": [
+        "Apple silicon is the only supported target, so the package cannot serve mixed or non-Apple fleets.",
+        "The bundled server is explicitly documented as not recommended for production because it implements only basic security checks.",
+        "Serving capability is minimal, with no documented continuous batching, metrics, or administrative surface."
+      ],
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single MIT license file covering the package.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file for the MLX LM package",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ml-explore/mlx-lm/blob/main/LICENSE",
+          "blob_sha": "98ff47b9ef9d4ac9f1a4bde3db13dd27456c5ea1",
+          "immutable_url": "https://api.github.com/repos/ml-explore/mlx-lm/git/blobs/98ff47b9ef9d4ac9f1a4bde3db13dd27456c5ea1"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 3.0,
+        "model_format_support": 5.0,
+        "serving_concurrency": 4.0,
+        "api_interoperability": 4.5,
+        "deployment_operations": 4.5,
+        "model_lifecycle_management": 7.0,
+        "observability_control": 2.5,
+        "documentation_transparency": 6.0,
+        "overall": 4.43
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Package overview",
+          "url": "https://github.com/ml-explore/mlx-lm/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Server documentation and limitations",
+          "url": "https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "maintainer": "Ollama",
+      "runtime_type": "desktop_runner",
+      "repo": "ollama/ollama",
+      "url": "https://docs.ollama.com/",
+      "description": "Local model runner that packages model download, storage, and serving behind one CLI, desktop application, and REST API on the user's own hardware.",
+      "runtime_boundary": "Represents the self-operated Ollama runtime. Ollama Cloud, the hosted tier operated by the same organization, is a separate managed inference service record. The model library Ollama distributes is not part of this record.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "metal",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "gguf",
+        "safetensors"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "parallel_requests"
+      ],
+      "api_styles": [
+        "service_native",
+        "openai_compatible",
+        "anthropic_compatible"
+      ],
+      "deployment_surfaces": [
+        "desktop_app",
+        "local_cli",
+        "container"
+      ],
+      "model_management": "Models are pulled, pushed, created from a Modelfile, copied, listed, and deleted through the CLI and REST API. Safetensors weights and adapters can be imported into the local store.",
+      "hardware_requirements": "Documented NVIDIA support requires compute capability 5.0 or newer with driver 550 or newer; AMD support runs through ROCm; Apple silicon runs through Metal. Models that do not fit one accelerator are spread across available GPUs, and available memory governs how many models load concurrently.",
+      "operational_controls": "Server environment variables govern loaded-model count, parallel requests per model, and queue depth. CUDA_VISIBLE_DEVICES restricts GPU selection. Running models and versions are inspectable through the API.",
+      "strengths": [
+        "Model lifecycle management is unusually complete for a local runner, covering pull, push, create, copy, import, and delete through both CLI and API.",
+        "Documents OpenAI-compatible and Anthropic-compatible endpoints alongside its native API, plus embeddings, tool calling, structured outputs, and vision.",
+        "Installers, container images, and hardware support are documented per platform with explicit driver and compute-capability floors."
+      ],
+      "tradeoffs": [
+        "Concurrency is limited to parallel request slots and multiple loaded models; the documentation describes no continuous batching or distributed serving.",
+        "Documented accelerator coverage spans NVIDIA, AMD, and Apple silicon; Vulkan and Intel paths are not part of the published hardware support matrix.",
+        "Operational visibility is limited to running-model and version endpoints with no documented metrics endpoint."
+      ],
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single MIT license file covering the runtime source.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file for the Ollama runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ollama/ollama/blob/main/LICENSE",
+          "blob_sha": "8e3dc978a7ca8c53f56bbedc5b558116140fc02e",
+          "immutable_url": "https://api.github.com/repos/ollama/ollama/git/blobs/8e3dc978a7ca8c53f56bbedc5b558116140fc02e"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 8.0,
+        "model_format_support": 6.5,
+        "serving_concurrency": 6.0,
+        "api_interoperability": 9.0,
+        "deployment_operations": 7.0,
+        "model_lifecycle_management": 9.0,
+        "observability_control": 5.0,
+        "documentation_transparency": 8.5,
+        "overall": 7.31
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Hardware support",
+          "url": "https://docs.ollama.com/gpu",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Concurrency and multi-GPU behaviour",
+          "url": "https://docs.ollama.com/faq",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI compatibility",
+          "url": "https://docs.ollama.com/api/openai-compatibility",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "API introduction",
+          "url": "https://docs.ollama.com/api/introduction",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "sglang",
+      "name": "SGLang",
+      "maintainer": "SGLang project",
+      "runtime_type": "server_engine",
+      "repo": "sgl-project/sglang",
+      "url": "https://docs.sglang.io/",
+      "description": "Serving engine for language and multimodal models built around radix-tree prefix caching, continuous batching, and multi-accelerator parallelism on operator-controlled hardware.",
+      "runtime_boundary": "Represents the self-hosted serving engine and its runtime, not the models it serves and not any managed platform that deploys it for a customer.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "safetensors",
+        "pytorch",
+        "fp8",
+        "awq",
+        "gptq"
+      ],
+      "serving_modes": [
+        "continuous_batching",
+        "parallel_requests",
+        "distributed_serving",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library",
+        "local_cli",
+        "container",
+        "orchestrated_cluster"
+      ],
+      "model_management": "Models load from Hugging Face repositories or local paths at launch, with adapter support. The engine does not provide a managed local model store.",
+      "hardware_requirements": "Documented execution covers NVIDIA and AMD accelerators, Intel Xeon processors, Google TPU, and Ascend NPU targets, with published configuration recipes for specific data-centre accelerator families.",
+      "operational_controls": "Parallelism strategy, prefix caching, and speculative decoding are configured at launch, and container images support orchestrated deployment.",
+      "strengths": [
+        "Radix-tree prefix caching, continuous batching, and tensor, pipeline, and data parallelism are documented as core scheduling capabilities.",
+        "Accelerator coverage extends beyond NVIDIA and AMD to Intel Xeon, Google TPU, and Ascend NPU targets.",
+        "Native multimodal handling covers text, image, video, and audio alongside structured output and tool calling."
+      ],
+      "tradeoffs": [
+        "Targets accelerator-backed server deployment with no desktop packaging or graphical interface.",
+        "Documentation is oriented toward data-centre accelerators, so consumer-hardware guidance is thinner than in desktop-first runtimes.",
+        "Model selection is fixed at launch, and the engine provides no local model lifecycle management."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single Apache-2.0 license file covering the serving engine.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the SGLang engine",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/sgl-project/sglang/blob/main/LICENSE",
+          "blob_sha": "9c422689c8f5c317c7c65153b1209349ec57007e",
+          "immutable_url": "https://api.github.com/repos/sgl-project/sglang/git/blobs/9c422689c8f5c317c7c65153b1209349ec57007e"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 8.0,
+        "model_format_support": 8.0,
+        "serving_concurrency": 9.0,
+        "api_interoperability": 8.0,
+        "deployment_operations": 8.0,
+        "model_lifecycle_management": 6.5,
+        "observability_control": 7.0,
+        "documentation_transparency": 7.5,
+        "overall": 7.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project documentation overview",
+          "url": "https://docs.sglang.io/",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Repository overview",
+          "url": "https://github.com/sgl-project/sglang/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "vllm",
+      "name": "vLLM",
+      "maintainer": "vLLM project",
+      "runtime_type": "server_engine",
+      "repo": "vllm-project/vllm",
+      "url": "https://docs.vllm.ai/en/latest/",
+      "description": "High-throughput inference and serving engine built around paged attention, continuous batching, and multi-dimensional parallelism for operator-controlled accelerators.",
+      "runtime_boundary": "Represents the self-hosted serving engine. Managed services that deploy vLLM on a customer's behalf are separate inference-service boundaries, and the models it serves are not part of this record.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "rocm",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "safetensors",
+        "pytorch",
+        "gguf",
+        "awq",
+        "gptq",
+        "fp8"
+      ],
+      "serving_modes": [
+        "continuous_batching",
+        "parallel_requests",
+        "distributed_serving",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library",
+        "local_cli",
+        "container",
+        "orchestrated_cluster"
+      ],
+      "model_management": "Models load from Hugging Face repositories or local paths at server start, with adapter and quantization support. Weights are pinned by the launch configuration rather than managed through a runtime model store.",
+      "hardware_requirements": "Documented execution covers NVIDIA GPUs, AMD GPUs, and x86, ARM, and PowerPC CPUs, with further accelerators available through a plugin architecture that includes TPU, Gaudi, Spyre, and Ascend targets.",
+      "operational_controls": "Parallelism strategy, batching, prefix caching, and speculative decoding are configured at launch. The project documents an observability surface for a running server alongside distributed deployment guidance.",
+      "strengths": [
+        "Serving capability is the most complete in the collection, covering continuous batching, chunked prefill, prefix caching, and tensor, pipeline, data, expert, and context parallelism.",
+        "Quantization and weight-format coverage spans FP8, MXFP8, NVFP4, INT8, INT4, GPTQ, AWQ, GGUF, and compressed-tensors.",
+        "Serves an OpenAI-compatible API alongside an Anthropic Messages API and gRPC, with structured outputs and tool calling."
+      ],
+      "tradeoffs": [
+        "The engine targets accelerator-backed server deployment; it is not packaged as a desktop application and has no graphical interface.",
+        "Accelerators beyond NVIDIA and AMD depend on plugins whose maturity varies by target.",
+        "Model selection is fixed by launch configuration, so changing weights means restarting or running another instance."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single Apache-2.0 license file covering the serving engine.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the vLLM engine",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vllm-project/vllm/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/vllm-project/vllm/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 8.5,
+        "model_format_support": 9.0,
+        "serving_concurrency": 9.5,
+        "api_interoperability": 9.0,
+        "deployment_operations": 8.5,
+        "model_lifecycle_management": 7.0,
+        "observability_control": 8.5,
+        "documentation_transparency": 8.5,
+        "overall": 8.64
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project documentation overview",
+          "url": "https://docs.vllm.ai/en/latest/",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Repository overview",
+          "url": "https://github.com/vllm-project/vllm/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    }
+  ]
 }
