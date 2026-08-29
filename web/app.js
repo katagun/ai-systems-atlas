@@ -796,6 +796,12 @@ function renderTaxonomy() {
     ["Inference delivery modes", state.taxonomy.inference_delivery_modes], ["Inference model sources", state.taxonomy.inference_model_sources],
     ["Inference API styles", state.taxonomy.inference_api_styles],
     ["Inference-service score", state.taxonomy.inference_service_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ["Local runtime types", state.taxonomy.local_runtime_types],
+    ["Runtime accelerators", state.taxonomy.runtime_accelerators],
+    ["Runtime model formats", state.taxonomy.runtime_model_formats],
+    ["Runtime serving modes", state.taxonomy.runtime_serving_modes],
+    ["Runtime deployment surfaces", state.taxonomy.runtime_deployment_surfaces],
+    ["Local-runtime score", state.taxonomy.local_runtime_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Licenses and terms", state.taxonomy.licenses]

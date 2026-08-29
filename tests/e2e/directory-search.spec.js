@@ -34,6 +34,20 @@ test("the atlas orbital field spans the five landscape nodes", async ({ page }) 
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
 });
 
+test("taxonomy documents every local-runtime group and its score weights", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "Taxonomy" }).click();
+  for (const group of [
+    "Local runtime types", "Runtime accelerators", "Runtime model formats",
+    "Runtime serving modes", "Runtime deployment surfaces", "Local-runtime score",
+  ]) {
+    await expect(page.locator("#taxonomy-content h2", { hasText: group })).toHaveCount(1);
+  }
+  await expect(page.locator("#taxonomy-content")).toContainText("Hardware Accelerator Coverage · 16%");
+  await expect(page.locator("#taxonomy-content")).toContainText("Compatibility gateway");
+});
+
 test("the local runtimes scope filters, sorts, and opens its own detail dialog", async ({ page }) => {
   await page.goto("/?collection=runtimes");
 
