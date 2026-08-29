@@ -3075,6 +3075,32 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "SylphAI-Inc/adal-cli",
+      "name": "AdaL",
+      "url": "https://github.com/SylphAI-Inc/adal-cli",
+      "description": "Commercial terminal, web IDE, and desktop coding agent from SylphAI that delegates to specialized worker agents for coding, review, deep research, and browser use, built on the open-source AdalFlow library.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.88,
+      "github_detected_license": null,
+      "stars": 100,
+      "topics": [
+        "ai-agent",
+        "cli",
+        "coding-agent",
+        "mcp",
+        "multi-model"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ]
 }
