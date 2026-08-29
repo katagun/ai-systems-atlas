@@ -148,17 +148,15 @@ const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
-// A Map, not an object literal: the comparison kind comes from the URL, and a
-// plain-object lookup would resolve inherited names such as "constructor" or
-// "hasOwnProperty" and dispatch to an unexpected target.
-const COMPARISON_COLLECTIONS = new Map([
-  ["system", () => state.projects],
-  ["inference", () => state.inferenceServices],
-  ["runtime", () => state.localRuntimes],
-]);
-
+// Static dispatch on purpose. The comparison kind comes from the compare URL
+// parameter, so any dynamic lookup keyed on it can resolve an unintended target;
+// an object literal would return inherited names such as "constructor". Each
+// branch names one collection, so an unknown kind can only fall through to null.
 function comparisonCollection(kind) {
-  return COMPARISON_COLLECTIONS.get(kind)?.() || null;
+  if (kind === "system") return state.projects;
+  if (kind === "inference") return state.inferenceServices;
+  if (kind === "runtime") return state.localRuntimes;
+  return null;
 }
 
 function comparisonRecords() {
