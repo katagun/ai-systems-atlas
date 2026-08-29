@@ -1,6 +1,6 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory, agent, and assistant systems plus unscored interoperability specifications and managed inference services. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory, agent, and assistant systems plus unscored interoperability specifications, managed inference services, and self-operated local runtimes. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 
@@ -16,6 +16,7 @@ Read only the documents required by the change:
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
+| local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
@@ -40,7 +41,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, and inference-service search/filters, cross-family score hiding, scoped comparison and URL restoration, the finder handoff, taxonomy, and all four dialogs in a browser.
+Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, inference-service, and local-runtime search/filters, cross-family score hiding, scoped comparison and URL restoration, the finder handoff, taxonomy, and all four dialogs in a browser.
 
 ## Hard rules
 
@@ -55,8 +56,9 @@ Run synchronization after changing any published `directory/*.json` file. Run al
 - Never promote `directory/candidates.json` records without the complete curation workflow.
 - Keep specifications outside `system_family` and score profiles; classify their type, integration scope, and maturity without ranking unlike artifacts.
 - Keep inference services outside `system_family` and system-family score profiles; use their dedicated service profile, curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
+- Keep local runtimes outside `system_family` and system-family score profiles; use their dedicated runtime profile, curate self-operated execution software rather than models, managed services, or client libraries, and never score them with throughput, latency, or benchmark results.
 - Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, and `inference-services.json` synchronized into `web/`; candidate and license-review queues are not published.
+- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`; candidate and license-review queues are not published.
 - Never report checks as passing unless you ran them.
 
 Existing unrelated changes belong to the user. Preserve them.

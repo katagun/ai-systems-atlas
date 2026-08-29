@@ -34,6 +34,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/DATA_MODEL.md",
             "docs/OPERATIONS.md",
             "docs/INFERENCE_SERVICES.md",
+            "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
@@ -46,6 +47,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/012-inference-services-use-a-dedicated-score-profile.md",
             "docs/adr/013-distinct-collections-share-one-directory-surface.md",
             "docs/adr/014-comparisons-are-scoped-to-one-score-profile.md",
+            "docs/adr/015-local-runtimes-are-self-operated-execution-records.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
