@@ -83,6 +83,44 @@
     {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."},
     {"id": "service_native", "name": "Service-native", "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."}
   ],
+  "local_runtime_types": [
+    {"id": "desktop_runner", "name": "Desktop runner", "definition": "A packaged application or command-line product that installs on a personal machine and manages model download, storage, and local serving as one product."},
+    {"id": "server_engine", "name": "Server engine", "definition": "An inference server built for sustained multi-request serving, batching, and deployment onto operator-controlled hardware."},
+    {"id": "embedded_library", "name": "Embedded library", "definition": "An inference implementation consumed as a library or binary that host applications embed rather than operate as a standing service."},
+    {"id": "compatibility_gateway", "name": "Compatibility gateway", "definition": "A self-hosted server that presents a compatible API surface over one or more local inference backends."}
+  ],
+  "runtime_accelerators": [
+    {"id": "cpu", "name": "CPU", "definition": "Documented execution on general-purpose processors without a dedicated accelerator."},
+    {"id": "cuda", "name": "NVIDIA CUDA", "definition": "Documented execution on NVIDIA GPUs through the CUDA toolchain."},
+    {"id": "rocm", "name": "AMD ROCm", "definition": "Documented execution on AMD GPUs through the ROCm toolchain."},
+    {"id": "metal", "name": "Apple Metal", "definition": "Documented execution on Apple silicon GPUs through Metal."},
+    {"id": "vulkan", "name": "Vulkan", "definition": "Documented execution through the cross-vendor Vulkan compute backend."},
+    {"id": "sycl", "name": "SYCL", "definition": "Documented execution through SYCL, covering Intel GPU targets."},
+    {"id": "multi_gpu", "name": "Multi-GPU", "definition": "Documented execution across more than one accelerator on a single host or across hosts."}
+  ],
+  "runtime_model_formats": [
+    {"id": "gguf", "name": "GGUF", "definition": "The quantized single-file weight format used by the llama.cpp family of runtimes."},
+    {"id": "safetensors", "name": "Safetensors", "definition": "The safe tensor serialization format used by mainstream transformer checkpoints."},
+    {"id": "pytorch", "name": "PyTorch checkpoints", "definition": "Native PyTorch weight checkpoints loaded through the framework's own serialization."},
+    {"id": "mlx", "name": "MLX", "definition": "Weights prepared for Apple's MLX array framework on Apple silicon."},
+    {"id": "awq", "name": "AWQ", "definition": "Activation-aware weight quantization checkpoints."},
+    {"id": "gptq", "name": "GPTQ", "definition": "Post-training quantized checkpoints produced by the GPTQ method."},
+    {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."}
+  ],
+  "runtime_serving_modes": [
+    {"id": "single_stream", "name": "Single stream", "definition": "One request served at a time, sufficient for interactive personal use."},
+    {"id": "continuous_batching", "name": "Continuous batching", "definition": "Requests joined into and retired from in-flight batches to sustain accelerator utilization."},
+    {"id": "parallel_requests", "name": "Parallel requests", "definition": "Concurrent request handling through configured workers, slots, or sequences."},
+    {"id": "distributed_serving", "name": "Distributed serving", "definition": "Model or request distribution across multiple accelerators or hosts through parallelism strategies."},
+    {"id": "speculative_decoding", "name": "Speculative decoding", "definition": "Draft-and-verify decoding that trades additional computation for reduced generation latency."}
+  ],
+  "runtime_deployment_surfaces": [
+    {"id": "desktop_app", "name": "Desktop application", "definition": "A graphical application installed on a personal operating system."},
+    {"id": "local_cli", "name": "Local CLI", "definition": "A command-line executable operated on the user's own machine."},
+    {"id": "library", "name": "Library", "definition": "An importable package or linkable binary embedded in a host application."},
+    {"id": "container", "name": "Container", "definition": "A published container image intended for containerized execution."},
+    {"id": "orchestrated_cluster", "name": "Orchestrated cluster", "definition": "Documented deployment onto an orchestrator such as Kubernetes with scaling guidance."}
+  ],
   "inference_service_score_profile": {
     "id": "inference_service",
     "name": "Inference-service score",
@@ -95,6 +133,20 @@
       {"id": "traffic_resilience", "weight": 0.10, "definition": "Documented traffic steering, fallback, multi-region capacity, replica, priority, or recovery controls without treating raw latency as stable."},
       {"id": "customization_lifecycle", "weight": 0.09, "definition": "Fine-tuning, customer models, version control, deployment configuration, and lifecycle management for supported model artifacts."},
       {"id": "documentation_transparency", "weight": 0.07, "definition": "Clarity and specificity of authoritative documentation for terms, data handling, regions, limits, availability, and operational exceptions."}
+    ]
+  },
+  "local_runtime_score_profile": {
+    "id": "local_runtime",
+    "name": "Local-runtime score",
+    "dimensions": [
+      {"id": "hardware_accelerator_coverage", "weight": 0.16, "definition": "Documented and supported CPU, CUDA, ROCm, Metal, Vulkan, and multi-accelerator execution paths for the reviewed runtime itself."},
+      {"id": "model_format_support", "weight": 0.15, "definition": "Breadth of supported weight formats, quantization schemes, and model architectures the runtime can load and execute."},
+      {"id": "serving_concurrency", "weight": 0.15, "definition": "Documented batching, parallel request handling, cache management, and distributed serving capability; it does not measure throughput or latency."},
+      {"id": "api_interoperability", "weight": 0.13, "definition": "Documented native and compatible endpoints, embeddings, tool calling, and structured output, and their portability across clients."},
+      {"id": "deployment_operations", "weight": 0.13, "definition": "Install paths, container images, orchestration guidance, resource limits, authentication, and upgrade practice."},
+      {"id": "model_lifecycle_management", "weight": 0.10, "definition": "Fetching, pinning, custom model import, adapter support, storage control, and removal for local model artifacts."},
+      {"id": "observability_control", "weight": 0.10, "definition": "Metrics, health endpoints, logging, request introspection, and administrative surfaces for an operator running the software."},
+      {"id": "documentation_transparency", "weight": 0.08, "definition": "Clarity and specificity of authoritative documentation for accelerators, formats, serving, deployment, limits, and known exceptions."}
     ]
   },
   "specification_types": [

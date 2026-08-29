@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28",
+  "generated_at": "2026-08-29",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -30,6 +30,12 @@
       "repo": null,
       "reason": "Gorgias describes Cortex as its flagship internal AI agent for Gorgias employees rather than a deployable or directly purchasable system available to Atlas users. The public Gorgias AI Agent is a separate customer-facing ecommerce product and is not substituted for Cortex.",
       "useful_lesson": "Internal agents can demonstrate cross-application work, employee adoption, and operational patterns without establishing a public product boundary."
+    },
+    {
+      "name": "Hugging Face Text Generation Inference",
+      "repo": "huggingface/text-generation-inference",
+      "reason": "The repository is archived, so the runtime no longer represents an operational choice a reader could adopt. Hugging Face Inference Endpoints remains separately represented as a managed inference service, and that service boundary is not substituted for the archived runtime.",
+      "useful_lesson": "Production serving engines can reach end of life while the managed service built on them continues; collection boundaries should be checked against repository lifecycle, not brand continuity."
     }
   ]
 }

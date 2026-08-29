@@ -1,8 +1,8 @@
 # ADR 010: Inference services are unscored service records
 
-**Status:** Amended by [ADR 012](012-inference-services-use-a-dedicated-score-profile.md) and [ADR 013](013-distinct-collections-share-one-directory-surface.md)
+**Status:** Amended by [ADR 012](012-inference-services-use-a-dedicated-score-profile.md), [ADR 013](013-distinct-collections-share-one-directory-surface.md), and [ADR 015](015-local-runtimes-are-self-operated-execution-records.md)
 
-ADR 012 preserves this record's service boundary and exclusions but replaces the unscored conclusion with a dedicated operational-service score that excludes model quality, price, and performance rankings. ADR 013 preserves the independent collection while moving it into the shared Directory browsing surface.
+ADR 012 preserves this record's service boundary and exclusions but replaces the unscored conclusion with a dedicated operational-service score that excludes model quality, price, and performance rankings. ADR 013 preserves the independent collection while moving it into the shared Directory browsing surface. ADR 015 leaves this record's exclusion of local inference runtimes intact and supplies the separate operational collection anticipated below, so a runtime is curated on its own terms rather than admitted here as a managed service.
 
 ## Context
 

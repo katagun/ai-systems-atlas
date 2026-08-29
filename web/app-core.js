@@ -95,37 +95,66 @@
     }).sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  function filterInferenceServices(services, filters = {}) {
+  function filterScoredCollection(records, filters = {}, options = {}) {
     const term = (filters.term || "").trim().toLowerCase();
-    return services.filter(service => {
-      const haystack = [
-        service.id,
-        service.name,
-        service.operator,
-        service.description,
-        service.service_boundary,
-        service.regional_controls,
-        service.retention_controls,
-        service.routing,
-        service.customization,
-        ...(service.strengths || []),
-        ...(service.tradeoffs || []),
-      ].filter(Boolean).join(" ").toLowerCase();
-      return matchesSearchTerm(haystack, term) &&
-        (!filters.type || service.service_type === filters.type) &&
-        (!filters.delivery || service.delivery_modes.includes(filters.delivery)) &&
-        (!filters.modelSource || service.model_sources.includes(filters.modelSource)) &&
-        (!filters.apiStyle || service.api_styles.includes(filters.apiStyle));
+    const searchFields = options.searchFields || [];
+    const facets = options.facets || {};
+    return records.filter(record => {
+      const haystack = searchFields
+        .flatMap(field => Array.isArray(record[field]) ? record[field] : [record[field]])
+        .filter(Boolean).join(" ").toLowerCase();
+      if (!matchesSearchTerm(haystack, term)) return false;
+      return Object.entries(facets).every(([key, field]) => {
+        const selected = filters[key];
+        if (!selected) return true;
+        const value = record[field];
+        return Array.isArray(value) ? value.includes(selected) : value === selected;
+      });
     }).sort(filters.sort === "score"
       ? (a, b) => b.score.overall - a.score.overall || a.name.localeCompare(b.name)
       : (a, b) => a.name.localeCompare(b.name));
   }
 
-  function filterDirectoryEntries(projects, services, filters = {}) {
+  const INFERENCE_SERVICE_VIEW = {
+    searchFields: [
+      "id", "name", "operator", "description", "service_boundary", "regional_controls",
+      "retention_controls", "routing", "customization", "strengths", "tradeoffs",
+    ],
+    facets: {
+      type: "service_type",
+      delivery: "delivery_modes",
+      modelSource: "model_sources",
+      apiStyle: "api_styles",
+    },
+  };
+
+  const LOCAL_RUNTIME_VIEW = {
+    searchFields: [
+      "id", "name", "maintainer", "description", "runtime_boundary", "model_management",
+      "hardware_requirements", "operational_controls", "strengths", "tradeoffs",
+    ],
+    facets: {
+      type: "runtime_type",
+      accelerator: "accelerators",
+      modelFormat: "model_formats",
+      apiStyle: "api_styles",
+    },
+  };
+
+  function filterInferenceServices(services, filters = {}) {
+    return filterScoredCollection(services, filters, INFERENCE_SERVICE_VIEW);
+  }
+
+  function filterLocalRuntimes(runtimes, filters = {}) {
+    return filterScoredCollection(runtimes, filters, LOCAL_RUNTIME_VIEW);
+  }
+
+  function filterDirectoryEntries(projects, services, runtimes = [], filters = {}) {
     const term = (filters.term || "").trim().toLowerCase();
     const entries = [
       ...projects.filter(project => matchesDirectoryProjectSearch(project, term)).map(record => ({ kind: "system", record })),
       ...filterInferenceServices(services, { term, sort: "name" }).map(record => ({ kind: "inference", record })),
+      ...filterLocalRuntimes(runtimes, { term, sort: "name" }).map(record => ({ kind: "runtime", record })),
     ];
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
@@ -151,6 +180,8 @@
     filterAndSortProjects,
     filterDirectoryEntries,
     filterInferenceServices,
+    filterLocalRuntimes,
+    filterScoredCollection,
     filterSpecifications,
     matchesProject,
     updateComparisonSelection,

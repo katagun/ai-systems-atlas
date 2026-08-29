@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "verified_at": "2026-08-28",
+  "verified_at": "2026-08-29",
   "services": [
     {
       "id": "openai-api",
@@ -983,6 +983,225 @@
         {"kind": "web", "label": "Stable Image service overview", "url": "https://platform.stability.ai/docs/getting-started/stable-image", "verified_at": "2026-08-28"}
       ],
       "verified_at": "2026-08-28"
+    },
+    {
+      "id": "ollama-cloud",
+      "name": "Ollama Cloud",
+      "operator": "Ollama",
+      "service_type": "managed_inference_host",
+      "url": "https://docs.ollama.com/cloud",
+      "description": "Managed hosting for open-weight models that Ollama clients can call in place of local execution, reachable through a local Ollama host or directly on ollama.com.",
+      "service_boundary": "Represents the hosted service operated by Ollama. The self-operated Ollama runtime is a separate local-runtime record, and the models offered through the service remain their publishers' artifacts.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "open_weight"
+      ],
+      "api_styles": [
+        "service_native",
+        "openai_compatible"
+      ],
+      "regional_controls": "Ollama states that it hosts models and compute primarily in the United States and may route to Europe and Singapore for additional capacity. Customers are not offered a documented region selection or residency guarantee.",
+      "retention_controls": "Ollama states that prompt and response data is never logged or trained on, that it requires no-logging, no-training, zero-retention terms from its hosting partners, and that zero data retention and logging is a plan feature. Its terms of service state that inputs and outputs are not used to train models.",
+      "routing": "Requests are served from Ollama's own capacity across its partner providers; the service is not a cross-provider routing layer and does not expose routing policy to the customer.",
+      "customization": "The service exposes a curated cloud model library. No fine-tuning, customer-supplied weights, or dedicated deployment path is documented.",
+      "strengths": [
+        "Cloud models are addressed through the same client, CLI, and API surface as local models, so a local workflow moves to hosted capacity without rewriting the integration.",
+        "Retention posture is stated plainly, including a contractual no-logging, no-training, zero-retention requirement on hosting partners."
+      ],
+      "tradeoffs": [
+        "Processing geography is described rather than selected; there is no documented region pinning or residency commitment.",
+        "The service offers on-demand capacity only, with no documented batch, reserved, or dedicated path and no customer-supplied models.",
+        "The catalogue is a curated set of cloud-enabled open-weight models rather than an open model marketplace."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.0,
+        "data_governance": 8.0,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 4.0,
+        "api_interoperability": 7.5,
+        "traffic_resilience": 5.0,
+        "customization_lifecycle": 3.0,
+        "documentation_transparency": 7.0,
+        "overall": 5.56
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Ollama Terms of Service",
+        "url": "https://ollama.com/terms",
+        "verified_at": "2026-08-29"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Cloud documentation",
+          "url": "https://docs.ollama.com/cloud",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Cloud service overview and data handling",
+          "url": "https://ollama.com/cloud",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "API introduction and authentication",
+          "url": "https://docs.ollama.com/api/introduction",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "nebius-token-factory",
+      "name": "Nebius Token Factory",
+      "operator": "Nebius",
+      "service_type": "managed_inference_host",
+      "url": "https://docs.tokenfactory.nebius.com/",
+      "description": "Managed inference and post-training platform for open-weight models, offering shared endpoints, region-pinned dedicated endpoints, custom weight hosting, and fine-tuning.",
+      "service_boundary": "Represents the Token Factory inference platform, previously presented as Nebius AI Studio. Nebius AI Cloud's general GPU compute and the models served through the platform remain separate boundaries.",
+      "delivery_modes": [
+        "on_demand",
+        "dedicated_endpoint"
+      ],
+      "model_sources": [
+        "open_weight",
+        "customer_supplied"
+      ],
+      "api_styles": [
+        "openai_compatible"
+      ],
+      "regional_controls": "Nebius describes data centres in Finland, France, and the United States and states that a dedicated endpoint processes requests only in the selected region, without multi-region routing or automatic overflow. It presents itself as an EU data processor operating under GDPR with a customer-facing data processing agreement.",
+      "retention_controls": "Nebius documents an account-level zero-data-retention setting under which inputs and outputs are not stored after a request is processed, and describes itself as processor with the customer as controller for content submitted to inference endpoints.",
+      "routing": "Shared endpoints are served from Nebius capacity with documented rate limits and scaling rules. Dedicated endpoints are explicitly not routed outside their configured region.",
+      "customization": "Supervised fine-tuning, LoRA and full fine-tuning, adapter merging, custom speculators, and hosting of customer-supplied weights on dedicated endpoints are documented.",
+      "strengths": [
+        "Dedicated endpoints pin processing to one selected region with an explicit statement that there is no multi-region overflow.",
+        "Customer-supplied weights, fine-tuning, and adapter lifecycle are first-class rather than adjacent products.",
+        "Inference observability and API integrations are documented as part of the service rather than left to the customer."
+      ],
+      "tradeoffs": [
+        "The catalogue is open-weight models; first-party frontier models from other developers are not part of the boundary.",
+        "The service was recently renamed from Nebius AI Studio, so third-party references and older integration guides may not match current documentation.",
+        "Region pinning is documented for dedicated endpoints; shared-endpoint placement is not presented as customer-selected."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 7.5,
+        "data_governance": 8.5,
+        "regional_deployment_control": 8.0,
+        "serving_flexibility": 7.5,
+        "api_interoperability": 7.5,
+        "traffic_resilience": 6.5,
+        "customization_lifecycle": 8.5,
+        "documentation_transparency": 7.5,
+        "overall": 7.74
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Nebius Token Factory legal quick guide",
+        "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
+        "verified_at": "2026-08-29"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Token Factory documentation",
+          "url": "https://docs.tokenfactory.nebius.com/",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Inference engine overview",
+          "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/overview",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Dedicated endpoints overview",
+          "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/dedicated-endpoints/overview",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Custom model weights",
+          "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/dedicated-endpoints/custom-weights",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "baseten",
+      "name": "Baseten",
+      "operator": "Baseten Labs",
+      "service_type": "managed_inference_host",
+      "url": "https://docs.baseten.co/overview",
+      "description": "Managed inference platform offering hosted model APIs alongside dedicated deployments of open-source, fine-tuned, or customer-supplied models on autoscaled GPU capacity across several clouds and regions.",
+      "service_boundary": "Represents Baseten's managed inference and training platform operated by Baseten Labs. The open-source packaging tooling it publishes and the models customers deploy remain separate boundaries.",
+      "delivery_modes": [
+        "on_demand",
+        "dedicated_endpoint"
+      ],
+      "model_sources": [
+        "open_weight",
+        "customer_supplied"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "service_native"
+      ],
+      "regional_controls": "Baseten documents multi-cloud capacity management across providers and regions, regional environments intended to satisfy data-residency requirements, private networking, and workload isolation. Specific region availability depends on the hosting option selected.",
+      "retention_controls": "Baseten's terms make the customer the exclusive owner of its content, prohibit training on customer content, limit Baseten's own use to deidentified and aggregated statistics, and commit to destroying copies of customer content after a twenty-day retrieval window following termination.",
+      "routing": "The platform provisions GPU capacity across clouds and regions and autoscales dedicated deployments; it is not a cross-provider model router and does not expose upstream provider selection.",
+      "customization": "Dedicated deployment of open-source, fine-tuned, and custom models is a primary path, alongside supervised fine-tuning and reinforcement learning loops and training jobs on dedicated GPU clusters.",
+      "strengths": [
+        "Hosted model APIs and dedicated deployment of customer-supplied models sit in one platform with a shared observability surface.",
+        "Terms are explicit that customer content is customer-owned, is not used for training, and is destroyed after a stated retrieval window.",
+        "Multi-cloud capacity management with regional environments and private networking addresses procurement and residency constraints directly."
+      ],
+      "tradeoffs": [
+        "Region and capacity availability depend on the hosting option and provider mix rather than a single published region list.",
+        "The platform targets teams operating their own models; it is not a catalogue of third-party proprietary frontier models.",
+        "Anthropic Messages compatibility is documented as beta, so contract parity should be confirmed before relying on it."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 8.0,
+        "data_governance": 8.0,
+        "regional_deployment_control": 7.5,
+        "serving_flexibility": 7.5,
+        "api_interoperability": 8.0,
+        "traffic_resilience": 7.0,
+        "customization_lifecycle": 8.5,
+        "documentation_transparency": 7.0,
+        "overall": 7.74
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Baseten Terms and Conditions",
+        "url": "https://www.baseten.co/terms-and-conditions/",
+        "verified_at": "2026-08-29"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform overview",
+          "url": "https://docs.baseten.co/overview",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Model APIs documentation",
+          "url": "https://docs.baseten.co/development/model-apis/overview",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
     }
   ]
 }

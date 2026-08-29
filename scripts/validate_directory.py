@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
-    "specifications.json", "inference-services.json",
+    "specifications.json", "inference-services.json", "local-runtimes.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -33,6 +33,11 @@ TAXONOMY_GROUPS = (
     "inference_delivery_modes",
     "inference_model_sources",
     "inference_api_styles",
+    "local_runtime_types",
+    "runtime_accelerators",
+    "runtime_model_formats",
+    "runtime_serving_modes",
+    "runtime_deployment_surfaces",
     "specification_types",
     "specification_scopes",
     "specification_statuses",
@@ -73,6 +78,14 @@ SPECIFICATION_REQUIRED = {
     "current_version", "stewards", "repo", "url", "description", "standardizes",
     "does_not_standardize", "licenses", "license_note", "related_specifications",
     "evidence", "license_evidence", "verified_at",
+}
+
+LOCAL_RUNTIME_REQUIRED = {
+    "id", "name", "maintainer", "runtime_type", "repo", "url", "description",
+    "runtime_boundary", "accelerators", "model_formats", "serving_modes", "api_styles",
+    "deployment_surfaces", "model_management", "hardware_requirements",
+    "operational_controls", "strengths", "tradeoffs", "licenses", "source_model",
+    "license_note", "license_evidence", "score_profile", "score", "evidence", "verified_at",
 }
 
 INFERENCE_SERVICE_REQUIRED = {
@@ -139,6 +152,101 @@ def validate_string_list(
         errors.append(f"{prefix}: unknown {field} {sorted(unknown)}")
 
 
+def validate_collection_envelope(
+    data: dict[str, Any],
+    name: str,
+    version: str,
+    key: str,
+    errors: list[str],
+) -> list[Any]:
+    """Validate a published collection's version, date, and record identifiers."""
+    if data.get("version") != version:
+        errors.append(f"{name}: unsupported version")
+    if not valid_date(data.get("verified_at")):
+        errors.append(f"{name}: verified_at must be an ISO date")
+    records = data.get(key)
+    if not isinstance(records, list):
+        errors.append(f"{name}: {key} must be a list")
+        return []
+    identifiers = {
+        item.get("id") for item in records
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    if len(identifiers) != len(records):
+        errors.append(f"{name}: ids must be present and unique")
+    return records
+
+
+def validate_score_profile(
+    taxonomy: dict[str, Any],
+    key: str,
+    profile_id: str,
+    label: str,
+    errors: list[str],
+) -> dict[str, float]:
+    """Validate a dedicated collection score profile and return its weights."""
+    profile = taxonomy.get(key)
+    weights: dict[str, float] = {}
+    if not isinstance(profile, dict):
+        errors.append(f"taxonomy: {key} must be an object")
+        return weights
+    if profile.get("id") != profile_id:
+        errors.append(f"taxonomy: {label} score profile requires id {profile_id!r}")
+    if not isinstance(profile.get("name"), str) or not profile["name"].strip():
+        errors.append(f"taxonomy: {label} score profile requires a name")
+    dimensions = profile.get("dimensions")
+    if not isinstance(dimensions, list) or not dimensions:
+        errors.append(f"taxonomy: {label} score profile requires dimensions")
+        return weights
+    for item in dimensions:
+        if not isinstance(item, dict) or not isinstance(item.get("id"), str):
+            errors.append(f"taxonomy: {label} score dimensions require string ids")
+            continue
+        weight = item.get("weight")
+        if not is_number(weight) or weight <= 0:
+            errors.append(f"taxonomy: {label} score dimensions require positive weights")
+            continue
+        if item["id"] in weights:
+            errors.append(f"taxonomy: {label} score profile has duplicate dimensions")
+        weights[item["id"]] = weight
+        if not isinstance(item.get("definition"), str) or not item["definition"].strip():
+            errors.append(f"taxonomy: {label} score dimensions require definitions")
+    if weights and abs(sum(weights.values()) - 1.0) > 1e-9:
+        errors.append(f"taxonomy: {label} score profile weights do not total 1")
+    return weights
+
+
+def validate_record_score(
+    record: dict[str, Any],
+    dimensions: dict[str, float],
+    profile_id: str,
+    label: str,
+    prefix: str,
+    errors: list[str],
+) -> None:
+    """Validate a record's score against its dedicated profile."""
+    if record.get("score_profile") != profile_id:
+        errors.append(f"{prefix}: score_profile must be {profile_id!r}")
+    score = record.get("score")
+    if not isinstance(score, dict) or set(score) != set(dimensions) | {"overall"}:
+        errors.append(f"{prefix}: score keys must exactly match the {label} profile")
+    elif any(
+        not is_number(score[key]) or not 0 <= score[key] <= 10
+        for key in dimensions
+    ):
+        errors.append(f"{prefix}: score dimensions must be numbers between 0 and 10")
+    elif not is_number(score["overall"]):
+        errors.append(f"{prefix}: score overall must be numeric")
+    else:
+        calculated = round(sum(
+            score[key] * weight for key, weight in dimensions.items()
+        ), 2)
+        if score["overall"] != calculated:
+            errors.append(
+                f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
+            )
+
+
 def validate(root: Path = ROOT) -> list[str]:
     global DIRECTORY
     original_directory = DIRECTORY
@@ -152,6 +260,7 @@ def validate(root: Path = ROOT) -> list[str]:
         exclusions_data = load("exclusions.json")
         specifications_data = load("specifications.json")
         inference_services_data = load("inference-services.json")
+        local_runtimes_data = load("local-runtimes.json")
         discovery_sources_data = load("discovery-sources.json")
     finally:
         DIRECTORY = original_directory
@@ -213,34 +322,12 @@ def validate(root: Path = ROOT) -> list[str]:
                 f"found {sorted(family_profiles)}"
             )
 
-    inference_score_profile = taxonomy.get("inference_service_score_profile")
-    inference_score_dimensions: dict[str, float] = {}
-    if not isinstance(inference_score_profile, dict):
-        errors.append("taxonomy: inference_service_score_profile must be an object")
-    else:
-        if inference_score_profile.get("id") != "inference_service":
-            errors.append("taxonomy: inference service score profile requires id 'inference_service'")
-        if not isinstance(inference_score_profile.get("name"), str) or not inference_score_profile["name"].strip():
-            errors.append("taxonomy: inference service score profile requires a name")
-        dimensions = inference_score_profile.get("dimensions")
-        if not isinstance(dimensions, list) or not dimensions:
-            errors.append("taxonomy: inference service score profile requires dimensions")
-        else:
-            for item in dimensions:
-                if not isinstance(item, dict) or not isinstance(item.get("id"), str):
-                    errors.append("taxonomy: inference service score dimensions require string ids")
-                    continue
-                weight = item.get("weight")
-                if not is_number(weight) or weight <= 0:
-                    errors.append("taxonomy: inference service score dimensions require positive weights")
-                    continue
-                if item["id"] in inference_score_dimensions:
-                    errors.append("taxonomy: inference service score profile has duplicate dimensions")
-                inference_score_dimensions[item["id"]] = weight
-                if not isinstance(item.get("definition"), str) or not item["definition"].strip():
-                    errors.append("taxonomy: inference service score dimensions require definitions")
-            if inference_score_dimensions and abs(sum(inference_score_dimensions.values()) - 1.0) > 1e-9:
-                errors.append("taxonomy: inference service score profile weights do not total 1")
+    inference_score_dimensions = validate_score_profile(
+        taxonomy, "inference_service_score_profile", "inference_service", "inference service", errors,
+    )
+    local_runtime_score_dimensions = validate_score_profile(
+        taxonomy, "local_runtime_score_profile", "local_runtime", "local runtime", errors,
+    )
 
     projects_value = data.get("projects")
     if not valid_date(data.get("generated_at")):
@@ -506,20 +593,13 @@ def validate(root: Path = ROOT) -> list[str]:
             else:
                 errors.append(f"{prefix}: unknown license evidence kind {kind!r}")
 
-    specifications_value = specifications_data.get("specifications")
-    if specifications_data.get("version") != "1.0":
-        errors.append("specifications.json: unsupported version")
-    if not valid_date(specifications_data.get("verified_at")):
-        errors.append("specifications.json: verified_at must be an ISO date")
-    if not isinstance(specifications_value, list):
-        errors.append("specifications.json: specifications must be a list")
-        specifications_value = []
+    specifications_value = validate_collection_envelope(
+        specifications_data, "specifications.json", "1.0", "specifications", errors,
+    )
     specification_ids = {
         item.get("id") for item in specifications_value
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
-    if len(specification_ids) != len(specifications_value):
-        errors.append("specifications.json: ids must be present and unique")
     for specification in specifications_value:
         if not isinstance(specification, dict):
             errors.append("specifications.json: every specification must be an object")
@@ -629,23 +709,9 @@ def validate(root: Path = ROOT) -> list[str]:
             else:
                 errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
 
-    inference_services_value = inference_services_data.get("services")
-    if inference_services_data.get("version") != "2.0":
-        errors.append("inference-services.json: unsupported version")
-    if not valid_date(inference_services_data.get("verified_at")):
-        errors.append("inference-services.json: verified_at must be an ISO date")
-    if not isinstance(inference_services_value, list):
-        errors.append("inference-services.json: services must be a list")
-        inference_services_value = []
-    inference_service_ids = [
-        item.get("id") for item in inference_services_value if isinstance(item, dict)
-    ]
-    if (
-        any(not isinstance(item, str) for item in inference_service_ids)
-        or len(inference_service_ids) != len(set(inference_service_ids))
-        or len(inference_service_ids) != len(inference_services_value)
-    ):
-        errors.append("inference-services.json: ids must be present and unique")
+    inference_services_value = validate_collection_envelope(
+        inference_services_data, "inference-services.json", "2.0", "services", errors,
+    )
     for service in inference_services_value:
         if not isinstance(service, dict):
             errors.append("inference-services.json: every service must be an object")
@@ -676,26 +742,9 @@ def validate(root: Path = ROOT) -> list[str]:
             validate_string_list(service, field, enum_ids[group], prefix, errors)
         for field in ("strengths", "tradeoffs"):
             validate_string_list(service, field, None, prefix, errors)
-        if service.get("score_profile") != "inference_service":
-            errors.append(f"{prefix}: score_profile must be 'inference_service'")
-        score = service.get("score")
-        if not isinstance(score, dict) or set(score) != set(inference_score_dimensions) | {"overall"}:
-            errors.append(f"{prefix}: score keys must exactly match the inference service profile")
-        elif any(
-            not is_number(score[key]) or not 0 <= score[key] <= 10
-            for key in inference_score_dimensions
-        ):
-            errors.append(f"{prefix}: score dimensions must be numbers between 0 and 10")
-        elif not is_number(score["overall"]):
-            errors.append(f"{prefix}: score overall must be numeric")
-        else:
-            calculated = round(sum(
-                score[key] * weight for key, weight in inference_score_dimensions.items()
-            ), 2)
-            if score["overall"] != calculated:
-                errors.append(
-                    f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
-                )
+        validate_record_score(
+            service, inference_score_dimensions, "inference_service", "inference service", prefix, errors,
+        )
         if not valid_date(service.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
 
@@ -737,6 +786,127 @@ def validate(root: Path = ROOT) -> list[str]:
                 evidence_urls.add(item["url"])
             if not valid_date(item.get("verified_at")):
                 errors.append(f"{prefix}: evidence requires verified_at")
+
+    local_runtimes_value = validate_collection_envelope(
+        local_runtimes_data, "local-runtimes.json", "1.0", "runtimes", errors,
+    )
+    for runtime in local_runtimes_value:
+        if not isinstance(runtime, dict):
+            errors.append("local-runtimes.json: every runtime must be an object")
+            continue
+        prefix = f"local runtime {runtime.get('id', 'unknown')}"
+        if set(runtime) != LOCAL_RUNTIME_REQUIRED:
+            missing = sorted(LOCAL_RUNTIME_REQUIRED - set(runtime))
+            extra = sorted(set(runtime) - LOCAL_RUNTIME_REQUIRED)
+            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+            continue
+        runtime_id = runtime.get("id")
+        if not isinstance(runtime_id, str) or not ID_PATTERN.fullmatch(runtime_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name", "maintainer", "description", "runtime_boundary",
+            "model_management", "hardware_requirements", "operational_controls", "license_note",
+        ):
+            if not isinstance(runtime.get(field), str) or not runtime[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        if not isinstance(runtime.get("url"), str) or not runtime["url"].startswith("https://"):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        repo = runtime.get("repo")
+        if repo is not None and (not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)):
+            errors.append(f"{prefix}: repo must be owner/name or null")
+        if runtime.get("runtime_type") not in enum_ids["local_runtime_types"]:
+            errors.append(f"{prefix}: unknown runtime type")
+        if runtime.get("source_model") not in enum_ids["source_models"]:
+            errors.append(f"{prefix}: unknown source model")
+        for field, group in (
+            ("accelerators", "runtime_accelerators"),
+            ("model_formats", "runtime_model_formats"),
+            ("serving_modes", "runtime_serving_modes"),
+            ("api_styles", "inference_api_styles"),
+            ("deployment_surfaces", "runtime_deployment_surfaces"),
+            ("licenses", "licenses"),
+        ):
+            validate_string_list(runtime, field, enum_ids[group], prefix, errors)
+        for field in ("strengths", "tradeoffs"):
+            validate_string_list(runtime, field, None, prefix, errors)
+        validate_record_score(
+            runtime, local_runtime_score_dimensions, "local_runtime", "local runtime", prefix, errors,
+        )
+        if not valid_date(runtime.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+
+        evidence_items = runtime.get("evidence")
+        if not isinstance(evidence_items, list) or not evidence_items:
+            errors.append(f"{prefix}: evidence must be a non-empty list")
+            evidence_items = []
+        evidence_urls: set[str] = set()
+        for item in evidence_items:
+            if not isinstance(item, dict) or set(item) != {"kind", "label", "url", "verified_at"}:
+                errors.append(f"{prefix}: evidence must match the web evidence schema")
+                continue
+            if item.get("kind") != "web":
+                errors.append(f"{prefix}: evidence kind must be web")
+            if not isinstance(item.get("label"), str) or not item["label"].strip():
+                errors.append(f"{prefix}: evidence requires a label")
+            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                errors.append(f"{prefix}: evidence requires an authoritative HTTPS URL")
+            elif item["url"] in evidence_urls:
+                errors.append(f"{prefix}: evidence URLs must be unique")
+            else:
+                evidence_urls.add(item["url"])
+            if not valid_date(item.get("verified_at")):
+                errors.append(f"{prefix}: evidence requires verified_at")
+
+        license_items = runtime.get("license_evidence")
+        if not isinstance(license_items, list) or not license_items:
+            errors.append(f"{prefix}: license_evidence must be a non-empty list")
+            license_items = []
+        evidence_licenses = {
+            item.get("license_id") for item in license_items if isinstance(item, dict)
+        }
+        if evidence_licenses != set(runtime.get("licenses", [])):
+            errors.append(f"{prefix}: license evidence does not match licenses")
+        for item in license_items:
+            if not isinstance(item, dict) or not isinstance(item.get("scope"), str) or not item["scope"].strip():
+                errors.append(f"{prefix}: license evidence requires a scope")
+                continue
+            if item.get("kind") == "git_blob":
+                blob_sha = item.get("blob_sha")
+                if not repo:
+                    errors.append(f"{prefix}: git-blob license evidence requires a repository")
+                elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                    errors.append(f"{prefix}: invalid license blob SHA")
+                elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                    errors.append(f"{prefix}: immutable license URL must address the blob SHA")
+                if not isinstance(item.get("path"), str) or not item["path"]:
+                    errors.append(f"{prefix}: git-blob license evidence requires a path")
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    f"https://github.com/{repo}/blob/"
+                ):
+                    errors.append(f"{prefix}: license source must be a GitHub blob URL")
+            elif item.get("kind") == "web_terms":
+                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                    errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
+                if not valid_date(item.get("verified_at")):
+                    errors.append(f"{prefix}: web terms require verified_at")
+            else:
+                errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
+
+    collection_ids: dict[str, list[str]] = {}
+    for collection_name, collection_records in (
+        ("projects.json", projects),
+        ("specifications.json", specifications_value),
+        ("inference-services.json", inference_services_value),
+        ("local-runtimes.json", local_runtimes_value),
+    ):
+        for record in collection_records:
+            if isinstance(record, dict) and isinstance(record.get("id"), str):
+                collection_ids.setdefault(record["id"], []).append(collection_name)
+    for record_id, sources in sorted(collection_ids.items()):
+        if len(sources) > 1:
+            errors.append(
+                f"id {record_id!r} appears in more than one collection: {sorted(sources)}"
+            )
 
     candidate_entries = candidates_data.get("candidates")
     if not isinstance(candidate_entries, list):
@@ -859,10 +1029,12 @@ def main() -> int:
     counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
     specification_count = len(load("specifications.json")["specifications"])
     inference_service_count = len(load("inference-services.json")["services"])
+    local_runtime_count = len(load("local-runtimes.json")["runtimes"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
-        f"{inference_service_count} scored inference services"
+        f"{inference_service_count} scored inference services; "
+        f"{local_runtime_count} scored local runtimes"
     )
     return 0
 

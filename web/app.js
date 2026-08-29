@@ -1,5 +1,5 @@
 const state = {
-  projects: [], specifications: [], inferenceServices: [], taxonomy: null, licenses: new Map(),
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], taxonomy: null, licenses: new Map(),
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
@@ -20,7 +20,8 @@ const FINDER_DIRECTIONS = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
   { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
   { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" },
-  { id: "inference_service", label: "Serve and route models", description: "A managed API, cloud platform, model host, or routing layer for production inference.", cue: "I need an inference service" }
+  { id: "inference_service", label: "Serve and route models", description: "A managed API, cloud platform, model host, or routing layer for production inference.", cue: "I need an inference service" },
+  { id: "local_runtime", label: "Run models on hardware I operate", description: "A desktop runner, server engine, embeddable library, or self-hosted compatible gateway.", cue: "I need a local runtime" }
 ];
 
 const FINDER_GOALS = {
@@ -50,6 +51,12 @@ const FINDER_GOALS = {
     { id: "cloud_governance", label: "Deploy through my cloud platform", description: "Use cloud-native identity, regions, networking, and models from several publishers.", serviceTypes: ["cloud_model_platform"] },
     { id: "host_models", label: "Host selected or custom models", description: "Serve open-weight, third-party, or customer-supplied models on managed infrastructure.", serviceTypes: ["managed_inference_host"] },
     { id: "route_models", label: "Route across models and providers", description: "Use one API with provider selection, fallback, or routing policy.", serviceTypes: ["routing_aggregator"] }
+  ],
+  local_runtime: [
+    { id: "personal_machine", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", runtimeTypes: ["desktop_runner"] },
+    { id: "serve_workload", label: "Serve a sustained request load", description: "An engine built for batching, concurrency, and multi-accelerator serving.", runtimeTypes: ["server_engine"] },
+    { id: "embed_inference", label: "Embed inference in my own software", description: "A library or binary a host application links rather than operates as a service.", runtimeTypes: ["embedded_library"] },
+    { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"] }
   ]
 };
 
@@ -81,6 +88,13 @@ const FINDER_PRIORITIES = {
     { id: "portable", label: "API and serving flexibility", description: "Prefer portable interfaces and several documented capacity or deployment modes." },
     { id: "resilience", label: "Traffic resilience", description: "Prefer documented routing, fallback, recovery, or multi-region traffic controls." },
     { id: "balanced", label: "Best balanced fit", description: "Use the inference-service editorial score as the main tie-breaker." }
+  ],
+  local_runtime: [
+    { id: "hardware", label: "Hardware coverage", description: "Prefer runtimes documenting the widest range of processors and accelerators." },
+    { id: "formats", label: "Model format breadth", description: "Prefer runtimes that load the widest range of weight formats and quantizations." },
+    { id: "serving", label: "Concurrent serving", description: "Prefer documented batching, parallel requests, and distributed serving." },
+    { id: "operability", label: "Deployment and visibility", description: "Prefer documented install paths, orchestration, controls, and metrics." },
+    { id: "balanced", label: "Best balanced fit", description: "Use the local-runtime editorial score as the main tie-breaker." }
   ]
 };
 
@@ -91,16 +105,17 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory] = await Promise.all([
+  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory] = await Promise.all([
     loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json")
+    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json")
   ]);
   state.projects = directory.projects;
   state.specifications = specificationDirectory.specifications;
   state.inferenceServices = inferenceDirectory.services;
+  state.localRuntimes = runtimeDirectory.runtimes;
   state.taxonomy = taxonomy;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
-  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at]
+  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -108,6 +123,7 @@ async function bootstrap() {
   populateFilters();
   populateSpecificationFilters();
   populateInferenceServiceFilters();
+  populateLocalRuntimeFilters();
   renderStats();
   renderFinder();
   renderSpecifications();
@@ -122,7 +138,8 @@ function taxonomyName(group, id) {
   return state.taxonomy[group].find(item => item.id === id)?.name || label(id);
 }
 const familyName = id => taxonomyName("system_families", id);
-const finderDirectionName = id => id === "inference_service" ? "Inference services" : familyName(id);
+const FINDER_DIRECTION_NAMES = { inference_service: "Inference services", local_runtime: "Local runtimes" };
+const finderDirectionName = id => FINDER_DIRECTION_NAMES[id] || familyName(id);
 const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
@@ -131,8 +148,19 @@ const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
+// Static dispatch on purpose. The comparison kind comes from the compare URL
+// parameter, so any dynamic lookup keyed on it can resolve an unintended target;
+// an object literal would return inherited names such as "constructor". Each
+// branch names one collection, so an unknown kind can only fall through to null.
+function comparisonCollection(kind) {
+  if (kind === "system") return state.projects;
+  if (kind === "inference") return state.inferenceServices;
+  if (kind === "runtime") return state.localRuntimes;
+  return null;
+}
+
 function comparisonRecords() {
-  const records = state.comparison.kind === "system" ? state.projects : state.inferenceServices;
+  const records = comparisonCollection(state.comparison.kind) || [];
   return state.comparison.ids.map(id => records.find(item => item.id === id)).filter(Boolean);
 }
 
@@ -161,8 +189,8 @@ function renderComparisonControls() {
     const selected = button.dataset.compareKind === state.comparison.kind && state.comparison.ids.includes(button.dataset.compareId);
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", String(selected));
-    const record = (button.dataset.compareKind === "system" ? state.projects : state.inferenceServices)
-      .find(item => item.id === button.dataset.compareId);
+    const collection = comparisonCollection(button.dataset.compareKind);
+    const record = collection ? collection.find(item => item.id === button.dataset.compareId) : null;
     button.setAttribute("aria-label", `${selected ? "Remove" : "Add"} ${record?.name || "item"} ${selected ? "from" : "to"} comparison`);
     button.textContent = selected ? "Selected" : "Compare";
   });
@@ -178,12 +206,10 @@ function renderComparisonControls() {
 }
 
 function toggleComparison(kind, id) {
-  const record = kind === "system"
-    ? state.projects.find(item => item.id === id)
-    : state.inferenceServices.find(item => item.id === id);
+  const collection = comparisonCollection(kind);
+  const record = collection ? collection.find(item => item.id === id) : null;
   if (!record) return;
-  const profile = kind === "system" ? record.score_profile : state.taxonomy.inference_service_score_profile.id;
-  state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile, id });
+  state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
   renderComparisonControls();
   writeDirectoryURL();
 }
@@ -196,10 +222,9 @@ function restoreComparisonFromURL() {
   const kind = raw.slice(0, separator);
   const referencedIds = raw.slice(separator + 1).split(",").filter(Boolean);
   const ids = [...new Set(referencedIds)];
-  const records = kind === "system"
-    ? ids.map(id => state.projects.find(item => item.id === id)).filter(Boolean)
-    : kind === "inference" ? ids.map(id => state.inferenceServices.find(item => item.id === id)).filter(Boolean) : [];
-  const profiles = new Set(records.map(item => kind === "system" ? item.score_profile : state.taxonomy.inference_service_score_profile.id));
+  const collection = comparisonCollection(kind);
+  const records = collection ? ids.map(id => collection.find(item => item.id === id)).filter(Boolean) : [];
+  const profiles = new Set(records.map(item => item.score_profile));
   if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1) {
     url.searchParams.delete("compare");
     window.history.replaceState(null, "", url);
@@ -215,7 +240,7 @@ function restoreComparisonFromURL() {
     updateScoreSortAvailability();
     setDirectoryCollection("systems", { updateURL: false });
   } else {
-    setDirectoryCollection("inference", { updateURL: false });
+    setDirectoryCollection(kind === "runtime" ? "runtimes" : "inference", { updateURL: false });
   }
   renderComparisonControls();
   writeDirectoryURL();
@@ -291,6 +316,25 @@ function populateInferenceServiceFilters() {
   }
 }
 
+function populateLocalRuntimeFilters() {
+  const groups = {
+    local_runtime_types: new Set(state.localRuntimes.map(item => item.runtime_type)),
+    runtime_accelerators: new Set(state.localRuntimes.flatMap(item => item.accelerators)),
+    runtime_model_formats: new Set(state.localRuntimes.flatMap(item => item.model_formats)),
+    inference_api_styles: new Set(state.localRuntimes.flatMap(item => item.api_styles)),
+  };
+  for (const [group, selector] of [
+    ["local_runtime_types", "#runtime-type-filter"],
+    ["runtime_accelerators", "#runtime-accelerator-filter"],
+    ["runtime_model_formats", "#runtime-format-filter"],
+    ["inference_api_styles", "#runtime-api-filter"],
+  ]) {
+    state.taxonomy[group]
+      .filter(item => groups[group].has(item.id))
+      .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  }
+}
+
 function updateScoreSortAvailability() {
   const scoreOption = $("#sort-filter").querySelector('option[value="score"]');
   const hasFamily = Boolean($("#family-filter").value);
@@ -332,19 +376,23 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  $("#hero-kicker").textContent = `${state.projects.length + state.inferenceServices.length} reviewed systems and services`;
+  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length;
+  $("#hero-kicker").textContent = `${total} reviewed systems, services, and runtimes`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [assistants, "assistants"], [state.inferenceServices.length, "inference services"]
+    [memories, "memory"], [agents, "agents"], [assistants, "assistants"],
+    [state.inferenceServices.length, "inference services"], [state.localRuntimes.length, "local runtimes"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
-  $("#all-collection-count").textContent = state.projects.length + state.inferenceServices.length;
+  $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#inference-collection-count").textContent = state.inferenceServices.length;
+  $("#runtime-collection-count").textContent = state.localRuntimes.length;
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
-  const selected = ["all", "systems", "inference"].includes(collection) ? collection : "all";
+  const selected = ["all", "systems", "inference", "runtimes"].includes(collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
-    || (selected === "inference" && state.comparison.kind === "inference");
+    || (selected === "inference" && state.comparison.kind === "inference")
+    || (selected === "runtimes" && state.comparison.kind === "runtime");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
   $$('[data-directory-collection]').forEach(button => {
@@ -355,28 +403,38 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   $("#all-directory-panel").hidden = selected !== "all";
   $("#systems-directory-panel").hidden = selected !== "systems";
   $("#inference-directory-panel").hidden = selected !== "inference";
-  if (selected === "all") {
-    $("#project-grid").innerHTML = "";
-    $("#inference-grid").innerHTML = "";
-    renderAllDirectoryEntries();
-  } else if (selected === "systems") {
-    $("#all-directory-grid").innerHTML = "";
-    $("#inference-grid").innerHTML = "";
-    renderProjects();
-  } else {
-    $("#all-directory-grid").innerHTML = "";
-    $("#project-grid").innerHTML = "";
-    renderInferenceServices();
+  $("#runtimes-directory-panel").hidden = selected !== "runtimes";
+  const renderers = {
+    all: renderAllDirectoryEntries,
+    systems: renderProjects,
+    inference: renderInferenceServices,
+    runtimes: renderLocalRuntimes,
+  };
+  for (const [name, grid] of [
+    ["all", "#all-directory-grid"], ["systems", "#project-grid"],
+    ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"],
+  ]) {
+    if (name !== selected) $(grid).innerHTML = "";
   }
+  renderers[selected]();
   if (updateURL) writeDirectoryURL();
 }
 
 function renderAllDirectoryEntries() {
-  const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, {
+  const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, {
     term: $("#all-directory-search").value,
   });
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   $("#all-directory-grid").innerHTML = entries.map(({ kind, record }) => {
+    if (kind === "runtime") {
+      return `<article class="project-card local-runtime-card mixed-directory-card">
+        <div class="card-top"><div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div>
+        <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
+        <p>${escapeHTML(record.description)}</p>
+        <div class="tags">${record.accelerators.slice(0, 3).map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
+        <div class="card-footer"><span>Dedicated runtime score</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
+      </article>`;
+    }
     if (kind === "inference") {
       return `<article class="project-card inference-service-card mixed-directory-card">
         <div class="card-top"><div><p class="family-label">Inference service · ${escapeHTML(taxonomyName("inference_service_types", record.service_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.operator)}</div></div></div>
@@ -395,9 +453,10 @@ function renderAllDirectoryEntries() {
       <div class="tags">${record.architectures.slice(0, 3).map(item => `<span>${escapeHTML(architectureName(item))}</span>`).join("")}</div>
       <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
     </article>`;
-  }).join("") || '<div class="notice">No systems or inference services match this search.</div>';
+  }).join("") || '<div class="notice">No systems, inference services, or local runtimes match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
+  $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
 }
 
 function filteredProjects() {
@@ -488,6 +547,29 @@ function renderInferenceServices() {
   renderComparisonControls();
 }
 
+function renderLocalRuntimes() {
+  const runtimes = AtlasCore.filterLocalRuntimes(state.localRuntimes, {
+    term: $("#runtime-search").value,
+    type: $("#runtime-type-filter").value,
+    accelerator: $("#runtime-accelerator-filter").value,
+    modelFormat: $("#runtime-format-filter").value,
+    apiStyle: $("#runtime-api-filter").value,
+    sort: $("#runtime-sort-filter").value,
+  });
+  $("#runtime-result-count").textContent = `${runtimes.length} ${runtimes.length === 1 ? "runtime" : "runtimes"} · ${state.taxonomy.local_runtime_score_profile.name}`;
+  $("#runtime-grid").innerHTML = runtimes.map(runtime => `<article class="project-card local-runtime-card">
+    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p><h2>${escapeHTML(runtime.name)}</h2><div class="repo">${escapeHTML(runtime.repo || runtime.maintainer)}</div></div><div class="score-ring" aria-label="Local-runtime score ${escapeHTML(runtime.score.overall)} out of 10">${escapeHTML(runtime.score.overall)}</div></div>
+    <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
+    <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+    <p>${escapeHTML(runtime.description)}</p>
+    <div class="tags">${runtime.accelerators.map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
+    <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
+  </article>`).join("") || '<div class="notice">No local runtimes match these filters.</div>';
+  $$('[data-local-runtime]', $("#runtime-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
+  bindComparisonButtons($("#runtime-grid"));
+  renderComparisonControls();
+}
+
 function bindComparisonButtons(root) {
   $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
     toggleComparison(button.dataset.compareKind, button.dataset.compareId);
@@ -534,11 +616,18 @@ function renderFinder() {
 }
 
 function priorityBoost(project, priority) {
-  if (!project.system_family) {
+  if (project.score_profile === "inference_service") {
     if (priority === "governance") return project.score.data_governance / 2;
     if (priority === "regions") return project.score.regional_deployment_control / 2;
     if (priority === "portable") return project.score.api_interoperability / 2 + project.score.serving_flexibility / 4;
     if (priority === "resilience") return project.score.traffic_resilience / 2 + project.score.operational_maturity / 4;
+    return project.score.overall / 3;
+  }
+  if (project.score_profile === "local_runtime") {
+    if (priority === "hardware") return project.score.hardware_accelerator_coverage / 2;
+    if (priority === "formats") return project.score.model_format_support / 2;
+    if (priority === "serving") return project.score.serving_concurrency / 2 + project.score.api_interoperability / 4;
+    if (priority === "operability") return project.score.deployment_operations / 2 + project.score.observability_control / 4;
     return project.score.overall / 3;
   }
   if (project.system_family === "memory_system") {
@@ -563,7 +652,16 @@ function priorityBoost(project, priority) {
 }
 
 function recommendationReasons(project, priority) {
-  if (!project.system_family) {
+  if (project.score_profile === "local_runtime") {
+    const reasons = [taxonomyName("local_runtime_types", project.runtime_type)];
+    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage}/10`);
+    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support}/10`);
+    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency}/10`);
+    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations}/10`, `Observability ${project.score.observability_control}/10`);
+    reasons.push(...project.accelerators.slice(0, 2).map(item => taxonomyName("runtime_accelerators", item)));
+    return [...new Set(reasons)].slice(0, 4);
+  }
+  if (project.score_profile === "inference_service") {
     const reasons = [taxonomyName("inference_service_types", project.service_type)];
     if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
     if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control}/10`);
@@ -594,13 +692,18 @@ function recommendationReasons(project, priority) {
 function recommendedFinderRecords() {
   const { direction, goal, priority } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
-  const records = direction === "inference_service" ? state.inferenceServices : state.projects;
+  const records = direction === "inference_service" ? state.inferenceServices
+    : direction === "local_runtime" ? state.localRuntimes : state.projects;
   return records
-    .filter(project => direction === "inference_service"
-      ? goalConfig.serviceTypes.includes(project.service_type)
-      : project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role))
+    .filter(project => {
+      if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
+      if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
+      return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
+    })
     .map(project => {
-      const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type) : goalConfig.roles.indexOf(project.primary_role);
+      const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type)
+        : direction === "local_runtime" ? goalConfig.runtimeTypes.indexOf(project.runtime_type)
+        : goalConfig.roles.indexOf(project.primary_role);
       const match = 6 - classificationIndex * 0.4 + project.score.overall * 0.2 + priorityBoost(project, priority);
       return { project, match, reasons: recommendationReasons(project, priority) };
     })
@@ -614,15 +717,26 @@ function renderFinderResults() {
   const priorityConfig = FINDER_PRIORITIES[direction].find(item => item.id === priority);
   const results = recommendedFinderRecords();
   const isInference = direction === "inference_service";
+  const isRuntime = direction === "local_runtime";
+  const classificationLabel = record => isInference ? taxonomyName("inference_service_types", record.service_type)
+    : isRuntime ? taxonomyName("local_runtime_types", record.runtime_type)
+    : roleName(record.primary_role);
+  const identityRow = record => {
+    if (isInference) return `<span class="source-badge">${escapeHTML(record.operator)}</span><span class="license-badge">${escapeHTML(record.terms.label)}</span>`;
+    const badge = isRuntime ? record.maintainer : sourceModelName(record.source_model);
+    return `<span class="source-badge">${escapeHTML(badge)}</span>${record.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}`;
+  };
+  const detailAttribute = isInference ? "data-finder-inference" : isRuntime ? "data-finder-runtime" : "data-finder-project";
+  const profileLabel = isInference ? "inference-service" : isRuntime ? "local-runtime" : "";
   return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(finderDirectionName(direction).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
-    <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || "inference_service")}">
+    <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || direction)}">
       <div class="finder-rank">0${index + 1}</div>
-      <div><p class="family-label">${escapeHTML(isInference ? taxonomyName("inference_service_types", project.service_type) : roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
-        <div class="license-row">${isInference ? `<span class="source-badge">${escapeHTML(project.operator)}</span><span class="license-badge">${escapeHTML(project.terms.label)}</span>` : `<span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}`}</div>
+      <div><p class="family-label">${escapeHTML(classificationLabel(project))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
+        <div class="license-row">${identityRow(project)}</div>
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
-      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference ? project.tradeoffs[0] : project.weaknesses[0])}</p>
-      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(isInference ? "inference-service" : project.score_profile)} score</span><button ${isInference ? "data-finder-inference" : "data-finder-project"}="${escapeHTML(project.id)}">View details →</button></div>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference || isRuntime ? project.tradeoffs[0] : project.weaknesses[0])}</p>
+      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
@@ -631,6 +745,17 @@ function applyFinderToDirectory() {
   const { direction, goal } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
   clearComparison();
+  if (direction === "local_runtime") {
+    $("#runtime-search").value = "";
+    $("#runtime-type-filter").value = goalConfig.runtimeTypes[0];
+    $("#runtime-accelerator-filter").value = "";
+    $("#runtime-format-filter").value = "";
+    $("#runtime-api-filter").value = "";
+    $("#runtime-sort-filter").value = "score";
+    setDirectoryCollection("runtimes");
+    activateView("directory");
+    return;
+  }
   if (direction === "inference_service") {
     $("#inference-search").value = "";
     $("#inference-type-filter").value = goalConfig.serviceTypes[0];
@@ -676,6 +801,12 @@ function renderTaxonomy() {
     ["Inference delivery modes", state.taxonomy.inference_delivery_modes], ["Inference model sources", state.taxonomy.inference_model_sources],
     ["Inference API styles", state.taxonomy.inference_api_styles],
     ["Inference-service score", state.taxonomy.inference_service_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ["Local runtime types", state.taxonomy.local_runtime_types],
+    ["Runtime accelerators", state.taxonomy.runtime_accelerators],
+    ["Runtime model formats", state.taxonomy.runtime_model_formats],
+    ["Runtime serving modes", state.taxonomy.runtime_serving_modes],
+    ["Runtime deployment surfaces", state.taxonomy.runtime_deployment_surfaces],
+    ["Local-runtime score", state.taxonomy.local_runtime_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Licenses and terms", state.taxonomy.licenses]
@@ -766,6 +897,36 @@ function openInferenceService(id) {
   $("#inference-dialog").showModal();
 }
 
+function runtimeLicenseEvidenceLink(item) {
+  const source = item.kind === "git_blob"
+    ? `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">${escapeHTML(item.path)} ↗</a> · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable blob ↗</a>`
+    : `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span>`;
+  return `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} — ${source}</p>`;
+}
+
+function openLocalRuntime(id) {
+  const runtime = state.localRuntimes.find(item => item.id === id);
+  if (!runtime) return;
+  const profile = state.taxonomy.local_runtime_score_profile;
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(runtime.score[dimension.id])}</td></tr>`).join("");
+  $("#runtime-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
+      <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(runtime.score.overall)}</td></tr></table><p class="unscored-note">Documented execution capability only. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.</p></section>
+      <section class="detail-block"><h3>Runtime boundary</h3><p>${escapeHTML(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Execution</h3><p><strong>Accelerators:</strong> ${escapeHTML(runtime.accelerators.map(item => taxonomyName("runtime_accelerators", item)).join(" · "))}</p><p><strong>Model formats:</strong> ${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</p><p><strong>Serving:</strong> ${escapeHTML(runtime.serving_modes.map(item => taxonomyName("runtime_serving_modes", item)).join(" · "))}</p></section>
+      <section class="detail-block"><h3>Interfaces and deployment</h3><p><strong>API styles:</strong> ${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p><p><strong>Deployment:</strong> ${escapeHTML(runtime.deployment_surfaces.map(item => taxonomyName("runtime_deployment_surfaces", item)).join(" · "))}</p></section>
+      <section class="detail-block"><h3>Hardware requirements</h3><p>${escapeHTML(runtime.hardware_requirements)}</p></section>
+      <section class="detail-block"><h3>Model management</h3><p>${escapeHTML(runtime.model_management)}</p></section>
+      <section class="detail-block"><h3>Operational controls</h3><p>${escapeHTML(runtime.operational_controls)}</p></section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${runtime.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Tradeoffs</h3><ul>${runtime.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${runtime.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${runtime.evidence.map(inferenceEvidenceLink).join("")}</section>
+    </div>`;
+  $("#runtime-dialog").showModal();
+}
+
 function comparisonTable(records, rows) {
   return `<div class="comparison-table-wrap"><table class="comparison-table">
     <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
@@ -798,6 +959,31 @@ function openComparison() {
       ["Architecture", records.map(item => item.architectures.map(architectureName).join(" · "))],
       ["Strengths", records.map(item => item.strengths.join(" • "))],
       ["Watchouts", records.map(item => item.weaknesses.join(" • "))],
+      ["Editorially verified", records.map(item => item.verified_at)],
+    ];
+  } else if (state.comparison.kind === "runtime") {
+    profile = state.taxonomy.local_runtime_score_profile;
+    eyebrow = profile.name;
+    note = "This comparison covers documented execution capability on hardware you operate. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.";
+    rows = [
+      ["Maintainer", records.map(item => item.maintainer)],
+      ["Runtime type", records.map(item => taxonomyName("local_runtime_types", item.runtime_type))],
+      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ...profile.dimensions.map(dimension => [
+        `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
+        records.map(item => `${item.score[dimension.id]} / 10`),
+      ]),
+      ["Accelerators", records.map(item => item.accelerators.map(value => taxonomyName("runtime_accelerators", value)).join(" · "))],
+      ["Model formats", records.map(item => item.model_formats.map(value => taxonomyName("runtime_model_formats", value)).join(" · "))],
+      ["Serving", records.map(item => item.serving_modes.map(value => taxonomyName("runtime_serving_modes", value)).join(" · "))],
+      ["API styles", records.map(item => item.api_styles.map(value => taxonomyName("inference_api_styles", value)).join(" · "))],
+      ["Deployment", records.map(item => item.deployment_surfaces.map(value => taxonomyName("runtime_deployment_surfaces", value)).join(" · "))],
+      ["Source model", records.map(item => sourceModelName(item.source_model))],
+      ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
+      ["Hardware requirements", records.map(item => item.hardware_requirements)],
+      ["Model management", records.map(item => item.model_management)],
+      ["Strengths", records.map(item => item.strengths.join(" • "))],
+      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else {
@@ -842,8 +1028,8 @@ function openComparison() {
 }
 
 function activateView(id) {
-  if (id === "inference-services") {
-    setDirectoryCollection("inference");
+  if (id === "inference-services" || id === "local-runtimes") {
+    setDirectoryCollection(id === "inference-services" ? "inference" : "runtimes");
     id = "directory";
   }
   $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
@@ -870,6 +1056,7 @@ function bindEvents() {
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
+  ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderLocalRuntimes));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -886,6 +1073,15 @@ function bindEvents() {
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
     renderInferenceServices();
+  });
+  $("#reset-runtime-filters").addEventListener("click", () => {
+    $("#runtime-search").value = "";
+    $("#runtime-type-filter").value = "";
+    $("#runtime-accelerator-filter").value = "";
+    $("#runtime-format-filter").value = "";
+    $("#runtime-api-filter").value = "";
+    $("#runtime-sort-filter").value = "score";
+    renderLocalRuntimes();
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
@@ -932,6 +1128,11 @@ function bindEvents() {
       openInferenceService(inferenceButton.dataset.finderInference);
       return;
     }
+    const runtimeButton = event.target.closest("[data-finder-runtime]");
+    if (runtimeButton) {
+      openLocalRuntime(runtimeButton.dataset.finderRuntime);
+      return;
+    }
     if (event.target.closest("[data-finder-directory]")) applyFinderToDirectory();
   });
   $("#project-dialog .dialog-close").addEventListener("click", () => $("#project-dialog").close());
@@ -940,6 +1141,8 @@ function bindEvents() {
   $("#specification-dialog").addEventListener("click", event => { if (event.target === $("#specification-dialog")) $("#specification-dialog").close(); });
   $("#inference-dialog .dialog-close").addEventListener("click", () => $("#inference-dialog").close());
   $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
+  $("#runtime-dialog .dialog-close").addEventListener("click", () => $("#runtime-dialog").close());
+  $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
   $("#comparison-open").addEventListener("click", openComparison);
   $("#comparison-clear").addEventListener("click", () => clearComparison());
   $("#comparison-dialog .dialog-close").addEventListener("click", () => $("#comparison-dialog").close());

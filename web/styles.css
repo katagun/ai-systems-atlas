@@ -253,6 +253,8 @@ h1 {
 .map-agent i { background: var(--coral); box-shadow: 0 0 0 4px rgba(213, 105, 81, .12); }
 .map-assistant { bottom: 13%; left: 24%; }
 .map-assistant i { background: var(--violet); box-shadow: 0 0 0 4px rgba(114, 89, 187, .12); }
+.map-runtime { bottom: 14%; right: 8%; }
+.map-runtime i { background: var(--amber); box-shadow: 0 0 0 4px rgba(169, 99, 40, .12); }
 .map-orbit {
   position: absolute;
   pointer-events: none;
@@ -263,15 +265,17 @@ h1 {
 .orbit-two { width: 92%; height: 78%; top: 9%; left: 4%; border-color: rgba(114, 89, 187, .16); transform: rotate(7deg); }
 .orbit-three { width: 96%; height: 60%; top: 19%; left: 2%; border-color: rgba(213, 105, 81, .14); transform: rotate(1deg); }
 .orbit-four { width: 82%; height: 88%; top: 5%; left: 9%; border-color: rgba(55, 125, 177, .15); transform: rotate(-15deg); }
+.orbit-five { width: 94%; height: 84%; top: 8%; left: 3%; border-color: rgba(169, 99, 40, .14); transform: rotate(14deg); }
 .map-legend { justify-content: flex-start; border-top: 1px solid var(--line); }
 .map-legend span { display: flex; align-items: center; gap: .3rem; }
 .map-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
 .map-legend .legend-inference { background: var(--coral); }
+.map-legend .legend-runtime { background: var(--amber); }
 .map-legend .legend-specs { background: var(--violet); }
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(105px, 1fr));
+  grid-template-columns: repeat(5, minmax(96px, 1fr));
   max-width: none;
   margin-top: 1rem;
   border: 1px solid var(--line);
@@ -466,6 +470,8 @@ input:focus, select:focus {
 .specification-card::before { background: var(--violet); }
 .inference-service-card { min-height: 380px; background: linear-gradient(145deg, #f9fdff, #fff 68%); }
 .inference-service-card::before { background: #377db1; }
+.local-runtime-card { min-height: 380px; background: linear-gradient(145deg, #fffaf5, #fff 68%); }
+.local-runtime-card::before { background: var(--amber); }
 .mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);
@@ -525,6 +531,7 @@ input:focus, select:focus {
 .assistant_system .role-badge { background: var(--violet-soft); color: #5e4697; }
 .specification-card .role-badge { background: #e7eff0; color: #48636e; }
 .inference-service-card .role-badge { background: #e5edf4; color: #405b73; }
+.local-runtime-card .role-badge { background: #f6ece2; color: #7d4a1c; }
 .license-row {
   display: flex;
   flex-wrap: wrap;
@@ -715,6 +722,7 @@ input:focus, select:focus {
 .finder-result.agent_system { background: linear-gradient(145deg, #fffdfb, #fff 68%); }
 .finder-result.assistant_system { background: linear-gradient(145deg, #fdfcff, #fff 68%); }
 .finder-result.inference_service { background: linear-gradient(145deg, #f8fcff, #fff 68%); }
+.finder-result.local_runtime { background: linear-gradient(145deg, #fffbf6, #fff 68%); }
 .finder-rank { align-self: end; color: #839188; font: 500 1.4rem var(--font-mono); }
 .finder-result h3 { margin: .2rem 0 .7rem; font-size: 1.65rem; font-weight: 600; letter-spacing: -.035em; }
 .finder-result p { color: var(--muted); line-height: 1.55; }
@@ -888,6 +896,7 @@ footer {
   .map-memory { left: 11%; }
   .map-agent { right: 8%; }
   .map-assistant { left: 17%; }
+  .map-runtime { right: 5%; }
   .view, #directory.view { padding: 2.6rem 0; }
   .hero-stats { max-width: none; grid-template-columns: repeat(2, 1fr); }
   .stat { padding-right: .45rem; }

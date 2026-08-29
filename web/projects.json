@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28",
+  "generated_at": "2026-08-29",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -6761,6 +6761,352 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "adalflow",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "AdalFlow",
+      "repo": "SylphAI-Inc/AdalFlow",
+      "url": "https://github.com/SylphAI-Inc/AdalFlow",
+      "description": "Library for building and automatically optimizing language-model workflows, combining a ReAct agent runtime with tool and MCP integration, retrieval components, tracing, and parameter-based prompt optimization.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "Python components, typed data classes, prompt parameters, tool definitions, retriever indexes, optimization traces, and run traces",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "workflows",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": 4213,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.2,
+        "autonomy": 6.5,
+        "human_control": 8.0,
+        "observability_recovery": 7.5,
+        "data_sovereignty": 8.8,
+        "interoperability": 8.0,
+        "maturity": 6.2,
+        "overall": 7.34
+      },
+      "strengths": [
+        "Ships a ReAct agent runtime with function and MCP tool integration alongside retrieval components, so agent building is a first-class outcome rather than an add-on",
+        "Treats prompts as optimizable parameters, giving evaluation-driven tuning a place in the same programming model as the agent loop",
+        "Includes human-in-the-loop and tracing infrastructure without requiring an external service or additional API"
+      ],
+      "weaknesses": [
+        "Positioned as a general language-model workflow library, so agent execution shares attention with optimization concerns rather than dominating the design",
+        "Deployment, persistence, permissions, and production recovery remain application-defined",
+        "Repository activity is slower than the largest agent frameworks, and the operational track record behind the AdaL product is not independently documented"
+      ],
+      "why_it_matters": "Represents the auto-optimization approach to agent construction, where prompts and demonstrations are tuned against metrics instead of hand-written, and is the open library beneath SylphAI's commercial AdaL coding agent.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-05-29T05:49:13Z",
+      "forks": 388,
+      "open_issues": 68,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "strands-agents-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Strands Agents SDK",
+      "repo": "strands-agents/harness-sdk",
+      "url": "https://github.com/strands-agents/harness-sdk",
+      "description": "Model-driven agent SDK from AWS that builds tool-using agents from a model, a prompt, and typed tools, with multi-provider model support, MCP integration, and multi-agent patterns.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "Agent definitions, typed tool implementations, prompts, session state, and MCP server configuration",
+      "deployment": [
+        "library",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 7045,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "AWS renamed the canonical repository from strands-agents/sdk-python to strands-agents/harness-sdk; the published packages remain strands-agents.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.5,
+        "autonomy": 7.5,
+        "human_control": 7.8,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "maturity": 7.5,
+        "overall": 7.87
+      },
+      "strengths": [
+        "Model-driven design keeps agent definitions short while leaving tools, prompts, and model choice explicit",
+        "Publishes Python and TypeScript packages plus its own MCP server, so the same agent definition reaches several runtimes",
+        "Backed by AWS with documented multi-agent patterns and a separate maintained tools repository"
+      ],
+      "weaknesses": [
+        "The canonical repository was renamed, so older integration guides and third-party references point at a stale path",
+        "Persistence, permissions, and production recovery remain application-defined rather than framework-guaranteed",
+        "A large open-issue count relative to the project's age indicates a fast-moving surface"
+      ],
+      "why_it_matters": "Gives the Atlas a provider-published, model-driven agent SDK whose design deliberately minimizes framework scaffolding, contrasting with graph-and-workflow frameworks.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-08-28T00:00:00Z",
+      "forks": 1077,
+      "open_issues": 682,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ]
+    },
+    {
+      "id": "genkit",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Genkit",
+      "repo": "genkit-ai/genkit",
+      "url": "https://github.com/genkit-ai/genkit",
+      "description": "Open-source framework from Google's Firebase for building AI-powered application flows, with a unified model interface, tool calling, structured output, retrieval, evaluation, and a local developer UI.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "Flow definitions, typed schemas, prompt files, tool definitions, plugin configuration, retriever indexes, and evaluation runs",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "workflows",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 6384,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 7.8,
+        "autonomy": 6.2,
+        "human_control": 8.0,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.2,
+        "maturity": 7.8,
+        "overall": 7.64
+      },
+      "strengths": [
+        "A local developer UI for running, inspecting, and evaluating flows makes agent behaviour observable during development rather than only in production",
+        "One model interface spans Google, OpenAI, Anthropic, and Ollama backends through a documented plugin system",
+        "Built and used in production by Google's Firebase, with production-ready JavaScript and Go SDKs"
+      ],
+      "weaknesses": [
+        "Language support is uneven: Python is beta and Dart is preview, so cross-language parity cannot be assumed",
+        "The design centres on application flows, so long-running autonomous agent execution is less developed than in agent-first runtimes",
+        "Deployment guidance leans toward Google's hosting even though the framework itself is portable"
+      ],
+      "why_it_matters": "Represents the application-framework approach to agent construction, where typed flows, evaluation, and a developer inspection loop matter more than autonomous execution.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-08-29T00:00:00Z",
+      "forks": 835,
+      "open_issues": 757,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "local_runtime"
+      ]
+    },
+    {
+      "id": "mistral-vibe",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Mistral Vibe",
+      "repo": null,
+      "url": "https://mistral.ai/products/le-chat",
+      "description": "Mistral's end-user chat assistant for work and code, covering web search, document and spreadsheet analysis, document creation, workflow automation, repository-connected coding, and broad tool connectivity.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "service-managed conversations, settings, connected-tool context, generated documents, and code changes in connected repositories",
+      "deployment": [
+        "mobile",
+        "managed_cloud",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "Mistral renamed Le Chat to Vibe and states that conversations, settings, and plans carry over. This record covers the end-user assistant; Mistral AI Studio and the Mistral API remain distinct boundaries.",
+      "score": {
+        "task_reliability": 7.2,
+        "context_continuity": 6.8,
+        "tools_integrations": 8.0,
+        "human_control": 7.5,
+        "data_governance": 7.5,
+        "interoperability": 7.8,
+        "usability_access": 7.5,
+        "maturity": 7.0,
+        "overall": 7.39
+      },
+      "strengths": [
+        "A French-incorporated provider under EU consumer terms gives European buyers a governance and jurisdiction boundary distinct from the US-operated assistants already in the catalogue",
+        "Enterprise plans document on-premises, private-cloud, and Mistral Cloud deployment with data residency, which is unusual for an end-user assistant product",
+        "Documents full MCP compatibility alongside repository integrations for GitHub, GitLab, and Jira, so the assistant reaches existing developer workflows"
+      ],
+      "weaknesses": [
+        "Training on user data is governed by an opt-out rather than an opt-in, so the default posture requires an explicit user action to change",
+        "The product was renamed from Le Chat to Vibe, so documentation, third-party guides, and support material are inconsistent about the product name",
+        "Durable project and memory behaviour is less clearly documented than in the longest-established assistants, which limits confidence in context continuity"
+      ],
+      "why_it_matters": "Adds a European-governed general assistant whose enterprise path includes self-hosted and residency-bound deployment, a materially different governance boundary from the US provider assistants that dominate the family.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "mistral"
+      ]
     }
   ]
 }

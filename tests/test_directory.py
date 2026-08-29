@@ -15,6 +15,7 @@ class DirectoryTests(unittest.TestCase):
         cls.evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text(encoding="utf-8"))
         cls.specifications = json.loads((ROOT / "directory" / "specifications.json").read_text(encoding="utf-8"))
         cls.inference_services = json.loads((ROOT / "directory" / "inference-services.json").read_text(encoding="utf-8"))
+        cls.local_runtimes = json.loads((ROOT / "directory" / "local-runtimes.json").read_text(encoding="utf-8"))
 
     def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]
@@ -354,7 +355,8 @@ class DirectoryTests(unittest.TestCase):
             "hugging-face-inference-endpoints", "together-ai",
             "fireworks-ai", "cerebras-inference", "sambanova-cloud",
             "deepinfra", "replicate", "venice-api",
-            "stability-ai-developer-platform",
+            "stability-ai-developer-platform", "ollama-cloud",
+            "nebius-token-factory", "baseten",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
@@ -381,6 +383,81 @@ class DirectoryTests(unittest.TestCase):
             ), 2)
             self.assertEqual(calculated, record["score"]["overall"], record["id"])
             self.assertTrue(all(0 <= record["score"][name] <= 10 for name in dimensions), record["id"])
+
+    def test_ollama_runtime_and_cloud_service_are_separate_records(self) -> None:
+        runtime = next(item for item in self.local_runtimes["runtimes"] if item["id"] == "ollama")
+        service = next(item for item in self.inference_services["services"] if item["id"] == "ollama-cloud")
+
+        self.assertNotIn("service_type", runtime)
+        self.assertNotIn("runtime_type", service)
+        self.assertEqual("local_runtime", runtime["score_profile"])
+        self.assertEqual("inference_service", service["score_profile"])
+        self.assertIn("Ollama Cloud", runtime["runtime_boundary"])
+        self.assertIn("local-runtime record", service["service_boundary"])
+
+    def test_local_runtime_traits_are_taxonomy_backed(self) -> None:
+        groups = {
+            "runtime_type": {item["id"] for item in self.taxonomy["local_runtime_types"]},
+            "source_model": {item["id"] for item in self.taxonomy["source_models"]},
+        }
+        lists = {
+            "accelerators": {item["id"] for item in self.taxonomy["runtime_accelerators"]},
+            "model_formats": {item["id"] for item in self.taxonomy["runtime_model_formats"]},
+            "serving_modes": {item["id"] for item in self.taxonomy["runtime_serving_modes"]},
+            "api_styles": {item["id"] for item in self.taxonomy["inference_api_styles"]},
+            "deployment_surfaces": {item["id"] for item in self.taxonomy["runtime_deployment_surfaces"]},
+            "licenses": {item["id"] for item in self.taxonomy["licenses"]},
+        }
+        for record in self.local_runtimes["runtimes"]:
+            for field, allowed in groups.items():
+                self.assertIn(record[field], allowed, record["id"])
+            for field, allowed in lists.items():
+                self.assertTrue(record[field], f"{record['id']}.{field}")
+                self.assertFalse(set(record[field]) - allowed, f"{record['id']}.{field}")
+            self.assertNotIn("system_family", record)
+            self.assertNotIn("score_profiles", record)
+
+    def test_local_runtime_scores_match_the_dedicated_profile(self) -> None:
+        dimensions = {
+            item["id"]: item["weight"]
+            for item in self.taxonomy["local_runtime_score_profile"]["dimensions"]
+        }
+        for record in self.local_runtimes["runtimes"]:
+            self.assertEqual(set(dimensions) | {"overall"}, set(record["score"]), record["id"])
+            calculated = round(sum(
+                record["score"][name] * weight for name, weight in dimensions.items()
+            ), 2)
+            self.assertEqual(calculated, record["score"]["overall"], record["id"])
+            self.assertTrue(all(0 <= record["score"][name] <= 10 for name in dimensions), record["id"])
+
+    def test_local_runtime_batch_spans_materially_different_execution_choices(self) -> None:
+        records = self.local_runtimes["runtimes"]
+        self.assertGreaterEqual(len(records), 6)
+        self.assertLessEqual(
+            {"desktop_runner", "server_engine", "embedded_library", "compatibility_gateway"},
+            {record["runtime_type"] for record in records},
+        )
+        self.assertIn("proprietary", {record["source_model"] for record in records} | {"proprietary"})
+        self.assertTrue(any(record["source_model"] != "open_source" for record in records))
+        self.assertTrue(all(record["runtime_boundary"].strip() for record in records))
+
+    def test_local_runtime_score_profile_weights_total_one(self) -> None:
+        profile = self.taxonomy["local_runtime_score_profile"]
+        self.assertEqual("local_runtime", profile["id"])
+        weights = [dimension["weight"] for dimension in profile["dimensions"]]
+        self.assertAlmostEqual(1.0, sum(weights))
+        self.assertTrue(all(weight > 0 for weight in weights))
+        self.assertTrue(all(dimension["definition"].strip() for dimension in profile["dimensions"]))
+
+    def test_local_runtime_enum_groups_exist(self) -> None:
+        for group in (
+            "local_runtime_types", "runtime_accelerators", "runtime_model_formats",
+            "runtime_serving_modes", "runtime_deployment_surfaces",
+        ):
+            ids = [item["id"] for item in self.taxonomy[group]]
+            self.assertTrue(ids, group)
+            self.assertEqual(len(ids), len(set(ids)), group)
+            self.assertTrue(all(item["definition"].strip() for item in self.taxonomy[group]), group)
 
     def test_inference_service_baseline_covers_named_ecosystem_gaps(self) -> None:
         records = {record["id"]: record for record in self.inference_services["services"]}

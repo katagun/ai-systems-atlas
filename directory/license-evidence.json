@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-08-28",
+  "verified_at": "2026-08-29",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -1368,6 +1368,71 @@
           "kind": "web_terms",
           "url": "https://venice.ai/legal/tos",
           "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "project_id": "adalflow",
+      "repo": "SylphAI-Inc/AdalFlow",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file covering the AdalFlow library",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/SylphAI-Inc/AdalFlow/blob/main/LICENSE.md",
+          "blob_sha": "40775efc1bcd72cb0ed3ff318f7bab0bf9c5170c",
+          "immutable_url": "https://api.github.com/repos/SylphAI-Inc/AdalFlow/git/blobs/40775efc1bcd72cb0ed3ff318f7bab0bf9c5170c"
+        }
+      ]
+    },
+    {
+      "project_id": "strands-agents-sdk",
+      "repo": "strands-agents/harness-sdk",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the Strands Agents SDK",
+          "kind": "git_blob",
+          "path": "LICENSE.APACHE",
+          "url": "https://github.com/strands-agents/harness-sdk/blob/main/LICENSE.APACHE",
+          "blob_sha": "67db8588217f266eb561f75fae738656325deac9",
+          "immutable_url": "https://api.github.com/repos/strands-agents/harness-sdk/git/blobs/67db8588217f266eb561f75fae738656325deac9"
+        }
+      ]
+    },
+    {
+      "project_id": "genkit",
+      "repo": "genkit-ai/genkit",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the Genkit framework",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/genkit-ai/genkit/blob/main/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/genkit-ai/genkit/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
+    },
+    {
+      "project_id": "mistral-vibe",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Consumer terms of service governing Vibe for users established in the European Union",
+          "kind": "web_terms",
+          "url": "https://legal.mistral.ai/terms/eu-consumers-terms-of-service",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Privacy policy governing personal data processing for Mistral consumer products",
+          "kind": "web_terms",
+          "url": "https://legal.mistral.ai/terms/privacy-policy",
+          "verified_at": "2026-08-29"
         }
       ]
     }
