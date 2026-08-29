@@ -8,7 +8,7 @@ The interface uses a technical editorial system: cool paper backgrounds, crisp w
 
 ## Content hierarchy
 
-The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional system-Finder action. It presents systems and inference services through collection scopes without merging their canonical records or scores.
+The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Atlas Finder action. It presents systems and inference services through collection scopes without merging their canonical records or scores.
 
 Use progressive disclosure for explanation and specialist controls:
 
@@ -36,10 +36,10 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.
 - Directory role filters list only roles represented by published projects; candidate-only taxonomy roles remain discoverable in Taxonomy without offering empty filters.
 - Selecting all families hides score values and disables score sorting.
-- Finder recommendations consider only active projects in the selected family and role set. Family-specific ranking code must use an explicit branch; never assume every non-memory project has agent-operation fields.
-- Add a Finder goal for a new role only after at least one active reviewed project can satisfy it.
+- Finder system recommendations consider only active projects in the selected family and role set. Inference recommendations consider only the selected service type. Ranking code must use explicit profile branches and never assume unlike records share fields or dimensions.
+- Add a Finder goal only after at least one active reviewed project or inference service can satisfy it.
 - Finder priorities affect the shortlist; they are preferences, not hard eligibility filters.
-- “Browse matches” preserves every eligible finder role. A manual family or role change clears that temporary role set.
+- “Browse matches” preserves every eligible system role or the selected inference-service type. A manual family or role change clears a temporary system-role set.
 - Active projects appear by default regardless of source model. Archived and removed projects remain inspectable through status filters.
 - Every card displays its reviewed license identifiers and source model.
 - License and source-model filters are taxonomy-driven and combine with every existing filter.
@@ -102,8 +102,8 @@ Then verify in a browser:
 2. switch memory, agent, assistant, and all-family views;
 3. confirm all-family scores are hidden;
 4. combine role, source-model, license, architecture, status, and local-first filters;
-5. complete at least one memory, agent, and assistant finder path;
-6. open the matching directory and confirm its role set;
+5. complete at least one memory, agent, assistant, and inference-service Finder path;
+6. open the matching Directory and confirm its role set or service type;
 7. inspect project details and evidence links;
 8. navigate taxonomy groups;
 9. check narrow and wide layouts and browser console errors.

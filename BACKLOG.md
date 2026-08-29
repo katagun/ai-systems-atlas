@@ -19,7 +19,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Add a stale-review report that distinguishes editorial age from GitHub metadata age without changing either.
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.
 - [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
-- [ ] Review a second specification batch around agent identity, discovery, authentication, and workflow exchange after concrete candidates are evidence-backed.
+- [ ] Review cross-protocol authentication and authorization profiles, workflow-state exchange beyond task messaging, and conformance suites as the next specification batch.
 - [ ] Review Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as the next bounded instruction-convention batch.
 
 ## Later
@@ -28,12 +28,15 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Completed on 2026-08-28
 
+- [x] Expand Specifications with WebMCP, OASF, ANP, AP2, UCP, and Commerce ACP, adding explicit web-agent, identity/discovery, metadata-schema, and agent-transaction taxonomy boundaries.
+- [x] Extend the Atlas Finder to inference-service jobs and priorities while preserving separate score profiles and collection-native Directory handoffs.
+- [x] Repair the duplicate ADR 011 sequence and update task-routing links.
 - [x] Define delegated general work as an agent-system role and publish Perplexity Computer and Claude Cowork with explicit boundaries from their vendors' conversational assistants.
 - [x] Publish Zep Cloud separately from Graphiti and Slite as a knowledge system whose Agent maintains the product's human-owned knowledge base.
 - [x] Reconcile Mem0, Letta Code, Graphiti, Sylph, Pletor, Gorgias Cortex, and Slite Agent with reviewed, provisional, or exclusion dispositions instead of forcing every name into a scored record.
 - [x] Show reviewed provider relationship and model-backend traits in project details without adding a sparse directory filter.
 - [x] Define managed Inference Services as service records rather than companies, models, or local runtimes in ADR 010.
-- [x] Add a six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views; later superseded its unscored treatment with ADR 011's dedicated service rubric.
+- [x] Add a six-service inference pilot with taxonomy-backed filters, terms, dated evidence, synchronization, validation, and detail views; later superseded its unscored treatment with ADR 012's dedicated service rubric.
 - [x] Expand the pilot to a 36-service, geographically broad baseline using multiple current discovery catalogs and first-party verification for every promoted service.
 - [x] Fold inference-service discovery into one Directory surface with systems while preserving separate schemas, filters, detail dialogs, URL state, and score comparability boundaries.
 - [x] Add shareable two-to-four-item comparisons scoped to one system-family or inference-service score profile, with aligned decision context and URL restoration.

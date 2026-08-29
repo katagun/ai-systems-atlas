@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-28
 
-The reviewed catalog contains 85 systems: 27 memory systems, 46 agent systems, and 12 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-one are proprietary. The provisional queue contains 102 records. The separate collections contain 15 unscored specifications plus 36 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
+The reviewed catalog contains 85 systems: 27 memory systems, 46 agent systems, and 12 assistant systems. Fifty-eight are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-one are proprietary. The provisional queue contains 102 records. The separate collections contain 21 unscored specifications plus 36 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -54,7 +54,7 @@ Choose small batches with one coherent boundary question:
 4. **Proprietary memory and knowledge:** NotebookLM, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary. Zep Cloud and Slite now establish managed agent-memory and self-maintaining knowledge baselines.
 5. **Source-model diversity:** screenpipe, AFFiNE, Onyx, and Obsidian. Review product terms and operational evidence without treating license as eligibility.
 6. **Thin operational roles:** browser/computer use, research, general work, coding workflows, context graphs, ambient capture, and human–agent bridges. Keep Pletor and Sylph provisional until their license or product-terms evidence meets the full curation standard.
-7. **Specification second pass:** evaluate agent identity, discovery, authentication, and workflow exchange only when candidates answer a distinct integration question; avoid cataloging generic web standards merely because agents use them.
+7. **Specification follow-up:** identity and discovery now have OASF and ANP baselines; browser-native tools and agentic transactions now have WebMCP, AP2, UCP, and Commerce ACP baselines. Next evaluate cross-protocol authentication/authorization profiles, workflow-state exchange beyond task messaging, and conformance evidence without absorbing generic web standards.
 8. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

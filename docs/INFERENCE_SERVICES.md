@@ -78,4 +78,4 @@ For geographically broad batches, explicitly screen direct model developers, hyp
 6. Add dated evidence and terms, then run synchronization and the complete verification suite.
 7. Exercise search, every inference-service filter, score sorting, and the detail dialog in a browser.
 
-Inference services use a dedicated score profile and default to score sorting inside their Directory scope. Mixed Directory browsing hides every numeric score. See [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md), and [ADR 012](adr/012-distinct-collections-share-one-directory-surface.md).
+Inference services use a dedicated score profile and default to score sorting inside their Directory scope. Mixed Directory browsing hides every numeric score. See [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).

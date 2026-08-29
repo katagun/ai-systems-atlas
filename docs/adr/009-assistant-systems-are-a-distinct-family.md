@@ -20,7 +20,7 @@ The assistant profile scores the product-level experience: task reliability, con
 
 Agent-operation traits remain required only for `agent_system`. Assistants use the shared architecture, retrieval, capture, lifecycle, deployment, source-model, license, and provider traits. Each family has exactly one score profile, and secondary roles cannot cross family boundaries.
 
-Plain model APIs, providers, playgrounds, thin prompt wrappers, and model repositories remain outside the scored system catalog. ADR 010 later defines managed inference services as a separate collection, and ADR 011 gives it a dedicated operational-service score without changing this scored-family boundary.
+Plain model APIs, providers, playgrounds, thin prompt wrappers, and model repositories remain outside the scored system catalog. ADR 010 later defines managed inference services as a separate collection, and ADR 012 gives it a dedicated operational-service score without changing this scored-family boundary.
 
 ## Consequences
 

@@ -82,6 +82,21 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
   await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
 });
 
+test("new protocol layers are searchable and keep their boundaries distinct", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Specifications" }).click();
+
+  for (const name of ["WebMCP", "OASF", "ANP", "AP2", "UCP", "Commerce ACP"]) {
+    await page.locator("#specification-search").fill(name);
+    await expect(page.locator("#specification-grid .project-card h2")).toHaveText(name);
+  }
+
+  await page.locator("#specification-search").fill("OASF");
+  await page.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#specification-dialog")).toContainText("Metadata schema");
+  await expect(page.locator("#specification-dialog")).toContainText("Agent identity and discovery");
+});
+
 test("reviewed provider traits appear only in project details", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /^Systems / }).click();
@@ -261,7 +276,7 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "System Finder" }).click();
+  await page.getByRole("button", { name: "Atlas Finder" }).click();
   await page.getByRole("button", { name: /I need an assistant/ }).click();
   await page.getByRole("button", { name: /Use several models in one place/ }).click();
   await page.getByRole("button", { name: /Model and data portability/ }).click();
@@ -272,4 +287,23 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await expect(page).toHaveURL(/collection=systems/);
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");
+});
+
+test("finder recommends inference services without crossing score profiles", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Atlas Finder" }).click();
+  await page.getByRole("button", { name: /I need an inference service/ }).click();
+  await page.getByRole("button", { name: /Route across models and providers/ }).click();
+  await page.getByRole("button", { name: /Traffic resilience/ }).click();
+
+  await expect(page.locator(".finder-results .finder-result")).toHaveCount(3);
+  await expect(page.locator(".finder-results .family-label").first()).toHaveText("Routing aggregator");
+  await page.locator(".finder-results [data-finder-inference]").first().click();
+  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
+  await page.locator("#inference-dialog .dialog-close").click();
+
+  await page.getByRole("button", { name: "Browse matches →" }).click();
+  await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page).toHaveURL(/collection=inference/);
+  await expect(page.locator("#inference-type-filter")).toHaveValue("routing_aggregator");
 });

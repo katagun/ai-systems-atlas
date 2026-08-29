@@ -1,4 +1,4 @@
-# ADR 012: Distinct collections share one Directory surface
+# ADR 013: Distinct collections share one Directory surface
 
 **Status:** Accepted
 
@@ -20,7 +20,9 @@ The Directory provides three scopes:
 
 The browser may normalize the two record types into a small presentation-only shape for mixed search and cards. It must not create a shared canonical schema, add inference services to `system_family`, reuse a primary role, combine service terms with project licensing, or rank different score profiles.
 
-Mixed cards identify both the collection and the record's native classification. Collection-specific detail dialogs continue to render the original canonical record. The selected Directory scope is represented in the URL so the systems and inference-service views remain directly addressable. The guided Finder remains a system finder until a separate evidence-backed inference workload flow is designed.
+Mixed cards identify both the collection and the record's native classification. Collection-specific detail dialogs continue to render the original canonical record. The selected Directory scope is represented in the URL so the systems and inference-service views remain directly addressable.
+
+The Atlas Finder may guide both collections, but its branches remain schema-specific. System jobs map to family-compatible roles and use only that family's score dimensions. Inference jobs map to one service type and use only inference-service dimensions. The results and Directory handoff retain the native classification, and no Finder ranking may pool scores across profiles.
 
 Specifications remain a sibling view because they are interoperability artifacts rather than deployable product or service choices.
 
@@ -32,4 +34,4 @@ Specifications remain a sibling view because they are interoperability artifacts
 - Filters change with the selected collection instead of exposing controls that do not apply to most records.
 - New operational collections can share the Directory only when they retain an explicit schema, boundary, and comparison policy.
 - Web tests must cover mixed search, score hiding, scope-specific controls, URL restoration, the Finder handoff, and both record-specific detail dialogs.
-- Side-by-side evaluation follows ADR 013: selection is available only inside one score profile and never in mixed browsing.
+- Side-by-side evaluation follows ADR 014: selection is available only inside one score profile and never in mixed browsing.

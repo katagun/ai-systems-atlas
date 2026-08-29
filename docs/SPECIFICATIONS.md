@@ -1,6 +1,6 @@
 # Specification curation
 
-Use this guide for protocols, instruction conventions, capability formats, and plugin package formats. Operational systems follow [`CURATION.md`](CURATION.md); the two collections share license and evidence rigor but not schema or scores.
+Use this guide for protocols, metadata schemas, instruction conventions, capability formats, and plugin package formats. Operational systems follow [`CURATION.md`](CURATION.md); the two collections share license and evidence rigor but not schema or scores.
 
 ## Inclusion boundary
 
@@ -21,6 +21,7 @@ For instruction conventions, curate the current primary format rather than every
 Choose one artifact type:
 
 - `protocol`: machine-readable interaction between independent components;
+- `metadata_schema`: a versioned vocabulary for describing discoverable identity, capability, domain, locator, or module metadata;
 - `instruction_convention`: a named file and discovery convention for project guidance;
 - `capability_format`: a reusable capability bundle with instructions and optional resources;
 - `package_format`: a larger distributable extension bundle.
@@ -40,4 +41,6 @@ Specifications are never scored, sorted by popularity, or assigned a system fami
 
 ## Current coverage
 
-The catalog covers open protocols and package formats plus a bounded set of repository-instruction conventions: AGENTS.md, CLAUDE.md, GitHub Copilot repository instructions, GEMINI.md, Cline, Cursor, Continue, Roo Code, and Devin Desktop rules. This is representative coverage, not a claim that every agent-specific settings file is a reusable specification. Use [`COVERAGE.md`](COVERAGE.md) and [`BACKLOG.md`](../BACKLOG.md) for the next research boundary.
+The catalog covers tool and context integration, agent interaction, user interfaces, editor clients, web-page tools, identity and discovery, agent transactions, capability and plugin packaging, plus a bounded set of repository-instruction conventions. OASF is classified as a metadata schema rather than a wire protocol. WebMCP is an evolving Community Group Report, not labeled a W3C Standard. AP2, UCP, and Commerce ACP remain separate because authorization evidence, cross-platform commerce, and agent-to-seller checkout answer different integration questions. The two ACP records use distinct display names: ACP for Agent Client Protocol and Commerce ACP for Agentic Commerce Protocol.
+
+Instruction-convention coverage includes AGENTS.md, CLAUDE.md, GitHub Copilot repository instructions, GEMINI.md, Cline, Cursor, Continue, Roo Code, and Devin Desktop rules. This is representative coverage, not a claim that every agent-specific settings file is reusable. Remaining high-value research gaps include cross-protocol authentication and authorization profiles, workflow-state exchange beyond task messaging, and protocol conformance or implementation evidence. Use [`COVERAGE.md`](COVERAGE.md) and [`BACKLOG.md`](../BACKLOG.md) for the next bounded pass.

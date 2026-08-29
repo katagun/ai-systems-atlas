@@ -20,7 +20,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 Run `uv run python scripts/sync_web_data.py` after manually changing published data.
 
-The browser presents projects and inference services through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes either canonical schema or makes their scores comparable. See [ADR 012](adr/012-distinct-collections-share-one-directory-surface.md).
+The browser presents projects and inference services through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes either canonical schema or makes their scores comparable. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
 
 ## Project record
 
@@ -111,4 +111,4 @@ Inference-service records are independent from project and specification records
 - **Terms and evidence:** one dated governing-terms record plus non-empty dated authoritative evidence.
 - **Review:** both the record and collection carry `verified_at` dates.
 
-Strict validation rejects extra fields such as copied price tables or model inventories and verifies every score against the taxonomy weights. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md), and [ADR 012](adr/012-distinct-collections-share-one-directory-surface.md).
+Strict validation rejects extra fields such as copied price tables or model inventories and verifies every score against the taxonomy weights. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).

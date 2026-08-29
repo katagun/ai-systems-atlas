@@ -1,4 +1,4 @@
-# ADR 013: Comparisons are scoped to one score profile
+# ADR 014: Comparisons are scoped to one score profile
 
 **Status:** Accepted
 

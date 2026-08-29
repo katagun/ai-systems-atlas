@@ -99,18 +99,22 @@
   },
   "specification_types": [
     {"id": "protocol", "name": "Protocol", "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."},
+    {"id": "metadata_schema", "name": "Metadata schema", "definition": "A versioned machine-readable vocabulary for describing identity, capabilities, domains, locators, or other discoverable metadata."},
     {"id": "instruction_convention", "name": "Instruction convention", "definition": "A file-naming and discovery convention that gives agents repository or project guidance without defining a wire protocol."},
     {"id": "capability_format", "name": "Capability format", "definition": "A portable package format for instructions, metadata, scripts, and resources that teach an agent a reusable capability."},
     {"id": "package_format", "name": "Package format", "definition": "A distributable bundle contract that composes capabilities, commands, agents, hooks, or integrations."}
   ],
   "specification_scopes": [
     {"id": "tool_data_integration", "name": "Tool and data integration", "definition": "Connects model applications to tools, resources, prompts, and external data."},
+    {"id": "web_agent_integration", "name": "Web and agent integration", "definition": "Lets web pages expose structured, user-mediated capabilities to browser or embedded agents."},
     {"id": "agent_interaction", "name": "Agent-to-agent interaction", "definition": "Supports discovery, task delegation, messages, artifacts, and lifecycle between independent agents."},
+    {"id": "agent_identity_discovery", "name": "Agent identity and discovery", "definition": "Describes agent identity, capabilities, endpoints, and discovery metadata across independently operated systems."},
     {"id": "agent_user_interaction", "name": "Agent–user interaction", "definition": "Streams agent state, events, actions, and human input between a runtime and user-facing application."},
     {"id": "agent_client_integration", "name": "Agent–client integration", "definition": "Connects coding agents to editors, IDEs, and other interactive clients."},
     {"id": "project_instructions", "name": "Project instructions", "definition": "Supplies persistent repository or workspace guidance to compatible coding agents."},
     {"id": "capability_packaging", "name": "Capability packaging", "definition": "Packages focused, reusable agent capabilities with progressive context loading."},
-    {"id": "plugin_packaging", "name": "Plugin packaging", "definition": "Bundles multiple agent extensions behind one installable manifest and directory layout."}
+    {"id": "plugin_packaging", "name": "Plugin packaging", "definition": "Bundles multiple agent extensions behind one installable manifest and directory layout."},
+    {"id": "agent_transactions", "name": "Agent transactions", "definition": "Coordinates commerce, authorization, checkout, payment, receipt, or order evidence between users, agents, merchants, and payment parties."}
   ],
   "specification_statuses": [
     {"id": "published", "name": "Published", "definition": "A named release or stable published specification is available."},
@@ -233,6 +237,7 @@
     {"id": "Unlicense", "name": "The Unlicense", "kind": "open_source"},
     {"id": "OFL-1.1", "name": "SIL Open Font License 1.1", "kind": "open_content"},
     {"id": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0", "kind": "open_content"},
+    {"id": "LicenseRef-W3C-Software-Document", "name": "W3C Software and Document License", "kind": "open_content"},
     {"id": "LicenseRef-Commercial", "name": "Commercial or production-restricted terms", "kind": "restricted"},
     {"id": "LicenseRef-Proprietary", "name": "Proprietary", "kind": "proprietary"},
     {"id": "LicenseRef-Unclear", "name": "Unclear or unresolved terms", "kind": "unclear"}

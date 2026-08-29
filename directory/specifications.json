@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-08-25",
+  "verified_at": "2026-08-28",
   "specifications": [
     {
       "id": "mcp",
@@ -18,7 +18,7 @@
       "does_not_standardize": "Agent-to-agent task delegation, an agent runtime, or how applications rank and use retrieved context.",
       "licenses": ["Apache-2.0", "MIT", "CC-BY-4.0"],
       "license_note": "The repository documents a transition: the current specification and new contributions use Apache-2.0, earlier contributions retain MIT, and non-specification documentation uses CC BY 4.0.",
-      "related_specifications": ["a2a", "ag-ui"],
+      "related_specifications": ["a2a", "ag-ui", "webmcp"],
       "evidence": [
         {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification/2026-07-28/index.mdx", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/index.mdx", "blob_sha": "452d78601b135b95bbe45287e756c0579534096b", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/452d78601b135b95bbe45287e756c0579534096b"},
         {"kind": "web", "label": "Current specification", "url": "https://modelcontextprotocol.io/specification/latest", "verified_at": "2026-08-25"}
@@ -46,7 +46,7 @@
       "does_not_standardize": "Tool access inside an agent, the agent's internal planner, or front-end event rendering.",
       "licenses": ["Apache-2.0"],
       "license_note": "The specification repository is licensed under Apache-2.0.",
-      "related_specifications": ["mcp", "ag-ui"],
+      "related_specifications": ["mcp", "ag-ui", "anp"],
       "evidence": [
         {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.md", "url": "https://github.com/a2aproject/A2A/blob/main/docs/specification.md", "blob_sha": "6d38bbfb03a036371cf03cca1331a510f603c1e9", "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/6d38bbfb03a036371cf03cca1331a510f603c1e9"},
         {"kind": "web", "label": "Published specification", "url": "https://a2a-protocol.org/latest/specification/", "verified_at": "2026-08-25"}
@@ -399,6 +399,163 @@
         {"license_id": "CC-BY-4.0", "scope": "Specification and documentation", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"}
       ],
       "verified_at": "2026-08-25"
+    },
+    {
+      "id": "webmcp",
+      "name": "WebMCP",
+      "short_name": "WebMCP",
+      "specification_type": "protocol",
+      "scope": "web_agent_integration",
+      "status": "evolving",
+      "current_version": null,
+      "stewards": ["Web Machine Learning Community Group", "W3C Community Group contributors"],
+      "repo": "webmachinelearning/webmcp",
+      "url": "https://webmachinelearning.github.io/webmcp/",
+      "description": "A browser API that lets web applications expose structured JavaScript and form-based tools to AI agents.",
+      "standardizes": "Registration, discovery, description, schema, invocation, cancellation, and lifecycle behavior for tools exposed by a web document to browser or embedded agents.",
+      "does_not_standardize": "Remote MCP transports, an agent runtime, generic browser automation, or the application-specific semantics and authorization policy behind each web tool.",
+      "licenses": ["LicenseRef-W3C-Software-Document"],
+      "license_note": "Reports in the repository use the W3C Software and Document License; the draft is a Community Group Report, not a W3C Standard or Standards Track document.",
+      "related_specifications": ["mcp"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed draft specification source", "path": "index.bs", "url": "https://github.com/webmachinelearning/webmcp/blob/main/index.bs", "blob_sha": "241bb2c014b10a646649cd2a0d147498925aa63a", "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/241bb2c014b10a646649cd2a0d147498925aa63a"},
+        {"kind": "web", "label": "Current Community Group Report", "url": "https://webmachinelearning.github.io/webmcp/", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "LicenseRef-W3C-Software-Document", "scope": "Reports in the specification repository", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/webmachinelearning/webmcp/blob/main/LICENSE.md", "blob_sha": "cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e", "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "oasf",
+      "name": "Open Agentic Schema Framework",
+      "short_name": "OASF",
+      "specification_type": "metadata_schema",
+      "scope": "agent_identity_discovery",
+      "status": "published",
+      "current_version": "1.1.0",
+      "stewards": ["AGNTCY project", "Linux Foundation"],
+      "repo": "agntcy/oasf",
+      "url": "https://docs.agntcy.org/oasf/agent-record-guide/",
+      "description": "A versioned schema and taxonomy for describing agent records, capabilities, domains, modules, and locators.",
+      "standardizes": "Agent-record metadata, skill and domain taxonomies, extensible modules, locators, versioning, and validation used to announce and discover agent capabilities.",
+      "does_not_standardize": "A discovery network or registry transport, cryptographic identity proof, agent-to-agent task lifecycle, authentication, or an agent runtime.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The schema, server, and documentation repository are licensed under Apache-2.0.",
+      "related_specifications": ["anp"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed schema overview", "path": "README.md", "url": "https://github.com/agntcy/oasf/blob/main/README.md", "blob_sha": "ed1e875c47e68b9cde7c35b84f5c204800d7bbaf", "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/ed1e875c47e68b9cde7c35b84f5c204800d7bbaf"},
+        {"kind": "web", "label": "Agent Record guide", "url": "https://docs.agntcy.org/oasf/agent-record-guide/", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Schema, server, and documentation repository", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agntcy/oasf/blob/main/LICENSE.md", "blob_sha": "9ec4c8665ad828cfbc361cdc19fa38beb9884a36", "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/9ec4c8665ad828cfbc361cdc19fa38beb9884a36"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "anp",
+      "name": "Agent Network Protocol",
+      "short_name": "ANP",
+      "specification_type": "protocol",
+      "scope": "agent_identity_discovery",
+      "status": "published",
+      "current_version": "1.1",
+      "stewards": ["Agent Network Protocol project"],
+      "repo": "agent-network-protocol/AgentNetworkProtocol",
+      "url": "https://agent-network-protocol.com/specs/1.1/instant-messaging",
+      "description": "An open protocol stack for decentralized agent identity, service discovery, secure messaging, and cross-domain communication.",
+      "standardizes": "DID-based agent and group identity, endpoint and capability discovery, message bindings, direct and group messaging profiles, attachments, proofs, and optional encryption overlays.",
+      "does_not_standardize": "An agent's internal planner or tools, a universal runtime, implementation-specific replica state, or every domain-specific application protocol.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The specification repository is licensed under Apache-2.0.",
+      "related_specifications": ["a2a", "oasf"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed protocol-suite overview", "path": "README.md", "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/README.md", "blob_sha": "b38680b1057aef15e526f005922b0fa210b0b8a8", "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/b38680b1057aef15e526f005922b0fa210b0b8a8"},
+        {"kind": "web", "label": "Released 1.1 identity and discovery profile", "url": "https://agent-network-protocol.com/specs/1.1/message/identity-discovery", "verified_at": "2026-08-28"},
+        {"kind": "web", "label": "Released 1.1 messaging profile set", "url": "https://agent-network-protocol.com/specs/1.1/instant-messaging", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Specification repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/LICENSE", "blob_sha": "3c09476e8c4d4c2031bf98c6735e1f06d188a8b6", "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/3c09476e8c4d4c2031bf98c6735e1f06d188a8b6"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "ap2",
+      "name": "Agent Payments Protocol",
+      "short_name": "AP2",
+      "specification_type": "protocol",
+      "scope": "agent_transactions",
+      "status": "evolving",
+      "current_version": "0.2.0",
+      "stewards": ["AP2 project", "Google", "FIDO Alliance working groups"],
+      "repo": "google-agentic-commerce/AP2",
+      "url": "https://ap2-protocol.org/ap2/specification/",
+      "description": "A payment-security protocol for proving a user's authorization and preserving evidence when an agent performs a transaction.",
+      "standardizes": "Participant roles, checkout and payment mandates, receipts, human-present and autonomous authorization modes, verification responsibilities, and dispute evidence.",
+      "does_not_standardize": "Catalog, cart, or checkout APIs; transport; the underlying payment rail; merchant fulfillment; or an agent's planning behavior.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The specification, SDK, and samples repository is licensed under Apache-2.0.",
+      "related_specifications": ["ucp"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed AP2 v0.2 specification", "path": "docs/ap2/specification.md", "url": "https://github.com/google-agentic-commerce/AP2/blob/main/docs/ap2/specification.md", "blob_sha": "80a6dd354d2062a512281e32df42b0233af27c8f", "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/80a6dd354d2062a512281e32df42b0233af27c8f"},
+        {"kind": "web", "label": "Published AP2 specification", "url": "https://ap2-protocol.org/ap2/specification/", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Specification, SDK, and samples repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/google-agentic-commerce/AP2/blob/main/LICENSE", "blob_sha": "ff9ad4530f5716304e042cbac72cecd7c40f0e0e", "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/ff9ad4530f5716304e042cbac72cecd7c40f0e0e"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "ucp",
+      "name": "Universal Commerce Protocol",
+      "short_name": "UCP",
+      "specification_type": "protocol",
+      "scope": "agent_transactions",
+      "status": "published",
+      "current_version": "2026-04-08",
+      "stewards": ["Universal Commerce Protocol project", "UCP Governing Council"],
+      "repo": "Universal-Commerce-Protocol/ucp",
+      "url": "https://ucp.dev/latest/specification/overview/",
+      "description": "A commerce protocol for capability discovery and interoperable shopping flows across agents, applications, businesses, and payment providers.",
+      "standardizes": "Business and platform profiles, capability negotiation, checkout, orders, identity linking, and payment-token exchange across supported commerce transports.",
+      "does_not_standardize": "The user's cryptographic authorization mandate, product recommendation ranking, an agent runtime, merchant-specific business logic, or underlying payment settlement.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The specification and documentation repository is licensed under Apache-2.0.",
+      "related_specifications": ["ap2", "agentic-commerce-protocol"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed core concepts", "path": "docs/documentation/core-concepts.md", "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/docs/documentation/core-concepts.md", "blob_sha": "6c20944f288f8bcb6758e0a283b0919f662b7359", "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/6c20944f288f8bcb6758e0a283b0919f662b7359"},
+        {"kind": "web", "label": "Current UCP specification", "url": "https://ucp.dev/latest/specification/overview/", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Specification and documentation repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/LICENSE", "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7", "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"}
+      ],
+      "verified_at": "2026-08-28"
+    },
+    {
+      "id": "agentic-commerce-protocol",
+      "name": "Agentic Commerce Protocol",
+      "short_name": "Commerce ACP",
+      "specification_type": "protocol",
+      "scope": "agent_transactions",
+      "status": "published",
+      "current_version": "2026-04-17",
+      "stewards": ["Agentic Commerce Protocol project", "OpenAI", "Stripe"],
+      "repo": "agentic-commerce-protocol/agentic-commerce-protocol",
+      "url": "https://www.agenticcommerce.dev/docs",
+      "description": "An open interaction model for buyers, agents, sellers, and payment providers to complete programmatic purchases.",
+      "standardizes": "Checkout-session APIs, capability negotiation, carts and item feeds, orders, authentication metadata, payment handlers, credential delegation, schemas, examples, and webhooks.",
+      "does_not_standardize": "General agent-to-agent messaging, product discovery ranking, a universal payment-authorization mandate, underlying payment rails, or merchant fulfillment operations.",
+      "licenses": ["Apache-2.0"],
+      "license_note": "The RFC, OpenAPI, JSON Schema, examples, and documentation repository is licensed under Apache-2.0.",
+      "related_specifications": ["ucp"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Reviewed agentic-checkout RFC", "path": "rfcs/rfc.agentic_checkout.md", "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/rfcs/rfc.agentic_checkout.md", "blob_sha": "2cf252233c74025e73cb59604e1d3562eb2fcbea", "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/2cf252233c74025e73cb59604e1d3562eb2fcbea"},
+        {"kind": "web", "label": "Current protocol documentation", "url": "https://www.agenticcommerce.dev/docs", "verified_at": "2026-08-28"}
+      ],
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Protocol specification and documentation repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/LICENSE", "blob_sha": "c61b66391a3c1545c8c274bc6d7d764bafb84993", "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/c61b66391a3c1545c8c274bc6d7d764bafb84993"}
+      ],
+      "verified_at": "2026-08-28"
     }
   ]
 }
