@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("121 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("128 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -26,12 +26,87 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
   );
 });
 
-test("the atlas orbital field spans the four landscape nodes", async ({ page }) => {
+test("the atlas orbital field spans the five landscape nodes", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.locator(".atlas-map .map-node")).toHaveCount(4);
-  await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(4);
+  await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
+  await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+});
+
+test("the local runtimes scope filters, sorts, and opens its own detail dialog", async ({ page }) => {
+  await page.goto("/?collection=runtimes");
+
+  await expect(page.getByRole("button", { name: /^Local runtimes / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#runtime-result-count")).toContainText("Local-runtime score");
+  const names = page.locator("#runtime-grid .project-card h2");
+  await expect(names.first()).toHaveText("vLLM");
+
+  await page.locator("#runtime-type-filter").selectOption("desktop_runner");
+  await expect(names).toHaveCount(2);
+  await page.locator("#runtime-accelerator-filter").selectOption("vulkan");
+  await expect(names).toHaveText(["LM Studio"]);
+
+  await page.locator("#reset-runtime-filters").click();
+  await page.locator("#runtime-sort-filter").selectOption("name");
+  await expect(names.first()).toHaveText("llama.cpp");
+
+  await page.locator("#runtime-search").fill("Ollama Cloud");
+  await expect(names).toHaveText(["Ollama"]);
+  await page.locator('#runtime-grid [data-local-runtime="ollama"]').click();
+  await expect(page.locator("#runtime-dialog")).toBeVisible();
+  await expect(page.locator("#runtime-dialog-content .eyebrow")).toContainText("Local-runtime score");
+  await expect(page.locator("#runtime-dialog-content")).toContainText("Runtime boundary");
+});
+
+test("local runtimes compare inside their own profile and clear across scopes", async ({ page }) => {
+  await page.goto("/?collection=runtimes");
+
+  await page.locator('#runtime-grid .compare-toggle').nth(0).click();
+  await page.locator('#runtime-grid .compare-toggle').nth(1).click();
+  await expect(page).toHaveURL(/compare=runtime%3A|compare=runtime:/);
+  await page.locator("#comparison-open").click();
+  await expect(page.locator("#comparison-dialog")).toBeVisible();
+  await expect(page.locator("#comparison-dialog .eyebrow")).toHaveText("Local-runtime score");
+  await page.locator("#comparison-dialog .dialog-close").click();
+
+  await page.getByRole("button", { name: /^Inference services / }).click();
+  await expect(page.locator("#comparison-tray")).toBeHidden();
+  await expect(page).not.toHaveURL(/compare=/);
+});
+
+test("a cross-profile comparison URL is discarded rather than partially restored", async ({ page }) => {
+  await page.goto("/?compare=runtime:ollama,openai-api");
+
+  await expect(page).not.toHaveURL(/compare=/);
+  await expect(page.locator("#comparison-dialog")).toBeHidden();
+});
+
+test("mixed browsing surfaces local runtimes without scores or comparison", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#all-directory-search").fill("SGLang");
+  await expect(page.locator("#all-directory-grid .local-runtime-card h2")).toHaveText("SGLang");
+  await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
+  await expect(page.locator("#all-directory-grid .compare-toggle")).toHaveCount(0);
+  await page.locator("#all-directory-grid [data-local-runtime]").click();
+  await expect(page.locator("#runtime-dialog")).toBeVisible();
+});
+
+test("the finder guides a local runtime path into the runtimes scope", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "Atlas Finder" }).click();
+  await page.locator('[data-finder-choice][data-finder-value="local_runtime"]').click();
+  await page.locator('[data-finder-choice][data-finder-value="serve_workload"]').click();
+  await page.locator('[data-finder-choice][data-finder-value="hardware"]').click();
+
+  await expect(page.locator(".finder-result h3").first()).toHaveText("vLLM");
+  await expect(page.locator(".finder-result-footer span").first()).toContainText("local-runtime score");
+
+  await page.locator("[data-finder-directory]").click();
+  await expect(page).toHaveURL(/collection=runtimes/);
+  await expect(page.locator("#runtime-type-filter")).toHaveValue("server_engine");
 });
 
 test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {

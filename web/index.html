@@ -38,24 +38,26 @@
         <div class="hero-copy-block">
           <p class="eyebrow" id="hero-kicker">Reviewed systems and services</p>
           <h1 id="directory-title">Find the AI layer <span>that fits.</span></h1>
-          <p class="hero-copy">Explore operational systems and the managed services that run model inference—without mixing their score profiles.</p>
+          <p class="hero-copy">Explore operational systems, the managed services that run model inference, and the runtimes you host yourself—without mixing their score profiles.</p>
           <button class="hero-action" data-open-tab="finder">Need a starting point? Use the finder <span aria-hidden="true">→</span></button>
         </div>
         <div class="atlas-map" aria-hidden="true">
           <div class="map-toolbar"><span>ATLAS / LIVE INDEX</span><span class="map-status">EVIDENCE REVIEWED</span></div>
           <div class="map-field">
-            <span class="map-axis map-axis-x">SYSTEM + SERVICE LANDSCAPE</span>
+            <span class="map-axis map-axis-x">SYSTEM, SERVICE + RUNTIME LANDSCAPE</span>
             <span class="map-axis map-axis-y">OPERATIONAL FIT</span>
             <span class="map-node map-memory"><i></i><b>MEMORY</b><small>retain · retrieve</small></span>
             <span class="map-node map-inference"><i></i><b>INFERENCE</b><small>serve · route</small></span>
             <span class="map-node map-agent"><i></i><b>AGENTS</b><small>plan · execute</small></span>
             <span class="map-node map-assistant"><i></i><b>ASSISTANTS</b><small>interact · create</small></span>
+            <span class="map-node map-runtime"><i></i><b>RUNTIMES</b><small>host · execute</small></span>
             <span class="map-orbit orbit-one"></span>
             <span class="map-orbit orbit-two"></span>
             <span class="map-orbit orbit-three"></span>
             <span class="map-orbit orbit-four"></span>
+            <span class="map-orbit orbit-five"></span>
           </div>
-          <div class="map-legend"><span><i class="legend-memory"></i> systems</span><span><i class="legend-inference"></i> inference</span><span><i class="legend-specs"></i> specs</span></div>
+          <div class="map-legend"><span><i class="legend-memory"></i> systems</span><span><i class="legend-inference"></i> inference</span><span><i class="legend-runtime"></i> runtimes</span><span><i class="legend-specs"></i> specs</span></div>
         </div>
       </div>
 
@@ -64,6 +66,7 @@
         <button class="is-active" data-directory-collection="all" aria-pressed="true"><span>All</span><strong id="all-collection-count"></strong></button>
         <button data-directory-collection="systems" aria-pressed="false"><span>Systems</span><strong id="system-collection-count"></strong></button>
         <button data-directory-collection="inference" aria-pressed="false"><span>Inference services</span><strong id="inference-collection-count"></strong></button>
+        <button data-directory-collection="runtimes" aria-pressed="false"><span>Local runtimes</span><strong id="runtime-collection-count"></strong></button>
       </nav>
 
       <div id="all-directory-panel" class="collection-panel">
@@ -110,6 +113,20 @@
         </section>
         <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
         <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
+      </div>
+
+      <div id="runtimes-directory-panel" class="collection-panel" hidden>
+        <section class="control-panel inference-controls" aria-label="Local runtime filters">
+          <label class="search-field"><span>Search</span><input id="runtime-search" type="search" placeholder="Search runtimes and boundaries" autocomplete="off"></label>
+          <label><span>Type</span><select id="runtime-type-filter"><option value="">All types</option></select></label>
+          <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
+          <label><span>Model format</span><select id="runtime-format-filter"><option value="">All model formats</option></select></label>
+          <label><span>API style</span><select id="runtime-api-filter"><option value="">All API styles</option></select></label>
+          <label><span>Sort</span><select id="runtime-sort-filter"><option value="score" selected>Runtime score</option><option value="name">Name</option></select></label>
+          <p class="filter-guidance">Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
+        </section>
+        <div class="result-row"><p id="runtime-result-count" aria-live="polite"></p><button id="reset-runtime-filters" class="ghost-button">Clear filters</button></div>
+        <section id="runtime-grid" class="project-grid inference-grid" aria-label="Reviewed local runtimes"></section>
       </div>
     </section>
 
@@ -173,6 +190,11 @@
   <dialog id="inference-dialog">
     <button class="dialog-close" aria-label="Close">×</button>
     <div id="inference-dialog-content"></div>
+  </dialog>
+
+  <dialog id="runtime-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="runtime-dialog-content"></div>
   </dialog>
 
   <aside id="comparison-tray" class="comparison-tray" aria-label="Comparison selection" hidden>
