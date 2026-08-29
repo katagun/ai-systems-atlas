@@ -1415,6 +1415,26 @@
           "immutable_url": "https://api.github.com/repos/genkit-ai/genkit/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
         }
       ]
+    },
+    {
+      "project_id": "mistral-vibe",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Consumer terms of service governing Vibe for users established in the European Union",
+          "kind": "web_terms",
+          "url": "https://legal.mistral.ai/terms/eu-consumers-terms-of-service",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Privacy policy governing personal data processing for Mistral consumer products",
+          "kind": "web_terms",
+          "url": "https://legal.mistral.ai/terms/privacy-policy",
+          "verified_at": "2026-08-29"
+        }
+      ]
     }
   ]
 }

@@ -7571,6 +7571,81 @@
         "anthropic",
         "local_runtime"
       ]
+    },
+    {
+      "id": "mistral-vibe",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Mistral Vibe",
+      "repo": null,
+      "url": "https://mistral.ai/products/le-chat",
+      "description": "Mistral's end-user chat assistant for work and code, covering web search, document and spreadsheet analysis, document creation, workflow automation, repository-connected coding, and broad tool connectivity.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "service-managed conversations, settings, connected-tool context, generated documents, and code changes in connected repositories",
+      "deployment": [
+        "mobile",
+        "managed_cloud",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "Mistral renamed Le Chat to Vibe and states that conversations, settings, and plans carry over. This record covers the end-user assistant; Mistral AI Studio and the Mistral API remain distinct boundaries.",
+      "score": {
+        "task_reliability": 7.2,
+        "context_continuity": 6.8,
+        "tools_integrations": 8.0,
+        "human_control": 7.5,
+        "data_governance": 7.5,
+        "interoperability": 7.8,
+        "usability_access": 7.5,
+        "maturity": 7.0,
+        "overall": 7.39
+      },
+      "strengths": [
+        "A French-incorporated provider under EU consumer terms gives European buyers a governance and jurisdiction boundary distinct from the US-operated assistants already in the catalogue",
+        "Enterprise plans document on-premises, private-cloud, and Mistral Cloud deployment with data residency, which is unusual for an end-user assistant product",
+        "Documents full MCP compatibility alongside repository integrations for GitHub, GitLab, and Jira, so the assistant reaches existing developer workflows"
+      ],
+      "weaknesses": [
+        "Training on user data is governed by an opt-out rather than an opt-in, so the default posture requires an explicit user action to change",
+        "The product was renamed from Le Chat to Vibe, so documentation, third-party guides, and support material are inconsistent about the product name",
+        "Durable project and memory behaviour is less clearly documented than in the longest-established assistants, which limits confidence in context continuity"
+      ],
+      "why_it_matters": "Adds a European-governed general assistant whose enterprise path includes self-hosted and residency-bound deployment, a materially different governance boundary from the US provider assistants that dominate the family.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "mistral"
+      ]
     }
   ]
 }
