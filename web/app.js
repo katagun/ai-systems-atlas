@@ -16,10 +16,11 @@ const label = value => String(value || "")
   .replace(/\bAi\b/g, "AI");
 const projectLocation = project => project.repo || new URL(project.url).hostname.replace(/^www\./, "");
 
-const FINDER_FAMILIES = [
+const FINDER_DIRECTIONS = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
   { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
-  { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" }
+  { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" },
+  { id: "inference_service", label: "Serve and route models", description: "A managed API, cloud platform, model host, or routing layer for production inference.", cue: "I need an inference service" }
 ];
 
 const FINDER_GOALS = {
@@ -43,6 +44,12 @@ const FINDER_GOALS = {
     { id: "general_assistance", label: "Use one broad AI workspace", description: "A general assistant for research, files, creation, memory, and connected tools.", roles: ["general_ai_assistant"] },
     { id: "enterprise_work", label: "Work across organizational context", description: "A governed assistant grounded in company data, applications, and business actions.", roles: ["enterprise_work_assistant"] },
     { id: "model_choice", label: "Use several models in one place", description: "A consistent chat workspace with first-class model and provider choice.", roles: ["multi_model_chat_client"] }
+  ],
+  inference_service: [
+    { id: "model_developer_api", label: "Use a model developer's API", description: "Call first-party model families through their developer's managed service.", serviceTypes: ["direct_model_api"] },
+    { id: "cloud_governance", label: "Deploy through my cloud platform", description: "Use cloud-native identity, regions, networking, and models from several publishers.", serviceTypes: ["cloud_model_platform"] },
+    { id: "host_models", label: "Host selected or custom models", description: "Serve open-weight, third-party, or customer-supplied models on managed infrastructure.", serviceTypes: ["managed_inference_host"] },
+    { id: "route_models", label: "Route across models and providers", description: "Use one API with provider selection, fallback, or routing policy.", serviceTypes: ["routing_aggregator"] }
   ]
 };
 
@@ -67,6 +74,13 @@ const FINDER_PRIORITIES = {
     { id: "governance", label: "Control and governance", description: "Prefer strong consent, retention, administration, privacy, and deletion controls." },
     { id: "portable", label: "Model and data portability", description: "Prefer model choice, export, APIs, protocols, and open connectors." },
     { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+  ],
+  inference_service: [
+    { id: "governance", label: "Data governance", description: "Prefer documented retention, training-use, privacy, deletion, and tenant controls." },
+    { id: "regions", label: "Regional deployment control", description: "Prefer explicit processing regions, network boundaries, and isolated placement." },
+    { id: "portable", label: "API and serving flexibility", description: "Prefer portable interfaces and several documented capacity or deployment modes." },
+    { id: "resilience", label: "Traffic resilience", description: "Prefer documented routing, fallback, recovery, or multi-region traffic controls." },
+    { id: "balanced", label: "Best balanced fit", description: "Use the inference-service editorial score as the main tie-breaker." }
   ]
 };
 
@@ -108,6 +122,7 @@ function taxonomyName(group, id) {
   return state.taxonomy[group].find(item => item.id === id)?.name || label(id);
 }
 const familyName = id => taxonomyName("system_families", id);
+const finderDirectionName = id => id === "inference_service" ? "Inference services" : familyName(id);
 const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
@@ -501,15 +516,15 @@ function renderFinder() {
   const { step, answers } = state.finder;
   let content;
   if (step === 0) {
-    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, or assist interactively across everyday tasks.</p></div>
-      <div class="finder-choice-grid family-grid">${FINDER_FAMILIES.map(item => finderChoice("family", item)).join("")}</div>`;
+    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, assist interactively, or serve models through a managed inference layer.</p></div>
+      <div class="finder-choice-grid direction-grid">${FINDER_DIRECTIONS.map(item => finderChoice("direction", item)).join("")}</div>`;
   } else if (step === 1) {
-    const choices = FINDER_GOALS[answers.family];
-    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(familyName(answers.family))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
+    const choices = FINDER_GOALS[answers.direction];
+    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
   } else if (step === 2) {
-    const choices = FINDER_PRIORITIES[answers.family];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking within the selected family.</p></div>
+    const choices = FINDER_PRIORITIES[answers.direction];
+    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
     content = renderFinderResults();
@@ -519,6 +534,13 @@ function renderFinder() {
 }
 
 function priorityBoost(project, priority) {
+  if (!project.system_family) {
+    if (priority === "governance") return project.score.data_governance / 2;
+    if (priority === "regions") return project.score.regional_deployment_control / 2;
+    if (priority === "portable") return project.score.api_interoperability / 2 + project.score.serving_flexibility / 4;
+    if (priority === "resilience") return project.score.traffic_resilience / 2 + project.score.operational_maturity / 4;
+    return project.score.overall / 3;
+  }
   if (project.system_family === "memory_system") {
     if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
     if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + project.score.data_sovereignty / 10;
@@ -541,6 +563,15 @@ function priorityBoost(project, priority) {
 }
 
 function recommendationReasons(project, priority) {
+  if (!project.system_family) {
+    const reasons = [taxonomyName("inference_service_types", project.service_type)];
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
+    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control}/10`);
+    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability}/10`, `Serving flexibility ${project.score.serving_flexibility}/10`);
+    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience}/10`);
+    reasons.push(...project.delivery_modes.slice(0, 2).map(item => taxonomyName("inference_delivery_modes", item)));
+    return [...new Set(reasons)].slice(0, 4);
+  }
   const reasons = [roleName(project.primary_role)];
   if (project.local_first) reasons.push("Local-first");
   if (project.system_family === "memory_system") {
@@ -560,14 +591,17 @@ function recommendationReasons(project, priority) {
   return [...new Set(reasons)].slice(0, 4);
 }
 
-function recommendedProjects() {
-  const { family, goal, priority } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
-  return state.projects
-    .filter(project => project.status === "active" && project.system_family === family && goalConfig.roles.includes(project.primary_role))
+function recommendedFinderRecords() {
+  const { direction, goal, priority } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
+  const records = direction === "inference_service" ? state.inferenceServices : state.projects;
+  return records
+    .filter(project => direction === "inference_service"
+      ? goalConfig.serviceTypes.includes(project.service_type)
+      : project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role))
     .map(project => {
-      const roleIndex = goalConfig.roles.indexOf(project.primary_role);
-      const match = 6 - roleIndex * 0.4 + project.score.overall * 0.2 + priorityBoost(project, priority);
+      const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type) : goalConfig.roles.indexOf(project.primary_role);
+      const match = 6 - classificationIndex * 0.4 + project.score.overall * 0.2 + priorityBoost(project, priority);
       return { project, match, reasons: recommendationReasons(project, priority) };
     })
     .sort((a, b) => b.match - a.match || b.project.score.overall - a.project.score.overall || a.project.name.localeCompare(b.project.name))
@@ -575,29 +609,41 @@ function recommendedProjects() {
 }
 
 function renderFinderResults() {
-  const { family, goal, priority } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
-  const priorityConfig = FINDER_PRIORITIES[family].find(item => item.id === priority);
-  const results = recommendedProjects();
-  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(familyName(family).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
-    <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family)}">
+  const { direction, goal, priority } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
+  const priorityConfig = FINDER_PRIORITIES[direction].find(item => item.id === priority);
+  const results = recommendedFinderRecords();
+  const isInference = direction === "inference_service";
+  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(finderDirectionName(direction).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
+    <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || "inference_service")}">
       <div class="finder-rank">0${index + 1}</div>
-      <div><p class="family-label">${escapeHTML(roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
-        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}</div>
+      <div><p class="family-label">${escapeHTML(isInference ? taxonomyName("inference_service_types", project.service_type) : roleName(project.primary_role))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
+        <div class="license-row">${isInference ? `<span class="source-badge">${escapeHTML(project.operator)}</span><span class="license-badge">${escapeHTML(project.terms.label)}</span>` : `<span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}`}</div>
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
-      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(project.weaknesses[0])}</p>
-      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(project.score_profile)} score</span><button data-finder-project="${escapeHTML(project.id)}">View details →</button></div>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference ? project.tradeoffs[0] : project.weaknesses[0])}</p>
+      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(isInference ? "inference-service" : project.score_profile)} score</span><button ${isInference ? "data-finder-inference" : "data-finder-project"}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
 
 function applyFinderToDirectory() {
-  const { family, goal, priority } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[family].find(item => item.id === goal);
+  const { direction, goal } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
   clearComparison();
+  if (direction === "inference_service") {
+    $("#inference-search").value = "";
+    $("#inference-type-filter").value = goalConfig.serviceTypes[0];
+    $("#inference-delivery-filter").value = "";
+    $("#inference-model-source-filter").value = "";
+    $("#inference-api-filter").value = "";
+    $("#inference-sort-filter").value = "score";
+    setDirectoryCollection("inference");
+    activateView("directory");
+    return;
+  }
   $("#project-search").value = "";
-  $("#family-filter").value = family;
+  $("#family-filter").value = direction;
   populateRoleFilter();
   state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
@@ -854,7 +900,7 @@ function bindEvents() {
     if (choice) {
       const key = choice.dataset.finderChoice;
       state.finder.answers[key] = choice.dataset.finderValue;
-      if (key === "family") {
+      if (key === "direction") {
         delete state.finder.answers.goal;
         delete state.finder.answers.priority;
       } else if (key === "goal") {
@@ -879,6 +925,11 @@ function bindEvents() {
     const projectButton = event.target.closest("[data-finder-project]");
     if (projectButton) {
       openProject(projectButton.dataset.finderProject);
+      return;
+    }
+    const inferenceButton = event.target.closest("[data-finder-inference]");
+    if (inferenceButton) {
+      openInferenceService(inferenceButton.dataset.finderInference);
       return;
     }
     if (event.target.closest("[data-finder-directory]")) applyFinderToDirectory();

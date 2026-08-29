@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status and remain unscored. Inference services are classified by service type, delivery mode, model-source scope, and API style, then compared through their own operational-service score profile. That score is not comparable to any system-family score. Systems and inference services share the Directory browsing surface without sharing schemas or rankings. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 011](adr/011-inference-services-use-a-dedicated-score-profile.md), and [ADR 012](adr/012-distinct-collections-share-one-directory-surface.md).
+Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status and remain unscored. Inference services are classified by service type, delivery mode, model-source scope, and API style, then compared through their own operational-service score profile. That score is not comparable to any system-family score. Systems and inference services share the Directory browsing surface without sharing schemas or rankings. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
 
 ## Family 1: memory systems
 
@@ -57,13 +57,13 @@ Specifications are also never inserted into this ranking. A protocol can be matu
 
 ## Guided finder
 
-The web finder is a transparent decision flow over this taxonomy:
+The Atlas Finder is a transparent decision flow over the operational collections:
 
-1. choose the memory, agent, or assistant family;
-2. choose a desired job, which maps to one or more primary roles;
-3. choose a priority such as local control, interoperability, operational simplicity, developer composability, or human control and recovery.
+1. choose a memory, agent, assistant, or inference-service direction;
+2. choose a desired job, which maps to one or more system roles or one inference-service type;
+3. choose a priority supported by that record's own traits and score profile.
 
-Only active projects in the chosen family and role set are eligible. The priority adds weight to documented traits or score dimensions, while the family-specific editorial score breaks close ties. Results explain the matched role and traits and surface one recorded weakness. Opening the directory preserves the complete eligible role set; preferences remain soft ranking signals rather than hard filters. The finder never compares numeric scores across families and should be treated as a starting shortlist rather than an empirical evaluation of a user's workload.
+Only active projects in the chosen system family and role set are eligible on a system path; inference paths use the independently curated service collection and exactly one service type. The priority adds weight only to documented traits or dimensions in the selected profile, whose overall score breaks close ties. Results explain the native classification and surface one recorded weakness or tradeoff. Opening the Directory preserves the eligible role set or service type. Preferences remain soft ranking signals rather than hard filters. The Finder never pools or compares scores across profiles and is a starting shortlist, not an empirical evaluation of a user's workload.
 
 ## Shared axes
 

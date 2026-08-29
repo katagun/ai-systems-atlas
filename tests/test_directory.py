@@ -425,12 +425,29 @@ class DirectoryTests(unittest.TestCase):
             "devin-desktop-rules",
             "agent-skills",
             "agent-plugins",
+            "webmcp",
+            "oasf",
+            "anp",
+            "ap2",
+            "ucp",
+            "agentic-commerce-protocol",
         }
         self.assertLessEqual(expected, {record["id"] for record in records})
         for record in records:
             self.assertNotIn("system_family", record, record["id"])
             self.assertNotIn("score_profile", record, record["id"])
             self.assertNotIn("score", record, record["id"])
+
+    def test_expanded_specification_layers_keep_distinct_boundaries(self) -> None:
+        records = {record["id"]: record for record in self.specifications["specifications"]}
+
+        self.assertEqual(("protocol", "web_agent_integration"), (records["webmcp"]["specification_type"], records["webmcp"]["scope"]))
+        self.assertEqual(("metadata_schema", "agent_identity_discovery"), (records["oasf"]["specification_type"], records["oasf"]["scope"]))
+        self.assertEqual(("protocol", "agent_identity_discovery"), (records["anp"]["specification_type"], records["anp"]["scope"]))
+        for specification_id in ("ap2", "ucp", "agentic-commerce-protocol"):
+            self.assertEqual("agent_transactions", records[specification_id]["scope"])
+        self.assertEqual("ACP", records["acp"]["short_name"])
+        self.assertEqual("Commerce ACP", records["agentic-commerce-protocol"]["short_name"])
 
     def test_vendor_instruction_conventions_are_explicitly_classified(self) -> None:
         records = {record["id"]: record for record in self.specifications["specifications"]}

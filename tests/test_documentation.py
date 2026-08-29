@@ -42,9 +42,10 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/007-licenses-are-classification-not-inclusion.md",
             "docs/adr/008-specifications-are-unscored-artifacts.md",
             "docs/adr/010-inference-services-are-unscored-service-records.md",
-            "docs/adr/011-inference-services-use-a-dedicated-score-profile.md",
-            "docs/adr/012-distinct-collections-share-one-directory-surface.md",
-            "docs/adr/013-comparisons-are-scoped-to-one-score-profile.md",
+            "docs/adr/011-delegated-work-agents-are-agent-systems.md",
+            "docs/adr/012-inference-services-use-a-dedicated-score-profile.md",
+            "docs/adr/013-distinct-collections-share-one-directory-surface.md",
+            "docs/adr/014-comparisons-are-scoped-to-one-score-profile.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
