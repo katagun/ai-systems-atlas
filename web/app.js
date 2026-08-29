@@ -148,14 +148,21 @@ const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
-const COMPARISON_COLLECTIONS = {
-  system: () => state.projects,
-  inference: () => state.inferenceServices,
-  runtime: () => state.localRuntimes,
-};
+// A Map, not an object literal: the comparison kind comes from the URL, and a
+// plain-object lookup would resolve inherited names such as "constructor" or
+// "hasOwnProperty" and dispatch to an unexpected target.
+const COMPARISON_COLLECTIONS = new Map([
+  ["system", () => state.projects],
+  ["inference", () => state.inferenceServices],
+  ["runtime", () => state.localRuntimes],
+]);
+
+function comparisonCollection(kind) {
+  return COMPARISON_COLLECTIONS.get(kind)?.() || null;
+}
 
 function comparisonRecords() {
-  const records = (COMPARISON_COLLECTIONS[state.comparison.kind] || (() => []))();
+  const records = comparisonCollection(state.comparison.kind) || [];
   return state.comparison.ids.map(id => records.find(item => item.id === id)).filter(Boolean);
 }
 
@@ -184,8 +191,8 @@ function renderComparisonControls() {
     const selected = button.dataset.compareKind === state.comparison.kind && state.comparison.ids.includes(button.dataset.compareId);
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", String(selected));
-    const collection = COMPARISON_COLLECTIONS[button.dataset.compareKind];
-    const record = collection ? collection().find(item => item.id === button.dataset.compareId) : null;
+    const collection = comparisonCollection(button.dataset.compareKind);
+    const record = collection ? collection.find(item => item.id === button.dataset.compareId) : null;
     button.setAttribute("aria-label", `${selected ? "Remove" : "Add"} ${record?.name || "item"} ${selected ? "from" : "to"} comparison`);
     button.textContent = selected ? "Selected" : "Compare";
   });
@@ -201,8 +208,8 @@ function renderComparisonControls() {
 }
 
 function toggleComparison(kind, id) {
-  const collection = COMPARISON_COLLECTIONS[kind];
-  const record = collection ? collection().find(item => item.id === id) : null;
+  const collection = comparisonCollection(kind);
+  const record = collection ? collection.find(item => item.id === id) : null;
   if (!record) return;
   state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
   renderComparisonControls();
@@ -217,8 +224,8 @@ function restoreComparisonFromURL() {
   const kind = raw.slice(0, separator);
   const referencedIds = raw.slice(separator + 1).split(",").filter(Boolean);
   const ids = [...new Set(referencedIds)];
-  const collection = COMPARISON_COLLECTIONS[kind];
-  const records = collection ? ids.map(id => collection().find(item => item.id === id)).filter(Boolean) : [];
+  const collection = comparisonCollection(kind);
+  const records = collection ? ids.map(id => collection.find(item => item.id === id)).filter(Boolean) : [];
   const profiles = new Set(records.map(item => item.score_profile));
   if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1) {
     url.searchParams.delete("compare");

@@ -89,6 +89,19 @@ test("local runtimes compare inside their own profile and clear across scopes", 
   await expect(page).not.toHaveURL(/compare=/);
 });
 
+test("comparison URLs naming inherited object properties are discarded, not dispatched", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+
+  for (const kind of ["constructor", "hasOwnProperty", "__proto__", "toString"]) {
+    await page.goto(`/?compare=${kind}:ollama`);
+    await expect(page).not.toHaveURL(/compare=/);
+    await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  }
+
+  expect(errors).toEqual([]);
+});
+
 test("a cross-profile comparison URL is discarded rather than partially restored", async ({ page }) => {
   await page.goto("/?compare=runtime:ollama,openai-api");
 
