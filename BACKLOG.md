@@ -24,7 +24,13 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Later
 
-- [ ] Reassess local inference runtimes, API clients, adapters, and observability SDKs only after concrete user questions justify another bounded collection.
+- [x] Reassess local inference runtimes as their own bounded collection; ADR 015 defines the local-runtime boundary and score profile, and the seed batch is published.
+- [ ] Reassess API clients, adapters, and observability SDKs only after concrete user questions justify another bounded collection.
+- [ ] Decide how the Atlas represents a framework its maintainer has declared superseded while the successor is already scored, then dispose of AutoGen and Semantic Kernel.
+- [ ] Evaluate Dify, Langflow, Flowise, and Botpress Cloud as one batch answering whether a low-code visual builder is an agent framework or a multi-agent orchestrator.
+- [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
+- [ ] Review Qwen Chat, Kimi, and Meta AI as assistants, each with its own product-terms and governance pass.
+- [ ] Thicken the embedded-library and compatibility-gateway runtime types, and screen Intel, NPU, and edge-oriented server engines.
 
 ## Completed on 2026-08-28
 

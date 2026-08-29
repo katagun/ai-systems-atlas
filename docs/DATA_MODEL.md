@@ -14,6 +14,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `exclusions.json` | Reviewed scope-boundary decisions | Yes |
 | `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
 | `inference-services.json` | Reviewed managed inference services, dedicated service scores, and evidence | Yes |
+| `local-runtimes.json` | Reviewed self-operated inference runtimes, dedicated runtime scores, and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
@@ -112,3 +113,17 @@ Inference-service records are independent from project and specification records
 - **Review:** both the record and collection carry `verified_at` dates.
 
 Strict validation rejects extra fields such as copied price tables or model inventories and verifies every score against the taxonomy weights. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
+
+## Local runtime record
+
+Local-runtime records are independent from project, specification, and inference-service records. They contain no `system_family`, role, popularity metric, or throughput measurement. Every record uses the dedicated `local_runtime` score profile. The envelope is `{"version": "1.0", "verified_at": <ISO date>, "runtimes": [...]}`.
+
+- **Identity and boundary:** `id`, `name`, `maintainer`, `repo` (owner/name or `null`), authoritative `url`, `description`, and `runtime_boundary`, which names the adjacent managed service, assistant, or library the record is not.
+- **Classification:** one taxonomy-backed `runtime_type` plus non-empty `accelerators`, `model_formats`, `serving_modes`, `api_styles`, and `deployment_surfaces`. `api_styles` reuses the `inference_api_styles` group because the trait describes the same documented contract on both sides of the service boundary.
+- **Operational constraints:** `model_management`, `hardware_requirements`, and `operational_controls` are reviewed prose because their exceptions vary by build, platform, backend, and model architecture.
+- **Editorial analysis:** strengths and tradeoffs describe the reviewed runtime without ranking it against another collection.
+- **Licensing:** `licenses`, `source_model`, `license_note`, and inline `license_evidence` scoped in the manner of specification records. Local runtimes stay out of `license-evidence.json`, whose one-entry-per-project invariant is keyed on `project_id`, and out of the ADR 005 project drift machinery.
+- **Editorial score:** `score_profile` identifies the local-runtime rubric and `score` contains every weighted execution dimension plus the calculated overall; it never scores model quality, throughput, latency, benchmark rank, or hardware cost.
+- **Evidence and review:** non-empty dated authoritative evidence, and both the record and collection carry `verified_at` dates.
+
+Strict validation rejects extra fields, enforces taxonomy membership, and verifies every score against the taxonomy weights. A cross-collection check additionally rejects any identifier that appears in more than one published collection, which is what keeps a runtime and its vendor's managed service distinct. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md), [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).

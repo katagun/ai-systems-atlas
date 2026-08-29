@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, and the managed services that run model inference. One Directory surface discovers systems and inference services while preserving their separate schemas and score profiles; specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, the managed services that run model inference, and the runtimes you host yourself. One Directory surface discovers systems, inference services, and local runtimes while preserving their separate schemas and score profiles; specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [katagun.github.io/ai-systems-atlas](https://katagun.github.io/ai-systems-atlas/).
 
@@ -31,6 +31,7 @@ Read only what your task needs:
 | Understand families, roles, and scores | [`docs/TAXONOMY.md`](docs/TAXONOMY.md) |
 | Add or understand a protocol, convention, or format | [`docs/SPECIFICATIONS.md`](docs/SPECIFICATIONS.md) |
 | Add or understand a managed model-inference service | [`docs/INFERENCE_SERVICES.md`](docs/INFERENCE_SERVICES.md) |
+| Add or understand a self-operated inference runtime | [`docs/LOCAL_RUNTIMES.md`](docs/LOCAL_RUNTIMES.md) |
 | Understand coverage and choose a research batch | [`docs/COVERAGE.md`](docs/COVERAGE.md) |
 | Add, remove, classify, or rescore a project | [`docs/CURATION.md`](docs/CURATION.md) |
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
@@ -51,6 +52,7 @@ directory/taxonomy.json         enum definitions, license catalog, score profile
 directory/license-evidence.json reviewed source paths and immutable blob evidence
 directory/specifications.json  reviewed unscored protocols, conventions, and formats
 directory/inference-services.json reviewed and separately scored managed inference services
+directory/local-runtimes.json  reviewed and separately scored self-operated inference runtimes
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
@@ -71,6 +73,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.
 - Inference services are classified by service boundary, delivery, model sources, and API style, then scored only on stable operational-service traits; their scores are not comparable to system-family scores.
+- Local runtimes are classified by runtime type, accelerators, model formats, serving modes, and deployment surfaces, then scored only on documented execution capability; their scores exclude throughput, latency, and benchmark rank and are not comparable to any other profile.
 
 The weekly workflow refreshes live metadata, preserves candidate and license-review queues, validates the complete catalog, runs tests, and commits only verified data changes.
 

@@ -15,6 +15,7 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Keep licensing, classifications, scores, and evidence human-owned while automation refreshes only live metadata and opens review signals.
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
 - Maintain a bounded inference-service collection with a dedicated operational score, surfaced alongside systems in one Directory without treating providers as a fourth system family or ranking model quality, price, and transient performance.
+- Maintain a bounded local-runtime collection with a dedicated execution-capability score for software the user operates on their own hardware, keeping managed tiers of a runtime in the inference-service collection and keeping throughput, latency, and benchmark rank out of the score.
 - Support side-by-side shortlists only within one score profile, preserving collection-specific decision context and shareable URL state.
 
 Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
@@ -31,7 +32,7 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 
 ## Later: ecosystem context
 
-Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, local runtimes, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary.
+Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary. Local runtimes now have such a boundary under ADR 015; expand that collection only when a record answers a distinct execution, hardware, format, or deployment question.
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 
