@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
-    "specifications.json", "inference-services.json",
+    "specifications.json", "inference-services.json", "local-runtimes.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -78,6 +78,14 @@ SPECIFICATION_REQUIRED = {
     "current_version", "stewards", "repo", "url", "description", "standardizes",
     "does_not_standardize", "licenses", "license_note", "related_specifications",
     "evidence", "license_evidence", "verified_at",
+}
+
+LOCAL_RUNTIME_REQUIRED = {
+    "id", "name", "maintainer", "runtime_type", "repo", "url", "description",
+    "runtime_boundary", "accelerators", "model_formats", "serving_modes", "api_styles",
+    "deployment_surfaces", "model_management", "hardware_requirements",
+    "operational_controls", "strengths", "tradeoffs", "licenses", "source_model",
+    "license_note", "license_evidence", "score_profile", "score", "evidence", "verified_at",
 }
 
 INFERENCE_SERVICE_REQUIRED = {
@@ -252,6 +260,7 @@ def validate(root: Path = ROOT) -> list[str]:
         exclusions_data = load("exclusions.json")
         specifications_data = load("specifications.json")
         inference_services_data = load("inference-services.json")
+        local_runtimes_data = load("local-runtimes.json")
         discovery_sources_data = load("discovery-sources.json")
     finally:
         DIRECTORY = original_directory
@@ -778,6 +787,127 @@ def validate(root: Path = ROOT) -> list[str]:
             if not valid_date(item.get("verified_at")):
                 errors.append(f"{prefix}: evidence requires verified_at")
 
+    local_runtimes_value = validate_collection_envelope(
+        local_runtimes_data, "local-runtimes.json", "1.0", "runtimes", errors,
+    )
+    for runtime in local_runtimes_value:
+        if not isinstance(runtime, dict):
+            errors.append("local-runtimes.json: every runtime must be an object")
+            continue
+        prefix = f"local runtime {runtime.get('id', 'unknown')}"
+        if set(runtime) != LOCAL_RUNTIME_REQUIRED:
+            missing = sorted(LOCAL_RUNTIME_REQUIRED - set(runtime))
+            extra = sorted(set(runtime) - LOCAL_RUNTIME_REQUIRED)
+            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+            continue
+        runtime_id = runtime.get("id")
+        if not isinstance(runtime_id, str) or not ID_PATTERN.fullmatch(runtime_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name", "maintainer", "description", "runtime_boundary",
+            "model_management", "hardware_requirements", "operational_controls", "license_note",
+        ):
+            if not isinstance(runtime.get(field), str) or not runtime[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        if not isinstance(runtime.get("url"), str) or not runtime["url"].startswith("https://"):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        repo = runtime.get("repo")
+        if repo is not None and (not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)):
+            errors.append(f"{prefix}: repo must be owner/name or null")
+        if runtime.get("runtime_type") not in enum_ids["local_runtime_types"]:
+            errors.append(f"{prefix}: unknown runtime type")
+        if runtime.get("source_model") not in enum_ids["source_models"]:
+            errors.append(f"{prefix}: unknown source model")
+        for field, group in (
+            ("accelerators", "runtime_accelerators"),
+            ("model_formats", "runtime_model_formats"),
+            ("serving_modes", "runtime_serving_modes"),
+            ("api_styles", "inference_api_styles"),
+            ("deployment_surfaces", "runtime_deployment_surfaces"),
+            ("licenses", "licenses"),
+        ):
+            validate_string_list(runtime, field, enum_ids[group], prefix, errors)
+        for field in ("strengths", "tradeoffs"):
+            validate_string_list(runtime, field, None, prefix, errors)
+        validate_record_score(
+            runtime, local_runtime_score_dimensions, "local_runtime", "local runtime", prefix, errors,
+        )
+        if not valid_date(runtime.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+
+        evidence_items = runtime.get("evidence")
+        if not isinstance(evidence_items, list) or not evidence_items:
+            errors.append(f"{prefix}: evidence must be a non-empty list")
+            evidence_items = []
+        evidence_urls: set[str] = set()
+        for item in evidence_items:
+            if not isinstance(item, dict) or set(item) != {"kind", "label", "url", "verified_at"}:
+                errors.append(f"{prefix}: evidence must match the web evidence schema")
+                continue
+            if item.get("kind") != "web":
+                errors.append(f"{prefix}: evidence kind must be web")
+            if not isinstance(item.get("label"), str) or not item["label"].strip():
+                errors.append(f"{prefix}: evidence requires a label")
+            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                errors.append(f"{prefix}: evidence requires an authoritative HTTPS URL")
+            elif item["url"] in evidence_urls:
+                errors.append(f"{prefix}: evidence URLs must be unique")
+            else:
+                evidence_urls.add(item["url"])
+            if not valid_date(item.get("verified_at")):
+                errors.append(f"{prefix}: evidence requires verified_at")
+
+        license_items = runtime.get("license_evidence")
+        if not isinstance(license_items, list) or not license_items:
+            errors.append(f"{prefix}: license_evidence must be a non-empty list")
+            license_items = []
+        evidence_licenses = {
+            item.get("license_id") for item in license_items if isinstance(item, dict)
+        }
+        if evidence_licenses != set(runtime.get("licenses", [])):
+            errors.append(f"{prefix}: license evidence does not match licenses")
+        for item in license_items:
+            if not isinstance(item, dict) or not isinstance(item.get("scope"), str) or not item["scope"].strip():
+                errors.append(f"{prefix}: license evidence requires a scope")
+                continue
+            if item.get("kind") == "git_blob":
+                blob_sha = item.get("blob_sha")
+                if not repo:
+                    errors.append(f"{prefix}: git-blob license evidence requires a repository")
+                elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                    errors.append(f"{prefix}: invalid license blob SHA")
+                elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                    errors.append(f"{prefix}: immutable license URL must address the blob SHA")
+                if not isinstance(item.get("path"), str) or not item["path"]:
+                    errors.append(f"{prefix}: git-blob license evidence requires a path")
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    f"https://github.com/{repo}/blob/"
+                ):
+                    errors.append(f"{prefix}: license source must be a GitHub blob URL")
+            elif item.get("kind") == "web_terms":
+                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                    errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
+                if not valid_date(item.get("verified_at")):
+                    errors.append(f"{prefix}: web terms require verified_at")
+            else:
+                errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
+
+    collection_ids: dict[str, list[str]] = {}
+    for collection_name, collection_records in (
+        ("projects.json", projects),
+        ("specifications.json", specifications_value),
+        ("inference-services.json", inference_services_value),
+        ("local-runtimes.json", local_runtimes_value),
+    ):
+        for record in collection_records:
+            if isinstance(record, dict) and isinstance(record.get("id"), str):
+                collection_ids.setdefault(record["id"], []).append(collection_name)
+    for record_id, sources in sorted(collection_ids.items()):
+        if len(sources) > 1:
+            errors.append(
+                f"id {record_id!r} appears in more than one collection: {sorted(sources)}"
+            )
+
     candidate_entries = candidates_data.get("candidates")
     if not isinstance(candidate_entries, list):
         errors.append("candidates.json: candidates must be a list")
@@ -899,10 +1029,12 @@ def main() -> int:
     counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
     specification_count = len(load("specifications.json")["specifications"])
     inference_service_count = len(load("inference-services.json")["services"])
+    local_runtime_count = len(load("local-runtimes.json")["runtimes"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
-        f"{inference_service_count} scored inference services"
+        f"{inference_service_count} scored inference services; "
+        f"{local_runtime_count} scored local runtimes"
     )
     return 0
 

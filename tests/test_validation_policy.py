@@ -22,6 +22,141 @@ class ValidationPolicyTests(unittest.TestCase):
     def write_json(self, path: Path, value: dict) -> None:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    SAMPLE_RUNTIME = {
+        "id": "sample-runtime",
+        "name": "Sample Runtime",
+        "maintainer": "Sample Maintainer",
+        "runtime_type": "server_engine",
+        "repo": "sample/runtime",
+        "url": "https://example.com/docs",
+        "description": "A synthetic runtime used to exercise local-runtime validation.",
+        "runtime_boundary": "Represents the runtime, not any managed service built on it.",
+        "accelerators": ["cpu", "cuda"],
+        "model_formats": ["safetensors"],
+        "serving_modes": ["continuous_batching"],
+        "api_styles": ["openai_compatible"],
+        "deployment_surfaces": ["container"],
+        "model_management": "Models are loaded from a configured local path.",
+        "hardware_requirements": "Documented accelerator memory guidance only.",
+        "operational_controls": "Configuration flags govern concurrency and resource limits.",
+        "strengths": ["Documented batching behaviour."],
+        "tradeoffs": ["No graphical interface."],
+        "licenses": ["Apache-2.0"],
+        "source_model": "open_source",
+        "license_note": "Repository-wide Apache-2.0 license.",
+        "license_evidence": [{
+            "license_id": "Apache-2.0",
+            "scope": "Repository-wide license file",
+            "kind": "git_blob",
+            "path": "LICENSE",
+            "url": "https://github.com/sample/runtime/blob/main/LICENSE",
+            "blob_sha": "0123456789abcdef0123456789abcdef01234567",
+            "immutable_url": (
+                "https://api.github.com/repos/sample/runtime/git/blobs/"
+                "0123456789abcdef0123456789abcdef01234567"
+            ),
+        }],
+        "score_profile": "local_runtime",
+        "score": {
+            "hardware_accelerator_coverage": 5.0,
+            "model_format_support": 5.0,
+            "serving_concurrency": 5.0,
+            "api_interoperability": 5.0,
+            "deployment_operations": 5.0,
+            "model_lifecycle_management": 5.0,
+            "observability_control": 5.0,
+            "documentation_transparency": 5.0,
+            "overall": 5.0,
+        },
+        "evidence": [{
+            "kind": "web",
+            "label": "Documentation",
+            "url": "https://example.com/docs",
+            "verified_at": "2026-08-29",
+        }],
+        "verified_at": "2026-08-29",
+    }
+
+    def catalog_with_runtime(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic local runtime."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        runtimes_path = root / "directory" / "local-runtimes.json"
+        document = json.loads(runtimes_path.read_text(encoding="utf-8"))
+        runtime = json.loads(json.dumps(self.SAMPLE_RUNTIME))
+        document["runtimes"] = [runtime]
+        if mutate is not None:
+            mutate(runtime, root)
+        self.write_json(runtimes_path, document)
+        self.write_json(root / "web" / "local-runtimes.json", document)
+        return validate(root)
+
+    def test_valid_local_runtime_passes_validation(self) -> None:
+        errors = self.catalog_with_runtime()
+        self.assertFalse([error for error in errors if "sample-runtime" in error], errors)
+
+    def test_local_runtime_overall_must_match_weighted_score(self) -> None:
+        def mutate(runtime, root):
+            runtime["score"]["overall"] = 9.99
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(any("does not match weighted" in error for error in errors), errors)
+
+    def test_local_runtime_rejects_unknown_accelerator(self) -> None:
+        def mutate(runtime, root):
+            runtime["accelerators"] = ["quantum"]
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(any("unknown accelerators" in error for error in errors), errors)
+
+    def test_local_runtime_license_evidence_must_cover_every_license(self) -> None:
+        def mutate(runtime, root):
+            runtime["licenses"] = ["Apache-2.0", "MIT"]
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(
+            any("license evidence does not match licenses" in error for error in errors), errors
+        )
+
+    def test_local_runtime_rejects_mismatched_immutable_license_url(self) -> None:
+        def mutate(runtime, root):
+            runtime["license_evidence"][0]["immutable_url"] = (
+                "https://api.github.com/repos/sample/runtime/git/blobs/"
+                "ffffffffffffffffffffffffffffffffffffffff"
+            )
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(
+            any("immutable license URL must address the blob SHA" in error for error in errors),
+            errors,
+        )
+
+    def test_ids_must_be_unique_across_collections(self) -> None:
+        def mutate(runtime, root):
+            services_path = root / "directory" / "inference-services.json"
+            services = json.loads(services_path.read_text(encoding="utf-8"))
+            runtime["id"] = services["services"][0]["id"]
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(
+            any("appears in more than one collection" in error for error in errors), errors
+        )
+
+    def test_local_runtimes_must_be_published_to_web(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = json.loads(
+            (root / "directory" / "local-runtimes.json").read_text(encoding="utf-8")
+        )
+        document["verified_at"] = "2026-01-01"
+        self.write_json(root / "directory" / "local-runtimes.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
+        )
+
     def test_restricted_license_is_valid_when_source_model_and_evidence_agree(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
