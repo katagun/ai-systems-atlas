@@ -47,9 +47,12 @@
     {"id": "deepseek", "name": "DeepSeek"},
     {"id": "google", "name": "Google"},
     {"id": "mistral", "name": "Mistral AI"},
+    {"id": "moonshot_ai", "name": "Moonshot AI"},
+    {"id": "nvidia", "name": "NVIDIA"},
     {"id": "openrouter", "name": "OpenRouter"},
     {"id": "openai_compatible", "name": "OpenAI-compatible endpoint"},
     {"id": "local_runtime", "name": "Local model runtime"},
+    {"id": "perplexity", "name": "Perplexity"},
     {"id": "x_ai", "name": "SpaceXAI / xAI"},
     {"id": "z_ai", "name": "Z.ai"}
   ],

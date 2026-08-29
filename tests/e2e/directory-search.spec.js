@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("120 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("121 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -153,7 +153,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(11);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(12);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
@@ -221,6 +221,7 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
     "Grok",
     "Microsoft 365 Copilot",
     "Microsoft Copilot",
+    "Perplexity",
     "Z.ai",
   ]) {
     await page.locator("#project-search").fill(name);
@@ -230,6 +231,22 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
     await expect(exactCard).toHaveCount(1);
     await expect(exactCard.locator(".license-badge")).toContainText("LicenseRef-Proprietary");
   }
+});
+
+test("Perplexity assistant, Computer, and API remain distinct directory records", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#all-directory-search").fill("Perplexity");
+
+  const cards = page.locator("#all-directory-grid .project-card");
+  for (const name of ["Perplexity", "Perplexity Computer", "Perplexity API"]) {
+    await expect(cards.filter({ has: page.getByRole("heading", { name, exact: true }) })).toHaveCount(1);
+  }
+
+  const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
+  await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
+  await assistantCard.getByRole("button", { name: "View details →" }).click();
+  await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
+  await expect(page.locator("#project-dialog")).toContainText("Multi-provider");
 });
 
 test("reviewed named agent additions are searchable", async ({ page }) => {
