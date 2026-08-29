@@ -2232,47 +2232,6 @@
       ]
     },
     {
-      "repo": "strands-agents/harness-sdk",
-      "name": "Strands Agents SDK",
-      "url": "https://github.com/strands-agents/harness-sdk",
-      "description": "Open-source Python and TypeScript SDK for building and controlling model-driven agent harnesses across models and deployment environments.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.98,
-      "github_detected_license": "Apache-2.0",
-      "stars": 7006,
-      "topics": [
-        "agent-framework",
-        "agentic",
-        "agentic-ai",
-        "agents",
-        "ai",
-        "ai-agents",
-        "anthropic",
-        "autonomous-agents",
-        "bedrock",
-        "generative-ai",
-        "harness",
-        "llm",
-        "llm-agent",
-        "mcp",
-        "multi-agent-systems",
-        "openai",
-        "python",
-        "sdk",
-        "strands-agents",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "superagent-ai/grok-cli",
       "name": "grok-cli",
       "url": "https://github.com/superagent-ai/grok-cli",
@@ -3019,30 +2978,6 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-28",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "genkit-ai/genkit",
-      "name": "Genkit",
-      "url": "https://github.com/genkit-ai/genkit",
-      "description": "Google-supported open-source framework for AI application flows, tools, retrieval, evaluation, and agentic orchestration.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-framework",
-        "google",
-        "workflow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
       "review_required": [
         "licensing",
         "classification",

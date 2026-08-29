@@ -7384,6 +7384,193 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "strands-agents-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Strands Agents SDK",
+      "repo": "strands-agents/harness-sdk",
+      "url": "https://github.com/strands-agents/harness-sdk",
+      "description": "Model-driven agent SDK from AWS that builds tool-using agents from a model, a prompt, and typed tools, with multi-provider model support, MCP integration, and multi-agent patterns.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "Agent definitions, typed tool implementations, prompts, session state, and MCP server configuration",
+      "deployment": [
+        "library",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 7045,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "AWS renamed the canonical repository from strands-agents/sdk-python to strands-agents/harness-sdk; the published packages remain strands-agents.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.5,
+        "autonomy": 7.5,
+        "human_control": 7.8,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "maturity": 7.5,
+        "overall": 7.87
+      },
+      "strengths": [
+        "Model-driven design keeps agent definitions short while leaving tools, prompts, and model choice explicit",
+        "Publishes Python and TypeScript packages plus its own MCP server, so the same agent definition reaches several runtimes",
+        "Backed by AWS with documented multi-agent patterns and a separate maintained tools repository"
+      ],
+      "weaknesses": [
+        "The canonical repository was renamed, so older integration guides and third-party references point at a stale path",
+        "Persistence, permissions, and production recovery remain application-defined rather than framework-guaranteed",
+        "A large open-issue count relative to the project's age indicates a fast-moving surface"
+      ],
+      "why_it_matters": "Gives the Atlas a provider-published, model-driven agent SDK whose design deliberately minimizes framework scaffolding, contrasting with graph-and-workflow frameworks.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-08-28T00:00:00Z",
+      "forks": 1077,
+      "open_issues": 682,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ]
+    },
+    {
+      "id": "genkit",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Genkit",
+      "repo": "genkit-ai/genkit",
+      "url": "https://github.com/genkit-ai/genkit",
+      "description": "Open-source framework from Google's Firebase for building AI-powered application flows, with a unified model interface, tool calling, structured output, retrieval, evaluation, and a local developer UI.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "Flow definitions, typed schemas, prompt files, tool definitions, plugin configuration, retriever indexes, and evaluation runs",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "workflows",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 6384,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 7.8,
+        "autonomy": 6.2,
+        "human_control": 8.0,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.2,
+        "maturity": 7.8,
+        "overall": 7.64
+      },
+      "strengths": [
+        "A local developer UI for running, inspecting, and evaluating flows makes agent behaviour observable during development rather than only in production",
+        "One model interface spans Google, OpenAI, Anthropic, and Ollama backends through a documented plugin system",
+        "Built and used in production by Google's Firebase, with production-ready JavaScript and Go SDKs"
+      ],
+      "weaknesses": [
+        "Language support is uneven: Python is beta and Dart is preview, so cross-language parity cannot be assumed",
+        "The design centres on application flows, so long-running autonomous agent execution is less developed than in agent-first runtimes",
+        "Deployment guidance leans toward Google's hosting even though the framework itself is portable"
+      ],
+      "why_it_matters": "Represents the application-framework approach to agent construction, where typed flows, evaluation, and a developer inspection loop matter more than autonomous execution.",
+      "research_confidence": "medium",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-08-29T00:00:00Z",
+      "forks": 835,
+      "open_issues": 757,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "local_runtime"
+      ]
     }
   ]
 }
