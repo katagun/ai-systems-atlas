@@ -15,6 +15,7 @@ class DirectoryTests(unittest.TestCase):
         cls.evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text(encoding="utf-8"))
         cls.specifications = json.loads((ROOT / "directory" / "specifications.json").read_text(encoding="utf-8"))
         cls.inference_services = json.loads((ROOT / "directory" / "inference-services.json").read_text(encoding="utf-8"))
+        cls.local_runtimes = json.loads((ROOT / "directory" / "local-runtimes.json").read_text(encoding="utf-8"))
 
     def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]
@@ -381,6 +382,24 @@ class DirectoryTests(unittest.TestCase):
             ), 2)
             self.assertEqual(calculated, record["score"]["overall"], record["id"])
             self.assertTrue(all(0 <= record["score"][name] <= 10 for name in dimensions), record["id"])
+
+    def test_local_runtime_score_profile_weights_total_one(self) -> None:
+        profile = self.taxonomy["local_runtime_score_profile"]
+        self.assertEqual("local_runtime", profile["id"])
+        weights = [dimension["weight"] for dimension in profile["dimensions"]]
+        self.assertAlmostEqual(1.0, sum(weights))
+        self.assertTrue(all(weight > 0 for weight in weights))
+        self.assertTrue(all(dimension["definition"].strip() for dimension in profile["dimensions"]))
+
+    def test_local_runtime_enum_groups_exist(self) -> None:
+        for group in (
+            "local_runtime_types", "runtime_accelerators", "runtime_model_formats",
+            "runtime_serving_modes", "runtime_deployment_surfaces",
+        ):
+            ids = [item["id"] for item in self.taxonomy[group]]
+            self.assertTrue(ids, group)
+            self.assertEqual(len(ids), len(set(ids)), group)
+            self.assertTrue(all(item["definition"].strip() for item in self.taxonomy[group]), group)
 
     def test_inference_service_baseline_covers_named_ecosystem_gaps(self) -> None:
         records = {record["id"]: record for record in self.inference_services["services"]}
