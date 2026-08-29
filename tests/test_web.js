@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterSpecifications, matchesProject, updateComparisonSelection } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -200,14 +200,96 @@ test("the unified directory discovers both collections without indexing hidden p
     { ...projects[3], id: "agent", description: "Coding system", model_backends: ["hidden-provider"] },
   ];
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, {}).map(item => [item.kind, item.record.name]),
+    filterDirectoryEntries(combinedProjects, inferenceServices, [], {}).map(item => [item.kind, item.record.name]),
     [["system", "Agent"], ["inference", "Amazon Bedrock"], ["inference", "OpenAI API"], ["inference", "OpenRouter"]],
   );
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, { term: "Bedrock" }).map(item => item.record.name),
+    filterDirectoryEntries(combinedProjects, inferenceServices, [], { term: "Bedrock" }).map(item => item.record.name),
     ["Amazon Bedrock"],
   );
-  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, { term: "hidden-provider" }), []);
+  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, [], { term: "hidden-provider" }), []);
+});
+
+const localRuntimes = [
+  { id: "ollama", name: "Ollama", maintainer: "Ollama", description: "Local model runner.", runtime_boundary: "Runtime, not Ollama Cloud.", model_management: "Pull and delete models.", hardware_requirements: "Compute capability floor.", operational_controls: "Parallel request settings.", runtime_type: "desktop_runner", accelerators: ["cpu", "cuda", "metal"], model_formats: ["gguf"], serving_modes: ["parallel_requests"], api_styles: ["openai_compatible"], deployment_surfaces: ["desktop_app"], strengths: ["Model lifecycle"], tradeoffs: ["No batching"], score: { overall: 7.31 }, evidence: [{ url: "https://hidden.example/runtime" }] },
+  { id: "vllm", name: "vLLM", maintainer: "vLLM project", description: "Serving engine.", runtime_boundary: "Engine, not a managed service.", model_management: "Weights pinned at launch.", hardware_requirements: "Accelerator required.", operational_controls: "Parallelism configured at launch.", runtime_type: "server_engine", accelerators: ["cuda", "rocm"], model_formats: ["safetensors", "fp8"], serving_modes: ["continuous_batching"], api_styles: ["openai_compatible"], deployment_surfaces: ["container"], strengths: ["PagedAttention"], tradeoffs: ["No desktop packaging"], score: { overall: 8.64 }, evidence: [] },
+  { id: "mlx-lm", name: "MLX LM", maintainer: "Apple machine learning research", description: "Apple silicon package.", runtime_boundary: "Package, not the MLX framework.", model_management: "Hugging Face Hub.", hardware_requirements: "Apple silicon only.", operational_controls: "Per-command parameters.", runtime_type: "embedded_library", accelerators: ["metal"], model_formats: ["mlx"], serving_modes: ["single_stream"], api_styles: ["openai_compatible"], deployment_surfaces: ["library"], strengths: ["First-party Apple path"], tradeoffs: ["Server not for production"], score: { overall: 4.43 }, evidence: [] },
+];
+
+test("local runtime search covers visible boundary prose but not evidence URLs", () => {
+  assert.deepEqual(
+    filterLocalRuntimes(localRuntimes, { term: "Ollama Cloud" }).map(item => item.name),
+    ["Ollama"],
+  );
+  assert.deepEqual(filterLocalRuntimes(localRuntimes, { term: "hidden" }), []);
+});
+
+test("local runtime filters combine type, accelerator, model format, and API style", () => {
+  const results = filterLocalRuntimes(localRuntimes, {
+    type: "server_engine",
+    accelerator: "rocm",
+    modelFormat: "fp8",
+    apiStyle: "openai_compatible",
+  });
+  assert.deepEqual(results.map(item => item.name), ["vLLM"]);
+  assert.deepEqual(
+    filterLocalRuntimes(localRuntimes, { accelerator: "metal" }).map(item => item.name),
+    ["MLX LM", "Ollama"],
+  );
+  assert.deepEqual(
+    filterLocalRuntimes(localRuntimes, { accelerator: "metal", type: "embedded_library" }).map(item => item.name),
+    ["MLX LM"],
+  );
+});
+
+test("local runtimes sort by name by default and by their dedicated score on request", () => {
+  assert.deepEqual(
+    filterLocalRuntimes(localRuntimes, {}).map(item => item.name),
+    ["MLX LM", "Ollama", "vLLM"],
+  );
+  assert.deepEqual(
+    filterLocalRuntimes(localRuntimes, { sort: "score" }).map(item => item.name),
+    ["vLLM", "Ollama", "MLX LM"],
+  );
+});
+
+test("scored collection filtering treats scalar and list facets alike", () => {
+  const options = {
+    searchFields: ["name", "strengths"],
+    facets: { type: "runtime_type", accelerator: "accelerators" },
+  };
+  assert.deepEqual(
+    filterScoredCollection(localRuntimes, { type: "desktop_runner" }, options).map(item => item.id),
+    ["ollama"],
+  );
+  assert.deepEqual(
+    filterScoredCollection(localRuntimes, { accelerator: "cuda" }, options).map(item => item.id),
+    ["ollama", "vllm"],
+  );
+  assert.deepEqual(
+    filterScoredCollection(localRuntimes, { term: "PagedAttention" }, options).map(item => item.id),
+    ["vllm"],
+  );
+});
+
+test("mixed directory browsing includes local runtimes alongside the other collections", () => {
+  const combinedProjects = [{ ...projects[3], id: "agent", description: "Coding system" }];
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, {}).map(item => [item.kind, item.record.name]),
+    [
+      ["system", "Agent"],
+      ["inference", "Amazon Bedrock"],
+      ["runtime", "MLX LM"],
+      ["runtime", "Ollama"],
+      ["inference", "OpenAI API"],
+      ["inference", "OpenRouter"],
+      ["runtime", "vLLM"],
+    ],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, { term: "MLX" }).map(item => item.record.name),
+    ["MLX LM"],
+  );
 });
 
 test("comparison selection stays inside one score profile and supports toggling", () => {
