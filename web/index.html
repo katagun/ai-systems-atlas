@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI Systems Atlas: reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
+  <meta name="description" content="AI Systems Atlas: reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
   <meta name="theme-color" content="#f7f9fc">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AI Systems Atlas">
-  <meta property="og:description" content="Reviewed AI systems, inference services, specifications, and protocols with explicit terms and evidence.">
+  <meta property="og:description" content="Reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
   <meta property="og:url" content="https://katagun.github.io/ai-systems-atlas/">
   <title>AI Systems Atlas</title>
   <link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6.5">
+  <link rel="stylesheet" href="styles.css?v=6.6">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="brand" aria-label="AI Systems Atlas">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span><strong>AI Systems Atlas</strong><small>systems · inference · specs</small></span>
+      <span><strong>AI Systems Atlas</strong><small>systems · inference · runtimes · specs</small></span>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
@@ -36,7 +36,7 @@
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
         <div class="hero-copy-block">
-          <p class="eyebrow" id="hero-kicker">Reviewed systems and services</p>
+          <p class="eyebrow" id="hero-kicker">Reviewed systems, services, and runtimes</p>
           <h1 id="directory-title">Find the AI layer <span>that fits.</span></h1>
           <p class="hero-copy">Explore operational systems, the managed services that run model inference, and the runtimes you host yourself—without mixing their score profiles.</p>
           <button class="hero-action" data-open-tab="finder">Need a starting point? Use the finder <span aria-hidden="true">→</span></button>
@@ -71,11 +71,11 @@
 
       <div id="all-directory-panel" class="collection-panel">
         <section class="control-panel mixed-directory-controls" aria-label="All directory search">
-          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems and inference services" autocomplete="off"></label>
-          <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose Systems or Inference services for specialist filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, inference services, and local runtimes" autocomplete="off"></label>
+          <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose Systems, Inference services, or Local runtimes for specialist filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
-        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems and inference services"></section>
+        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, inference services, and local runtimes"></section>
       </div>
 
       <div id="systems-directory-panel" class="collection-panel" hidden>
@@ -215,8 +215,8 @@
     <div id="comparison-dialog-content"></div>
   </dialog>
 
-  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services use a separate score. Specifications remain unscored.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=6.5" defer></script>
-  <script src="app.js?v=6.5" defer></script>
+  <footer><span>AI Systems Atlas</span><span>Systems scored within families. Inference services and local runtimes each use a separate score. Specifications remain unscored.</span><span id="data-date"></span></footer>
+  <script src="app-core.js?v=6.6" defer></script>
+  <script src="app.js?v=6.6" defer></script>
 </body>
 </html>
