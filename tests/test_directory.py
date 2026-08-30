@@ -356,7 +356,7 @@ class DirectoryTests(unittest.TestCase):
             "fireworks-ai", "cerebras-inference", "sambanova-cloud",
             "deepinfra", "replicate", "venice-api",
             "stability-ai-developer-platform", "ollama-cloud",
-            "nebius-token-factory", "baseten",
+            "nebius-token-factory", "baseten", "meta-model-api",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(

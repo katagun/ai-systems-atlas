@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-08-29",
+  "verified_at": "2026-08-30",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -1472,6 +1472,53 @@
           "url": "https://github.com/microsoft/semantic-kernel/blob/main/LICENSE",
           "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
           "immutable_url": "https://api.github.com/repos/microsoft/semantic-kernel/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
+        }
+      ]
+    },
+    {
+      "project_id": "meta-ai",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Meta AIs and generative AI features made available through any Meta Product, including the Meta AI assistant",
+          "kind": "web_terms",
+          "url": "https://www.facebook.com/legal/ai-terms",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Meta Terms of Service governing the Meta Products that host the Meta AI assistant, incorporated by the AI terms",
+          "kind": "web_terms",
+          "url": "https://www.facebook.com/terms",
+          "verified_at": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "project_id": "muse-code",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Use of Muse Code and the Meta Model API, including object-code-only Downloadable Materials licensed under a revocable, non-transferable grant",
+          "kind": "web_terms",
+          "url": "https://dev.meta.ai/legal/terms-of-service",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Use restrictions on Muse Code outputs, actions, and integrated products, incorporated by reference into the Meta Model API Terms of Service",
+          "kind": "web_terms",
+          "url": "https://dev.meta.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Purchase and renewal of a Muse Code Coding Harness Subscription",
+          "kind": "web_terms",
+          "url": "https://www.facebook.com/legal/meta_subs_terms",
+          "verified_at": "2026-08-30"
         }
       ]
     }
