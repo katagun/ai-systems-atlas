@@ -18,20 +18,20 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 91 systems: 27 memory systems, 51 agent systems, and 13 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-two are proprietary. Two records are archived and two are superseded, so 87 satisfy active-choice coverage. The provisional queue contains 100 records. The separate collections contain 21 unscored specifications, 39 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 7 scored local runtimes.
+The reviewed catalog contains 91 systems: 27 memory systems, 51 agent systems, and 13 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-two are proprietary. Two records are archived and two are superseded, so 87 satisfy active-choice coverage. The provisional queue contains 100 records. The separate collections contain 21 unscored specifications, 39 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 10 scored local runtimes.
 
 ### Local runtimes
 
-The local-runtime collection covers self-operated inference software under [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md). Its seven records span two desktop runners, two server engines, two embedded libraries, and one compatibility gateway, and include one mixed-source product alongside six open-source projects.
+The local-runtime collection covers self-operated inference software under [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md). Its ten records span two desktop runners, three server engines, three embedded libraries, and two compatibility gateways, and include one mixed-source product alongside nine open-source projects.
 
 | Runtime type | Reviewed | Coverage signal |
 |---|---:|---|
 | Desktop runner | 2 | Adequate baseline across an open runner and a proprietary application; a third open desktop option would strengthen source-model comparison |
-| Server engine | 2 | Adequate for accelerator-backed serving; Intel, NPU, and edge-oriented engines remain unreviewed |
-| Embedded library | 2 | Thin, and both records skew toward one hardware story each; a portable cross-platform library is missing |
-| Compatibility gateway | 1 | Thin; alternative self-hosted gateways remain unreviewed |
+| Server engine | 3 | Adequate across accelerator-backed serving and an Intel and NPU path; edge-oriented engines remain unreviewed |
+| Embedded library | 3 | Improved with a portable cross-platform library alongside the GGUF and Apple silicon options |
+| Compatibility gateway | 2 | Improved; both reviewed gateways are open source, so a proprietary or managed self-hosted gateway remains unreviewed |
 
-Coverage is representative of material execution choices rather than exhaustive. Text Generation Inference was screened and excluded because its repository is archived. Jan was screened and routed to the candidate queue as an assistant, because conversations, projects, assistants, agents, and connectors place it on the assistant side of the ADR 015 runtime test.
+Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and DirectML paths, and format coverage includes ONNX alongside GGUF, safetensors, MLX, and the quantized schemes. Coverage is representative of material execution choices rather than exhaustive. Text Generation Inference was screened and excluded because its repository is archived. Jan was screened and routed to the candidate queue as an assistant, because conversations, projects, assistants, agents, and connectors place it on the assistant side of the ADR 015 runtime test.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
@@ -71,7 +71,7 @@ Choose small batches with one coherent boundary question:
 8. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
 9. **Superseded predecessors:** resolved by [ADR 016](adr/016-superseded-predecessors-keep-their-record.md), which adds the `superseded` status and a validated `superseded_by` link. AutoGen and Semantic Kernel are published under it. Apply the same treatment when a maintainer publishes a succession and the successor is already reviewed.
 10. **Low-code agent builders:** evaluate Dify, Langflow, Flowise, and Botpress Cloud as one batch whose single question is whether a visual builder is an agent framework or a multi-agent orchestrator. Do not resolve that boundary inside a code-first SDK batch.
-11. **Local-runtime second pass:** review embedded and gateway alternatives to thicken the thinnest runtime types, and screen Intel, NPU, and edge-oriented server engines. Keep managed tiers of a runtime in the inference-service collection.
+11. **Local-runtime second pass:** done. ONNX Runtime GenAI, Xinference, and OpenVINO Model Server closed the portable-library, gateway, and Intel/NPU gaps. Next screen edge-oriented engines, and revisit llamafile and TensorRT-LLM, whose detected licenses were inconclusive and need their license files read.
 12. **Assistant regional follow-up:** Qwen Chat, Kimi, and Meta AI remain unreviewed. Each needs its own product-terms and governance pass; do not infer an assistant's boundary from its provider's API record.
 13. **Inference-service follow-up:** Novita AI and Lambda Inference were screened but not promoted because one documentation pass did not establish their retention, residency, and delivery boundaries. Revisit with governing terms in hand.
 

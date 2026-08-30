@@ -96,6 +96,8 @@
     {"id": "metal", "name": "Apple Metal", "definition": "Documented execution on Apple silicon GPUs through Metal."},
     {"id": "vulkan", "name": "Vulkan", "definition": "Documented execution through the cross-vendor Vulkan compute backend."},
     {"id": "sycl", "name": "SYCL", "definition": "Documented execution through SYCL, covering Intel GPU targets."},
+    {"id": "npu", "name": "NPU", "definition": "Documented execution on a dedicated neural processing unit, such as those integrated into recent client processors."},
+    {"id": "directml", "name": "DirectML", "definition": "Documented execution through Microsoft's DirectML backend, covering vendor-neutral GPU acceleration on Windows."},
     {"id": "multi_gpu", "name": "Multi-GPU", "definition": "Documented execution across more than one accelerator on a single host or across hosts."}
   ],
   "runtime_model_formats": [
@@ -105,7 +107,8 @@
     {"id": "mlx", "name": "MLX", "definition": "Weights prepared for Apple's MLX array framework on Apple silicon."},
     {"id": "awq", "name": "AWQ", "definition": "Activation-aware weight quantization checkpoints."},
     {"id": "gptq", "name": "GPTQ", "definition": "Post-training quantized checkpoints produced by the GPTQ method."},
-    {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."}
+    {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."},
+    {"id": "onnx", "name": "ONNX", "definition": "Models exported to the Open Neural Network Exchange graph format, optionally with quantized weights."}
   ],
   "runtime_serving_modes": [
     {"id": "single_stream", "name": "Single stream", "definition": "One request served at a time, sufficient for interactive personal use."},

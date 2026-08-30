@@ -484,6 +484,260 @@
       "verified_at": "2026-08-29"
     },
     {
+      "id": "onnxruntime-genai",
+      "name": "ONNX Runtime GenAI",
+      "maintainer": "Microsoft",
+      "runtime_type": "embedded_library",
+      "repo": "microsoft/onnxruntime-genai",
+      "url": "https://onnxruntime.ai/docs/genai/",
+      "description": "Cross-platform generative inference library that implements the token generation loop for ONNX models, including pre- and post-processing, KV-cache management, sampling, constrained decoding, and adapters, consumed through Python, C, C++, C#, and Java APIs.",
+      "runtime_boundary": "Represents the generate() API layer published as onnxruntime-genai, not ONNX Runtime itself, which is the general-purpose ONNX inference engine and execution-provider framework underneath it. Products that embed this library, including Foundry Local, Windows ML, and the Visual Studio Code AI Toolkit, are separate boundaries. The library has no server, no network endpoint, and no graphical interface; it is exercised through host application code, which places it on the runtime side of the ADR 015 runtime-versus-assistant test as an embedded library rather than an assistant.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "directml",
+        "npu"
+      ],
+      "model_formats": [
+        "onnx"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "continuous_batching",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library"
+      ],
+      "model_management": "Models are ONNX directories containing a genai_config.json alongside graph and tokenizer assets, loaded from a local path; a model-package layout can bundle several hardware variants of one model and select at load time. The repository ships a model builder that converts and quantizes Hugging Face PyTorch, quantized PyTorch, and GGUF sources into the required ONNX layout, and the project documents downloading prebuilt ONNX models through the Hugging Face CLI or Foundry Local. There is no runtime model store, registry, or removal command; LoRA adapters use a documented .onnx_adapter flatbuffers file and multi-adapter switching.",
+      "hardware_requirements": "The project's support matrix documents Linux, Windows, macOS, and Android on x86, x64, and arm64, with CPU, CUDA, DirectML, NvTensorRtRtx, OpenVINO, QNN, and WebGPU acceleration; AMD GPU support is listed as roadmap. Qualcomm Snapdragon NPU execution requires the separate onnxruntime-qnn execution-provider plugin and a model packaged with compiled QNN graph artifacts, and Python, C, C++, and C# are supported while Java requires a source build.",
+      "operational_controls": "Search, sampling, and KV-cache behaviour are configured through genai_config.json and per-generator search options; provider options such as the Qualcomm HTP performance mode are set on the model configuration. Runtime options can terminate and restart a generation session and toggle ONNX Runtime profiling per token during generation.",
+      "strengths": [
+        "One generation loop targets CPU, CUDA, DirectML, and Qualcomm NPU hardware across Windows, Linux, macOS, and Android from Python, C, C++, C#, and Java bindings.",
+        "Constrained decoding through LLGuidance provides Lark grammar, JSON schema, and regex outputs for tool calling, alongside multi-LoRA adapters with a published adapter file specification.",
+        "The repository documents a paged-attention engine with continuous batching, and both draft-model and n-gram speculative decoding, with explicit statements of their limits."
+      ],
+      "tradeoffs": [
+        "Execution is limited to ONNX graphs, so any other weight format must first be converted with the model builder or Olive, and per-execution-provider artifacts such as QNN context binaries are built separately.",
+        "There is no server, endpoint, authentication, metrics, or health surface; only in-process profiling and logging, so operational visibility depends entirely on the host application.",
+        "The continuous-batching Engine API is documented as a transitional host-facing surface that is not thread-safe, and the published support matrix still lists speculative decoding as roadmap while the repository documents it as implemented, so capability varies by version and build."
+      ],
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single MIT license file covering the generate() API implementation. A ThirdPartyNotices.txt file lists the licenses of bundled dependencies and does not restrict or alter the project's own MIT terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file for the ONNX Runtime GenAI library",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/LICENSE",
+          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+          "immutable_url": "https://api.github.com/repos/microsoft/onnxruntime-genai/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 7.0,
+        "model_format_support": 5.5,
+        "serving_concurrency": 5.5,
+        "api_interoperability": 4.0,
+        "deployment_operations": 5.0,
+        "model_lifecycle_management": 6.0,
+        "observability_control": 4.0,
+        "documentation_transparency": 6.5,
+        "overall": 5.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project overview and support matrix",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Generate API documentation",
+          "url": "https://onnxruntime.ai/docs/genai/",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Package installation options",
+          "url": "https://onnxruntime.ai/docs/genai/howto/install.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Qualcomm NPU execution provider guide",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/docs/qnn.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Paged attention engine and continuous batching",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/docs/paged_attention_engine.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Speculative decoding methods and limits",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/docs/SpeculativeDecoding.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Model download options",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/docs/DownloadModels.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Model builder conversion and quantization",
+          "url": "https://github.com/microsoft/onnxruntime-genai/blob/main/src/python/py/models/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Adapter file specification",
+          "url": "https://onnxruntime.ai/docs/genai/reference/adapter.html",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "openvino-model-server",
+      "name": "OpenVINO Model Server",
+      "maintainer": "Intel",
+      "runtime_type": "server_engine",
+      "repo": "openvinotoolkit/model_server",
+      "url": "https://github.com/openvinotoolkit/model_server",
+      "description": "C++ inference server that serves generative and classic deep-learning models compiled by OpenVINO onto Intel CPU, GPU, and NPU targets, exposing OpenAI-compatible, KServe, and TensorFlow Serving endpoints over REST and gRPC.",
+      "runtime_boundary": "Represents the model server, not the OpenVINO toolkit it is built on: the toolkit supplies the runtime plugins, model conversion, and optimization tooling and is a separate boundary, as are the OpenVINO GenAI library and the models published in Intel's Hugging Face collections. The server is headless and operated as a container, a binary package, a Windows service, or an in-process C API host; it ships no graphical or conversational interface, which keeps it on the runtime side of the ADR 015 runtime-versus-assistant test.",
+      "accelerators": [
+        "cpu",
+        "npu",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "onnx",
+        "gguf"
+      ],
+      "serving_modes": [
+        "continuous_batching",
+        "parallel_requests",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "local_cli",
+        "container",
+        "orchestrated_cluster",
+        "library"
+      ],
+      "model_management": "Models live in a versioned model repository on local storage, S3, Google Cloud Storage, Azure Blob, or the Hugging Face Hub. A pull mode downloads models in OpenVINO IR or GGUF form without starting the service, and a conversion path exports and quantizes PyTorch sources through optimum-cli. Version policies choose which numbered versions are served, configuration changes and new or removed models are applied at runtime without restarting, and a model cache speeds repeated loads.",
+      "hardware_requirements": "Execution targets Intel hardware: x86 CPUs including Xeon, Intel integrated and discrete GPUs through the OpenVINO GPU plugin built on oneDNN and OpenCL, and NPU devices, on Linux and Windows as containers or binary packages. GPU and NPU use requires host drivers and, for containers, the accelerator-enabled image and device passthrough. NPU execution uses the stateful pipeline and static shapes only, so dynamic models must be reset with a fixed batch size or shape, while CPU and GPU use the continuous-batching pipeline.",
+      "operational_controls": "The server takes device selection per model through target_device, including HETERO and AUTO virtual devices with latency, throughput, and cumulative-throughput hints. LLM graphs configure KV-cache size, maximum active sequences, dynamic split fuse, prefix caching, and cache eviction. Generative endpoints can require a bearer API key from a file or environment variable, and request limits cover execution streams, gRPC threads, REST workers, message size, and memory quota.",
+      "strengths": [
+        "One server presents OpenAI-compatible chat, completions, responses, embeddings, image generation, and audio endpoints, a Cohere-compatible rerank API, and KServe and TensorFlow Serving APIs over both REST and gRPC.",
+        "Generative serving uses continuous batching and paged attention with prefix caching, cache eviction, dynamic split fuse, and draft-model speculative decoding, and classic models run through a DAG scheduler and MediaPipe graphs.",
+        "Operations are mature: Prometheus-compatible metrics with a documented metric list, versioned model repositories on cloud storage, runtime configuration reload, Docker, bare-metal, Windows service, Kubernetes and OpenShift deployment, and a C API for in-process embedding."
+      ],
+      "tradeoffs": [
+        "Hardware coverage is Intel-only; there is no documented CUDA, ROCm, or Metal execution path, so the server does not serve mixed-vendor accelerator fleets.",
+        "Generative models are normally served from OpenVINO IR exported with optimum-cli, GGUF support is limited to text generation on a published model list, and NPU serving requires static shapes.",
+        "The documentation states that gRPC and REST endpoints provide no access restrictions or traffic encryption by default, with an API key available only for the generative /v3 endpoints, so production exposure depends on a reverse proxy; scaling beyond one host is by replicas rather than multi-host model parallelism."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single Apache-2.0 license file covering the server, reproduced unchanged in the release package directory. A thirdparty-licenses directory carries the licenses of the components redistributed in the binary and container packages and does not restrict the server's own terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the OpenVINO Model Server",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/openvinotoolkit/model_server/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 5.0,
+        "model_format_support": 7.0,
+        "serving_concurrency": 8.0,
+        "api_interoperability": 8.5,
+        "deployment_operations": 8.5,
+        "model_lifecycle_management": 7.5,
+        "observability_control": 8.5,
+        "documentation_transparency": 8.5,
+        "overall": 7.54
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project overview, features, and packages",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Accelerator and virtual device guide",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/accelerators.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Metrics endpoint and metric families",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/metrics.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Security considerations and endpoint limits",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/security_considerations.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Pull mode for Hugging Face models",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/pull_hf_models.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "LLM graph configuration reference",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/llm/reference.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Server parameters including draft models and API key",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/parameters.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Feature list",
+          "url": "https://github.com/openvinotoolkit/model_server/blob/main/docs/features.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
       "id": "sglang",
       "name": "SGLang",
       "maintainer": "SGLang project",
@@ -670,6 +924,149 @@
           "kind": "web",
           "label": "Repository overview",
           "url": "https://github.com/vllm-project/vllm/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        }
+      ],
+      "verified_at": "2026-08-29"
+    },
+    {
+      "id": "xinference",
+      "name": "Xinference",
+      "maintainer": "Xorbits",
+      "runtime_type": "compatibility_gateway",
+      "repo": "xorbitsai/inference",
+      "url": "https://inference.readthedocs.io/en/latest/index.html",
+      "description": "Self-hosted supervisor-and-worker server that launches language, embedding, reranking, image, audio, and multimodal models on interchangeable inference backends and presents them through one OpenAI-compatible API, a web interface, a command line, and a Python client.",
+      "runtime_boundary": "Represents the self-hosted community edition and the backends it launches, not the engines themselves: vLLM, SGLang, llama.cpp through xllamacpp, MLX, and Transformers each keep their own boundary, and vLLM has its own record. It is distinct from LocalAI, the other reviewed compatibility gateway, which ships its own Go server with bundled C++ backends and a gallery aimed at a single mixed-hardware host, whereas Xinference is a Python cluster of a supervisor and workers that places model replicas across machines. Xinference Enterprise and the maintainer's hosted plans hold the serving contract for their customers and are outside this record. The bundled web interface is a management and test console for locally launched models, not a conversational workspace, so the record stays on the runtime side of the ADR 015 runtime-versus-assistant test. The separately licensed enterprise edition and the maintainer's hosted plans are outside this record.",
+      "accelerators": [
+        "cpu",
+        "cuda",
+        "metal",
+        "npu",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "pytorch",
+        "gguf",
+        "awq",
+        "gptq",
+        "fp8",
+        "mlx"
+      ],
+      "serving_modes": [
+        "continuous_batching",
+        "parallel_requests",
+        "distributed_serving"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "local_cli",
+        "container",
+        "orchestrated_cluster"
+      ],
+      "model_management": "A built-in catalogue launches models by name with one command, downloading from Hugging Face or ModelScope and caching files locally for later starts. Custom models are registered from a local path or a JSON specification, cached files are listed and removed through the command line and web interface, running models are terminated to free resources, and LoRA modules are attached at launch from operator-supplied paths. Per-model virtual environments isolate backend dependencies, and the backend is selected automatically from model format, quantization, and hardware unless the operator names one.",
+      "hardware_requirements": "Installation is documented on Linux, Windows, and macOS with backend extras installed per model type. CUDA devices are required for the vLLM and SGLang backends, the MLX backend targets Apple silicon, llama.cpp covers CPU and GPU hosts with automatic GPU-layer estimation, and Ascend NPU execution is documented through torch-npu with the Transformers backend only, which the project states is slow on some chips and steers to its enterprise MindIE engine. Multi-GPU and multi-node execution is available for the engines that support it.",
+      "operational_controls": "Models launch with a chosen engine, replica count, GPU count, and optional per-replica placement onto named workers. A database-backed authentication system with users, permissions, API keys, and optional OIDC single sign-on is enabled by default and can be disabled by environment variable. Supervisor and worker Prometheus metrics exporters, cluster start and stop commands, and a web interface complete the operator surface.",
+      "strengths": [
+        "One OpenAI-compatible endpoint covers chat, completions, embeddings, reranking, image, audio, and multimodal models launched from a large built-in catalogue with a single command.",
+        "Cluster operation is first class: a supervisor with registered workers, replica placement, distributed inference across machines on vLLM, SGLang, and MLX, and shared KV cache between vLLM replicas.",
+        "Operational controls are unusually complete for a gateway, with database-backed authentication and API keys enabled by default, OIDC single sign-on, supervisor and worker metrics exporters, and per-model virtual environments."
+      ],
+      "tradeoffs": [
+        "Execution quality, batching, and quantization coverage come from the selected backend, so behaviour is not uniform across the catalogue and each backend carries its own installation constraints.",
+        "Ascend NPU support in the open-source edition runs only on the Transformers backend, and the project directs users needing the MindIE engine to a separately licensed enterprise edition.",
+        "The Python dependency surface is heavy and version-sensitive, with vLLM and SGLang documented as conflicting inside one environment and several backends requiring separate installation commands."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single Apache-2.0 license file covering the self-hosted edition, which is what this record represents. The maintainer also markets a separately licensed enterprise edition and hosted plans, and its own Ascend installation guide names the MindIE engine as unavailable outside that edition. Those commercial terms are published only as a placeholder page at the time of review, so the enterprise edition is noted as an adjacent product boundary rather than recorded as a reviewed license.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the Xinference community edition",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/xorbitsai/inference/blob/main/LICENSE",
+          "blob_sha": "f49a4e16e68b128803cc2dcea614603632b04eac",
+          "immutable_url": "https://api.github.com/repos/xorbitsai/inference/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 7.0,
+        "model_format_support": 8.0,
+        "serving_concurrency": 7.5,
+        "api_interoperability": 8.5,
+        "deployment_operations": 8.5,
+        "model_lifecycle_management": 9.0,
+        "observability_control": 7.5,
+        "documentation_transparency": 7.5,
+        "overall": 7.91
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Repository overview and feature comparison",
+          "url": "https://github.com/xorbitsai/inference/blob/main/README.md",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Installation and backend selection conditions",
+          "url": "https://inference.readthedocs.io/en/latest/getting_started/installation.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Backend reference",
+          "url": "https://inference.readthedocs.io/en/latest/user_guide/backends.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Distributed inference across workers",
+          "url": "https://inference.readthedocs.io/en/latest/user_guide/distributed_inference.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Supervisor and worker metrics",
+          "url": "https://inference.readthedocs.io/en/latest/user_guide/metrics.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Ascend NPU installation guide",
+          "url": "https://inference.readthedocs.io/en/latest/getting_started/installation_npu.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Cluster deployment and model management commands",
+          "url": "https://inference.readthedocs.io/en/latest/getting_started/using_xinference.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Database-backed authentication system",
+          "url": "https://inference.readthedocs.io/en/latest/user_guide/auth_system.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "LoRA integration",
+          "url": "https://inference.readthedocs.io/en/latest/models/lora.html",
+          "verified_at": "2026-08-29"
+        },
+        {
+          "kind": "web",
+          "label": "Enterprise edition and hosted plans",
+          "url": "https://xinference.io/",
           "verified_at": "2026-08-29"
         }
       ],

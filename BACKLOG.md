@@ -31,7 +31,9 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Evaluate Dify, Langflow, Flowise, and Botpress Cloud as one batch answering whether a low-code visual builder is an agent framework or a multi-agent orchestrator.
 - [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
 - [ ] Review Qwen Chat, Kimi, and Meta AI as assistants, each with its own product-terms and governance pass.
-- [ ] Thicken the embedded-library and compatibility-gateway runtime types, and screen Intel, NPU, and edge-oriented server engines.
+- [x] Thicken the embedded-library and compatibility-gateway runtime types and screen Intel and NPU server engines; ONNX Runtime GenAI, Xinference, and OpenVINO Model Server are published.
+- [ ] Screen edge-oriented inference engines, and read the license files for llamafile and TensorRT-LLM, whose detected licenses are inconclusive.
+- [ ] Revisit Xinference if its commercial terms are published; the enterprise edition is currently noted as an adjacent boundary because the vendor's terms page is a placeholder.
 
 ## Completed on 2026-08-28
 
