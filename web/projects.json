@@ -3399,16 +3399,42 @@
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
       "provider_relationship": "provider_native",
-      "model_backends": ["anthropic"],
-      "architectures": ["undisclosed_managed"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["conversation", "file_import", "connectors"],
-      "memory_lifecycle": ["upsert_rewrite", "consolidation"],
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
       "canonical_data": "service-managed sessions, uploaded and connected files, execution state, and generated work artifacts",
-      "deployment": ["desktop", "mobile", "managed_cloud"],
-      "agent_interfaces": ["web_app"],
-      "execution_boundaries": ["remote_cloud"],
-      "agent_capabilities": ["research", "persistent_state", "workflows"],
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "moderate",
@@ -3417,7 +3443,17 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "Cowork now shares a Claude home with Chat, but Anthropic documents it as a distinct delegated-work mode with the agentic architecture of Claude Code and an isolated remote execution environment.",
-      "score": {"task_reliability": 8.7, "tool_use": 8.8, "autonomy": 8.9, "human_control": 8.5, "observability_recovery": 7.7, "data_sovereignty": 7.2, "interoperability": 7.0, "maturity": 8.2, "overall": 8.23},
+      "score": {
+        "task_reliability": 8.7,
+        "tool_use": 8.8,
+        "autonomy": 8.9,
+        "human_control": 8.5,
+        "observability_recovery": 7.7,
+        "data_sovereignty": 7.2,
+        "interoperability": 7.0,
+        "maturity": 8.2,
+        "overall": 8.23
+      },
       "strengths": [
         "Purpose-built delegation flow for multi-step work rather than a sequence of chat prompts",
         "Isolated cloud execution and explicit tool permissions create a clearer operational boundary",
@@ -3431,7 +3467,9 @@
       "why_it_matters": "Establishes delegated general knowledge work as a product boundary distinct from both conversational Claude and developer-facing Claude Code.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -3446,15 +3484,40 @@
       "primary_role": "general_work_agent",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
-      "architectures": ["undisclosed_managed"],
-      "retrieval_modes": ["keyword", "agentic", "recency_rules"],
-      "capture_modes": ["conversation", "file_import", "connectors", "scheduled"],
-      "memory_lifecycle": ["upsert_rewrite", "consolidation"],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
       "canonical_data": "service-managed work context, connector state, task history, schedules, and generated applications or artifacts",
-      "deployment": ["managed_cloud"],
-      "agent_interfaces": ["web_app"],
-      "execution_boundaries": ["remote_cloud"],
-      "agent_capabilities": ["browser_control", "research", "persistent_state", "workflows"],
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "moderate",
@@ -3463,7 +3526,17 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "This record covers the Computer digital-worker product, not Perplexity's answer engine, Comet browser, or inference API.",
-      "score": {"task_reliability": 8.4, "tool_use": 9.0, "autonomy": 9.1, "human_control": 7.4, "observability_recovery": 6.8, "data_sovereignty": 5.8, "interoperability": 7.4, "maturity": 7.4, "overall": 7.76},
+      "score": {
+        "task_reliability": 8.4,
+        "tool_use": 9.0,
+        "autonomy": 9.1,
+        "human_control": 7.4,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 5.8,
+        "interoperability": 7.4,
+        "maturity": 7.4,
+        "overall": 7.76
+      },
       "strengths": [
         "Broad delegated-work surface spanning research, communications, applications, files, and scheduling",
         "Large connector catalog lets one task coordinate information and actions across services",
@@ -3477,7 +3550,9 @@
       "why_it_matters": "A prominent general work agent that combines Perplexity's research foundation with cross-application execution and asynchronous delegation.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -6169,14 +6244,38 @@
       "url": "https://slite.com/slite-agent",
       "description": "Self-maintaining team knowledge base with human-authored docs, connected sources, cited AI answers, drift detection, drafted updates, and MCP access.",
       "primary_role": "ai_knowledge_app",
-      "secondary_roles": ["human_pkm"],
+      "secondary_roles": [
+        "human_pkm"
+      ],
       "agent_relation": "agent_enabled_ui",
-      "architectures": ["relational_db", "full_text", "hybrid"],
-      "retrieval_modes": ["keyword", "hybrid", "agentic", "recency_rules"],
-      "capture_modes": ["manual", "file_import", "connectors"],
-      "memory_lifecycle": ["human_curated", "upsert_rewrite", "versioned", "consolidation"],
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "hybrid",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "service-managed team documents, connected-source indexes, answer citations, verification state, and drafted knowledge updates",
-      "deployment": ["desktop", "mobile", "managed_cloud"],
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "strong",
@@ -6185,7 +6284,15 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "Slite Agent is represented as a core capability of the Slite knowledge product rather than as a separate autonomous-agent system.",
-      "score": {"second_brain_fit": 8.5, "data_sovereignty": 6.5, "interoperability": 8.3, "memory_intelligence": 8.1, "operational_simplicity": 9.0, "maturity": 8.6, "overall": 8.11},
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.3,
+        "memory_intelligence": 8.1,
+        "operational_simplicity": 9.0,
+        "maturity": 8.6,
+        "overall": 8.11
+      },
       "strengths": [
         "Combines editable team documentation and connected sources with cited answers",
         "Detects stale knowledge and drafts updates while keeping publication under human review",
@@ -6199,7 +6306,9 @@
       "why_it_matters": "A strong reference for knowledge systems that use an agent to maintain human-owned organizational memory instead of replacing it with an opaque chat history.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -6212,14 +6321,36 @@
       "url": "https://www.getzep.com/",
       "description": "Managed enterprise agent-memory platform combining temporal context graphs, a governed context lake, APIs, SDKs, and a dashboard.",
       "primary_role": "agent_memory_service",
-      "secondary_roles": ["context_graph_engine"],
+      "secondary_roles": [
+        "context_graph_engine"
+      ],
       "agent_relation": "external_memory",
-      "architectures": ["graph_db", "vector_index", "full_text", "hybrid"],
-      "retrieval_modes": ["semantic_vector", "keyword", "hybrid", "graph_traversal", "temporal"],
-      "capture_modes": ["conversation", "connectors"],
-      "memory_lifecycle": ["append_only", "supersession", "consolidation"],
+      "architectures": [
+        "graph_db",
+        "vector_index",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "graph_traversal",
+        "temporal"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "supersession",
+        "consolidation"
+      ],
       "canonical_data": "service-managed Context Graph and Context Lake with episodes, entities, relationships, provenance, permissions, and temporal validity",
-      "deployment": ["managed_cloud"],
+      "deployment": [
+        "managed_cloud"
+      ],
       "local_first": false,
       "human_editable": false,
       "provenance": "strong",
@@ -6228,7 +6359,15 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "Zep Cloud is the proprietary managed memory service; the separately reviewed Graphiti record covers its reusable open-source temporal graph engine.",
-      "score": {"second_brain_fit": 8.8, "data_sovereignty": 5.5, "interoperability": 8.5, "memory_intelligence": 9.4, "operational_simplicity": 8.3, "maturity": 8.1, "overall": 8.11},
+      "score": {
+        "second_brain_fit": 8.8,
+        "data_sovereignty": 5.5,
+        "interoperability": 8.5,
+        "memory_intelligence": 9.4,
+        "operational_simplicity": 8.3,
+        "maturity": 8.1,
+        "overall": 8.11
+      },
       "strengths": [
         "Temporal context graph models changing facts and relationship history rather than flattening all memories",
         "Managed APIs, SDKs, dashboard, and governance reduce the operational burden of Graphiti-style memory",
@@ -6242,7 +6381,9 @@
       "why_it_matters": "Separates the managed agent-memory product from Graphiti and provides a reference for governed enterprise context graphs as a service.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -6258,16 +6399,56 @@
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
       "provider_relationship": "multi_provider",
-      "model_backends": ["anthropic", "openai", "google", "mistral", "openrouter", "z_ai", "openai_compatible", "local_runtime"],
-      "architectures": ["plain_files", "event_log", "git_versioned", "hybrid"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["coding_session"],
-      "memory_lifecycle": ["versioned", "consolidation"],
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "openrouter",
+        "z_ai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "local working tree, Git history, agent configuration, skills, and exportable coding sessions",
-      "deployment": ["local_cli", "ide_extension", "cloud_optional"],
-      "agent_interfaces": ["terminal", "ide"],
-      "execution_boundaries": ["host", "remote_cloud"],
-      "agent_capabilities": ["code_editing", "shell_execution", "research", "multi_agent", "persistent_state", "mcp", "workflows"],
+      "deployment": [
+        "local_cli",
+        "ide_extension",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6276,7 +6457,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": "This record covers the MIT-licensed Kilo Code IDE extensions and CLI; Kilo Gateway and Cloud Agent are optional hosted service boundaries and are not classified as open source here.",
-      "score": {"task_reliability": 8.1, "tool_use": 8.7, "autonomy": 8.3, "human_control": 8.4, "observability_recovery": 7.9, "data_sovereignty": 8.8, "interoperability": 9.3, "maturity": 8.5, "overall": 8.44},
+      "score": {
+        "task_reliability": 8.1,
+        "tool_use": 8.7,
+        "autonomy": 8.3,
+        "human_control": 8.4,
+        "observability_recovery": 7.9,
+        "data_sovereignty": 8.8,
+        "interoperability": 9.3,
+        "maturity": 8.5,
+        "overall": 8.44
+      },
       "strengths": [
         "IDE and terminal clients share a capable coding-agent workflow with interactive and autonomous operation",
         "Permission rules, MCP, skills, custom agents, session import and export, and Git workflows provide strong operator control",
@@ -6295,7 +6486,9 @@
       "open_issues": 583,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": "MIT",
-      "licenses": ["MIT"],
+      "licenses": [
+        "MIT"
+      ],
       "source_model": "open_source",
       "license_review_status": "verified"
     },
@@ -6311,16 +6504,62 @@
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
       "provider_relationship": "provider_agnostic",
-      "model_backends": ["openai", "openrouter", "openai_compatible", "local_runtime"],
-      "architectures": ["plain_files", "relational_db", "event_log", "hybrid"],
-      "retrieval_modes": ["keyword", "agentic", "recency_rules"],
-      "capture_modes": ["conversation", "connectors", "scheduled", "coding_session"],
-      "memory_lifecycle": ["human_curated", "versioned", "consolidation", "self_editing"],
+      "model_backends": [
+        "openai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned",
+        "consolidation",
+        "self_editing"
+      ],
       "canonical_data": "human-readable memory and profile files, SQLite session history, agent-created skills, schedules, and per-profile configuration",
-      "deployment": ["desktop", "local_cli", "self_hosted", "cloud_optional"],
-      "agent_interfaces": ["terminal", "web_app"],
-      "execution_boundaries": ["host", "container", "external_sandbox", "remote_cloud"],
-      "agent_capabilities": ["code_editing", "shell_execution", "browser_control", "research", "multi_agent", "persistent_state", "mcp", "workflows"],
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6329,7 +6568,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": null,
-      "score": {"task_reliability": 7.8, "tool_use": 9.0, "autonomy": 9.0, "human_control": 7.6, "observability_recovery": 8.4, "data_sovereignty": 9.0, "interoperability": 9.2, "maturity": 7.8, "overall": 8.38},
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 9.0,
+        "autonomy": 9.0,
+        "human_control": 7.6,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 9.0,
+        "interoperability": 9.2,
+        "maturity": 7.8,
+        "overall": 8.38
+      },
       "strengths": [
         "Persistent memory, searchable sessions, agent-authored skills, schedules, and profiles form a coherent long-lived runtime",
         "Local, container, SSH, and hosted sandbox backends support materially different execution boundaries",
@@ -6348,7 +6597,9 @@
       "open_issues": 37014,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": "MIT",
-      "licenses": ["MIT"],
+      "licenses": [
+        "MIT"
+      ],
       "source_model": "open_source",
       "license_review_status": "verified"
     },
@@ -6363,15 +6614,43 @@
       "primary_role": "coding_agent",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
-      "architectures": ["undisclosed_managed", "git_versioned", "hybrid"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["conversation", "coding_session"],
-      "memory_lifecycle": ["versioned", "consolidation"],
+      "architectures": [
+        "undisclosed_managed",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "service-managed project files, Agent conversations and memory, task state, checkpoints, database state, and publishing configuration",
-      "deployment": ["managed_cloud"],
-      "agent_interfaces": ["web_app", "ide"],
-      "execution_boundaries": ["remote_cloud"],
-      "agent_capabilities": ["code_editing", "shell_execution", "browser_control", "research", "persistent_state", "mcp", "workflows"],
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "strong",
@@ -6380,7 +6659,17 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "Replit Agent is represented as the proprietary managed coding-agent product, not as the separately editable application code it generates inside a Replit project.",
-      "score": {"task_reliability": 8.3, "tool_use": 9.0, "autonomy": 9.0, "human_control": 8.4, "observability_recovery": 9.0, "data_sovereignty": 3.8, "interoperability": 6.8, "maturity": 8.8, "overall": 8.03},
+      "score": {
+        "task_reliability": 8.3,
+        "tool_use": 9.0,
+        "autonomy": 9.0,
+        "human_control": 8.4,
+        "observability_recovery": 9.0,
+        "data_sovereignty": 3.8,
+        "interoperability": 6.8,
+        "maturity": 8.8,
+        "overall": 8.03
+      },
       "strengths": [
         "Planning, code generation, shell execution, app testing, database work, and publishing share one managed workspace",
         "Checkpoints expose diffs and support rollback of files, Agent state, tasks, and optionally development database state",
@@ -6394,7 +6683,9 @@
       "why_it_matters": "A mature example of a vertically integrated cloud coding agent where workspace, execution, recovery, databases, and deployment are one product boundary.",
       "research_confidence": "high",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -6407,17 +6698,49 @@
       "url": "https://github.com/trycua/cua",
       "description": "Open-source computer-use agent infrastructure with local and cloud sandboxes, SDKs, tools, and evaluation support for operating full desktops.",
       "primary_role": "browser_computer_agent",
-      "secondary_roles": ["agent_framework_sdk"],
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
       "agent_relation": "agent_runtime",
-      "architectures": ["event_log", "hybrid"],
-      "retrieval_modes": ["agentic"],
-      "capture_modes": ["screen", "activity"],
-      "memory_lifecycle": ["append_only"],
+      "architectures": [
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen",
+        "activity"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
       "canonical_data": "agent trajectories, screenshots, sandbox state, computer-use actions, task logs, and evaluation results",
-      "deployment": ["library", "local_cli", "self_hosted", "cloud_optional"],
-      "agent_interfaces": ["api_sdk", "library"],
-      "execution_boundaries": ["host", "external_sandbox", "remote_cloud"],
-      "agent_capabilities": ["code_editing", "shell_execution", "browser_control", "research", "persistent_state", "mcp", "workflows"],
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6426,7 +6749,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": "This record covers the MIT-licensed Cua libraries and self-hostable computer-use infrastructure; optional Cua Cloud sandbox capacity is a separate managed service boundary.",
-      "score": {"task_reliability": 7.7, "tool_use": 9.2, "autonomy": 8.4, "human_control": 8.2, "observability_recovery": 8.4, "data_sovereignty": 8.8, "interoperability": 9.0, "maturity": 7.8, "overall": 8.38},
+      "score": {
+        "task_reliability": 7.7,
+        "tool_use": 9.2,
+        "autonomy": 8.4,
+        "human_control": 8.2,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 8.8,
+        "interoperability": 9.0,
+        "maturity": 7.8,
+        "overall": 8.38
+      },
       "strengths": [
         "Combines computer-use agent tooling, desktop virtualization, sandbox lifecycle, and evaluation in one reusable stack",
         "Supports local execution and self-hosting while offering optional managed sandbox capacity",
@@ -6445,7 +6778,9 @@
       "open_issues": 736,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": "MIT",
-      "licenses": ["MIT"],
+      "licenses": [
+        "MIT"
+      ],
       "source_model": "open_source",
       "license_review_status": "verified"
     },
@@ -6458,17 +6793,51 @@
       "url": "https://github.com/sapientinc/PRAXIST",
       "description": "Source-available autonomous research system that runs parallel research peers, executable evaluations, evidence capture, and iterative synthesis across generations.",
       "primary_role": "research_agent",
-      "secondary_roles": ["multi_agent_orchestrator"],
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
       "agent_relation": "agent_runtime",
-      "architectures": ["plain_files", "event_log", "git_versioned", "hybrid"],
-      "retrieval_modes": ["keyword", "agentic", "recency_rules"],
-      "capture_modes": ["file_import", "connectors", "coding_session"],
-      "memory_lifecycle": ["append_only", "versioned", "consolidation"],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "research questions, peer workspaces, experiment code, evaluation outputs, evidence, lineage, and generation summaries",
-      "deployment": ["local_cli", "self_hosted"],
-      "agent_interfaces": ["terminal"],
-      "execution_boundaries": ["host", "framework_defined"],
-      "agent_capabilities": ["code_editing", "shell_execution", "research", "multi_agent", "persistent_state", "workflows"],
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6477,7 +6846,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": "PRAXIST is in beta. Its public source is governed by a Fair Source license with internal-use, distribution, revenue, and commercial-license restrictions, so it is not classified as open source.",
-      "score": {"task_reliability": 7.3, "tool_use": 8.6, "autonomy": 9.3, "human_control": 7.8, "observability_recovery": 9.2, "data_sovereignty": 8.4, "interoperability": 7.7, "maturity": 5.8, "overall": 7.98},
+      "score": {
+        "task_reliability": 7.3,
+        "tool_use": 8.6,
+        "autonomy": 9.3,
+        "human_control": 7.8,
+        "observability_recovery": 9.2,
+        "data_sovereignty": 8.4,
+        "interoperability": 7.7,
+        "maturity": 5.8,
+        "overall": 7.98
+      },
       "strengths": [
         "Treats executable evaluation and durable evidence as part of the research loop rather than relying only on generated prose",
         "Parallel peers and generation-to-generation synthesis support broad exploration without discarding lineage",
@@ -6496,7 +6875,9 @@
       "open_issues": 1,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": null,
-      "licenses": ["LicenseRef-Commercial"],
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
       "source_model": "source_available",
       "license_review_status": "verified"
     },
@@ -6511,15 +6892,40 @@
       "primary_role": "coding_agent",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
-      "architectures": ["plain_files", "event_log", "git_versioned"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["coding_session"],
-      "memory_lifecycle": ["versioned", "consolidation"],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "local working tree, Git history, configuration, tool output, and coding-agent sessions",
-      "deployment": ["local_cli"],
-      "agent_interfaces": ["terminal", "api_sdk"],
-      "execution_boundaries": ["host"],
-      "agent_capabilities": ["code_editing", "shell_execution", "research", "persistent_state", "workflows"],
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6528,7 +6934,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": "Open Grok is a community-maintained fork of the Grok Build coding-agent codebase. It is unrelated to the long-running OpenGrok source-code search and cross-reference project.",
-      "score": {"task_reliability": 7.5, "tool_use": 8.7, "autonomy": 8.2, "human_control": 8.2, "observability_recovery": 8.3, "data_sovereignty": 8.8, "interoperability": 8.6, "maturity": 5.5, "overall": 7.97},
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 8.7,
+        "autonomy": 8.2,
+        "human_control": 8.2,
+        "observability_recovery": 8.3,
+        "data_sovereignty": 8.8,
+        "interoperability": 8.6,
+        "maturity": 5.5,
+        "overall": 7.97
+      },
       "strengths": [
         "Provides a reusable open implementation of the Grok Build terminal-agent workflow",
         "Interactive, headless, tool, and Agent Client Protocol surfaces support several operating modes",
@@ -6547,7 +6963,9 @@
       "open_issues": 3,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": "Apache-2.0",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "source_model": "open_source",
       "license_review_status": "verified"
     },
@@ -6560,17 +6978,52 @@
       "url": "https://github.com/warpdotdev/Warp",
       "description": "Open-source agentic development environment combining a modern terminal, code editing and review, built-in local agents, third-party CLI agents, and optional Oz cloud orchestration.",
       "primary_role": "coding_agent",
-      "secondary_roles": ["multi_agent_orchestrator"],
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
       "agent_relation": "agent_runtime",
-      "architectures": ["plain_files", "event_log", "git_versioned", "hybrid"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["coding_session"],
-      "memory_lifecycle": ["versioned", "consolidation"],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
       "canonical_data": "local working trees, terminal state, agent conversations, plans, diffs, workflows, and optional Oz task state",
-      "deployment": ["desktop", "local_cli", "cloud_optional"],
-      "agent_interfaces": ["terminal", "ide", "web_app", "api_sdk"],
-      "execution_boundaries": ["host", "remote_cloud"],
-      "agent_capabilities": ["code_editing", "shell_execution", "research", "multi_agent", "persistent_state", "mcp", "workflows"],
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -6579,7 +7032,17 @@
       "stars_verified_at": "2026-08-28",
       "historical_stars": null,
       "current_repo_note": "Most of the Warp repository is AGPL-3.0; the warpui_core and warpui UI framework packages are MIT. Optional Oz hosted runners and managed orchestration are separate cloud boundaries.",
-      "score": {"task_reliability": 8.2, "tool_use": 9.0, "autonomy": 8.8, "human_control": 8.5, "observability_recovery": 8.5, "data_sovereignty": 7.6, "interoperability": 8.8, "maturity": 9.0, "overall": 8.53},
+      "score": {
+        "task_reliability": 8.2,
+        "tool_use": 9.0,
+        "autonomy": 8.8,
+        "human_control": 8.5,
+        "observability_recovery": 8.5,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.8,
+        "maturity": 9.0,
+        "overall": 8.53
+      },
       "strengths": [
         "Terminal, editor, agent plans, diffs, review, and command execution share one mature local interface",
         "Runs built-in and third-party CLI agents while adding approvals, notifications, and review tooling",
@@ -6598,7 +7061,10 @@
       "open_issues": 5117,
       "metadata_verified_at": "2026-08-28",
       "github_detected_license": "AGPL-3.0",
-      "licenses": ["AGPL-3.0", "MIT"],
+      "licenses": [
+        "AGPL-3.0",
+        "MIT"
+      ],
       "source_model": "mixed_open_source",
       "license_review_status": "verified"
     },
@@ -6613,15 +7079,42 @@
       "primary_role": "general_work_agent",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
-      "architectures": ["undisclosed_managed"],
-      "retrieval_modes": ["keyword", "agentic", "recency_rules"],
-      "capture_modes": ["conversation", "file_import", "connectors", "scheduled"],
-      "memory_lifecycle": ["upsert_rewrite", "consolidation"],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
       "canonical_data": "service-managed conversations, persistent files, memories, skills, connector state, schedules, and generated media or applications",
-      "deployment": ["managed_cloud"],
-      "agent_interfaces": ["web_app"],
-      "execution_boundaries": ["remote_cloud"],
-      "agent_capabilities": ["code_editing", "browser_control", "research", "multi_agent", "persistent_state", "workflows"],
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "moderate",
@@ -6630,7 +7123,17 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "This record covers the Supercomputer Agent product, not Higgsfield's individual image or video generators and not the company as a whole.",
-      "score": {"task_reliability": 7.7, "tool_use": 9.0, "autonomy": 9.0, "human_control": 8.2, "observability_recovery": 8.2, "data_sovereignty": 3.8, "interoperability": 7.8, "maturity": 7.2, "overall": 7.72},
+      "score": {
+        "task_reliability": 7.7,
+        "tool_use": 9.0,
+        "autonomy": 9.0,
+        "human_control": 8.2,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 3.8,
+        "interoperability": 7.8,
+        "maturity": 7.2,
+        "overall": 7.72
+      },
       "strengths": [
         "Combines broad work delegation with unusually deep image, video, audio, and campaign-production capabilities",
         "Persistent files, memory, reusable skills, schedules, and parallel chats support work beyond one prompt",
@@ -6644,7 +7147,9 @@
       "why_it_matters": "Shows a general work agent emerging from a creative-media platform rather than a chat or office-suite product, with media execution as a first-class tool surface.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
@@ -6660,13 +7165,35 @@
       "secondary_roles": [],
       "agent_relation": "agent_enabled_ui",
       "provider_relationship": "multi_provider",
-      "model_backends": ["anthropic", "deepseek", "google", "mistral", "openai", "x_ai", "z_ai"],
-      "architectures": ["undisclosed_managed"],
-      "retrieval_modes": ["keyword", "agentic"],
-      "capture_modes": ["conversation", "file_import"],
-      "memory_lifecycle": ["human_curated", "upsert_rewrite"],
+      "model_backends": [
+        "anthropic",
+        "deepseek",
+        "google",
+        "mistral",
+        "openai",
+        "x_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite"
+      ],
       "canonical_data": "device-held conversation history plus service-managed account, preferences, model routing, and generated artifacts",
-      "deployment": ["mobile", "managed_cloud"],
+      "deployment": [
+        "mobile",
+        "managed_cloud"
+      ],
       "local_first": false,
       "human_editable": true,
       "provenance": "moderate",
@@ -6675,7 +7202,17 @@
       "stars_verified_at": null,
       "historical_stars": null,
       "current_repo_note": "This record covers the end-user Venice assistant. The separately reviewed Venice API record covers the developer inference and routing service.",
-      "score": {"task_reliability": 7.7, "context_continuity": 7.9, "tools_integrations": 7.4, "human_control": 8.0, "data_governance": 8.8, "interoperability": 8.0, "usability_access": 8.4, "maturity": 8.0, "overall": 7.99},
+      "score": {
+        "task_reliability": 7.7,
+        "context_continuity": 7.9,
+        "tools_integrations": 7.4,
+        "human_control": 8.0,
+        "data_governance": 8.8,
+        "interoperability": 8.0,
+        "usability_access": 8.4,
+        "maturity": 8.0,
+        "overall": 7.99
+      },
       "strengths": [
         "Presents a large cross-provider and cross-modal model catalog in one assistant workspace",
         "Device-held history and clearly labeled private, anonymized, TEE, and E2EE model modes expose meaningful privacy choices",
@@ -6689,7 +7226,9 @@
       "why_it_matters": "A useful comparison point for multi-model assistants that make routing privacy and local conversation history part of the product proposition.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "licenses": ["LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
       "source_model": "proprietary",
       "license_review_status": "verified"
     },
