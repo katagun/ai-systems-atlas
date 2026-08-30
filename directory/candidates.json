@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-08-29",
+  "updated_at": "2026-08-30",
   "candidates": [
     {
       "repo": "agiresearch/A-mem",
@@ -2973,6 +2973,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Meta Business Agent Platform",
+      "url": "https://developers.facebook.com/documentation/meta-business-agent/overview",
+      "description": "Managed platform on which a business configures a WhatsApp customer-facing agent through Meta's APIs, grounding it in business content and connecting its own APIs and webhooks so the agent can take actions and hand control back to the business app.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.7,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "customer-messaging",
+        "managed-agent-platform",
+        "tool-calling",
+        "whatsapp"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-30",
       "review_required": [
         "licensing",
         "classification",
