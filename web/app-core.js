@@ -11,6 +11,7 @@
       roles: [],
       agent: "",
       architecture: "",
+      deployment: "",
       sourceModel: "",
       license: "",
       status: "active",
@@ -58,6 +59,7 @@
       (!roles.length || roles.includes(project.primary_role)) &&
       (!filters.agent || project.agent_relation === filters.agent) &&
       (!filters.architecture || project.architectures.includes(filters.architecture)) &&
+      (!filters.deployment || project.deployment.includes(filters.deployment)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&

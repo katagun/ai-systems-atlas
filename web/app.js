@@ -257,6 +257,8 @@ function populateFilters() {
   populateRoleFilter();
   state.taxonomy.agent_relations.forEach(item => $("#agent-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   state.taxonomy.architectures.forEach(item => $("#architecture-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedDeployments = new Set(state.projects.flatMap(project => project.deployment));
+  state.taxonomy.deployment_modes.filter(item => publishedDeployments.has(item.id)).forEach(item => $("#deployment-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedSourceModels = new Set(state.projects.map(project => project.source_model));
   state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
@@ -348,6 +350,7 @@ function updateAdvancedFilterSummary() {
     $("#license-filter").value,
     $("#agent-filter").value,
     $("#architecture-filter").value,
+    $("#deployment-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
     $("#local-filter").checked ? "local" : "",
   ].filter(Boolean).length;
@@ -366,6 +369,7 @@ function applyDirectoryDefaults() {
   $("#license-filter").value = defaults.license;
   $("#agent-filter").value = defaults.agent;
   $("#architecture-filter").value = defaults.architecture;
+  $("#deployment-filter").value = defaults.deployment;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").checked = defaults.localOnly;
@@ -467,6 +471,7 @@ function filteredProjects() {
     roles: state.directoryRoles || [],
     agent: $("#agent-filter").value,
     architecture: $("#architecture-filter").value,
+    deployment: $("#deployment-filter").value,
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
@@ -774,6 +779,7 @@ function applyFinderToDirectory() {
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
   $("#agent-filter").value = "";
   $("#architecture-filter").value = "";
+  $("#deployment-filter").value = "";
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
@@ -1062,7 +1068,7 @@ function bindEvents() {
     renderProjects();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
-  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
+  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
   ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderLocalRuntimes));

@@ -433,3 +433,18 @@ test("finder recommends inference services without crossing score profiles", asy
   await expect(page).toHaveURL(/collection=inference/);
   await expect(page.locator("#inference-type-filter")).toHaveValue("routing_aggregator");
 });
+
+test("the deployment filter reaches vendor-operated systems and reports itself as active", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(1);
+
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#deployment-filter").selectOption("managed_cloud");
+
+  await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(0);
+  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+});
