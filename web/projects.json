@@ -211,7 +211,9 @@
       ],
       "canonical_data": "browser state and execution history",
       "deployment": [
-        "self_hosted",
+        "local_cli",
+        "library",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -303,8 +305,9 @@
       ],
       "canonical_data": "local working tree, project instructions, and resumable Claude Code sessions",
       "deployment": [
-        "local_cli",
+        "desktop",
         "ide_extension",
+        "local_cli",
         "managed_cloud"
       ],
       "agent_interfaces": [
@@ -400,9 +403,7 @@
       ],
       "canonical_data": "streamed SDK messages, Claude Code session state, project instructions, checkpoints, tool results, and application-defined external session stores",
       "deployment": [
-        "library",
-        "self_hosted",
-        "cloud_optional"
+        "library"
       ],
       "agent_interfaces": [
         "api_sdk",
@@ -667,7 +668,10 @@
       ],
       "canonical_data": "application-defined crew and flow state",
       "deployment": [
+        "local_cli",
+        "library",
         "self_hosted",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -977,6 +981,7 @@
       ],
       "canonical_data": "cloud workspaces, repository state, session history, knowledge, and playbooks",
       "deployment": [
+        "local_cli",
         "managed_cloud"
       ],
       "agent_interfaces": [
@@ -1423,8 +1428,9 @@
       ],
       "canonical_data": "research artifacts and generated reports",
       "deployment": [
-        "self_hosted",
-        "cloud_optional"
+        "local_cli",
+        "library",
+        "self_hosted"
       ],
       "agent_interfaces": [
         "web_app",
@@ -1516,8 +1522,7 @@
       ],
       "canonical_data": "Git-versioned skills, plans, review and QA artifacts, browser evidence, and append-only learning records",
       "deployment": [
-        "local_cli",
-        "cloud_optional"
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal",
@@ -1626,6 +1631,7 @@
       "deployment": [
         "library",
         "self_hosted",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -1720,7 +1726,6 @@
       "deployment": [
         "desktop",
         "local_cli",
-        "ide_extension",
         "managed_cloud"
       ],
       "agent_interfaces": [
@@ -1903,7 +1908,9 @@
       ],
       "canonical_data": "application-defined graph state and checkpoints",
       "deployment": [
+        "library",
         "self_hosted",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -2207,6 +2214,7 @@
       "deployment": [
         "library",
         "self_hosted",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -2300,6 +2308,7 @@
       ],
       "canonical_data": "application-defined workflow and agent state",
       "deployment": [
+        "library",
         "self_hosted",
         "cloud_optional"
       ],
@@ -2767,7 +2776,7 @@
       "deployment": [
         "local_cli",
         "self_hosted",
-        "cloud_optional"
+        "managed_cloud"
       ],
       "agent_interfaces": [
         "terminal",
@@ -3048,6 +3057,7 @@
       ],
       "canonical_data": "typed application-defined state",
       "deployment": [
+        "library",
         "self_hosted",
         "cloud_optional"
       ],
@@ -5010,8 +5020,7 @@
       "canonical_data": "Git-versioned Markdown brain repositories, with PGLite or Postgres retrieval projections, typed links, citations, and durable background-job state",
       "deployment": [
         "local_cli",
-        "self_hosted",
-        "cloud_optional"
+        "self_hosted"
       ],
       "local_first": true,
       "human_editable": true,
@@ -5243,7 +5252,6 @@
       "canonical_data": "database",
       "deployment": [
         "desktop",
-        "mobile",
         "self_hosted",
         "managed_cloud"
       ],
@@ -6428,8 +6436,9 @@
       ],
       "canonical_data": "local working tree, Git history, agent configuration, skills, and exportable coding sessions",
       "deployment": [
-        "local_cli",
         "ide_extension",
+        "local_cli",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -6718,10 +6727,10 @@
       ],
       "canonical_data": "agent trajectories, screenshots, sandbox state, computer-use actions, task logs, and evaluation results",
       "deployment": [
-        "library",
         "local_cli",
+        "library",
         "self_hosted",
-        "cloud_optional"
+        "managed_cloud"
       ],
       "agent_interfaces": [
         "api_sdk",
@@ -7003,6 +7012,7 @@
       "deployment": [
         "desktop",
         "local_cli",
+        "managed_cloud",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -7411,7 +7421,7 @@
       "canonical_data": "Agent definitions, typed tool implementations, prompts, session state, and MCP server configuration",
       "deployment": [
         "library",
-        "managed_cloud"
+        "self_hosted"
       ],
       "agent_interfaces": [
         "library",
@@ -7506,7 +7516,7 @@
       "deployment": [
         "library",
         "self_hosted",
-        "managed_cloud"
+        "cloud_optional"
       ],
       "agent_interfaces": [
         "library",
@@ -7602,8 +7612,10 @@
       "canonical_data": "service-managed conversations, settings, connected-tool context, generated documents, and code changes in connected repositories",
       "deployment": [
         "mobile",
-        "managed_cloud",
-        "self_hosted"
+        "ide_extension",
+        "local_cli",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": true,

@@ -14,7 +14,7 @@ Use progressive disclosure for explanation and specialist controls:
 
 - Keep the All, Systems, Inference services, and Local runtimes collection switcher visible.
 - In All, expose one shared search, sort alphabetically, and hide numeric scores.
-- In Systems, keep Search, Family, Role, and Sort visible; keep source model, license, agent relation, architecture, status, and local-first under “More filters.”
+- In Systems, keep Search, Family, Role, and Sort visible; keep source model, license, agent relation, architecture, deployment, status, and local-first under “More filters.”
 - In Inference services, keep search, service type, delivery, model source, API style, and score sort visible.
 - In Local runtimes, keep search, runtime type, accelerator, model format, API style, and score sort visible.
 - State the applicable score-scope rule beside each collection's controls.
@@ -46,6 +46,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - A superseded project's details lead with a notice naming its successor, and the successor's name opens that record. The notice states that the review still stands.
 - Every card displays its reviewed license identifiers and source model.
 - License and source-model filters are taxonomy-driven and combine with every existing filter.
+- The deployment filter is taxonomy-driven and combines with every existing filter. It lists only modes carried by published projects, and it is how a reader reaches an operational fact such as a vendor-operated system. [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md) makes that reachability a precondition: who operates a system is a trait, so the filter must exist rather than the fact being encoded as a role.
 - Project details show scoped license evidence; Git-hosted evidence links both immutable blobs and human-readable source paths.
 - Specification cards show type, integration scope, status or version, steward, and every reviewed license.
 - Specification filters combine search, type, scope, status, and license. Results are alphabetic and explicitly unscored.
