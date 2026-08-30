@@ -15,6 +15,7 @@ Read only the documents required by the change:
 | system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md` |
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
+| vendor-hosted platforms, who operates a system, or deployment traits | `docs/TAXONOMY.md`, then `docs/adr/018-operating-party-is-a-trait-not-a-role.md` and `docs/adr/003-multi-axis-directory.md` |
 | provider relationships or model backends | `docs/DATA_MODEL.md`, then `docs/adr/006-provider-relationships-are-orthogonal.md` |
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
