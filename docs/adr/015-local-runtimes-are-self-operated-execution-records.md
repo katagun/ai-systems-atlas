@@ -1,6 +1,8 @@
 # ADR 015: Local runtimes are self-operated execution records
 
-**Status:** Accepted
+**Status:** Amended by [ADR 017](017-local-runtime-eligibility-ignores-modality.md)
+
+ADR 017 preserves this record's boundary, purpose test, and exclusions. It settles separately whether the kind of model a runtime executes affects eligibility, and adds the vocabulary obligation that follows.
 
 ## Context
 
@@ -54,11 +56,11 @@ The test is therefore purpose, not capability. Ask what the software is for. If 
 
 A framework's dedicated serving product is a separate boundary and can qualify on its own. TensorFlow Serving exists to serve trained models and is judged on its own terms; the TensorFlow framework is not.
 
-### Modality is not the gate
+### Modality
 
-The unit of curation says model inference without naming a model type, and that is deliberate. A runtime built for speech, vision, or embeddings is eligible on the same purpose test as one built for language models, and is scored against the same profile.
+The unit of curation says model inference without naming a model type. Whether that omission is an eligibility criterion is settled by [ADR 017](017-local-runtime-eligibility-ignores-modality.md), which holds that modality is not a gate and records the vocabulary obligation that follows from admitting one.
 
-The consequence is that the collection's centre of gravity may be language models while its boundary is wider. Reviewers should not reject a candidate for serving a different modality, and should not admit a general framework merely because it serves the same one.
+The purpose test above still governs. A general framework is not admitted merely because it serves the same modality as a published runtime.
 
 ### Runtime versus assistant
 
@@ -105,5 +107,5 @@ Classification filters remain first-class. A deliberately narrow runtime — an 
 - Local runtimes carry inline scoped license evidence in the manner of specifications. They stay outside `directory/license-evidence.json`, whose one-entry-per-project invariant is keyed on `project_id`, and outside the [ADR 005](005-fail-closed-license-drift.md) project drift machinery.
 - Changing a dimension or weight requires a taxonomy and documentation change plus recomputation of every local-runtime score.
 - The substrate test keeps the collection one layer deep. A framework beneath a published runtime is out, while that framework's dedicated serving product is judged on its own terms, so an execution stack is never recorded twice.
-- Leaving modality open means the collection may admit speech, vision, or embedding runtimes. That is intended, and reviewers should expect the published set to look language-heavy for reasons of demand rather than boundary.
+- Leaving modality open is settled by [ADR 017](017-local-runtime-eligibility-ignores-modality.md), which admits speech, vision, and embedding runtimes on the same purpose test and requires the classification vocabulary to be extended alongside.
 - Adding a fifth collection requires its own decision record and the ADR 013 conditions; the existence of a fourth is not a precedent for admitting adjacent software by analogy.

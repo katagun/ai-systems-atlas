@@ -37,7 +37,8 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Screen edge-oriented inference engines and read the inconclusive license files; both were Apache-2.0 despite GitHub reporting NOASSERTION. MLC LLM, Qualcomm GenieX, and TensorRT-LLM are published and llamafile is excluded.
 - [ ] Allow license evidence to reference a pinned blob in a vendored submodule's own repository. The GenieX proprietary component is documented only in the geniex-qairt-plugin repository, and the git-blob evidence rule requires the record's own repo, so it is recorded as dated web terms instead.
 - [ ] Review a proprietary or managed self-hosted gateway; both reviewed compatibility gateways are open source.
-- [ ] Extend the runtime model-format vocabulary in one deliberate pass if more classical machine-learning serving systems are reviewed. The current ids describe language-model weights, so TensorFlow Serving needed `saved_model` added on its own; Triton, KServe, and Seldon would each hit the same edge.
+- [ ] Extend the runtime model-format vocabulary in one deliberate pass if more classical machine-learning serving systems are reviewed. ADR 017 makes extending the vocabulary an obligation when a modality is admitted; TensorFlow Serving needed `saved_model` added on its own, and Triton, KServe, and Seldon would each hit the same edge.
+- [ ] Decide whisper.cpp on its merits under the ADR 015 purpose test and the ADR 017 modality rule; it was screened without a decision when the rule was unwritten.
 - [ ] Revisit Xinference if its commercial terms are published; the enterprise edition is currently noted as an adjacent boundary because the vendor's terms page is a placeholder.
 
 ## Completed on 2026-08-28
