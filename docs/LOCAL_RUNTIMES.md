@@ -16,6 +16,12 @@ The record represents the runtime, not its maintainer, its model catalog, or a s
 
 Do not include model weights or families, managed inference services, inference client SDKs, proxies, routing libraries, vector stores, retrieval infrastructure, or training and fine-tuning frameworks. Inference execution on user-controlled hardware is the gate.
 
+### Substrate and modality
+
+A general-purpose machine-learning framework is out even though it executes inference. PyTorch, TensorFlow, JAX, and Apache TVM are the layer published runtimes are built on, and recording both would capture one execution stack twice. Ask what the software is for: if serving inference on the operator's hardware is the product, it is a candidate; if serving is one capability of something built to train models, it is not. A framework's dedicated serving product is a separate boundary and qualifies on its own terms.
+
+Modality is not the gate. A runtime built for speech, vision, or embeddings is eligible on the same test as one built for language models, and is scored against the same profile. See [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md).
+
 ### Runtime or assistant
 
 Some runtimes ship a graphical chat interface. Classify by primary operational outcome.
