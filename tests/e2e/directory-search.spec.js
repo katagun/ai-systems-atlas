@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("140 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("143 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -79,13 +79,13 @@ test("the local runtimes scope filters, sorts, and opens its own detail dialog",
   await expect(names.first()).toHaveText("vLLM");
 
   await page.locator("#runtime-type-filter").selectOption("desktop_runner");
-  await expect(names).toHaveCount(2);
+  await expect(names).toHaveCount(3);
   await page.locator("#runtime-accelerator-filter").selectOption("vulkan");
   await expect(names).toHaveText(["LM Studio"]);
 
   await page.locator("#reset-runtime-filters").click();
   await page.locator("#runtime-sort-filter").selectOption("name");
-  await expect(names.first()).toHaveText("llama.cpp");
+  await expect(names.first()).toHaveText("GenieX");
 
   await page.locator("#runtime-search").fill("Ollama Cloud");
   await expect(names).toHaveText(["Ollama"]);

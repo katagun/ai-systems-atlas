@@ -32,7 +32,9 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
 - [ ] Review Qwen Chat, Kimi, and Meta AI as assistants, each with its own product-terms and governance pass.
 - [x] Thicken the embedded-library and compatibility-gateway runtime types and screen Intel and NPU server engines; ONNX Runtime GenAI, Xinference, and OpenVINO Model Server are published.
-- [ ] Screen edge-oriented inference engines, and read the license files for llamafile and TensorRT-LLM, whose detected licenses are inconclusive.
+- [x] Screen edge-oriented inference engines and read the inconclusive license files; both were Apache-2.0 despite GitHub reporting NOASSERTION. MLC LLM, Qualcomm GenieX, and TensorRT-LLM are published and llamafile is excluded.
+- [ ] Allow license evidence to reference a pinned blob in a vendored submodule's own repository. The GenieX proprietary component is documented only in the geniex-qairt-plugin repository, and the git-blob evidence rule requires the record's own repo, so it is recorded as dated web terms instead.
+- [ ] Review a proprietary or managed self-hosted gateway; both reviewed compatibility gateways are open source.
 - [ ] Revisit Xinference if its commercial terms are published; the enterprise edition is currently noted as an adjacent boundary because the vendor's terms page is a placeholder.
 
 ## Completed on 2026-08-28
