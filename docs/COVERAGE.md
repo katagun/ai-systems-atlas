@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 93 systems: 27 memory systems, 52 agent systems, and 14 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-four are proprietary. Two records are archived and two are superseded, so 89 satisfy active-choice coverage. The provisional queue contains 100 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 93 systems: 27 memory systems, 52 agent systems, and 14 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-four are proprietary. Two records are archived and two are superseded, so 89 satisfy active-choice coverage. The provisional queue contains 101 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -75,7 +75,7 @@ Choose small batches with one coherent boundary question:
 10. **Low-code agent builders:** evaluate Dify, Langflow, Flowise, and Botpress Cloud as one batch whose single question is whether a visual builder is an agent framework or a multi-agent orchestrator. Do not resolve that boundary inside a code-first SDK batch.
 11. **Local-runtime passes two and three:** done. ONNX Runtime GenAI, Xinference, and OpenVINO Model Server closed the portable-library, gateway, and Intel/NPU gaps; MLC LLM, Qualcomm GenieX, and TensorRT-LLM extended execution to mobile, browser, and first-party NVIDIA serving. llamafile was screened out as packaging of the published llama.cpp record rather than a distinct execution boundary. Remaining gap: a proprietary or managed self-hosted gateway.
 12. **Assistant regional follow-up:** Meta AI is now reviewed. Qwen Chat and Kimi remain unreviewed, and each needs its own product-terms and governance pass; do not infer an assistant's boundary from its provider's API record.
-14. **Meta follow-up:** Meta Business AI publishes its own Meta Business Agents and Platform Terms of Service, so a distinct enterprise boundary is plausible under the consumer and enterprise split. It was screened but not reviewed, and is the strongest remaining Meta candidate.
 13. **Inference-service follow-up:** Novita AI and Lambda Inference were screened but not promoted because one documentation pass did not establish their retention, residency, and delivery boundaries. Revisit with governing terms in hand.
+14. **Meta follow-up:** done. Meta Business AI is a marketing umbrella over advertising automation and creative tooling rather than a product. Its one operational product, the Meta Business Agent Platform, publishes real dated terms and is queued as a candidate in batch 2, because promoting it alone would settle that batch's role question by accident.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

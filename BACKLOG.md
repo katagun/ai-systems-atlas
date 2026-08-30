@@ -4,7 +4,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 102 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
