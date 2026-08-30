@@ -32,7 +32,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
 - [x] Review Meta's AI products; the consumer assistant, Muse Code, and the Meta Model API are published as three records across three collections.
 - [ ] Review Qwen Chat and Kimi as assistants, each with its own product-terms and governance pass.
-- [ ] Review Meta Business AI, which publishes its own Meta Business Agents and Platform Terms of Service and may be a distinct enterprise boundary.
+- [x] Review Meta Business AI. The name is a marketing umbrella over advertising automation, creative tooling, and one operational product, the Meta Business Agent Platform, which is queued as a candidate. Its governing terms are real and dated, but it belongs to the deferred managed-agent-platform batch rather than a solo promotion.
 - [x] Thicken the embedded-library and compatibility-gateway runtime types and screen Intel and NPU server engines; ONNX Runtime GenAI, Xinference, and OpenVINO Model Server are published.
 - [x] Screen edge-oriented inference engines and read the inconclusive license files; both were Apache-2.0 despite GitHub reporting NOASSERTION. MLC LLM, Qualcomm GenieX, and TensorRT-LLM are published and llamafile is excluded.
 - [ ] Allow license evidence to reference a pinned blob in a vendored submodule's own repository. The GenieX proprietary component is documented only in the geniex-qairt-plugin repository, and the git-blob evidence rule requires the record's own repo, so it is recorded as dated web terms instead.
