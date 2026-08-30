@@ -46,6 +46,7 @@
     {"id": "openai", "name": "OpenAI"},
     {"id": "deepseek", "name": "DeepSeek"},
     {"id": "google", "name": "Google"},
+    {"id": "meta", "name": "Meta"},
     {"id": "mistral", "name": "Mistral AI"},
     {"id": "moonshot_ai", "name": "Moonshot AI"},
     {"id": "nvidia", "name": "NVIDIA"},
@@ -110,6 +111,7 @@
     {"id": "awq", "name": "AWQ", "definition": "Activation-aware weight quantization checkpoints."},
     {"id": "gptq", "name": "GPTQ", "definition": "Post-training quantized checkpoints produced by the GPTQ method."},
     {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."},
+    {"id": "saved_model", "name": "TensorFlow SavedModel", "definition": "TensorFlow's SavedModel graph directory, the versioned artifact produced by exporting a trained TensorFlow model."},
     {"id": "mlc", "name": "MLC compiled", "definition": "Weights and model libraries produced by MLC LLM's compilation pipeline for a specific target."},
     {"id": "onnx", "name": "ONNX", "definition": "Models exported to the Open Neural Network Exchange graph format, optionally with quantized weights."}
   ],

@@ -39,7 +39,26 @@ Each record must:
 - **Inference client SDKs, proxies, and routing libraries:** calling an endpoint is not operating one.
 - **Vector stores and retrieval infrastructure:** these remain scored systems under the `retrieval_infrastructure` role.
 - **Training and fine-tuning frameworks:** inference execution is the gate.
+- **General-purpose machine-learning frameworks and tensor libraries,** resolved by the substrate test below.
 - **Assistants that bundle a runtime,** resolved by the test below.
+
+### The substrate test
+
+A framework that runtimes are built on is not itself a member of this collection.
+
+PyTorch, TensorFlow, JAX, and Apache TVM all execute model inference on hardware the user controls, so the unit of curation above does not exclude them on its face. They are still out, because serving inference is not what they are for. Their primary outcome is building and training models, and inference is one capability among many rather than the product.
+
+Admitting them would also break the collection's structure rather than extend it. Several published records are built on these frameworks: TensorRT-LLM is architected on PyTorch, MLX LM sits on the MLX array framework, and MLC LLM compiles through Apache TVM. A collection that contained both a runtime and the framework beneath it would be recording one execution stack twice, and every record would be partly a duplicate of the substrate entry.
+
+The test is therefore purpose, not capability. Ask what the software is for. If serving inference on the operator's hardware is the product, it is a candidate. If serving is a capability of something built to do a different job, the record belongs to that job's collection or to no collection at all.
+
+A framework's dedicated serving product is a separate boundary and can qualify on its own. TensorFlow Serving exists to serve trained models and is judged on its own terms; the TensorFlow framework is not.
+
+### Modality is not the gate
+
+The unit of curation says model inference without naming a model type, and that is deliberate. A runtime built for speech, vision, or embeddings is eligible on the same purpose test as one built for language models, and is scored against the same profile.
+
+The consequence is that the collection's centre of gravity may be language models while its boundary is wider. Reviewers should not reject a candidate for serving a different modality, and should not admit a general framework merely because it serves the same one.
 
 ### Runtime versus assistant
 
@@ -85,4 +104,6 @@ Classification filters remain first-class. A deliberately narrow runtime — an 
 - Runtime capability claims change faster than service terms. Every record carries `verified_at`, and curation must revisit documentation rather than assume a reviewed capability persists.
 - Local runtimes carry inline scoped license evidence in the manner of specifications. They stay outside `directory/license-evidence.json`, whose one-entry-per-project invariant is keyed on `project_id`, and outside the [ADR 005](005-fail-closed-license-drift.md) project drift machinery.
 - Changing a dimension or weight requires a taxonomy and documentation change plus recomputation of every local-runtime score.
+- The substrate test keeps the collection one layer deep. A framework beneath a published runtime is out, while that framework's dedicated serving product is judged on its own terms, so an execution stack is never recorded twice.
+- Leaving modality open means the collection may admit speech, vision, or embedding runtimes. That is intended, and reviewers should expect the published set to look language-heavy for reasons of demand rather than boundary.
 - Adding a fifth collection requires its own decision record and the ADR 013 conditions; the existence of a fourth is not a precedent for admitting adjacent software by analogy.
