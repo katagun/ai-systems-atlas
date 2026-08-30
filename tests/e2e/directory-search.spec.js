@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("137 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("140 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -135,11 +135,13 @@ test("mixed browsing surfaces local runtimes without scores or comparison", asyn
   await page.goto("/");
 
   await page.locator("#all-directory-search").fill("SGLang");
-  await expect(page.locator("#all-directory-grid .local-runtime-card h2")).toHaveText("SGLang");
+  const runtimeCards = page.locator("#all-directory-grid .local-runtime-card h2");
+  await expect(runtimeCards.filter({ hasText: /^SGLang$/ })).toHaveCount(1);
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#all-directory-grid .compare-toggle")).toHaveCount(0);
-  await page.locator("#all-directory-grid [data-local-runtime]").click();
+  await page.locator('#all-directory-grid [data-local-runtime="sglang"]').click();
   await expect(page.locator("#runtime-dialog")).toBeVisible();
+  await expect(page.locator("#runtime-dialog-content h1")).toHaveText("SGLang");
 });
 
 test("the finder guides a local runtime path into the runtimes scope", async ({ page }) => {
