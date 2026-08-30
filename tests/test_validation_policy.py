@@ -157,6 +157,48 @@ class ValidationPolicyTests(unittest.TestCase):
             any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
         )
 
+    def catalog_with_superseded(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog whose first project is marked superseded."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        projects_path = root / "directory" / "projects.json"
+        projects = json.loads(projects_path.read_text(encoding="utf-8"))
+        project = projects["projects"][0]
+        successor = next(item for item in projects["projects"] if item["id"] != project["id"])
+        project["status"] = "superseded"
+        project["superseded_by"] = successor["id"]
+        if mutate is not None:
+            mutate(project, projects)
+        self.write_json(projects_path, projects)
+        self.write_json(root / "web" / "projects.json", projects)
+        return validate(root)
+
+    def test_superseded_project_is_valid_with_a_resolvable_successor(self) -> None:
+        errors = self.catalog_with_superseded()
+        self.assertFalse([error for error in errors if "supersed" in error], errors)
+
+    def test_superseded_project_requires_a_successor(self) -> None:
+        errors = self.catalog_with_superseded(lambda project, _: project.pop("superseded_by"))
+        self.assertTrue(any("requires superseded_by" in error for error in errors), errors)
+
+    def test_superseded_by_must_reference_an_existing_project(self) -> None:
+        errors = self.catalog_with_superseded(
+            lambda project, _: project.update({"superseded_by": "no-such-project"})
+        )
+        self.assertTrue(any("unknown superseded_by" in error for error in errors), errors)
+
+    def test_superseded_by_cannot_reference_itself(self) -> None:
+        errors = self.catalog_with_superseded(
+            lambda project, _: project.update({"superseded_by": project["id"]})
+        )
+        self.assertTrue(any("cannot supersede itself" in error for error in errors), errors)
+
+    def test_active_project_cannot_declare_a_successor(self) -> None:
+        errors = self.catalog_with_superseded(lambda project, _: project.update({"status": "active"}))
+        self.assertTrue(
+            any("superseded_by requires the superseded status" in error for error in errors), errors
+        )
+
     def test_restricted_license_is_valid_when_source_model_and_evidence_agree(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

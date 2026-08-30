@@ -254,6 +254,7 @@
   "project_statuses": [
     {"id": "active", "name": "Active"},
     {"id": "archived", "name": "Archived"},
+    {"id": "superseded", "name": "Superseded"},
     {"id": "removed", "name": "Repository unavailable"}
   ],
   "license_review_statuses": [

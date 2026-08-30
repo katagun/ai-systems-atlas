@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 89 systems: 27 memory systems, 49 agent systems, and 13 assistant systems. Sixty-one are open-source, two use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-two are proprietary. The provisional queue contains 102 records. The separate collections contain 21 unscored specifications, 39 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 7 scored local runtimes.
+The reviewed catalog contains 91 systems: 27 memory systems, 51 agent systems, and 13 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-two are proprietary. Two records are archived and two are superseded, so 87 satisfy active-choice coverage. The provisional queue contains 100 records. The separate collections contain 21 unscored specifications, 39 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 7 scored local runtimes.
 
 ### Local runtimes
 
@@ -36,7 +36,7 @@ Coverage is representative of material execution choices rather than exhaustive.
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 3 | 3 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
-| Agent framework / SDK | 15 | 15 | Broad across provider-native, provider-published, provider-agnostic, open-core, and auto-optimizing approaches |
+| Agent framework / SDK | 17 | 15 | Broad across provider-native, provider-published, provider-agnostic, open-core, and auto-optimizing approaches; two Microsoft predecessors are reviewed but superseded |
 | Coding agent | 16 | 16 | Broad across local, self-hosted, managed-cloud, terminal-native, and community-fork operation |
 | Human-first PKM | 8 | 8 | Broad, but proprietary reference products remain provisional |
 | AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
@@ -55,7 +55,7 @@ Coverage is representative of material execution choices rather than exhaustive.
 | Enterprise work assistant | 2 | 2 | Improved Microsoft/AWS baseline; broader enterprise SaaS diversity remains a priority |
 | Multi-model chat client | 2 | 2 | Improved across conventional and privacy-oriented hosted approaches; open-client boundaries remain thin |
 
-Archived systems remain reviewed historical references but do not satisfy active-choice coverage.
+Archived and superseded systems remain reviewed historical references but do not satisfy active-choice coverage. A superseded record names its successor, so a reader who arrives at a predecessor is pointed at the system that replaced it.
 
 ## Research batches
 
@@ -69,7 +69,7 @@ Choose small batches with one coherent boundary question:
 6. **Thin operational roles:** browser/computer use, research, general work, coding workflows, context graphs, ambient capture, and human–agent bridges. Keep Pletor and Sylph provisional until their license or product-terms evidence meets the full curation standard.
 7. **Specification follow-up:** identity and discovery now have OASF and ANP baselines; browser-native tools and agentic transactions now have WebMCP, AP2, UCP, and Commerce ACP baselines. Next evaluate cross-protocol authentication/authorization profiles, workflow-state exchange beyond task messaging, and conformance evidence without absorbing generic web standards.
 8. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
-9. **Superseded predecessors:** decide how the Atlas represents a framework its maintainer has declared superseded while the successor is already scored. AutoGen and Semantic Kernel are the immediate cases: Microsoft names Microsoft Agent Framework the successor to both, yet Semantic Kernel still receives commits, so neither `active` nor `archived` describes them accurately. Settle the representation before promoting either.
+9. **Superseded predecessors:** resolved by [ADR 016](adr/016-superseded-predecessors-keep-their-record.md), which adds the `superseded` status and a validated `superseded_by` link. AutoGen and Semantic Kernel are published under it. Apply the same treatment when a maintainer publishes a succession and the successor is already reviewed.
 10. **Low-code agent builders:** evaluate Dify, Langflow, Flowise, and Botpress Cloud as one batch whose single question is whether a visual builder is an agent framework or a multi-agent orchestrator. Do not resolve that boundary inside a code-first SDK batch.
 11. **Local-runtime second pass:** review embedded and gateway alternatives to thicken the thinnest runtime types, and screen Intel, NPU, and edge-oriented server engines. Keep managed tiers of a runtime in the inference-service collection.
 12. **Assistant regional follow-up:** Qwen Chat, Kimi, and Meta AI remain unreviewed. Each needs its own product-terms and governance pass; do not infer an assistant's boundary from its provider's API record.

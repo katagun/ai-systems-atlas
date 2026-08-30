@@ -40,6 +40,12 @@ Choose `system_family` from the project's primary outcome:
 
 Then assign one primary role belonging to that family. Record independent traits for source model, licenses, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, and provenance. Agent entries additionally require interfaces, execution boundaries, and capabilities.
 
+## Superseded predecessors
+
+When a maintainer publicly designates a named successor that the Atlas already publishes, set `status` to `superseded` and `superseded_by` to the successor's project id. The record keeps its family, role, traits, licenses, evidence, and score; supersession reports availability for a new choice, not review quality.
+
+Use it only for a published maintainer declaration with a represented successor. Editorial judgment that a system has fallen behind belongs in weaknesses and the maturity dimension. A rename or rebrand stays one record with a note. See [ADR 016](adr/016-superseded-predecessors-keep-their-record.md).
+
 ## Editorial scores
 
 Scores run from 0 to 10. The overall is the profile's weighted sum rounded to two decimals.

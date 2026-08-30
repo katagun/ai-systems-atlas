@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("135 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("137 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -32,6 +32,28 @@ test("the atlas orbital field spans the five landscape nodes", async ({ page }) 
   await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+});
+
+test("superseded systems leave the active view and link to their successor", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await page.locator("#project-search").fill("AutoGen");
+  await expect(names.filter({ hasText: /^AutoGen$/ })).toHaveCount(0);
+
+  await page.locator("#project-search").fill("");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#status-filter").selectOption("superseded");
+  await expect(names).toHaveText(["AutoGen", "Semantic Kernel"]);
+
+  await page.locator('#project-grid [data-project="autogen"]').click();
+  const dialog = page.locator("#project-dialog");
+  await expect(dialog.locator(".status-notice")).toContainText("The review below stands");
+  await expect(dialog.locator("h1")).toHaveText("AutoGen");
+
+  await dialog.locator("[data-successor]").click();
+  await expect(dialog.locator("h1")).toHaveText("Microsoft Agent Framework");
+  await expect(dialog.locator(".status-notice")).toHaveCount(0);
 });
 
 test("taxonomy documents every local-runtime group and its score weights", async ({ page }) => {

@@ -42,7 +42,8 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Add a Finder goal only after at least one active reviewed project, inference service, or local runtime can satisfy it.
 - Finder priorities affect the shortlist; they are preferences, not hard eligibility filters.
 - “Browse matches” preserves every eligible system role, the selected inference-service type, or the selected runtime type. A manual family or role change clears a temporary system-role set.
-- Active projects appear by default regardless of source model. Archived and removed projects remain inspectable through status filters.
+- Active projects appear by default regardless of source model. Archived, superseded, and removed projects remain inspectable through status filters.
+- A superseded project's details lead with a notice naming its successor, and the successor's name opens that record. The notice states that the review still stands.
 - Every card displays its reviewed license identifiers and source model.
 - License and source-model filters are taxonomy-driven and combine with every existing filter.
 - Project details show scoped license evidence; Git-hosted evidence links both immutable blobs and human-readable source paths.
