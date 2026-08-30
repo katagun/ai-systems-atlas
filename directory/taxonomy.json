@@ -96,6 +96,8 @@
     {"id": "metal", "name": "Apple Metal", "definition": "Documented execution on Apple silicon GPUs through Metal."},
     {"id": "vulkan", "name": "Vulkan", "definition": "Documented execution through the cross-vendor Vulkan compute backend."},
     {"id": "sycl", "name": "SYCL", "definition": "Documented execution through SYCL, covering Intel GPU targets."},
+    {"id": "opencl", "name": "OpenCL", "definition": "Documented execution through the OpenCL compute API, covering Adreno, Mali, and other cross-vendor GPU targets."},
+    {"id": "webgpu", "name": "WebGPU", "definition": "Documented execution through the WebGPU browser compute API, covering in-page and cross-platform GPU targets."},
     {"id": "npu", "name": "NPU", "definition": "Documented execution on a dedicated neural processing unit, such as those integrated into recent client processors."},
     {"id": "directml", "name": "DirectML", "definition": "Documented execution through Microsoft's DirectML backend, covering vendor-neutral GPU acceleration on Windows."},
     {"id": "multi_gpu", "name": "Multi-GPU", "definition": "Documented execution across more than one accelerator on a single host or across hosts."}
@@ -108,6 +110,7 @@
     {"id": "awq", "name": "AWQ", "definition": "Activation-aware weight quantization checkpoints."},
     {"id": "gptq", "name": "GPTQ", "definition": "Post-training quantized checkpoints produced by the GPTQ method."},
     {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."},
+    {"id": "mlc", "name": "MLC compiled", "definition": "Weights and model libraries produced by MLC LLM's compilation pipeline for a specific target."},
     {"id": "onnx", "name": "ONNX", "definition": "Models exported to the Open Neural Network Exchange graph format, optionally with quantized weights."}
   ],
   "runtime_serving_modes": [
@@ -122,7 +125,9 @@
     {"id": "local_cli", "name": "Local CLI", "definition": "A command-line executable operated on the user's own machine."},
     {"id": "library", "name": "Library", "definition": "An importable package or linkable binary embedded in a host application."},
     {"id": "container", "name": "Container", "definition": "A published container image intended for containerized execution."},
-    {"id": "orchestrated_cluster", "name": "Orchestrated cluster", "definition": "Documented deployment onto an orchestrator such as Kubernetes with scaling guidance."}
+    {"id": "orchestrated_cluster", "name": "Orchestrated cluster", "definition": "Documented deployment onto an orchestrator such as Kubernetes with scaling guidance."},
+    {"id": "mobile_device", "name": "Mobile or embedded device", "definition": "Documented deployment onto phones, tablets, or embedded hardware rather than a personal computer or server."},
+    {"id": "browser", "name": "Browser", "definition": "Documented execution inside a web browser page without a separate local server process."}
   ],
   "inference_service_score_profile": {
     "id": "inference_service",

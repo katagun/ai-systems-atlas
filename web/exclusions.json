@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29",
+  "generated_at": "2026-08-30",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -36,6 +36,12 @@
       "repo": "huggingface/text-generation-inference",
       "reason": "The repository is archived, so the runtime no longer represents an operational choice a reader could adopt. Hugging Face Inference Endpoints remains separately represented as a managed inference service, and that service boundary is not substituted for the archived runtime.",
       "useful_lesson": "Production serving engines can reach end of life while the managed service built on them continues; collection boundaries should be checked against repository lifecycle, not brand continuity."
+    },
+    {
+      "name": "llamafile",
+      "repo": "mozilla-ai/llamafile",
+      "reason": "llamafile packages llama.cpp and model weights into one portable executable. Its own documentation states it relies on llama.cpp for serving and inherits that project's server interface and endpoints, and the repository pins the upstream commit rather than forking it. What it adds is a distribution format, not a separate execution boundary, so the published llama.cpp record already represents the runtime. No local-runtime type fits it either: it manages no model store, and nothing embeds it because it embeds the weights.",
+      "useful_lesson": "A packaging innovation can be genuinely valuable without being a distinct operational boundary; check whether the candidate serves models itself or delegates to a runtime already represented."
     }
   ]
 }

@@ -1,7 +1,145 @@
 {
   "version": "1.0",
-  "verified_at": "2026-08-29",
+  "verified_at": "2026-08-30",
   "runtimes": [
+    {
+      "id": "geniex",
+      "name": "GenieX",
+      "maintainer": "Qualcomm",
+      "runtime_type": "desktop_runner",
+      "repo": "qualcomm/GenieX",
+      "url": "https://geniex.aihub.qualcomm.com/",
+      "description": "On-device inference runtime for Qualcomm Snapdragon that pulls, caches, and runs language and vision-language models on the Hexagon NPU, Adreno GPU, or CPU, dispatching either to llama.cpp with Qualcomm's Hexagon backend or to the Qualcomm AI Engine Direct runtime, through a CLI, an OpenAI-compatible local server, and Python, Android, and C SDKs.",
+      "runtime_boundary": "Represents the GenieX software runtime, not the Snapdragon silicon it targets and not Qualcomm AI Hub, the hosted model-compilation and device service from which pre-compiled bundles are fetched. The project was formerly published as NexaAI/nexa-sdk; that repository now redirects to qualcomm/GenieX, and the reviewed product name and owner are GenieX and Qualcomm, described in its own documentation as the community version of Qualcomm GENIE. It is not llama.cpp, which it vendors as a submodule and dispatches to, and not Qualcomm AI Engine Direct, the proprietary Qualcomm runtime reached through a separate plugin repository. Because the product exists to run models on the user's own device and its chat session and local server are how that capability is exercised, it classifies as a runtime rather than an assistant under ADR 015.",
+      "accelerators": [
+        "cpu",
+        "npu"
+      ],
+      "model_formats": [
+        "gguf"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "local_cli",
+        "library",
+        "container",
+        "mobile_device"
+      ],
+      "model_management": "geniex pull downloads a model into a local cache from Hugging Face, Qualcomm AI Hub, Docker Hub, or a local directory or AI Hub zip archive, prompting for a GGUF precision where several exist and recording an inferred model type. geniex model list enumerates AI Hub models with a build for the detected chipset, geniex model set-type rewrites the cached manifest to switch between the language-only and multimodal load path, and geniex config get or set chipset controls chipset detection. Gated Hugging Face repositories are reached through GENIEX_HFTOKEN, HF_TOKEN, or the cached Hugging Face token file in that priority order. The local server does not auto-download; a model must be pulled first. No removal command is documented.",
+      "hardware_requirements": "Execution is confined to Qualcomm Snapdragon; the documentation states there is no x86 or non-Snapdragon ARM build. The validated set is Snapdragon X Elite and X2 Elite on Windows ARM64, Snapdragon 8 Elite and 8 Elite Gen 5 on Android, and Dragonwing IQ-9075 and IQ-8275 on Linux ARM64, with chipset auto-detection on all three and an explicit chipset required for Qualcomm AI Hub pulls from the Android SDK. The llama.cpp runtime reaches the Hexagon NPU, the Adreno GPU through OpenCL, and the CPU, with a hybrid per-tensor Hexagon-plus-CPU scheduler and optional spreading across several HTP cores; the Qualcomm AI Engine Direct runtime is NPU-only and coerces other compute-unit requests with a warning. Python must be an ARM64 build.",
+      "operational_controls": "A compute unit is selected per run as npu, gpu, cpu, hybrid, or an explicit HTP device list, and sampler and model flags including context length are set on the same command. Logging has six levels set by flag or the GENIEX_LOG environment variable. Speculative decoding is enabled with a draft model and draft-token bounds, and reports an accepted-draft ratio in the profiling block. The bundled server exposes a Swagger UI at its root and accepts any non-empty API key without checking it. Qualcomm AI Engine Direct bundles have precision, context length, and KV-cache size baked in and reject attempts to change them at runtime.",
+      "strengths": [
+        "Two runtimes behind one interface give both breadth and depth on the same device: any community GGUF from Hugging Face runs on NPU, GPU, or CPU through llama.cpp, while Qualcomm AI Hub bundles run pre-compiled and pinned to the Hexagon NPU.",
+        "Model lifecycle is a complete product surface, covering pull from four sources, local cache, precision selection, chipset-aware listing, manifest editing, and gated-repository authentication.",
+        "The documentation is unusually specific about limits, naming the validated chipset list, the compute-unit alias mapping, the baked-in constraints of pre-compiled bundles, and the exact error returned when audio is sent to an unsupported runtime."
+      ],
+      "tradeoffs": [
+        "Hardware coverage is deliberately confined to Qualcomm Snapdragon, so the runtime cannot serve any other fleet, and the Qualcomm AI Engine Direct path additionally requires a bundle compiled for the specific chipset.",
+        "Serving capability is interactive rather than concurrent: no batching, parallel-request handling, KV-cache management, or distributed serving is documented, and the server performs no authentication.",
+        "Observability is limited to log levels, a benchmarking tool, and per-run throughput output; there is no metrics or health endpoint for an operator.",
+        "The project is published as a developer preview, and the NPU path depends on proprietary Qualcomm runtime libraries rather than being open source end to end."
+      ],
+      "licenses": [
+        "BSD-3-Clause",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "mixed_source",
+      "license_note": "The repository publishes a BSD-3-Clause license file covering GenieX itself, and its NOTICE file lists bundled Go, C/C++, Python, and Android dependencies under MIT, Apache-2.0, and BSD terms, none of which restrict or alter the project's own license; bindings/python/LICENSE is a symlink to the same root file. The Qualcomm AI Engine Direct execution path, however, is not open source: the geniex-qairt submodule resolves to qualcomm/geniex-qairt-plugin, whose own third-party notices state that the QAIRT headers under qnn-api/ and the prebuilt Windows, Android, and Linux runtime libraries are proprietary Qualcomm Technologies code governed by the Qualcomm AI Runtime SDK end-user licence agreement and explicitly not relicensed under BSD-3-Clause. The README also states that use of the project is subject to Qualcomm's terms of use. An open-source product built around a proprietary accelerator runtime is a mixed_source boundary. The proprietary component is vendored as a git submodule, so its notices live in a separate repository and are recorded as dated web terms rather than a pinned blob in this record's own tree.",
+      "license_evidence": [
+        {
+          "license_id": "BSD-3-Clause",
+          "scope": "Repository-wide license file for the GenieX SDK, CLI, server, and bindings",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/qualcomm/GenieX/blob/main/LICENSE",
+          "blob_sha": "74eadadcbcbd7754420fde09f261326df8cf2697",
+          "immutable_url": "https://api.github.com/repos/qualcomm/GenieX/git/blobs/74eadadcbcbd7754420fde09f261326df8cf2697"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Qualcomm AI Runtime SDK headers and prebuilt runtime libraries that carry the NPU execution path, vendored through the geniex-qairt-plugin submodule and governed by the Qualcomm AI Runtime SDK end-user licence agreement. The submodule's own third-party notices state these files are not relicensed under BSD-3-Clause. The evidence sits outside this record's repository, so it is recorded as dated web terms rather than a pinned blob.",
+          "kind": "web_terms",
+          "url": "https://github.com/qualcomm/geniex-qairt-plugin/blob/main/THIRD_PARTY_NOTICES.md",
+          "verified_at": "2026-08-30"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 4.0,
+        "model_format_support": 6.0,
+        "serving_concurrency": 2.5,
+        "api_interoperability": 6.5,
+        "deployment_operations": 5.5,
+        "model_lifecycle_management": 7.0,
+        "observability_control": 4.0,
+        "documentation_transparency": 7.5,
+        "overall": 5.17
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Repository overview, interfaces, and runtimes",
+          "url": "https://github.com/qualcomm/GenieX/blob/main/README.md",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Product overview and architecture",
+          "url": "https://geniex.aihub.qualcomm.com/en/get-started/what-is-geniex",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Supported chipsets, compute units, and runtime constraints",
+          "url": "https://geniex.aihub.qualcomm.com/en/get-started/platforms",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "CLI command and flag reference",
+          "url": "https://geniex.aihub.qualcomm.com/en/run/cli/reference",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI-compatible local server endpoints",
+          "url": "https://geniex.aihub.qualcomm.com/en/run/cli/local-server",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Model sources, formats, and precisions",
+          "url": "https://geniex.aihub.qualcomm.com/en/models/supported",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Speculative decoding with a multi-token-prediction draft model",
+          "url": "https://geniex.aihub.qualcomm.com/en/tutorials/speculative-decoding-mtp",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Repository license file",
+          "url": "https://github.com/qualcomm/GenieX/blob/main/LICENSE",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "QAIRT plugin third-party notices",
+          "url": "https://github.com/qualcomm/geniex-qairt-plugin/blob/main/THIRD_PARTY_NOTICES.md",
+          "verified_at": "2026-08-30"
+        }
+      ],
+      "verified_at": "2026-08-30"
+    },
     {
       "id": "llama-cpp",
       "name": "llama.cpp",
@@ -294,6 +432,145 @@
         }
       ],
       "verified_at": "2026-08-29"
+    },
+    {
+      "id": "mlc-llm",
+      "name": "MLC LLM",
+      "maintainer": "MLC AI community",
+      "runtime_type": "embedded_library",
+      "repo": "mlc-ai/mlc-llm",
+      "url": "https://llm.mlc.ai/docs/",
+      "description": "Machine-learning compiler and deployment engine that converts and compiles language models into platform-native binaries, then executes them on MLCEngine through Python, a command line, a REST server, and Swift, Kotlin, and JavaScript SDKs across desktop GPUs, phones, and the browser.",
+      "runtime_boundary": "Represents the MLC LLM package, its conversion and compilation tooling, and the MLCEngine runtime. It is not Apache TVM, the general-purpose tensor compiler and TensorIR stack it is built on and installs as a separate dependency; TVM supplies the code generation, while this record covers the model definitions, quantization schemes, engine, and serving surfaces layered above it. The browser path is delivered by the sibling mlc-ai/web-llm package, documented here as the web backend of MLCEngine but published and versioned separately. The iOS and Android chat applications built from this repository are demonstrations of the SDKs, not an assistant workspace, so the project stays on the runtime side of the ADR 015 test.",
+      "accelerators": [
+        "cuda",
+        "rocm",
+        "metal",
+        "vulkan",
+        "opencl",
+        "webgpu",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "mlc",
+        "safetensors",
+        "pytorch"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "parallel_requests",
+        "distributed_serving",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "local_cli",
+        "library",
+        "mobile_device",
+        "browser"
+      ],
+      "model_management": "A model reference of the form HF://org/repo resolves against the Hugging Face Hub, downloading pre-quantized weights into a local cache and compiling a model library on first use, after which both are reused. Custom models go through mlc_llm convert_weight to quantize a Hugging Face checkpoint into the project's own sharded parameter format, mlc_llm gen_config to emit mlc-chat-config.json and process tokenizers, and mlc_llm compile to produce the platform binary; the result can be uploaded back to the Hub. Packaging tooling bundles libraries and weights into iOS and Android application builds. There is no pinning, listing, or removal command for cached artifacts.",
+      "hardware_requirements": "The project's platform table documents AMD, NVIDIA, and Intel GPUs on Linux and Windows through Vulkan, with ROCm and CUDA as vendor backends; Apple and Intel GPUs on macOS through Metal; Apple A-series GPUs on iOS and iPadOS through Metal; Adreno and Mali GPUs on Android through OpenCL; and WebGPU with WebAssembly in the browser. The server accepts a device string of cuda, metal, vulkan, rocm, opencl, or auto. There is no documented CPU-only execution path, and compiling for a new target requires the TVM compiler installed alongside the package.",
+      "operational_controls": "The server takes one of three preset engine modes — interactive, local, and server — which set maximum concurrent sequences, total sequence length, and prefill chunk size, each overridable individually along with tensor-parallel shards, GPU memory utilization, prefix-cache recycling, context or sliding-window size, and attention-sink size. Speculative decoding is selected per launch as small-draft, Eagle, or Medusa with an additional draft model. Per-request event logging is enabled with a tracing flag, and CORS origins, methods, headers, and credentials are configurable. There is no authentication, metrics endpoint, or health endpoint.",
+      "strengths": [
+        "One compiler and one engine target an unusually wide set of execution surfaces — desktop GPUs on three operating systems, iOS and Android phones, and WebGPU in the browser — with the same OpenAI-compatible interface on each.",
+        "Compilation is a first-class, documented workflow: weight conversion, quantization configuration, model-library compilation, packaging for mobile builds, and defining a new model architecture each have their own reference page.",
+        "The server exposes tensor-parallel sharding, prefix caching, configurable batch sizing through engine modes, and three families of speculative decoding without requiring a separate orchestrator."
+      ],
+      "tradeoffs": [
+        "Nothing runs without conversion and compilation: weights must be transformed into the project's own quantized shard format and paired with a compiled model library for the exact target, so a stock checkpoint cannot be pointed at and served directly.",
+        "Operational visibility is minimal, with per-request tracing and a CLI statistics command but no metrics endpoint, health endpoint, authentication, container image, or orchestration guidance.",
+        "The supported model architecture list is narrower than mainstream server engines, and the published documentation is still versioned 0.1.0 with pages of differing freshness, so capability must be confirmed per model and per release.",
+        "Browser execution is documented here but shipped from a separate repository and package, so the reviewed runtime's own release does not carry that surface."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single verbatim Apache-2.0 license file covering the compiler, engine, and tooling. The accompanying NOTICE file carries only the project name and a contributor copyright line and imposes no additional terms. The Apache TVM dependency is installed separately and is not vendored into this repository.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the MLC LLM compiler, MLCEngine runtime, and tooling",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mlc-ai/mlc-llm/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/mlc-ai/mlc-llm/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 8.0,
+        "model_format_support": 4.5,
+        "serving_concurrency": 6.0,
+        "api_interoperability": 6.5,
+        "deployment_operations": 5.0,
+        "model_lifecycle_management": 6.5,
+        "observability_control": 3.5,
+        "documentation_transparency": 5.5,
+        "overall": 5.79
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Project overview and platform support table",
+          "url": "https://github.com/mlc-ai/mlc-llm/blob/main/README.md",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Introduction covering the download, compile, and run workflow",
+          "url": "https://llm.mlc.ai/docs/get_started/introduction.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "REST server flags, engine modes, and API endpoints",
+          "url": "https://llm.mlc.ai/docs/deploy/rest.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Weight conversion and quantization workflow",
+          "url": "https://llm.mlc.ai/docs/compilation/convert_weights.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "iOS Swift SDK deployment",
+          "url": "https://llm.mlc.ai/docs/deploy/ios.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Android SDK deployment",
+          "url": "https://llm.mlc.ai/docs/deploy/android.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "WebLLM JavaScript SDK and the WebGPU browser backend",
+          "url": "https://llm.mlc.ai/docs/deploy/webllm.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Python package installation options",
+          "url": "https://llm.mlc.ai/docs/install/mlc_llm.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Repository license file",
+          "url": "https://github.com/mlc-ai/mlc-llm/blob/main/LICENSE",
+          "verified_at": "2026-08-30"
+        }
+      ],
+      "verified_at": "2026-08-30"
     },
     {
       "id": "mlx-lm",
@@ -831,6 +1108,166 @@
         }
       ],
       "verified_at": "2026-08-29"
+    },
+    {
+      "id": "tensorrt-llm",
+      "name": "TensorRT LLM",
+      "maintainer": "NVIDIA",
+      "runtime_type": "server_engine",
+      "repo": "NVIDIA/TensorRT-LLM",
+      "url": "https://nvidia.github.io/TensorRT-LLM/",
+      "description": "NVIDIA inference and serving engine for language, multimodal, and visual generation models, combining custom GPU kernels, a PyTorch-native runtime, and an optional ahead-of-time compiled TensorRT engine path behind one Python LLM API and an OpenAI-compatible server.",
+      "runtime_boundary": "Represents the TensorRT LLM library and its trtllm-serve, trtllm-bench, and trtllm-eval tools, operated on GPUs the user controls. It is not TensorRT, the general-purpose NVIDIA deep-learning inference library and engine-builder it can compile through, and it is not NVIDIA's managed offerings, which hold their own serving contract and belong to the inference-service collection. NVIDIA Dynamo and Triton Inference Server orchestrate this engine and are separate boundaries, as is NVIDIA Model Optimizer, the offline quantization toolkit whose checkpoints this runtime loads.",
+      "accelerators": [
+        "cuda",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "safetensors",
+        "pytorch",
+        "fp8",
+        "awq",
+        "gptq"
+      ],
+      "serving_modes": [
+        "continuous_batching",
+        "parallel_requests",
+        "distributed_serving",
+        "speculative_decoding"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "library",
+        "local_cli",
+        "container",
+        "orchestrated_cluster"
+      ],
+      "model_management": "Models are named by Hugging Face repository identifier or local checkpoint directory at engine construction, with a pluggable checkpoint-loading architecture that separates config loader, weight loader, and weight mapper so a new checkpoint format can be added without changing the engine. Pre-quantized checkpoints produced by NVIDIA Model Optimizer load directly; offline quantization is a separate step in that project. Multiple LoRA adapters are supported per request. There is no runtime model store, pinning, or removal command, and the legacy TensorRT backend additionally requires an engine build step whose artifact is specific to the GPU architecture and parallelism configuration it was built for.",
+      "hardware_requirements": "The published support matrix limits the reviewed runtime to Linux on x86_64 or aarch64 with NVIDIA GPUs from the Ampere, Ada Lovelace, Hopper, Grace Hopper, and Blackwell architectures including GB200 NVL72; architectures outside that list are community-supported only. Available precisions vary by architecture, with FP8 documented from Ada Lovelace onward and INT4 AWQ or GPTQ with FP8 activations requiring compute capability 8.9 or higher. Windows and macOS are not supported, and a Jetson path exists only on a separate release branch.",
+      "operational_controls": "Parallelism is configured at launch through tensor, pipeline, expert, context, and data-parallel sizes, alongside KV-cache dtype and block reuse, chunked prefill, CUDA graph batch sizes, scheduler policy, and speculative decoding mode. trtllm-serve exposes /health, /metrics, and /version, with the metrics endpoint reporting runtime iteration statistics including GPU memory use and in-flight batching detail. Anonymous telemetry is collected by default and can be disabled by environment variable, a marker file, a Python config field, or a CLI flag. A stated deprecation policy gives a three-month migration window with runtime warnings.",
+      "strengths": [
+        "Serving capability is unusually complete, covering in-flight batching, paged KV cache with block reuse, chunked prefill, an overlap scheduler, prefill-decode disaggregation, and tensor, pipeline, expert, context, and data parallelism across single-node and multi-node deployments.",
+        "Quantization coverage is broad and documented per model, spanning NVFP4, MXFP4, several FP8 recipes, FP8 and NVFP4 KV cache, and W4A8 or W4A16 AWQ and GPTQ, with a published model-by-model support table.",
+        "The server implements OpenAI Chat, Completions, and Responses endpoints plus a dedicated embeddings subcommand with dynamic batching, alongside guided decoding, multi-LoRA serving, and multimodal input."
+      ],
+      "tradeoffs": [
+        "Execution is confined to NVIDIA GPUs on Linux; there is no CPU, AMD, Apple, or Windows execution path in the reviewed support matrix, so the runtime cannot serve a mixed fleet.",
+        "The project carries two backends whose model coverage differs, and the current PyTorch backend is primary while the TensorRT engine-building path is documented separately, so a capability confirmed for one backend is not evidence for the other.",
+        "Several headline features are labelled beta or prototype in the documentation, including disaggregated serving and AutoDeploy, and the published support matrix page is stamped almost a year older than the installation guide, so version-specific verification is required.",
+        "The repository ships a visual-generation model directory under a restricted community license with revenue-based commercial terms, so redistribution and commercial use of the whole tree are not uniformly Apache-2.0."
+      ],
+      "licenses": [
+        "Apache-2.0",
+        "BSD-3-Clause",
+        "MIT",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_note": "The root LICENSE file states Apache-2.0 as the project license and then reproduces three further license texts covering code derived into the project from other open-source projects. Portions derived from CUTLASS, causal-conv1d, and flash-attention are BSD-3-Clause; portions derived from Bitcoin Core, flash-linear-attention, InstructEval, and MiniMax Sparse Attention are MIT; portions derived from FlashInfer, Mamba, Quack, SGLang, Text Generation Inference, Transformers, XGrammar, vLLM, and Baseten's suffix-automaton speculative decoding are Apache-2.0. The same file also reproduces the LTX-2 Community License Agreement, which the file scopes explicitly to tensorrt_llm/_torch/visual_gen/models/ltx2/ and which is not an open-source license: it requires entities with annual revenues of at least ten million dollars to obtain a separate paid commercial license, imposes use-based restrictions, and requires derivatives to be distributed under the same agreement. That directory exists in the repository and carries its own NOTICE pointing back to the root file. The Apache-2.0 core is therefore accompanied by a restricted component, which is why this record is classified open_core rather than mixed_open_source; GitHub reports NOASSERTION because the file opens with a custom header and concatenates four license texts.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Root license file; primary project license for TensorRT LLM and for all modifications and additions to incorporated projects",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/LICENSE",
+          "blob_sha": "bf9a933a66974480a8ddaaf395b526bfc1f018bd",
+          "immutable_url": "https://api.github.com/repos/NVIDIA/TensorRT-LLM/git/blobs/bf9a933a66974480a8ddaaf395b526bfc1f018bd"
+        },
+        {
+          "license_id": "BSD-3-Clause",
+          "scope": "Root license file; covers portions derived from CUTLASS, causal-conv1d, and flash-attention",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/LICENSE",
+          "blob_sha": "bf9a933a66974480a8ddaaf395b526bfc1f018bd",
+          "immutable_url": "https://api.github.com/repos/NVIDIA/TensorRT-LLM/git/blobs/bf9a933a66974480a8ddaaf395b526bfc1f018bd"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "Root license file; covers portions derived from Bitcoin Core, flash-linear-attention, InstructEval, and MiniMax Sparse Attention",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/LICENSE",
+          "blob_sha": "bf9a933a66974480a8ddaaf395b526bfc1f018bd",
+          "immutable_url": "https://api.github.com/repos/NVIDIA/TensorRT-LLM/git/blobs/bf9a933a66974480a8ddaaf395b526bfc1f018bd"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Root license file; reproduces the LTX-2 Community License Agreement, scoped by that file to the tensorrt_llm/_torch/visual_gen/models/ltx2/ directory, with revenue-threshold commercial licensing and use-based restrictions",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/LICENSE",
+          "blob_sha": "bf9a933a66974480a8ddaaf395b526bfc1f018bd",
+          "immutable_url": "https://api.github.com/repos/NVIDIA/TensorRT-LLM/git/blobs/bf9a933a66974480a8ddaaf395b526bfc1f018bd"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 5.5,
+        "model_format_support": 8.5,
+        "serving_concurrency": 9.5,
+        "api_interoperability": 8.5,
+        "deployment_operations": 8.0,
+        "model_lifecycle_management": 7.0,
+        "observability_control": 7.5,
+        "documentation_transparency": 7.5,
+        "overall": 7.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Repository overview and architecture",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/README.md",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Support matrix for hardware, models, and precisions",
+          "url": "https://nvidia.github.io/TensorRT-LLM/reference/support-matrix.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "trtllm-serve endpoints and serving options",
+          "url": "https://nvidia.github.io/TensorRT-LLM/commands/trtllm-serve/trtllm-serve.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Quantization recipes and per-model support table",
+          "url": "https://nvidia.github.io/TensorRT-LLM/features/quantization.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Checkpoint loading architecture",
+          "url": "https://nvidia.github.io/TensorRT-LLM/features/checkpoint-loading.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Installation paths and container images",
+          "url": "https://nvidia.github.io/TensorRT-LLM/installation/index.html",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "Root license file",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/LICENSE",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "kind": "web",
+          "label": "LTX-2 directory notice scoping the restricted component",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/blob/main/tensorrt_llm/_torch/visual_gen/models/ltx2/NOTICE",
+          "verified_at": "2026-08-30"
+        }
+      ],
+      "verified_at": "2026-08-30"
     },
     {
       "id": "vllm",
