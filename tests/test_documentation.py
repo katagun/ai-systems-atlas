@@ -38,7 +38,10 @@ class DocumentationTests(unittest.TestCase):
             "docs/SPECIFICATIONS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
+            "docs/adr/003-multi-axis-directory.md",
+            "docs/adr/004-memory-and-agent-families.md",
             "docs/adr/005-fail-closed-license-drift.md",
+            "docs/adr/009-assistant-systems-are-a-distinct-family.md",
             "docs/adr/006-provider-relationships-are-orthogonal.md",
             "docs/adr/007-licenses-are-classification-not-inclusion.md",
             "docs/adr/008-specifications-are-unscored-artifacts.md",
@@ -52,6 +55,19 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/017-local-runtime-eligibility-ignores-modality.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
+
+    def test_routing_documents_are_reachable_from_agents(self) -> None:
+        """Every document the manifest protects must be routed to from AGENTS.md."""
+        agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        manifest = re.findall(r'"((?:docs/|)[A-Za-z0-9_./-]+\.md)"', self.routing_manifest_source())
+        unreachable = sorted({name for name in manifest if name not in agents})
+        self.assertEqual([], unreachable)
+
+    def routing_manifest_source(self) -> str:
+        source = Path(__file__).read_text(encoding="utf-8")
+        start = source.index("def test_task_routing_documents_exist")
+        end = source.index("self.assertTrue((ROOT / relative).is_file()", start)
+        return source[start:end]
 
     def test_pages_deploy_accepts_only_trusted_main_verification(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
