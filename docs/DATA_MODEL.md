@@ -45,6 +45,10 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 
 `license_review_status` is `verified` when evidence supports the reviewed classification and `review_required` when automation or a reviewer detected possible drift. Review-required systems remain visible.
 
+### Lifecycle
+
+`status` is one of `active`, `archived`, `superseded`, or `removed`. `superseded_by` is optional, required exactly when `status` is `superseded`, and holds one project id that must resolve to another published record. The validator rejects a missing successor, an unknown id, a self-reference, and a `superseded_by` on any other status. See [ADR 016](adr/016-superseded-predecessors-keep-their-record.md).
+
 ### Optional provider traits
 
 `provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits.

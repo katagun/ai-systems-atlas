@@ -271,6 +271,9 @@ h1 {
 .map-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
 .map-legend .legend-inference { background: var(--coral); }
 .map-legend .legend-runtime { background: var(--amber); }
+.status-notice { border-left: 3px solid var(--amber); }
+.link-button { padding: 0; border: 0; background: none; color: var(--cyan); font: inherit; text-decoration: underline; cursor: pointer; }
+.link-button:hover { color: var(--cyan-bright); }
 .map-legend .legend-specs { background: var(--violet); }
 
 .hero-stats {

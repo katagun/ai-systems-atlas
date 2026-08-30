@@ -70,7 +70,7 @@ PROJECT_REQUIRED = {
 PROJECT_OPTIONAL = {
     "agent_interfaces", "execution_boundaries", "agent_capabilities", "pushed_at", "forks",
     "open_issues", "metadata_verified_at", "github_detected_license", "provider_relationship",
-    "model_backends",
+    "model_backends", "superseded_by",
 }
 
 SPECIFICATION_REQUIRED = {
@@ -451,6 +451,13 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"{prefix}: unknown research confidence")
         if project.get("status") not in enum_ids["project_statuses"]:
             errors.append(f"{prefix}: unknown project status")
+        if project.get("status") == "superseded":
+            if "superseded_by" not in project:
+                errors.append(f"{prefix}: superseded status requires superseded_by")
+            elif project["superseded_by"] == project.get("id"):
+                errors.append(f"{prefix}: a project cannot supersede itself")
+        elif "superseded_by" in project:
+            errors.append(f"{prefix}: superseded_by requires the superseded status")
         validate_string_list(project, "licenses", enum_ids["licenses"], prefix, errors)
         source_model = project.get("source_model")
         if source_model not in enum_ids["source_models"]:
@@ -494,8 +501,8 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append(f"{prefix}: verified_at must be an ISO date")
         if project.get("stars") is not None and (not isinstance(project["stars"], int) or project["stars"] < 0):
             errors.append(f"{prefix}: stars must be a non-negative integer or null")
-        if repo and project.get("status") in {"active", "archived"} and project.get("stars") is None:
-            errors.append(f"{prefix}: active and archived GitHub projects require refreshed stars")
+        if repo and project.get("status") in {"active", "archived", "superseded"} and project.get("stars") is None:
+            errors.append(f"{prefix}: active, archived, and superseded GitHub projects require refreshed stars")
         if project.get("stars") is not None and not valid_date(project.get("stars_verified_at")):
             errors.append(f"{prefix}: populated stars require stars_verified_at")
         if project.get("stars_verified_at") is not None and not valid_date(project["stars_verified_at"]):
@@ -514,6 +521,14 @@ def validate(root: Path = ROOT) -> list[str]:
         for field in ("pushed_at", "github_detected_license"):
             if project.get(field) is not None and not isinstance(project[field], str):
                 errors.append(f"{prefix}: {field} must be a string or null")
+
+    for project in projects:
+        if not isinstance(project, dict) or "superseded_by" not in project:
+            continue
+        successor = project["superseded_by"]
+        if successor != project.get("id") and successor not in ids:
+            prefix = str(project.get("repo") or project.get("id") or "unknown")
+            errors.append(f"{prefix}: unknown superseded_by {successor!r}")
 
     evidence_entries = evidence_data.get("entries", [])
     if not valid_date(evidence_data.get("verified_at")):

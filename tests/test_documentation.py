@@ -48,6 +48,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/013-distinct-collections-share-one-directory-surface.md",
             "docs/adr/014-comparisons-are-scoped-to-one-score-profile.md",
             "docs/adr/015-local-runtimes-are-self-operated-execution-records.md",
+            "docs/adr/016-superseded-predecessors-keep-their-record.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

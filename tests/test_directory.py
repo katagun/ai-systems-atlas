@@ -441,6 +441,22 @@ class DirectoryTests(unittest.TestCase):
         self.assertTrue(any(record["source_model"] != "open_source" for record in records))
         self.assertTrue(all(record["runtime_boundary"].strip() for record in records))
 
+    def test_superseded_projects_name_a_published_successor(self) -> None:
+        projects = self.document["projects"]
+        ids = {project["id"] for project in projects}
+        for project in projects:
+            if project["status"] == "superseded":
+                self.assertIn("superseded_by", project, project["id"])
+                self.assertIn(project["superseded_by"], ids, project["id"])
+                self.assertNotEqual(project["superseded_by"], project["id"], project["id"])
+                self.assertTrue(project["score"]["overall"] > 0, project["id"])
+            else:
+                self.assertNotIn("superseded_by", project, project["id"])
+
+    def test_superseded_is_a_reviewed_project_status(self) -> None:
+        statuses = {item["id"] for item in self.taxonomy["project_statuses"]}
+        self.assertEqual({"active", "archived", "superseded", "removed"}, statuses)
+
     def test_local_runtime_score_profile_weights_total_one(self) -> None:
         profile = self.taxonomy["local_runtime_score_profile"]
         self.assertEqual("local_runtime", profile["id"])

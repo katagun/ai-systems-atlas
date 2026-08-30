@@ -55,7 +55,7 @@ Coverage is representative of material execution choices rather than exhaustive.
 | Enterprise work assistant | 2 | 2 | Improved Microsoft/AWS baseline; broader enterprise SaaS diversity remains a priority |
 | Multi-model chat client | 2 | 2 | Improved across conventional and privacy-oriented hosted approaches; open-client boundaries remain thin |
 
-Archived systems remain reviewed historical references but do not satisfy active-choice coverage.
+Archived and superseded systems remain reviewed historical references but do not satisfy active-choice coverage. A superseded record names its successor, so a reader who arrives at a predecessor is pointed at the system that replaced it.
 
 ## Research batches
 
