@@ -7646,6 +7646,194 @@
       "model_backends": [
         "mistral"
       ]
+    },
+    {
+      "id": "autogen",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "AutoGen",
+      "repo": "microsoft/autogen",
+      "url": "https://github.com/microsoft/autogen",
+      "description": "Layered Python and .NET framework for event-driven multi-agent applications, combining a message-passing core runtime, the AgentChat conversation API, model, tool, MCP, and code-executor extensions, and the AutoGen Studio prototyping GUI.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "Python and .NET agent and team definitions, declarative component configuration, message and event streams, serialized team state, and optional Chroma, Redis, or Mem0 memory stores",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "mcp",
+        "shell_execution",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "superseded",
+      "superseded_by": "microsoft-agent-framework",
+      "stars": 60697,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "The README (fetched 2026-08-29) carries a maintenance-mode caution: AutoGen \"is now in maintenance mode. It will not receive new features or enhancements and is community managed going forward.\" It directs new users to Microsoft Agent Framework as the \"enterprise-ready successor to AutoGen,\" links an AutoGen to Microsoft Agent Framework migration guide, and limits contributions to bug fixes, security patches, and documentation. The repository's last push was 2026-04-15.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.4,
+        "autonomy": 8.5,
+        "human_control": 8.0,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.5,
+        "interoperability": 8.3,
+        "maturity": 7.0,
+        "overall": 7.94
+      },
+      "strengths": [
+        "A layered design separates the event-driven Core API, the opinionated AgentChat API, and an Extensions package, so teams can work at the abstraction their problem needs rather than one fixed agent loop",
+        "Real execution surfaces ship in the repository: local, Jupyter, Docker, Docker-Jupyter, and Azure code executors, an MCP workbench for external tool servers, and AgentTool for exposing agents to other agents as delegated tools",
+        "Cross-language Python and .NET runtimes, published PyPI and NuGet packages, AutoGen Studio for no-code prototyping, and the AGBench evaluation suite gave the multi-agent patterns an unusually complete tooling story"
+      ],
+      "weaknesses": [
+        "Microsoft has declared it superseded: the README places AutoGen in maintenance mode, states it is community managed and will receive no new features, and tells new projects to start with Microsoft Agent Framework instead",
+        "Contributions are restricted to bug fixes, security patches, and documentation, and the last push was 2026-04-15, so model-client, protocol, and tool integrations will drift out of date faster than the framework can absorb",
+        "AutoGen Studio is explicitly labelled not production-ready, leaving authentication, security, and deployment concerns to the application developer",
+        "Users have already absorbed one breaking migration from v0.2 to v0.4, and the move to Microsoft Agent Framework asks them to absorb a second"
+      ],
+      "why_it_matters": "AutoGen took conversational multi-agent orchestration out of Microsoft Research and into mainstream practice, and Microsoft names it the direct predecessor of Microsoft Agent Framework; recording it as superseded keeps that lineage legible instead of leaving a heavily adopted framework looking like a current recommendation.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-04-15T11:59:09Z",
+      "forks": 9166,
+      "open_issues": 996,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "CC-BY-4.0",
+      "licenses": [
+        "MIT",
+        "CC-BY-4.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "semantic-kernel",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Semantic Kernel",
+      "repo": "microsoft/semantic-kernel",
+      "url": "https://github.com/microsoft/semantic-kernel",
+      "description": "Model-agnostic Python, .NET, and Java SDK for building agents and multi-agent systems from kernels, plugins and kernel functions, prompt templates, filters, OpenAPI and MCP connectors, vector-store integrations, and the Process Framework.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "Kernel configurations, plugins and kernel functions, prompt templates, agent definitions, chat-history threads, process definitions, and records in connected vector stores",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "superseded",
+      "superseded_by": "microsoft-agent-framework",
+      "stars": 28516,
+      "stars_verified_at": "2026-08-29",
+      "historical_stars": null,
+      "current_repo_note": "The README (fetched 2026-08-29) opens with an important notice: \"Semantic Kernel is now Microsoft Agent Framework!\" It describes Microsoft Agent Framework as \"the enterprise-ready successor to Semantic Kernel,\" now at a production-ready 1.0 with stable APIs and long-term support, and points readers to a Semantic Kernel migration guide. Unlike AutoGen, the README carries no maintenance-mode notice and the repository still received commits on 2026-08-27.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.6,
+        "autonomy": 7.8,
+        "human_control": 8.3,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.9,
+        "maturity": 7.6,
+        "overall": 8.09
+      },
+      "strengths": [
+        "Genuinely multi-language rather than a Python project with ports: maintained Python, .NET, and Java trees in one repository with published PyPI and NuGet packages and per-language API references",
+        "A wide substitutable integration surface — OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
+        "Explicit developer control surfaces: typed kernel functions, OpenAPI and MCP plugins, function-choice behavior, filters, reliability policies, structured output through Pydantic models, and the Process Framework for modeling business workflows"
+      ],
+      "weaknesses": [
+        "Microsoft has declared it superseded: the README's first line states Semantic Kernel \"is now Microsoft Agent Framework\" and names that project the enterprise-ready successor, so new work is steered away from this SDK even though commits continue",
+        "The successor announcement is not paired with a stated support horizon in the repository, so adopters cannot tell from authoritative repository sources how long Semantic Kernel will keep receiving fixes",
+        "Feature parity differs by language, which is why the project maintains a separate supported-languages feature matrix; a capability demonstrated in the Python samples is not guaranteed in .NET or Java",
+        "Quickstarts, samples, and defaults are Azure-first, so the model-agnostic design takes more work to realize outside the Azure OpenAI path"
+      ],
+      "why_it_matters": "Semantic Kernel is the enterprise-facing half of the lineage that Microsoft consolidated into Microsoft Agent Framework, and it is the framework that carried plugin-based agent orchestration into .NET and Java shops; recording it as superseded preserves that reach while pointing adopters at the maintained path.",
+      "research_confidence": "high",
+      "verified_at": "2026-08-29",
+      "pushed_at": "2026-08-27T16:58:48Z",
+      "forks": 4746,
+      "open_issues": 265,
+      "metadata_verified_at": "2026-08-29",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
     }
   ]
 }

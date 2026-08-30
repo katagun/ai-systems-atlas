@@ -1410,37 +1410,6 @@
       ]
     },
     {
-      "repo": "microsoft/autogen",
-      "name": "AutoGen",
-      "url": "https://github.com/microsoft/autogen",
-      "description": "A framework for creating multi-agent AI applications that can act autonomously or work alongside humans; now in maintenance mode in favor of Microsoft Agent Framework.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.96,
-      "github_detected_license": "CC-BY-4.0",
-      "stars": 60629,
-      "topics": [
-        "agentic",
-        "agentic-agi",
-        "agents",
-        "ai",
-        "autogen",
-        "autogen-ecosystem",
-        "chatgpt",
-        "framework",
-        "llm-agent",
-        "llm-framework"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "microsoft/magentic-ui",
       "name": "Magentic-UI",
       "url": "https://github.com/microsoft/magentic-ui",
@@ -1462,32 +1431,6 @@
         "magenticbrain",
         "magenticlite",
         "ui"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "microsoft/semantic-kernel",
-      "name": "Semantic Kernel",
-      "url": "https://github.com/microsoft/semantic-kernel",
-      "description": "Microsoft SDK with agent abstractions, tool integration, and multi-agent patterns for building AI applications in Python, .NET, and Java.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 28501,
-      "topics": [
-        "ai",
-        "artificial-intelligence",
-        "llm",
-        "openai",
-        "sdk"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
