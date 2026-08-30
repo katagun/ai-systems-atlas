@@ -6,7 +6,9 @@ This is the source of truth for actionable repository work. Policy and field def
 
 - [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
-- [ ] Review the managed-platform batch: Microsoft Foundry Agent Service, Copilot Studio, Amazon Bedrock AgentCore, Gemini Enterprise Agent Platform, Salesforce Agentforce, and IBM watsonx Orchestrate.
+- [ ] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it. ADR 018 makes this a precondition for promoting any record whose distinguishing fact is operational.
+- [ ] Review the former managed-platform candidates individually under the ADR 018 routing, rather than as one batch.
+- [ ] Settle the product boundary for Salesforce Agentforce and the Meta Business Agent Platform before assigning either a role.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
 - [ ] Review the remaining coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, and Windsurf. Replit Agent now provides the managed-workspace baseline.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.
