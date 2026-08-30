@@ -41,6 +41,9 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Review a proprietary or managed self-hosted gateway; both reviewed compatibility gateways are open source.
 - [ ] Extend the runtime model-format vocabulary in one deliberate pass if more classical machine-learning serving systems are reviewed. ADR 017 makes extending the vocabulary an obligation when a modality is admitted; TensorFlow Serving needed `saved_model` added on its own, and Triton, KServe, and Seldon would each hit the same edge.
 - [ ] Decide whisper.cpp on its merits under the ADR 015 purpose test and the ADR 017 modality rule; it was screened without a decision when the rule was unwritten.
+- [ ] Settle whether `self_hosted` belongs on a record that ships only a library. It sits on 59 of 93 records, including LangChain, Pydantic AI, and the OpenAI Agents SDK, where running your own application is what `library` already says. The deployment-mode definitions settled `managed_cloud` against `cloud_optional`; this pair is the same kind of question and was left alone rather than changed without evidence.
+- [ ] Re-check the Khoj record's status and links. The desktop download on khoj.dev returns 404 and the homepage now leads with a different product, which is a status question rather than a deployment one.
+- [ ] Decide whether Perplexity Personal Computer is a separate record from Perplexity Computer. It has its own product page and installs on the user's machine with access to local files and applications, so its execution boundary differs from the cloud product this record reviews.
 - [ ] Revisit Xinference if its commercial terms are published; the enterprise edition is currently noted as an adjacent boundary because the vendor's terms page is a placeholder.
 
 ## Completed on 2026-08-28
