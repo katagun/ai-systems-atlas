@@ -256,8 +256,8 @@
     {"id": "mobile", "name": "Mobile application", "definition": "A mobile application the user installs and runs."},
     {"id": "local_cli", "name": "Local CLI", "definition": "A command-line program the user runs on their own machine."},
     {"id": "ide_extension", "name": "IDE extension", "definition": "An extension that runs inside an editor or IDE."},
-    {"id": "library", "name": "Embedded library", "definition": "A package the user embeds in an application they build."},
-    {"id": "self_hosted", "name": "Self-hosted service", "definition": "A service the user deploys and operates on infrastructure they control."},
+    {"id": "library", "name": "Embedded library", "definition": "A package the user embeds in an application they build, including helpers that application calls to serve its own endpoints."},
+    {"id": "self_hosted", "name": "Self-hosted service", "definition": "A service the project itself ships, which the user deploys and operates on infrastructure they control."},
     {"id": "managed_cloud", "name": "Managed cloud", "definition": "The vendor operates this system and the user reaches it as a tenant rather than running it."},
     {"id": "cloud_optional", "name": "Optional cloud services", "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."}
   ],

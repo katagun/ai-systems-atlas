@@ -130,7 +130,7 @@
       ],
       "canonical_data": "Git working tree and commits",
       "deployment": [
-        "self_hosted"
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal",
@@ -497,7 +497,9 @@
       ],
       "canonical_data": "working tree and task history",
       "deployment": [
-        "self_hosted"
+        "ide_extension",
+        "local_cli",
+        "library"
       ],
       "agent_interfaces": [
         "ide",
@@ -582,7 +584,9 @@
       ],
       "canonical_data": "working tree and session state",
       "deployment": [
-        "self_hosted"
+        "desktop",
+        "ide_extension",
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal",
@@ -883,8 +887,7 @@
       "canonical_data": "append-only session events in JSONL or SQLite plus YAML configuration",
       "deployment": [
         "local_cli",
-        "library",
-        "self_hosted"
+        "library"
       ],
       "agent_interfaces": [
         "terminal",
@@ -1152,7 +1155,9 @@
       ],
       "canonical_data": "working tree and session state",
       "deployment": [
-        "self_hosted"
+        "ide_extension",
+        "local_cli",
+        "library"
       ],
       "agent_interfaces": [
         "terminal",
@@ -1250,8 +1255,8 @@
       ],
       "canonical_data": "code or declarative agent and workflow definitions, chronological session events, mutable state, artifacts, traces, and evaluation sets",
       "deployment": [
+        "local_cli",
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -1344,6 +1349,8 @@
       ],
       "canonical_data": "working tree and local configuration",
       "deployment": [
+        "desktop",
+        "local_cli",
         "self_hosted"
       ],
       "agent_interfaces": [
@@ -1820,7 +1827,6 @@
       "canonical_data": "application-defined graph state and message history",
       "deployment": [
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -2014,7 +2020,10 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "desktop",
+        "local_cli",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -2309,7 +2318,6 @@
       "canonical_data": "application-defined workflow and agent state",
       "deployment": [
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -2394,7 +2402,7 @@
       ],
       "canonical_data": "local files and session history",
       "deployment": [
-        "self_hosted"
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal",
@@ -2490,7 +2498,6 @@
       "canonical_data": "typed run items, resumable run state, and pluggable session stores",
       "deployment": [
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -2682,6 +2689,8 @@
       ],
       "canonical_data": "working tree and session state",
       "deployment": [
+        "desktop",
+        "local_cli",
         "self_hosted"
       ],
       "agent_interfaces": [
@@ -3057,8 +3066,8 @@
       ],
       "canonical_data": "typed application-defined state",
       "deployment": [
+        "local_cli",
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -3141,7 +3150,8 @@
       ],
       "canonical_data": "application-defined state",
       "deployment": [
-        "self_hosted"
+        "local_cli",
+        "library"
       ],
       "agent_interfaces": [
         "library"
@@ -3238,8 +3248,7 @@
       ],
       "canonical_data": "database schemas, tool-use memories, conversation state, permissions, and application-defined context",
       "deployment": [
-        "library",
-        "self_hosted"
+        "library"
       ],
       "agent_interfaces": [
         "web_app",
@@ -4469,6 +4478,8 @@
       ],
       "canonical_data": "database",
       "deployment": [
+        "desktop",
+        "mobile",
         "self_hosted"
       ],
       "local_first": true,
@@ -4771,7 +4782,9 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "library",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -4844,7 +4857,10 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "local_cli",
+        "library",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -4917,7 +4933,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "ide_extension"
       ],
       "local_first": true,
       "human_editable": true,
@@ -5173,6 +5189,7 @@
       "deployment": [
         "desktop",
         "mobile",
+        "local_cli",
         "self_hosted",
         "managed_cloud"
       ],
@@ -5324,7 +5341,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "library"
       ],
       "local_first": false,
       "human_editable": false,
@@ -5399,6 +5416,9 @@
       ],
       "canonical_data": "Markdown/Org or local database",
       "deployment": [
+        "desktop",
+        "mobile",
+        "local_cli",
         "self_hosted"
       ],
       "local_first": true,
@@ -5474,6 +5494,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
+        "local_cli",
         "library",
         "self_hosted",
         "managed_cloud"
@@ -5615,7 +5636,9 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "library",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -5761,7 +5784,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "local_cli"
       ],
       "local_first": true,
       "human_editable": false,
@@ -5829,7 +5852,9 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "library",
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -5901,7 +5926,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "library"
       ],
       "local_first": false,
       "human_editable": false,
@@ -5975,7 +6000,7 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "desktop"
       ],
       "local_first": true,
       "human_editable": true,
@@ -6829,8 +6854,7 @@
       ],
       "canonical_data": "research questions, peer workspaces, experiment code, evaluation outputs, evidence, lineage, and generation summaries",
       "deployment": [
-        "local_cli",
-        "self_hosted"
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal"
@@ -7270,7 +7294,8 @@
       ],
       "canonical_data": "database",
       "deployment": [
-        "self_hosted"
+        "self_hosted",
+        "managed_cloud"
       ],
       "local_first": false,
       "human_editable": false,
@@ -7420,8 +7445,7 @@
       ],
       "canonical_data": "Agent definitions, typed tool implementations, prompts, session state, and MCP server configuration",
       "deployment": [
-        "library",
-        "self_hosted"
+        "library"
       ],
       "agent_interfaces": [
         "library",
@@ -7514,8 +7538,8 @@
       ],
       "canonical_data": "Flow definitions, typed schemas, prompt files, tool definitions, plugin configuration, retriever indexes, and evaluation runs",
       "deployment": [
+        "local_cli",
         "library",
-        "self_hosted",
         "cloud_optional"
       ],
       "agent_interfaces": [
@@ -7689,8 +7713,7 @@
       ],
       "canonical_data": "Python and .NET agent and team definitions, declarative component configuration, message and event streams, serialized team state, and optional Chroma, Redis, or Mem0 memory stores",
       "deployment": [
-        "library",
-        "self_hosted"
+        "library"
       ],
       "agent_interfaces": [
         "library",
