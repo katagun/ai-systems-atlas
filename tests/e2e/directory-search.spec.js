@@ -448,3 +448,15 @@ test("the deployment filter reaches vendor-operated systems and reports itself a
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(0);
   await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
 });
+
+test("the interface filter separates canvas builders from code libraries", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#agent-interface-filter").selectOption("library");
+
+  await expect(names.filter({ hasText: /^LangChain$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(0);
+  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+});
