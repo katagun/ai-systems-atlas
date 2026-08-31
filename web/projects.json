@@ -8433,6 +8433,484 @@
         "LicenseRef-Proprietary"
       ],
       "source_model": "mixed_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 153995,
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "GitHub reports NOASSERTION, which is correct here: the licence is a modified Apache 2.0 rather than the standard text, so no identifier applies.",
+      "pushed_at": "2026-08-31T13:23:47Z",
+      "forks": 24328,
+      "open_issues": 1002,
+      "metadata_verified_at": "2026-08-31",
+      "github_detected_license": "NOASSERTION",
+      "research_confidence": "high",
+      "repo": "langgenius/dify",
+      "id": "dify",
+      "name": "Dify",
+      "url": "https://github.com/langgenius/dify",
+      "description": "Platform for building LLM applications, agents, and workflows on a visual canvas, self-hosted or vendor-hosted.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "application definitions as versioned YAML, knowledge-base documents and embeddings, and conversation and workflow run logs",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "container",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.4,
+        "autonomy": 7.8,
+        "human_control": 8.6,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 7.2,
+        "interoperability": 8.2,
+        "maturity": 8.4,
+        "overall": 7.98
+      },
+      "strengths": [
+        "A human-input node makes approval and review a first-class workflow step, deliverable by email to people without an account",
+        "Applications export and import as versioned declarative files, so the definition itself is portable",
+        "Persistence is backend-agnostic across several relational databases and many vector stores"
+      ],
+      "weaknesses": [
+        "The licence is a modified Apache 2.0 that forbids operating a multi-tenant environment and forbids removing frontend branding, so it is source-available rather than open source",
+        "Its own documentation states the agent runtime is not intended as a hardened security boundary between mutually untrusted users",
+        "The hosted terms of service carry no version or last-updated date, so changes cannot be tracked"
+      ],
+      "why_it_matters": "A visual application builder that has grown an autonomous agent runtime, testing whether canvas tools and coding agents converge.",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 153968,
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-31T13:30:18Z",
+      "forks": 9975,
+      "open_issues": 1005,
+      "metadata_verified_at": "2026-08-31",
+      "github_detected_license": "MIT",
+      "research_confidence": "high",
+      "repo": "langflow-ai/langflow",
+      "id": "langflow",
+      "name": "Langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "description": "Python platform for building agent and retrieval workflows on a visual canvas, then running exported flows anywhere.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "relational_db",
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "flow definitions as JSON graphs, plus chat message history and run logs",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "library",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.4,
+        "autonomy": 7.6,
+        "human_control": 6.2,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.8,
+        "maturity": 8.2,
+        "overall": 7.71
+      },
+      "strengths": [
+        "Plain MIT with no carve-outs and no separately licensed enterprise directory, the least encumbered option among comparable builders",
+        "A separate executor package runs exported flows statelessly with no database and no interface, decoupling the runtime from the builder",
+        "Flows version as normalized JSON with command-line validate, push, pull, and export, giving canvas work a real delivery path"
+      ],
+      "weaknesses": [
+        "No human approval or pause-for-review primitive is documented, unlike comparable builders",
+        "One structured output mode silently skips playground events and chat-history writes, creating an observability gap",
+        "Marketing advertises a free cloud account that no retrievable first-party service page or documentation supports"
+      ],
+      "why_it_matters": "The permissively licensed canvas whose flows run as portable JSON outside the builder, making visual authoring compatible with code-based deployment.",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "The public botpress/botpress repository holds integrations, the command-line tool, and SDKs under MIT; the studio, engine, and runtime are closed and hosted, and the discontinued self-hosted product lives in a separate repository under AGPL-3.0.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "repo": null,
+      "id": "botpress-cloud",
+      "name": "Botpress Cloud",
+      "url": "https://botpress.com/",
+      "description": "Vendor-hosted platform for building and running customer-support agents, with a visual studio, a typed SDK, and human handoff.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "undisclosed_managed",
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "bot definitions, structured tables, knowledge-base sources, and conversation history",
+      "deployment": [
+        "local_cli",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 8.0,
+        "autonomy": 7.8,
+        "human_control": 8.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 3.4,
+        "interoperability": 5.6,
+        "maturity": 8.0,
+        "overall": 7.22
+      },
+      "strengths": [
+        "Human handoff is a first-class product surface rather than a feature, with a dedicated escalation agent, a console for human operators, and handoff interfaces in the SDK",
+        "A genuine code-first authoring path exists alongside the canvas, with typed primitives discovered from the filesystem and automated conversation tests",
+        "Conversation-metered pricing with unlimited seats on paid tiers, under dated published terms"
+      ],
+      "weaknesses": [
+        "No self-hosting, on-premises, or data-residency option is documented anywhere, so the vendor holds all data unconditionally",
+        "Bot export is a proprietary archive users are told not to open, which excludes knowledge-base files and fails above roughly three gigabytes",
+        "What the product calls agents are components running in a fixed order around one bot rather than peers that hand off to each other"
+      ],
+      "why_it_matters": "A visual bot builder narrowed into a hosted support product, where the durable differentiator is human escalation rather than agent autonomy.",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "mixed_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "archived",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": 55399,
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "GitHub reports NOASSERTION; the repository actually splits Apache-2.0 for the bulk against a commercial licence covering packages/server/src/enterprise. Archived on 2026-08-13 with end of life announced for 2026-08-31 and no successor named.",
+      "pushed_at": "2026-08-13T12:38:19Z",
+      "forks": 24969,
+      "open_issues": 1046,
+      "metadata_verified_at": "2026-08-31",
+      "github_detected_license": "NOASSERTION",
+      "research_confidence": "medium",
+      "repo": "FlowiseAI/Flowise",
+      "id": "flowise",
+      "name": "Flowise",
+      "url": "https://github.com/FlowiseAI/Flowise",
+      "description": "Visual builder for agent and retrieval workflows, wound down by its maintainers with development frozen and the repository archived.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "flow definitions, chat history, and document stores",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 6.6,
+        "tool_use": 7.6,
+        "autonomy": 7.0,
+        "human_control": 6.2,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 7.2,
+        "maturity": 3.4,
+        "overall": 6.58
+      },
+      "strengths": [
+        "The bulk of the code is Apache-2.0 and the maintainers explicitly encourage forking it after the wind-down",
+        "A large adoption base and fork count leave substantial community material behind the archived repository",
+        "Both licences are stated in-repository with an explicit directory-level carve-out rather than left to detection"
+      ],
+      "weaknesses": [
+        "Development ceased on 2026-07-29 and the repository was archived on 2026-08-13, with published packages and images deprecated",
+        "No successor or endorsed fork is named, so a reader gets no migration target from the maintainers",
+        "The enterprise directory stays under a commercial licence conditioned on a subscription from a company winding the product down, and the fate of the hosted service is undocumented"
+      ],
+      "why_it_matters": "A widely adopted visual builder whose maintainers wound it down citing the shift to coding agents, making it a dated reference point for that transition.",
+      "licenses": [
+        "Apache-2.0",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "repo": null,
+      "id": "microsoft-copilot-studio",
+      "name": "Microsoft Copilot Studio",
+      "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio",
+      "description": "Vendor-operated low-code service for configuring agents that use connectors and knowledge, coordinate child agents, and escalate to people.",
+      "primary_role": "multi_agent_orchestrator",
+      "architectures": [
+        "undisclosed_managed",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned",
+        "decay"
+      ],
+      "canonical_data": "agent definitions, knowledge sources, tool configurations, and conversation transcripts retained for a bounded period",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.6,
+        "autonomy": 8.0,
+        "human_control": 8.8,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 5.0,
+        "interoperability": 7.0,
+        "maturity": 8.4,
+        "overall": 7.7
+      },
+      "strengths": [
+        "Human escalation is a first-class construct with a dedicated transfer step, a documented context contract for routing, and escalation marked in analytics",
+        "Coordinates child agents, other tenants' agents over an open protocol, and agents from three sibling Microsoft products",
+        "Knowledge sources resolve under the signed-in user's identity, so an agent surfaces only content that user may already see"
+      ],
+      "weaknesses": [
+        "The runtime is vendor-operated with no self-hosted option, and agent definitions live in the vendor's own data platform",
+        "Capability is bounded by the surrounding ecosystem, and the richest connectors, channels, and knowledge sources are first-party",
+        "Conversation transcripts are retained only for a bounded window before automatic deletion, limiting long-range audit"
+      ],
+      "why_it_matters": "The low-code path into a major vendor's agent ecosystem, and the clearest case that a visual builder can be an orchestrator rather than a framework.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
     }
   ]
 }

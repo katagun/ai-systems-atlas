@@ -31,7 +31,8 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Decide how the Atlas represents a framework its maintainer has declared superseded while the successor is already scored; ADR 016 adds the `superseded` status and a validated `superseded_by` link, and AutoGen and Semantic Kernel are published under it.
 - [x] Stop the automated updater from reformatting `projects.json`; the file now matches the serializer the updater writes with, so a metadata refresh produces no formatting churn.
 - [x] Answer whether a low-code visual builder is an agent framework or a multi-agent orchestrator; ADR 019 makes authoring surface a trait, amends the framework definition to cover builders, and requires an interface filter before any is promoted.
-- [ ] Publish the reviewed builders under the ADR 019 routing: Dify, Langflow, Botpress Cloud, and an archived Flowise record, with Copilot Studio as a multi-agent orchestrator.
+- [x] Publish the reviewed builders under the ADR 019 routing; all five are published.
+- [ ] Revisit Flowise if a community fork gains maintainer endorsement or clear succession; the record is archived with no successor named, so ADR 016's superseded status does not apply.
 - [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
 - [x] Review Meta's AI products; the consumer assistant, Muse Code, and the Meta Model API are published as three records across three collections.
 - [ ] Review Qwen Chat and Kimi as assistants, each with its own product-terms and governance pass.
