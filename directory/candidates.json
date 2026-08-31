@@ -2652,31 +2652,6 @@
     },
     {
       "repo": null,
-      "name": "Microsoft Foundry Agent Service",
-      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/agents/overview",
-      "description": "Managed Microsoft runtime for building, deploying, scaling, observing, securing, and publishing tool-using agents.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.96,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-platform",
-        "azure",
-        "managed-runtime",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
       "name": "Microsoft Copilot Studio",
       "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio",
       "description": "Graphical low-code platform for building, testing, deploying, and orchestrating agents and agent flows.",
@@ -2702,56 +2677,6 @@
     },
     {
       "repo": null,
-      "name": "Amazon Bedrock AgentCore",
-      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/amazon-bedrock-agent-core.html",
-      "description": "Managed AWS agent runtime with session isolation, memory, gateway, identity, browser and code tools, and observability.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.97,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-platform",
-        "aws",
-        "managed-runtime",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Gemini Enterprise Agent Platform",
-      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale",
-      "description": "Google Cloud's managed agent platform for runtime deployment, sessions, Memory Bank, evaluation, sandboxing, observability, and governance; formerly represented by the Vertex AI Agent Engine boundary.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.97,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-platform",
-        "google-cloud",
-        "managed-runtime",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
       "name": "Salesforce Agentforce",
       "url": "https://www.salesforce.com/platform/agentforce-platform",
       "description": "Enterprise platform for designing, testing, deploying, observing, and orchestrating autonomous agents over Salesforce data and actions.",
@@ -2764,32 +2689,6 @@
         "agent-platform",
         "enterprise",
         "salesforce",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "IBM watsonx Orchestrate",
-      "url": "https://www.ibm.com/products/watsonx-orchestrate",
-      "description": "Enterprise control plane for building, coordinating, governing, and observing native and external agents, tools, and workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.96,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-platform",
-        "enterprise",
-        "ibm",
-        "orchestration",
         "official-product"
       ],
       "status": "provisional",

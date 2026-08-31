@@ -7,7 +7,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [ ] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it. ADR 018 makes this a precondition for promoting any record whose distinguishing fact is operational.
-- [ ] Review the former managed-platform candidates individually under the ADR 018 routing, rather than as one batch.
+- [x] Review the former managed-platform candidates individually under the ADR 018 routing. Foundry Agent Service, Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes and watsonx Orchestrate as a multi-agent orchestrator; Copilot Studio stays with the low-code builder batch.
 - [ ] Settle the product boundary for Salesforce Agentforce and the Meta Business Agent Platform before assigning either a role.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
 - [ ] Review the remaining coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, and Windsurf. Replit Agent now provides the managed-workspace baseline.
@@ -37,7 +37,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [x] Review Meta Business AI. The name is a marketing umbrella over advertising automation, creative tooling, and one operational product, the Meta Business Agent Platform, which is queued as a candidate. Its governing terms are real and dated, but it belongs to the deferred managed-agent-platform batch rather than a solo promotion.
 - [x] Thicken the embedded-library and compatibility-gateway runtime types and screen Intel and NPU server engines; ONNX Runtime GenAI, Xinference, and OpenVINO Model Server are published.
 - [x] Screen edge-oriented inference engines and read the inconclusive license files; both were Apache-2.0 despite GitHub reporting NOASSERTION. MLC LLM, Qualcomm GenieX, and TensorRT-LLM are published and llamafile is excluded.
-- [ ] Allow license evidence to reference a pinned blob in a vendored submodule's own repository. The GenieX proprietary component is documented only in the geniex-qairt-plugin repository, and the git-blob evidence rule requires the record's own repo, so it is recorded as dated web terms instead.
+- [ ] Allow license evidence to reference a pinned blob in a repository other than the record's own. Two records now need it: the GenieX proprietary component, and watsonx Orchestrate, whose MIT client lives in a repository the platform record does not claim as its own. Both are recorded as dated web terms with the blob hash named in the scope instead.
 - [ ] Review a proprietary or managed self-hosted gateway; both reviewed compatibility gateways are open source.
 - [ ] Extend the runtime model-format vocabulary in one deliberate pass if more classical machine-learning serving systems are reviewed. ADR 017 makes extending the vocabulary an obligation when a modality is admitted; TensorFlow Serving needed `saved_model` added on its own, and Triton, KServe, and Seldon would each hit the same edge.
 - [ ] Decide whisper.cpp on its merits under the ADR 015 purpose test and the ADR 017 modality rule; it was screened without a decision when the rule was unwritten.

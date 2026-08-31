@@ -8047,6 +8047,392 @@
         "LicenseRef-Proprietary"
       ],
       "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-30",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "microsoft-foundry-agent-service",
+      "name": "Microsoft Foundry Agent Service",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview",
+      "description": "Managed Azure service that runs configured or containerized agents with hosted tools, per-session sandboxes, persistent conversations, and directory identities.",
+      "primary_role": "stateful_agent_runtime",
+      "architectures": [
+        "undisclosed_managed",
+        "vector_index",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "versioned"
+      ],
+      "canonical_data": "agent versions, conversation threads, run state, uploaded files, vector stores, per-session sandbox filesystems, and memory stores",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 9.0,
+        "autonomy": 8.3,
+        "human_control": 8.0,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 7.0,
+        "interoperability": 8.0,
+        "maturity": 7.8,
+        "overall": 7.96
+      },
+      "strengths": [
+        "Standard setup keeps files, vector stores, threads, and agent definitions in the customer's own Azure Storage, AI Search, and Cosmos DB resources",
+        "Each hosted agent receives a dedicated Microsoft Entra identity and a per-session isolated sandbox with a persistent filesystem",
+        "Toolboxes expose curated tools through one managed protocol endpoint that non-Foundry runtimes can consume unchanged"
+      ],
+      "weaknesses": [
+        "Agent-side quotas are fixed and documented as unable to be increased, including 128 tools per agent, 100,000 messages per thread, and 1,000 agent revisions",
+        "Memory, skills, tool search, agent-to-agent endpoints, and long-running resilience remain in preview, and the resilience documentation is not recommended for production",
+        "Tool availability varies by region and model rather than being uniform across the service"
+      ],
+      "why_it_matters": "A vendor-operated runtime that enterprises use to host agents written in other frameworks, so its identity, storage, and approval boundaries become those agents' operating envelope.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-30",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "bedrock-agentcore",
+      "name": "Amazon Bedrock AgentCore",
+      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+      "description": "Managed AWS platform that hosts, secures, and observes agents built in any framework, with memory, tool gateways, and policy enforcement.",
+      "primary_role": "stateful_agent_runtime",
+      "architectures": [
+        "event_log",
+        "undisclosed_managed",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "versioned"
+      ],
+      "canonical_data": "agent session state, persistent session filesystems, and extracted long-term memory records",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 9.0,
+        "autonomy": 8.6,
+        "human_control": 8.5,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 6.2,
+        "interoperability": 8.8,
+        "maturity": 8.2,
+        "overall": 8.2
+      },
+      "strengths": [
+        "Runtime hosts CrewAI, LangGraph, LlamaIndex, Google ADK, OpenAI Agents SDK, and Strands agents, or no framework at all",
+        "Every session runs in a dedicated micro virtual machine that is terminated and sanitized when the session ends",
+        "Policy intercepts each tool call at the gateway against declarative rules before execution and logs every decision"
+      ],
+      "weaknesses": [
+        "The tool allowlist is not a containment boundary: it does not constrain the direct command-invocation API, so containment depends entirely on account permissions",
+        "Customer-managed encryption keys cover only memory and gateway resources, and gateway names, target names, tool names, and gateway logs are documented as unencrypted by default",
+        "The low-code harness path cannot use a framework of the customer's choice, and its export escape hatch produces one vendor's framework in one language"
+      ],
+      "why_it_matters": "The operated substrate beneath agents built in other frameworks, selling hosting, memory, tool governance, and tracing as a service rather than a library.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-30",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "gemini-enterprise-agent-platform",
+      "name": "Gemini Enterprise Agent Platform",
+      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/",
+      "description": "Google Cloud's managed runtime for agents built in its own and third-party frameworks, with hosted sessions, long-term memory, and a governing gateway.",
+      "primary_role": "stateful_agent_runtime",
+      "architectures": [
+        "vector_index",
+        "event_log",
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "versioned",
+        "decay"
+      ],
+      "canonical_data": "deployed agent revisions, session event histories, and generated long-term memories",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.0,
+        "autonomy": 8.2,
+        "human_control": 6.0,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 5.8,
+        "interoperability": 8.5,
+        "maturity": 7.0,
+        "overall": 7.18
+      },
+      "strengths": [
+        "Hosts agents written in the vendor's own kit plus LangChain, LangGraph, AG2, LlamaIndex, and CrewAI, or any container meeting a published runtime contract",
+        "Memory Bank provides consolidation, immutable revision history, per-identity scoping, and customer-set expiry rather than a bare vector store",
+        "Agent Registry gives one catalog for storing, discovering, and governing agents, tool servers, and endpoints across an organization"
+      ],
+      "weaknesses": [
+        "The gateway that enforces policy does not support the platform's own network perimeter controls, by its own documented limitation",
+        "Long-term memories never expire unless an expiry is set, and no retention period is documented for traces or logs",
+        "No retry, backoff, or failure-recovery semantics are documented, and the only rollback mechanism remains in preview",
+        "Pause-and-approve exists only by inheriting one framework's breakpoints; no framework-neutral human-approval interface is documented"
+      ],
+      "why_it_matters": "A major cloud vendor's managed runtime for other people's agent frameworks, and a reference point for how hosted agent state, identity, and governance are productized.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-30",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "watsonx-orchestrate",
+      "name": "IBM watsonx Orchestrate",
+      "url": "https://developer.watson-orchestrate.ibm.com/",
+      "description": "Enterprise platform that registers and routes between agents from other vendors over open protocols, with hosted, on-premises, and air-gapped deployments.",
+      "primary_role": "multi_agent_orchestrator",
+      "architectures": [
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "agent, tool, and knowledge-base definitions with conversation threads and execution traces",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.8,
+        "autonomy": 7.6,
+        "human_control": 7.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.2,
+        "interoperability": 8.8,
+        "maturity": 7.0,
+        "overall": 7.6
+      },
+      "strengths": [
+        "Registers external agents by typed provider across six integrations, including another vendor's customer-relationship agents and a competitor's low-code agents",
+        "Documented air-gapped on-premises operation with a release-by-release compatibility matrix and a local package-registry procedure",
+        "Model-neutral through a gateway spanning fourteen providers, including self-hosted options"
+      ],
+      "weaknesses": [
+        "The open component is the client: the runtime that plans, routes, and selects collaborators is proprietary, so routing behavior can be observed through vendor traces but never read",
+        "The vendor's own known-issues list documents tools running before required inputs arrive, repeated identical tool calls, and failed agent-to-agent transfers",
+        "The local Developer Edition is licensed to a single developer, cannot deploy, and still routes inputs and outputs through the vendor's cloud"
+      ],
+      "why_it_matters": "One of the few systems that puts agents from several vendors behind one registry, one policy layer, and one trace log, including on hardware the customer owns.",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "mixed_source"
     }
   ]
 }

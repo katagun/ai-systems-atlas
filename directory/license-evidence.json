@@ -1521,6 +1521,114 @@
           "verified_at": "2026-08-30"
         }
       ]
+    },
+    {
+      "project_id": "microsoft-foundry-agent-service",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Universal License Terms for Online Services governing Foundry Agent Service as an Azure online service",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/terms/product/ForOnlineServices/all",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Microsoft Azure Services product offering terms, which name Foundry Tools directly",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzureServices/EAEAS",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Supplemental Terms of Use for Microsoft Azure Previews, which govern the service's preview capabilities",
+          "kind": "web_terms",
+          "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
+          "verified_at": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "project_id": "bedrock-agentcore",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "AWS Service Terms; the only AgentCore-specific section is 50.15, covering the preview Payments capability",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/service-terms/",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "AWS Customer Agreement, the underlying agreement governing use of AWS services",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/agreement/",
+          "verified_at": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "project_id": "gemini-enterprise-agent-platform",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Google Cloud Services Summary, which defines Gemini Enterprise Agent Platform as a named service",
+          "kind": "web_terms",
+          "url": "https://cloud.google.com/terms/services",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Service Specific Terms, including the AI/ML services sections and the agentic-AI responsibility clause",
+          "kind": "web_terms",
+          "url": "https://cloud.google.com/terms/service-terms",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Google Cloud Platform Terms of Service, the underlying agreement",
+          "kind": "web_terms",
+          "url": "https://cloud.google.com/terms/",
+          "verified_at": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "project_id": "watsonx-orchestrate",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Agent Development Kit client, the open command-line and Python component, whose LICENSE blob is pinned at 5a2a5f2cc2e67203aaf546e6c40e0859eaeb4e2a",
+          "kind": "web_terms",
+          "url": "https://github.com/IBM/ibm-watsonx-orchestrate-adk/blob/5a2a5f2cc2e67203aaf546e6c40e0859eaeb4e2a/LICENSE",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Service Description i126-9451 for the watsonx Orchestrate cloud service, which embeds the AI technology terms",
+          "kind": "web_terms",
+          "url": "https://www.ibm.com/terms/?id=i126-9451",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Cloud Services Agreement Z126-6304, the governing agreement named by the Service Description",
+          "kind": "web_terms",
+          "url": "https://www.ibm.com/terms/?id=Z126-6304",
+          "verified_at": "2026-08-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "International Program License Agreement i125-3301-15, governing the proprietary Developer Edition program",
+          "kind": "web_terms",
+          "url": "https://www.ibm.com/terms/?id=i125-3301",
+          "verified_at": "2026-08-30"
+        }
+      ]
     }
   ]
 }
