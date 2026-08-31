@@ -54,6 +54,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/016-superseded-predecessors-keep-their-record.md",
             "docs/adr/017-local-runtime-eligibility-ignores-modality.md",
             "docs/adr/018-operating-party-is-a-trait-not-a-role.md",
+            "docs/adr/019-authoring-surface-is-a-trait-not-a-role.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
