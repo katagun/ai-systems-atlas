@@ -359,6 +359,9 @@ class DirectoryTests(unittest.TestCase):
             "nebius-token-factory", "baseten", "meta-model-api",
             "requesty", "eden-ai", "aiml-api", "nano-gpt",
             "vercel-ai-gateway", "cloudflare-ai-gateway", "martian", "chutes", "trustedrouter",
+            "volcengine-ark", "zhipu-bigmodel", "siliconflow-cn",
+            "siliconflow-international", "qiniu-ai-inference",
+            "stepfun-open-platform", "stepfun-open-platform-global",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
