@@ -42,6 +42,12 @@
       "repo": "mozilla-ai/llamafile",
       "reason": "llamafile packages llama.cpp and model weights into one portable executable. Its own documentation states it relies on llama.cpp for serving and inherits that project's server interface and endpoints, and the repository pins the upstream commit rather than forking it. What it adds is a distribution format, not a separate execution boundary, so the published llama.cpp record already represents the runtime. No local-runtime type fits it either: it manages no model store, and nothing embeds it because it embeds the weights.",
       "useful_lesson": "A packaging innovation can be genuinely valuable without being a distinct operational boundary; check whether the candidate serves models itself or delegates to a runtime already represented."
+    },
+    {
+      "name": "Unify",
+      "repo": null,
+      "reason": "Unify's routing product was retired and the successor was retired in turn; its console states the product is no longer available, and its pricing and documentation pages return not-found. A service a reader cannot sign up for is not an operational choice, matching the treatment of archived runtimes.",
+      "useful_lesson": "A routing aggregator can disappear faster than the models it routes to, so a dated check of the operator's own console is worth more than a live marketing page."
     }
   ]
 }

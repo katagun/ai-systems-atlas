@@ -6,7 +6,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 - [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
-- [ ] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it. ADR 018 makes this a precondition for promoting any record whose distinguishing fact is operational.
+- [x] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it; both shipped, and ADR 019 later added the matching interface filter.
 - [x] Review the former managed-platform candidates individually under the ADR 018 routing. Foundry Agent Service, Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes and watsonx Orchestrate as a multi-agent orchestrator; Copilot Studio stays with the low-code builder batch.
 - [ ] Settle the product boundary for Salesforce Agentforce and the Meta Business Agent Platform before assigning either a role.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
@@ -27,12 +27,14 @@ This is the source of truth for actionable repository work. Policy and field def
 ## Later
 
 - [x] Reassess local inference runtimes as their own bounded collection; ADR 015 defines the local-runtime boundary and score profile, and the seed batch is published.
-- [ ] Reassess API clients, adapters, and observability SDKs only after concrete user questions justify another bounded collection.
+- [ ] Review the hosted editions of self-hosted gateways as routing aggregators, starting with Portkey and Helicone. Their vendor-run tiers are inference services on the existing definition; the self-hostable software itself stays out under ADR 015, which excludes proxies and routing libraries by name.
+- [ ] Reassess API clients, adapters, and observability SDKs only after concrete user questions justify another bounded collection. A 2026-08-31 pass asked whether self-hosted AI gateways deserved a collection and concluded they do not: ADR 010 and ADR 015 already exclude proxies and routing libraries by name, so this is a settled decision rather than an unfilled gap, and reversing it would need its own record.
 - [x] Decide how the Atlas represents a framework its maintainer has declared superseded while the successor is already scored; ADR 016 adds the `superseded` status and a validated `superseded_by` link, and AutoGen and Semantic Kernel are published under it.
 - [x] Stop the automated updater from reformatting `projects.json`; the file now matches the serializer the updater writes with, so a metadata refresh produces no formatting churn.
 - [x] Answer whether a low-code visual builder is an agent framework or a multi-agent orchestrator; ADR 019 makes authoring surface a trait, amends the framework definition to cover builders, and requires an interface filter before any is promoted.
 - [x] Publish the reviewed builders under the ADR 019 routing; all five are published.
 - [ ] Revisit Flowise if a community fork gains maintainer endorsement or clear succession; the record is archived with no successor named, so ADR 016's superseded status does not apply.
+- [ ] Settle what Glama is before reviewing it. Its model gateway still serves a public catalogue, but the product now presents as an index of tool servers with a chat workspace attached, and no plan price is visible without signing up, so the reviewable boundary is unclear.
 - [ ] Review Novita AI and Lambda Inference with governing terms in hand; one documentation pass did not establish their retention, residency, and delivery boundaries.
 - [x] Review Meta's AI products; the consumer assistant, Muse Code, and the Meta Model API are published as three records across three collections.
 - [ ] Review Qwen Chat and Kimi as assistants, each with its own product-terms and governance pass.

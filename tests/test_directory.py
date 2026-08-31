@@ -357,6 +357,8 @@ class DirectoryTests(unittest.TestCase):
             "deepinfra", "replicate", "venice-api",
             "stability-ai-developer-platform", "ollama-cloud",
             "nebius-token-factory", "baseten", "meta-model-api",
+            "requesty", "eden-ai", "aiml-api", "nano-gpt",
+            "vercel-ai-gateway", "cloudflare-ai-gateway", "martian", "chutes", "trustedrouter",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
