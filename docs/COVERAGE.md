@@ -65,6 +65,16 @@ Archived and superseded systems remain reviewed historical references but do not
 
 For checking coverage rather than detecting launches, use [models.dev](https://models.dev/api.json), a community-maintained database of inference providers and models published under an open license from [anomalyco/models.dev](https://github.com/anomalyco/models.dev). A pass on 2026-08-31 found 212 provider entries against 49 reviewed services. That difference overstates the gap: the catalog keys on API endpoints, so one operator appears several times across regional and subscription variants, and Alibaba alone accounts for six entries. Collapse those to service boundaries before treating an entry as a candidate, and treat the catalog as aggregated third-party data that locates candidates rather than as evidence, since every record still needs first-party terms and documentation.
 
+### High-adoption discovery sweep
+
+A 2026-08-31 sweep looked for widely adopted open-source systems the catalog does not hold, prompted by a question about forks and derivatives. Two findings shaped the method.
+
+**Walking fork graphs does not work.** The seventy-three published repositories carry more than half a million forks between them, dominated by personal copies: sorting one popular project's forks by stars returned repositories with 584, 70, and 28 stars. More decisively, the derivative that prompted the question is not a fork in the platform's sense at all, so no amount of graph walking would reach it. Lineage is a review-time boundary question, not a discovery mechanism.
+
+**Adoption finds candidates; the existing rules filter them.** Twenty banded searches keyed to the role vocabulary returned 327 repositories, 279 of them new, active, and not forks. Star count sorts attention but decides nothing: the highest-ranked results included a methodology, several skill libraries, an unrelated automation platform, a database, and an agent-managed museum exhibit. `CURATION.md` already excludes prompt templates, collections, and research inputs, and applying that plus the tool-and-plugin boundary removed the noise. Thirty survivors were queued.
+
+Band the searches. A first pass with an unbanded top-thirty cut silently dropped a twenty-eight-thousand-star coding agent because larger repositories crowded the result window.
+
 ### Chinese-operator coverage
 
 A 2026-08-31 pass compared the catalog against models.dev for Chinese operators. Thirty-five catalog entries collapsed to about thirteen operators once regional and subscription variants were folded in, confirming that the catalog keys on endpoints rather than on services.

@@ -4,7 +4,8 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 120 provisional records in small, evidence-backed batches.
+- [ ] Write the derivative rule down. A fork or reimplementation earns its own record when its operational boundary differs, not when its repository does; llamafile was excluded as packaging of a published runtime, Open Grok is recorded as a distinct community fork, and language bindings are excluded as one product. The rule is consistent but unwritten, and the sweep queued several derivatives that will need it.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [x] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it; both shipped, and ADR 019 later added the matching interface filter.
 - [x] Review the former managed-platform candidates individually under the ADR 018 routing. Foundry Agent Service, Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes and watsonx Orchestrate as a multi-agent orchestrator; Copilot Studio stays with the low-code builder batch.
