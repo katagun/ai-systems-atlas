@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 102 systems: 27 memory systems, 61 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-five are proprietary. Three records are archived and two are superseded, so 97 satisfy active-choice coverage. The provisional queue contains 92 records. The separate collections contain 21 unscored specifications, 49 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 102 systems: 27 memory systems, 61 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-five are proprietary. Three records are archived and two are superseded, so 97 satisfy active-choice coverage. The provisional queue contains 92 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -58,6 +58,20 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | Multi-model chat client | 2 | 2 | Improved across conventional and privacy-oriented hosted approaches; open-client boundaries remain thin |
 
 Archived and superseded systems remain reviewed historical references but do not satisfy active-choice coverage. A superseded record names its successor, so a reader who arrives at a predecessor is pointed at the system that replaced it.
+
+## Catalog sources for coverage audits
+
+`directory/discovery-sources.json` holds authoritative announcement feeds that automation polls for launches. It is not the right home for a catalog, because its schema requires a feed and the updater treats every entry as a stream of dated items.
+
+For checking coverage rather than detecting launches, use [models.dev](https://models.dev/api.json), a community-maintained database of inference providers and models published under an open license from [anomalyco/models.dev](https://github.com/anomalyco/models.dev). A pass on 2026-08-31 found 212 provider entries against 49 reviewed services. That difference overstates the gap: the catalog keys on API endpoints, so one operator appears several times across regional and subscription variants, and Alibaba alone accounts for six entries. Collapse those to service boundaries before treating an entry as a candidate, and treat the catalog as aggregated third-party data that locates candidates rather than as evidence, since every record still needs first-party terms and documentation.
+
+### Chinese-operator coverage
+
+A 2026-08-31 pass compared the catalog against models.dev for Chinese operators. Thirty-five catalog entries collapsed to about thirteen operators once regional and subscription variants were folded in, confirming that the catalog keys on endpoints rather than on services.
+
+Two boundary rules were already settled and held. A domestic platform operated by a different legal entity from its international sibling is a separate record: Volcengine Ark's own terms licence it for use only within mainland China, Zhipu's mainland platform and Z.ai are separate companies in separate jurisdictions, and SiliconFlow's international terms exclude users located in mainland China outright. Subscription tiers are not separate records, which the existing BytePlus boundary already stated. Region-scoped endpoints of one platform remain a trait rather than a record, as Alibaba Cloud Model Studio shows.
+
+Remaining unreviewed operators from that comparison include Xiaomi, Bailing, and the long tail of aggregators that resell other aggregators, which needs a boundary rule of its own before any of them is reviewable.
 
 ## Research batches
 

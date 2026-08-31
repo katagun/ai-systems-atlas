@@ -48,6 +48,12 @@
       "repo": null,
       "reason": "Unify's routing product was retired and the successor was retired in turn; its console states the product is no longer available, and its pricing and documentation pages return not-found. A service a reader cannot sign up for is not an operational choice, matching the treatment of archived runtimes.",
       "useful_lesson": "A routing aggregator can disappear faster than the models it routes to, so a dated check of the operator's own console is worth more than a live marketing page."
+    },
+    {
+      "name": "ModelScope API-Inference",
+      "repo": null,
+      "reason": "ModelScope operates a genuine first-party inference API rather than proxying another platform, so the duplication concern does not apply. It is excluded because its own documentation declares the service non-commercial and not for profit, tells developers not to use it for tasks needing concurrency or service-level guarantees, and refers commercial demand to other platforms. Access is metered by community credits that are earned rather than bought, and no billing exists. The directory curates operated services with commercial commitments.",
+      "useful_lesson": "Check the reason a service is excluded, not just the conclusion: the expected ground here was duplication of a sibling platform, and that turned out to be false while a different disqualification was stated plainly in the vendor's own limits page."
     }
   ]
 }
