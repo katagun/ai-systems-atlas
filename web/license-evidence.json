@@ -1629,6 +1629,107 @@
           "verified_at": "2026-08-30"
         }
       ]
+    },
+    {
+      "project_id": "dify",
+      "repo": "langgenius/dify",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under a modified Apache License 2.0 that forbids multi-tenant operation and frontend branding removal",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langgenius/dify/blob/329ee302875f292fdd11e12e830562d0be9ade1c/LICENSE",
+          "blob_sha": "329ee302875f292fdd11e12e830562d0be9ade1c",
+          "immutable_url": "https://api.github.com/repos/langgenius/dify/git/blobs/329ee302875f292fdd11e12e830562d0be9ade1c"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Terms of service for the vendor-hosted edition; the document carries no version or last-updated date",
+          "kind": "web_terms",
+          "url": "https://dify.ai/legal/terms-of-service",
+          "verified_at": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "project_id": "langflow",
+      "repo": "langflow-ai/langflow",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langflow-ai/langflow/blob/ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347/LICENSE",
+          "blob_sha": "ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347",
+          "immutable_url": "https://api.github.com/repos/langflow-ai/langflow/git/blobs/ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347"
+        }
+      ]
+    },
+    {
+      "project_id": "flowise",
+      "repo": "FlowiseAI/Flowise",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository contents outside the enterprise directory",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/68314426eaf58acf21727cdada2d8047797058e7/LICENSE.md",
+          "blob_sha": "68314426eaf58acf21727cdada2d8047797058e7",
+          "immutable_url": "https://api.github.com/repos/FlowiseAI/Flowise/git/blobs/68314426eaf58acf21727cdada2d8047797058e7"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "packages/server/src/enterprise and files carrying an explicit copyright notice, conditioned on a paid subscription",
+          "kind": "git_blob",
+          "path": "packages/server/src/enterprise/LICENSE.md",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/462c48dc6de78a52abaafa1f89cda55291dadc0a/packages/server/src/enterprise/LICENSE.md",
+          "blob_sha": "462c48dc6de78a52abaafa1f89cda55291dadc0a",
+          "immutable_url": "https://api.github.com/repos/FlowiseAI/Flowise/git/blobs/462c48dc6de78a52abaafa1f89cda55291dadc0a"
+        }
+      ]
+    },
+    {
+      "project_id": "botpress-cloud",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Public integrations, command-line tool, SDK, and API client, whose LICENSE blob is pinned at da998345162b9f0c970947cad48899f6c5d52554",
+          "kind": "web_terms",
+          "url": "https://github.com/botpress/botpress/blob/da998345162b9f0c970947cad48899f6c5d52554/LICENSE",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Terms of service for the hosted platform, last updated 2026-03-23",
+          "kind": "web_terms",
+          "url": "https://botpress.com/legal/terms-of-service",
+          "verified_at": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "project_id": "microsoft-copilot-studio",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Universal License Terms for Online Services governing Copilot Studio as a Microsoft online service",
+          "kind": "web_terms",
+          "url": "https://www.microsoft.com/licensing/terms/product/ForOnlineServices/all",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Product licensing and billing documentation for the separately purchasable service",
+          "kind": "web_terms",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/billing-licensing",
+          "verified_at": "2026-08-31"
+        }
+      ]
     }
   ]
 }

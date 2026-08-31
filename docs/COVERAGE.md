@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 97 systems: 27 memory systems, 56 agent systems, and 14 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, two are mixed-source, one is source-available, and twenty-four are proprietary. Two records are archived and two are superseded, so 93 satisfy active-choice coverage. The provisional queue contains 97 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 102 systems: 27 memory systems, 61 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-five are proprietary. Three records are archived and two are superseded, so 97 satisfy active-choice coverage. The provisional queue contains 92 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -38,7 +38,7 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 3 | 3 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
-| Agent framework / SDK | 17 | 15 | Broad across provider-native, provider-published, provider-agnostic, open-core, and auto-optimizing approaches; two Microsoft predecessors are reviewed but superseded |
+| Agent framework / SDK | 21 | 18 | Broad across code frameworks and visual builders after ADR 019 widened the definition; two Microsoft predecessors are superseded and one builder is archived |
 | Coding agent | 17 | 17 | Broad across local, self-hosted, managed-cloud, terminal-native, and community-fork operation |
 | Human-first PKM | 8 | 8 | Broad, but proprietary reference products remain provisional |
 | AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
@@ -47,7 +47,7 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | Agent memory service | 4 | 4 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 2 | 2 | Thin; source-model diversity is missing |
 | Context graph engine | 2 | 2 | Thin |
-| Multi-agent orchestrator | 3 | 3 | Improved with a vendor-operated platform that registers other vendors' agents; open orchestrators remain thin |
+| Multi-agent orchestrator | 4 | 4 | Improved with a vendor-operated registry platform and a low-code service that escalates to people; open orchestrators remain thin |
 | Stateful agent runtime | 8 | 8 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 2 | 2 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
 | Coding-agent workflow | 1 | 1 | Priority gap |
@@ -72,7 +72,7 @@ Choose small batches with one coherent boundary question:
 7. **Specification follow-up:** identity and discovery now have OASF and ANP baselines; browser-native tools and agentic transactions now have WebMCP, AP2, UCP, and Commerce ACP baselines. Next evaluate cross-protocol authentication/authorization profiles, workflow-state exchange beyond task messaging, and conformance evidence without absorbing generic web standards.
 8. **Instruction-convention follow-up:** evaluate Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as one bounded batch. Treat workflows, custom modes, and product configuration as separate boundaries rather than stretching the instruction-convention category.
 9. **Superseded predecessors:** resolved by [ADR 016](adr/016-superseded-predecessors-keep-their-record.md), which adds the `superseded` status and a validated `superseded_by` link. AutoGen and Semantic Kernel are published under it. Apply the same treatment when a maintainer publishes a succession and the successor is already reviewed.
-10. **Low-code agent builders:** answered by [ADR 019](adr/019-authoring-surface-is-a-trait-not-a-role.md). The batch question presumed one role for the class, but none of these systems organizes itself around specialized agents handing off to each other, so the orchestrator role is wrong for all of them, and the framework role's wording excluded them until it was amended. Authoring surface is a trait carried by `agent_interfaces`, not a role. Review each on its own outcome, and only after the Systems scope can filter on interface.
+10. **Low-code agent builders:** done under [ADR 019](adr/019-authoring-surface-is-a-trait-not-a-role.md). Dify, Langflow, and Botpress Cloud are published as agent frameworks, Flowise as an archived one after its maintainers wound it down without naming a successor, and Copilot Studio as a multi-agent orchestrator because it coordinates other agents and escalates to people. A shared authoring surface did not make them alike, and `agent_interfaces` now carries that difference as a filter.
 11. **Local-runtime passes two and three:** done. ONNX Runtime GenAI, Xinference, and OpenVINO Model Server closed the portable-library, gateway, and Intel/NPU gaps; MLC LLM, Qualcomm GenieX, and TensorRT-LLM extended execution to mobile, browser, and first-party NVIDIA serving. llamafile was screened out as packaging of the published llama.cpp record rather than a distinct execution boundary. Remaining gap: a proprietary or managed self-hosted gateway.
 12. **Assistant regional follow-up:** Meta AI is now reviewed. Qwen Chat and Kimi remain unreviewed, and each needs its own product-terms and governance pass; do not infer an assistant's boundary from its provider's API record.
 13. **Inference-service follow-up:** Novita AI and Lambda Inference were screened but not promoted because one documentation pass did not establish their retention, residency, and delivery boundaries. Revisit with governing terms in hand.

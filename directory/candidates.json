@@ -1102,73 +1102,6 @@
       ]
     },
     {
-      "repo": "langflow-ai/langflow",
-      "name": "Langflow",
-      "url": "https://github.com/langflow-ai/langflow",
-      "description": "Visual and code-driven platform for building, executing, and deploying AI agents and workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.88,
-      "github_detected_license": "MIT",
-      "stars": 153680,
-      "topics": [
-        "agents",
-        "chatgpt",
-        "generative-ai",
-        "large-language-models",
-        "multiagent",
-        "react-flow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "langgenius/dify",
-      "name": "Dify",
-      "url": "https://github.com/langgenius/dify",
-      "description": "Collaborative platform for building and operating agentic workflows, RAG pipelines, model integrations, and tool-using applications.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.88,
-      "github_detected_license": "NOASSERTION",
-      "stars": 153509,
-      "topics": [
-        "agent",
-        "agentic-ai",
-        "agentic-framework",
-        "agentic-workflow",
-        "ai",
-        "automation",
-        "claude",
-        "deepseek",
-        "genai",
-        "gpt",
-        "llm",
-        "low-code",
-        "mcp",
-        "nextjs",
-        "no-code",
-        "openai",
-        "python",
-        "skills",
-        "workflow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "lavague-ai/LaVague",
       "name": "LaVague",
       "url": "https://github.com/lavague-ai/LaVague",
@@ -2652,31 +2585,6 @@
     },
     {
       "repo": null,
-      "name": "Microsoft Copilot Studio",
-      "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio",
-      "description": "Graphical low-code platform for building, testing, deploying, and orchestrating agents and agent flows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.95,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-builder",
-        "low-code",
-        "microsoft",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
       "name": "Salesforce Agentforce",
       "url": "https://www.salesforce.com/platform/agentforce-platform",
       "description": "Enterprise platform for designing, testing, deploying, observing, and orchestrating autonomous agents over Salesforce data and actions.",
@@ -2715,56 +2623,6 @@
         "notebook",
         "rag",
         "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "FlowiseAI/Flowise",
-      "name": "Flowise",
-      "url": "https://github.com/FlowiseAI/Flowise",
-      "description": "Visual platform for LLM and agent workflows whose repository was archived on 2026-08-13 ahead of an announced 2026-08-31 end of life; review its mixed Apache-2.0 and enterprise-subtree terms before any historical disposition.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.84,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-framework",
-        "archived",
-        "eol-2026-08-31",
-        "low-code",
-        "workflow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Botpress Cloud",
-      "url": "https://botpress.com/",
-      "description": "Hosted platform for building and operating conversational agents with tools, workflows, knowledge, and integrations; the public botpress/botpress repository contains development components rather than the hosted runtime implementation.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.82,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-framework",
-        "conversational-agent",
-        "workflow"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-26",
