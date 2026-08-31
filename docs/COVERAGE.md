@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 93 systems: 27 memory systems, 52 agent systems, and 14 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, one is mixed-source, one is source-available, and twenty-four are proprietary. Two records are archived and two are superseded, so 89 satisfy active-choice coverage. The provisional queue contains 101 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 97 systems: 27 memory systems, 56 agent systems, and 14 assistant systems. Sixty-two are open-source, three use mixed open licenses, two are open-core, two are mixed-source, one is source-available, and twenty-four are proprietary. Two records are archived and two are superseded, so 93 satisfy active-choice coverage. The provisional queue contains 97 records. The separate collections contain 21 unscored specifications, 40 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -47,8 +47,8 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | Agent memory service | 4 | 4 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 2 | 2 | Thin; source-model diversity is missing |
 | Context graph engine | 2 | 2 | Thin |
-| Multi-agent orchestrator | 2 | 2 | Thin relative to ecosystem size |
-| Stateful agent runtime | 5 | 5 | Improved with a self-editing personal-agent runtime; compare persistence and execution-policy boundaries |
+| Multi-agent orchestrator | 3 | 3 | Improved with a vendor-operated platform that registers other vendors' agents; open orchestrators remain thin |
+| Stateful agent runtime | 8 | 8 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 2 | 2 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
 | Coding-agent workflow | 1 | 1 | Priority gap |
 | Human–agent memory bridge | 1 | 1 | Priority gap |
@@ -64,7 +64,7 @@ Archived and superseded systems remain reviewed historical references but do not
 Choose small batches with one coherent boundary question:
 
 1. **Assistant boundary follow-up:** keep GroqChat provisional until first-party evidence establishes a durable end-user workspace distinct from Groq Playground and GroqCloud. Preserve consumer, enterprise, playground, model, API, and agent-mode boundaries rather than comparing transient model benchmarks.
-2. **Managed agent platforms:** dissolved by [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md). The seven products were grouped on a shape none of them fully has: watsonx Orchestrate ships on-premises and as a local Developer Edition, Foundry and AgentCore and the Gemini Enterprise Agent Platform host code the customer writes against frameworks the Atlas already publishes, and neither AWS nor Google documents human handoff. Operating party is a trait, so the routing is per record: Foundry, AgentCore, and the Gemini Enterprise Agent Platform as stateful agent runtimes; watsonx Orchestrate as a multi-agent orchestrator; Copilot Studio into batch 10 as a low-code builder; Agentforce and the Meta Business Agent Platform unresolved pending a product-boundary decision. Review each on its own evidence, and only after the Systems scope can filter on deployment.
+2. **Managed agent platforms:** done. Under [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md) the batch was dissolved and its members routed individually. Microsoft Foundry Agent Service, Amazon Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes; IBM watsonx Orchestrate as a multi-agent orchestrator, and it is not vendor-operated only, since it ships on-premises and air-gapped. Copilot Studio belongs to batch 10 as a low-code builder. Salesforce Agentforce and the Meta Business Agent Platform remain queued pending a product-boundary decision.
 3. **Coding-agent second pass:** Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, Windsurf, and T3 Code. Replit Agent now establishes a vertically integrated managed-cloud baseline; resolve editor, cloud-delegation, and workflow boundaries without duplicating represented products.
 4. **Proprietary memory and knowledge:** NotebookLM, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary. Zep Cloud and Slite now establish managed agent-memory and self-maintaining knowledge baselines.
 5. **Source-model diversity:** screenpipe, AFFiNE, Onyx, and Obsidian. Review product terms and operational evidence without treating license as eligibility.
