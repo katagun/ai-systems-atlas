@@ -1730,6 +1730,39 @@
           "verified_at": "2026-08-31"
         }
       ]
+    },
+    {
+      "project_id": "salesforce-agentforce",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Notices and license information for the Einstein Platform grouping, under which the vendor's trust documentation places the Agentforce-branded services",
+          "kind": "web_terms",
+          "url": "https://www.salesforce.com/content/dam/web/en_us/www/documents/legal/misc/einstein-platform-notices-and-license-information.pdf",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Trust and compliance documentation index, which enumerates the services and features branded as Agentforce",
+          "kind": "web_terms",
+          "url": "https://www.salesforce.com/company/legal/trust-and-compliance-documentation/",
+          "verified_at": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "project_id": "meta-business-agent-platform",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Terms governing the Meta Business Agent, the platform, its interfaces, and its connectors; the document renders only in a browser and its text could not be re-read during this review",
+          "kind": "web_terms",
+          "url": "https://www.facebook.com/legal/3774714022740775/",
+          "verified_at": "2026-08-31"
+        }
+      ]
     }
   ]
 }
