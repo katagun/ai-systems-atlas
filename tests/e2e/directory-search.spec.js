@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("156 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("165 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -243,10 +243,10 @@ test("inference services combine filters and expose the dedicated service score"
   await page.reload();
   await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
 
-  await expect(page.locator("#inference-result-count")).toContainText("40 services · Inference-service score");
+  await expect(page.locator("#inference-result-count")).toContainText("49 services · Inference-service score");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
   await page.locator("#inference-sort-filter").selectOption("name");
-  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("AI21 Studio");
+  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("AI/ML API");
   await page.locator("#inference-sort-filter").selectOption("score");
   await page.locator("#inference-search").fill("Bedrock");
   await page.locator("#inference-type-filter").selectOption("cloud_model_platform");

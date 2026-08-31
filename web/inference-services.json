@@ -2790,6 +2790,621 @@
         }
       ],
       "verified_at": "2026-08-30"
+    },
+    {
+      "id": "requesty",
+      "name": "Requesty",
+      "operator": "Requesty Ltd",
+      "service_type": "routing_aggregator",
+      "url": "https://requesty.ai/",
+      "description": "A routing API that forwards requests to several hundred hosted models through one compatible endpoint.",
+      "service_boundary": "Represents Requesty's routing service, not the upstream providers it forwards to or the models they publish.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible"
+      ],
+      "regional_controls": "A European endpoint is documented on every plan, so requests can be kept within an EU routing path.",
+      "retention_controls": "The privacy policy states that customer data is not used to train models and describes this as absolute on paid plans; logs are encrypted and held for up to thirty days, and a zero-retention mode disables logging. Models whose providers permit training are labelled and offered without charge.",
+      "routing": "Routing policies cover fallback and load balancing across providers, with spend controls and guardrails including personal-data detection.",
+      "customization": "The service routes existing hosted models; no customer fine-tuning or private model hosting is documented.",
+      "strengths": [
+        "A European routing endpoint is offered on every plan rather than reserved for enterprise agreements.",
+        "Models whose providers permit training on inputs are labelled as such and offered at no cost, making that tradeoff explicit."
+      ],
+      "tradeoffs": [
+        "The terms of service render only in a browser, so the governing text could not be read from the published page.",
+        "Documented model and provider counts differ between the vendor's own pages.",
+        "Requests cross an additional service boundary before reaching an upstream provider."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.8,
+        "data_governance": 7.6,
+        "regional_deployment_control": 7.4,
+        "serving_flexibility": 4.5,
+        "api_interoperability": 8.6,
+        "traffic_resilience": 7.8,
+        "customization_lifecycle": 3.5,
+        "documentation_transparency": 6.0,
+        "overall": 6.69
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Requesty Terms of Service",
+        "url": "https://requesty.ai/terms",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Product and routing overview",
+          "url": "https://requesty.ai/",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy",
+          "url": "https://requesty.ai/privacy",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "eden-ai",
+      "name": "Eden AI",
+      "operator": "Eden AI SAS",
+      "service_type": "routing_aggregator",
+      "url": "https://www.edenai.co/",
+      "description": "A French-operated API that forwards one request format to language, document, speech, translation, and vision models from many vendors.",
+      "service_boundary": "Represents Eden AI's aggregation API across several model categories, not the upstream vendors it forwards to.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "regional_controls": "The operator is a French company and documents European data governance; upstream processing geography follows the selected provider.",
+      "retention_controls": "The terms state customer data is not used to train models and that prompts and outputs are not stored by default, with limited billing metadata retained. The operator explicitly disclaims control over upstream providers' retention.",
+      "routing": "Requests are directed to a selected vendor for a chosen capability, with fallback across vendors for the same task.",
+      "customization": "The service focuses on aggregating existing vendor models across categories rather than customer fine-tuning.",
+      "strengths": [
+        "Coverage extends past language models to document, speech, translation, and vision vendors through one contract and one request format.",
+        "The operator is a named French company with dated terms and a stated position on training and storage."
+      ],
+      "tradeoffs": [
+        "Documented model and provider counts differ across the vendor's own pages.",
+        "Breadth across model categories means the effective data boundary varies by which vendor a request reaches.",
+        "Whether platform fees apply to customer-supplied provider keys is not documented."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 7.2,
+        "data_governance": 8.0,
+        "regional_deployment_control": 7.0,
+        "serving_flexibility": 4.5,
+        "api_interoperability": 7.6,
+        "traffic_resilience": 6.6,
+        "customization_lifecycle": 3.5,
+        "documentation_transparency": 7.4,
+        "overall": 6.63
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Eden AI Terms of Service",
+        "url": "https://www.edenai.co/terms",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Plans and pricing",
+          "url": "https://www.edenai.co/pricing",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy",
+          "url": "https://www.edenai.co/privacy",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "aiml-api",
+      "name": "AI/ML API",
+      "operator": "AIMLAPI OÜ",
+      "service_type": "routing_aggregator",
+      "url": "https://aimlapi.com/",
+      "description": "A hosted API that resells access to roughly a thousand text, image, video, and voice models at its own per-token rates.",
+      "service_boundary": "Represents the AI/ML API reselling service, not the labs whose models it forwards to.",
+      "delivery_modes": [
+        "on_demand",
+        "batch"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible"
+      ],
+      "regional_controls": "No customer control over processing geography is documented.",
+      "retention_controls": "The privacy policy states no retention period beyond keeping data as long as necessary, and no position on training over customer prompts is documented.",
+      "routing": "Requests reach a named model through one compatible endpoint; provider selection, fallback, and steering controls are not documented.",
+      "customization": "No customer fine-tuning or private deployment is documented.",
+      "strengths": [
+        "A single compatible endpoint reaches an unusually broad multimodal catalogue spanning text, image, video, and voice vendors.",
+        "Response headers report spend per request, making cost attribution possible without a separate metering system."
+      ],
+      "tradeoffs": [
+        "Per-token rates are the operator's own and sit consistently above the rates other aggregators publish for the same models, with no statement anywhere of how they relate to upstream pricing.",
+        "The terms promise to carry a last-updated date and carry none, and no position on training over customer prompts is stated.",
+        "Subscription tiers and the paused free tier are visible only after signing in."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.0,
+        "data_governance": 3.8,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 4.5,
+        "api_interoperability": 8.2,
+        "traffic_resilience": 5.0,
+        "customization_lifecycle": 3.0,
+        "documentation_transparency": 2.8,
+        "overall": 4.66
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "AI/ML API Terms and Conditions",
+        "url": "https://aimlapi.com/terms-and-conditions",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Model catalogue and pricing",
+          "url": "https://aimlapi.com/models",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "API documentation",
+          "url": "https://docs.aimlapi.com/",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "nano-gpt",
+      "name": "Nano-GPT",
+      "operator": "NanoGPT LLC",
+      "service_type": "routing_aggregator",
+      "url": "https://nano-gpt.com/",
+      "description": "A routing API and chat surface reaching about a thousand text, image, video, and audio models, usable without an account.",
+      "service_boundary": "Represents the Nano-GPT routing service and its chat surface, not the upstream providers it forwards to.",
+      "delivery_modes": [
+        "on_demand",
+        "batch"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible"
+      ],
+      "regional_controls": "No customer control over processing geography is documented; provider selection determines where upstream processing occurs.",
+      "retention_controls": "The terms state the operator is not authorised to train models on customer content, and chat history is held locally by default. The terms are unusually candid that zero-retention routing is a best-effort classification based on a provider's own claim rather than verified visibility into that provider's servers.",
+      "routing": "Requests can be pinned to a chosen provider, and a broad set of upstream partners is named in the privacy policy.",
+      "customization": "The service routes existing hosted models; no customer fine-tuning is documented.",
+      "strengths": [
+        "Accountless and cryptocurrency-payable access, with generated user identifiers, removes the usual identity requirement for reaching hosted models.",
+        "The terms state plainly that zero-retention status is a provider claim rather than something the operator can verify, which most competitors assert without qualification.",
+        "Catalogue breadth spans text, image, video, and speech through one compatible endpoint."
+      ],
+      "tradeoffs": [
+        "The operating company is registered but otherwise impersonal, with no named team, no funding disclosure, and an absent about page.",
+        "No control over processing geography is documented.",
+        "Confidence in retention behaviour rests on upstream provider claims by the operator's own admission."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.2,
+        "data_governance": 7.8,
+        "regional_deployment_control": 3.2,
+        "serving_flexibility": 5.0,
+        "api_interoperability": 8.4,
+        "traffic_resilience": 6.4,
+        "customization_lifecycle": 3.0,
+        "documentation_transparency": 7.6,
+        "overall": 6.01
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "NanoGPT Terms of Service",
+        "url": "https://nano-gpt.com/legal/terms-of-service",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pricing and fee model",
+          "url": "https://nano-gpt.com/pricing",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "API documentation",
+          "url": "https://docs.nano-gpt.com/",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "vercel-ai-gateway",
+      "name": "Vercel AI Gateway",
+      "operator": "Vercel",
+      "service_type": "routing_aggregator",
+      "url": "https://vercel.com/docs/ai-gateway",
+      "description": "A routing service that forwards requests to hosted model providers at provider list price, with budgets scoped to teams and keys.",
+      "service_boundary": "Represents Vercel's gateway service, not the upstream providers or Vercel's wider hosting platform.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "regional_controls": "No customer control over processing geography is documented for the gateway itself; upstream provider selection determines where processing occurs.",
+      "retention_controls": "Zero-retention handling is documented both per request and as a chargeable team-wide setting, and customer-supplied provider keys are supported on paid plans.",
+      "routing": "Requests can fall back across providers, and customer-supplied keys are used first with documented fallback to platform credentials when a key fails.",
+      "customization": "The service routes existing hosted models; no customer fine-tuning or private model deployment is documented.",
+      "strengths": [
+        "Documentation states plainly that no markup and no platform fee are applied to tokens, and dates itself, which is rare among comparable services.",
+        "Budgets can be scoped to a team, project, key, or member rather than only to an account.",
+        "Observability exports through open telemetry drains rather than a proprietary console only."
+      ],
+      "tradeoffs": [
+        "A failed request using a customer-supplied key falls back to platform credentials and that usage is billed, so key failures carry a silent cost.",
+        "The free tier reaches a subset of the catalogue, and free credits stop applying permanently once credits are purchased.",
+        "Team-wide provider allowlisting and zero retention are billed per request, while their per-request equivalents are free."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 7.8,
+        "data_governance": 7.4,
+        "regional_deployment_control": 3.4,
+        "serving_flexibility": 4.5,
+        "api_interoperability": 8.6,
+        "traffic_resilience": 7.6,
+        "customization_lifecycle": 3.0,
+        "documentation_transparency": 8.6,
+        "overall": 6.38
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Vercel Terms of Service",
+        "url": "https://vercel.com/legal/terms",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "AI Gateway pricing",
+          "url": "https://vercel.com/docs/ai-gateway/pricing",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "AI Gateway documentation",
+          "url": "https://vercel.com/docs/ai-gateway",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "cloudflare-ai-gateway",
+      "name": "Cloudflare AI Gateway",
+      "operator": "Cloudflare",
+      "service_type": "routing_aggregator",
+      "url": "https://developers.cloudflare.com/ai-gateway/",
+      "description": "A proxy that fronts requests to two dozen hosted model providers, adding caching, rate limiting, and analytics.",
+      "service_boundary": "Represents Cloudflare's gateway product, not the upstream providers it fronts or Cloudflare's own model hosting.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "service_native"
+      ],
+      "regional_controls": "Requests traverse the operator's global network; no gateway-level control over processing geography is documented.",
+      "retention_controls": "Persistent log volumes differ by plan, and log forwarding is available on paid plans. Customer-supplied provider credentials can be stored so that the operator never holds the billing relationship.",
+      "routing": "Caching, rate limiting, and request retry are configurable per gateway, and credential precedence runs from the request, to stored keys, to the operator's own billing.",
+      "customization": "The gateway fronts existing provider APIs in their native formats; customer fine-tuning is not part of the product.",
+      "strengths": [
+        "Core caching, rate limiting, and analytics are available without charge on a free account and require no infrastructure.",
+        "Customer-supplied provider credentials remove the operator from the billing path entirely.",
+        "Data-loss prevention scanning is available on all plans rather than reserved for paid tiers."
+      ],
+      "tradeoffs": [
+        "Providers connect through their own native request formats, and a single compatible endpoint across providers could not be confirmed from the documentation.",
+        "Persistent log retention is capped far lower on the free tier, and forwarding logs elsewhere requires a paid plan.",
+        "Credits bought through the operator's unified billing carry a stated percentage fee, avoidable only by supplying provider keys."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 8.4,
+        "data_governance": 7.2,
+        "regional_deployment_control": 4.0,
+        "serving_flexibility": 4.0,
+        "api_interoperability": 6.4,
+        "traffic_resilience": 8.2,
+        "customization_lifecycle": 2.8,
+        "documentation_transparency": 8.0,
+        "overall": 6.2
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Cloudflare Self-Serve Subscription Agreement",
+        "url": "https://www.cloudflare.com/terms/",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "AI Gateway pricing",
+          "url": "https://developers.cloudflare.com/ai-gateway/reference/pricing/",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Supported providers",
+          "url": "https://developers.cloudflare.com/ai-gateway/usage/providers/",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "martian",
+      "name": "Martian Gateway",
+      "operator": "Martian Learning, Inc.",
+      "service_type": "routing_aggregator",
+      "url": "https://docs.withmartian.com/",
+      "description": "A routing API forwarding to a few hundred hosted models, alongside a separately branded endpoint applying inference-time optimisation.",
+      "service_boundary": "Represents the Martian routing gateway, not the operator's research work or the separately branded optimisation product sold under another name.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible"
+      ],
+      "regional_controls": "No customer control over processing geography is documented.",
+      "retention_controls": "The terms grant the operator a sublicensable right to use customer materials, defined to include all input data, for purposes that expressly include training and improving the operator's own machine-learning models. No retention period is stated.",
+      "routing": "Requests reach named models through one compatible endpoint; a separately branded endpoint applies inference-time optimisation to frontier models.",
+      "customization": "Inference-time optimisation is sold as a distinct endpoint rather than as customer fine-tuning.",
+      "strengths": [
+        "Inference-time optimisation is offered as a product with a stated quality commitment, which is a different proposition from routing alone.",
+        "The gateway exposes both compatible request formats and publishes a public model listing without requiring a key."
+      ],
+      "tradeoffs": [
+        "The terms expressly license the operator to train its own models on customer inputs, which is the opposite of the default among comparable services.",
+        "The pricing page the operator's own contract cites does not exist, so the fee model cannot be established from published documents.",
+        "The product has been repositioned twice and now sits alongside a separately branded successor, leaving the durable boundary unclear."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 5.4,
+        "data_governance": 2.4,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 4.0,
+        "api_interoperability": 7.8,
+        "traffic_resilience": 5.4,
+        "customization_lifecycle": 4.2,
+        "documentation_transparency": 3.2,
+        "overall": 4.37
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Martian Terms of Service",
+        "url": "https://withmartian.com/terms-of-service",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Gateway documentation",
+          "url": "https://docs.withmartian.com/",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Company site",
+          "url": "https://withmartian.com/",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "chutes",
+      "name": "Chutes",
+      "operator": "Chutes",
+      "service_type": "managed_inference_host",
+      "url": "https://chutes.ai/",
+      "description": "An inference platform serving open-weight models on a decentralised GPU network, which also runs customer-supplied model code.",
+      "service_boundary": "Represents the Chutes hosting service, not the underlying decentralised network protocol or the open-weight models it serves.",
+      "delivery_modes": [
+        "on_demand",
+        "dedicated_endpoint"
+      ],
+      "model_sources": [
+        "open_weight",
+        "customer_supplied"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "service_native"
+      ],
+      "regional_controls": "Capacity comes from a decentralised operator network rather than named regions, and no customer control over processing geography is documented.",
+      "retention_controls": "The terms state that API requests, responses, and application content are not used to train models, and that content is not logged for public inference. Customer-created deployments are noted as running code the operator does not control.",
+      "routing": "Requests reach a named open-weight model on network capacity; private deployments run on dedicated hardware billed by time.",
+      "customization": "Customers can deploy their own model code and weights as private endpoints on dedicated hardware.",
+      "strengths": [
+        "Confidential-compute execution is marked on every model in the public catalogue rather than offered as a premium tier.",
+        "Capacity comes from a decentralised operator network rather than a single cloud, which changes the concentration risk profile.",
+        "The platform's own core is published under a permissive licence, which is uncommon among hosted inference operators."
+      ],
+      "tradeoffs": [
+        "The catalogue is open-weight only, so it is not an alternative for reaching proprietary frontier models.",
+        "The operating entity is unclear, with no named legal company and a team page listing mostly handles.",
+        "A pricing path on the operator's own site returns a not-found body under a success status, which would mislead automated checks."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.0,
+        "data_governance": 8.0,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 7.4,
+        "api_interoperability": 8.0,
+        "traffic_resilience": 6.0,
+        "customization_lifecycle": 7.6,
+        "documentation_transparency": 6.4,
+        "overall": 6.53
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Chutes Terms of Service",
+        "url": "https://chutes.ai/terms",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pricing and plans",
+          "url": "https://chutes.ai/pricing",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Platform documentation",
+          "url": "https://docs.chutes.ai/",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "trustedrouter",
+      "name": "TrustedRouter",
+      "operator": "Lore Hex Corp",
+      "service_type": "routing_aggregator",
+      "url": "https://trustedrouter.com/",
+      "description": "Routes requests to hundreds of models through one compatible endpoint, using hardware-attested gateways that log no prompt or output content.",
+      "service_boundary": "Represents the TrustedRouter routing service and its attested gateway, not the upstream providers it forwards to. A small set of house composite models is layered over other providers' models rather than separately trained.",
+      "delivery_modes": [
+        "on_demand",
+        "batch"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight",
+        "first_party"
+      ],
+      "api_styles": [
+        "openai_compatible"
+      ],
+      "regional_controls": "A European routing alias is documented alongside zero-retention and end-to-end aliases; upstream provider selection still determines where processing occurs.",
+      "retention_controls": "The privacy policy states prompts and outputs are never logged, with an opt-in batch path retaining enclave-encrypted artifacts for up to thirty days. Request metadata is itemised but carries no fixed retention period. Upstream retention is disclaimed twice, and only a minority of catalogue models route to a zero-retention upstream.",
+      "routing": "Aliases select automatic health-based failover, zero-retention routes, end-to-end encrypted routes, or European routes, and per-request constraints can require a minimum privacy class.",
+      "customization": "Customer-supplied provider keys are supported on many models; no customer fine-tuning is documented, and the house models are ensembles over existing providers.",
+      "strengths": [
+        "The privacy claim is cryptographically checkable rather than asserted: a live attestation signed by the cloud operator names an image digest matching the published one, and binds the connection's own certificate.",
+        "Three confidential-computing planes are documented, with signed trust artifacts recorded in a public transparency log.",
+        "Corporate identity is disclosed to an unusual degree, including registration identifiers and a named signatory, in a category where anonymous operators are common."
+      ],
+      "tradeoffs": [
+        "The gateway and control plane are published under a source-available licence granting no production use for four years, so the service's own description of the code as fully open is inaccurate.",
+        "No third-party audit exists; the operator states its compliance certification is not obtained and its processing addendum is an unsigned draft.",
+        "Documented provider coverage is materially higher than the live catalogue supports, and most models do not route to a zero-retention upstream.",
+        "The operation rests on one named individual with no disclosed funding, and the trust page links a repository that does not exist."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 5.6,
+        "data_governance": 8.8,
+        "regional_deployment_control": 6.6,
+        "serving_flexibility": 5.2,
+        "api_interoperability": 8.6,
+        "traffic_resilience": 7.4,
+        "customization_lifecycle": 3.6,
+        "documentation_transparency": 8.2,
+        "overall": 6.81
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "TrustedRouter Terms of Service",
+        "url": "https://trustedrouter.com/terms",
+        "verified_at": "2026-08-31"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy",
+          "url": "https://trustedrouter.com/privacy",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Attestation and trust artifacts",
+          "url": "https://trust.trustedrouter.com/",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Pricing",
+          "url": "https://trustedrouter.com/pricing",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "Compliance status",
+          "url": "https://trustedrouter.com/legal",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-08-31"
     }
   ]
 }
