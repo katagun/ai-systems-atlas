@@ -4,11 +4,13 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Now
 
-- [ ] Review the remaining 101 provisional records in small, evidence-backed batches.
+- [ ] Review the remaining 120 provisional records in small, evidence-backed batches.
+- [ ] Write the derivative rule down. A fork or reimplementation earns its own record when its operational boundary differs, not when its repository does; llamafile was excluded as packaging of a published runtime, Open Grok is recorded as a distinct community fork, and language bindings are excluded as one product. The rule is consistent but unwritten, and the sweep queued several derivatives that will need it.
 - [ ] Resolve GroqChat's product boundary only when first-party evidence establishes a durable workspace distinct from Groq Playground and GroqCloud.
 - [x] Add a deployment filter to the Systems scope and reconcile the `deployment` values behind it; both shipped, and ADR 019 later added the matching interface filter.
 - [x] Review the former managed-platform candidates individually under the ADR 018 routing. Foundry Agent Service, Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes and watsonx Orchestrate as a multi-agent orchestrator; Copilot Studio stays with the low-code builder batch.
-- [ ] Settle the product boundary for Salesforce Agentforce and the Meta Business Agent Platform before assigning either a role.
+- [x] Settle the product boundary for Salesforce Agentforce and the Meta Business Agent Platform; both are published as agent frameworks.
+- [ ] Re-read the Meta Business Agent terms and record their date and scope. The document renders only in a browser, and browser access to that host is blocked in the current environment, so this review cites the governing URL without restating its text.
 - [ ] Review the remaining proprietary memory batch: NotebookLM, Microsoft Recall, and Limitless, preserving product boundaries from open references.
 - [ ] Review the remaining coding-agent second pass: Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, and Windsurf. Replit Agent now provides the managed-workspace baseline.
 - [ ] Review source-model diversity candidates: screenpipe, AFFiNE, Onyx, Obsidian, Microsoft Recall, and Limitless.

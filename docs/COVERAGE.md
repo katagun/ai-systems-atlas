@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 102 systems: 27 memory systems, 61 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-five are proprietary. Three records are archived and two are superseded, so 97 satisfy active-choice coverage. The provisional queue contains 92 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 104 systems: 27 memory systems, 63 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-seven are proprietary. Three records are archived and two are superseded, so 99 satisfy active-choice coverage. The provisional queue contains 90 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -38,7 +38,7 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 3 | 3 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
-| Agent framework / SDK | 21 | 18 | Broad across code frameworks and visual builders after ADR 019 widened the definition; two Microsoft predecessors are superseded and one builder is archived |
+| Agent framework / SDK | 23 | 20 | Broad across code frameworks and visual builders after ADR 019 widened the definition; two Microsoft predecessors are superseded and one builder is archived |
 | Coding agent | 17 | 17 | Broad across local, self-hosted, managed-cloud, terminal-native, and community-fork operation |
 | Human-first PKM | 8 | 8 | Broad, but proprietary reference products remain provisional |
 | AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
@@ -65,6 +65,16 @@ Archived and superseded systems remain reviewed historical references but do not
 
 For checking coverage rather than detecting launches, use [models.dev](https://models.dev/api.json), a community-maintained database of inference providers and models published under an open license from [anomalyco/models.dev](https://github.com/anomalyco/models.dev). A pass on 2026-08-31 found 212 provider entries against 49 reviewed services. That difference overstates the gap: the catalog keys on API endpoints, so one operator appears several times across regional and subscription variants, and Alibaba alone accounts for six entries. Collapse those to service boundaries before treating an entry as a candidate, and treat the catalog as aggregated third-party data that locates candidates rather than as evidence, since every record still needs first-party terms and documentation.
 
+### High-adoption discovery sweep
+
+A 2026-08-31 sweep looked for widely adopted open-source systems the catalog does not hold, prompted by a question about forks and derivatives. Two findings shaped the method.
+
+**Walking fork graphs does not work.** The seventy-three published repositories carry more than half a million forks between them, dominated by personal copies: sorting one popular project's forks by stars returned repositories with 584, 70, and 28 stars. More decisively, the derivative that prompted the question is not a fork in the platform's sense at all, so no amount of graph walking would reach it. Lineage is a review-time boundary question, not a discovery mechanism.
+
+**Adoption finds candidates; the existing rules filter them.** Twenty banded searches keyed to the role vocabulary returned 327 repositories, 279 of them new, active, and not forks. Star count sorts attention but decides nothing: the highest-ranked results included a methodology, several skill libraries, an unrelated automation platform, a database, and an agent-managed museum exhibit. `CURATION.md` already excludes prompt templates, collections, and research inputs, and applying that plus the tool-and-plugin boundary removed the noise. Thirty survivors were queued.
+
+Band the searches. A first pass with an unbanded top-thirty cut silently dropped a twenty-eight-thousand-star coding agent because larger repositories crowded the result window.
+
 ### Chinese-operator coverage
 
 A 2026-08-31 pass compared the catalog against models.dev for Chinese operators. Thirty-five catalog entries collapsed to about thirteen operators once regional and subscription variants were folded in, confirming that the catalog keys on endpoints rather than on services.
@@ -78,7 +88,7 @@ Remaining unreviewed operators from that comparison include Xiaomi, Bailing, and
 Choose small batches with one coherent boundary question:
 
 1. **Assistant boundary follow-up:** keep GroqChat provisional until first-party evidence establishes a durable end-user workspace distinct from Groq Playground and GroqCloud. Preserve consumer, enterprise, playground, model, API, and agent-mode boundaries rather than comparing transient model benchmarks.
-2. **Managed agent platforms:** done. Under [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md) the batch was dissolved and its members routed individually. Microsoft Foundry Agent Service, Amazon Bedrock AgentCore, and the Gemini Enterprise Agent Platform are published as stateful agent runtimes; IBM watsonx Orchestrate as a multi-agent orchestrator, and it is not vendor-operated only, since it ships on-premises and air-gapped. Copilot Studio belongs to batch 10 as a low-code builder. Salesforce Agentforce and the Meta Business Agent Platform remain queued pending a product-boundary decision.
+2. **Managed agent platforms:** closed. Under [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md) the batch was dissolved and routed per record, and the last two are now reviewed. Salesforce Agentforce and the Meta Business Agent Platform are agent frameworks rather than orchestrators: Agentforce's subagents are categories of actions inside one agent rather than peers it delegates to, and Meta's platform coordinates nothing. Foundry Agent Service, Bedrock AgentCore, and the Gemini Enterprise Agent Platform are stateful agent runtimes; watsonx Orchestrate is a multi-agent orchestrator; Copilot Studio joined batch 10.
 3. **Coding-agent second pass:** Cursor, GitHub Copilot coding agent, Jules, Roo Code, SWE-agent, Windsurf, and T3 Code. Replit Agent now establishes a vertically integrated managed-cloud baseline; resolve editor, cloud-delegation, and workflow boundaries without duplicating represented products.
 4. **Proprietary memory and knowledge:** NotebookLM, Microsoft Recall, Limitless, and other products that provide a materially different ownership or governance boundary. Zep Cloud and Slite now establish managed agent-memory and self-maintaining knowledge baselines.
 5. **Source-model diversity:** screenpipe, AFFiNE, Onyx, and Obsidian. Review product terms and operational evidence without treating license as eligibility.

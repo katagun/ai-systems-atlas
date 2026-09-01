@@ -8911,6 +8911,185 @@
         "LicenseRef-Proprietary"
       ],
       "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Salesforce groups this platform under Einstein Platform in its trust documentation, alongside prebuilt Agentforce assistants and legacy Einstein features. Agentforce Vibes, Contact Center, IT Service, Operations, and Supply Chain are documented separately and are outside this record.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "salesforce-agentforce",
+      "name": "Salesforce Agentforce",
+      "url": "https://developer.salesforce.com/docs/ai/agentforce/guide/",
+      "description": "Vendor-operated platform for configuring agents as declarative org metadata that serve a customer's own customers or employees.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned",
+        "append_only"
+      ],
+      "canonical_data": "agent and version metadata, subagent and action definitions, indexed knowledge libraries, and server-side conversation sessions",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "research",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.4,
+        "autonomy": 7.6,
+        "human_control": 8.6,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 4.6,
+        "interoperability": 5.8,
+        "maturity": 8.6,
+        "overall": 7.48
+      },
+      "strengths": [
+        "Agents are declarative metadata that deploy, version, and promote through the vendor's ordinary release tooling rather than living only in a console",
+        "Human escalation is a first-class construct with a dedicated subagent and a routing path into the vendor's contact-centre queueing",
+        "Actions reuse existing org logic directly, so database queries, business flows, and custom code become agent capabilities without a separate integration layer"
+      ],
+      "weaknesses": [
+        "The runtime is vendor-operated inside a customer org with no self-hosted option, so execution and data both stay on the vendor's infrastructure",
+        "Capability is bounded by the surrounding platform: the richest actions, knowledge sources, and escalation targets are all first-party",
+        "The brand covers prebuilt assistants and several separately sold products, so published material about “Agentforce” often describes something other than this platform"
+      ],
+      "why_it_matters": "The agent-building layer inside one of the largest enterprise data platforms, where the agent's reach is defined by records and permissions the organisation already maintains.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "repo": null,
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Meta Business AI is a marketing umbrella covering advertising automation and creative tooling; this record covers only the separately documented agent platform and its own terms.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "id": "meta-business-agent-platform",
+      "name": "Meta Business Agent Platform",
+      "url": "https://developers.facebook.com/documentation/meta-business-agent/overview",
+      "description": "Vendor-operated platform where a business configures a messaging agent through APIs, grounding it in its own content and connecting its own systems.",
+      "primary_role": "agent_framework_sdk",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "agent configuration, business knowledge sources, skill definitions, and connected action endpoints",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "workflows"
+      ],
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 6.8,
+        "autonomy": 6.6,
+        "human_control": 8.0,
+        "observability_recovery": 5.6,
+        "data_sovereignty": 3.2,
+        "interoperability": 3.4,
+        "maturity": 5.4,
+        "overall": 5.93
+      },
+      "strengths": [
+        "Handoff between the agent and the business's own application is a documented first-class capability rather than an escalation afterthought",
+        "The agent takes real actions through the business's own interfaces and webhook subscriptions rather than only retrieving answers",
+        "A test surface for sending messages and evaluating behaviour is documented before and after going live"
+      ],
+      "weaknesses": [
+        "The platform serves one messaging channel on eligible business phone numbers, so it is not a general agent surface",
+        "Eligibility excludes several regulated categories outright, including finance, government, health, alcohol, gambling, and over-the-counter drugs",
+        "The published documentation surface is small, and the governing terms render only in a browser, so their text could not be re-read during this review"
+      ],
+      "why_it_matters": "Shows a messaging platform turning its business channel into a configurable agent surface, where reach is defined by the channel rather than by the customer's own systems.",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary"
     }
   ]
 }
