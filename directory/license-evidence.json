@@ -1763,6 +1763,51 @@
           "verified_at": "2026-08-31"
         }
       ]
+    },
+    {
+      "project_id": "oh-my-openagent",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under a sustainable-use licence limiting use to internal, personal, or non-commercial purposes",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/code-yeongyu/oh-my-openagent/blob/5982a8720a1cb87c26a36bb31d5019f119841769/LICENSE.md",
+          "blob_sha": "5982a8720a1cb87c26a36bb31d5019f119841769",
+          "immutable_url": "https://api.github.com/repos/code-yeongyu/oh-my-openagent/git/blobs/5982a8720a1cb87c26a36bb31d5019f119841769"
+        }
+      ]
+    },
+    {
+      "project_id": "gajae-code",
+      "repo": "Yeachan-Heo/gajae-code",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Yeachan-Heo/gajae-code/blob/16eb3fc020a9dbefb165d2fb1d4597d2203c44bd/LICENSE",
+          "blob_sha": "16eb3fc020a9dbefb165d2fb1d4597d2203c44bd",
+          "immutable_url": "https://api.github.com/repos/Yeachan-Heo/gajae-code/git/blobs/16eb3fc020a9dbefb165d2fb1d4597d2203c44bd"
+        }
+      ]
+    },
+    {
+      "project_id": "claw-code",
+      "repo": "ultraworkers/claw-code",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ultraworkers/claw-code/blob/28e6960dd9a2be209c308b49bc9a8973dbf4d60d/LICENSE",
+          "blob_sha": "28e6960dd9a2be209c308b49bc9a8973dbf4d60d",
+          "immutable_url": "https://api.github.com/repos/ultraworkers/claw-code/git/blobs/28e6960dd9a2be209c308b49bc9a8973dbf4d60d"
+        }
+      ]
     }
   ]
 }

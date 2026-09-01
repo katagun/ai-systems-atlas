@@ -42,6 +42,9 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | CrewAI | Multi-agent coordination | Accessible role-based crews plus explicit flows | Extra agents can amplify nondeterminism and debugging cost |
 | Microsoft Agent Framework | Workflow convergence | Multi-agent workflows, state, observability, and .NET/Python support | Newer consolidated framework with cloud-oriented integrations |
 | smolagents | Minimal agent abstraction | Understandable code-agent design and flexible local/sandbox execution | Persistence, recovery, and policy are mostly left to applications |
+| Gajae-Code | Subscription-authenticated agency | Runs on plans the developer already pays for, gates mutation behind an approved plan, and relays questions to chat apps | Self-declared experimental beta with no semantic retrieval |
+| oh-my-openagent | Third-party orchestration layer | Adds planning, multi-agent teams, and code navigation inside command lines developers already run | Source-available licence bars commercial redistribution; all releases are prereleases |
+| Claw Code | Agent-executed codebase as artifact | Safe-by-default permissions and structured diagnostics across a large agent-built Rust workspace | Maintainers direct users elsewhere for real work; no releases or tags exist |
 
 ### Assistant-system research set
 

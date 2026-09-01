@@ -9090,6 +9090,290 @@
         "LicenseRef-Proprietary"
       ],
       "source_model": "proprietary"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "Distributed for one host command line under the separate name LazyCodex, whose repository is a thin installer that vendors this engine as a submodule; the installer carries a permissive licence but the engine it fetches does not.",
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "id": "oh-my-openagent",
+      "name": "oh-my-openagent",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "url": "https://github.com/code-yeongyu/oh-my-openagent",
+      "description": "A plugin adding multi-agent orchestration, planning, and code-navigation tooling to an existing coding command line, plus a standalone edition.",
+      "primary_role": "coding_agent_workflow",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "project and user configuration, hierarchical instruction files, and stored plans",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "stars": 68562,
+      "forks": 5628,
+      "open_issues": 954,
+      "pushed_at": "2026-08-31T20:37:20Z",
+      "github_detected_license": "NOASSERTION",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 8.6,
+        "autonomy": 7.8,
+        "human_control": 6.6,
+        "observability_recovery": 6.4,
+        "data_sovereignty": 5.6,
+        "interoperability": 8.0,
+        "maturity": 5.4,
+        "overall": 6.84
+      },
+      "strengths": [
+        "Runs inside command lines developers already use rather than requiring them to adopt a new agent",
+        "Hash-anchored editing gives the model a verifiable line identifier, addressing a documented class of edit failure",
+        "Existing hooks, commands, skills, and tool servers from another vendor's agent are explicitly supported unchanged"
+      ],
+      "weaknesses": [
+        "The licence permits only internal, personal, or non-commercial use and forbids paid redistribution, so it is source-available rather than open source",
+        "Every current release is a prerelease of a major version, against roughly nine hundred open issues and a structural refactor in progress",
+        "Package, binary, and configuration names are mid-rename, and an unrelated package occupies the short name on the public registry"
+      ],
+      "why_it_matters": "The most-adopted attempt to let a third-party plugin, rather than a vendor, define the orchestration layer above whichever coding command line a developer already runs.",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "id": "gajae-code",
+      "name": "Gajae-Code",
+      "repo": "Yeachan-Heo/gajae-code",
+      "url": "https://github.com/Yeachan-Heo/gajae-code",
+      "description": "A terminal coding agent that authenticates against existing subscriptions, gates edits behind an approved plan, and relays questions to chat apps.",
+      "primary_role": "coding_agent",
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "manual",
+        "file_import",
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "consolidation",
+        "self_editing",
+        "decay"
+      ],
+      "canonical_data": "append-only session logs with content-addressed blobs, plus consolidated memory files and generated playbooks",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "stars": 2682,
+      "forks": 372,
+      "open_issues": 22,
+      "pushed_at": "2026-09-01T00:08:03Z",
+      "github_detected_license": "MIT",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 8.4,
+        "autonomy": 7.6,
+        "human_control": 8.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.4,
+        "interoperability": 8.8,
+        "maturity": 5.8,
+        "overall": 7.74
+      },
+      "strengths": [
+        "Authenticates against subscriptions the developer already pays for across many providers, avoiding a second metered bill",
+        "Mutation is gated behind an approved plan, and the project ships no permission-bypass flag by design",
+        "Unattended runs are bounded by a lease that only real tool execution renews, so streaming text cannot keep a stalled run alive"
+      ],
+      "weaknesses": [
+        "The project declares itself experimental and pre-release and tells users to verify outputs before relying on them",
+        "Retrieval is keyword, structural, and language-server based, with no semantic or vector search documented",
+        "Automatic memory is disabled by default and its artifacts are private runtime state rather than a supported interface"
+      ],
+      "why_it_matters": "The clearest worked example of a coding agent designed around subscription authentication and asynchronous human approval rather than metered billing and terminal presence.",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "The repository describes itself as maintained without human intervention; its philosophy document instead describes humans directing work through a chat channel while agents implement, its contributor guide is conventional, and recent commits carry a dozen human author identities with no automated account. Direct pushes to the main branch are policy-blocked and merges are performed by people.",
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "id": "claw-code",
+      "name": "Claw Code",
+      "repo": "ultraworkers/claw-code",
+      "url": "https://github.com/ultraworkers/claw-code",
+      "description": "A command-line coding agent written in Rust and modelled on an existing vendor agent, published as a demonstration rather than a supported tool.",
+      "primary_role": "coding_agent",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "in-workspace session files, worker state, and layered instruction files",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "stars": 195158,
+      "forks": 108805,
+      "open_issues": 41,
+      "pushed_at": "2026-08-16T06:18:45Z",
+      "github_detected_license": "MIT",
+      "score": {
+        "task_reliability": 5.4,
+        "tool_use": 7.8,
+        "autonomy": 5.6,
+        "human_control": 8.4,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 8.0,
+        "interoperability": 6.4,
+        "maturity": 2.6,
+        "overall": 6.61
+      },
+      "strengths": [
+        "Permissions are explicit and safe by default, with full access requiring a deliberate opt-in and a pre-dispatch enforcement gate",
+        "Every diagnostic command emits structured output, including build provenance and per-entry validation errors for tool servers and hooks",
+        "Runs against local compatible model servers, so it need not call a hosted interface at all"
+      ],
+      "weaknesses": [
+        "Its own maintainers state it is not the serious production project and direct users to two other tools to do real work",
+        "There are no releases and no tags at all, installation is build-from-source only, and the same-named package on the language registry installs a deprecated stub",
+        "The claim that it is maintained without human intervention is contradicted by its own contributor guide and by a commit history with a dozen human authors and no automated account"
+      ],
+      "why_it_matters": "A highly visible demonstration that agent-executed development can sustain a large codebase, and an equally clear illustration of the distance between that and a shippable tool.",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source"
     }
   ]
 }
