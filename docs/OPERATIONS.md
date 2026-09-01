@@ -77,6 +77,16 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR. GitHub may require a maintainer to approve CI on bot-created PRs; that review gate is intentional.
 
+## Logo coverage
+
+`node scripts/build_logos.mjs --check` rebuilds `web/logos.json` in memory and fails when the committed file no longer matches the record map, the published records, or the installed icon-package versions. It also reports every monogram record and flags candidates whose id or name now matches an available icon slug. Three rails keep coverage current:
+
+- `verify.yml` runs the check on every pull request, so a record-map edit or icon-package bump cannot merge without a regenerated `web/logos.json`.
+- `update-directory.yml` writes the weekly coverage report to the run summary, surfacing records published without marks and newly available candidates.
+- Dependabot's weekly npm pull requests bump the icon packages; the check fails on those PRs until the file is regenerated, which is when newly added icons become mappable.
+
+A candidate hint is a review prompt, never an auto-mapping: confirm the icon depicts the record's product or the maintainer/operator named in its published data, then map it — or record `null` in `RECORD_MARKS` to decline it durably with a reason.
+
 ## GitHub Pages
 
 `.github/workflows/deploy-pages.yml` deploys only `web/` after the exact `main` revision passes the complete `verify` workflow. A manual run is accepted only from `main` and performs the deployment workflow's local validation before publishing. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.

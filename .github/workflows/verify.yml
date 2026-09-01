@@ -49,5 +49,7 @@ jobs:
         run: |
           npm ci --ignore-scripts
           npm exec -- playwright install --with-deps chromium
+      - name: Check logo coverage and freshness
+        run: node scripts/build_logos.mjs --check
       - name: Run browser end-to-end tests
         run: npm run test:e2e

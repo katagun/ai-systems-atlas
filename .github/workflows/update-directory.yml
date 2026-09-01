@@ -43,6 +43,14 @@ jobs:
         run: node --check web/app-core.js && node --check web/app.js
       - name: Run web behavior tests
         run: node --test tests/test_web.js
+      - name: Report logo coverage
+        run: |
+          npm ci --ignore-scripts
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          node scripts/build_logos.mjs --check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          status="${PIPESTATUS[0]}"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
       - name: Open or update the refresh pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
