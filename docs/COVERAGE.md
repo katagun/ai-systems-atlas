@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-08-29
 
-The reviewed catalog contains 104 systems: 27 memory systems, 63 agent systems, and 14 assistant systems. Sixty-three are open-source, three use mixed open licenses, three are open-core, three are mixed-source, two are source-available, and twenty-seven are proprietary. Three records are archived and two are superseded, so 99 satisfy active-choice coverage. The provisional queue contains 90 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 111 systems: 31 memory systems, 66 agent systems, and 14 assistant systems. Sixty-eight are open-source, three use mixed open licenses, three are open-core, three are mixed-source, three are source-available, and twenty-seven are proprietary. Three records are archived and two are superseded, so 106 satisfy active-choice coverage. The provisional queue contains 115 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
 
 ### Local runtimes
 
@@ -44,13 +44,13 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 | AI knowledge app / RAG brain | 6 | 5 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
 | Retrieval infrastructure | 4 | 4 | Adequate baseline |
 | Data-analysis / text-to-SQL agent | 3 | 2 | Improved; add distinct governed and enterprise approaches |
-| Agent memory service | 4 | 4 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
+| Agent memory service | 7 | 7 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 2 | 2 | Thin; source-model diversity is missing |
 | Context graph engine | 2 | 2 | Thin |
 | Multi-agent orchestrator | 4 | 4 | Improved with a vendor-operated registry platform and a low-code service that escalates to people; open orchestrators remain thin |
 | Stateful agent runtime | 8 | 8 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 2 | 2 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
-| Coding-agent workflow | 1 | 1 | Priority gap |
+| Coding-agent workflow | 3 | 3 | Improved with a third-party orchestration plugin and an agent-built demonstration; compare process and delivery discipline |
 | Human–agent memory bridge | 1 | 1 | Priority gap |
 | Research agent | 2 | 2 | Improved with a source-available executable-evidence approach; broader production evidence remains thin |
 | General AI assistant | 10 | 10 | Representative provider baseline now including European-governed and Meta products; add others only when their workspace, governance, or regional ecosystem is materially distinct |
