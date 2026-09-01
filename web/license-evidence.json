@@ -1868,6 +1868,148 @@
           "immutable_url": "https://api.github.com/repos/tinyhumansai/openhuman/git/blobs/6a366447b44a765b93414462d8d07982055ea96a"
         }
       ]
+    },
+    {
+      "project_id": "librechat",
+      "repo": "danny-avila/LibreChat",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/danny-avila/LibreChat/blob/main/LICENSE",
+          "blob_sha": "5ee6463dee826517754e332444f0acb7b3d106a0",
+          "immutable_url": "https://api.github.com/repos/danny-avila/LibreChat/git/blobs/5ee6463dee826517754e332444f0acb7b3d106a0"
+        }
+      ]
+    },
+    {
+      "project_id": "deer-flow",
+      "repo": "bytedance/deer-flow",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, jointly copyrighted by ByteDance and the DeerFlow authors",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/bytedance/deer-flow/blob/main/LICENSE",
+          "blob_sha": "9dc98a4a6b9b549447a4fc314e4cf50529c184c7",
+          "immutable_url": "https://api.github.com/repos/bytedance/deer-flow/git/blobs/9dc98a4a6b9b549447a4fc314e4cf50529c184c7"
+        }
+      ]
+    },
+    {
+      "project_id": "codegraph",
+      "repo": "colbymchenry/codegraph",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; vendored tree-sitter grammars carry their own MIT notices",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/colbymchenry/codegraph/blob/main/LICENSE",
+          "blob_sha": "31c84c9c80d953a0571b69af15cf815f22c5f2b6",
+          "immutable_url": "https://api.github.com/repos/colbymchenry/codegraph/git/blobs/31c84c9c80d953a0571b69af15cf815f22c5f2b6"
+        }
+      ]
+    },
+    {
+      "project_id": "gitnexus",
+      "repo": "abhigyanpatwari/GitNexus",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under PolyForm Noncommercial License 1.0.0, which permits only noncommercial purposes; vendored tree-sitter grammars carry their own MIT notices",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/abhigyanpatwari/GitNexus/blob/main/LICENSE",
+          "blob_sha": "485af9b57b41e262e414d2791831f0d12823c6b4",
+          "immutable_url": "https://api.github.com/repos/abhigyanpatwari/GitNexus/git/blobs/485af9b57b41e262e414d2791831f0d12823c6b4"
+        }
+      ]
+    },
+    {
+      "project_id": "ecc",
+      "repo": "affaan-m/ECC",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/affaan-m/ECC/blob/main/LICENSE",
+          "blob_sha": "b832b6f642312312367c07688dc7426db40a82ed",
+          "immutable_url": "https://api.github.com/repos/affaan-m/ECC/git/blobs/b832b6f642312312367c07688dc7426db40a82ed"
+        }
+      ]
+    },
+    {
+      "project_id": "ruflo",
+      "repo": "ruvnet/ruflo",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ruvnet/ruflo/blob/main/LICENSE",
+          "blob_sha": "5c4718198a4156beacc780980077043a98b0dd6a",
+          "immutable_url": "https://api.github.com/repos/ruvnet/ruflo/git/blobs/5c4718198a4156beacc780980077043a98b0dd6a"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Bundled web interface under the Apache License 2.0, carried over from the upstream chat interface it forks",
+          "kind": "git_blob",
+          "path": "ruflo/src/ruvocal/LICENSE",
+          "url": "https://github.com/ruvnet/ruflo/blob/main/ruflo/src/ruvocal/LICENSE",
+          "blob_sha": "e44d8f5b79a0643c99977835611e1da9d08fc3cf",
+          "immutable_url": "https://api.github.com/repos/ruvnet/ruflo/git/blobs/e44d8f5b79a0643c99977835611e1da9d08fc3cf"
+        }
+      ]
+    },
+    {
+      "project_id": "orca",
+      "repo": "stablyai/orca",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the package manifest declares no license field",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/stablyai/orca/blob/main/LICENSE",
+          "blob_sha": "fbf46fc17dacb1f65e03e2b6290eb53ba94b149d",
+          "immutable_url": "https://api.github.com/repos/stablyai/orca/git/blobs/fbf46fc17dacb1f65e03e2b6290eb53ba94b149d"
+        }
+      ]
+    },
+    {
+      "project_id": "grok-bot",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "xAI consumer terms of service governing the product and the autonomous actions it takes on a user's behalf; the effective date is not restated here because the host refuses automated and browser access from this environment",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service",
+          "verified_at": "2026-09-01"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Third-party bot terms governing bots shared between accounts",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/bot-sharing-terms",
+          "verified_at": "2026-09-01"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Anysphere terms of service, last updated August 13, 2026, which the product documentation designates for account authentication, backend retention, and account deletion",
+          "kind": "web_terms",
+          "url": "https://cursor.com/terms-of-service",
+          "verified_at": "2026-09-01"
+        }
+      ]
     }
-  ]
+  ],
+  "generated_at": "2026-09-01"
 }

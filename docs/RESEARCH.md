@@ -21,6 +21,8 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | agentmemory | Memory lifecycle mechanics | Supersession, decay, expiry, and eviction implemented separately, running with no key and no model calls | Pinned third-party engine dependency; more open issues than closed |
 | memU | Judgement delegated to the caller | Plain markdown on disk, a store that makes no model calls, one backend shared across hosts | Non-canonical licence text no identifier matches; retrieval is cosine similarity alone |
 | OpenHuman | Personal memory the owner can read | Editable markdown vault the agent reasons over, with local-only mode enforced at the client construction point | An assistant rather than a service: no external interface lets other software read its memory |
+| CodeGraph | Code graph as shared infrastructure | Measured per-language extraction coverage on named public repositories, and uncertain edges marked rather than asserted | Telemetry ships enabled by default; the schema keeps only current state, so history cannot be queried |
+| GitNexus | Cross-repository code graph | Ad-hoc graph queries, hybrid keyword and vector search, and contract registries that join microservice graphs | Noncommercial licence bars commercial use and reads as unlicensed to automated detection; the docs contradict each other on incremental indexing |
 
 ### Agent-system research set
 
@@ -49,6 +51,11 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Gajae-Code | Subscription-authenticated agency | Runs on plans the developer already pays for, gates mutation behind an approved plan, and relays questions to chat apps | Self-declared experimental beta with no semantic retrieval |
 | oh-my-openagent | Third-party orchestration layer | Adds planning, multi-agent teams, and code navigation inside command lines developers already run | Source-available licence bars commercial redistribution; all releases are prereleases |
 | Claw Code | Agent-executed codebase as artifact | Safe-by-default permissions and structured diagnostics across a large agent-built Rust workspace | Maintainers direct users elsewhere for real work; no releases or tags exist |
+| DeerFlow | Batteries-included agent runtime | Memory, skills, sandboxes, and schedules ship as one operable system across four interfaces | Gateway administration equals host code execution; run history is not durable by default |
+| ECC | Process enforced at tool-call time | Blocking hooks demand facts before edits rather than asking a question the model always answers yes | Most of the catalogue is documentation, and the headline control plane is self-declared alpha |
+| ruflo | Advertised coordination versus shipped substrate | A genuinely built memory layer with vector index, encryption at rest, and expiry sweeps | The swarm engine it markets is in neither dependency chain of the published package |
+| Orca | Supervising real agent processes | Typed, durable inter-agent messages and a terminal daemon that outlives the application | The orchestration layer is behind an experimental flag and absent from the readme |
+| Grok Bot | Persistent named agents as a product | Per-action approvals, review rules where requiring approval wins, and peer handoffs between durable bots | One shared computer per user is explicitly not a security boundary, and no administrator audit trail exists yet |
 
 ### Assistant-system research set
 
@@ -64,6 +71,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Amazon Quick | Governed enterprise assistance | Organizational knowledge, analytics, actions, custom agents, and AWS administration | Broad evolving bundle with proprietary cloud operation |
 | Microsoft 365 Copilot | Tenant-grounded work assistance | Microsoft 365 context, enterprise search, notebooks, applications, agents, and governance | Licensing and capability surfaces vary across plans, tenant configuration, and the wider Copilot brand |
 | T3 Chat | Multi-provider workspace | First-class model choice in a simple persistent client | Narrower tools, governance, and autonomous workflows than major provider assistants |
+| LibreChat | Operator-held multi-model workspace | Hash-chained audit log, group and role permissions, and its own agents re-exposed as a model endpoint | Manifests declare a different licence from the repository; memory entries overwrite with no history |
 
 GroqChat remains provisional. Groq's current first-party agreement establishes a governed cloud service with access to multiple model services, but the public product material does not yet establish the durable workspace or boundary from Groq Playground and GroqCloud required for the multi-model chat-client role.
 

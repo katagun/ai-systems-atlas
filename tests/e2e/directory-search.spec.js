@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("181 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("190 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -244,10 +244,10 @@ test("inference services combine filters and expose the dedicated service score"
   await page.reload();
   await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
 
-  await expect(page.locator("#inference-result-count")).toContainText("56 services · Inference-service score");
+  await expect(page.locator("#inference-result-count")).toContainText("57 services · Inference-service score");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
   await page.locator("#inference-sort-filter").selectOption("name");
-  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("AI/ML API");
+  await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("abliteration.ai");
   await page.locator("#inference-sort-filter").selectOption("score");
   await page.locator("#inference-search").fill("Bedrock");
   await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
@@ -279,7 +279,7 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
   ]);
 
   await page.locator("#role-filter").selectOption("multi_model_chat_client");
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["T3 Chat", "Venice.ai"]);
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["LibreChat", "T3 Chat", "Venice.ai"]);
   await page.locator('#project-grid button[data-project="t3-chat"]').click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Context & continuity");
@@ -295,7 +295,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(14);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(15);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 

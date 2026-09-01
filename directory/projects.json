@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30",
+  "generated_at": "2026-09-01",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -9703,6 +9703,789 @@
         "GPL-3.0"
       ],
       "source_model": "open_source"
+    },
+    {
+      "id": "librechat",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "LibreChat",
+      "repo": "danny-avila/LibreChat",
+      "url": "https://github.com/danny-avila/LibreChat",
+      "description": "Self-hosted multi-user chat workspace that routes many model providers through one interface, with agents, MCP tools, and file handling.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "deepseek",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid",
+        "relational_db",
+        "vector_index",
+        "full_text",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "self_editing"
+      ],
+      "canonical_data": "conversations, messages, agents, prompts, files, and per-user memory entries in an operator-run MongoDB",
+      "deployment": [
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "task_reliability": 7.4,
+        "context_continuity": 8.2,
+        "tools_integrations": 8.8,
+        "human_control": 8.6,
+        "data_governance": 9.0,
+        "interoperability": 9.2,
+        "usability_access": 7.6,
+        "maturity": 8.0,
+        "overall": 8.31
+      },
+      "strengths": [
+        "Routes Anthropic, OpenAI, Azure, Bedrock, Google, and any OpenAI-compatible endpoint through one workspace",
+        "A hash-chained immutable audit log with ACL, role, and group permissions gives operators real multi-tenant governance",
+        "Re-exposes its own agents over chat-completions and Open Responses endpoints, so the workspace is also an addressable backend"
+      ],
+      "weaknesses": [
+        "Package manifests declare ISC while the license file and GitHub both report MIT",
+        "Memory entries are keyed upserts with no revision history, so an automatic write overwrites the prior value",
+        "File search needs MongoDB, Meilisearch, pgvector, and a separate retrieval API before it works"
+      ],
+      "why_it_matters": "The most complete open self-hosted counterpart to hosted multi-model assistants, holding conversations, agents, and permissions in infrastructure the operator controls.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 42682,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-09-01T10:25:14Z",
+      "forks": 8835,
+      "open_issues": 736,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "deer-flow",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DeerFlow",
+      "repo": "bytedance/deer-flow",
+      "url": "https://github.com/bytedance/deer-flow",
+      "description": "Self-hosted agent runtime that runs long tasks using skills, memory, sandboxes, scheduled runs, and optional sub-agent delegation.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "agent_framework_sdk",
+        "research_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid",
+        "relational_db",
+        "plain_files",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "scheduled",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "self_editing",
+        "upsert_rewrite",
+        "consolidation",
+        "decay",
+        "human_curated"
+      ],
+      "canonical_data": "threads, graph checkpoints, run events, scheduled tasks, sandbox workspace files, and Markdown memory facts",
+      "deployment": [
+        "self_hosted",
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.9,
+        "autonomy": 8.7,
+        "human_control": 7.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.8,
+        "maturity": 5.6,
+        "overall": 7.92
+      },
+      "strengths": [
+        "Four interfaces — terminal, web, HTTP gateway, and an embedded client — share one config, checkpointer, memory, and sandbox stack",
+        "Memory writes pass a deterministic scope and authority gate that fails closed, and facts stay readable Markdown files",
+        "Sandboxed execution spans host, Docker, Kubernetes, and remote VMs with capacity limits enforced across the deployment"
+      ],
+      "weaknesses": [
+        "Its documentation states that gateway administration is equivalent to running code on the host, so the admin role is not a containment boundary",
+        "Run events default to an in-memory backend, so run history and traces are lost on restart until reconfigured",
+        "Version 2.0 shares no code with version 1, so the operational track record is far shorter than the repository age implies"
+      ],
+      "why_it_matters": "Shows what a long-horizon agent runtime looks like when memory, skills, sandboxes, and schedules ship as one operable system rather than a framework to assemble.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 81219,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-09-01T09:25:26Z",
+      "forks": 11196,
+      "open_issues": 893,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "codegraph",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "CodeGraph",
+      "repo": "colbymchenry/codegraph",
+      "url": "https://github.com/colbymchenry/codegraph",
+      "description": "Local code knowledge graph in SQLite that indexes symbols and call edges, syncs on file changes, and answers agent queries over MCP.",
+      "primary_role": "context_graph_engine",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "graph_db",
+        "relational_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "graph_traversal",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "a per-project SQLite graph of code symbols, call edges, and file hashes with a full-text index",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "second_brain_fit": 7.2,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.8,
+        "memory_intelligence": 7.4,
+        "operational_simplicity": 9.0,
+        "maturity": 5.4,
+        "overall": 7.49
+      },
+      "strengths": [
+        "Publishes per-language and per-framework extraction coverage measured on named public repositories rather than asserting accuracy",
+        "One SQLite graph serves nine coding agents plus a command line, an embeddable library, and a browser viewer",
+        "Marks uncertain edges as uncertain instead of presenting inferred relationships as fact"
+      ],
+      "weaknesses": [
+        "Telemetry ships enabled by default, with opt-out only after the installer prompt or an environment variable",
+        "Two continuous integration workflows, neither running tests, despite 236 test files in the repository",
+        "The schema keeps only current state, so no query can ask what the graph looked like before a change"
+      ],
+      "why_it_matters": "Demonstrates that a code graph is more useful as shared local infrastructure many agents query than as a retrieval feature bundled inside one of them.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 68952,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-31T23:15:02Z",
+      "forks": 4407,
+      "open_issues": 474,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "gitnexus",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "GitNexus",
+      "repo": "abhigyanpatwari/GitNexus",
+      "url": "https://github.com/abhigyanpatwari/GitNexus",
+      "description": "Code knowledge graph engine that indexes repositories and exposes graph, search, and impact queries to agents through MCP.",
+      "primary_role": "context_graph_engine",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "graph_db",
+        "vector_index",
+        "full_text",
+        "hybrid",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal",
+        "structured_query",
+        "temporal"
+      ],
+      "capture_modes": [
+        "file_import",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "versioned"
+      ],
+      "canonical_data": "a graph database of code symbols, relationships, embeddings, and cross-repository contract registries",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "managed_cloud",
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "second_brain_fit": 7.4,
+        "data_sovereignty": 6.8,
+        "interoperability": 8.6,
+        "memory_intelligence": 8.6,
+        "operational_simplicity": 6.4,
+        "maturity": 6.6,
+        "overall": 7.47
+      },
+      "strengths": [
+        "Ships a real graph database with ad-hoc Cypher, hybrid keyword and vector search, and program-dependence queries",
+        "Cross-repository groups join microservice graphs through a provider and consumer contract registry for blast-radius analysis",
+        "Documents its own hosted-deploy weakness plainly, stating the bearer token is the only control on that deployment"
+      ],
+      "weaknesses": [
+        "The PolyForm Noncommercial license bars commercial use, and GitHub reports the repository as having no recognised license",
+        "The roadmap lists incremental indexing as unfinished while the command reference documents it as working",
+        "Twenty-two release candidates of a single patch version, three within about seventy minutes, indicate an unsettled release process"
+      ],
+      "why_it_matters": "The most capable open code-graph engine for agents, and a clear case where a restrictive license and a vendor-run edition shape how a record must be classified.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "stars": 46804,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-09-01T12:22:13Z",
+      "forks": 5139,
+      "open_issues": 323,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "ecc",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ECC",
+      "repo": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "description": "A plugin that adds hooks, subagents, skills, and a local memory store to command-line coding agents.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "moonshot_ai",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "supersession",
+        "human_curated",
+        "consolidation"
+      ],
+      "canonical_data": "Markdown memory documents, YAML instincts, and a local SQLite session and install state store",
+      "deployment": [
+        "local_cli",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.2,
+        "autonomy": 6.6,
+        "human_control": 9.0,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.8,
+        "interoperability": 7.6,
+        "maturity": 5.8,
+        "overall": 7.78
+      },
+      "strengths": [
+        "Blocking hooks enforce discipline at tool-call time rather than relying on the model to follow written instructions",
+        "The memory design document states its own limits precisely, including lexical-only search and a named gap in its threat model",
+        "Eleven continuous integration workflows and validators lint every agent, skill, and hook definition in the repository"
+      ],
+      "weaknesses": [
+        "Only sixteen of 286 skills ship executable scripts; the large majority of the catalogue is documentation",
+        "The control plane that headlines version 2.0 is self-declared alpha, contradicting the project's battle-tested framing",
+        "Hook commands are long inline bootstrap blobs repeated across every entry, so a user cannot readily audit them before install"
+      ],
+      "why_it_matters": "Shows that a coding-agent add-on can enforce process through blocking hooks and durable local memory rather than through prompt text alone.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 245527,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-08-31T22:18:39Z",
+      "forks": 37075,
+      "open_issues": 126,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "ruflo",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ruflo",
+      "repo": "ruvnet/ruflo",
+      "url": "https://github.com/ruvnet/ruflo",
+      "description": "Command-line harness and MCP server giving coding agents durable memory, a coordination ledger, and scheduled background workers.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid",
+        "relational_db",
+        "vector_index",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "hybrid",
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "consolidation",
+        "decay"
+      ],
+      "canonical_data": "vector-indexed agent memory and swarm and agent registries in local SQLite and record-file stores",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "library",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "web_app",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "browser_control",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "score": {
+        "task_reliability": 5.4,
+        "tool_use": 7.6,
+        "autonomy": 6.8,
+        "human_control": 7.0,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.2,
+        "interoperability": 8.0,
+        "maturity": 4.2,
+        "overall": 6.77
+      },
+      "strengths": [
+        "The memory layer is genuinely built, with write-ahead SQLite, a vector index, encryption at rest, and expiry sweeps",
+        "Code comments repeatedly label the project's own stubs rather than reporting false success",
+        "Releases publish from tag-pinned checkouts with install smoke tests gating the registry write"
+      ],
+      "weaknesses": [
+        "The advertised swarm engine is not a dependency of the published package and is imported by nothing in the shipped command line",
+        "Coordination and spawn tools write records without dispatching any work, and several workflow step types are unimplemented",
+        "The project's own status and changelog documents trail the shipped version by twenty-eight and four minor releases"
+      ],
+      "why_it_matters": "A widely adopted coding-agent harness whose durable memory substrate is real while its advertised swarm coordination remains a bookkeeping ledger.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "stars": 70083,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-09-01T07:19:42Z",
+      "forks": 8368,
+      "open_issues": 888,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "orca",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Orca",
+      "repo": "stablyai/orca",
+      "url": "https://github.com/stablyai/orca",
+      "description": "Desktop app that runs several coding-agent command-line tools in parallel git worktrees with terminals, diffs, and mobile monitoring.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation",
+        "scheduled",
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite",
+        "versioned"
+      ],
+      "canonical_data": "workspace and worktree state plus orchestration runs, tasks, and inter-agent messages in a local database",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud",
+        "external_sandbox",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "score": {
+        "task_reliability": 8.2,
+        "tool_use": 7.8,
+        "autonomy": 6.2,
+        "human_control": 8.8,
+        "observability_recovery": 9.2,
+        "data_sovereignty": 9.0,
+        "interoperability": 8.2,
+        "maturity": 6.0,
+        "overall": 8.01
+      },
+      "strengths": [
+        "Failure semantics are engineered rather than assumed, keeping an unverifiable verdict distinct from a confirmed exit",
+        "The terminal daemon outlives the application, so agent sessions survive a runtime restart or upgrade",
+        "Telemetry is enumerated field by field with three independent opt-outs, and the product has no account system"
+      ],
+      "weaknesses": [
+        "The inter-agent orchestration layer is gated behind an experimental setting and is absent from the project readme",
+        "The main runtime module is a single file of more than forty thousand lines against a repository-wide line-count ratchet",
+        "Open issues and pull requests both exceed two thousand, indicating triage is not keeping pace with the daily release cadence"
+      ],
+      "why_it_matters": "Runs any terminal coding agent as a supervised process under one application, making parallel agent work reviewable rather than merely concurrent.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 58848,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "pushed_at": "2026-09-01T12:47:28Z",
+      "forks": 3992,
+      "open_issues": 5013,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "grok-bot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Grok Bot",
+      "repo": null,
+      "url": "https://docs.x.ai/grok-bot/overview",
+      "description": "Desktop and iOS product for creating named persistent agents that share one per-user cloud Linux computer with a browser, terminal, and filesystem.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "undisclosed_managed",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed bot profiles, conversations, learned memory, skills, and routines, plus one per-user cloud computer holding workspace files, browser sessions, and command-line credentials",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "host"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Covers the Grok Bot desktop and iOS product and its per-user cloud computer, not grok.com, Grok on X, or the xAI API. Authentication, administration, billing, and backend retention run through Cursor accounts while the service terms are xAI's; no first-party page reconciles the two.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 8.4,
+        "autonomy": 8.6,
+        "human_control": 8.4,
+        "observability_recovery": 5.6,
+        "data_sovereignty": 5.4,
+        "interoperability": 5.2,
+        "maturity": 3.6,
+        "overall": 6.5
+      },
+      "strengths": [
+        "Each bot is a durable named teammate with its own memory, skills, and routines rather than a session, and the documentation makes that the product's unit",
+        "Bots reach systems with no API by driving a real browser and terminal on a persistent virtual machine, handing control back to the person for passwords and challenges",
+        "Control surfaces are unusually complete for a new product, with per-action approvals, review rules where requiring approval wins over allowing, and a local-execution policy that asks by default"
+      ],
+      "weaknesses": [
+        "All of a user's bots share one computer with shared files and sign-in sessions, and the documentation states plainly that separate bots are not a security boundary",
+        "No administrator audit trail exists yet, leaving autonomous actions reviewable only through each bot's own conversation",
+        "Governance is split across two companies, with service terms from one and authentication, retention, and deletion following the other's"
+      ],
+      "why_it_matters": "Establishes the persistent named agent with its own cloud computer, memory, routines, and peer handoffs as a shipping consumer product boundary distinct from the Grok assistant.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-01",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
     }
   ]
 }
