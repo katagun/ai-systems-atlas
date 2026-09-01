@@ -750,7 +750,7 @@ function renderFinderResults() {
   const profileLabel = isInference ? "inference-service" : isRuntime ? "local-runtime" : "";
   return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(finderDirectionName(direction).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
     <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || direction)}">
-      <div class="finder-rank">0${index + 1}</div>
+      <div class="finder-result-top">${cardMark(project)}<div class="finder-rank">0${index + 1}</div></div>
       <div><p class="family-label">${escapeHTML(classificationLabel(project))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
         <div class="license-row">${identityRow(project)}</div>
       </div>

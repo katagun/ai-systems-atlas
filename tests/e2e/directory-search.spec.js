@@ -153,6 +153,7 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
   await page.locator('[data-finder-choice][data-finder-value="hardware"]').click();
 
   await expect(page.locator(".finder-result h3").first()).toHaveText("vLLM");
+  await expect(page.locator(".finder-result").first().locator(".card-mark svg")).toHaveCount(1);
   await expect(page.locator(".finder-result-footer span").first()).toContainText("local-runtime score");
 
   await page.locator("[data-finder-directory]").click();
@@ -408,6 +409,7 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await page.getByRole("button", { name: /Model and data portability/ }).click();
 
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
+  await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
   await page.getByRole("button", { name: "Browse matches →" }).click();
   await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
   await expect(page).toHaveURL(/collection=systems/);

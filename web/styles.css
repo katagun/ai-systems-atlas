@@ -741,7 +741,8 @@ input:focus, select:focus {
 .finder-result.assistant_system { background: linear-gradient(145deg, #fdfcff, #fff 68%); }
 .finder-result.inference_service { background: linear-gradient(145deg, #f8fcff, #fff 68%); }
 .finder-result.local_runtime { background: linear-gradient(145deg, #fffbf6, #fff 68%); }
-.finder-rank { align-self: end; color: #839188; font: 500 1.4rem var(--font-mono); }
+.finder-result-top { display: flex; align-items: flex-end; justify-content: space-between; }
+.finder-rank { color: #839188; font: 500 1.4rem var(--font-mono); }
 .finder-result h3 { margin: .2rem 0 .7rem; font-size: 1.65rem; font-weight: 600; letter-spacing: -.035em; }
 .finder-result p { color: var(--muted); line-height: 1.55; }
 .finder-why { margin-top: auto; padding-top: 1rem; }
