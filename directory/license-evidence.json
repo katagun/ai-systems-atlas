@@ -2009,6 +2009,160 @@
           "verified_at": "2026-09-01"
         }
       ]
+    },
+    {
+      "project_id": "openviking",
+      "repo": "volcengine/OpenViking",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Repository root, covering the server and the framework integration, under the GNU Affero General Public License 3.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/volcengine/OpenViking/blob/main/LICENSE",
+          "blob_sha": "27268c8e4ad8c300f7665fe6b20875c580d05f4b",
+          "immutable_url": "https://api.github.com/repos/volcengine/OpenViking/git/blobs/27268c8e4ad8c300f7665fe6b20875c580d05f4b"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Client crates and examples under the Apache License 2.0, covering the command line and the TypeScript library",
+          "kind": "git_blob",
+          "path": "crates/LICENSE",
+          "url": "https://github.com/volcengine/OpenViking/blob/main/crates/LICENSE",
+          "blob_sha": "8364a3e94f9c00f9a24255c6cb7fdc093dfacc8b",
+          "immutable_url": "https://api.github.com/repos/volcengine/OpenViking/git/blobs/8364a3e94f9c00f9a24255c6cb7fdc093dfacc8b"
+        }
+      ]
+    },
+    {
+      "project_id": "supermemory",
+      "repo": "supermemoryai/supermemory",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository under the MIT License; the repository holds client libraries, adapters, and applications, and the memory engine the product runs on is not present in it",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/supermemoryai/supermemory/blob/main/LICENSE",
+          "blob_sha": "7b20e33c1b3d277e200ff1872a109c6d9304bacc",
+          "immutable_url": "https://api.github.com/repos/supermemoryai/supermemory/git/blobs/7b20e33c1b3d277e200ff1872a109c6d9304bacc"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Vendor terms of service, effective June 2, 2025, governing the hosted memory API and the closed engine that the open client libraries call",
+          "kind": "web_terms",
+          "url": "https://supermemory.ai/terms",
+          "verified_at": "2026-09-01"
+        }
+      ]
+    },
+    {
+      "project_id": "onyx",
+      "repo": "onyx-dot-app/onyx",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under a modified MIT License whose preamble places three enterprise directories under separate commercial terms",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/onyx-dot-app/onyx/blob/main/LICENSE",
+          "blob_sha": "adedc9c96af1a84fa0eeb35361cd4e04c8611b83",
+          "immutable_url": "https://api.github.com/repos/onyx-dot-app/onyx/git/blobs/adedc9c96af1a84fa0eeb35361cd4e04c8611b83"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Enterprise directories under the Onyx Enterprise License, requiring a seat-based subscription for production use; 229 of 3,347 backend Python files sit under this tree",
+          "kind": "git_blob",
+          "path": "backend/ee/LICENSE",
+          "url": "https://github.com/onyx-dot-app/onyx/blob/main/backend/ee/LICENSE",
+          "blob_sha": "1352aacb64c4a1cc38d81bb50a963dfbfea8472c",
+          "immutable_url": "https://api.github.com/repos/onyx-dot-app/onyx/git/blobs/1352aacb64c4a1cc38d81bb50a963dfbfea8472c"
+        }
+      ]
+    },
+    {
+      "project_id": "affine",
+      "repo": "toeverything/AFFiNE",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under a modified MIT License whose preamble places the server and native packages under separate terms",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/toeverything/AFFiNE/blob/main/LICENSE",
+          "blob_sha": "ee4c98c5f018d7421d7a4a28d24f0710f1705269",
+          "immutable_url": "https://api.github.com/repos/toeverything/AFFiNE/git/blobs/ee4c98c5f018d7421d7a4a28d24f0710f1705269"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "The entire server, holding synchronization, search indexing, all AI, authentication, and payment, under the AFFiNE Enterprise Edition license requiring a seat-based subscription for production use",
+          "kind": "git_blob",
+          "path": "packages/backend/server/LICENSE",
+          "url": "https://github.com/toeverything/AFFiNE/blob/main/packages/backend/server/LICENSE",
+          "blob_sha": "053ad06aa04a5c6676ca1d31cfcb53cf8ebc59d3",
+          "immutable_url": "https://api.github.com/repos/toeverything/AFFiNE/git/blobs/053ad06aa04a5c6676ca1d31cfcb53cf8ebc59d3"
+        }
+      ]
+    },
+    {
+      "project_id": "oh-my-pi",
+      "repo": "can1357/oh-my-pi",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, carrying the upstream Pi author's copyright alongside the fork maintainer's and its corporate steward's",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/can1357/oh-my-pi/blob/main/LICENSE",
+          "blob_sha": "09a0c6c926a81c9d56dc3326cff1e5358c63c6d6",
+          "immutable_url": "https://api.github.com/repos/can1357/oh-my-pi/git/blobs/09a0c6c926a81c9d56dc3326cff1e5358c63c6d6"
+        }
+      ]
+    },
+    {
+      "project_id": "oh-my-claudecode",
+      "repo": "Yeachan-Heo/oh-my-claudecode",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Yeachan-Heo/oh-my-claudecode/blob/main/LICENSE",
+          "blob_sha": "949cb44419ca456a7c6183c4c0a359f0fadef57c",
+          "immutable_url": "https://api.github.com/repos/Yeachan-Heo/oh-my-claudecode/git/blobs/949cb44419ca456a7c6183c4c0a359f0fadef57c"
+        }
+      ]
+    },
+    {
+      "project_id": "codewhale",
+      "repo": "Hmbown/CodeWhale",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the copyright line still names the project's former identity after its rename",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Hmbown/CodeWhale/blob/main/LICENSE",
+          "blob_sha": "d20b90d5f572f597cad32f0c7ddd4c3ce1733239",
+          "immutable_url": "https://api.github.com/repos/Hmbown/CodeWhale/git/blobs/d20b90d5f572f597cad32f0c7ddd4c3ce1733239"
+        }
+      ]
+    },
+    {
+      "project_id": "reasonix",
+      "repo": "esengine/DeepSeek-Reasonix",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; vendored desktop components carry their own MIT and ISC notices",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/esengine/DeepSeek-Reasonix/blob/main-v2/LICENSE",
+          "blob_sha": "bc45a281d8050c59c9b833ea2d0b1fb6e02602c0",
+          "immutable_url": "https://api.github.com/repos/esengine/DeepSeek-Reasonix/git/blobs/bc45a281d8050c59c9b833ea2d0b1fb6e02602c0"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-01"

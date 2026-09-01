@@ -618,38 +618,6 @@
       ]
     },
     {
-      "repo": "Hmbown/CodeWhale",
-      "name": "CodeWhale",
-      "url": "https://github.com/Hmbown/CodeWhale",
-      "description": "Open-source coding agent for your terminal, built in Rust and on a journey of continuous community improvement. Issues and PRs welcome.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 40841,
-      "topics": [
-        "agent-orchestration",
-        "ai-agent",
-        "cli",
-        "coding-agent",
-        "local-first",
-        "mcp",
-        "multi-agent",
-        "multi-model",
-        "open-source",
-        "rust",
-        "tui"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": null,
       "name": "Cursor",
       "url": "https://cursor.com/",
@@ -1633,32 +1601,6 @@
       ]
     },
     {
-      "repo": "onyx-dot-app/onyx",
-      "name": "Onyx",
-      "url": "https://github.com/onyx-dot-app/onyx",
-      "description": "AI knowledge platform with enterprise search, connectors, retrieval, and chat across organizational data.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "ai_knowledge_app",
-      "classification_confidence": 0.98,
-      "github_detected_license": "NOASSERTION",
-      "stars": 31762,
-      "topics": [
-        "ai-chat",
-        "enterprise-search",
-        "information-retrieval",
-        "rag",
-        "self-hosted"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "Orchestra-Research/AI-Research-SKILLs",
       "name": "AI-Research-SKILLs",
       "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
@@ -2136,39 +2078,6 @@
       ]
     },
     {
-      "repo": "supermemoryai/supermemory",
-      "name": "Supermemory",
-      "url": "https://github.com/supermemoryai/supermemory",
-      "description": "Memory and context service for agents with fact extraction, evolving user profiles, hybrid retrieval, connectors, and local self-hosting.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.99,
-      "github_detected_license": "MIT",
-      "stars": 29065,
-      "topics": [
-        "agent-memory",
-        "ai-memory",
-        "cloudflare-kv",
-        "cloudflare-pages",
-        "cloudflare-workers",
-        "drizzle-orm",
-        "memory",
-        "postgres",
-        "remix",
-        "tailwindcss",
-        "typescript",
-        "vite"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "swarmclawai/swarmclaw",
       "name": "swarmclaw",
       "url": "https://github.com/swarmclawai/swarmclaw",
@@ -2310,32 +2219,6 @@
       ]
     },
     {
-      "repo": "toeverything/AFFiNE",
-      "name": "AFFiNE",
-      "url": "https://github.com/toeverything/AFFiNE",
-      "description": "Knowledge workspace combining documents, databases, planning, and whiteboards.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.96,
-      "github_detected_license": "NOASSERTION",
-      "stars": 71875,
-      "topics": [
-        "knowledge-base",
-        "markdown",
-        "notes",
-        "whiteboard",
-        "workspace"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "vectorize-io/hindsight",
       "name": "hindsight",
       "url": "https://github.com/vectorize-io/hindsight",
@@ -2350,33 +2233,6 @@
         "agents",
         "ai-memory",
         "memory"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "volcengine/OpenViking",
-      "name": "OpenViking",
-      "url": "https://github.com/volcengine/OpenViking",
-      "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 33197,
-      "topics": [
-        "agent-memory",
-        "agent-plugins",
-        "agentic-rag",
-        "context-database",
-        "dsh-plugin",
-        "self-evolving"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -2734,52 +2590,6 @@
       ]
     },
     {
-      "repo": "Yeachan-Heo/oh-my-claudecode",
-      "name": "oh-my-claudecode",
-      "url": "https://github.com/Yeachan-Heo/oh-my-claudecode",
-      "description": "Teams-first Multi-agent orchestration for Claude Code",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.7,
-      "github_detected_license": "MIT",
-      "stars": 38917,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "esengine/DeepSeek-Reasonix",
-      "name": "DeepSeek-Reasonix",
-      "url": "https://github.com/esengine/DeepSeek-Reasonix",
-      "description": "DeepSeek-native AI coding agent for your terminal. Engineered around prefix-cache stability — leave it running.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 35297,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "herdrdev/herdr",
       "name": "herdr",
       "url": "https://github.com/herdrdev/herdr",
@@ -2812,29 +2622,6 @@
       "classification_confidence": 0.8,
       "github_detected_license": "MIT",
       "stars": 28773,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "can1357/oh-my-pi",
-      "name": "oh-my-pi",
-      "url": "https://github.com/can1357/oh-my-pi",
-      "description": "⌥ Coding agent with the IDE wired in",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.84,
-      "github_detected_license": "MIT",
-      "stars": 28719,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"

@@ -148,7 +148,10 @@ class DirectoryTests(unittest.TestCase):
             "toeverything/AFFiNE",
         }
 
-        self.assertLessEqual(requeued, {candidate["repo"] for candidate in candidates["candidates"]})
+        reachable = {candidate["repo"] for candidate in candidates["candidates"]}
+        reachable |= {project["repo"] for project in self.document["projects"]}
+
+        self.assertLessEqual(requeued, reachable)
         self.assertTrue(requeued.isdisjoint({entry["repo"] for entry in exclusions["entries"]}))
 
     def test_major_coding_agent_and_runtime_batch_is_reviewed(self) -> None:
