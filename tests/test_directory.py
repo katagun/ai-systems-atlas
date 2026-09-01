@@ -354,7 +354,7 @@ class DirectoryTests(unittest.TestCase):
             "nvidia-api-catalog", "hugging-face-inference-providers",
             "hugging-face-inference-endpoints", "together-ai",
             "fireworks-ai", "cerebras-inference", "sambanova-cloud",
-            "deepinfra", "replicate", "venice-api",
+            "deepinfra", "replicate", "venice-api", "abliteration-ai",
             "stability-ai-developer-platform", "ollama-cloud",
             "nebius-token-factory", "baseten", "meta-model-api",
             "requesty", "eden-ai", "aiml-api", "nano-gpt",

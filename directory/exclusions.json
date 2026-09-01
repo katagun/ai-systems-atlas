@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30",
+  "generated_at": "2026-09-01",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -54,6 +54,12 @@
       "repo": null,
       "reason": "ModelScope operates a genuine first-party inference API rather than proxying another platform, so the duplication concern does not apply. It is excluded because its own documentation declares the service non-commercial and not for profit, tells developers not to use it for tasks needing concurrency or service-level guarantees, and refers commercial demand to other platforms. Access is metered by community credits that are earned rather than bought, and no billing exists. The directory curates operated services with commercial commitments.",
       "useful_lesson": "Check the reason a service is excluded, not just the conclusion: the expected ground here was duplication of a sibling platform, and that turned out to be false while a different disqualification was stated plainly in the vendor's own limits page."
+    },
+    {
+      "name": "Superpowers",
+      "repo": "obra/superpowers",
+      "reason": "The repository describes itself as a software development methodology built on composable skills, and it ships no agent machinery: the package declares no executable and no dependencies, and its session hook only reads a skill document and prints it as additional context. Its subagent workflow is prose instructing a host agent to call the host's own tools, so nothing runs when the host harness is removed. CURATION.md keeps prompt templates and collections as research inputs rather than operational systems.",
+      "useful_lesson": "Adoption does not establish an operational boundary: at 280,000 stars this was the most-starred candidate in the sweep and still resolves to documentation that a host agent executes."
     }
   ]
 }

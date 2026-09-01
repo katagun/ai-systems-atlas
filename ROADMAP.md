@@ -34,6 +34,8 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 
 Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary. Local runtimes now have such a boundary under ADR 015; expand that collection only when a record answers a distinct execution, hardware, format, or deployment question.
 
+Decide the treatment of agent skill packs before the class grows further, separating the authoring convention from a skills runtime from a collection of skill documents; only the middle case can own an operational outcome, and adoption does not settle any of them.
+
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 
 Evaluate additional scored families only when a distinct operational outcome cannot fit the memory, agent, or assistant profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
