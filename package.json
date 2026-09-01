@@ -6,6 +6,8 @@
     "test:e2e": "playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1"
+    "@lobehub/icons-static-svg": "1.94.0",
+    "@playwright/test": "1.62.1",
+    "simple-icons": "16.29.0"
   }
 }

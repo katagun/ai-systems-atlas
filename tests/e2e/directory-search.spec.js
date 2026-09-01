@@ -460,3 +460,15 @@ test("the interface filter separates canvas builders from code libraries", async
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(0);
   await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
 });
+
+test("directory cards carry product marks with monogram fallbacks", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#all-directory-search").fill("OpenAI API");
+  const marked = page.locator("#all-directory-grid .project-card").filter({ hasText: "OpenAI API" }).first();
+  await expect(marked.locator(".card-mark svg")).toHaveCount(1);
+
+  await page.locator("#all-directory-search").fill("Aider");
+  const fallback = page.locator("#all-directory-grid .project-card").filter({ hasText: "Aider" }).first();
+  await expect(fallback.locator(".card-monogram")).toHaveText("A");
+});
