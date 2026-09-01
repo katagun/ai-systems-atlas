@@ -45,6 +45,7 @@ const RECORD_MARKS = {
   llamaindex: "lobe:llamaindex",
   mastra: "lobe:mastra",
   "meta-ai": "lobe:metaai",
+  "meta-business-agent-platform": "lobe:meta",
   "microsoft-365-copilot": "lobe:copilot",
   "microsoft-agent-framework": "lobe:microsoft",
   "microsoft-copilot": "lobe:copilot",
