@@ -28,6 +28,10 @@
     return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(haystack);
   }
 
+  function monogramGlyph(name) {
+    return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
+  }
+
   function matchesProjectSearch(project, term) {
     if (term.length === 1) {
       const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -188,6 +192,7 @@
     filterScoredCollection,
     filterSpecifications,
     matchesProject,
+    monogramGlyph,
     updateComparisonSelection,
   };
 });

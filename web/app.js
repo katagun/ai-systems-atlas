@@ -105,15 +105,16 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory] = await Promise.all([
+  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory, logos] = await Promise.all([
     loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json")
+    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json"), loadJSON("logos.json")
   ]);
   state.projects = directory.projects;
   state.specifications = specificationDirectory.specifications;
   state.inferenceServices = inferenceDirectory.services;
   state.localRuntimes = runtimeDirectory.runtimes;
   state.taxonomy = taxonomy;
+  state.logos = logos;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
   const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at]
     .filter(Boolean)
@@ -132,6 +133,15 @@ async function bootstrap() {
   if (!restoreComparisonFromURL()) {
     setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
   }
+}
+
+// Marks are decorative next to the record name, so they stay hidden from
+// assistive technology. Icon bodies come from the vendored, build-sanitized
+// logos.json; every dynamic value still passes through escapeHTML.
+function cardMark(record) {
+  const icon = state.logos.icons[state.logos.records[record.id]];
+  if (icon) return `<span class="card-mark" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+  return `<span class="card-mark card-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
 }
 
 function taxonomyName(group, id) {
@@ -436,7 +446,7 @@ function renderAllDirectoryEntries() {
   $("#all-directory-grid").innerHTML = entries.map(({ kind, record }) => {
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
-        <div class="card-top"><div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div>
+        <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         <div class="tags">${record.accelerators.slice(0, 3).map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
@@ -445,7 +455,7 @@ function renderAllDirectoryEntries() {
     }
     if (kind === "inference") {
       return `<article class="project-card inference-service-card mixed-directory-card">
-        <div class="card-top"><div><p class="family-label">Inference service · ${escapeHTML(taxonomyName("inference_service_types", record.service_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.operator)}</div></div></div>
+        <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Inference service · ${escapeHTML(taxonomyName("inference_service_types", record.service_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.operator)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         <div class="tags">${record.delivery_modes.slice(0, 3).map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
@@ -454,7 +464,7 @@ function renderAllDirectoryEntries() {
     }
     const location = projectLocation(record);
     return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
-      <div class="card-top"><div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div>
+      <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
@@ -498,7 +508,7 @@ function renderProjects() {
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
     const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div>${score}</div>
+      <div class="card-top"><div class="card-identity">${cardMark(project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
@@ -546,7 +556,7 @@ function renderInferenceServices() {
   });
   $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · ${state.taxonomy.inference_service_score_profile.name}`;
   $("#inference-grid").innerHTML = services.map(service => `<article class="project-card inference-service-card">
-    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(service)}<div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
@@ -568,7 +578,7 @@ function renderLocalRuntimes() {
   });
   $("#runtime-result-count").textContent = `${runtimes.length} ${runtimes.length === 1 ? "runtime" : "runtimes"} · ${state.taxonomy.local_runtime_score_profile.name}`;
   $("#runtime-grid").innerHTML = runtimes.map(runtime => `<article class="project-card local-runtime-card">
-    <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p><h2>${escapeHTML(runtime.name)}</h2><div class="repo">${escapeHTML(runtime.repo || runtime.maintainer)}</div></div><div class="score-ring" aria-label="Local-runtime score ${escapeHTML(runtime.score.overall)} out of 10">${escapeHTML(runtime.score.overall)}</div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(runtime)}<div><p class="family-label">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p><h2>${escapeHTML(runtime.name)}</h2><div class="repo">${escapeHTML(runtime.repo || runtime.maintainer)}</div></div></div><div class="score-ring" aria-label="Local-runtime score ${escapeHTML(runtime.score.overall)} out of 10">${escapeHTML(runtime.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
