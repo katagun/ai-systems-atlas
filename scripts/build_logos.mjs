@@ -4,7 +4,14 @@
 // Run `npm ci` first, then `node scripts/build_logos.mjs` whenever RECORD_MARKS
 // changes. Records absent from RECORD_MARKS render a monogram fallback instead;
 // map a record only to a mark that identifies the product itself or the
-// maintainer/operator named in its published data.
+// maintainer/operator named in its published data. A value of null records a
+// human decision to keep the monogram (wrong identity, or an icon the
+// sanitizer rejects) and suppresses the candidate hint for that record.
+// `--check` rebuilds in memory instead of writing: it fails when the committed
+// web/logos.json no longer matches the map, the published records, or the
+// installed package versions, and reports monogram records whose name or id
+// now matches an available icon slug so new marks are noticed as the icon
+// packages grow. Candidate hints are review prompts, never auto-mappings.
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,9 +39,11 @@ const RECORD_MARKS = {
   "gemini-cli": "lobe:geminicli",
   "gemini-enterprise-agent-platform": "lobe:gemini",
   genkit: "simple:firebase",
+  "deer-flow": "simple:bytedance",
   "google-adk": "lobe:google",
   goose: "lobe:goose",
   grok: "lobe:grok",
+  "grok-bot": "lobe:grok",
   haystack: "simple:haystack",
   "hermes-agent": "lobe:hermesagent",
   "kilo-code": "lobe:kilocode",
@@ -54,10 +63,12 @@ const RECORD_MARKS = {
   "mistral-vibe": "lobe:mistral",
   "muse-code": "lobe:meta",
   "openai-agents-sdk": "lobe:openai",
+  openclaw: null, // lobe:openclaw carries gradients the sanitizer rejects
   opencode: "lobe:opencode",
   openhands: "lobe:openhands",
   perplexity: "lobe:perplexity",
   "perplexity-computer": "lobe:perplexity",
+  pi: null, // lobe:pi depicts Inflection Pi, not earendil-works/pi
   "pydantic-ai": "lobe:pydanticai",
   "replit-agent": "lobe:replit",
   "semantic-kernel": "lobe:microsoft",
@@ -175,19 +186,19 @@ function packageInfo(name) {
   return { package: name, version: pkg.version, license: pkg.license };
 }
 
-const knownIds = new Set();
+const recordNames = new Map();
 for (const [file, listKey] of [
   ["web/projects.json", "projects"],
   ["web/inference-services.json", "services"],
   ["web/local-runtimes.json", "runtimes"],
 ]) {
-  for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) knownIds.add(record.id);
+  for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) recordNames.set(record.id, record.name);
 }
 
 const icons = {};
 const records = {};
 for (const [recordId, key] of Object.entries(RECORD_MARKS)) {
-  if (!knownIds.has(recordId)) throw new Error(`${recordId}: not a published directory record`);
+  if (!recordNames.has(recordId)) throw new Error(`${recordId}: not a published directory record`);
   if (!key) continue;
   const [source, slug] = key.split(":");
   if (!icons[key]) icons[key] = { source, body: source === "lobe" ? loadLobe(slug) : loadSimple(slug) };
@@ -200,8 +211,37 @@ const output = {
   icons,
   records,
 };
-writeFileSync(join(root, "web/logos.json"), `${JSON.stringify(output, null, 2)}\n`);
-console.log(`web/logos.json: ${Object.keys(records).length} records mapped to ${Object.keys(icons).length} marks; ${knownIds.size - Object.keys(records).length} records fall back to monograms.`);
+const serialized = `${JSON.stringify(output, null, 2)}\n`;
+const checkMode = process.argv.includes("--check");
+if (checkMode) {
+  let committed = "";
+  try { committed = readFileSync(join(root, "web/logos.json"), "utf8"); } catch {}
+  if (committed === serialized) {
+    console.log("web/logos.json matches the record map, the published records, and the installed icon packages.");
+  } else {
+    console.error("web/logos.json is stale: run `node scripts/build_logos.mjs` and commit the result.");
+    process.exitCode = 1;
+  }
+} else {
+  writeFileSync(join(root, "web/logos.json"), serialized);
+}
+console.log(`web/logos.json: ${Object.keys(records).length} records mapped to ${Object.keys(icons).length} marks; ${recordNames.size - Object.keys(records).length} records fall back to monograms.`);
 
-const unmapped = [...knownIds].filter(id => !(id in RECORD_MARKS)).sort();
+const unmapped = [...recordNames.keys()].filter(id => !(id in RECORD_MARKS)).sort();
 if (unmapped.length) console.log(`monogram fallback: ${unmapped.join(", ")}`);
+
+const normalize = value => String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+const lobeSlugs = new Set(
+  readdirSync(join(root, "node_modules/@lobehub/icons-static-svg/icons"))
+    .filter(file => file.endsWith(".svg") && !/-(color|text|brand)/.test(file))
+    .map(file => file.replace(".svg", "")),
+);
+const hints = unmapped.flatMap(id => {
+  const candidates = [...new Set([normalize(id), normalize(recordNames.get(id))])].flatMap(slug =>
+    [lobeSlugs.has(slug) && `lobe:${slug}`, simpleBySlug.has(slug) && `simple:${slug}`].filter(Boolean));
+  return candidates.length ? [`  ${id} → ${candidates.join(", ")}`] : [];
+});
+if (hints.length) {
+  console.log("candidate marks available — verify each depicts the record's product or named maintainer/operator before mapping, or record null to decline:");
+  console.log(hints.join("\n"));
+}
