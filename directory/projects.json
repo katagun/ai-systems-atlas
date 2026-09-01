@@ -10486,6 +10486,744 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "openviking",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "OpenViking",
+      "repo": "volcengine/OpenViking",
+      "url": "https://github.com/volcengine/OpenViking",
+      "description": "Self-hosted context store that keeps agent memories, resources, and skills under a virtual filesystem and serves them over an API, SDKs, and MCP.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [
+        "retrieval_infrastructure"
+      ],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "plain_files",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic",
+        "keyword",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "consolidation",
+        "versioned",
+        "self_editing"
+      ],
+      "canonical_data": "a virtual filesystem of memories, resources, and skills in tiered summaries over a local vector index and file store",
+      "deployment": [
+        "self_hosted",
+        "local_cli",
+        "library",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The repository open-sources a subset of the capabilities described in the vendor's published paper; the commercial self-managed edition is activated by a license key whose code is not in this repository.",
+      "score": {
+        "second_brain_fit": 6.4,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.4,
+        "memory_intelligence": 8.2,
+        "operational_simplicity": 6.6,
+        "maturity": 5.2,
+        "overall": 7.3
+      },
+      "strengths": [
+        "Every query keeps the directory-browsing path that produced it, so a wrong result can be traced rather than attributed to an opaque similarity score",
+        "Client surfaces are deliberately permissive while the server stays copyleft, so an embedder can link the command line and TypeScript library without that reaching their own code",
+        "Runs offline in earnest, with local vector and file backends and an installer that detects and provisions a local model runtime"
+      ],
+      "weaknesses": [
+        "The Python library declares no license and so inherits the copyleft root, while its Go and TypeScript siblings are permissive",
+        "Every published benchmark figure is vendor-run on the vendor's own model and embeddings, at a version older than the current tree",
+        "The repository is less than eight months old and calls itself early stage, so its adoption implies more operational history than exists"
+      ],
+      "why_it_matters": "Reframes agent memory as a browsable filesystem with tiered summaries rather than an opaque vector store, and already drops into a third-party runtime as an alternative to an established service.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "AGPL-3.0",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "stars": 34875,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T13:11:56Z",
+      "forks": 2666,
+      "open_issues": 584,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "supermemory",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Supermemory",
+      "repo": "supermemoryai/supermemory",
+      "url": "https://github.com/supermemoryai/supermemory",
+      "description": "Hosted memory and retrieval API for agents, with open client libraries, framework adapters, an MCP server, and applications in the repository.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid",
+        "keyword"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "consolidation",
+        "supersession",
+        "decay"
+      ],
+      "canonical_data": "a hosted memory store behind the vendor's API, whose schema and engine are not in the repository",
+      "deployment": [
+        "managed_cloud",
+        "self_hosted",
+        "library",
+        "local_cli"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "status": "active",
+      "current_repo_note": "The repository holds client libraries, adapters, and applications. The memory engine is not present in it, and the self-hosted binary the documentation describes is distributed prebuilt from the vendor's site.",
+      "score": {
+        "second_brain_fit": 6.8,
+        "data_sovereignty": 4.6,
+        "interoperability": 8.4,
+        "memory_intelligence": 6.4,
+        "operational_simplicity": 8.6,
+        "maturity": 6.4,
+        "overall": 6.75
+      },
+      "strengths": [
+        "The framework adapter surface is unusually broad and genuinely permissive, spanning eight major frameworks plus a tool server",
+        "Memory lifecycle is specified as behavior rather than storage, naming supersession of stale facts and dated expiry",
+        "The vendor publishes an open harness for comparing memory systems head to head, which few in this space offer"
+      ],
+      "weaknesses": [
+        "The memory engine is absent from the repository while the documentation describes the binary as open source and links back to that same repository",
+        "Automated license detection reports a permissive license for a product whose engine is closed, so the signal is wrong without a human note",
+        "Every benchmark claim is self-reported against a harness the same vendor authors, with no readable pipeline to inspect"
+      ],
+      "why_it_matters": "The most widely adopted agent memory API with genuinely open framework adapters, and a clean demonstration that a permissive root license is not a source-model conclusion.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified",
+      "stars": 29179,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T06:22:30Z",
+      "forks": 2551,
+      "open_issues": 119,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "onyx",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Onyx",
+      "repo": "onyx-dot-app/onyx",
+      "url": "https://github.com/onyx-dot-app/onyx",
+      "description": "Self-hostable platform that indexes organizational sources through connectors and answers, searches, and runs agents over them in a chat interface.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [
+        "retrieval_infrastructure"
+      ],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "connectors",
+        "file_import",
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "an index over source systems that remain canonical, held in a relational database and a search index the operator runs",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud",
+        "desktop",
+        "mobile"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The root license is a modified permissive license whose preamble places three enterprise directories under separate commercial terms; 229 of 3,347 backend Python files sit under the enterprise tree, and the project was formerly named Danswer.",
+      "score": {
+        "second_brain_fit": 8.2,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.6,
+        "memory_intelligence": 7.4,
+        "operational_simplicity": 6.4,
+        "maturity": 8.4,
+        "overall": 7.79
+      },
+      "strengths": [
+        "The open-core boundary is drawn honestly and can be checked: the enterprise tree is governance, and the permissive deployment indexes, retrieves, and serves without it",
+        "Unusual breadth for a self-hostable product, with fifty-five connectors, deep research, tool actions, and desktop, mobile, command-line, and browser clients",
+        "Deployment is realistic, offering a light mode, air-gapped compose files in the tree, and an offline license upload path"
+      ],
+      "weaknesses": [
+        "Document-level permission sync and post-query filtering are enterprise-only, so the open edition cannot safely serve mixed-permission organizational data",
+        "The readme's license badge is a static image that misstates a repository with a real proprietary tier",
+        "Positioning has drifted toward general chat, and the light mode ships without a vector index at all"
+      ],
+      "why_it_matters": "The most complete self-hostable knowledge-grounded product, and a reference for an open-core boundary that leaves the operational core genuinely usable.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "stars": 31877,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T12:37:59Z",
+      "forks": 4398,
+      "open_issues": 423,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "affine",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "AFFiNE",
+      "repo": "toeverything/AFFiNE",
+      "url": "https://github.com/toeverything/AFFiNE",
+      "description": "Local-first workspace for writing documents, building databases, and drawing on an unbounded canvas, with optional AI and server-based collaboration.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "a conflict-free replicated document store held locally on the device or synchronized through a server the operator runs",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "status": "active",
+      "current_repo_note": "The root license places the entire server and native packages under separate enterprise terms, and self-hosted workspaces are capped at ten seats. The enterprise text also names a third license for community-edition parts that appears nowhere in the tree, so the license map cannot be closed from the repository alone.",
+      "score": {
+        "second_brain_fit": 7.6,
+        "data_sovereignty": 6.2,
+        "interoperability": 5.8,
+        "memory_intelligence": 5.6,
+        "operational_simplicity": 6.8,
+        "maturity": 8.6,
+        "overall": 6.74
+      },
+      "strengths": [
+        "The local-first path is real and permissively licensed, shipping local storage backends with their own indexers so an offline workspace never reaches the proprietary server",
+        "Its editor framework is a reusable permissive package, so the most valuable open component is consumable independently of the product",
+        "Self-hosted AI brings your own key across four providers, with per-workspace storage and a test step, rather than being hosted-only"
+      ],
+      "weaknesses": [
+        "The proprietary boundary is a whole tier rather than a feature overlay, with synchronization, search indexing, all AI, authentication, and payment in one licensed server",
+        "The repository asserts three licenses while shipping the text of two and no marker separating the editions",
+        "Self-hosted workspaces are capped at ten seats, and the team plan validates against the vendor unless a separate installable license is bought"
+      ],
+      "why_it_matters": "The largest open local-first alternative to mainstream document and canvas tools, and the clearest case where a permissive client sits on an entirely proprietary server.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "stars": 72083,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-08-28T13:24:46Z",
+      "forks": 5216,
+      "open_issues": 722,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "oh-my-pi",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "oh-my-pi",
+      "repo": "can1357/oh-my-pi",
+      "url": "https://github.com/can1357/oh-my-pi",
+      "description": "Terminal coding agent forked from Pi that adds a native execution core, language-server and debugger integration, and editor, remote-call, and shared-session surfaces.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "the local working tree, newline-delimited session logs, and local history and memory stores under the user's home directory",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "api_sdk",
+        "library",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "A hard fork of the published Pi record, sharing its early history and carrying the upstream author's copyright alongside its own; it stopped tracking upstream in January 2026. GitHub does not flag the repository as a fork.",
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 8.8,
+        "autonomy": 8.2,
+        "human_control": 4.8,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 8.0,
+        "interoperability": 9.0,
+        "maturity": 5.8,
+        "overall": 7.41
+      },
+      "strengths": [
+        "Replaces shelling out with an embedded shell and in-process utilities, so common commands run without spawning processes and behave the same on Windows",
+        "The only reviewed coding agent that drives a real debugger, with adapters for three languages alongside language-server rename support",
+        "Attribution is unusually careful for a fork, with three-way copyright, per-component notices naming upstreams and local modifications, and generated third-party notices"
+      ],
+      "weaknesses": [
+        "Approval defaults to a permissive mode that auto-approves reads, writes, and shell execution, and no operating-system sandbox ships at all",
+        "The session-sharing relay defaults to a service the maintainer operates, whose source the documentation states is not published",
+        "More than two thousand open issues, a contribution policy that was gated and may be re-gated, and a four-toolchain build make independent verification expensive"
+      ],
+      "why_it_matters": "The clearest case of a fork that outgrew its upstream, replacing a shell-out model with a native execution core and editor-grade language, debugger, and session surfaces.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 28851,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T13:33:21Z",
+      "forks": 2883,
+      "open_issues": 2041,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "oh-my-claudecode",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "oh-my-claudecode",
+      "repo": "Yeachan-Heo/oh-my-claudecode",
+      "url": "https://github.com/Yeachan-Heo/oh-my-claudecode",
+      "description": "Plugin and command-line tool for Claude Code that routes work to role-specific subagents and supervises fleets of terminal coding-agent workers in terminal panes.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "local project state under a dotted working directory, plus agent, skill, and command definitions kept as editable Markdown",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "code_editing",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "An independent port of another author's project rather than a fork; it shares no history or code with it, and that project is not represented in the Atlas. The record is scored for the worker-supervision runtime it owns, not for capabilities the host agent supplies.",
+      "score": {
+        "task_reliability": 6.6,
+        "tool_use": 7.4,
+        "autonomy": 7.6,
+        "human_control": 6.4,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 6.8,
+        "interoperability": 7.0,
+        "maturity": 6.2,
+        "overall": 6.97
+      },
+      "strengths": [
+        "The worker-supervision layer is real machinery rather than prose, covering dispatch queues, mailboxes, pane readiness, merge coordination, and process identity locks",
+        "It supervises six competing vendors' coding-agent command-line tools as interchangeable workers",
+        "Test code exceeds implementation code, across more than seven hundred test files"
+      ],
+      "weaknesses": [
+        "The primary in-session surface runs nothing without the host agent and a paid subscription, so the record cannot claim the execution boundary it appears to describe",
+        "Thousands of build artifacts are committed, so the code that ships to the package registry is not reviewable against source without rebuilding",
+        "The marketplace manifest overstates the agent and skill counts present in the tree, and the near-empty issue queue reflects automated closing rather than triage"
+      ],
+      "why_it_matters": "The most adopted worked example of an orchestrator that treats several competing vendors' coding agents as interchangeable supervised workers rather than as alternatives.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 38930,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T09:34:10Z",
+      "forks": 3492,
+      "open_issues": 1,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "codewhale",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Codewhale",
+      "repo": "Hmbown/CodeWhale",
+      "url": "https://github.com/Hmbown/CodeWhale",
+      "description": "Terminal coding agent that runs against hosted or local model providers, with layered approval policy, operating-system sandboxing where available, and local browser and runtime interfaces.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "deepseek",
+        "anthropic",
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "the local working tree, an append-only session journal, and Markdown memory files with a rebuildable full-text index under the user's home directory",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Renamed from an earlier project of the same author and now provider-neutral; the project states it is unaffiliated with any model provider, though the repository name and a stale license copyright line both invite the opposite inference.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.4,
+        "autonomy": 8.0,
+        "human_control": 9.4,
+        "observability_recovery": 8.6,
+        "data_sovereignty": 7.8,
+        "interoperability": 9.0,
+        "maturity": 6.6,
+        "overall": 8.27
+      },
+      "strengths": [
+        "Authorization is specified before it is implemented, as nine ordered layers with a stated invariant that approval at one layer is never a universal bypass",
+        "The sandbox documentation refuses to claim capability it does not ship, naming which backends are wired and warning that source-only sandbox code is not evidence a command was restricted",
+        "Four coordinated local surfaces ship from one binary, including a web client that cannot be rebound off the loopback address"
+      ],
+      "weaknesses": [
+        "The license copyright still names the former project's contributors after the rename, so the file names an identity the project explicitly disclaims",
+        "Anonymous usage telemetry is enabled by default and posts to a first-party endpoint",
+        "Still before a first stable release, with active architectural churn and a self-reported gap in its third-party license notices"
+      ],
+      "why_it_matters": "The clearest open example of a coding agent whose authorization order, sandbox availability, and telemetry contract are written down as falsifiable specifications rather than asserted as features.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 40888,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T13:19:57Z",
+      "forks": 3540,
+      "open_issues": 111,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "reasonix",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Reasonix",
+      "repo": "esengine/DeepSeek-Reasonix",
+      "url": "https://github.com/esengine/DeepSeek-Reasonix",
+      "description": "Coding agent distributed as a single static binary, driven by a configuration file and plugin registry, with terminal, desktop, editor, and HTTP surfaces over one local engine.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "the local working tree, conversation transcripts, file-snapshot checkpoints, and a configuration file; the session catalogue is a rebuildable cache whose deletion never changes a conversation",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "The default branch is a ground-up rewrite on an orphan branch that shares no history with the original implementation, which remains abandoned on the branch a reader reaches by repository name. The project is a community effort and is not operated by the model provider its repository name carries.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 7.6,
+        "autonomy": 8.0,
+        "human_control": 8.2,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.2,
+        "maturity": 4.8,
+        "overall": 7.64
+      },
+      "strengths": [
+        "Ships as a fully self-contained static binary cross-compiled to six targets, with nothing to install on the target machine beyond the binary",
+        "The architecture is written as a contract that leads the code, with an enforced acyclic dependency direction",
+        "Data ownership is reversible by design: checkpoints are file snapshots that never touch version history, and the session catalogue is an explicitly disposable cache"
+      ],
+      "weaknesses": [
+        "The published surface was rewritten from scratch on an orphan branch four months ago, and a reader arriving at the repository's named branch gets the abandoned implementation",
+        "More than sixteen hundred open issues stand against a codebase only three months old",
+        "Its lean-dependency principle means sandboxing and language-server support are reimplemented in the tree rather than delegated to hardened components"
+      ],
+      "why_it_matters": "Shows that a full coding agent with plan mode, permissions, checkpoints, subagents, and editor and remote surfaces fits in one dependency-light static binary.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 35320,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T13:19:53Z",
+      "forks": 2359,
+      "open_issues": 1686,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
     }
   ]
 }

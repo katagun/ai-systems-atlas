@@ -18,6 +18,7 @@ Read only the documents required by the change:
 | visual builders, authoring surface, or agent interfaces | `docs/TAXONOMY.md`, then `docs/adr/019-authoring-surface-is-a-trait-not-a-role.md` |
 | vendor-hosted platforms, who operates a system, or deployment traits | `docs/TAXONOMY.md`, then `docs/adr/018-operating-party-is-a-trait-not-a-role.md` and `docs/adr/003-multi-axis-directory.md` |
 | provider relationships or model backends | `docs/DATA_MODEL.md`, then `docs/adr/006-provider-relationships-are-orthogonal.md` |
+| forks, ports, renames, or derivative candidates | `docs/CURATION.md`, then `docs/adr/020-derivative-records-turn-on-operational-boundary.md` for the boundary test and `docs/adr/016-superseded-predecessors-keep-their-record.md` for renames and declared successors |
 | coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |

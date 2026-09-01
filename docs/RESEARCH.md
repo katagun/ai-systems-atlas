@@ -23,6 +23,10 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | OpenHuman | Personal memory the owner can read | Editable markdown vault the agent reasons over, with local-only mode enforced at the client construction point | An assistant rather than a service: no external interface lets other software read its memory |
 | CodeGraph | Code graph as shared infrastructure | Measured per-language extraction coverage on named public repositories, and uncertain edges marked rather than asserted | Telemetry ships enabled by default; the schema keeps only current state, so history cannot be queried |
 | GitNexus | Cross-repository code graph | Ad-hoc graph queries, hybrid keyword and vector search, and contract registries that join microservice graphs | Noncommercial licence bars commercial use and reads as unlicensed to automated detection; the docs contradict each other on incremental indexing |
+| OpenViking | Memory as a browsable filesystem | Tiered summaries and retrieval that keeps the path which produced each result | Copyleft server with a permissively licensed client, and an unlicensed Python library between them |
+| Supermemory | Open adapters over a closed core | Eight framework adapters and a tool server, all permissive and forkable | The memory engine is absent from the repository the documentation calls open source |
+| Onyx | Honest open-core boundary | Fifty-five connectors and a full retrieval stack that run without the enterprise tree | Permission sync and post-query filtering are enterprise-only, which is what mixed-permission data needs |
+| AFFiNE | Permissive client on a proprietary server | A genuinely local-first offline path with reusable editor internals | Synchronization, search, and all AI sit in one licensed server, and self-hosting caps at ten seats |
 
 ### Agent-system research set
 
@@ -56,6 +60,10 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | ruflo | Advertised coordination versus shipped substrate | A genuinely built memory layer with vector index, encryption at rest, and expiry sweeps | The swarm engine it markets is in neither dependency chain of the published package |
 | Orca | Supervising real agent processes | Typed, durable inter-agent messages and a terminal daemon that outlives the application | The orchestration layer is behind an experimental flag and absent from the readme |
 | Grok Bot | Persistent named agents as a product | Per-action approvals, review rules where requiring approval wins, and peer handoffs between durable bots | One shared computer per user is explicitly not a security boundary, and no administrator audit trail exists yet |
+| oh-my-pi | A fork that outgrew its upstream | Native execution core, debugger and language-server integration, shared sessions | Approval defaults to auto-approving shell execution, with no operating-system sandbox |
+| oh-my-claudecode | Orchestrating rival vendors' agents | Supervises six competing coding-agent tools as interchangeable workers | The primary surface runs nothing without the host agent and a paid subscription |
+| Codewhale | Authorization written as specification | Nine ordered approval layers, and sandbox docs that name what is not wired | Telemetry defaults to on, and the licence still names the pre-rename identity |
+| Reasonix | A whole agent in one static binary | Self-contained cross-compiled distribution with reversible file-snapshot checkpoints | The shipped code lives on a rewrite branch; the repository's named branch is abandoned |
 
 ### Assistant-system research set
 

@@ -79,6 +79,7 @@ const RECORD_MARKS = {
   "watsonx-orchestrate": "lobe:ibm",
   "z-ai": "lobe:zai",
   // Systems — memory
+  affine: "simple:affine",
   joplin: "simple:joplin",
   langmem: "lobe:langchain",
   logseq: "simple:logseq",
