@@ -1808,6 +1808,66 @@
           "immutable_url": "https://api.github.com/repos/ultraworkers/claw-code/git/blobs/28e6960dd9a2be209c308b49bc9a8973dbf4d60d"
         }
       ]
+    },
+    {
+      "project_id": "claude-mem",
+      "repo": "thedotmack/claude-mem",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Open core: engine, server, command line, packages, and tool interfaces",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/thedotmack/claude-mem/blob/d645695673349e3947e8e5ae42332d0ac3164cd7/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/thedotmack/claude-mem/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
+    },
+    {
+      "project_id": "agentmemory",
+      "repo": "rohitg00/agentmemory",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/rohitg00/agentmemory/blob/cb13c72881997c8ad1662ec42c1484cc15859147/LICENSE",
+          "blob_sha": "cb13c72881997c8ad1662ec42c1484cc15859147",
+          "immutable_url": "https://api.github.com/repos/rohitg00/agentmemory/git/blobs/cb13c72881997c8ad1662ec42c1484cc15859147"
+        }
+      ]
+    },
+    {
+      "project_id": "memu",
+      "repo": "NevaMind-AI/memU",
+      "items": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "Whole repository under a non-canonical licence text that no standard identifier matches",
+          "kind": "git_blob",
+          "path": "LICENSE.txt",
+          "url": "https://github.com/NevaMind-AI/memU/blob/037b3bceb0e1e3151caac1cacf9fec113cd50781/LICENSE.txt",
+          "blob_sha": "037b3bceb0e1e3151caac1cacf9fec113cd50781",
+          "immutable_url": "https://api.github.com/repos/NevaMind-AI/memU/git/blobs/037b3bceb0e1e3151caac1cacf9fec113cd50781"
+        }
+      ]
+    },
+    {
+      "project_id": "openhuman",
+      "repo": "tinyhumansai/openhuman",
+      "items": [
+        {
+          "license_id": "GPL-3.0",
+          "scope": "Whole repository, with the memory component under the same licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/tinyhumansai/openhuman/blob/6a366447b44a765b93414462d8d07982055ea96a/LICENSE",
+          "blob_sha": "6a366447b44a765b93414462d8d07982055ea96a",
+          "immutable_url": "https://api.github.com/repos/tinyhumansai/openhuman/git/blobs/6a366447b44a765b93414462d8d07982055ea96a"
+        }
+      ]
     }
   ]
 }

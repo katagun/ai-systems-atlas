@@ -9374,6 +9374,335 @@
         "MIT"
       ],
       "source_model": "open_source"
+    },
+    {
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "secondary_roles": [],
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "The project describes an open-core structure, but everything in the repository carries one permissive licence; the reserved capabilities are hosted-service features such as cloud sync, team memory, administration, and enterprise access control rather than restricted source, so the record classifies it by the code it publishes.",
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "agent_relation": "external_memory",
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "temporal"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "id": "claude-mem",
+      "name": "claude-mem",
+      "repo": "thedotmack/claude-mem",
+      "url": "https://github.com/thedotmack/claude-mem",
+      "description": "Captures coding-agent tool activity through lifecycle hooks, summarises it, and stores it locally for later retrieval.",
+      "primary_role": "agent_memory_service",
+      "architectures": [
+        "hybrid",
+        "relational_db",
+        "vector_index",
+        "full_text"
+      ],
+      "canonical_data": "tool-use observations and session summaries, scoped per project",
+      "deployment": [
+        "local_cli",
+        "ide_extension",
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "stars": 92776,
+      "forks": 8161,
+      "open_issues": 283,
+      "pushed_at": "2026-08-31T00:00:00Z",
+      "github_detected_license": "Apache-2.0",
+      "score": {
+        "second_brain_fit": 5.6,
+        "data_sovereignty": 6.4,
+        "interoperability": 8.8,
+        "memory_intelligence": 7.0,
+        "operational_simplicity": 5.2,
+        "maturity": 7.4,
+        "overall": 6.71
+      },
+      "strengths": [
+        "The only one of its peers exposing its store through a documented interface, a tool protocol, and an embeddable package at once",
+        "Provenance is a first-class table rather than a metadata blob",
+        "Cross-project leakage is blocked in the database itself rather than by application convention"
+      ],
+      "weaknesses": [
+        "Two storage models coexist and the newer one is documented as not yet read by any live path",
+        "Writing a memory requires a language model, so the default configuration sends session content off the device",
+        "The project's own readme closes with a promoted cryptocurrency token, which is unusual for infrastructure a team would adopt"
+      ],
+      "why_it_matters": "The most widely installed memory layer for coding agents, and the only one of its peers reachable through an interface, a tool protocol, and a package simultaneously.",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "secondary_roles": [],
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "agent_relation": "external_memory",
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal",
+        "temporal"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "supersession",
+        "versioned",
+        "consolidation",
+        "decay",
+        "upsert_rewrite"
+      ],
+      "id": "agentmemory",
+      "name": "agentmemory",
+      "repo": "rohitg00/agentmemory",
+      "url": "https://github.com/rohitg00/agentmemory",
+      "description": "A local memory server for coding agents that captures tool use through hooks and serves it over a tool protocol and an interface.",
+      "primary_role": "agent_memory_service",
+      "architectures": [
+        "hybrid",
+        "vector_index",
+        "full_text",
+        "graph_db",
+        "git_versioned"
+      ],
+      "canonical_data": "tool-use observations consolidated into memories, lessons, and graph entities",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "library",
+        "ide_extension"
+      ],
+      "local_first": true,
+      "stars": 27861,
+      "forks": 2404,
+      "open_issues": 545,
+      "pushed_at": "2026-08-31T00:00:00Z",
+      "github_detected_license": "Apache-2.0",
+      "score": {
+        "second_brain_fit": 5.4,
+        "data_sovereignty": 8.8,
+        "interoperability": 8.2,
+        "memory_intelligence": 8.4,
+        "operational_simplicity": 4.6,
+        "maturity": 5.4,
+        "overall": 6.9
+      },
+      "strengths": [
+        "Runs entirely offline with no key and no model calls, using lexical search with optional on-device embeddings",
+        "Supersession, decay, expiry, and eviction are separate implemented modules rather than a single forget flag",
+        "Memory exports to a plain markdown vault and synchronises in both directions with a project memory file"
+      ],
+      "weaknesses": [
+        "A hard dependency on a pinned third-party engine version the project cannot yet run without",
+        "More open issues than closed ones on a project roughly six months old and still before its first stable release",
+        "Repository hygiene is uneven; the root design document describes an unrelated car manufacturer's website rather than this system"
+      ],
+      "why_it_matters": "The fullest open implementation of memory lifecycle mechanics, including supersession, decay, and a temporal graph, and it runs without any model key.",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source"
+    },
+    {
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "secondary_roles": [],
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "The licence file follows the structure of a well-known permissive licence but rewrites its grant using the wording of a different one, so no standard identifier applies and the hosting platform reports it only as other. The project's package metadata has its licence declaration commented out and publishes with none.",
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "agent_relation": "external_memory",
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "self_editing",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "id": "memu",
+      "name": "memU",
+      "repo": "NevaMind-AI/memU",
+      "url": "https://github.com/NevaMind-AI/memU",
+      "description": "A memory store and companion process that mines agent session logs into markdown notes and reusable skills, retrieved by embedding.",
+      "primary_role": "agent_memory_service",
+      "architectures": [
+        "hybrid",
+        "relational_db",
+        "vector_index",
+        "plain_files"
+      ],
+      "canonical_data": "markdown memory notes and extracted reusable skills, held in two tracks",
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "stars": 14363,
+      "forks": 1063,
+      "open_issues": 115,
+      "pushed_at": "2026-08-31T00:00:00Z",
+      "github_detected_license": "NOASSERTION",
+      "score": {
+        "second_brain_fit": 4.4,
+        "data_sovereignty": 4.0,
+        "interoperability": 5.6,
+        "memory_intelligence": 4.8,
+        "operational_simplicity": 7.4,
+        "maturity": 4.8,
+        "overall": 5.01
+      },
+      "strengths": [
+        "The core is small and inspectable, and the store itself makes no model calls at all",
+        "Memory lands on disk as plain markdown with front matter, editable by hand and readable if the tool is removed",
+        "One configured backend is shared across every host, so what one agent's sessions taught it, another retrieves"
+      ],
+      "weaknesses": [
+        "The licence file is a non-canonical rewrite that no identifier matches, and the package metadata declares no licence at all",
+        "No local embedding option is documented, so even the private deployment sends memory content to a third-party interface",
+        "Retrieval is cosine similarity alone, with no lexical fallback, reranking, recency, or temporal filtering"
+      ],
+      "why_it_matters": "Shows how far a memory service gets by storing plain markdown and delegating every judgement to the calling agent, at the cost of any built-in memory reasoning.",
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
+      "source_model": "unclear"
+    },
+    {
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "secondary_roles": [],
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-08-31",
+      "human_editable": true,
+      "provenance": "strong",
+      "stars_verified_at": "2026-08-31",
+      "historical_stars": null,
+      "current_repo_note": "The memory implementation lives in a separate component referenced as a submodule, which carries the same strong copyleft licence as the application.",
+      "metadata_verified_at": "2026-08-31",
+      "research_confidence": "high",
+      "agent_relation": "external_memory",
+      "retrieval_modes": [
+        "semantic_vector",
+        "graph_traversal",
+        "temporal",
+        "keyword",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "connectors",
+        "scheduled",
+        "conversation",
+        "file_import",
+        "audio",
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "consolidation",
+        "versioned",
+        "human_curated",
+        "upsert_rewrite"
+      ],
+      "id": "openhuman",
+      "name": "OpenHuman",
+      "repo": "tinyhumansai/openhuman",
+      "url": "https://github.com/tinyhumansai/openhuman",
+      "description": "A desktop assistant that ingests connected accounts into a local markdown memory tree and runs agents over it.",
+      "primary_role": "ai_knowledge_app",
+      "architectures": [
+        "hybrid",
+        "plain_files",
+        "relational_db",
+        "vector_index",
+        "git_versioned"
+      ],
+      "canonical_data": "hierarchical markdown summary trees over connected accounts, plus a canonical entity registry",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "stars": 39202,
+      "forks": 3854,
+      "open_issues": 349,
+      "pushed_at": "2026-08-31T00:00:00Z",
+      "github_detected_license": "GPL-3.0",
+      "score": {
+        "second_brain_fit": 8.8,
+        "data_sovereignty": 7.8,
+        "interoperability": 5.0,
+        "memory_intelligence": 8.4,
+        "operational_simplicity": 6.0,
+        "maturity": 6.0,
+        "overall": 7.21
+      },
+      "strengths": [
+        "Memory is a folder of editable markdown the user owns, and the same files the agent reasons over are the ones a person can open and correct",
+        "A local-only mode is enforced where the inference client is constructed, so no code path can reach a hosted model while it is set",
+        "Change tracking maps onto real version-control primitives, so a reader can ask what changed since they last looked"
+      ],
+      "weaknesses": [
+        "It is an assistant rather than a memory service: no external interface, package, or tool protocol lets other software read its memory",
+        "A strong copyleft licence with a hosted subscription backend makes it hard to embed or to run wholly independently at default settings",
+        "The project labels itself early beta, and its memory core has only just been extracted into a separate component"
+      ],
+      "why_it_matters": "The clearest working demonstration that a personal assistant's memory can be a plain markdown vault the owner reads and corrects by hand.",
+      "licenses": [
+        "GPL-3.0"
+      ],
+      "source_model": "open_source"
     }
   ]
 }

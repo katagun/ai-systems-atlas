@@ -2713,29 +2713,6 @@
       ]
     },
     {
-      "repo": "thedotmack/claude-mem",
-      "name": "claude-mem",
-      "url": "https://github.com/thedotmack/claude-mem",
-      "description": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.82,
-      "github_detected_license": "Apache-2.0",
-      "stars": 92776,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
       "url": "https://github.com/bytedance/deer-flow",
@@ -2897,29 +2874,6 @@
       ]
     },
     {
-      "repo": "tinyhumansai/openhuman",
-      "name": "openhuman",
-      "url": "https://github.com/tinyhumansai/openhuman",
-      "description": "Your Personal AI super intelligence. A brain that builds a local-first memory of your life, a fantastic orchestrator of agent fleets and workflows, and a deep researcher.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.66,
-      "github_detected_license": "GPL-3.0",
-      "stars": 39201,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "Yeachan-Heo/oh-my-claudecode",
       "name": "oh-my-claudecode",
       "url": "https://github.com/Yeachan-Heo/oh-my-claudecode",
@@ -3044,29 +2998,6 @@
       "classification_confidence": 0.72,
       "github_detected_license": "Apache-2.0",
       "stars": 27972,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "rohitg00/agentmemory",
-      "name": "agentmemory",
-      "url": "https://github.com/rohitg00/agentmemory",
-      "description": "#1 Persistent memory for AI coding agents based on real-world benchmarks",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.76,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27860,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"
@@ -3274,29 +3205,6 @@
       "classification_confidence": 0.76,
       "github_detected_license": "MIT",
       "stars": 18229,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "NevaMind-AI/memU",
-      "name": "memU",
-      "url": "https://github.com/NevaMind-AI/memU",
-      "description": "Personal memory across agents",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.74,
-      "github_detected_license": "NOASSERTION",
-      "stars": 14363,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"

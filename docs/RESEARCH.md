@@ -17,6 +17,10 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Trilium | Hierarchical PKM | Hierarchy, cloning, revisions, encryption, scripting, REST API, large-vault maturity | Less portable database-centric storage |
 | AppFlowy | Structured workspace UX | Documents, databases, projects, native cross-platform experience, data control | Heavy system whose AI memory lifecycle remains secondary |
 | OpenRecall | Open ambient capture | Local, cross-platform, searchable screenshot history | Privacy, storage, noise, and slower project activity |
+| claude-mem | Coding-session memory as a service | Store reachable through an interface, a tool protocol, and a package at once, with provenance as a first-class table | Two storage models coexist; writing memory requires an off-device model call |
+| agentmemory | Memory lifecycle mechanics | Supersession, decay, expiry, and eviction implemented separately, running with no key and no model calls | Pinned third-party engine dependency; more open issues than closed |
+| memU | Judgement delegated to the caller | Plain markdown on disk, a store that makes no model calls, one backend shared across hosts | Non-canonical licence text no identifier matches; retrieval is cosine similarity alone |
+| OpenHuman | Personal memory the owner can read | Editable markdown vault the agent reasons over, with local-only mode enforced at the client construction point | An assistant rather than a service: no external interface lets other software read its memory |
 
 ### Agent-system research set
 
