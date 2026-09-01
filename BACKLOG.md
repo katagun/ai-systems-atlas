@@ -22,6 +22,7 @@ This is the source of truth for actionable repository work. Policy and field def
 
 ## Next
 
+- [ ] Surface local-runtime GitHub star counts in the Directory UI (card badge, sort option). `directory/local-runtimes.json` now carries `stars`/`stars_verified_at`, refreshed by `scripts/update_directory.py`, but the web app doesn't render them yet; data-only was a deliberate scope cut.
 - [ ] Add a small review command that promotes a candidate only after all required editorial, source-model, license, and evidence fields are present.
 - [ ] Add a stale-review report that distinguishes editorial age from GitHub metadata age without changing either.
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.

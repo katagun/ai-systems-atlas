@@ -73,6 +73,8 @@ Runtime capabilities change faster than service terms. Every claim is dated thro
 
 Do not copy benchmark tables, throughput measurements, or hardware recommendations expressed as performance claims. `hardware_requirements` records what the documentation states is needed to run, not how fast it runs.
 
+`stars` and `stars_verified_at` are the one piece of automation-refreshed live metadata this collection carries. `scripts/update_directory.py` refreshes them from GitHub for every record with a `repo`, the same way it refreshes `projects.json`. They are descriptive only: never weigh them, or let their absence lower a dimension score. The scoring rubric above already excludes repository popularity by design, per [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md).
+
 ## Coverage discovery
 
 No single external list defines this universe, and the available ones count different units. Inference-client adapter lists mix managed services with runtimes and compatibility aliases. Model hubs list integration partners. Package registries count distributions rather than projects.
