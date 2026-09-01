@@ -358,3 +358,37 @@ test("the interface filter combines with role rather than replacing it", () => {
 
   assert.deepEqual(results.map(project => project.name), ["SDK"]);
 });
+
+test("monogram glyphs use the first alphanumeric character uppercased", () => {
+  const { monogramGlyph } = require("../web/app-core.js");
+  assert.equal(monogramGlyph("Aider"), "A");
+  assert.equal(monogramGlyph("llama.cpp"), "L");
+  assert.equal(monogramGlyph("vLLM"), "V");
+  assert.equal(monogramGlyph(".NET"), "N");
+  assert.equal(monogramGlyph(""), "•");
+  assert.equal(monogramGlyph(undefined), "•");
+});
+
+test("every logo mapping points at a published record and a vendored plain mark", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const readJSON = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", file), "utf8"));
+  const logos = readJSON("logos.json");
+  const publishedIds = new Set([
+    ...readJSON("projects.json").projects.map(record => record.id),
+    ...readJSON("inference-services.json").services.map(record => record.id),
+    ...readJSON("local-runtimes.json").runtimes.map(record => record.id),
+  ]);
+
+  assert.ok(Object.keys(logos.records).length > 0);
+  for (const [recordId, key] of Object.entries(logos.records)) {
+    assert.ok(publishedIds.has(recordId), `${recordId} is not a published directory record`);
+    assert.ok(logos.icons[key], `${recordId} maps to missing icon ${key}`);
+  }
+  for (const [key, icon] of Object.entries(logos.icons)) {
+    for (const [, tag] of icon.body.matchAll(/<\/?([a-zA-Z][a-zA-Z0-9-]*)/g)) {
+      assert.ok(["path", "g", "circle", "rect", "ellipse", "polygon"].includes(tag), `${key} uses disallowed <${tag}>`);
+    }
+    assert.doesNotMatch(icon.body, /\son[a-z]+=|href=|url\(/i, `${key} carries disallowed attribute content`);
+  }
+});

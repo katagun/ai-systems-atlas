@@ -23,7 +23,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
 - [ ] Review cross-protocol authentication and authorization profiles, workflow-state exchange beyond task messaging, and conformance suites as the next specification batch.
 - [ ] Review Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as the next bounded instruction-convention batch.
-- [ ] Add operator and project logos to the directory cards on the site (OpenAI, AWS, Anthropic, and the rest). Logos are trademarks, so settle sourcing and licensing first — first-party brand assets or a permissively licensed icon set — plus a text-only fallback for records without a usable mark, all without adding a runtime dependency to the dependency-free application.
+- [x] Add operator and project logos to the directory cards on the site. 118 of 172 records carry monochrome marks vendored into `web/logos.json` from `@lobehub/icons-static-svg` (MIT) and `simple-icons` (CC0) via `scripts/build_logos.mjs`; the rest show monogram fallbacks, the runtime stays dependency-free, and the footer carries a trademark notice.
 
 ## Later
 

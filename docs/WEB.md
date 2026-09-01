@@ -4,7 +4,7 @@ The `web/` directory is a dependency-free static application. `app-core.js` cont
 
 ## Visual language
 
-The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The decorative atlas map in the directory hero expresses the three system families, the inference-service layer, and the local-runtime layer without becoming another navigation surface. Its faint orbital ellipses span all five nodes so no subset reads as a separate cluster. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence.
+The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The decorative atlas map in the directory hero expresses the three system families, the inference-service layer, and the local-runtime layer without becoming another navigation surface. Its faint orbital ellipses span all five nodes so no subset reads as a separate cluster. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence. Directory cards lead with a small product mark — a monochrome logo vendored into `web/logos.json`, or a monogram fallback — rendered in `currentColor` so marks stay subordinate to the taxonomy accents.
 
 ## Content hierarchy
 
@@ -45,6 +45,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - Active projects appear by default regardless of source model. Archived, superseded, and removed projects remain inspectable through status filters.
 - A superseded project's details lead with a notice naming its successor, and the successor's name opens that record. The notice states that the review still stands.
 - Every card displays its reviewed license identifiers and source model.
+- Every system, inference-service, and local-runtime card leads with a product mark from `web/logos.json` or a monogram fallback. Marks are decorative (`aria-hidden`), may only depict the product itself or the maintainer/operator named in the record's published data, ship as build-sanitized monochrome vector bodies with no gradients, masks, links, or scripts, and the footer states that marks identify their owners' products. Regenerate the file with `node scripts/build_logos.mjs` after editing its record map or reviewing new records.
 - License and source-model filters are taxonomy-driven and combine with every existing filter.
 - The deployment filter is taxonomy-driven and combines with every existing filter. It lists only modes carried by published projects, and it is how a reader reaches an operational fact such as a vendor-operated system. [ADR 018](adr/018-operating-party-is-a-trait-not-a-role.md) makes that reachability a precondition: who operates a system is a trait, so the filter must exist rather than the fact being encoded as a role.
 - The agent-interface filter is taxonomy-driven, lists only interfaces carried by published projects, and combines with every existing filter. It is how a reader separates a canvas-authored builder from a code library inside one role. [ADR 019](adr/019-authoring-surface-is-a-trait-not-a-role.md) makes that reachability a precondition: authoring surface is a trait, so the filter must exist rather than the fact being encoded as a role.
@@ -76,6 +77,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 | collection filter facets and search fields | `web/app-core.js` collection view descriptors |
 | rendering and detail dialog | `web/app.js` |
 | comparison eligibility and selection | `web/app-core.js` and `web/app.js` |
+| card marks and logo vendoring | `scripts/build_logos.mjs`, then regenerate `web/logos.json` |
 | layout and responsive behavior | `web/styles.css` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
@@ -126,5 +128,6 @@ Then verify in a browser:
 16. compare two to four local runtimes, reload a `runtime:` comparison URL, confirm a cross-profile URL is discarded rather than partially restored, and confirm changing scope clears the selection.
 17. complete a local-runtime Finder path and confirm the Directory handoff preselects the runtime type.
 18. confirm the five-node atlas map and the hero statistics row render without wrapping at narrow and wide widths.
+19. confirm directory cards lead with product marks in all three collections and that unmapped records show monogram fallbacks.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.
