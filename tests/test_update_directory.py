@@ -135,6 +135,53 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("review_required", project["license_review_status"])
         self.assertEqual("2026-08-24", reviews[0]["detected_at"])
 
+    def test_local_runtime_stars_refresh_updates_descriptive_metadata_only(self) -> None:
+        runtime = {
+            "id": "sample-runtime",
+            "repo": "sample/runtime",
+            "verified_at": "2025-01-15",
+            "score": {"overall": 5.0},
+            "stars": 10,
+            "stars_verified_at": "2025-01-15",
+        }
+
+        successes, failures = update_directory.refresh_local_runtime_stars(
+            [runtime], lambda _path, _token: {"stargazers_count": 42}, None, "2026-08-25", sleeper=lambda _delay: None
+        )
+
+        self.assertEqual((1, []), (successes, failures))
+        self.assertEqual(42, runtime["stars"])
+        self.assertEqual("2026-08-25", runtime["stars_verified_at"])
+        self.assertEqual("2025-01-15", runtime["verified_at"])
+        self.assertEqual({"overall": 5.0}, runtime["score"])
+
+    def test_local_runtime_star_refresh_transport_failure_preserves_existing_value(self) -> None:
+        runtime = {"id": "sample-runtime", "repo": "sample/runtime", "stars": 10, "stars_verified_at": "2025-01-15"}
+        before = copy.deepcopy(runtime)
+
+        def unavailable(_path: str, _token: str | None) -> dict:
+            raise urllib.error.URLError("offline")
+
+        successes, failures = update_directory.refresh_local_runtime_stars(
+            [runtime], unavailable, None, "2026-08-25", sleeper=lambda _delay: None
+        )
+
+        self.assertEqual(0, successes)
+        self.assertEqual(1, len(failures))
+        self.assertEqual(before, runtime)
+
+    def test_local_runtime_without_a_repo_is_not_sent_to_github(self) -> None:
+        runtime = {"id": "lm-studio", "repo": None, "stars": None, "stars_verified_at": None}
+
+        def unexpected_request(_path: str, _token: str | None) -> dict:
+            raise AssertionError("repo-less local runtime should not be refreshed through GitHub")
+
+        successes, failures = update_directory.refresh_local_runtime_stars(
+            [runtime], unexpected_request, None, "2026-08-25", sleeper=lambda _delay: None
+        )
+
+        self.assertEqual((0, []), (successes, failures))
+
     def test_candidate_has_no_editorial_score_or_review_date(self) -> None:
         repo = {
             "full_name": "example/new-agent",
