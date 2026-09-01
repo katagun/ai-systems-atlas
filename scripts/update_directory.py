@@ -41,6 +41,7 @@ TAXONOMY_PATH = DIRECTORY / "taxonomy.json"
 CANDIDATES_PATH = DIRECTORY / "candidates.json"
 LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
 DISCOVERY_SOURCES_PATH = DIRECTORY / "discovery-sources.json"
+LOCAL_RUNTIMES_PATH = DIRECTORY / "local-runtimes.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 MIN_METADATA_SUCCESS_RATIO = 0.80
@@ -481,6 +482,35 @@ def refresh_projects(
     return successes, failures, reviews
 
 
+def refresh_local_runtime_stars(
+    runtimes: list[dict[str, Any]],
+    getter: GitHubGetter,
+    token: str | None,
+    refreshed_at: str,
+    *,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> tuple[int, list[str]]:
+    """Refresh descriptive GitHub star counts. Never touches score, evidence, or verified_at."""
+    successes = 0
+    failures: list[str] = []
+
+    for runtime in runtimes:
+        repo = runtime.get("repo")
+        if not repo:
+            continue
+        try:
+            metadata = getter(f"/repos/{repo}", token)
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+            failures.append(f"{repo}: {type(exc).__name__}: {exc}")
+            continue
+        runtime["stars"] = metadata.get("stargazers_count")
+        runtime["stars_verified_at"] = refreshed_at
+        successes += 1
+        sleeper(0.05)
+
+    return successes, failures
+
+
 def discover_candidates(
     known_projects: set[str],
     previous_candidates: list[dict[str, Any]],
@@ -575,6 +605,7 @@ def main() -> int:
     discovery_sources = load_json(DISCOVERY_SOURCES_PATH)
     candidate_document = load_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []})
     review_document = load_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []})
+    local_runtimes_document = load_json(LOCAL_RUNTIMES_PATH, {"version": "1.0", "verified_at": None, "runtimes": []})
     projects = document["projects"]
     previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
 
@@ -636,18 +667,28 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
+    runtime_successes, runtime_failures = refresh_local_runtime_stars(
+        local_runtimes_document["runtimes"],
+        github_get,
+        token,
+        refreshed_at,
+    )
+
     for failure in metadata_failures:
         print(f"warning: {failure}", file=sys.stderr)
     for failure in discovery_failures:
         print(f"warning: discovery query failed: {failure}", file=sys.stderr)
     for failure in official_failures:
         print(f"warning: official discovery source failed: {failure}", file=sys.stderr)
+    for failure in runtime_failures:
+        print(f"warning: local runtime star refresh failed: {failure}", file=sys.stderr)
 
     projects.sort(key=lambda project: (project["system_family"], project["name"].lower()))
     document["generated_at"] = refreshed_at
     write_json(PROJECTS_PATH, document)
     write_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": refreshed_at, "candidates": candidates})
     write_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": refreshed_at, "entries": reviews})
+    write_json(LOCAL_RUNTIMES_PATH, local_runtimes_document)
     sync_web_data()
 
     print(json.dumps({
@@ -658,6 +699,8 @@ def main() -> int:
         "new_candidates": new_candidates + new_official_candidates,
         "candidate_queue": len(candidates),
         "license_reviews_open": len(reviews),
+        "local_runtime_stars_refreshed": runtime_successes,
+        "local_runtime_stars_failed": len(runtime_failures),
         "auto_added": 0,
     }, indent=2))
     return 0

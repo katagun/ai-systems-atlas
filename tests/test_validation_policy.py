@@ -131,6 +131,36 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    def test_local_runtime_accepts_descriptive_star_metadata(self) -> None:
+        def mutate(runtime, root):
+            runtime["stars"] = 42
+            runtime["stars_verified_at"] = "2026-08-30"
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertFalse([error for error in errors if "sample-runtime" in error], errors)
+
+    def test_local_runtime_rejects_negative_stars(self) -> None:
+        def mutate(runtime, root):
+            runtime["stars"] = -1
+            runtime["stars_verified_at"] = "2026-08-30"
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(any("stars must be a non-negative integer or null" in error for error in errors), errors)
+
+    def test_local_runtime_populated_stars_require_stars_verified_at(self) -> None:
+        def mutate(runtime, root):
+            runtime["stars"] = 42
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(any("populated stars require stars_verified_at" in error for error in errors), errors)
+
+    def test_local_runtime_still_rejects_unknown_fields(self) -> None:
+        def mutate(runtime, root):
+            runtime["throughput_tokens_per_second"] = 500
+
+        errors = self.catalog_with_runtime(mutate)
+        self.assertTrue(any("fields differ from schema" in error for error in errors), errors)
+
     def test_ids_must_be_unique_across_collections(self) -> None:
         def mutate(runtime, root):
             services_path = root / "directory" / "inference-services.json"

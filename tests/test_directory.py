@@ -435,6 +435,19 @@ class DirectoryTests(unittest.TestCase):
             self.assertEqual(calculated, record["score"]["overall"], record["id"])
             self.assertTrue(all(0 <= record["score"][name] <= 10 for name in dimensions), record["id"])
 
+    def test_local_runtime_stars_are_descriptive_and_excluded_from_score(self) -> None:
+        dimensions = {item["id"] for item in self.taxonomy["local_runtime_score_profile"]["dimensions"]}
+        self.assertNotIn("stars", dimensions)
+        self.assertNotIn("repository_popularity", dimensions)
+        for record in self.local_runtimes["runtimes"]:
+            if record.get("repo"):
+                self.assertIsInstance(record.get("stars"), int, record["id"])
+                self.assertGreaterEqual(record["stars"], 0, record["id"])
+                self.assertIsNotNone(record.get("stars_verified_at"), record["id"])
+            else:
+                self.assertIsNone(record.get("stars"), record["id"])
+                self.assertIsNone(record.get("stars_verified_at"), record["id"])
+
     def test_local_runtime_batch_spans_materially_different_execution_choices(self) -> None:
         records = self.local_runtimes["runtimes"]
         self.assertGreaterEqual(len(records), 6)

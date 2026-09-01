@@ -87,6 +87,7 @@ LOCAL_RUNTIME_REQUIRED = {
     "operational_controls", "strengths", "tradeoffs", "licenses", "source_model",
     "license_note", "license_evidence", "score_profile", "score", "evidence", "verified_at",
 }
+LOCAL_RUNTIME_OPTIONAL = {"stars", "stars_verified_at"}
 
 INFERENCE_SERVICE_REQUIRED = {
     "id", "name", "operator", "service_type", "url", "description", "service_boundary",
@@ -810,10 +811,12 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append("local-runtimes.json: every runtime must be an object")
             continue
         prefix = f"local runtime {runtime.get('id', 'unknown')}"
-        if set(runtime) != LOCAL_RUNTIME_REQUIRED:
-            missing = sorted(LOCAL_RUNTIME_REQUIRED - set(runtime))
-            extra = sorted(set(runtime) - LOCAL_RUNTIME_REQUIRED)
-            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+        missing = LOCAL_RUNTIME_REQUIRED - set(runtime)
+        unknown_fields = set(runtime) - LOCAL_RUNTIME_REQUIRED - LOCAL_RUNTIME_OPTIONAL
+        if missing or unknown_fields:
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={sorted(missing)}, extra={sorted(unknown_fields)}"
+            )
             continue
         runtime_id = runtime.get("id")
         if not isinstance(runtime_id, str) or not ID_PATTERN.fullmatch(runtime_id):
@@ -849,6 +852,12 @@ def validate(root: Path = ROOT) -> list[str]:
         )
         if not valid_date(runtime.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
+        if runtime.get("stars") is not None and (not isinstance(runtime["stars"], int) or runtime["stars"] < 0):
+            errors.append(f"{prefix}: stars must be a non-negative integer or null")
+        if runtime.get("stars") is not None and not valid_date(runtime.get("stars_verified_at")):
+            errors.append(f"{prefix}: populated stars require stars_verified_at")
+        if runtime.get("stars_verified_at") is not None and not valid_date(runtime["stars_verified_at"]):
+            errors.append(f"{prefix}: stars_verified_at must be null or an ISO date")
 
         evidence_items = runtime.get("evidence")
         if not isinstance(evidence_items, list) or not evidence_items:
