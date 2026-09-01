@@ -34,7 +34,7 @@ Use `uv` for Python work.
 ```bash
 uv sync --locked
 uv run python scripts/sync_web_data.py
-node scripts/build_logos.mjs
+node scripts/build_logos.mjs --check
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests

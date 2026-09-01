@@ -26,7 +26,7 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Add a small review command that promotes a candidate only after all required editorial, source-model, license, and evidence fields are present.
 - [ ] Add a stale-review report that distinguishes editorial age from GitHub metadata age without changing either.
 - [ ] Document and test repository rename/transfer handling while preserving evidence history.
-- [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching.
+- [ ] Add link checking for project, license/terms, and immutable-evidence URLs with rate-limit-aware caching. This is also the natural home for terms-drift detection: the weekly refresh only compares GitHub-detected SPDX against reviewed licenses, so license or terms changes for records without a GitHub-detected license — inference services above all — surface no signal today.
 - [ ] Review cross-protocol authentication and authorization profiles, workflow-state exchange beyond task messaging, and conformance suites as the next specification batch.
 - [ ] Review Amazon Q rules, Kiro steering, and JetBrains AI Assistant rules as the next bounded instruction-convention batch.
 - [x] Add operator and project logos to the directory cards on the site. 119 of 174 records carry monochrome marks vendored into `web/logos.json` from `@lobehub/icons-static-svg` (MIT) and `simple-icons` (CC0) via `scripts/build_logos.mjs`; the rest show monogram fallbacks, the runtime stays dependency-free, and the footer carries a trademark notice.
