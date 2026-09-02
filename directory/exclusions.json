@@ -84,6 +84,18 @@
       "repo": "herdrdev/herdr",
       "reason": "The system owns terminals rather than agents. Its package manifest describes it as a terminal workspace manager for coding agents, and its documentation says it does not wrap or replace them but owns their terminals. It makes no model calls and holds no identity, memory, skills, or schedules of its own; the agent state it shows is inferred by pattern-matching the screen text of another product. It is well built, and it is a process supervisor.",
       "useful_lesson": "A tagline promising the runtime your agents live on can mean a process supervisor. Check for a provider directory before checking for a memory directory."
+    },
+    {
+      "name": "deep-research",
+      "repo": "dzhng/deep-research",
+      "reason": "The repository is a deliberately minimal reference implementation rather than an operational system. Its readme sets a goal of staying under five hundred lines, its research step is a fixed recursion over one search vendor in which the model never selects a tool, and it ships no test runner, no continuous integration, and no release; the last code change predates this review by more than a year, and its package manifest declares a different licence from its licence file.",
+      "useful_lesson": "A recursion with a model at each step is not a tool loop. Check whether the model can choose an action or only fill a slot in a pipeline the caller parameterised."
+    },
+    {
+      "name": "InsForge",
+      "repo": "InsForge/InsForge",
+      "reason": "A relational backend-as-a-service for coding agents whose ten products are database, authentication, storage, realtime, functions, a model gateway, sites, messaging, payments, and compute. Its one memory route is three commits old, undocumented, and not exposed through its tool server, and a vector extension inside a general database offering is not retrieval infrastructure any more than it is in the hosted database platforms it compares itself to. The agent is the operator of the backend, not the subject it serves.",
+      "useful_lesson": "Vector and embedding topics on a repository identify a database extension, not a memory system. Check the products page before the schema."
     }
   ]
 }

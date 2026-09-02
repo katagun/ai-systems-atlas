@@ -12834,6 +12834,453 @@
       "open_issues": 504,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "mini-swe-agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "mini-SWE-agent",
+      "repo": "SWE-agent/mini-swe-agent",
+      "url": "https://github.com/SWE-agent/mini-swe-agent",
+      "description": "Small Python coding agent whose only tool is the shell, run interactively from a terminal with confirmation before each command or as a library, against a local shell, a container, or a remote sandbox.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "the working tree of the local or container environment, plus a trajectory file rewritten after every step",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Declared successor to SWE-agent in that project's readme, and the maintainers' own boundary statement lives in this project's documentation: prefer this for a simple local tool and stable sandboxing, and the predecessor for custom tools and rich configuration. The second major version changed the trajectory format with a migration guide. The package still carries an alpha classifier at version 2.4.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 5.8,
+        "autonomy": 6.6,
+        "human_control": 8.2,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.8,
+        "maturity": 6.8,
+        "overall": 7.28
+      },
+      "strengths": [
+        "The loop is roughly a hundred lines and tested, so what runs is what you read",
+        "Confirmation is the interactive default, rejections are fed back to the model as steering, and a three-mode switch is documented",
+        "One design runs unchanged on the host, containers, and remote sandboxes because each action is an independent process"
+      ],
+      "weaknesses": [
+        "The command-line default environment is the host with no isolation, and the sandbox backends are opt-in or marked experimental",
+        "The shell is the only tool, so file edits are model-issued stream edits and here-documents with no structured edit primitive",
+        "The package still declares alpha status at version 2.4, and the last release is six weeks old"
+      ],
+      "why_it_matters": "The maintainers of SWE-agent replaced their own tool-rich scaffold with a shell-only loop and published the boundary between the two, making it the reference for how little harness a coding agent needs.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 6910,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-08-31T22:24:08Z",
+      "forks": 961,
+      "open_issues": 58,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "swe-agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "SWE-agent",
+      "repo": "SWE-agent/SWE-agent",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "description": "Configurable coding agent that resolves repository issues in a container through a tested library loop and tool bundles, kept for research reproducibility after its authors moved development to a simpler successor.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "per-run trajectory files and the container working tree",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "superseded",
+      "superseded_by": "mini-swe-agent",
+      "current_repo_note": "Its readme states that mini-SWE-agent has superseded it and recommends the successor going forward, which ADR 016 records now that the successor is published. It passes the research-artifact test that excluded other paper projects: the loop is in a tested library with continuous integration. No package has been distributed since a placeholder in 2024, and the last release is from May 2025.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 7.4,
+        "autonomy": 7.0,
+        "human_control": 4.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.8,
+        "interoperability": 7.4,
+        "maturity": 4.8,
+        "overall": 6.69
+      },
+      "strengths": [
+        "The loop and tools live in a tested library with continuous-integration coverage, not a demo",
+        "Trajectories are first-class and replayable, with an inspector and a replay runner",
+        "Execution is in a container by default"
+      ],
+      "weaknesses": [
+        "Its own maintainers recommend against it in favour of the successor",
+        "No distributed package exists beyond a 2024 placeholder, and there has been no release since May 2025",
+        "No action approval exists in the primary run path; the person is either the model or absent"
+      ],
+      "why_it_matters": "The reference scaffold that defined the agent-computer-interface pattern, now kept for reproducibility while its authors moved on.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 20191,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-08-31T22:23:17Z",
+      "forks": 2209,
+      "open_issues": 89,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "agenticseek",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "agenticSeek",
+      "repo": "Fosowl/agenticSeek",
+      "url": "https://github.com/Fosowl/agenticSeek",
+      "description": "Self-hosted multi-agent assistant that routes a request to a coding, file, browser, or planning agent, runs that agent's tool loop against a local model, and answers through a terminal or web interface.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "local_runtime",
+        "openai",
+        "deepseek",
+        "openrouter",
+        "google",
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "per-agent conversation sessions saved as structured files under the runtime directory, plus files the agents write inside the configured workspace",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Covers two of the role's four surfaces: files and the web, but not applications or scheduled work; its tool-server agent is disabled as non-functional and no scheduler exists. It passes the operational test that excluded paper projects, with the loop in a library behind a real test suite, but no continuous integration runs those tests and no release has ever been cut.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 6.8,
+        "autonomy": 7.0,
+        "human_control": 4.4,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 8.2,
+        "interoperability": 6.4,
+        "maturity": 5.0,
+        "overall": 6.15
+      },
+      "strengths": [
+        "The browser agent is a genuine navigation loop with form filling, stuck detection, and an explicit exit action",
+        "Workspace confinement and loopback-only publishing were added deliberately, with tests behind the safe-mode fix",
+        "Local models are the primary path and every hosted key is optional"
+      ],
+      "weaknesses": [
+        "No continuous integration and no release has ever been cut, so the test suite is only as good as the maintainer's machine",
+        "Command execution runs unconfirmed by default, safe mode is a word blocklist, and the browser prompt tells the model never to ask the user",
+        "Two of the role's four surfaces are absent, and the tool-server agent is disabled as non-functional"
+      ],
+      "why_it_matters": "The most-adopted attempt at a fully local general work agent, showing how far router-plus-planner delegation reaches on consumer hardware before connectors and scheduling exist.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "GPL-3.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 27107,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-08-11T14:14:08Z",
+      "forks": 3032,
+      "open_issues": 34,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "GPL-3.0"
+    },
+    {
+      "id": "docsgpt",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "DocsGPT",
+      "repo": "arc53/DocsGPT",
+      "url": "https://github.com/arc53/DocsGPT",
+      "description": "Self-hostable platform that ingests documents, web sources, connectors, and audio into a searchable knowledge base and answers questions and runs configurable agents over it, exposing those agents through widgets, a compatible API, and a tool server.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "graph_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "graph_traversal",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "conversation",
+        "scheduled",
+        "audio"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "uploaded and connected sources chunked into a vector store the operator selects, with users, agents, conversations, and memory-tool files in a relational database",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists — role management, single sign-on with provisioning, teams, and connectors — are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
+      "score": {
+        "second_brain_fit": 7.6,
+        "data_sovereignty": 6.8,
+        "interoperability": 8.6,
+        "memory_intelligence": 7.0,
+        "operational_simplicity": 6.4,
+        "maturity": 8.4,
+        "overall": 7.48
+      },
+      "strengths": [
+        "The governance features a competitor sells as enterprise — role management, single sign-on with provisioning, and teams — are in the permissive tree and documented",
+        "Agents are first-class integration surfaces: any compatible client or tool-server host can call a configured agent",
+        "A real correctness gate, with thousands of tests run on every push and coverage reported"
+      ],
+      "weaknesses": [
+        "The default quick-start routes all inference through the vendor's public endpoint with a shared key",
+        "Version checks contact the vendor by default",
+        "The memory tool and lifecycle are thin, with path-keyed overwrite and no consolidation or temporal handling, and graph retrieval is gated to one store"
+      ],
+      "why_it_matters": "A complete permissively licensed knowledge platform whose enterprise governance is not withheld, and which turns each knowledge agent into an endpoint other software can call.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 18232,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T02:19:57Z",
+      "forks": 2142,
+      "open_issues": 109,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "memtensor-memos",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "MemOS",
+      "repo": "MemTensor/MemOS",
+      "url": "https://github.com/MemTensor/MemOS",
+      "description": "Self-hostable memory service and Python library that extracts memories from conversations and files into graph and vector stores organised as per-user memory cubes, serves add, search, and feedback over an API and a tool server, and ships local plugins for three agent runtimes.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "graph_db",
+        "vector_index",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "upsert_rewrite",
+        "self_editing"
+      ],
+      "canonical_data": "per-user memory cubes of extracted memory items held in a graph database and a vector store the operator runs, with users and cubes in a relational store; the agent plugins keep a local file database",
+      "deployment": [
+        "self_hosted",
+        "library",
+        "managed_cloud",
+        "local_cli"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Paper-associated but maintained by a company with a hosted product, a release roughly every one to two weeks, and a multi-platform continuous-integration matrix, so it passes the test that excluded paper harnesses. No published runtime it targets names it as a backend; its integrations run one way from its own adapters, unlike Hindsight and OpenViking, which were confirmed from the runtime side. Plugin directories declare a permissive licence in their manifests with no licence file, and a vendored third-party desktop app carries its own.",
+      "score": {
+        "second_brain_fit": 6.6,
+        "data_sovereignty": 5.8,
+        "interoperability": 7.2,
+        "memory_intelligence": 7.6,
+        "operational_simplicity": 5.8,
+        "maturity": 6.8,
+        "overall": 6.66
+      },
+      "strengths": [
+        "A real service surface of an API, a tool server, a library, and a command line, with a continuous-integration matrix that builds and installs the package on four platforms",
+        "Memory cubes give explicit isolation and sharing boundaries across users and agents rather than a single flat store",
+        "The local plugin brings the same core to three agent runtimes on-device with a file database and hybrid recall"
+      ],
+      "weaknesses": [
+        "No runtime it targets names it as a backend; one of them lists eight other memory services and not this one",
+        "Licence metadata is inconsistent, with permissive manifests beside no licence file and a badge that links to a different licence text",
+        "Defaults are not sovereign: a hosted model provider for every model, telemetry on in the plugin, and every accuracy figure vendor-run"
+      ],
+      "why_it_matters": "The most complete open memory service organised around explicit per-user, per-agent memory cubes, shipping both a self-hosted server and on-device plugins, even though the runtimes it targets have not yet reciprocated.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 11150,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T08:11:45Z",
+      "forks": 1018,
+      "open_issues": 70,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
     }
   ]
 }

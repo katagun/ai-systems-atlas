@@ -390,32 +390,6 @@
       ]
     },
     {
-      "repo": "dzhng/deep-research",
-      "name": "deep-research",
-      "url": "https://github.com/dzhng/deep-research",
-      "description": "An AI-powered research assistant that performs iterative, deep research on any topic by combining search engines, web scraping, and large language models.  The goal of this repo is to provide the simplest implementation of a deep research agent - e.g. an agent that can refine its research direction overtime and deep dive into a topic.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 19596,
-      "topics": [
-        "agent",
-        "ai",
-        "gpt",
-        "o3-mini",
-        "research"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "eugeniughelbur/obsidian-second-brain",
       "name": "obsidian-second-brain",
       "url": "https://github.com/eugeniughelbur/obsidian-second-brain",
@@ -839,40 +813,6 @@
       ]
     },
     {
-      "repo": "InsForge/InsForge",
-      "name": "InsForge",
-      "url": "https://github.com/InsForge/InsForge",
-      "description": "The all-in-one, open-source backend platform for agentic coding. InsForge gives your coding agent database, auth, storage, compute, hosting, and AI gateway to ship full-stack apps end-to-end.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 0.9,
-      "github_detected_license": "Apache-2.0",
-      "stars": 12785,
-      "topics": [
-        "ai",
-        "ai-agents",
-        "coding",
-        "deno",
-        "embeddings",
-        "insforge",
-        "nextjs",
-        "oauth2",
-        "pgvector",
-        "postgresql",
-        "realtime",
-        "vectors",
-        "websockets"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "jordan-gibbs/hyperresearch",
       "name": "hyperresearch",
       "url": "https://github.com/jordan-gibbs/hyperresearch",
@@ -1141,47 +1081,6 @@
         "rag",
         "retrieval",
         "user-memory"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "MemTensor/MemOS",
-      "name": "MemOS",
-      "url": "https://github.com/MemTensor/MemOS",
-      "description": "Self-evolving memory system for agents with persistent storage, hybrid retrieval, memory management, and cross-task skill reuse.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.95,
-      "github_detected_license": "Apache-2.0",
-      "stars": 10982,
-      "topics": [
-        "agent",
-        "agentic-ai",
-        "ai",
-        "ai-agents",
-        "chatgpt",
-        "claude",
-        "deepseek-harness",
-        "dsh-plugin",
-        "hermes",
-        "llm",
-        "long-term-memory",
-        "mcp",
-        "memory",
-        "memory-management",
-        "openclaw",
-        "rag",
-        "self-evolving",
-        "self-hosted",
-        "skills",
-        "token-savings"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1817,30 +1716,6 @@
       ]
     },
     {
-      "repo": "SWE-agent/SWE-agent",
-      "name": "SWE-agent",
-      "url": "https://github.com/SWE-agent/SWE-agent",
-      "description": "Research-rooted coding agent that attempts issue resolution in a configurable computer environment.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.99,
-      "github_detected_license": "MIT",
-      "stars": 20137,
-      "topics": [
-        "agent",
-        "developer-tools",
-        "llm"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "TeleAI-UAGI/Awesome-Agent-Memory",
       "name": "Awesome-Agent-Memory",
       "url": "https://github.com/TeleAI-UAGI/Awesome-Agent-Memory",
@@ -2173,29 +2048,6 @@
       ]
     },
     {
-      "repo": "Fosowl/agenticSeek",
-      "name": "agenticSeek",
-      "url": "https://github.com/Fosowl/agenticSeek",
-      "description": "Fully Local Manus AI. No APIs, No $200 monthly bills. Enjoy an autonomous agent that thinks, browses the web, and code for the sole cost of electricity.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.7,
-      "github_detected_license": "GPL-3.0",
-      "stars": 27083,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "MiroMindAI/MiroThinker",
       "name": "MiroThinker",
       "url": "https://github.com/MiroMindAI/MiroThinker",
@@ -2205,29 +2057,6 @@
       "classification_confidence": 0.7,
       "github_detected_license": "Apache-2.0",
       "stars": 8361,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "arc53/DocsGPT",
-      "name": "DocsGPT",
-      "url": "https://github.com/arc53/DocsGPT",
-      "description": "Private AI platform for agents, assistants and enterprise search. Built-in Agent Builder, Deep research, Document analysis, Multi-model support, and API connectivity for agents.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "ai_knowledge_app",
-      "classification_confidence": 0.76,
-      "github_detected_license": "MIT",
-      "stars": 18229,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"
@@ -2327,30 +2156,6 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-01",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "SWE-agent/mini-swe-agent",
-      "name": "mini-swe-agent",
-      "url": "https://github.com/SWE-agent/mini-swe-agent",
-      "description": "Maintained successor to SWE-agent, declared by its authors, with a compact agent loop, approval-by-default interactive mode, and container and local environments.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 6910,
-      "topics": [
-        "coding-agent",
-        "swe-bench",
-        "successor"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-02",
       "review_required": [
         "licensing",
         "classification",
