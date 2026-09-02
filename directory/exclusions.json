@@ -58,7 +58,7 @@
     {
       "name": "Superpowers",
       "repo": "obra/superpowers",
-      "reason": "The repository describes itself as a software development methodology built on composable skills, and it ships no agent machinery: the package declares no executable and no dependencies, and its session hook only reads a skill document and prints it as additional context. Its subagent workflow is prose instructing a host agent to call the host's own tools, so nothing runs when the host harness is removed. CURATION.md keeps prompt templates and collections as research inputs rather than operational systems.",
+      "reason": "The repository describes itself as a software development methodology built on composable skills, and it ships no agent machinery: the package declares no executable and no dependencies, and its session hook only reads a skill document and prints it as additional context. Its subagent workflow is prose instructing a host agent to call the host's own tools, so nothing runs when the host harness is removed. The curation rules keep prompt templates and other non-operational research inputs outside the scored catalog.",
       "useful_lesson": "Adoption does not establish an operational boundary: at 280,000 stars this was the most-starred candidate in the sweep and still resolves to documentation that a host agent executes."
     },
     {
@@ -150,6 +150,12 @@
       "repo": "BAI-LAB/MemoryOS",
       "reason": "The repository is a research release rather than an operational service. It has no tests: three files carry test-like names, one opens by asking the reader to paste an API key into a demo function, and the tree contains no test runner or assertion anywhere. It has no continuous-integration directory at all, which is weaker than the paper implementations already excluded, each of which at least ran a formatting check. Its last release is more than a year old, the package its readme tells users to install has one version from July 2025, and no package manifest exists in the tree, so there is no development-status classifier to read. A benchmark harness and its dataset sit in the tree, and the core package is copied three times rather than sharing a storage interface, so the pluggable architecture the readme advertises is implemented by duplication. The package name its documentation uses on the index belongs to a different project the Atlas already publishes.",
       "useful_lesson": "Two projects can ship under one name on a package index while being unrelated. Check which project the index entry actually resolves to before treating a package as the record's distribution."
+    },
+    {
+      "name": "Zoo Code",
+      "repo": "Zoo-Code-Org/Zoo-Code",
+      "reason": "The community continuation of an archived editor coding agent, and the derivative rule folds it into that record: its interfaces, deployment, execution boundaries, and capabilities are identical to the published predecessor's, which is the rule's definition of the same system in different packaging. What it adds is refinement inside those fields, chiefly a local on-demand semantic search binary and an opt-in downloaded command guard that ships disabled. The predecessor's own documentation names it an alternative rather than a successor, so the supersession status is unavailable in both directions, and the lineage is noted on the record it folds into. A reader wanting a maintained agent in this lineage is served by the other published fork, which is active and which this candidate does differ from.",
+      "useful_lesson": "A derivative can be the only living thing in its lineage and still be packaging. The rule compares fields, not vitality, and the reader is served by whichever record in the lineage is active rather than by publishing every fork that outlives its parent."
     }
   ]
 }

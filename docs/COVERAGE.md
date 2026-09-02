@@ -16,9 +16,9 @@ Measure coverage across three axes:
 
 Do not add a new family merely to fit a famous product. Add one only when its primary operational outcome cannot be scored coherently by an existing family.
 
-## Snapshot — 2026-08-29
+## Snapshot — 2026-09-02
 
-The reviewed catalog contains 111 systems: 31 memory systems, 66 agent systems, and 14 assistant systems. Sixty-eight are open-source, three use mixed open licenses, three are open-core, three are mixed-source, three are source-available, and twenty-seven are proprietary. Three records are archived and two are superseded, so 106 satisfy active-choice coverage. The provisional queue contains 115 records. The separate collections contain 21 unscored specifications, 56 scored inference services spanning direct APIs, cloud model platforms, managed hosting, and routing aggregation across North American, European, Chinese, and other international operators, and 14 scored local runtimes.
+The reviewed catalog contains 158 systems: forty-two memory systems, one hundred agent systems, and sixteen assistant systems. Six records are archived and three are superseded, so 149 satisfy active-choice coverage. The provisional queue contains fifty-five records, several of them held pending open questions recorded in `BACKLOG.md`, and twenty-five candidates have been excluded with reasons. The separate collections contain twenty-one unscored specifications, fifty-seven scored inference services, and fourteen scored local runtimes.
 
 ### Local runtimes
 
@@ -71,7 +71,7 @@ A 2026-08-31 sweep looked for widely adopted open-source systems the catalog doe
 
 **Walking fork graphs does not work.** The seventy-three published repositories carry more than half a million forks between them, dominated by personal copies: sorting one popular project's forks by stars returned repositories with 584, 70, and 28 stars. More decisively, the derivative that prompted the question is not a fork in the platform's sense at all, so no amount of graph walking would reach it. Lineage is a review-time boundary question, not a discovery mechanism.
 
-**Adoption finds candidates; the existing rules filter them.** Twenty banded searches keyed to the role vocabulary returned 327 repositories, 279 of them new, active, and not forks. Star count sorts attention but decides nothing: the highest-ranked results included a methodology, several skill libraries, an unrelated automation platform, a database, and an agent-managed museum exhibit. `CURATION.md` already excludes prompt templates, collections, and research inputs, and applying that plus the tool-and-plugin boundary removed the noise. Thirty survivors were queued.
+**Adoption finds candidates; the existing rules filter them.** Twenty banded searches keyed to the role vocabulary returned 327 repositories, 279 of them new, active, and not forks. Star count sorts attention but decides nothing: the highest-ranked results included a methodology, several skill libraries, an unrelated automation platform, a database, and an agent-managed museum exhibit. `CURATION.md` already excludes prompt templates and non-operational research inputs, and applying that plus the tool-and-plugin boundary removed the noise. Thirty survivors were queued.
 
 Band the searches. A first pass with an unbanded top-thirty cut silently dropped a twenty-eight-thousand-star coding agent because larger repositories crowded the result window.
 
