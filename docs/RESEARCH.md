@@ -94,6 +94,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | stagewise | A coding agent inside its own browser | The live page's console and structure as environment adapters, and an approval default that cannot drift | The licence appends a carve-out for bundled icons the app depends on |
 | BeeAI Framework | Tool-use control declared ahead of the run | Requirement rules validated at construction, and one agent served over three protocols | The headline promises multi-agent; coordination is under five per cent of the package |
 | grok-cli | Scheduled unattended runs on one provider | Hooks that block at tool-call time, and reproducible signed binaries | File tools resolve absolute paths with no containment; no workflow runs its tests |
+| SeekrFlow | Attribution as a platform surface | Context, training-data, and source attribution map a response back to retrieved chunks and training examples | The advertised cross-session memory has no documented surface; commercial terms are unpublished |
 
 ### Assistant-system research set
 

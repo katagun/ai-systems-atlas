@@ -1612,6 +1612,26 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "Seekr-Technologies/seekr-hatchery",
+      "name": "seekr-hatchery",
+      "url": "https://github.com/Seekr-Technologies/seekr-hatchery",
+      "description": "Task orchestration CLI that gives each coding-agent task its own git worktree, branch, task record, and Docker sandbox with a read-only repository mount.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.82,
+      "github_detected_license": null,
+      "stars": 12,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-02",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ],
   "generated_at": "2026-09-02"
