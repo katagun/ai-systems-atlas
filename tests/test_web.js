@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, updateComparisonSelection } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, parseRecordReference, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -390,5 +390,15 @@ test("every logo mapping points at a published record and a vendored plain mark"
       assert.ok(["path", "g", "circle", "rect", "ellipse", "polygon"].includes(tag), `${key} uses disallowed <${tag}>`);
     }
     assert.doesNotMatch(icon.body, /\son[a-z]+=|href=|url\(/i, `${key} carries disallowed attribute content`);
+  }
+});
+
+test("record references parse only a known kind and a plain id", () => {
+  assert.deepEqual(parseRecordReference("system:kilo-code"), { kind: "system", id: "kilo-code" });
+  assert.deepEqual(parseRecordReference("spec:mcp"), { kind: "spec", id: "mcp" });
+  assert.deepEqual(parseRecordReference("inference:openai-api"), { kind: "inference", id: "openai-api" });
+  assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
+  for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
+    assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
 });

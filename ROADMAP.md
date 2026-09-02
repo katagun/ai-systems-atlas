@@ -38,6 +38,8 @@ Decide the treatment of agent skill packs before the class grows further, separa
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 
+Decide whether the Atlas gains an explanatory layer beside the directory: a separately published, unscored collection of architecture and safety patterns drawn with the Atlas's own diagram engine, in the ADR 008 shape that ADR 021 reserved for research material. The trigger is reader demand for patterns beside products, not the existence of a same-named visual atlas; if built, diagrams stay data-defined, dependency-free at runtime, and free of unsourced numbers.
+
 Evaluate additional scored families only when a distinct operational outcome cannot fit the memory, agent, or assistant profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
 
 Exit signal: evidence of user value justifies the additional model and maintenance surface.

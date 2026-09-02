@@ -36,6 +36,7 @@ Use `uv` for Python work.
 uv sync --locked
 uv run python scripts/sync_web_data.py
 node scripts/build_logos.mjs --check
+node scripts/build_fonts.mjs --check
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests
@@ -48,7 +49,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, inference-service, and local-runtime search/filters, cross-family score hiding, scoped comparison and URL restoration, the finder handoff, taxonomy, and all four dialogs in a browser.
+Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, inference-service, and local-runtime search/filters, cross-family score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all four dialogs in a browser.
 
 ## Hard rules
 
