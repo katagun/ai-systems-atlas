@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01",
+  "generated_at": "2026-09-02",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -66,6 +66,24 @@
       "repo": "stanford-oval/storm",
       "reason": "The reviewed repository is a paper implementation rather than an operational system. Its readme presents a research preview and states the system cannot produce publication-ready articles; it ships no tests at all, its only continuous integration is a formatting check, its package still declares alpha status, its last substantive code change predates this review by more than a year, and it hard-pins a two-year-old version of the framework its own documentation calls its core. Nothing here distinguishes its outcome from a published research agent either.",
       "useful_lesson": "A laboratory release can be genuine executable code with real entry points and still be a research input. The tell is not whether code exists but whether any correctness gate does, and whether the dependency floor is frozen at the paper's date."
+    },
+    {
+      "name": "Stagehand",
+      "repo": "browserbase/stagehand",
+      "reason": "The current major version removed its agent loop on purpose. Its own migration guide states the built-in orchestrator is gone and that the library now exposes discrete tools and leaves the control flow to the caller, so it no longer owns the iterative browse-act-observe workflow the browser-agent role requires. It is a driver library that hands a browser to some other agent as tools, and the Atlas has no role for tool providers; classifying it as a framework would describe the brand rather than the operational product.",
+      "useful_lesson": "A vendor can turn an agent into a library by deleting the loop. Re-read the migration notes of a major version before trusting the role a candidate held one version earlier."
+    },
+    {
+      "name": "Agent S",
+      "repo": "simular-ai/Agent-S",
+      "reason": "The reviewed repository is paper code for three successive papers rather than an operational system. The library exposes a single-step prediction call and leaves the loop to a fifteen-step demo command line that executes model-generated Python on the host directly beneath a comment promising a confirmation prompt that does not exist. It carries one provider-configuration test, a formatting-only continuous-integration check, no package development-status classifier, no release since December 2025, and keeps four paper versions with their benchmark harnesses side by side. The vendor's maintained product is a separate proprietary cloud desktop agent.",
+      "useful_lesson": "A company-published paper implementation can be maintained enough to merge community provider changes and still lack any correctness gate. The additional tell here is that the loop lives in the demo, not the library."
+    },
+    {
+      "name": "herdr",
+      "repo": "herdrdev/herdr",
+      "reason": "The system owns terminals rather than agents. Its package manifest describes it as a terminal workspace manager for coding agents, and its documentation says it does not wrap or replace them but owns their terminals. It makes no model calls and holds no identity, memory, skills, or schedules of its own; the agent state it shows is inferred by pattern-matching the screen text of another product. It is well built, and it is a process supervisor.",
+      "useful_lesson": "A tagline promising the runtime your agents live on can mean a process supervisor. Check for a provider directory before checking for a memory directory."
     }
   ]
 }

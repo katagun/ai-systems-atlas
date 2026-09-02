@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01",
+  "generated_at": "2026-09-02",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -10533,7 +10533,7 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "current_repo_note": "The repository open-sources a subset of the capabilities described in the vendor's published paper; the commercial self-managed edition is activated by a license key whose code is not in this repository.",
+      "current_repo_note": "The repository open-sources a subset of the capabilities described in the vendor's published paper; the commercial self-managed edition is activated by a license key whose code is not in this repository. The bundled agent module is a port of the separately published nanobot runtime.",
       "score": {
         "second_brain_fit": 6.4,
         "data_sovereignty": 8.6,
@@ -11944,6 +11944,334 @@
       "forks": 4049,
       "open_issues": 178,
       "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "skyvern",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Skyvern",
+      "repo": "Skyvern-AI/skyvern",
+      "url": "https://github.com/Skyvern-AI/skyvern",
+      "description": "Browser-workflow agent that plans and executes tasks on websites through a driven browser and vision models, with a workflow builder, self-hosted server, libraries, and a managed cloud.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "openai_compatible",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "raw_media",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "tasks, workflow definitions and runs, steps and actions, screenshots and recordings, credentials, and extracted data in a database the operator runs plus artifact storage",
+      "deployment": [
+        "local_cli",
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "workflows",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts — anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors — live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.0,
+        "autonomy": 7.8,
+        "human_control": 7.0,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 6.6,
+        "interoperability": 8.4,
+        "maturity": 7.4,
+        "overall": 7.61
+      },
+      "strengths": [
+        "A budgeted, retrying step loop with a failure classifier, and a second-generation tool-calling engine with stall detection",
+        "One codebase covers a command line, an embedded library, a self-hosted server with a workflow builder, container orchestration, and a cloud",
+        "Broad model backends including local and compatible endpoints, plus a tool server and workflow-automation integrations"
+      ],
+      "weaknesses": [
+        "The advertised anti-bot and captcha solving are cloud-only overrides of open stubs that return nothing",
+        "Telemetry is on by default, and the workflow code block executes user Python in the server process behind an allowlist rather than a sandbox",
+        "Package releases trail the repository's tags, and the quick-install path has shipped broken releases"
+      ],
+      "why_it_matters": "The most complete self-hostable browser agent with a workflow builder and credential handling, and a clear demonstration of where an open core stops and the vendor cloud begins.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "AGPL-3.0",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "stars": 22907,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T03:57:00Z",
+      "forks": 2152,
+      "open_issues": 216,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "cowagent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "CowAgent",
+      "repo": "zhayujie/CowAgent",
+      "url": "https://github.com/zhayujie/CowAgent",
+      "description": "Self-hosted personal agent runtime that plans and runs tool calls over per-agent workspaces holding memory, knowledge, skills, and schedules, reachable from a web console, terminal, desktop app, and messaging channels.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "moonshot_ai",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "vector_index",
+        "plain_files",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "upsert_rewrite",
+        "self_editing",
+        "human_curated"
+      ],
+      "canonical_data": "per-agent workspaces of identity, memory, knowledge, and skill files plus a scheduler store, alongside a local database of sessions, messages, runs, and memory chunks",
+      "deployment": [
+        "local_cli",
+        "desktop",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Renamed from chatgpt-on-wechat within the same history, so it stays one record. The rename changed nothing operational; the change that earns this role is the 2.0 agent core released ten weeks earlier, before which the project was a messaging bridge. The container image, compose file, and package metadata still carry the former name.",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 8.2,
+        "autonomy": 7.8,
+        "human_control": 5.4,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.4,
+        "maturity": 6.2,
+        "overall": 6.97
+      },
+      "strengths": [
+        "Standing named agents are the runtime's unit, each with its own workspace, memory, skills, sessions, scheduler, and channel bindings, with delegation between them recorded as parent and child runs",
+        "Memory is a real three-tier system with full-text and vector search in one local database and a scheduled distillation pass, all held in readable Markdown",
+        "The broadest coverage of Chinese messaging platforms of any reviewed runtime, alongside the Western ones"
+      ],
+      "weaknesses": [
+        "The permission model checks tool arguments rather than sandboxing, and defaults to full access on existing installations",
+        "Continuous integration runs no general test suite, so the substantial test tree is only as good as the maintainer's local runs",
+        "Development is effectively single-maintainer, and the container image and package metadata still carry the pre-rename identity"
+      ],
+      "why_it_matters": "Shows a messaging-bot repository turning into a multi-agent personal runtime while keeping its channel reach, with peer delegation recorded as durable runs rather than ephemeral subagents.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 46754,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T12:23:18Z",
+      "forks": 10332,
+      "open_issues": 46,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "nanobot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "nanobot",
+      "repo": "HKUDS/nanobot",
+      "url": "https://github.com/HKUDS/nanobot",
+      "description": "Self-hosted personal agent runtime with version-controlled Markdown memory, scheduled automations, skills, subagents, and many chat channels, exposed through a terminal, web console, Python library, and compatible API.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "openai_compatible",
+        "openrouter",
+        "local_runtime",
+        "x_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "upsert_rewrite",
+        "versioned",
+        "self_editing"
+      ],
+      "canonical_data": "an agent workspace of identity, user, and memory files, an append-only history log, heartbeat and scheduled jobs, and skills under version control, plus session files kept outside it",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The discovery sweep read 'framework' from the tagline, but the readme calls it a self-hosted personal agent runtime two sections later and the code agrees. It is the upstream of the agent module vendored into the published OpenViking record, which ports it at an early version. The package still classifies itself as alpha.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.4,
+        "autonomy": 8.2,
+        "human_control": 5.6,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.8,
+        "maturity": 6.6,
+        "overall": 7.62
+      },
+      "strengths": [
+        "Memory is layered and auditable: an append-only history, a consolidator, a scheduled distillation pass, and version-control history of every durable-file change",
+        "The same runtime is reachable as a command line, a web console, a compatible model endpoint, and a Python library, so it embeds without forking, which a published memory record already did",
+        "Interrupted turns recover from checkpoints without replaying tool calls that had side effects"
+      ],
+      "weaknesses": [
+        "The lightweight claim describes a small core, not the package, whose channel code alone is several times larger",
+        "Process isolation has one backend and is Linux-only; other platforms get application-level guards the code says are not a sandbox",
+        "Control governs who may talk to the agent rather than what it may run; there is no approval step before a tool executes"
+      ],
+      "why_it_matters": "The most widely adopted open runtime of its shape that is also a library, and the upstream of the agent bundled into a published memory system.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 47627,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T20:34:19Z",
+      "forks": 8406,
+      "open_issues": 757,
+      "metadata_verified_at": "2026-09-02",
       "github_detected_license": "MIT"
     }
   ]

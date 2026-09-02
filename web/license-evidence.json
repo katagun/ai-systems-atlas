@@ -2286,7 +2286,59 @@
           "immutable_url": "https://api.github.com/repos/langchain-ai/deepagents/git/blobs/3957738673765912ca83a0048f833e095d61e087"
         }
       ]
+    },
+    {
+      "project_id": "skyvern",
+      "repo": "Skyvern-AI/skyvern",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Whole repository under the GNU Affero General Public License 3.0; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Skyvern-AI/skyvern/blob/main/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/Skyvern-AI/skyvern/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "The managed cloud and its anti-bot, captcha, enterprise-gating, and billing components, which the repository's own code comments describe as cloud overrides living outside this tree",
+          "kind": "web_terms",
+          "url": "https://www.skyvern.com/",
+          "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "cowagent",
+      "repo": "zhayujie/CowAgent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, carrying the author's copyright without a title line",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/zhayujie/CowAgent/blob/main/LICENSE",
+          "blob_sha": "fd03f7c24a514e138467c303e3641a49811bc9c9",
+          "immutable_url": "https://api.github.com/repos/zhayujie/CowAgent/git/blobs/fd03f7c24a514e138467c303e3641a49811bc9c9"
+        }
+      ]
+    },
+    {
+      "project_id": "nanobot",
+      "repo": "HKUDS/nanobot",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the separately distributed terminal interface archive carries its own notices for bundled copyleft components",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/HKUDS/nanobot/blob/main/LICENSE",
+          "blob_sha": "e06eb24cf4abdc5b46d354fc7d1c9531b2f52dfa",
+          "immutable_url": "https://api.github.com/repos/HKUDS/nanobot/git/blobs/e06eb24cf4abdc5b46d354fc7d1c9531b2f52dfa"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-01"
+  "generated_at": "2026-09-02"
 }
