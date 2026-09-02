@@ -2163,6 +2163,129 @@
           "immutable_url": "https://api.github.com/repos/esengine/DeepSeek-Reasonix/git/blobs/bc45a281d8050c59c9b833ea2d0b1fb6e02602c0"
         }
       ]
+    },
+    {
+      "project_id": "crush",
+      "repo": "charmbracelet/crush",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under the Functional Source License 1.1 with MIT Future License, which bars competing commercial use and converts to permissive terms two years after each release; the same file carries a separate permissive grant covering the original author's contributions before the project was relicensed",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/charmbracelet/crush/blob/main/LICENSE.md",
+          "blob_sha": "950d0d85cee17e533b53572b19ba34d689d42680",
+          "immutable_url": "https://api.github.com/repos/charmbracelet/crush/git/blobs/950d0d85cee17e533b53572b19ba34d689d42680"
+        }
+      ]
+    },
+    {
+      "project_id": "qwen-code",
+      "repo": "QwenLM/qwen-code",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository root under the Apache License 2.0, with the appendix naming both the upstream author and the fork maintainer",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/QwenLM/qwen-code/blob/main/LICENSE",
+          "blob_sha": "2d4f1fee82272cbad5f22394dc064e621f668aac",
+          "immutable_url": "https://api.github.com/repos/QwenLM/qwen-code/git/blobs/2d4f1fee82272cbad5f22394dc064e621f668aac"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "First-party editor extension package under the MIT License",
+          "kind": "git_blob",
+          "path": "packages/zed-extension/LICENSE",
+          "url": "https://github.com/QwenLM/qwen-code/blob/main/packages/zed-extension/LICENSE",
+          "blob_sha": "1600dfe565f7b680fc54cf3a64da561b0e0bbbdf",
+          "immutable_url": "https://api.github.com/repos/QwenLM/qwen-code/git/blobs/1600dfe565f7b680fc54cf3a64da561b0e0bbbdf"
+        },
+        {
+          "license_id": "Unlicense",
+          "scope": "Vendored search component dual-licensed under the Unlicense and the MIT License",
+          "kind": "git_blob",
+          "path": "packages/core/vendor/ripgrep/COPYING",
+          "url": "https://github.com/QwenLM/qwen-code/blob/main/packages/core/vendor/ripgrep/COPYING",
+          "blob_sha": "bb9c20a094e41b7632d63bcff20c0b4b95e80777",
+          "immutable_url": "https://api.github.com/repos/QwenLM/qwen-code/git/blobs/bb9c20a094e41b7632d63bcff20c0b4b95e80777"
+        }
+      ]
+    },
+    {
+      "project_id": "continue",
+      "repo": "continuedev/continue",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/continuedev/continue/blob/main/LICENSE",
+          "blob_sha": "c25dc1768217ba50d454fcc06290d66886512872",
+          "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/c25dc1768217ba50d454fcc06290d66886512872"
+        }
+      ]
+    },
+    {
+      "project_id": "roo-code",
+      "repo": "RooCodeInc/Roo-Code",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/LICENSE",
+          "blob_sha": "302fa51c8a6e47ad20ae0092cc302a3af9f59107",
+          "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/302fa51c8a6e47ad20ae0092cc302a3af9f59107"
+        }
+      ]
+    },
+    {
+      "project_id": "vane",
+      "repo": "ItzCrazyKns/Vane",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ItzCrazyKns/Vane/blob/main/LICENSE",
+          "blob_sha": "f94c7b0dabce11a8f6c98749125b15a9ced41137",
+          "immutable_url": "https://api.github.com/repos/ItzCrazyKns/Vane/git/blobs/f94c7b0dabce11a8f6c98749125b15a9ced41137"
+        }
+      ]
+    },
+    {
+      "project_id": "dexter",
+      "repo": "virattt/dexter",
+      "items": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "No licence file exists in the repository and none ever has; the package manifest declares no licence, and the platform reports none. This readme is the only artifact asserting terms, in a single sentence with no accompanying grant",
+          "kind": "git_blob",
+          "path": "README.md",
+          "url": "https://github.com/virattt/dexter/blob/main/README.md",
+          "blob_sha": "ed1b9350b9af933eb6c5f9cb12360d4d42da7a0c",
+          "immutable_url": "https://api.github.com/repos/virattt/dexter/git/blobs/ed1b9350b9af933eb6c5f9cb12360d4d42da7a0c"
+        }
+      ]
+    },
+    {
+      "project_id": "deepagents",
+      "repo": "langchain-ai/deepagents",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under the MIT License, matched by the licence files shipped with each published package",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langchain-ai/deepagents/blob/main/LICENSE",
+          "blob_sha": "3957738673765912ca83a0048f833e095d61e087",
+          "immutable_url": "https://api.github.com/repos/langchain-ai/deepagents/git/blobs/3957738673765912ca83a0048f833e095d61e087"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-01"

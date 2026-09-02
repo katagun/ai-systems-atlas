@@ -64,6 +64,13 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | oh-my-claudecode | Orchestrating rival vendors' agents | Supervises six competing coding-agent tools as interchangeable workers | The primary surface runs nothing without the host agent and a paid subscription |
 | Codewhale | Authorization written as specification | Nine ordered approval layers, and sandbox docs that name what is not wired | Telemetry defaults to on, and the licence still names the pre-rename identity |
 | Reasonix | A whole agent in one static binary | Self-contained cross-compiled distribution with reversible file-snapshot checkpoints | The shipped code lives on a rewrite branch; the repository's named branch is abandoned |
+| Crush | Source-available coding agency | Language-server operations as agent tools, and one local backend serving several clients | Licence bars competing commercial use; project config is executed shell |
+| Qwen Code | A provider fork that outgrew its upstream | Sandboxed execution, subagents, and a client surface wider than the record it descends from | Surface area outruns evidence, and the headline install pipes a hosted script into a shell |
+| Continue | A coding agent that ended deliberately | Removed telemetry, authentication, and hosted coupling before freezing at a final release | Read-only and unmaintained; headless mode allows every tool by default |
+| Roo Code | The middle link of a fork chain | Per-task checkpoints and a shim letting one core run outside the editor | Shut down and delisted; its command line auto-approves by default |
+| Vane | A bounded research loop, self-hosted | An explicit tool registry with a deliberate finish action, and a plan shown to the reader | No tests or CI beyond an image build; dormant, with advertised providers absent |
+| dexter | Domain tools carry the specialisation | Nine implemented finance tools and a shell-parsing permission engine that fails closed | No licence file has ever existed; all data flows through one hard-coded vendor |
+| deepagents | A harness that earns its own build target | Its own storage protocol, model harness profiles, and three external benchmarks in CI | Inseparable from the framework beneath it, whose vendor tracing is a hard dependency |
 
 ### Assistant-system research set
 

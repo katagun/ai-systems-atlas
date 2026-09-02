@@ -437,8 +437,13 @@ def refresh_projects(
 
         successes += 1
         review_was_open = project.get("license_review_status") == "review_required"
-        if project.get("status") != "candidate":
-            project["status"] = "archived" if metadata.get("archived") else "active"
+        # Metadata may archive an active record, and never overwrites an
+        # editorial status. GitHub reports archived=false for a project whose
+        # maintainers wound it down without archiving the repository, and for a
+        # superseded predecessor under ADR 016, so deriving the status in both
+        # directions would silently revert a reviewed decision.
+        if project.get("status") == "active" and metadata.get("archived"):
+            project["status"] = "archived"
         project.update({
             "stars": metadata.get("stargazers_count"),
             "stars_verified_at": refreshed_at,

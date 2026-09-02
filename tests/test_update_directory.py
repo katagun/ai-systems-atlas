@@ -135,6 +135,36 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("review_required", project["license_review_status"])
         self.assertEqual("2026-08-24", reviews[0]["detected_at"])
 
+    def test_editorial_status_survives_a_metadata_refresh(self) -> None:
+        superseded = project_fixture(status="superseded")
+        archived = project_fixture(status="archived")
+
+        update_directory.refresh_projects(
+            [superseded, archived],
+            {},
+            lambda _path, _token: metadata_fixture("MIT"),
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
+        )
+
+        self.assertEqual("superseded", superseded["status"])
+        self.assertEqual("archived", archived["status"])
+
+    def test_refresh_still_archives_a_record_its_repository_archived(self) -> None:
+        project = project_fixture()
+
+        def archived_metadata(_path: str, _token: str | None) -> dict:
+            metadata = metadata_fixture("MIT")
+            metadata["archived"] = True
+            return metadata
+
+        update_directory.refresh_projects(
+            [project], {}, archived_metadata, None, "2026-08-25", sleeper=lambda _delay: None
+        )
+
+        self.assertEqual("archived", project["status"])
+
     def test_local_runtime_stars_refresh_updates_descriptive_metadata_only(self) -> None:
         runtime = {
             "id": "sample-runtime",

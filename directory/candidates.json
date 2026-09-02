@@ -368,32 +368,6 @@
       ]
     },
     {
-      "repo": "continuedev/continue",
-      "name": "continue",
-      "url": "https://github.com/continuedev/continue",
-      "description": "open-source coding agent",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "Apache-2.0",
-      "stars": 35625,
-      "topics": [
-        "agent",
-        "ai",
-        "cli",
-        "developer-tools",
-        "open-source"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "decodingai-magazine/second-brain-ai-assistant-course",
       "name": "second-brain-ai-assistant-course",
       "url": "https://github.com/decodingai-magazine/second-brain-ai-assistant-course",
@@ -945,41 +919,6 @@
         "realtime",
         "vectors",
         "websockets"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "ItzCrazyKns/Vane",
-      "name": "Vane (formerly Perplexica)",
-      "url": "https://github.com/ItzCrazyKns/Vane",
-      "description": "Self-hostable AI answering engine that searches current web sources, refines retrieval, and returns synthesized answers with citations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.85,
-      "github_detected_license": "MIT",
-      "stars": 36471,
-      "topics": [
-        "ai-agents",
-        "ai-search-engine",
-        "answering-engine",
-        "artificial-intelligence",
-        "llm",
-        "machine-learning",
-        "open-source-ai-search-engine",
-        "perplexica",
-        "rag",
-        "search-engine",
-        "searxng",
-        "searxng-copilot",
-        "self-hosted-ai",
-        "vane"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1702,39 +1641,6 @@
       ]
     },
     {
-      "repo": "QwenLM/qwen-code",
-      "name": "qwen-code",
-      "url": "https://github.com/QwenLM/qwen-code",
-      "description": "An open-source AI coding agent that lives in your terminal.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27362,
-      "topics": [
-        "agentic",
-        "ai",
-        "ai-agent",
-        "ai-coding",
-        "cli",
-        "coding-agent",
-        "developer-tools",
-        "llm",
-        "mcp",
-        "qwen",
-        "terminal",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "revezone/revezone",
       "name": "revezone",
       "url": "https://github.com/revezone/revezone",
@@ -1760,29 +1666,6 @@
         "second-brain",
         "tldraw",
         "whiteboard"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "RooCodeInc/Roo-Code",
-      "name": "Roo Code",
-      "url": "https://github.com/RooCodeInc/Roo-Code",
-      "description": "Roo Code gives developers a team of configurable coding agents inside the editor.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.99,
-      "github_detected_license": "Apache-2.0",
-      "stars": 24325,
-      "topics": [
-        "coding-agent",
-        "ide"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -2009,36 +1892,6 @@
         "agent",
         "agent-orchestration",
         "ide"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "stanford-oval/storm",
-      "name": "STORM",
-      "url": "https://github.com/stanford-oval/storm",
-      "description": "Knowledge-curation system that performs multi-perspective research and generates cited, full-length reports.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": "MIT",
-      "stars": 31131,
-      "topics": [
-        "agentic-rag",
-        "deep-research",
-        "emnlp2024",
-        "knowledge-curation",
-        "large-language-models",
-        "naacl",
-        "nlp",
-        "report-generation",
-        "retrieval-augmented-generation"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -2613,29 +2466,6 @@
       ]
     },
     {
-      "repo": "langchain-ai/deepagents",
-      "name": "deepagents",
-      "url": "https://github.com/langchain-ai/deepagents",
-      "description": "The batteries-included agent harness.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 28773,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "BloopAI/vibe-kanban",
       "name": "vibe-kanban",
       "url": "https://github.com/BloopAI/vibe-kanban",
@@ -2645,29 +2475,6 @@
       "classification_confidence": 0.72,
       "github_detected_license": "Apache-2.0",
       "stars": 27972,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "charmbracelet/crush",
-      "name": "crush",
-      "url": "https://github.com/charmbracelet/crush",
-      "description": "Glamourous agentic coding for all 💘",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "NOASSERTION",
-      "stars": 27839,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"
@@ -2714,29 +2521,6 @@
       "classification_confidence": 0.64,
       "github_detected_license": "Apache-2.0",
       "stars": 32463,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "virattt/dexter",
-      "name": "dexter",
-      "url": "https://github.com/virattt/dexter",
-      "description": "An autonomous agent for deep financial research",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.66,
-      "github_detected_license": null,
-      "stars": 27561,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"
@@ -2858,6 +2642,30 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-31",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Zoo-Code-Org/Zoo-Code",
+      "name": "Zoo Code",
+      "url": "https://github.com/Zoo-Code-Org/Zoo-Code",
+      "description": "Community continuation of Roo Code, carrying the same editor coding agent forward after its maintainers wound the product down.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.9,
+      "github_detected_license": "Apache-2.0",
+      "stars": 1774,
+      "topics": [
+        "coding-agent",
+        "fork",
+        "vscode"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-01",
       "review_required": [
         "licensing",
         "classification",
