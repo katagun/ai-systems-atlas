@@ -2503,6 +2503,88 @@
           "immutable_url": "https://api.github.com/repos/MemTensor/MemOS/git/blobs/2090de541d3389f3da3d001d37e6426fe5c93779"
         }
       ]
+    },
+    {
+      "project_id": "magentic-ui",
+      "repo": "microsoft/magentic-ui",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; an accompanying notice file records that part of the tool directory derives from another permissively licensed agent project",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/microsoft/magentic-ui/blob/main/LICENSE",
+          "blob_sha": "269a8973689dbb250d355f516f8a30c1cc66b8e4",
+          "immutable_url": "https://api.github.com/repos/microsoft/magentic-ui/git/blobs/269a8973689dbb250d355f516f8a30c1cc66b8e4"
+        }
+      ]
+    },
+    {
+      "project_id": "taskweaver",
+      "repo": "microsoft/TaskWeaver",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, indented throughout but substantively canonical; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/microsoft/TaskWeaver/blob/main/LICENSE",
+          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+          "immutable_url": "https://api.github.com/repos/microsoft/TaskWeaver/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
+        }
+      ]
+    },
+    {
+      "project_id": "omnigent",
+      "repo": "omnigent-ai/omnigent",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0, omitting only the optional appendix; a bundled editor extension carries the identical licence file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/omnigent-ai/omnigent/blob/main/LICENSE",
+          "blob_sha": "d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe",
+          "immutable_url": "https://api.github.com/repos/omnigent-ai/omnigent/git/blobs/d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe"
+        }
+      ]
+    },
+    {
+      "project_id": "swarms",
+      "repo": "kyegomez/swarms",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/kyegomez/swarms/blob/main/LICENSE",
+          "blob_sha": "601999fa2ce76ac8f33c9cfe3f9cd4f3791bbdbe",
+          "immutable_url": "https://api.github.com/repos/kyegomez/swarms/git/blobs/601999fa2ce76ac8f33c9cfe3f9cd4f3791bbdbe"
+        }
+      ]
+    },
+    {
+      "project_id": "open-swe",
+      "repo": "langchain-ai/open-swe",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under the MIT License, covering the agent graphs and dashboard",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/langchain-ai/open-swe/blob/main/LICENSE",
+          "blob_sha": "611da687a0f196b8ea5329ef1c4923ef9d4e4ec3",
+          "immutable_url": "https://api.github.com/repos/langchain-ai/open-swe/git/blobs/611da687a0f196b8ea5329ef1c4923ef9d4e4ec3"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "The agent server this project pins for production self-hosting, published under the Elastic License 2.0 and requiring a licence key; that licence has no identifier in the vocabulary, and this reference stands for it",
+          "kind": "web_terms",
+          "url": "https://pypi.org/project/langgraph-api/",
+          "verified_at": "2026-09-02"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

@@ -13281,6 +13281,531 @@
       "open_issues": 70,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "magentic-ui",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "MagenticLite",
+      "repo": "microsoft/magentic-ui",
+      "url": "https://github.com/microsoft/magentic-ui",
+      "description": "Locally installed browser and filesystem agent that runs its browser inside a virtual-machine sandbox and pairs a small orchestrator model with a separate vision model for browser actions.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "raw_media"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen",
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "sessions, runs, messages, settings, and trusted-folder grants in a local database, plus per-run screenshots and the folders the user has mounted",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "shell_execution",
+        "code_editing",
+        "persistent_state",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Renamed and rewritten within one repository and one package, so it stays one record; the rewrite replaced most of the tree and removed the collaborative planning feature the earlier version was known for. Its dependency on the vendor's superseded agent framework has been severed entirely: the current package manifest names none of it. The maintainer describes it as a research prototype and advises against production use, and the package still declares an alpha classifier.",
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 7.0,
+        "autonomy": 7.0,
+        "human_control": 8.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.0,
+        "interoperability": 5.8,
+        "maturity": 6.2,
+        "overall": 7.37
+      },
+      "strengths": [
+        "It runs the browser inside a virtual machine by default rather than a container or the bare host, the strongest isolation boundary of any browser agent reviewed",
+        "Human control is machinery rather than prompting: a large command policy with deny patterns, approval required for anything untrusted as the shipped default, an explicit grant table for folders, mid-run steering, and browser takeover, each with tests behind it",
+        "It is engineered to run on small models, with a documented end-to-end self-hosting path that makes a fully operator-controlled deployment achievable rather than theoretical"
+      ],
+      "weaknesses": [
+        "The rewrite deleted the collaborative planning feature the project was known for, which its own public description still advertises",
+        "The maintainer explicitly advises against commercial or real-world use and the package still declares alpha status after sixteen releases",
+        "Provider breadth is thin and momentum has stalled: two model clients, no tool-server support, a browser role that accepts only two model variants, and six weeks with no human merge while dependency updates queue"
+      ],
+      "why_it_matters": "The only browser agent reviewed that ships as an installed local application running its browser inside a virtual machine, and the clearest demonstration that a capable agent loop can be built for small self-hostable models rather than frontier ones.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 10080,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T22:15:06Z",
+      "forks": 1016,
+      "open_issues": 14,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "taskweaver",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "TaskWeaver",
+      "repo": "microsoft/TaskWeaver",
+      "url": "https://github.com/microsoft/TaskWeaver",
+      "description": "Archived code-first agent that answers data-analysis requests by planning, generating, and verifying Python, then executing it in a stateful kernel that preserves in-memory data across turns.",
+      "primary_role": "data_analysis_agent",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "local_runtime",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "per-session workspace directories with conversation files, an execution working directory, distilled experience files, and plugin definitions the user authors",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "code_editing",
+        "multi_agent",
+        "persistent_state",
+        "workflows",
+        "research"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "archived",
+      "current_repo_note": "Archived by its maintainer with no notice on the readme or the still-live documentation site, so both surfaces still read as an active project. It was never published to a package index; the only install paths are a clone or a version-control URL against one of two tags, against a declared version far beyond them.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 6.4,
+        "autonomy": 6.6,
+        "human_control": 6.4,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 7.6,
+        "interoperability": 6.0,
+        "maturity": 4.4,
+        "overall": 6.54
+      },
+      "strengths": [
+        "Code verification is real machinery rather than a prompt, walking the syntax tree with configurable allow and block lists and an explicit dangerous-builtins list, feeding a bounded revise-and-retry loop",
+        "Stateful execution is the design centre: the kernel keeps in-memory tables alive across turns, so multi-step analysis composes instead of restarting, which is the specific thing query-generating agents cannot do",
+        "Unusually broad provider coverage for its era, spanning five vendors plus local runtimes, with container execution by default and a published executor image"
+      ],
+      "weaknesses": [
+        "The repository is archived with no notice on the readme or the live documentation site, so both still read as active",
+        "It was never published to a package index, so it cannot be a dependency and the only install paths are a clone or a version-control URL",
+        "No approval step exists before generated code runs, which its own contribution wish-list asks for, and there is no tool-server support"
+      ],
+      "why_it_matters": "The clearest worked example of a data agent built on generated Python over live in-memory state rather than on generated queries, with syntax-tree verification of that code before it runs.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 6171,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-03-23T06:17:21Z",
+      "forks": 781,
+      "open_issues": 53,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "omnigent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Omnigent",
+      "repo": "omnigent-ai/omnigent",
+      "url": "https://github.com/omnigent-ai/omnigent",
+      "description": "Meta-harness that runs a declaratively defined agent on any of a dozen vendors' coding-agent harnesses, with its own policy engine, operating-system sandboxes, and a self-hosted server reachable from terminal, browser, desktop, and phone.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk",
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log",
+        "plain_files",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "sessions, conversations, agent and policy definitions, projects, files, and scheduled tasks in a self-hosted database the operator chooses, plus per-session working trees on the host",
+      "deployment": [
+        "local_cli",
+        "desktop",
+        "mobile",
+        "self_hosted",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "ide",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Published under a neutral organisation but first-party to a named company, which holds the copyright and is the package author. A framework reading is genuinely arguable and the package's own summary takes it; the orchestrator reading rests on the routing relay that interposes on a harness's own subagent spawn and on mixing several vendors' agents in one session. Its third-party notice attributes two copyleft dependencies, neither of which is vendored into the tree.",
+      "score": {
+        "task_reliability": 8.2,
+        "tool_use": 8.0,
+        "autonomy": 7.2,
+        "human_control": 8.8,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 9.2,
+        "maturity": 5.6,
+        "overall": 7.88
+      },
+      "strengths": [
+        "The harness abstraction is real and symmetric, with paired executor modules for about a dozen competing vendors' agents, a capability matrix, and a contribution-gating bench that checks each against observed behaviour",
+        "Control is engineered as a first-class layer rather than prompt text: stacked server, agent, and session policies evaluated in a deliberately non-Turing-complete expression language, with spend caps and credentials brokered away from the agent",
+        "Correctness infrastructure is unusual for a three-month-old project, with a sharded test matrix, separate runs against two database engines, and a parity job that builds a sidecar to check a wrapped vendor tool"
+      ],
+      "weaknesses": [
+        "It is pre-release and says so, while more than a thousand open issues have accumulated in under three months",
+        "The subagent routing gate is advisory by design: any transport failure, timeout, or unparseable verdict silently allows the spawn, so the routing policy is not a boundary a reader can rely on",
+        "Telemetry is enabled by default and fetches its own remote configuration from a vendor endpoint, so a fully offline install requires opting out before first run"
+      ],
+      "why_it_matters": "The most complete attempt so far to make competing vendors' coding agents interchangeable executors behind one declarative agent file, one policy layer, and one sandbox.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 9614,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T13:40:26Z",
+      "forks": 1488,
+      "open_issues": 1185,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "open-swe",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Open SWE",
+      "repo": "langchain-ai/open-swe",
+      "url": "https://github.com/langchain-ai/open-swe",
+      "description": "Self-hosted system that takes code-change and code-review tasks from a dashboard, a code host, chat, or a schedule, works in a per-thread sandbox, and delivers pull requests.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "moonshot_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files",
+        "git_versioned",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "durable threads and checkpoints bound to persistent sandboxes, plus pull requests, review findings, learned review preferences, skills, and automation definitions",
+      "deployment": [
+        "self_hosted",
+        "desktop",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "external_sandbox",
+        "remote_cloud",
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "The repository is permissively licensed, but the agent server it pins for production self-hosting is licensed on restricted terms and gated on a licence key, so the permissive badge covers the graphs and not the runtime that serves them. That runtime's licence has no identifier in the vocabulary and is recorded under the general commercial reference. The project was repositioned in September 2026 beyond the framing of its original announcement, which is a scope change on one record rather than supersession.",
+      "score": {
+        "task_reliability": 8.2,
+        "tool_use": 8.6,
+        "autonomy": 8.4,
+        "human_control": 8.2,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 5.0,
+        "interoperability": 6.2,
+        "maturity": 6.6,
+        "overall": 7.64
+      },
+      "strengths": [
+        "It owns the whole delivery loop rather than the agent turn, with five distinct graphs, dozens of purpose-built tools, and a reviewer evaluated in continuous integration against golden comments mined from five real open-source repositories",
+        "Authorisation and containment are product features rather than deployment advice, with organisation and repository allowlists checked against the actor, approval before workflow-file pushes, and read-only review and chat graphs",
+        "Failure semantics are stated and enforced: a store outage raises rather than reading as empty, and an unreachable sandbox fails the run rather than being silently replaced and losing uncommitted work"
+      ],
+      "weaknesses": [
+        "Production self-hosting is not fully open, because the agent server it pins is licensed on restricted terms and gated on a licence key",
+        "The vendor's own platform is the default for both sandboxing and tracing, and its key appears among the standalone deployment's required settings, so the lowest-friction path routes work and traces through that service",
+        "Models are a closed list in the dashboard with no compatible endpoint or local runtime, so a deployer who self-hosts the infrastructure still cannot self-host the model"
+      ],
+      "why_it_matters": "The clearest worked example of a coding agent packaged as deployable infrastructure, with triggers, sandboxes, review, and delivery, rather than as a library an integrator has to assemble.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified",
+      "stars": 10651,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T13:37:17Z",
+      "forks": 1254,
+      "open_issues": 68,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "swarms",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Swarms",
+      "repo": "kyegomez/swarms",
+      "url": "https://github.com/kyegomez/swarms",
+      "description": "Python framework whose director agent parses typed orders and dispatches them to named worker agents, with dozens of prebuilt coordination structures and a command-line interface.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "deepseek",
+        "mistral",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "application-defined agent conversations and swarm task state",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Its dispatch was verified by running the published package offline against stub workers with no network, so the failure recorded against another orchestrator, whose advertised engine was absent from its shipped package, does not apply here. The overstatement is in the marketing rather than the machinery: the readme promises an availability guarantee and enterprise high-availability for a library whose own manifest declares beta status, and its citation file names a version many majors behind what ships.",
+      "score": {
+        "task_reliability": 5.2,
+        "tool_use": 7.4,
+        "autonomy": 7.6,
+        "human_control": 3.2,
+        "observability_recovery": 6.0,
+        "data_sovereignty": 3.6,
+        "interoperability": 7.0,
+        "maturity": 5.4,
+        "overall": 5.57
+      },
+      "strengths": [
+        "The hierarchical dispatch is typed machinery in the shipped package rather than a prompt pattern, gated on a schema parsed from the director's tool call that raises rather than degrading to text",
+        "Dozens of structures cover genuinely distinct coordination shapes, each with a matching test module",
+        "Recent maintenance is corrective rather than promotional, reading as a defect-fix train through the coordination structures themselves"
+      ],
+      "weaknesses": [
+        "The test gate is nominal: not one passing run in the last thirty, every one killed at the workflow's timeout, so no change to the coordination structures has been mechanically verified",
+        "Telemetry is on by default and carries task text, model output, and serialised conversation state to a vendor endpoint behind a single environment variable",
+        "No approval, interrupt, or gating primitive exists anywhere in the coordination structures, and published release notes stopped nine major versions ago"
+      ],
+      "why_it_matters": "The most heavily forked general multi-agent orchestrator whose dispatch really is implemented in the shipped package, wrapped in enterprise claims its own release metadata contradicts.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 7117,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T02:22:05Z",
+      "forks": 1010,
+      "open_issues": 164,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
     }
   ]
 }

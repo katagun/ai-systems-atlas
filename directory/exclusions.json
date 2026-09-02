@@ -96,6 +96,18 @@
       "repo": "InsForge/InsForge",
       "reason": "A relational backend-as-a-service for coding agents whose ten products are database, authentication, storage, realtime, functions, a model gateway, sites, messaging, payments, and compute. Its one memory route is three commits old, undocumented, and not exposed through its tool server, and a vector extension inside a general database offering is not retrieval infrastructure any more than it is in the hosted database platforms it compares itself to. The agent is the operator of the backend, not the subject it serves.",
       "useful_lesson": "Vector and embedding topics on a repository identify a database extension, not a memory system. Check the products page before the schema."
+    },
+    {
+      "name": "MiroThinker",
+      "repo": "MiroMindAI/MiroThinker",
+      "reason": "The repository is a model release with an evaluation harness rather than an operational agent. Its readme is a model card of weight collections, parameter tables, and benchmark charts, and its quick start frames the bundled scaffold as what it recommends running those weights with. It has no tests: the test configuration declares a test directory and a full coverage and type-checking stack, and no such directory exists anywhere in the tree. Its only workflow is a lint and format check. It has no tags, no releases, and neither of its packages exists on a package index. Its single entry point hard-codes an example task, all fifteen of its scripts are benchmark evaluation runners, and the benchmark tree sits inside the agent application. The maintained framework is a separate repository the readme never links, and the operational product the readme markets is a proprietary hosted agent.",
+      "useful_lesson": "A large orchestrator with rollback and turn budgets can still be a research input. The tell is not the sophistication of the loop but whether the repository is something a reader installs: here the test configuration points at a directory that was never written, which is a sharper signal than the absence of tests alone."
+    },
+    {
+      "name": "claude-squad",
+      "repo": "smtg-ai/claude-squad",
+      "reason": "The system owns terminals rather than agents, on the same grounds as a previously excluded terminal workspace manager. It makes no model calls at all: its dependency manifest names no provider client and no HTTP client, and a search of its source for provider endpoints returns nothing. Its persisted model is a flat list of terminal sessions with no task, run, order, or message entity, and the agent state it displays is inferred by matching prompt strings in another product's screen output. The only occurrences of the word handoff in the tree are a help-screen heading for commands that hand work back to the human.",
+      "useful_lesson": "A handoff heading in a help screen can name the handoff to the human. Check whether the persisted schema has a second entity beside the session before believing an orchestrator is there."
     }
   ]
 }
