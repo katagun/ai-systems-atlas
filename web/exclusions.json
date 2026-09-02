@@ -60,6 +60,12 @@
       "repo": "obra/superpowers",
       "reason": "The repository describes itself as a software development methodology built on composable skills, and it ships no agent machinery: the package declares no executable and no dependencies, and its session hook only reads a skill document and prints it as additional context. Its subagent workflow is prose instructing a host agent to call the host's own tools, so nothing runs when the host harness is removed. CURATION.md keeps prompt templates and collections as research inputs rather than operational systems.",
       "useful_lesson": "Adoption does not establish an operational boundary: at 280,000 stars this was the most-starred candidate in the sweep and still resolves to documentation that a host agent executes."
+    },
+    {
+      "name": "STORM",
+      "repo": "stanford-oval/storm",
+      "reason": "The reviewed repository is a paper implementation rather than an operational system. Its readme presents a research preview and states the system cannot produce publication-ready articles; it ships no tests at all, its only continuous integration is a formatting check, its package still declares alpha status, its last substantive code change predates this review by more than a year, and it hard-pins a two-year-old version of the framework its own documentation calls its core. Nothing here distinguishes its outcome from a published research agent either.",
+      "useful_lesson": "A laboratory release can be genuine executable code with real entry points and still be a research input. The tell is not whether code exists but whether any correctness gate does, and whether the dependency floor is frozen at the paper's date."
     }
   ]
 }

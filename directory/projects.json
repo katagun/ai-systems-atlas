@@ -11224,6 +11224,727 @@
       "open_issues": 1686,
       "metadata_verified_at": "2026-09-01",
       "github_detected_license": "MIT"
+    },
+    {
+      "id": "crush",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Crush",
+      "repo": "charmbracelet/crush",
+      "url": "https://github.com/charmbracelet/crush",
+      "description": "Terminal coding agent in Go with permission-gated tools, per-project session state, language-server and tool-server integration, and a local API for several clients.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "moonshot_ai",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "the working tree, a per-project session database, and a configuration file the user owns",
+      "deployment": [
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Licensed under the Functional Source License, which bars competing commercial use and converts to a permissive licence two years after each release. An earlier period of the work carries a separate permissive grant from its original author.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.6,
+        "autonomy": 7.2,
+        "human_control": 7.4,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 8.0,
+        "interoperability": 8.2,
+        "maturity": 7.4,
+        "overall": 7.74
+      },
+      "strengths": [
+        "Language-server operations are exposed as agent tools rather than as context alone, including rename and symbol replacement",
+        "One local backend serves several terminal clients over a socket, sharing session history, permission queue, and tool-server state",
+        "Ships as a single static binary packaged across eight operating-system families and every major package manager"
+      ],
+      "weaknesses": [
+        "The licence bars building a competing commercial product, a materially different position from every other published coding agent",
+        "Its own documentation notes that the project configuration is executed shell, so opening an untrusted repository is itself an execution decision",
+        "A stale generated annotation in the entry point advertises a permissive licence at a path that does not exist"
+      ],
+      "why_it_matters": "The first source-available coding agent in the catalogue, and a self-contained runtime whose licence converts to permissive terms rather than staying restricted.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "stars": 27855,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T18:58:00Z",
+      "forks": 2206,
+      "open_issues": 679,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "qwen-code",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Qwen Code",
+      "repo": "QwenLM/qwen-code",
+      "url": "https://github.com/QwenLM/qwen-code",
+      "description": "Terminal coding agent forked from Gemini CLI, adding subagents, sandboxed execution, desktop and editor clients, language libraries, and messaging-platform channels.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "the working tree, project instructions, agent and skill definitions, and resumable local sessions",
+      "deployment": [
+        "desktop",
+        "ide_extension",
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Forked from the published Gemini CLI record at version 0.8.2 and no longer syncing with it; hundreds of files still carry the upstream copyright alongside the fork's own. The vocabulary has no model-backend identifier for the maintainer's own models, so its native backend cannot be recorded.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.8,
+        "autonomy": 8.0,
+        "human_control": 8.6,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.8,
+        "maturity": 6.8,
+        "overall": 8.01
+      },
+      "strengths": [
+        "The permission layer reasons about shell semantics and destructive commands rather than matching tool names, and is tested",
+        "Sandboxed execution through containers and hand-written platform profiles, in a role where most published records run on the host only",
+        "Reach no published coding agent matches, spanning a desktop app, three editor integrations, three language libraries, and messaging channels"
+      ],
+      "weaknesses": [
+        "Surface area outruns evidence, with several client packages thin relative to the core and two excluded from the main build",
+        "The headline installation path pipes a vendor-hosted script from a cloud bucket into a shell",
+        "Licence provenance needs care, with hundreds of core files still carrying the upstream author's copyright and three open licences across the tree"
+      ],
+      "why_it_matters": "Shows a provider fork outgrowing its upstream, stopping its syncs and adding sandboxed execution, subagents, and a far wider client surface than the record it descends from.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "Apache-2.0",
+        "MIT",
+        "Unlicense"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "stars": 27559,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T22:42:21Z",
+      "forks": 2973,
+      "open_issues": 1250,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "continue",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Continue",
+      "repo": "continuedev/continue",
+      "url": "https://github.com/continuedev/continue",
+      "description": "Coding agent whose core runs as a separate process behind a command line, an editor extension, and a JetBrains plugin; released a final version and is no longer maintained.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "mistral",
+        "moonshot_ai",
+        "nvidia",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "the working tree, a declarative agent configuration file, and command-line sessions under the user's home directory",
+      "deployment": [
+        "ide_extension",
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "archived",
+      "current_repo_note": "The maintainers state the repository is no longer actively maintained and is read-only, following a final release that removed telemetry and authentication; the vendor was acquired. GitHub does not flag the repository as archived, so this status is editorial and rests on the maintainers' own statement.",
+      "score": {
+        "task_reliability": 6.6,
+        "tool_use": 7.2,
+        "autonomy": 6.6,
+        "human_control": 7.6,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.6,
+        "maturity": 4.6,
+        "overall": 6.94
+      },
+      "strengths": [
+        "One core packaged as a standalone process drives three clients, including the batch's only first-class JetBrains support",
+        "The permission design has an exclude level that hides a tool from the model entirely, with documented precedence resolution",
+        "Eighty-one model adapters, the widest provider surface reviewed, including four separate local-runtime paths"
+      ],
+      "weaknesses": [
+        "The product is finished: the repository is read-only, the final release is cut, and nothing further will be fixed",
+        "Headless mode's default policy allows shell execution and then allows every tool, so the strongest control is off where it matters most",
+        "The command line still contacts a vendor endpoint for version checks, against infrastructure nobody has committed to maintaining"
+      ],
+      "why_it_matters": "A three-year open coding agent that removed its telemetry, authentication, and hosted coupling before freezing, leaving a self-contained final release.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 35725,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T09:52:30Z",
+      "forks": 5321,
+      "open_issues": 938,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "roo-code",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Roo Code",
+      "repo": "RooCodeInc/Roo-Code",
+      "url": "https://github.com/RooCodeInc/Roo-Code",
+      "description": "Editor coding agent with user-definable modes, per-task checkpoints, and a compatibility layer letting its core run outside the editor; shut down in May 2026.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "deepseek",
+        "google",
+        "mistral",
+        "moonshot_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime",
+        "x_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "the working tree, per-task checkpoint repositories, and user-defined mode definitions",
+      "deployment": [
+        "ide_extension",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "ide",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "archived",
+      "current_repo_note": "Shut down in May 2026 and archived, with the extension delisted. Its own documentation names a community fork and its origin project as alternatives rather than declaring a successor, so the superseded status does not apply. It is the middle link between two published records, having forked from one and been forked into the other.",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.6,
+        "autonomy": 7.0,
+        "human_control": 7.2,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.2,
+        "maturity": 4.4,
+        "overall": 7.13
+      },
+      "strengths": [
+        "Per-task checkpoint repositories with navigation give genuine working-tree recovery, which its closest neighbours do not offer",
+        "A compatibility layer lets the same core run headless outside the editor, so one engine serves two front ends",
+        "Modes are first-class user-definable configuration with a published schema, giving reviewable role separation without a separate orchestration layer"
+      ],
+      "weaknesses": [
+        "Shut down in May 2026, with the repository archived and the extension delisted, so installing it now means building from source",
+        "Its command line auto-approves actions by default in interactive mode, inverting the safety posture the extension was known for",
+        "The live continuation is a community fork under different governance, so the reviewed privacy commitments no longer bind whoever ships the code"
+      ],
+      "why_it_matters": "The most widely installed editor coding agent to shut down mid-flight, and the middle link in a fork chain whose other two records the Atlas publishes.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 24315,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-05-15T18:08:47Z",
+      "forks": 3412,
+      "open_issues": 1034,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "vane",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Vane",
+      "repo": "ItzCrazyKns/Vane",
+      "url": "https://github.com/ItzCrazyKns/Vane",
+      "description": "Self-hosted web application that answers a question by running a bounded search-and-scrape loop over a local search engine and returning a cited answer.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "chat messages and the response blocks recorded against them in a local database",
+      "deployment": [
+        "self_hosted",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "research",
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Renamed from Perplexica within the same history, so it stays one record with a note. Development has been quiet: the most recent code change predates this review by several months, and two features the readme advertises are absent from the source.",
+      "score": {
+        "task_reliability": 5.6,
+        "tool_use": 6.6,
+        "autonomy": 6.4,
+        "human_control": 6.0,
+        "observability_recovery": 5.8,
+        "data_sovereignty": 8.4,
+        "interoperability": 6.4,
+        "maturity": 5.4,
+        "overall": 6.24
+      },
+      "strengths": [
+        "The research step is an explicit bounded tool loop with its own registry and a deliberate finish action, rather than a fixed retrieval pipeline",
+        "The plan is a first-class part of the interface, streamed to the reader as reasoning before any other tool runs",
+        "Fully self-operable from one container, with four of its eight model providers running locally"
+      ],
+      "weaknesses": [
+        "No test suite and no continuous integration beyond building a container image",
+        "Search and scrape failures are logged and dropped inside the retrieval layer, so a run can quietly degrade to a thin evidence set",
+        "Effectively dormant, with no code change for several months and advertised search providers missing from the source"
+      ],
+      "why_it_matters": "The only fully self-hostable cited-answer engine reviewed whose research step is an inspectable tool loop rather than a fixed retrieval pipeline.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 36577,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T14:12:12Z",
+      "forks": 4064,
+      "open_issues": 347,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "dexter",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "dexter",
+      "repo": "virattt/dexter",
+      "url": "https://github.com/virattt/dexter",
+      "description": "Terminal agent that answers financial research questions by planning tool calls across a market-data service, filings, and web search, then writing a sourced summary.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "x_ai",
+        "openrouter",
+        "moonshot_ai",
+        "deepseek",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "decay"
+      ],
+      "canonical_data": "tool-call logs written per run, a local memory database, and user-editable instruction files",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "No licence file has ever existed in this repository and the package manifest declares none; a single readme sentence claims permissive terms, which is the only artifact granting anything. Two memory modules credit a third-party project in comments without a corresponding licence file.",
+      "score": {
+        "task_reliability": 6.2,
+        "tool_use": 7.4,
+        "autonomy": 6.8,
+        "human_control": 7.8,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 5.2,
+        "interoperability": 6.6,
+        "maturity": 5.0,
+        "overall": 6.63
+      },
+      "strengths": [
+        "A permission engine parses shell commands and fails closed to asking, with dedicated tests behind it",
+        "Domain depth is implemented rather than prompted, spanning statements, filings, insider trades, institutional holdings, and screening",
+        "Every tool call is durably recorded with arguments, raw result, and summary, so a run can be reconstructed afterwards"
+      ],
+      "weaknesses": [
+        "No licence file has ever existed and the manifest declares none, so redistribution terms rest on one readme sentence",
+        "Headline capabilities the readme advertises are prompt behaviour rather than machinery; the loop is a plain iteration with a fixed cap",
+        "All financial data flows through a single hard-coded commercial endpoint owned by the maintainer, with no alternative path"
+      ],
+      "why_it_matters": "Shows what a vertical research agent looks like when domain tools rather than the prompt carry the specialisation, and how far a permission model reaches without a sandbox.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
+      "source_model": "unclear",
+      "license_review_status": "verified",
+      "stars": 27562,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-08-04T15:20:42Z",
+      "forks": 3411,
+      "open_issues": 99,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": null
+    },
+    {
+      "id": "deepagents",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "deepagents",
+      "repo": "langchain-ai/deepagents",
+      "url": "https://github.com/langchain-ai/deepagents",
+      "description": "Python library that assembles a preconfigured agent with a filesystem, subagent delegation, skills, and context management on top of an existing agent loop.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "nvidia",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic",
+        "keyword"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "versioned"
+      ],
+      "canonical_data": "application-defined agent state, plus files held in a pluggable storage backend the integrator chooses",
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "framework_defined",
+        "host",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "workflows",
+        "shell_execution",
+        "code_editing",
+        "mcp",
+        "research"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Its own architecture document states it is an opinionated harness over the vendor's existing agent constructor and introduces no new runtime; the vendor's framework and graph runtime are published separately. The companion library in another language is the same product and is not recorded separately. Benchmark corpora vendored under the evaluation package carry their own permissive notices from their upstream projects.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.6,
+        "autonomy": 8.2,
+        "human_control": 7.8,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 6.0,
+        "interoperability": 7.6,
+        "maturity": 7.0,
+        "overall": 7.74
+      },
+      "strengths": [
+        "It owns substantial machinery of its own, including a storage protocol with eight implementations and per-model harness profiles",
+        "Correctness infrastructure is unusually strong for a pre-1.0 library, with warnings treated as errors and three external benchmarks run in continuous integration",
+        "Approval is a construction-time parameter that compiles down to runtime interrupts, rather than an integration exercise"
+      ],
+      "weaknesses": [
+        "It is structurally inseparable from the framework beneath it, which is published separately, and its own documents say it adds no new runtime",
+        "The vendor's hosted tracing service is a required dependency of the core package and its sandbox is a first-class backend",
+        "It ships before a first stable release, with an active deprecation on its main entry point and an alpha sub-runtime its own documentation excludes from production"
+      ],
+      "why_it_matters": "The clearest example of a harness layer that adds enough of its own machinery to be a separate build target rather than a convenience wrapper over the framework beneath it.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-01",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 28826,
+      "stars_verified_at": "2026-09-01",
+      "historical_stars": null,
+      "pushed_at": "2026-09-01T21:13:51Z",
+      "forks": 4049,
+      "open_issues": 178,
+      "metadata_verified_at": "2026-09-01",
+      "github_detected_license": "MIT"
     }
   ]
 }
