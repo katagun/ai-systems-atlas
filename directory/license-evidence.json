@@ -2428,6 +2428,81 @@
           "immutable_url": "https://api.github.com/repos/janhq/jan/git/blobs/d614b967f4b5b3634dee1e659d9d2f076f458ae8"
         }
       ]
+    },
+    {
+      "project_id": "mini-swe-agent",
+      "repo": "SWE-agent/mini-swe-agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/SWE-agent/mini-swe-agent/blob/main/LICENSE.md",
+          "blob_sha": "503821c9dbe06f13a48e54088eb6cd203adb407f",
+          "immutable_url": "https://api.github.com/repos/SWE-agent/mini-swe-agent/git/blobs/503821c9dbe06f13a48e54088eb6cd203adb407f"
+        }
+      ]
+    },
+    {
+      "project_id": "swe-agent",
+      "repo": "SWE-agent/SWE-agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, naming six authors",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SWE-agent/SWE-agent/blob/main/LICENSE",
+          "blob_sha": "e702436e21844c5c519de31ab68277a6d3b427d9",
+          "immutable_url": "https://api.github.com/repos/SWE-agent/SWE-agent/git/blobs/e702436e21844c5c519de31ab68277a6d3b427d9"
+        }
+      ]
+    },
+    {
+      "project_id": "agenticseek",
+      "repo": "Fosowl/agenticSeek",
+      "items": [
+        {
+          "license_id": "GPL-3.0",
+          "scope": "Whole repository under the GNU General Public License 3.0, identical to the canonical text",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Fosowl/agenticSeek/blob/main/LICENSE",
+          "blob_sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+          "immutable_url": "https://api.github.com/repos/Fosowl/agenticSeek/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+        }
+      ]
+    },
+    {
+      "project_id": "docsgpt",
+      "repo": "arc53/DocsGPT",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; it is the only licence file in the tree and no enterprise directory exists",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/arc53/DocsGPT/blob/main/LICENSE",
+          "blob_sha": "eb01d1a0cee26762aad4edfcd97a9d1b9b361857",
+          "immutable_url": "https://api.github.com/repos/arc53/DocsGPT/git/blobs/eb01d1a0cee26762aad4edfcd97a9d1b9b361857"
+        }
+      ]
+    },
+    {
+      "project_id": "memtensor-memos",
+      "repo": "MemTensor/MemOS",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository root under the Apache License 2.0, covering the operational core; plugin directories declare a permissive licence in manifests without a licence file, and one vendored third-party app carries its own",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/MemTensor/MemOS/blob/main/LICENSE",
+          "blob_sha": "2090de541d3389f3da3d001d37e6426fe5c93779",
+          "immutable_url": "https://api.github.com/repos/MemTensor/MemOS/git/blobs/2090de541d3389f3da3d001d37e6426fe5c93779"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

@@ -29,6 +29,8 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | AFFiNE | Permissive client on a proprietary server | A genuinely local-first offline path with reusable editor internals | Synchronization, search, and all AI sit in one licensed server, and self-hosting caps at ten seats |
 | screenpipe | Ambient capture goes source-available | An agent-facing API and tool server over a local database with retention and export controls | Nothing in the tree is open since June 2026; analytics defaults on despite the local claim |
 | Hindsight | Beliefs with evidence, not a fact pile | Consolidation into observations with quoted proof, and a third-party runtime already using it as a backend | Every accuracy figure is vendor-run; the wrapper defaults to the vendor cloud |
+| DocsGPT | Enterprise governance not withheld | Role management, single sign-on, and teams in the permissive tree; agents as compatible and tool-server endpoints | The quick-start routes inference through the vendor's shared key |
+| MemOS | Memory cubes without reciprocation | Per-user, per-agent isolation, a real service surface, and on-device plugins for three runtimes | No targeted runtime names it as a backend; defaults and benchmarks are vendor-run |
 
 ### Agent-system research set
 
@@ -79,6 +81,9 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | CAMEL | A research collective's production orchestrator | Coordinator, snapshot, resume, and runtime worker creation, all tested | Release train stalled at alphas; two files of over six thousand lines |
 | Open Design | A workflow that owns its own daemon | Data-contract adapters for many vendor tools, and a tool-loop guard with real failure semantics | Silently modified Apache text; a telemetry channel the toggle cannot disable |
 | AionUi | Bundled engine plus supervised vendor workers | Scheduler, mailbox, and crash recovery as machinery; runs without any third-party tool | The core is a binary fetched from a second repository at packaging time |
+| mini-SWE-agent | How little harness a coding agent needs | A hundred-line tested loop, confirmation by default, and one design across host, container, and sandbox | The shell is the only tool; the default environment has no isolation |
+| SWE-agent | A superseded scaffold kept for reproducibility | Tested library loop, replayable trajectories, container by default | Its own maintainers recommend the successor; no distributed package since 2024 |
+| agenticSeek | A fully local general work agent, two surfaces of four | A real browser navigation loop, workspace confinement, local models first | No CI or release ever; execution unconfirmed by default; no scheduler or connectors |
 
 ### Assistant-system research set
 

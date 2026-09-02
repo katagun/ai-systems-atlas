@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("214 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("219 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -44,7 +44,7 @@ test("superseded systems leave the active view and link to their successor", asy
   await page.locator("#project-search").fill("");
   await page.locator(".advanced-filter-shell summary").click();
   await page.locator("#status-filter").selectOption("superseded");
-  await expect(names).toHaveText(["AutoGen", "Semantic Kernel"]);
+  await expect(names).toHaveText(["AutoGen", "Semantic Kernel", "SWE-agent"]);
 
   await page.locator('#project-grid [data-project="autogen"]').click();
   const dialog = page.locator("#project-dialog");
