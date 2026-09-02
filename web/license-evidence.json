@@ -2669,6 +2669,33 @@
           "immutable_url": "https://api.github.com/repos/memodb-io/memobase/git/blobs/a5906aff66440994e680f18e1a1178aba3b791a0"
         }
       ]
+    },
+    {
+      "project_id": "seekrflow",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "seekrai 0.34.3, the open Python client for the platform, whose published wheel declares License-Expression Apache-2.0 and ships the unmodified licence text alongside its readable source modules",
+          "kind": "web_terms",
+          "url": "https://pypi.org/project/seekrai/0.34.3/",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "SeekrFlow pricing terms, which license the customer-hosted platform per GPU annually and meter the hosted deployments, agents, storage, and tool calls",
+          "kind": "web_terms",
+          "url": "https://www.seekr.com/pricing/",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "The Terms and Conditions the SeekrFlow sign-up flow requires agreement to; the posted text governs the Seekr Platform search application rather than the SeekrFlow product, and no platform agreement is published outside the gated Trust Center",
+          "kind": "web_terms",
+          "url": "https://www.seekr.com/terms-conditions/",
+          "verified_at": "2026-09-02"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"
