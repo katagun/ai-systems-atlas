@@ -2338,6 +2338,96 @@
           "immutable_url": "https://api.github.com/repos/HKUDS/nanobot/git/blobs/e06eb24cf4abdc5b46d354fc7d1c9531b2f52dfa"
         }
       ]
+    },
+    {
+      "project_id": "screenpipe",
+      "repo": "screenpipe/screenpipe",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under the Screenpipe Commercial License, a custom licence permitting personal, non-profit, and short evaluation use and requiring a paid licence for commercial use; earlier permissive releases remain under their original terms",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/screenpipe/screenpipe/blob/main/LICENSE.md",
+          "blob_sha": "cf9b4c83e95d652a1f38fc94d1d8ee53606cd80b",
+          "immutable_url": "https://api.github.com/repos/screenpipe/screenpipe/git/blobs/cf9b4c83e95d652a1f38fc94d1d8ee53606cd80b"
+        }
+      ]
+    },
+    {
+      "project_id": "hindsight",
+      "repo": "vectorize-io/hindsight",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License, with identical copies shipped in each integration package",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vectorize-io/hindsight/blob/main/LICENSE",
+          "blob_sha": "8dce7b4d4c2632990bdf8b4101694ea19ba6ad46",
+          "immutable_url": "https://api.github.com/repos/vectorize-io/hindsight/git/blobs/8dce7b4d4c2632990bdf8b4101694ea19ba6ad46"
+        }
+      ]
+    },
+    {
+      "project_id": "camel",
+      "repo": "camel-ai/camel",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/camel-ai/camel/blob/main/LICENSE",
+          "blob_sha": "c46213dce5875ed087fc9fe3ce329b69d98713ed",
+          "immutable_url": "https://api.github.com/repos/camel-ai/camel/git/blobs/c46213dce5875ed087fc9fe3ce329b69d98713ed"
+        }
+      ]
+    },
+    {
+      "project_id": "open-design",
+      "repo": "nexu-io/open-design",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under a modified Apache License 2.0 text: one clause of the redistribution section is shortened and the warranty section is retitled; shipped design templates carry their own permissive notices",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nexu-io/open-design/blob/main/LICENSE",
+          "blob_sha": "eb79c35bd865477e525b18e56f35d56fbe0f7110",
+          "immutable_url": "https://api.github.com/repos/nexu-io/open-design/git/blobs/eb79c35bd865477e525b18e56f35d56fbe0f7110"
+        }
+      ]
+    },
+    {
+      "project_id": "aionui",
+      "repo": "iOfficeAI/AionUi",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0 with reformatted whitespace; the same file ships in the backend repository, whose package manifest declares a different licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/iOfficeAI/AionUi/blob/main/LICENSE",
+          "blob_sha": "1aa6d7d8cf5e0216d1a1bef32c9719d20fce6d91",
+          "immutable_url": "https://api.github.com/repos/iOfficeAI/AionUi/git/blobs/1aa6d7d8cf5e0216d1a1bef32c9719d20fce6d91"
+        }
+      ]
+    },
+    {
+      "project_id": "jan",
+      "repo": "janhq/jan",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "A short notice naming the Apache License 2.0 as the repository's licence rather than the licence text; the platform detects no licence and package manifests disagree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/janhq/jan/blob/main/LICENSE",
+          "blob_sha": "d614b967f4b5b3634dee1e659d9d2f076f458ae8",
+          "immutable_url": "https://api.github.com/repos/janhq/jan/git/blobs/d614b967f4b5b3634dee1e659d9d2f076f458ae8"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

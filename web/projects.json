@@ -12273,6 +12273,567 @@
       "open_issues": 757,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "MIT"
+    },
+    {
+      "id": "screenpipe",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "screenpipe",
+      "repo": "screenpipe/screenpipe",
+      "url": "https://github.com/screenpipe/screenpipe",
+      "description": "Local screen and audio recorder that stores recognised text, transcripts, and frame metadata in a local database and exposes them to agents over an HTTP API and a tool server.",
+      "primary_role": "ambient_capture",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "raw_media",
+        "relational_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query",
+        "temporal"
+      ],
+      "capture_modes": [
+        "screen",
+        "audio",
+        "activity"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "decay"
+      ],
+      "canonical_data": "a local database of recognised text, transcripts, and frame and audio metadata alongside local video and audio files",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Relicensed in June 2026 from a permissive licence to a custom commercial licence covering the whole tree, which permits personal, non-profit, and short evaluation use and requires a paid licence for commercial use; earlier permissive releases remain available under their original terms. Several library manifests still declare an enterprise identifier with no matching licence file, which the library readme says is superseded by the root licence. Release builds check for a paid plan.",
+      "score": {
+        "second_brain_fit": 7.8,
+        "data_sovereignty": 5.6,
+        "interoperability": 7.6,
+        "memory_intelligence": 6.0,
+        "operational_simplicity": 6.8,
+        "maturity": 7.4,
+        "overall": 6.87
+      },
+      "strengths": [
+        "The only ambient-capture system reviewed with an agent-facing API and tool-server endpoint, so what was seen and heard is retrievable by software rather than only by a person",
+        "Explicit retention auto-deletion, raw query, and export controls over a database the user holds",
+        "Broad continuous integration across three platforms with end-to-end, chaos, and evaluation suites, and near-daily releases"
+      ],
+      "weaknesses": [
+        "Since June 2026 no part of the tree is under an open licence, and the licence claims ownership of contributors' modifications",
+        "Product analytics and crash reporting are on by default in the desktop app despite the claim that everything is local",
+        "Release builds are subscription-gated, so the free path is building from a fast-moving multi-toolchain tree"
+      ],
+      "why_it_matters": "Shows the ambient-capture category migrating from open hobby projects to a venture-backed source-available product with an agent interface.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "stars": 21365,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T01:16:46Z",
+      "forks": 2160,
+      "open_issues": 59,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "hindsight",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Hindsight",
+      "repo": "vectorize-io/hindsight",
+      "url": "https://github.com/vectorize-io/hindsight",
+      "description": "Self-hosted memory server that extracts facts from what an agent retains, consolidates them into evidence-backed observations and standing mental models, and serves recall and reflection over an API, libraries, and a tool server.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "graph_traversal",
+        "temporal",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "upsert_rewrite"
+      ],
+      "canonical_data": "a relational database with vector extensions, or an embedded equivalent, holding facts, entities, observations, and mental models scoped to memory banks",
+      "deployment": [
+        "self_hosted",
+        "library",
+        "local_cli",
+        "managed_cloud"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Independently confirmed as a swappable memory backend in the published oh-my-pi record, whose client posts to this server's bank-scoped endpoints; that is the same evidence shape that settled OpenViking. The drop-in model-client wrapper defaults to the vendor's hosted endpoint unless configured otherwise.",
+      "score": {
+        "second_brain_fit": 7.4,
+        "data_sovereignty": 8.2,
+        "interoperability": 8.8,
+        "memory_intelligence": 8.6,
+        "operational_simplicity": 7.0,
+        "maturity": 6.6,
+        "overall": 7.82
+      },
+      "strengths": [
+        "Consolidation produces beliefs with quoted evidence and proof counts instead of overwriting facts",
+        "Ships a real service surface of four client languages, a command line, and a per-bank tool-server endpoint that a third-party coding agent already uses as a pluggable backend",
+        "Runs offline in earnest, with an embedded database and local embedding and reranking models"
+      ],
+      "weaknesses": [
+        "Every published accuracy figure is vendor-run and the accompanying paper is the vendor's own",
+        "The drop-in model-client wrapper points at the vendor's cloud unless told otherwise",
+        "The API and configuration surface is very large for a pre-1.0 release"
+      ],
+      "why_it_matters": "The strongest current case that agent memory should consolidate into standing, evidence-backed beliefs rather than a searchable pile of extracted facts, already wired into an independent runtime.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 22127,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T08:49:21Z",
+      "forks": 1689,
+      "open_issues": 66,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "camel",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "CAMEL",
+      "repo": "camel-ai/camel",
+      "url": "https://github.com/camel-ai/camel",
+      "description": "Python framework for building societies of role-playing and workforce agents, with a coordinator that decomposes tasks, assigns workers, and recovers from failures.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "deepseek",
+        "mistral",
+        "moonshot_ai",
+        "nvidia",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "application-defined agent memory and workforce task state",
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state",
+        "mcp",
+        "shell_execution",
+        "code_editing"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Paper-associated and maintained by a research collective, but with a real release train, a large test suite, and continuous integration, so it passes the test that excluded paper harnesses. Framework-primary is a defensible alternative reading; the flagship module, name, and description are the multi-agent society. A separate commercial product is built on it by the same organisation.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.4,
+        "autonomy": 8.2,
+        "human_control": 6.4,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.2,
+        "interoperability": 8.6,
+        "maturity": 6.4,
+        "overall": 7.61
+      },
+      "strengths": [
+        "A full orchestration runtime with pause, snapshot, and resume rather than a prompt pattern",
+        "Failure handling that creates new workers at runtime is implemented and tested",
+        "Provider and sandbox breadth without any vendor lock, including local runtimes and container execution"
+      ],
+      "weaknesses": [
+        "The release train stalled at pre-release alphas for five months while commits continued",
+        "Two files of over six thousand lines each hold the orchestrator and the chat agent, making audit costly",
+        "Research-collective governance with a separate commercial product sitting on top"
+      ],
+      "why_it_matters": "The oldest surviving role-playing multi-agent framework, now carrying a production-style workforce orchestrator alongside its research heritage.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 17661,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-08-31T10:25:23Z",
+      "forks": 2068,
+      "open_issues": 488,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "open-design",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Open Design",
+      "repo": "nexu-io/open-design",
+      "url": "https://github.com/nexu-io/open-design",
+      "description": "Desktop and command-line workspace that runs the user's installed coding-agent tool against design skills, design-system files, and templates to produce prototypes, decks, images, and video, with a sandboxed preview and export.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "file_import",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "project folders of generated output and assets plus a local database of projects, conversations, messages, runs, and agent sessions",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "mcp",
+        "workflows",
+        "persistent_state"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Four months old at review with the highest adoption in the queue. Its daemon spawns and supervises the host agents itself, so the reserved add-on question does not apply. The licence file is a silently modified Apache text: one clause in the redistribution section is shortened and the warranty section is retitled; the platform still detects the standard licence. Packaged beta builds bundle a closed third-party command-line tool.",
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 6.6,
+        "autonomy": 6.4,
+        "human_control": 6.2,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 6.6,
+        "interoperability": 8.6,
+        "maturity": 6.0,
+        "overall": 6.95
+      },
+      "strengths": [
+        "The adapter layer is a data contract, so many vendors' agent tools are driven by one generic engine",
+        "A tool-loop guard and run-failure classification give the wrapper its own failure semantics instead of streaming a stuck agent forever",
+        "Test volume in the daemon exceeds its implementation, and browser suites run on every change"
+      ],
+      "weaknesses": [
+        "The licence text is a silently modified Apache licence, and packaged beta builds bundle an unlicensed third-party tool",
+        "A single composition file of nearly seventeen thousand lines holds the process-spawn path alongside everything else",
+        "A safety-telemetry channel that the analytics toggle cannot disable, and a readme that leads with a paid model service"
+      ],
+      "why_it_matters": "The most adopted example of a workflow layer that owns its own daemon, persistence, and process supervision around whichever coding agent the user already runs.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 93462,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T08:28:18Z",
+      "forks": 10775,
+      "open_issues": 923,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "aionui",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "AionUi",
+      "repo": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "description": "Desktop and web application with a bundled agent engine that runs file, document, web, and scheduled tasks, and supervises third-party coding-agent tools and agent teams over the Agent Client Protocol.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "moonshot_ai",
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "conversations, sessions, assistants, teams, and scheduled jobs in local databases owned by the desktop app and its backend, plus Markdown assistant and skill definitions",
+      "deployment": [
+        "desktop",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The operational core is a first-party backend fetched as a binary from a second repository at packaging time, and the bundled engine is a third first-party repository; under ADR 020 the three are one product. The backend's package manifest declares a permissive licence that differs from its licence file. Reviewing this repository alone reviews the shell.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.0,
+        "autonomy": 7.8,
+        "human_control": 7.2,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.2,
+        "interoperability": 8.4,
+        "maturity": 6.6,
+        "overall": 7.36
+      },
+      "strengths": [
+        "Team coordination is real machinery: a scheduler, mailbox, work coordinator, and crash recovery rather than prose",
+        "It works without any third-party tool because a first-party engine is bundled",
+        "A headless server and standalone web runtime are documented alongside the desktop build"
+      ],
+      "weaknesses": [
+        "The operational core is a binary fetched from a second repository at packaging time",
+        "The backend's package manifest declares a different licence from its licence file",
+        "Design documents and much of the changelog rationale are in one language only, and partner promotions precede the product description in the readme"
+      ],
+      "why_it_matters": "A desktop agent product where one runtime hosts a bundled engine and competing vendors' tools as interchangeable protocol workers, including in supervised teams.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 32502,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T08:47:22Z",
+      "forks": 3343,
+      "open_issues": 870,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "jan",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Jan",
+      "repo": "janhq/jan",
+      "url": "https://github.com/janhq/jan",
+      "description": "Desktop chat application that runs local models through bundled engines or cloud providers, with projects, assistants, file context, tool servers, and a local compatible API.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "threads as line-delimited files, assistants and settings as structured files, and model files in a user-relocatable local folder, plus a local vector index for project files",
+      "deployment": [
+        "desktop",
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "The licence file is a short notice naming the Apache licence rather than its text, the platform detects no licence, and several package manifests still declare the copyleft licence the project used before 2025 while others declare a permissive one; the readme and the notice agree on the current licence. Its inference engine is the separately published llama.cpp record, which names this product as a downstream boundary. A terminal coding agent in the same repository is distributed separately in preview and is not part of this record.",
+      "score": {
+        "task_reliability": 7.2,
+        "context_continuity": 7.4,
+        "tools_integrations": 8.0,
+        "human_control": 7.6,
+        "data_governance": 7.8,
+        "interoperability": 8.4,
+        "usability_access": 8.2,
+        "maturity": 7.2,
+        "overall": 7.66
+      },
+      "strengths": [
+        "Everything is a readable local file, with threads, assistants, and model manifests in a relocatable data folder",
+        "Local engines and cloud providers share one project and assistant model, re-exposed through a local compatible server",
+        "Tool-server support includes dynamic registration and standards-based authorisation with tokens kept in a separate owner-only file"
+      ],
+      "weaknesses": [
+        "The licence file is a notice rather than the licence text, the platform reports none, and manifests disagree with each other",
+        "The Apple-silicon engine path is documented as experimental without embeddings",
+        "No stable release in six weeks against daily commits, with agent surfaces moving faster than the documentation that gates them"
+      ],
+      "why_it_matters": "The reference open desktop counterpart to hosted chat assistants, holding conversations, projects, and models on the user's own disk with no server to operate.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 44298,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T08:20:52Z",
+      "forks": 3002,
+      "open_issues": 504,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "NOASSERTION"
     }
   ]
 }
