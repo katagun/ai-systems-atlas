@@ -51,5 +51,7 @@ jobs:
           npm exec -- playwright install --with-deps chromium
       - name: Check logo coverage and freshness
         run: node scripts/build_logos.mjs --check
+      - name: Check vendored font freshness
+        run: node scripts/build_fonts.mjs --check
       - name: Run browser end-to-end tests
         run: npm run test:e2e

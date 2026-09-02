@@ -4,7 +4,7 @@ The `web/` directory is a dependency-free static application. `app-core.js` cont
 
 ## Visual language
 
-The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The decorative atlas map in the directory hero expresses the three system families, the inference-service layer, and the local-runtime layer without becoming another navigation surface. Its faint orbital ellipses span all five nodes so no subset reads as a separate cluster. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence. Directory cards lead with a small product mark — a monochrome logo vendored into `web/logos.json`, or a monogram fallback — rendered in `currentColor` so marks stay subordinate to the taxonomy accents.
+The interface uses a technical editorial system: cool paper backgrounds, crisp white surfaces, teal, coral, and violet taxonomy accents, a subtle coordinate-grid texture, and restrained dimensional shadows. Bricolage Grotesque carries display hierarchy, IBM Plex Sans carries body text, and JetBrains Mono carries evidence, metadata, labels, and counts. The three faces are vendored into `web/fonts/` by `scripts/build_fonts.mjs`, which also writes `web/fonts.css`, so the published page makes no third-party request at runtime. The decorative atlas map in the directory hero expresses the three system families, the inference-service layer, and the local-runtime layer without becoming another navigation surface. Its faint orbital ellipses span all five nodes so no subset reads as a separate cluster. New components should reuse the CSS variables in `styles.css`, preserve strong contrast and information density, and keep decoration subordinate to taxonomy and evidence. Directory cards lead with a small product mark — a monochrome logo vendored into `web/logos.json`, or a monogram fallback — rendered in `currentColor` so marks stay subordinate to the taxonomy accents.
 
 ## Content hierarchy
 
@@ -67,6 +67,8 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 - The `compare` URL parameter uses `system:id,id`, `inference:id,id`, or `runtime:id,id`. Restoration requires every ID to exist and share one compatible profile; invalid or incompatible state is removed rather than partially restored.
 - Changing collection or system family clears an incompatible comparison. Filters within the same profile may hide a selected card but must not discard the selection.
 - Comparison tables remain fully keyboard operable and horizontally scroll inside their dialog on narrow screens. The current URL is the shareable state; no account or server persistence is implied.
+- Every detail dialog is addressable. Opening a system, specification, inference-service, or local-runtime record writes a `record` URL parameter — `system:id`, `spec:id`, `inference:id`, or `runtime:id` — as a new history entry, so the browser back button closes the dialog and forward reopens it; closing the dialog removes the parameter. Restoring a `record` URL opens the dialog over the requested collection, switches to the Specifications view for a specification, and discards an unknown kind, an unknown id, or a malformed reference rather than opening anything. Each record dialog offers a Copy link control.
+- The page makes no request outside its own origin: fonts, marks, and data are all served from `web/`.
 
 ## Change surfaces
 
@@ -78,6 +80,8 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 | rendering and detail dialog | `web/app.js` |
 | comparison eligibility and selection | `web/app-core.js` and `web/app.js` |
 | card marks and logo vendoring | `scripts/build_logos.mjs`, then regenerate `web/logos.json` |
+| web fonts | `scripts/build_fonts.mjs`, then regenerate `web/fonts.css` and `web/fonts/` |
+| record URLs and detail dialog history | `web/app-core.js` `parseRecordReference` and `web/app.js` record functions |
 | layout and responsive behavior | `web/styles.css` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
@@ -92,9 +96,10 @@ Run the dependency-free logic suite:
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
+node scripts/build_fonts.mjs --check
 ```
 
-Run the rendered browser regression suite (install Chromium once per environment):
+Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 
 ```bash
 npm ci
@@ -129,5 +134,7 @@ Then verify in a browser:
 17. complete a local-runtime Finder path and confirm the Directory handoff preselects the runtime type.
 18. confirm the five-node atlas map and the hero statistics row render without wrapping at narrow and wide widths.
 19. confirm directory cards lead with product marks in all three collections and that unmapped records show monogram fallbacks.
+20. open a record from each Directory collection and from Specifications, confirm the URL carries `record=`, reload it, press back to close it, and use Copy link.
+21. confirm the network panel shows no request outside the site origin.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

@@ -956,3 +956,6 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
 }
+
+.record-link { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: .2rem 0 1rem; }
+.record-link-status { color: var(--muted); font: .72rem var(--font-mono); }

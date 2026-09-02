@@ -182,6 +182,21 @@
     };
   }
 
+  // Record references come from the URL. The kind is checked against a static
+  // list on purpose: a lookup keyed on user input could resolve inherited names
+  // such as "constructor", and an id is a plain slug or it is nothing.
+  const RECORD_KINDS = ["system", "spec", "inference", "runtime"];
+  const RECORD_ID = /^[\w.-]+$/;
+  function parseRecordReference(raw) {
+    if (typeof raw !== "string") return null;
+    const separator = raw.indexOf(":");
+    if (separator < 1) return null;
+    const kind = raw.slice(0, separator);
+    const id = raw.slice(separator + 1);
+    if (!RECORD_KINDS.includes(kind) || !RECORD_ID.test(id)) return null;
+    return { kind, id };
+  }
+
   return {
     compareProjects,
     directoryDefaults,
@@ -193,6 +208,7 @@
     filterSpecifications,
     matchesProject,
     monogramGlyph,
+    parseRecordReference,
     updateComparisonSelection,
   };
 });

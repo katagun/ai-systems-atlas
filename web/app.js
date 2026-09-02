@@ -133,6 +133,7 @@ async function bootstrap() {
   if (!restoreComparisonFromURL()) {
     setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
   }
+  restoreRecordFromURL();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -838,7 +839,7 @@ function renderTaxonomy() {
 
 function openProject(id) {
   const project = state.projects.find(item => item.id === id);
-  if (!project) return;
+  if (!project) return false;
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
   let familyDetail;
@@ -876,7 +877,8 @@ function openProject(id) {
     </div>`;
   $$('[data-successor]', $("#dialog-content")).forEach(button =>
     button.addEventListener("click", () => openProject(button.dataset.successor)));
-  $("#project-dialog").showModal();
+  showRecordDialog("#project-dialog", "system", id);
+  return true;
 }
 
 function specificationEvidenceLink(item) {
@@ -888,7 +890,7 @@ function specificationEvidenceLink(item) {
 
 function openSpecification(id) {
   const specification = state.specifications.find(item => item.id === id);
-  if (!specification) return;
+  if (!specification) return false;
   const related = specification.related_specifications.map(relatedId => state.specifications.find(item => item.id === relatedId)).filter(Boolean);
   $("#specification-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
     <div class="detail-grid">
@@ -899,7 +901,8 @@ function openSpecification(id) {
       <section class="detail-block"><h3>Reviewed sources</h3>${specification.evidence.map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
-  $("#specification-dialog").showModal();
+  showRecordDialog("#specification-dialog", "spec", id);
+  return true;
 }
 
 function inferenceEvidenceLink(item) {
@@ -908,7 +911,7 @@ function inferenceEvidenceLink(item) {
 
 function openInferenceService(id) {
   const service = state.inferenceServices.find(item => item.id === id);
-  if (!service) return;
+  if (!service) return false;
   const profile = state.taxonomy.inference_service_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(service.score[dimension.id])}</td></tr>`).join("");
   $("#inference-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
@@ -925,7 +928,8 @@ function openInferenceService(id) {
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${service.evidence.map(inferenceEvidenceLink).join("")}</section>
     </div>`;
-  $("#inference-dialog").showModal();
+  showRecordDialog("#inference-dialog", "inference", id);
+  return true;
 }
 
 function runtimeLicenseEvidenceLink(item) {
@@ -937,7 +941,7 @@ function runtimeLicenseEvidenceLink(item) {
 
 function openLocalRuntime(id) {
   const runtime = state.localRuntimes.find(item => item.id === id);
-  if (!runtime) return;
+  if (!runtime) return false;
   const profile = state.taxonomy.local_runtime_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(runtime.score[dimension.id])}</td></tr>`).join("");
   $("#runtime-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
@@ -955,7 +959,80 @@ function openLocalRuntime(id) {
       <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${runtime.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${runtime.evidence.map(inferenceEvidenceLink).join("")}</section>
     </div>`;
-  $("#runtime-dialog").showModal();
+  showRecordDialog("#runtime-dialog", "runtime", id);
+  return true;
+}
+
+// A record dialog is the shareable unit of the site: opening one writes a
+// `record=kind:id` URL, so the address bar always links to what is on screen.
+// Dispatch is static, as with comparisons, because the kind comes from the URL.
+const RECORD_DIALOG_SELECTORS = ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog"];
+const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">The current URL opens this record.</span></p>';
+
+function openRecord(kind, id) {
+  if (kind === "system") return openProject(id);
+  if (kind === "spec") return openSpecification(id);
+  if (kind === "inference") return openInferenceService(id);
+  if (kind === "runtime") return openLocalRuntime(id);
+  return false;
+}
+
+function showRecordDialog(selector, kind, id) {
+  const dialog = $(selector);
+  dialog.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  writeRecordURL(kind, id);
+  if (!dialog.open) dialog.showModal();
+}
+
+function writeRecordURL(kind, id) {
+  const url = new URL(window.location.href);
+  const reference = `${kind}:${id}`;
+  if (url.searchParams.get("record") === reference) return;
+  url.searchParams.set("record", reference);
+  window.history.pushState(null, "", url);
+}
+
+function clearRecordURL() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("record")) return;
+  url.searchParams.delete("record");
+  window.history.replaceState(null, "", url);
+}
+
+function closeRecordDialogs() {
+  RECORD_DIALOG_SELECTORS.forEach(selector => { if ($(selector).open) $(selector).close(); });
+}
+
+function restoreRecordFromURL() {
+  const url = new URL(window.location.href);
+  const raw = url.searchParams.get("record");
+  if (raw === null) return;
+  const reference = AtlasCore.parseRecordReference(raw);
+  if (reference && openRecord(reference.kind, reference.id)) {
+    if (reference.kind === "spec") activateView("specifications");
+    return;
+  }
+  url.searchParams.delete("record");
+  window.history.replaceState(null, "", url);
+}
+
+// Back and forward move between record states only: collection and comparison
+// changes replace the current entry, so a popstate is always a record change.
+function syncRecordWithHistory() {
+  const reference = AtlasCore.parseRecordReference(new URL(window.location.href).searchParams.get("record"));
+  if (reference && openRecord(reference.kind, reference.id)) return;
+  closeRecordDialogs();
+  clearRecordURL();
+}
+
+async function copyRecordLink(button) {
+  const status = button.parentElement.querySelector("[data-record-link-status]");
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    status.textContent = "Link copied.";
+  } catch {
+    status.textContent = "Copy the current browser URL to share this record.";
+  }
 }
 
 function comparisonTable(records, rows) {
@@ -1174,6 +1251,12 @@ function bindEvents() {
   $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
   $("#runtime-dialog .dialog-close").addEventListener("click", () => $("#runtime-dialog").close());
   $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
+  RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
+  window.addEventListener("popstate", syncRecordWithHistory);
+  document.addEventListener("click", event => {
+    const button = event.target.closest("[data-copy-record-link]");
+    if (button) copyRecordLink(button);
+  });
   $("#comparison-open").addEventListener("click", openComparison);
   $("#comparison-clear").addEventListener("click", () => clearComparison());
   $("#comparison-dialog .dialog-close").addEventListener("click", () => $("#comparison-dialog").close());
