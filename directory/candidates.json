@@ -863,35 +863,6 @@
       ]
     },
     {
-      "repo": "langchain-ai/open-swe",
-      "name": "open-swe",
-      "url": "https://github.com/langchain-ai/open-swe",
-      "description": "An Open-Source Asynchronous Coding Agent",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 10610,
-      "topics": [
-        "agent",
-        "agents",
-        "ai",
-        "anthropic",
-        "claudecode",
-        "llm",
-        "llms",
-        "openai"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "lavague-ai/LaVague",
       "name": "LaVague",
       "url": "https://github.com/lavague-ai/LaVague",
@@ -1092,66 +1063,6 @@
       ]
     },
     {
-      "repo": "microsoft/magentic-ui",
-      "name": "Magentic-UI",
-      "url": "https://github.com/microsoft/magentic-ui",
-      "description": "Human-centered agent for monitored browser, code, and local-file tasks with editable plans, intervention, approvals, and recurring workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": "MIT",
-      "stars": 10076,
-      "topics": [
-        "agents",
-        "ai",
-        "ai-ux",
-        "autogen",
-        "browser-use",
-        "computer-use-agent",
-        "cua",
-        "fara",
-        "magenticbrain",
-        "magenticlite",
-        "ui"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "microsoft/TaskWeaver",
-      "name": "TaskWeaver",
-      "url": "https://github.com/microsoft/TaskWeaver",
-      "description": "Archived code-first agent framework for planning and executing stateful data-analysis tasks through generated code and plugins.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.96,
-      "github_detected_license": "MIT",
-      "stars": 6173,
-      "topics": [
-        "agent",
-        "ai-agents",
-        "code-interpreter",
-        "copilot",
-        "data-analysis",
-        "llm",
-        "openai"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "mindsdb/mindshub",
       "name": "MindsHub",
       "url": "https://github.com/mindsdb/mindshub",
@@ -1293,43 +1204,6 @@
         "spaced-repetition",
         "tana",
         "vscode"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "omnigent-ai/omnigent",
-      "name": "omnigent",
-      "url": "https://github.com/omnigent-ai/omnigent",
-      "description": "Omnigent is an open-source AI agent framework and meta-harness: orchestrate Claude Code, Codex, Cursor, Pi, and custom agents — swap harnesses without rewriting, enforce policies and sandboxing, and collaborate in real time from any device.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 9266,
-      "topics": [
-        "agent-framework",
-        "agent-governance",
-        "agent-orchestration",
-        "agents",
-        "ai",
-        "ai-agent",
-        "ai-agents",
-        "claude-code",
-        "codex",
-        "coding-agents",
-        "developer-tools",
-        "llm",
-        "ml",
-        "multi-agent",
-        "python",
-        "sandbox"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -2048,29 +1922,6 @@
       ]
     },
     {
-      "repo": "MiroMindAI/MiroThinker",
-      "name": "MiroThinker",
-      "url": "https://github.com/MiroMindAI/MiroThinker",
-      "description": "MiroThinker is a deep research agent optimized for complex research and prediction tasks. Our latest models, MiroThinker-1.7, achieves 74.0 and 75.3 on the BrowseComp and BrowseComp Zh, respectively.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.7,
-      "github_detected_license": "Apache-2.0",
-      "stars": 8361,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "nanobrowser/nanobrowser",
       "name": "nanobrowser",
       "url": "https://github.com/nanobrowser/nanobrowser",
@@ -2080,52 +1931,6 @@
       "classification_confidence": 0.76,
       "github_detected_license": "Apache-2.0",
       "stars": 13705,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "smtg-ai/claude-squad",
-      "name": "claude-squad",
-      "url": "https://github.com/smtg-ai/claude-squad",
-      "description": "Manage multiple AI terminal agents like Claude Code, Codex, OpenCode, and Amp.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.68,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 8404,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "kyegomez/swarms",
-      "name": "swarms",
-      "url": "https://github.com/kyegomez/swarms",
-      "description": "The Enterprise-Grade Multi-Agent Orchestration Framework. Website: https://swarms.ai",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.7,
-      "github_detected_license": "Apache-2.0",
-      "stars": 7111,
       "topics": [
         "high-adoption",
         "discovery-sweep-2026-08-31"
@@ -2156,6 +1961,29 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-01",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "MiroMindAI/MiroFlow",
+      "name": "MiroFlow",
+      "url": "https://github.com/MiroMindAI/MiroFlow",
+      "description": "The maintained agent framework behind MiroThinker's bundled scaffold, with a web interface and support for several model providers.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "research_agent",
+      "classification_confidence": 0.75,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3102,
+      "topics": [
+        "research-agent",
+        "framework"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-02",
       "review_required": [
         "licensing",
         "classification",

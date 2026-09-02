@@ -84,6 +84,11 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | mini-SWE-agent | How little harness a coding agent needs | A hundred-line tested loop, confirmation by default, and one design across host, container, and sandbox | The shell is the only tool; the default environment has no isolation |
 | SWE-agent | A superseded scaffold kept for reproducibility | Tested library loop, replayable trajectories, container by default | Its own maintainers recommend the successor; no distributed package since 2024 |
 | agenticSeek | A fully local general work agent, two surfaces of four | A real browser navigation loop, workspace confinement, local models first | No CI or release ever; execution unconfirmed by default; no scheduler or connectors |
+| Omnigent | Competing agents as interchangeable executors | Paired harness modules for a dozen vendors, stacked policies in a non-Turing-complete language, ten sandboxes | Pre-release with a thousand open issues in three months; the routing gate fails open by design |
+| Open SWE | A coding agent as deployable infrastructure | Five graphs, delivery to a code host, and a reviewer evaluated against golden comments from real repositories | The production runtime is restricted and licence-keyed; models are a closed list |
+| Swarms | Dispatch that is real, marketing that is not | Typed order parsing verified by running the shipped package offline against stub workers | Zero passing test runs in thirty; telemetry on by default carries task text and conversation |
+| MagenticLite | A browser agent inside a virtual machine | The strongest isolation boundary reviewed, with approval-by-default and a grant table for folders | The rewrite deleted the planning feature its own description still advertises |
+| TaskWeaver | Generated Python over live state | Syntax-tree verification before execution, and a kernel that keeps tables alive across turns | Archived with no notice on the readme or the live documentation site; never packaged |
 
 ### Assistant-system research set
 
