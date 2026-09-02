@@ -27,6 +27,8 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Supermemory | Open adapters over a closed core | Eight framework adapters and a tool server, all permissive and forkable | The memory engine is absent from the repository the documentation calls open source |
 | Onyx | Honest open-core boundary | Fifty-five connectors and a full retrieval stack that run without the enterprise tree | Permission sync and post-query filtering are enterprise-only, which is what mixed-permission data needs |
 | AFFiNE | Permissive client on a proprietary server | A genuinely local-first offline path with reusable editor internals | Synchronization, search, and all AI sit in one licensed server, and self-hosting caps at ten seats |
+| screenpipe | Ambient capture goes source-available | An agent-facing API and tool server over a local database with retention and export controls | Nothing in the tree is open since June 2026; analytics defaults on despite the local claim |
+| Hindsight | Beliefs with evidence, not a fact pile | Consolidation into observations with quoted proof, and a third-party runtime already using it as a backend | Every accuracy figure is vendor-run; the wrapper defaults to the vendor cloud |
 
 ### Agent-system research set
 
@@ -74,6 +76,9 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Skyvern | Where the open core stops | A budgeted, retrying step loop with a failure classifier, plus a workflow builder and self-hosted server | Anti-bot and captcha solving are cloud overrides of open stubs; telemetry defaults on |
 | CowAgent | A messaging bridge that became a runtime | Standing named agents with their own workspaces, and delegation recorded as durable runs | Argument-level permissions defaulting to full access; no general test suite in CI |
 | nanobot | A runtime that is also a library | Version-controlled layered memory, checkpoint recovery, and four surfaces over one engine | Control governs who may talk, not what may run; isolation is Linux-only |
+| CAMEL | A research collective's production orchestrator | Coordinator, snapshot, resume, and runtime worker creation, all tested | Release train stalled at alphas; two files of over six thousand lines |
+| Open Design | A workflow that owns its own daemon | Data-contract adapters for many vendor tools, and a tool-loop guard with real failure semantics | Silently modified Apache text; a telemetry channel the toggle cannot disable |
+| AionUi | Bundled engine plus supervised vendor workers | Scheduler, mailbox, and crash recovery as machinery; runs without any third-party tool | The core is a binary fetched from a second repository at packaging time |
 
 ### Assistant-system research set
 
@@ -123,3 +128,4 @@ This research argues against:
 The catalog is organized by operational relevance, not by license eligibility. Open-source, open-core, source-available, and proprietary systems can all qualify when their behavior can be reviewed responsibly. Licensing remains prominent, scoped evidence: users can filter by exact license or source model, and inspectability influences confidence and relevant score dimensions. An open-source-only directory is therefore a view over the catalog rather than its boundary. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md).
 
 License-only exclusions were returned to the review queue. True exclusions now express a role or evidence boundary—for example, a tracing client that does not itself act as an agent—not a preference for one software-distribution model.
+| Jan | The open desktop counterpart to hosted chat | Threads, assistants, and models as readable local files, re-exposed through a local compatible server | The licence file is a notice rather than the text, and package manifests disagree with each other |

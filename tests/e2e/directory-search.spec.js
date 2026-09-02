@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("208 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("214 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -279,7 +279,7 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
   ]);
 
   await page.locator("#role-filter").selectOption("multi_model_chat_client");
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["LibreChat", "T3 Chat", "Venice.ai"]);
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Jan", "LibreChat", "T3 Chat", "Venice.ai"]);
   await page.locator('#project-grid button[data-project="t3-chat"]').click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Context & continuity");
@@ -295,7 +295,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(15);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(16);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
