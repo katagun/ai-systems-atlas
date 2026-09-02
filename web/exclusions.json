@@ -114,6 +114,42 @@
       "repo": "MiroMindAI/MiroFlow",
       "reason": "This is the maintained framework the excluded model release pointed at, and the operational boundary is not here either. The agent loop is in the source tree, but the repository is a benchmark harness around it: six of its seven entry-point commands are evaluation and scoring utilities, more than half its configurations are named for benchmarks, and the benchmark data sits in the tree. It has no tests of any kind and no test configuration; its only two workflows are a lint check and a title regex; it has no tags and no releases, and its package name exists on no index. The last commit touching code is nine months old and every other branch is older. The web interface its own repository description advertises lives in a different repository.",
       "useful_lesson": "Being the maintained sibling of an excluded model release is not itself a qualification. The predecessor's tell was a test configuration pointing at a directory that was never written; this one's is that benchmark configurations outnumber product configurations many times over, which says what the repository is for more plainly than the absence of tests does."
+    },
+    {
+      "name": "Agent-Memory-Paper-List",
+      "repo": "Shichun-Liu/Agent-Memory-Paper-List",
+      "reason": "The repository is the companion bibliography to a published survey, and it contains no system. Its complete tree is five files: a readme, a licence, two figures, and a stray desktop metadata file, with no source file in any language, no manifest, no tests, and no continuous integration. Its most recent change merges a request adding one more paper to the list. The curation rules keep benchmarks and research inputs outside the scored catalog, and the proposed external memory role requires a replaceable library or service that something can call.",
+      "useful_lesson": "A survey's taxonomy can read like a system's architecture, and the repository title will not say which it is. Count the source files before reading the readme."
+    },
+    {
+      "name": "Awesome-AI-Memory",
+      "repo": "IAAR-Shanghai/Awesome-AI-Memory",
+      "reason": "The repository is a catalogue of several hundred papers and open-source projects on memory for language models, and it is a discovery source for this directory rather than an entry in it. Eight files in total: four documents, two images, a licence, and one script whose sole job is to refresh a count badge. The readme it maintains is very large and the systems it describes are everyone else's. Its licence file is one identifier while its readme badge claims another.",
+      "useful_lesson": "A frequently updated catalogue looks maintained on every activity signal a discovery pass reads. Activity measures the list, not a system."
+    },
+    {
+      "name": "Second-Brain",
+      "repo": "KasperZutterman/Second-Brain",
+      "reason": "The repository is a table of links to other people's public knowledge gardens, one row per person with an address and a social handle. Three files comprise it: the readme, a licence, and a link checker that validates the list. There is nothing to install and nothing to run, and the personal knowledge role asks for a system whose canonical workflow is a person writing and linking knowledge, not an index of strangers who have one.",
+      "useful_lesson": "A directory of second brains and a second brain answer to the same search terms. The tell is whether the repository owns any of the knowledge it points at."
+    },
+    {
+      "name": "Second Brain AI Assistant Course",
+      "repo": "decodingai-magazine/second-brain-ai-assistant-course",
+      "reason": "The repository is the code companion to a six-module open course, and the course rather than the assistant is the product: the readme opens by naming it a course, its module table marks the first module as having no code, its lessons live off the repository on the publisher's site, and its header credits several tool vendors as collaborators. The code is real but ungated. Its three tests only check that datasets download, its continuous integration runs two jobs and both are formatting and linting with no test step, it has published no release, and its last code change predates this review by more than a year while the only newer commit edits the readme. The curation rules keep templates and teaching material as research inputs rather than operational systems.",
+      "useful_lesson": "A course ships the same directory listing as a product: pipelines, applications, a compose file, a lint workflow. Read the continuous integration for a test step, and the readme for a module table."
+    },
+    {
+      "name": "MatrixOne",
+      "repo": "matrixorigin/matrixone",
+      "reason": "The product is a database compatible with a mainstream relational engine that sells itself as a replacement for a four-database stack, handling transactional, analytical, full-text, and vector workloads in one system. Its own readme never uses the words memory, agent, or tool server across more than eleven hundred lines; those words appear only in the repository description. Its packages are a database kernel of transactions, catalog, log and lock services, storage, and a query frontend, with vector indexing as one package among many, and its only client library is a database binding. As with the backend platform excluded before it, a vector index inside a general database is not retrieval infrastructure, and every retrieval record the Atlas publishes is a store whose entire product is similarity search.",
+      "useful_lesson": "A repository description written for the current market can contradict the readme it sits above. Search the readme for the role's own vocabulary; a zero count is the finding."
+    },
+    {
+      "name": "MemoryOS",
+      "repo": "BAI-LAB/MemoryOS",
+      "reason": "The repository is a research release rather than an operational service. It has no tests: three files carry test-like names, one opens by asking the reader to paste an API key into a demo function, and the tree contains no test runner or assertion anywhere. It has no continuous-integration directory at all, which is weaker than the paper implementations already excluded, each of which at least ran a formatting check. Its last release is more than a year old, the package its readme tells users to install has one version from July 2025, and no package manifest exists in the tree, so there is no development-status classifier to read. A benchmark harness and its dataset sit in the tree, and the core package is copied three times rather than sharing a storage interface, so the pluggable architecture the readme advertises is implemented by duplication. The package name its documentation uses on the index belongs to a different project the Atlas already publishes.",
+      "useful_lesson": "Two projects can ship under one name on a package index while being unrelated. Check which project the index entry actually resolves to before treating a package as the record's distribution."
     }
   ]
 }

@@ -99,9 +99,9 @@
       "repo": "anymorph-ai/Claudable",
       "name": "Claudable",
       "url": "https://github.com/anymorph-ai/Claudable",
-      "description": "Claudable is an open-source web builder that leverages local CLI agents, such as Claude Code, Codex, Gemini CLI, Qwen Code, and Cursor Agent, to build and deploy products effortlessly.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "ai_knowledge_app",
+      "description": "Web application builder that drives other vendors' coding-agent tools as child processes; dormant since March 2026, with the maintaining organisation renamed and moved on.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
       "classification_confidence": 0.78,
       "github_detected_license": "MIT",
       "stars": 4046,
@@ -208,35 +208,6 @@
       ]
     },
     {
-      "repo": "BAI-LAB/MemoryOS",
-      "name": "MemoryOS",
-      "url": "https://github.com/BAI-LAB/MemoryOS",
-      "description": "Operational personalized-agent memory system with short-, mid-, and long-term memory tiers, profile updates, MCP tools, and Docker deployment.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.95,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1560,
-      "topics": [
-        "agent",
-        "language-model",
-        "llm",
-        "long-term-memory",
-        "operating-system",
-        "personalization",
-        "rag",
-        "retrieval-augmented-generation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "ballred/obsidian-claude-pkm",
       "name": "obsidian-claude-pkm",
       "url": "https://github.com/ballred/obsidian-claude-pkm",
@@ -301,38 +272,6 @@
       "github_detected_license": "MIT",
       "stars": 681,
       "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "decodingai-magazine/second-brain-ai-assistant-course",
-      "name": "second-brain-ai-assistant-course",
-      "url": "https://github.com/decodingai-magazine/second-brain-ai-assistant-course",
-      "description": "Learn to build your Second Brain AI assistant with LLMs, agents, RAG, fine-tuning, LLMOps and AI systems techniques.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "ai_knowledge_app",
-      "classification_confidence": 0.78,
-      "github_detected_license": "MIT",
-      "stars": 3058,
-      "topics": [
-        "agents",
-        "ai-systems",
-        "data-engineering",
-        "fine-tuning",
-        "huggingface",
-        "llm",
-        "llmops",
-        "mlops",
-        "openai",
-        "python",
-        "rag"
-      ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
@@ -711,38 +650,6 @@
       ]
     },
     {
-      "repo": "IAAR-Shanghai/Awesome-AI-Memory",
-      "name": "Awesome-AI-Memory",
-      "url": "https://github.com/IAAR-Shanghai/Awesome-AI-Memory",
-      "description": "Awesome AI Memory | LLM Memory | A curated knowledge base on AI memory for LLMs and agents, covering long-term memory, reasoning, retrieval, and memory-native system design.  Awesome-AI-Memory 是一个 集中式、持续更新的 AI 记忆知识库，系统性整理了与 大模型记忆（LLM Memory）与智能体记忆（Agent Memory） 相关的前沿研究、工程框架、系统设计、评测基准与真实应用实践。",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1179,
-      "topics": [
-        "agent-memory",
-        "ai-memory",
-        "ai-memory-system",
-        "awesome-ai-memory",
-        "continual-learning",
-        "llm-memory",
-        "long-term-memory",
-        "memory-augmented-models",
-        "memory-systems",
-        "rag",
-        "reasoning-over-time"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "jordan-gibbs/hyperresearch",
       "name": "hyperresearch",
       "url": "https://github.com/jordan-gibbs/hyperresearch",
@@ -758,30 +665,6 @@
         "claude-code",
         "deep-research",
         "deep-research-agent"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "KasperZutterman/Second-Brain",
-      "name": "Second-Brain",
-      "url": "https://github.com/KasperZutterman/Second-Brain",
-      "description": "A curated list of awesome Public Zettelkastens 🗄️ / Second Brains 🧠 / Digital Gardens 🌱",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": "MIT",
-      "stars": 1834,
-      "topics": [
-        "digital-garden",
-        "second-brain",
-        "zettelkasten"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -872,44 +755,6 @@
         "spring-boot",
         "telegrambot",
         "tool-calling"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "matrixorigin/matrixone",
-      "name": "matrixone",
-      "url": "https://github.com/matrixorigin/matrixone",
-      "description": "AI-native HTAP database with Git-for-Data and built-in vector search, serving as the data and memory backbone for intelligent agents and applications.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 0.9,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1881,
-      "topics": [
-        "agents",
-        "ai-native",
-        "cloud-native",
-        "database",
-        "distributed-database",
-        "distributed-systems",
-        "fulltext-support",
-        "git-for-data",
-        "go",
-        "htap",
-        "hyperconverged",
-        "memory",
-        "mysql-compatible",
-        "olap",
-        "one-size-fits-all",
-        "sql",
-        "vector-database"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1293,29 +1138,6 @@
         "obsidian-plugin",
         "ollama",
         "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "Shichun-Liu/Agent-Memory-Paper-List",
-      "name": "Agent-Memory-Paper-List",
-      "url": "https://github.com/Shichun-Liu/Agent-Memory-Paper-List",
-      "description": "The paper list of \"Memory in the Age of AI Agents: A Survey\"",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 2339,
-      "topics": [
-        "agent",
-        "memory"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
