@@ -265,33 +265,6 @@
       ]
     },
     {
-      "repo": "browserbase/stagehand",
-      "name": "Stagehand",
-      "url": "https://github.com/browserbase/stagehand",
-      "description": "Browser-agent SDK with Playwright-style primitives, self-healing actions, local and remote browser control, and autonomous multi-step execution.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": "MIT",
-      "stars": 24057,
-      "topics": [
-        "agents",
-        "ai",
-        "llms",
-        "playwright",
-        "puppeteer",
-        "selenium"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "camel-ai/camel",
       "name": "CAMEL",
       "url": "https://github.com/camel-ai/camel",
@@ -1780,77 +1753,6 @@
       ]
     },
     {
-      "repo": "simular-ai/Agent-S",
-      "name": "Agent S",
-      "url": "https://github.com/simular-ai/Agent-S",
-      "description": "Computer-use agent framework with planning, GUI grounding, memory, and desktop automation capabilities.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.99,
-      "github_detected_license": "Apache-2.0",
-      "stars": 12189,
-      "topics": [
-        "agent-computer-interface",
-        "ai-agents",
-        "computer-automation",
-        "computer-use",
-        "computer-use-agent",
-        "cua",
-        "grounding",
-        "gui-agents",
-        "in-context-reinforcement-learning",
-        "memory",
-        "mllm",
-        "planning",
-        "retrieval-augmented-generation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "Skyvern-AI/skyvern",
-      "name": "Skyvern",
-      "url": "https://github.com/Skyvern-AI/skyvern",
-      "description": "Browser-workflow agent that plans and executes tasks through Playwright, vision models, validation, and observable workflow runs.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 22851,
-      "topics": [
-        "ai",
-        "api",
-        "automation",
-        "browser",
-        "browser-automation",
-        "computer",
-        "gpt",
-        "llm",
-        "playwright",
-        "powerautomate",
-        "puppeteer",
-        "python",
-        "rpa",
-        "selenium",
-        "vision",
-        "workflow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "softaworks/agent-toolkit",
       "name": "agent-toolkit",
       "url": "https://github.com/softaworks/agent-toolkit",
@@ -2397,75 +2299,6 @@
       ]
     },
     {
-      "repo": "HKUDS/nanobot",
-      "name": "nanobot",
-      "url": "https://github.com/HKUDS/nanobot",
-      "description": "Ultra-lightweight, open-source, self-hosted personal AI agent framework in Python with WebUI, tools, memory, MCP, multi-agent workflows, automation, and chat apps",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.7,
-      "github_detected_license": "MIT",
-      "stars": 47576,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "zhayujie/CowAgent",
-      "name": "CowAgent",
-      "url": "https://github.com/zhayujie/CowAgent",
-      "description": "Open-source super AI assistant & Agent Harness. Plans tasks, runs tools and skills, self-evolves with memory and knowledge. Multi-model, multi-channel. Lightweight, extensible, one-line install. (formerly chatgpt-on-wechat)",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.72,
-      "github_detected_license": "MIT",
-      "stars": 46741,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "herdrdev/herdr",
-      "name": "herdr",
-      "url": "https://github.com/herdrdev/herdr",
-      "description": "the runtime your coding agents live on",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.72,
-      "github_detected_license": "Apache-2.0",
-      "stars": 34049,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "BloopAI/vibe-kanban",
       "name": "vibe-kanban",
       "url": "https://github.com/BloopAI/vibe-kanban",
@@ -2674,5 +2507,5 @@
       ]
     }
   ],
-  "generated_at": "2026-09-01"
+  "generated_at": "2026-09-02"
 }

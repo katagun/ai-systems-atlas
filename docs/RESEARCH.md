@@ -71,6 +71,9 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Vane | A bounded research loop, self-hosted | An explicit tool registry with a deliberate finish action, and a plan shown to the reader | No tests or CI beyond an image build; dormant, with advertised providers absent |
 | dexter | Domain tools carry the specialisation | Nine implemented finance tools and a shell-parsing permission engine that fails closed | No licence file has ever existed; all data flows through one hard-coded vendor |
 | deepagents | A harness that earns its own build target | Its own storage protocol, model harness profiles, and three external benchmarks in CI | Inseparable from the framework beneath it, whose vendor tracing is a hard dependency |
+| Skyvern | Where the open core stops | A budgeted, retrying step loop with a failure classifier, plus a workflow builder and self-hosted server | Anti-bot and captcha solving are cloud overrides of open stubs; telemetry defaults on |
+| CowAgent | A messaging bridge that became a runtime | Standing named agents with their own workspaces, and delegation recorded as durable runs | Argument-level permissions defaulting to full access; no general test suite in CI |
+| nanobot | A runtime that is also a library | Version-controlled layered memory, checkpoint recovery, and four surfaces over one engine | Control governs who may talk, not what may run; isolation is Linux-only |
 
 ### Assistant-system research set
 
