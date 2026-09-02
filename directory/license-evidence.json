@@ -2585,6 +2585,90 @@
           "verified_at": "2026-09-02"
         }
       ]
+    },
+    {
+      "project_id": "emdash",
+      "repo": "generalaction/emdash",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/generalaction/emdash/blob/main/LICENSE.md",
+          "blob_sha": "52225c98d0bef1a06c840ab44b60871392489cf6",
+          "immutable_url": "https://api.github.com/repos/generalaction/emdash/git/blobs/52225c98d0bef1a06c840ab44b60871392489cf6"
+        }
+      ]
+    },
+    {
+      "project_id": "grok-cli",
+      "repo": "superagent-ai/grok-cli",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under a template MIT licence whose copyright holder was never filled in and whose permission clause is reworded; the package manifest and platform detection both report the standard identifier",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/superagent-ai/grok-cli/blob/main/LICENSE",
+          "blob_sha": "f242f29a9889aa9b3040d92e99e45db55d559f92",
+          "immutable_url": "https://api.github.com/repos/superagent-ai/grok-cli/git/blobs/f242f29a9889aa9b3040d92e99e45db55d559f92"
+        }
+      ]
+    },
+    {
+      "project_id": "stagewise",
+      "repo": "stagewise-io/stagewise",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Repository root under the canonical GNU Affero General Public License 3.0 through line 661, after which a seventeen-line addendum appends a separate restriction",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/stagewise-io/stagewise/blob/main/LICENSE",
+          "blob_sha": "3b044b51464da87d5a3364565de4234bc87a0073",
+          "immutable_url": "https://api.github.com/repos/stagewise-io/stagewise/git/blobs/3b044b51464da87d5a3364565de4234bc87a0073"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Bundled icon assets the shipped application depends on, declared neither open source nor redistributable and excluded from the copyleft grant; the vendor also offers commercial relicensing and operates a paid account tier",
+          "kind": "git_blob",
+          "path": "packages/icons/LICENSE",
+          "url": "https://github.com/stagewise-io/stagewise/blob/main/packages/icons/LICENSE",
+          "blob_sha": "1ecda26f8a0fa6813fbba71c71dba9407d6ecf03",
+          "immutable_url": "https://api.github.com/repos/stagewise-io/stagewise/git/blobs/1ecda26f8a0fa6813fbba71c71dba9407d6ecf03"
+        }
+      ]
+    },
+    {
+      "project_id": "beeai-framework",
+      "repo": "i-am-bee/beeai-framework",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository root under the Apache License 2.0, with a second identical copy shipped alongside the Python package",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/i-am-bee/beeai-framework/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/i-am-bee/beeai-framework/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "memobase",
+      "repo": "memodb-io/memobase",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0 with the appendix completed as the licence instructs; one component's manifest declares no licence and inherits the root",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/memodb-io/memobase/blob/main/LICENSE",
+          "blob_sha": "a5906aff66440994e680f18e1a1178aba3b791a0",
+          "immutable_url": "https://api.github.com/repos/memodb-io/memobase/git/blobs/a5906aff66440994e680f18e1a1178aba3b791a0"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

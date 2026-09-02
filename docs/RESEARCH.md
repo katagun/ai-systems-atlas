@@ -31,6 +31,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Hindsight | Beliefs with evidence, not a fact pile | Consolidation into observations with quoted proof, and a third-party runtime already using it as a backend | Every accuracy figure is vendor-run; the wrapper defaults to the vendor cloud |
 | DocsGPT | Enterprise governance not withheld | Role management, single sign-on, and teams in the permissive tree; agents as compatible and tool-server endpoints | The quick-start routes inference through the vendor's shared key |
 | MemOS | Memory cubes without reciprocation | Per-user, per-agent isolation, a real service surface, and on-device plugins for three runtimes | No targeted runtime names it as a backend; defaults and benchmarks are vendor-run |
+| Memobase | Memory as an editable user profile | A configurable profile schema plus an event timeline, directly editable through the API | Every first-party hosted surface is gone, and development stopped in January |
 
 ### Agent-system research set
 
@@ -89,6 +90,10 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Swarms | Dispatch that is real, marketing that is not | Typed order parsing verified by running the shipped package offline against stub workers | Zero passing test runs in thirty; telemetry on by default carries task text and conversation |
 | MagenticLite | A browser agent inside a virtual machine | The strongest isolation boundary reviewed, with approval-by-default and a grant table for folders | The rewrite deleted the planning feature its own description still advertises |
 | TaskWeaver | Generated Python over live state | Syntax-tree verification before execution, and a kernel that keeps tables alive across turns | Archived with no notice on the readme or the live documentation site; never packaged |
+| emdash | Parallel agent runs as a delivery process | One protocol contract driving thirty-eight vendors' tools, with a test gate that provisions native builds so specs actually run | No model client at all, so it is contingent on other vendors' tools |
+| stagewise | A coding agent inside its own browser | The live page's console and structure as environment adapters, and an approval default that cannot drift | The licence appends a carve-out for bundled icons the app depends on |
+| BeeAI Framework | Tool-use control declared ahead of the run | Requirement rules validated at construction, and one agent served over three protocols | The headline promises multi-agent; coordination is under five per cent of the package |
+| grok-cli | Scheduled unattended runs on one provider | Hooks that block at tool-call time, and reproducible signed binaries | File tools resolve absolute paths with no containment; no workflow runs its tests |
 
 ### Assistant-system research set
 

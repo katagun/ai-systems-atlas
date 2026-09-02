@@ -108,6 +108,12 @@
       "repo": "smtg-ai/claude-squad",
       "reason": "The system owns terminals rather than agents, on the same grounds as a previously excluded terminal workspace manager. It makes no model calls at all: its dependency manifest names no provider client and no HTTP client, and a search of its source for provider endpoints returns nothing. Its persisted model is a flat list of terminal sessions with no task, run, order, or message entity, and the agent state it displays is inferred by matching prompt strings in another product's screen output. The only occurrences of the word handoff in the tree are a help-screen heading for commands that hand work back to the human.",
       "useful_lesson": "A handoff heading in a help screen can name the handoff to the human. Check whether the persisted schema has a second entity beside the session before believing an orchestrator is there."
+    },
+    {
+      "name": "MiroFlow",
+      "repo": "MiroMindAI/MiroFlow",
+      "reason": "This is the maintained framework the excluded model release pointed at, and the operational boundary is not here either. The agent loop is in the source tree, but the repository is a benchmark harness around it: six of its seven entry-point commands are evaluation and scoring utilities, more than half its configurations are named for benchmarks, and the benchmark data sits in the tree. It has no tests of any kind and no test configuration; its only two workflows are a lint check and a title regex; it has no tags and no releases, and its package name exists on no index. The last commit touching code is nine months old and every other branch is older. The web interface its own repository description advertises lives in a different repository.",
+      "useful_lesson": "Being the maintained sibling of an excluded model release is not itself a qualification. The predecessor's tell was a test configuration pointing at a directory that was never written; this one's is that benchmark configurations outnumber product configurations many times over, which says what the repository is for more plainly than the absence of tests does."
     }
   ]
 }
