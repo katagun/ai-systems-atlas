@@ -17,7 +17,7 @@ Specifications and inference services are separate collections, not additional s
 
 ## Family 1: memory systems
 
-Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, retrieval infrastructure, and research reference.
+Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, and retrieval infrastructure.
 
 The memory score measures second-brain fit, data sovereignty, interoperability, memory intelligence, operational simplicity, and maturity.
 

@@ -11598,7 +11598,7 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "archived",
-      "current_repo_note": "Shut down in May 2026 and archived, with the extension delisted. Its own documentation names a community fork and its origin project as alternatives rather than declaring a successor, so the superseded status does not apply. It is the middle link between two published records, having forked from one and been forked into the other.",
+      "current_repo_note": "Shut down in May 2026 and archived, with the extension delisted. Its own documentation names a community fork, Zoo Code, and its origin project as alternatives rather than declaring a successor, so the superseded status does not apply. That fork is excluded as packaging under the derivative rule, being identical to this record on every named field; a reader wanting a maintained agent in this lineage is served by the other published fork. It is the middle link between two published records, having forked from one and been forked into the other.",
       "score": {
         "task_reliability": 6.8,
         "tool_use": 7.6,

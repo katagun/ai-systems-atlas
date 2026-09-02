@@ -46,6 +46,8 @@ When a maintainer publicly designates a named successor that the Atlas already p
 
 Use it only for a published maintainer declaration with a represented successor. Editorial judgment that a system has fallen behind belongs in weaknesses and the maturity dimension. A rename or rebrand stays one record with a note. See [ADR 016](adr/016-superseded-predecessors-keep-their-record.md).
 
+Set `status` to `archived` when a system is no longer an operational choice a reader could adopt. That is an editorial conclusion, not a mirror of a hosting platform's flag: a maintainer who publicly declares the work stopped archives the record whether or not the repository carries the flag, and a maintainer who names no successor archives the record too, because supersession requires both a declaration and a represented successor. Sustained silence without a declaration is not enough on its own; that judgment belongs in weaknesses and the maturity dimension. The metadata refresh may promote an active record to archived when the platform reports it, and never overwrites an editorial status in either direction.
+
 ## Editorial scores
 
 Scores run from 0 to 10. The overall is the profile's weighted sum rounded to two decimals.

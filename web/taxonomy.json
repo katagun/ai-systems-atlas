@@ -14,7 +14,6 @@
     {"id": "memory_bridge", "family": "memory_system", "name": "Human–agent memory bridge", "definition": "A compatibility layer that exposes human-owned files or workspaces to multiple agents."},
     {"id": "ambient_capture", "family": "memory_system", "name": "Ambient capture / lifelogging", "definition": "A passive collector that records digital activity without requiring deliberate note creation."},
     {"id": "retrieval_infrastructure", "family": "memory_system", "name": "Retrieval / storage infrastructure", "definition": "A low-level vector, graph, lexical, or multimodal store used to build memory systems."},
-    {"id": "research_reference", "family": "memory_system", "name": "Research / benchmark / reference", "definition": "A survey, benchmark, course, template, or catalog that informs memory implementation."},
     {"id": "general_work_agent", "family": "agent_system", "name": "General work agent", "definition": "An end-user agent that accepts broad delegated outcomes and executes multi-step knowledge work across files, the web, applications, and scheduled workflows."},
     {"id": "coding_agent", "family": "agent_system", "name": "Coding agent", "definition": "An interactive agent that reads, edits, runs, and reasons about software projects."},
     {"id": "research_agent", "family": "agent_system", "name": "Research agent", "definition": "An agent that plans multi-step information gathering and synthesizes cited findings."},

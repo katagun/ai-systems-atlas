@@ -1612,30 +1612,6 @@
         "traits",
         "editorial_score"
       ]
-    },
-    {
-      "repo": "Zoo-Code-Org/Zoo-Code",
-      "name": "Zoo Code",
-      "url": "https://github.com/Zoo-Code-Org/Zoo-Code",
-      "description": "Community continuation of Roo Code, carrying the same editor coding agent forward after its maintainers wound the product down.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1774,
-      "topics": [
-        "coding-agent",
-        "fork",
-        "vscode"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-01",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
     }
   ],
   "generated_at": "2026-09-02"
