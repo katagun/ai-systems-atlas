@@ -431,46 +431,6 @@
       ]
     },
     {
-      "repo": "generalaction/emdash",
-      "name": "emdash",
-      "url": "https://github.com/generalaction/emdash",
-      "description": "Emdash is the Open-Source Agentic Development Environment (🧡 YC W26). Run multiple coding agents in parallel. Use any provider.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "Apache-2.0",
-      "stars": 5488,
-      "topics": [
-        "agenticdevelopment",
-        "agenticdevelopmentenvironment",
-        "ai",
-        "claude-code",
-        "cli",
-        "coding-agents",
-        "codingagents",
-        "containerization",
-        "docker",
-        "gitworktrees",
-        "jira",
-        "linear",
-        "llm",
-        "openai",
-        "opensource",
-        "orchestration",
-        "parallel-agents",
-        "parallelexecution",
-        "terminal"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "henrydaum/second-brain",
       "name": "second-brain",
       "url": "https://github.com/henrydaum/second-brain",
@@ -751,36 +711,6 @@
       ]
     },
     {
-      "repo": "i-am-bee/beeai-framework",
-      "name": "BeeAI Framework",
-      "url": "https://github.com/i-am-bee/beeai-framework",
-      "description": "Python and TypeScript framework for building agents and multi-agent workflows with tools, memory, middleware, and protocol integrations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.95,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3385,
-      "topics": [
-        "agents",
-        "ai",
-        "ai-agent",
-        "beeai",
-        "framework",
-        "llm",
-        "multiagent",
-        "python",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "IAAR-Shanghai/Awesome-AI-Memory",
       "name": "Awesome-AI-Memory",
       "url": "https://github.com/IAAR-Shanghai/Awesome-AI-Memory",
@@ -1032,37 +962,6 @@
       ]
     },
     {
-      "repo": "memodb-io/memobase",
-      "name": "Memobase",
-      "url": "https://github.com/memodb-io/memobase",
-      "description": "Self-hostable long-term memory service that derives structured user profiles and time-aware events for AI applications through APIs and SDKs.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.99,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2858,
-      "topics": [
-        "ai-companion",
-        "ai-memory",
-        "chatgpt",
-        "llm-application",
-        "llm-memory",
-        "long-term-memory",
-        "memory",
-        "rag",
-        "retrieval",
-        "user-memory"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "mindsdb/mindshub",
       "name": "MindsHub",
       "url": "https://github.com/mindsdb/mindshub",
@@ -1253,7 +1152,7 @@
       "repo": "PawanOsman/OpenCursor",
       "name": "OpenCursor",
       "url": "https://github.com/PawanOsman/OpenCursor",
-      "description": "Open-source Cursor-like AI coding agent for VS Code — agentic chat, multi-provider LLMs (OpenAI, Ollama, llama.cpp), semantic search, and MCP support",
+      "description": "VS Code coding-agent extension with bundled local inference; the repository was rewritten in place in July 2026 from an unrelated reverse proxy, so its adoption figures belong to that defunct product.",
       "proposed_system_family": "agent_system",
       "proposed_primary_role": "coding_agent",
       "classification_confidence": 0.82,
@@ -1445,58 +1344,6 @@
         "claude-code",
         "coding-agent",
         "development"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "stagewise-io/stagewise",
-      "name": "stagewise",
-      "url": "https://github.com/stagewise-io/stagewise",
-      "description": "The Open Source Agentic IDE. Create and orchestrate coding agents, show app previews and run git workflows. Use your favorite models across all providers.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.86,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 6788,
-      "topics": [
-        "agent",
-        "agent-orchestration",
-        "ide"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "superagent-ai/grok-cli",
-      "name": "grok-cli",
-      "url": "https://github.com/superagent-ai/grok-cli",
-      "description": "An open-source coding agent for the Grok API",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 3433,
-      "topics": [
-        "agents",
-        "ai",
-        "cli",
-        "code",
-        "coding-agent",
-        "grok",
-        "xai"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1961,29 +1808,6 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-01",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "MiroMindAI/MiroFlow",
-      "name": "MiroFlow",
-      "url": "https://github.com/MiroMindAI/MiroFlow",
-      "description": "The maintained agent framework behind MiroThinker's bundled scaffold, with a web interface and support for several model providers.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.75,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3102,
-      "topics": [
-        "research-agent",
-        "framework"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-02",
       "review_required": [
         "licensing",
         "classification",

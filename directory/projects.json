@@ -13806,6 +13806,479 @@
       "open_issues": 164,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "emdash",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "emdash",
+      "repo": "generalaction/emdash",
+      "url": "https://github.com/generalaction/emdash",
+      "description": "Desktop application that runs several third-party coding-agent command lines in parallel, each in its own working tree, with issue-tracker intake, diff review, pull-request handling, scheduled automations, and remote workspaces.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "append_only"
+      ],
+      "canonical_data": "a working tree per task plus a local database of workspaces, conversations, automation deployments, and pull-request state",
+      "deployment": [
+        "desktop",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "The sweep proposed a coding-agent role, but no model client exists anywhere in the tree: it drives thirty-eight vendors' tools over one protocol contract. It is not the terminal-manager shape that excluded two earlier candidates, because its persisted schema carries workspaces, conversations, automation deployments, and pull-request state rather than a flat list of sessions, and it ships a scheduling runtime and a remote daemon of its own. Nothing hosts it, so the reserved add-on question is not reached.",
+      "score": {
+        "task_reliability": 8.6,
+        "tool_use": 8.0,
+        "autonomy": 7.8,
+        "human_control": 7.4,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 7.4,
+        "interoperability": 9.0,
+        "maturity": 7.2,
+        "overall": 7.98
+      },
+      "strengths": [
+        "The test job is a required gate on every change and provisions native database and terminal builds specifically so the migration and terminal specs actually execute rather than being skipped",
+        "Concurrency is designed rather than asserted, with seven of its own decision records settling workspace ownership, a single-writer registry, best-effort cancellation, and reconciled deletion",
+        "One generic protocol and plugin contract drives thirty-eight agent tools and reaches remote machines through a separately versioned daemon, so the reach does not come from per-vendor special cases"
+      ],
+      "weaknesses": [
+        "It executes nothing agentic itself, so its usefulness is entirely contingent on other vendors' tools and their protocol support",
+        "Only two of the thirty-eight adapters ship a bundled protocol asset; the rest require the user to have installed and authenticated the vendor's own tool",
+        "Telemetry is enabled by default in code, and nearly two hundred issues are open against a product that reached its first stable version weeks ago"
+      ],
+      "why_it_matters": "The most adopted attempt to make parallel, isolated coding-agent runs a reviewable delivery process, and the only reviewed system driving many vendors' agents through one protocol contract instead of per-vendor glue.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 5573,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T14:06:26Z",
+      "forks": 573,
+      "open_issues": 189,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "stagewise",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "stagewise",
+      "repo": "stagewise-io/stagewise",
+      "url": "https://github.com/stagewise-io/stagewise",
+      "description": "Desktop browser with a built-in coding agent that reads the open tab's console and page structure, edits the connected codebase, and can also drive external agents over a client protocol.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "moonshot_ai",
+        "x_ai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "the connected working tree plus a local agent database of sessions, plans, memory, and diff history",
+      "deployment": [
+        "desktop",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "The sweep proposed a workflow role describing a product that no longer exists: the browser toolbar was removed in November 2025 and the current product is a browser shipping its own agent. Its licence file is the canonical copyleft text with a seventeen-line addendum appended, carving out bundled icons the shipped application depends on as neither open source nor redistributable; neither the readme nor the platform's detection reflects that. The tree names two different legal entities for the same vendor.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 7.6,
+        "autonomy": 6.4,
+        "human_control": 8.4,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 5.6,
+        "interoperability": 7.4,
+        "maturity": 7.0,
+        "overall": 7.38
+      },
+      "strengths": [
+        "The agent reads the live page, with the console and page structure supplied as environment adapters rather than screenshots pasted into a prompt",
+        "The approval default is centralised in one constant with a written rationale for why stored migrations must not reference it, so the safe default cannot drift between the backend, the interface, and the database",
+        "Unit tests are a required gate on two operating systems, followed by cross-platform packaging with a smoke test"
+      ],
+      "weaknesses": [
+        "The licence file appends a carve-out for bundled icons the shipped application depends on, which neither the readme nor automated detection reflects",
+        "The shipped default routes inference through the vendor's own proxy against an account token, so bringing your own key is the configured path rather than the out-of-box one",
+        "The product replaced its own toolbar with a browser less than a year ago, so the current boundary has little operating history, and the tree names two different legal entities"
+      ],
+      "why_it_matters": "The only reviewed coding agent whose primary surface is a browser it ships itself, giving the agent the running page's console and structure as first-class context rather than as pasted evidence.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "AGPL-3.0",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "stars": 6800,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-08-17T19:00:31Z",
+      "forks": 508,
+      "open_issues": 17,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "grok-cli",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "grok-cli",
+      "repo": "superagent-ai/grok-cli",
+      "url": "https://github.com/superagent-ai/grok-cli",
+      "description": "Terminal coding agent for one vendor's model API with subagent delegation, scheduled headless runs, host desktop automation, and remote control over a messaging bot.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "x_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "the working tree, a local session and transcript store, saved schedules and run logs, and a generated wallet file under the user's home directory",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Distinct from the published community agent for the same model family on capabilities and canonical data rather than on interfaces, where it is the poorer of the two: it has no client-protocol surface, while the other does. Its licence is a template that was never filled in, naming no copyright holder. The last change to the default branch predates this review by three and a half months, and three pull requests claiming security fixes have been open since mid-2026.",
+      "score": {
+        "task_reliability": 5.4,
+        "tool_use": 8.2,
+        "autonomy": 8.2,
+        "human_control": 4.8,
+        "observability_recovery": 6.4,
+        "data_sovereignty": 6.8,
+        "interoperability": 5.6,
+        "maturity": 5.2,
+        "overall": 6.24
+      },
+      "strengths": [
+        "Hooks block at tool-call time across eighteen lifecycle events with a documented exit-code contract, rather than asking the model to obey prose",
+        "Unattended operation is first-class, with a scheduling daemon keeping persisted run logs and a batch mode against the provider's own batch interface, both covered by tests",
+        "Release engineering is unusually careful for the size, with reproducible per-platform binaries carrying checksums and build-provenance attestations"
+      ],
+      "weaknesses": [
+        "The file tools resolve absolute paths without any workspace containment, and the change fixing it has been open since July 2026 alongside two other unmerged security fixes",
+        "Two hundred and forty-eight tests exist and no workflow runs them; continuous integration gates formatting, linting, typing, and a build only",
+        "The licence is a template with the copyright holder never filled in, and a generated wallet private key sits in plain text under the user's home directory"
+      ],
+      "why_it_matters": "The most adopted independent coding agent built for one vendor's model API, and the only published one combining subagent delegation with scheduled unattended runs and host desktop automation.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 3449,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-07-06T14:05:33Z",
+      "forks": 420,
+      "open_issues": 32,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "beeai-framework",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "BeeAI Framework",
+      "repo": "i-am-bee/beeai-framework",
+      "url": "https://github.com/i-am-bee/beeai-framework",
+      "description": "Python and TypeScript framework for building tool-using agents, with provider adapters, declarative tool-use requirements, and delegation and pipeline primitives for running several agents together.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "application-defined agent memory, workflow state, and serialised agent snapshots",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state",
+        "mcp",
+        "shell_execution"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The sweep read the orchestrator role from a readme headline promising multi-agent systems, which is the framing the curation rules say not to classify on. The coordination layer is under five per cent of the package against eleven thousand lines of provider adapters, so the roles are the inverse of two published orchestrators and were decided the same way. Its delegation and workflow primitives were confirmed present in the shipped package by running it offline against stub agents.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 7.8,
+        "autonomy": 6.6,
+        "human_control": 8.0,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 7.2,
+        "interoperability": 9.0,
+        "maturity": 6.4,
+        "overall": 7.59
+      },
+      "strengths": [
+        "Its declarative requirement system is real control machinery rather than prompt guidance, validating rule sets at construction and raising on contradictions, with an approval gate that interposes before named tools run",
+        "Provider and protocol breadth without lock-in, covering many model providers plus local runtimes, three agent-serving protocols, and bridges into four other frameworks",
+        "The delegation and workflow primitives are implemented in the shipped package, confirmed by running it offline against stub agents"
+      ],
+      "weaknesses": [
+        "Its own headline promises multi-agent systems, but the coordination layer is a linear pipeline over a routing engine it never routes with, plus an agent-as-tool handoff",
+        "Two years and eighty-two releases in, it remains a pre-release version with no development-status classifier, and its flagship agent sits in an experimental package",
+        "The second language implementation is a lagging sibling rather than a peer, several releases and a month behind, with a fraction of the test tree"
+      ],
+      "why_it_matters": "Shows what a vendor-neutral agent framework looks like when tool-use control is declarative and validated ahead of the run, and when one agent definition can be served over three interoperability protocols unchanged.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 3387,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-09-02T08:05:39Z",
+      "forks": 486,
+      "open_issues": 14,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "memobase",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Memobase",
+      "repo": "memodb-io/memobase",
+      "url": "https://github.com/memodb-io/memobase",
+      "description": "Self-hosted memory server that turns chat transcripts into a configurable per-user profile and a searchable event timeline, and serves them over an API, three client libraries, and a tool server.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "structured_query",
+        "temporal",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation",
+        "append_only"
+      ],
+      "canonical_data": "a per-user profile organised by topic and an event timeline with embedded summaries, in a relational database with vector search, buffered through a cache; raw transcripts are discarded after processing unless retention is enabled",
+      "deployment": [
+        "self_hosted",
+        "library",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "Development stopped in January 2026 with several unanswered contributions, and the maintaining organisation's readme now opens by promoting a separate project that makes no reference back to this one, so no successor is declared and the supersession rule does not apply. Every first-party hosted surface is unreachable: the homepage and cloud sign-in return not-found, the playground fails, and the documented cloud host does not resolve; only the documentation site answers. The self-hosted path is intact, which is why this is not the dormancy shape that holds other candidates. No published runtime names it as a backend; its integrations run one way from its own clients.",
+      "score": {
+        "second_brain_fit": 6.6,
+        "data_sovereignty": 6.8,
+        "interoperability": 7.4,
+        "memory_intelligence": 6.8,
+        "operational_simplicity": 6.4,
+        "maturity": 4.2,
+        "overall": 6.44
+      },
+      "strengths": [
+        "The memory unit is a configurable per-user profile with an event timeline rather than an undifferentiated fact pile, with worked schemas shipped so an operator decides what is worth remembering before extraction",
+        "Genuinely replaceable infrastructure: three client libraries, a broad API, a tool server, and a drop-in patch that adds memory to an existing model call, all against one self-hosted stack",
+        "Profiles and events are directly editable and deletable through the API, and raw transcripts are discarded after processing by default"
+      ],
+      "weaknesses": [
+        "Every first-party hosted surface the readme sends readers to is gone, including the homepage, the cloud sign-in, the playground, and the documented cloud host",
+        "Development has stopped, with no commit for eight months and no client release for longer, while the same organisation promotes a different project",
+        "Its capture surface is narrower than its client advertises: the library offers six content types but the server processes only two and rejects the rest"
+      ],
+      "why_it_matters": "The clearest worked example of agent memory as a configurable, editable user profile plus an event timeline over an ordinary database, rather than a similarity search over accumulated facts.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 2877,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-01-11T03:51:40Z",
+      "forks": 232,
+      "open_issues": 32,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
     }
   ]
 }
