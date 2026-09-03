@@ -72,7 +72,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 
 .site-header {
   min-height: 88px;
-  padding: 0 clamp(1rem, 4vw, 4rem);
+  padding: 0 max(1.5rem, calc((100% - 1360px) / 2));
   border-bottom: 1px solid rgba(186, 198, 212, .72);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
