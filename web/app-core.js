@@ -207,8 +207,16 @@
     return null;
   }
 
+  // The theme control cycles through three states; anything else, including a
+  // value someone typed into storage, restarts at the OS preference.
+  const THEME_PREFERENCES = ["system", "light", "dark"];
+  function cycleThemePreference(current) {
+    return THEME_PREFERENCES[(THEME_PREFERENCES.indexOf(current) + 1) % THEME_PREFERENCES.length];
+  }
+
   return {
     compareProjects,
+    cycleThemePreference,
     directoryDefaults,
     filterAndSortProjects,
     filterDirectoryEntries,

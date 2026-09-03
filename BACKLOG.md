@@ -43,7 +43,7 @@ This is the source of truth for actionable repository work. Policy and field def
 ## Next
 
 - [x] Emit per-record share metadata now that every record has a URL; `scripts/build_share_pages.py` generates a static landing page per record with title, description, canonical link, preview tags, and JSON-LD, plus a sitemap and robots file, and Copy link now shares that page. Share images are the remaining piece and would need a browser-rendering step this repository does not yet run in CI. This came out of the 2026-09-02 review of `zoltlabs/ai-systems-atlas`, together with the three items below.
-- [ ] Add a three-state theme control (system, light, dark) on the existing CSS custom properties; the site is light-only today.
+- [x] Add a three-state theme control (system, light, dark). Every colour in `web/styles.css` now resolves through a token, the dark palette is defined once for the OS preference and once for an explicit choice with a unit test holding the two identical, and share pages follow the OS preference.
 - [ ] Replace the five per-collection search boxes with one search across records, specifications, and taxonomy terms that still lands in the right collection scope and never mixes score profiles under ADR 013.
 - [ ] Show related records and previous/next navigation inside detail dialogs from data the records already carry: same role, same family, and declared successors.
 - [ ] Surface local-runtime GitHub star counts in the Directory UI (card badge, sort option). `directory/local-runtimes.json` now carries `stars`/`stars_verified_at`, refreshed by `scripts/update_directory.py`, but the web app doesn't render them yet; data-only was a deliberate scope cut.

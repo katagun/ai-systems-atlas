@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="peacefulcoexistance is an AI systems directory: reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
   <meta name="theme-color" content="#f7f9fc">
+  <script>
+    // Stamp a stored theme choice before first paint so the page never flashes
+    // the wrong palette. app.js owns the control; this only reads the choice.
+    (function () {
+      try {
+        var theme = localStorage.getItem("theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch (error) {}
+    })();
+  </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="peacefulcoexistance — AI systems directory">
   <meta property="og:description" content="Reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
@@ -31,7 +41,10 @@
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
     </nav>
-    <a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer">GitHub ↗</a>
+    <div class="header-tools">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" title="Switch between system, light, and dark themes"></button>
+      <a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
   </header>
 
   <main id="main">

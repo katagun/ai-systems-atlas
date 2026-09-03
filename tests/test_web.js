@@ -1,6 +1,8 @@
 const test = require("node:test");
+const fs = require("node:fs");
+const path = require("node:path");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, cycleThemePreference, matchesProject, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -409,4 +411,42 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("inference", "openai-api"), "records/inference-services/openai-api/");
   assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
+});
+
+test("theme preference cycles system, light, dark and recovers from unknown values", () => {
+  assert.equal(cycleThemePreference("system"), "light");
+  assert.equal(cycleThemePreference("light"), "dark");
+  assert.equal(cycleThemePreference("dark"), "system");
+  assert.equal(cycleThemePreference("sepia"), "system");
+  assert.equal(cycleThemePreference(null), "system");
+});
+
+// The stylesheet is themed through custom properties only. Every colour lives
+// in the light :root block or in one of the two dark blocks, and the dark
+// blocks must define the same tokens with the same values so the OS
+// preference and an explicit choice can never drift apart.
+function stylesheetBlocks() {
+  const css = fs.readFileSync(path.join(__dirname, "..", "web", "styles.css"), "utf8");
+  const tokens = text => Object.fromEntries([...text.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(match => [match[1], match[2].trim()]));
+  const light = tokens(css.match(/^:root \{([\s\S]*?)^\}/m)[1]);
+  const osDark = tokens(css.match(/@media \(prefers-color-scheme: dark\) \{\s*:root:not\(\[data-theme="light"\]\) \{([\s\S]*?)\}\s*\}/)[1]);
+  const chosenDark = tokens(css.match(/^:root\[data-theme="dark"\] \{([\s\S]*?)^\}/m)[1]);
+  const rest = css
+    .replace(/^:root \{[\s\S]*?^\}/m, "")
+    .replace(/@media \(prefers-color-scheme: dark\) \{[\s\S]*?\}\s*\}/, "")
+    .replace(/^:root\[data-theme="dark"\] \{[\s\S]*?^\}/m, "");
+  return { light, osDark, chosenDark, rest };
+}
+
+test("both dark token blocks define the same tokens with the same values", () => {
+  const { light, osDark, chosenDark } = stylesheetBlocks();
+  assert.ok(Object.keys(osDark).length > 20, "dark palette is missing");
+  assert.deepEqual(osDark, chosenDark);
+  for (const token of Object.keys(osDark)) assert.ok(token in light, `${token} has no light definition`);
+});
+
+test("colours outside the token blocks are references, never literals", () => {
+  const { rest } = stylesheetBlocks();
+  const literals = [...rest.matchAll(/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\b(?:white|black)\b(?!-)/g)].map(match => match[0]);
+  assert.deepEqual(literals, []);
 });
