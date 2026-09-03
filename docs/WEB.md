@@ -8,7 +8,7 @@ The interface uses a technical editorial system: cool paper backgrounds, crisp w
 
 ## Content hierarchy
 
-The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Atlas Finder action. It presents systems, inference services, and local runtimes through collection scopes without merging their canonical records or scores.
+The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Finder action. It presents systems, inference services, and local runtimes through collection scopes without merging their canonical records or scores.
 
 Use progressive disclosure for explanation and specialist controls:
 

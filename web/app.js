@@ -1264,5 +1264,5 @@ function bindEvents() {
 }
 
 bootstrap().catch(error => {
-  document.body.innerHTML = `<main><div class="notice">AI Systems Atlas failed to load: ${escapeHTML(error.message)}</div></main>`;
+  document.body.innerHTML = `<main><div class="notice">peacefulcoexistance failed to load: ${escapeHTML(error.message)}</div></main>`;
 });
