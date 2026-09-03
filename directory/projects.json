@@ -14630,6 +14630,104 @@
       "license_review_status": "verified"
     },
     {
+      "id": "sandbase-harness",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "SandBase Harness",
+      "repo": "sandbaseai/sandbase-harness",
+      "url": "https://github.com/sandbaseai/sandbase-harness",
+      "description": "Local-first agent runtime and MCP bridge that manages sandboxed tool execution, credential vaults, and resumable session audit/replay for external model-driving clients, exposing a Claude Managed-Agents-compatible API rather than running its own reasoning loop.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "deepseek",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query",
+        "temporal"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "SQLite-backed session, event, and credential-vault store (.managed-agents/data.db) plus local filesystem artifacts and sandbox configuration",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": 642,
+      "stars_verified_at": "2026-09-03",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 3.5,
+        "tool_use": 5.0,
+        "autonomy": 3.0,
+        "human_control": 7.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.5,
+        "maturity": 2.0,
+        "overall": 5.27
+      },
+      "strengths": [
+        "Session, sandbox, credential, and audit/replay concerns are handled by dedicated, documented primitives — local, Docker, Kubernetes, and self-hosted worker sandboxes; a resumable Server-Sent Events stream for session replay; and a SQLite-backed credential vault — independent of which model or client drives reasoning",
+        "Speaks a Claude Managed-Agents-compatible /v1 API and a six-tool MCP bridge (list_agents, create_session, run_session, get_session, list_artifacts, stop_session), so unmodified clients such as Claude Code, GitHub Copilot, Cline, and DeepSeek Harness can drive it without a bespoke integration",
+        "Runs entirely on infrastructure the operator controls — local SQLite and filesystem storage with no required hosted control plane — and the user supplies their own OpenAI, Anthropic, DeepSeek, or OpenAI-compatible API keys"
+      ],
+      "weaknesses": [
+        "The runtime does not execute its own agent loop; all reasoning is delegated to an external client, so autonomy, planning quality, and task reliability are properties of whichever client connects rather than of this project",
+        "The project is about two months old with four GitHub contributors and rapid, closely spaced point releases (v0.3.4 through v0.3.8 within ten days), so operational maturity and long-term stability are unproven",
+        "The maintainer has run an unusually large, single-account self-promotion campaign — dozens of near-identical submissions to external 'awesome list' and MCP-directory repositories, most still 'maintainer review pending' — which this review independently confirmed against two of the linked pull requests; that pattern weakens confidence in community-adoption signals like stars and forks without changing the reviewed technical claims, which were verified directly against the project's own license, README, and installation documentation"
+      ],
+      "why_it_matters": "One of the few open, client-agnostic runtimes that treats agent session state, sandbox isolation, credentials, and audit/replay as infrastructure separate from the reasoning loop, letting operators pair it with whichever coding or chat agent they already use.",
+      "research_confidence": "low",
+      "verified_at": "2026-09-03",
+      "pushed_at": "2026-08-31T11:17:00Z",
+      "forks": 63,
+      "open_issues": 11,
+      "metadata_verified_at": "2026-09-03",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
       "id": "babyagi",
       "system_family": "agent_system",
       "score_profile": "agent",
