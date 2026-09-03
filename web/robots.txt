@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://katagun.github.io/ai-systems-atlas/sitemap.xml
+Sitemap: https://peacefulcoexistance.com/sitemap.xml

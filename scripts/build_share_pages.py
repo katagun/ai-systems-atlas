@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE_URL = "https://katagun.github.io/ai-systems-atlas/"
+SITE_URL = "https://peacefulcoexistance.com/"
 SITE_NAME = "peacefulcoexistance"
 SITE_TAGLINE = "AI systems directory"
 RECORD_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
