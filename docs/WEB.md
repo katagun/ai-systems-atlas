@@ -87,6 +87,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 | record URLs and detail dialog history | `web/app-core.js` `parseRecordReference` and `web/app.js` record functions |
 | theme palette and control | `web/styles.css` token blocks, `web/index.html` pre-paint stamp, `web/app.js` theme functions |
 | layout and responsive behavior | `web/styles.css` |
+| asset cache busting | `scripts/build_asset_version.mjs`, run after any change to `web/fonts.css`, `web/styles.css`, `web/app-core.js`, or `web/app.js` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
 
@@ -101,6 +102,7 @@ node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
 node scripts/build_fonts.mjs --check
+node scripts/build_asset_version.mjs --check
 uv run python scripts/build_share_pages.py --check
 ```
 
@@ -142,5 +144,6 @@ Then verify in a browser:
 20. open a record from each Directory collection and from Specifications, confirm the URL carries `record=`, reload it, press back to close it, and use Copy link; open the copied share page and follow its link back into the dialog.
 21. confirm the network panel shows no request outside the site origin.
 22. cycle the theme control through system, light, and dark with the OS set to each preference; reload under a stored choice and confirm there is no flash; check cards, badges, dialogs, the comparison table, and the Finder in dark.
+23. confirm the theme control and the GitHub icon sit on the brand row at desktop, tablet, and phone widths, and that the GitHub icon carries an accessible name.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

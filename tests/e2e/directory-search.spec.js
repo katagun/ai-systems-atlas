@@ -20,7 +20,7 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
     "href",
     "https://katagun.github.io/ai-systems-atlas/",
   );
-  await expect(page.getByRole("link", { name: "GitHub ↗" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute(
     "href",
     "https://github.com/katagun/ai-systems-atlas",
   );

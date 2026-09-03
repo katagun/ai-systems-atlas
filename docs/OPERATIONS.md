@@ -86,6 +86,10 @@ The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-req
 
 `node scripts/build_fonts.mjs --check` rebuilds `web/fonts.css` and the woff2 files under `web/fonts/` in memory from the installed `@fontsource` packages and fails when the committed copies differ, so a font package bump or a face change cannot ship unvendored; regenerate with `node scripts/build_fonts.mjs`.
 
+## Asset versions
+
+`node scripts/build_asset_version.mjs --check` recomputes the `?v=` query string on every local asset `web/index.html` references (`fonts.css`, `styles.css`, `app-core.js`, `app.js`) from that file's content hash and fails when the committed page carries a different value, so a stylesheet or script change cannot ship under a version a browser has already cached. Regenerate with `node scripts/build_asset_version.mjs` after editing any of those files; `tests/test_web.js` enforces the same rule.
+
 ## Logo coverage
 
 `node scripts/build_logos.mjs --check` rebuilds `web/logos.json` in memory and fails when the committed file no longer matches the record map, the published records, or the installed icon-package versions. It also reports every monogram record and flags candidates whose id or name now matches an available icon slug. Three rails keep coverage current:

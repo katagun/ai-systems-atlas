@@ -1,4 +1,5 @@
 const test = require("node:test");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
@@ -449,4 +450,24 @@ test("colours outside the token blocks are references, never literals", () => {
   const { rest } = stylesheetBlocks();
   const literals = [...rest.matchAll(/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\b(?:white|black)\b(?!-)/g)].map(match => match[0]);
   assert.deepEqual(literals, []);
+});
+
+function indexHTML() {
+  return fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+}
+
+test("index.html references each web asset under its content hash so a change is never served from a stale cache", () => {
+  const references = [...indexHTML().matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)];
+  assert.deepEqual(references.map(match => match[1]).sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
+  for (const [, file, version] of references) {
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} is referenced as ?v=${version} but its content hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+  }
+});
+
+test("the GitHub link is an icon with an accessible name rather than visible text", () => {
+  const link = indexHTML().match(/<a class="github-link"[^>]*>([\s\S]*?)<\/a>/);
+  assert.ok(link, "no .github-link anchor in index.html");
+  assert.match(link[0], /aria-label="GitHub"/);
+  assert.match(link[1], /^\s*<svg[^>]*aria-hidden="true"[^>]*>[\s\S]*<\/svg>\s*$/, "the link body must be exactly one hidden SVG with no visible text");
 });

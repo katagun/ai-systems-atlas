@@ -336,15 +336,18 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 :root[data-theme="light"] .theme-toggle::before { content: "☼"; }
 :root[data-theme="dark"] .theme-toggle::before { content: "☾"; }
 .github-link {
-  color: var(--muted);
-  padding: .5rem .7rem;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--glass-weak);
-  font: 600 .72rem var(--font-mono);
+  color: var(--muted);
   text-decoration: none;
 }
-.github-link:hover { color: var(--text); }
+.github-link svg { width: 18px; height: 18px; fill: currentColor; }
+.github-link:hover { color: var(--text); border-color: var(--line-strong); }
 
 main { width: min(1360px, calc(100% - 3rem)); margin: 0 auto; }
 .view { display: none; padding: clamp(3.5rem, 7vw, 7rem) 0; }
@@ -1093,13 +1096,13 @@ footer {
   .project-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-choice-grid,
   .finder-choice-grid.direction-grid { grid-template-columns: repeat(2, 1fr); }
-  .site-header { grid-template-columns: 1fr auto; }
-  .github-link { display: none; }
+  .site-header { grid-template-columns: 1fr auto auto; column-gap: .75rem; }
 }
 
 @media (max-width: 720px) {
   main, footer { width: min(100% - 1.5rem, 1360px); }
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
+  .header-tools { order: 2; }
   .brand small { display: none; }
   .tabs { order: 3; width: 100%; min-height: 42px; padding: .2rem; justify-content: flex-start; overflow-x: auto; border-radius: 10px; }
   .tab { flex: 0 0 auto; padding: .48rem .62rem; font-size: .68rem; }
