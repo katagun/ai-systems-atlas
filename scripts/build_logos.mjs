@@ -145,6 +145,7 @@ const RECORD_MARKS = {
   "openvino-model-server": "simple:intel",
   "tensorflow-serving": "simple:tensorflow",
   "tensorrt-llm": "lobe:nvidia",
+  "text-embeddings-inference": "lobe:huggingface",
   vllm: "lobe:vllm",
   xinference: "lobe:xinference",
 };
