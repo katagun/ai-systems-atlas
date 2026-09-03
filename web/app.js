@@ -415,13 +415,34 @@ function renderStats() {
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
   const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length;
   $("#hero-kicker").textContent = `${total} reviewed systems, services, and runtimes`;
-  $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [assistants, "assistants"]
-  ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
+  $("#memory-collection-count").textContent = memories;
+  $("#agent-collection-count").textContent = agents;
+  $("#assistant-collection-count").textContent = assistants;
   $("#inference-collection-count").textContent = state.inferenceServices.length;
   $("#runtime-collection-count").textContent = state.localRuntimes.length;
+}
+
+function syncCollectionSwitcher() {
+  const family = $("#family-filter").value;
+  $$('[data-directory-collection]').forEach(button => {
+    const buttonFamily = button.dataset.directoryFamily;
+    const active = button.dataset.directoryCollection === state.directoryCollection
+      && (buttonFamily === undefined || buttonFamily === family);
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function jumpToDirectoryFamily(family) {
+  clearComparison();
+  $("#family-filter").value = family;
+  state.directoryRoles = null;
+  $("#role-filter").value = "";
+  populateRoleFilter();
+  updateScoreSortAvailability();
+  setDirectoryCollection("systems");
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
@@ -431,11 +452,7 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
     || (selected === "runtimes" && state.comparison.kind === "runtime");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
-  $$('[data-directory-collection]').forEach(button => {
-    const active = button.dataset.directoryCollection === selected;
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+  syncCollectionSwitcher();
   $("#all-directory-panel").hidden = selected !== "all";
   $("#systems-directory-panel").hidden = selected !== "systems";
   $("#inference-directory-panel").hidden = selected !== "inference";
@@ -1232,7 +1249,11 @@ function activateView(id) {
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
-  $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => setDirectoryCollection(button.dataset.directoryCollection)));
+  $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => {
+    const family = button.dataset.directoryFamily;
+    if (family !== undefined) jumpToDirectoryFamily(family);
+    else setDirectoryCollection(button.dataset.directoryCollection);
+  }));
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
@@ -1240,6 +1261,7 @@ function bindEvents() {
     $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
+    syncCollectionSwitcher();
     state.page.systems = 1;
     renderProjects();
   });
