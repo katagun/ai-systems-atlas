@@ -2789,6 +2789,54 @@
           "immutable_url": "https://api.github.com/repos/BloopAI/vibe-kanban/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
         }
       ]
+    },
+    {
+      "project_id": "pool",
+      "repo": "poolsideai/pool",
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "pool distribution notice in the public repository",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/poolsideai/pool/blob/main/LICENSE.md",
+          "blob_sha": "7bee63541f1035275265a554e85ade5e66965e1b",
+          "immutable_url": "https://api.github.com/repos/poolsideai/pool/git/blobs/7bee63541f1035275265a554e85ade5e66965e1b"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Poolside Terms of Use governing Products, which name Poolside Agent CLI",
+          "kind": "web_terms",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "poolside-assistant",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Poolside Terms of Use, which govern software Poolside makes publicly available; Poolside Assistant is not among the products the definition enumerates",
+          "kind": "web_terms",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "poolside-chat",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Poolside Terms of Use, which name Poolside Chat in the definition of Products",
+          "kind": "web_terms",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

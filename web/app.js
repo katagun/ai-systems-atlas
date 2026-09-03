@@ -416,8 +416,7 @@ function renderStats() {
   const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length;
   $("#hero-kicker").textContent = `${total} reviewed systems, services, and runtimes`;
   $("#hero-stats").innerHTML = [
-    [memories, "memory"], [agents, "agents"], [assistants, "assistants"],
-    [state.inferenceServices.length, "inference services"], [state.localRuntimes.length, "local runtimes"]
+    [memories, "memory"], [agents, "agents"], [assistants, "assistants"]
   ].map(([value, text]) => `<div class="stat"><strong>${escapeHTML(value)}</strong><span>${escapeHTML(text)}</span></div>`).join("");
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
