@@ -2746,6 +2746,21 @@
       ]
     },
     {
+      "project_id": "sandbase-harness",
+      "repo": "sandbaseai/sandbase-harness",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/sandbaseai/sandbase-harness/blob/main/LICENSE",
+          "blob_sha": "f5a3b7ecafc97cfdde0f1f38dbc62a2789268420",
+          "immutable_url": "https://api.github.com/repos/sandbaseai/sandbase-harness/git/blobs/f5a3b7ecafc97cfdde0f1f38dbc62a2789268420"
+        }
+      ]
+    },
+    {
       "project_id": "babyagi",
       "repo": "yoheinakajima/babyagi_archive",
       "items": [
