@@ -282,33 +282,6 @@
       ]
     },
     {
-      "repo": "dendronhq/dendron",
-      "name": "dendron",
-      "url": "https://github.com/dendronhq/dendron",
-      "description": "The personal knowledge management (PKM) tool that grows as you do!",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": "Apache-2.0",
-      "stars": 7463,
-      "topics": [
-        "dendron",
-        "markdown",
-        "markdown-editor",
-        "pkm",
-        "vscode",
-        "zettelkasten"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "disler/super-simple-software-factory",
       "name": "super-simple-software-factory",
       "url": "https://github.com/disler/super-simple-software-factory",
@@ -1560,29 +1533,6 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-29",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "BloopAI/vibe-kanban",
-      "name": "vibe-kanban",
-      "url": "https://github.com/BloopAI/vibe-kanban",
-      "description": "Get 10X more out of Claude Code, Codex or any coding agent",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.72,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27972,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
       "review_required": [
         "licensing",
         "classification",

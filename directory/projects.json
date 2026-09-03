@@ -3728,7 +3728,7 @@
         "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
         "Service-managed context and memory reduce data portability and local control"
       ],
-      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use\u2014not only text chat.",
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
       "research_confidence": "medium",
       "verified_at": "2026-08-26",
       "licenses": [
@@ -7847,7 +7847,7 @@
       },
       "strengths": [
         "Genuinely multi-language rather than a Python project with ports: maintained Python, .NET, and Java trees in one repository with published PyPI and NuGet packages and per-language API references",
-        "A wide substitutable integration surface \u2014 OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
+        "A wide substitutable integration surface — OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
         "Explicit developer control surfaces: typed kernel functions, OpenAPI and MCP plugins, function-choice behavior, filters, reliability policies, structured output through Pydantic models, and the Process Framework for modeling business workflows"
       ],
       "weaknesses": [
@@ -8998,7 +8998,7 @@
       "weaknesses": [
         "The runtime is vendor-operated inside a customer org with no self-hosted option, so execution and data both stay on the vendor's infrastructure",
         "Capability is bounded by the surrounding platform: the richest actions, knowledge sources, and escalation targets are all first-party",
-        "The brand covers prebuilt assistants and several separately sold products, so published material about \u201cAgentforce\u201d often describes something other than this platform"
+        "The brand covers prebuilt assistants and several separately sold products, so published material about “Agentforce” often describes something other than this platform"
       ],
       "why_it_matters": "The agent-building layer inside one of the largest enterprise data platforms, where the agent's reach is defined by records and permissions the organisation already maintains.",
       "licenses": [
@@ -9884,7 +9884,7 @@
         "overall": 7.92
       },
       "strengths": [
-        "Four interfaces \u2014 terminal, web, HTTP gateway, and an embedded client \u2014 share one config, checkpointer, memory, and sandbox stack",
+        "Four interfaces — terminal, web, HTTP gateway, and an embedded client — share one config, checkpointer, memory, and sandbox stack",
         "Memory writes pass a deterministic scope and authority gate that fails closed, and facts stay readable Markdown files",
         "Sandboxed execution spans host, Docker, Kubernetes, and remote VMs with capacity limits enforced across the deployment"
       ],
@@ -12008,7 +12008,7 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts \u2014 anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors \u2014 live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
+      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts — anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors — live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
       "score": {
         "task_reliability": 7.6,
         "tool_use": 8.0,
@@ -13163,7 +13163,7 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists \u2014 role management, single sign-on with provisioning, teams, and connectors \u2014 are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
+      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists — role management, single sign-on with provisioning, teams, and connectors — are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
       "score": {
         "second_brain_fit": 7.6,
         "data_sovereignty": 6.8,
@@ -13174,7 +13174,7 @@
         "overall": 7.48
       },
       "strengths": [
-        "The governance features a competitor sells as enterprise \u2014 role management, single sign-on with provisioning, and teams \u2014 are in the permissive tree and documented",
+        "The governance features a competitor sells as enterprise — role management, single sign-on with provisioning, and teams — are in the permissive tree and documented",
         "Agents are first-class integration surfaces: any compatible client or tool-server host can call a configured agent",
         "A real correctness gate, with thousands of tests run on every push and coverage reported"
       ],
@@ -14717,6 +14717,175 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "dendron",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Dendron",
+      "repo": "dendronhq/dendron",
+      "url": "https://github.com/dendronhq/dendron",
+      "description": "Editor-based note tool that organises Markdown notes in a strict hierarchy with schemas, lookup, refactoring, and a publishing pipeline.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "plain_files",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "a vault of Markdown notes on disk, named by hierarchy, with schemas and configuration the user owns",
+      "deployment": [
+        "ide_extension",
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "archived",
+      "current_repo_note": "Archived on the maintainer's own published declaration, not on a platform flag: the readme states active development has ceased and the project is in maintenance only, following a public announcement that the company behind it did not find a viable business. No successor is named, so the supersession status does not apply. The last commit touching product code is from August 2023, no releases exist, and the editor extension has not been updated since; its documentation site and published vaults still resolve. A search across its whole source tree finds no model or embedding code, so it is a plain note tool rather than an assisted one.",
+      "score": {
+        "second_brain_fit": 7.8,
+        "data_sovereignty": 8.6,
+        "interoperability": 7.4,
+        "memory_intelligence": 6.0,
+        "operational_simplicity": 7.0,
+        "maturity": 3.4,
+        "overall": 6.84
+      },
+      "strengths": [
+        "Hierarchical naming with schemas makes structure enforceable rather than conventional, so a large vault stays navigable by lookup instead of by memory",
+        "Notes are ordinary Markdown files on disk that survive the tool, and the publishing pipeline turns a vault into a site the author owns",
+        "Import and export adapters move whole vaults between other note tools without a proprietary intermediate format"
+      ],
+      "weaknesses": [
+        "Development ceased in early 2023 by the maintainer's own declaration, with no release since and hundreds of issues left open",
+        "It has no model or embedding code anywhere in its tree, so every assisted-retrieval capability its neighbours offer is absent",
+        "Licence metadata is inconsistent: several packages declare no licence at all, others use a non-standard identifier string, and a notice file asserts all rights reserved beside a permissive licence"
+      ],
+      "why_it_matters": "The most complete worked example of hierarchy and schemas as the organising principle of a note vault, and a reminder that a widely installed tool can stop without its files becoming unreadable.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 7464,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2025-11-13T05:31:19Z",
+      "forks": 303,
+      "open_issues": 800,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "vibe-kanban",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Vibe Kanban",
+      "repo": "BloopAI/vibe-kanban",
+      "url": "https://github.com/BloopAI/vibe-kanban",
+      "description": "Board application that ran several vendors' coding-agent tools as supervised processes, each in its own working tree, with approval gating and diff review.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "git_versioned",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "a working tree per task plus a local database of tasks, attempts, and execution processes",
+      "deployment": [
+        "local_cli",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "archived",
+      "current_repo_note": "Archived on the maintainer's own published declaration rather than a platform flag: the readme carries a sunsetting banner and the company behind it announced its closure in April 2026. Its final release retired the board and issue flows to an export-only page, so the product a reader would install no longer does what its name describes, though the per-task working-tree runs remain. No successor is named, so the supersession status does not apply.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 7.6,
+        "autonomy": 6.6,
+        "human_control": 7.8,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.8,
+        "interoperability": 8.4,
+        "maturity": 3.0,
+        "overall": 7.05
+      },
+      "strengths": [
+        "Approval is real machinery rather than prose, with a service interface that creates a tool approval and blocks until it is answered",
+        "One adapter per vendor drives nine different coding-agent tools as supervised processes, each isolated in its own working tree",
+        "Substantial correctness infrastructure for its size, with hundreds of tests, dozens of schema migrations, and workflows covering the interface, the server, and the desktop build"
+      ],
+      "weaknesses": [
+        "The company behind it announced its closure, and the last commit, release, and package publication all fall in the same week of April 2026",
+        "Its final change retired the board and issue flows the product is named for, leaving an export page in their place",
+        "A promised community continuation was announced but no commit has followed in the months since"
+      ],
+      "why_it_matters": "Showed a task board as the surface for parallel agent work, with per-task working trees and blocking approvals, and then retired the board while the machinery beneath it stayed.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 27995,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "pushed_at": "2026-04-24T09:17:34Z",
+      "forks": 2996,
+      "open_issues": 539,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "Apache-2.0"
     }
   ]
 }
