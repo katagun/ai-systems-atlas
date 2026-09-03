@@ -469,6 +469,5 @@ test("the GitHub link is an icon with an accessible name rather than visible tex
   const link = indexHTML().match(/<a class="github-link"[^>]*>([\s\S]*?)<\/a>/);
   assert.ok(link, "no .github-link anchor in index.html");
   assert.match(link[0], /aria-label="GitHub"/);
-  assert.match(link[1], /<svg[^>]*aria-hidden="true"/);
-  assert.equal(link[1].replace(/<[^>]+>/g, "").trim(), "");
+  assert.match(link[1], /^\s*<svg[^>]*aria-hidden="true"[^>]*>[\s\S]*<\/svg>\s*$/, "the link body must be exactly one hidden SVG with no visible text");
 });
