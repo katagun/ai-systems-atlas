@@ -299,6 +299,31 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
+test("the Memory, Agents, and Assistants chips jump straight into their filtered, scored family", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("button", { name: /^Memory / }).click();
+  await expect(page).toHaveURL(/collection=systems/);
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Memory / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Agents / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
+  await expect(page.locator("#project-grid .score-ring").first()).toBeVisible();
+  await expect(page.locator("#result-count")).toContainText("Memory-system score");
+
+  await page.getByRole("button", { name: /^Agents / }).click();
+  await expect(page.getByRole("button", { name: /^Memory / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: /^Agents / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expect(page.locator("#result-count")).toContainText("Agent-system score");
+
+  await page.getByRole("button", { name: /^Assistants / }).click();
+  await expect(page.getByRole("button", { name: /^Agents / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: /^Assistants / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
+  await expect(page.locator("#result-count")).toContainText("Assistant-system score");
+});
+
 test("system comparisons require one family and restore from a shareable URL", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /^Systems / }).click();
