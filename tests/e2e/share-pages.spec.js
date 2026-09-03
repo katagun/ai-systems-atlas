@@ -3,13 +3,13 @@ const { test, expect } = require("@playwright/test");
 test("a share page carries record metadata and opens the record in the Atlas", async ({ page }) => {
   await page.goto("/records/systems/kilo-code/");
 
-  await expect(page).toHaveTitle("Kilo Code · AI Systems Atlas");
+  await expect(page).toHaveTitle("Kilo Code · peacefulcoexistance");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://katagun.github.io/ai-systems-atlas/records/systems/kilo-code/");
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "Kilo Code");
   await expect(page.locator("h1")).toHaveText("Kilo Code");
   await expect(page.locator("main")).not.toContainText(/\d\.\d/);
 
-  await page.getByRole("link", { name: /Open in the Atlas/ }).click();
+  await page.getByRole("link", { name: /Open in the directory/ }).click();
   await expect(page).toHaveURL(/record=system(%3A|:)kilo-code/);
   await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
 });

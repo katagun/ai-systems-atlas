@@ -41,7 +41,9 @@ class SharePageTests(unittest.TestCase):
 
     def test_system_page_carries_share_metadata_and_an_atlas_link(self) -> None:
         page = self.pages["records/systems/kilo-code/index.html"]
-        self.assertIn("<title>Kilo Code · AI Systems Atlas</title>", page)
+        self.assertIn("<title>Kilo Code · peacefulcoexistance</title>", page)
+        self.assertIn('<meta property="og:site_name" content="peacefulcoexistance">', page)
+        self.assertNotIn("Atlas", page)
         self.assertIn(f'<link rel="canonical" href="{SITE_URL}records/systems/kilo-code/">', page)
         self.assertIn('<meta property="og:title" content="Kilo Code">', page)
         self.assertIn(f'<meta property="og:url" content="{SITE_URL}records/systems/kilo-code/">', page)

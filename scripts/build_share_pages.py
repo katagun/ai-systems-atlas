@@ -5,7 +5,7 @@ The application is one index.html, so a record URL such as ``?record=system:kilo
 cannot carry its own title, description, or preview card. This script writes one small
 landing page per record under ``web/records/<collection>/<id>/`` with that metadata,
 JSON-LD, the record's identity and licensing facts, and a link that opens the record
-in the Atlas. Pages never show scores: a score only means something beside its
+in the directory. Pages never show scores: a score only means something beside its
 profile, which is the application's job.
 
 Run it after any published data change and commit the result. ``--check`` rebuilds in
@@ -22,7 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_URL = "https://katagun.github.io/ai-systems-atlas/"
-SITE_NAME = "AI Systems Atlas"
+SITE_NAME = "peacefulcoexistance"
+SITE_TAGLINE = "AI systems directory"
 RECORD_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 # kind (as in the application's record URL) -> (directory under web/records, catalog key)
@@ -167,7 +168,7 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
         "description": description,
         "url": url,
         "dateModified": record["verified_at"],
-        "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "url": SITE_URL},
+        "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "alternateName": SITE_TAGLINE, "url": SITE_URL},
         "about": about,
     }
     escaped_facts = [(label, value if label == "Superseded by" else html.escape(value)) for label, value in facts]
@@ -200,10 +201,10 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
 <h1>{html.escape(name)}</h1>
 <p class="lead">{html.escape(lead)}</p>
 <dl>{facts_html}</dl>
-<p class="actions"><a class="primary" href="../../../?record={kind}:{html.escape(record["id"])}">Open in the Atlas →</a> <a href="{html.escape(record["url"])}" rel="noreferrer">{official_label} ↗</a>{repo_link}</p>
-<p class="note">Editorial ratings appear in the Atlas beside the profile they belong to and are never compared across collections.</p>
+<p class="actions"><a class="primary" href="../../../?record={kind}:{html.escape(record["id"])}">Open in the directory →</a> <a href="{html.escape(record["url"])}" rel="noreferrer">{official_label} ↗</a>{repo_link}</p>
+<p class="note">Editorial ratings appear in the directory beside the profile they belong to and are never compared across collections.</p>
 </main>
-<footer>{SITE_NAME} · Reviewed {html.escape(record["verified_at"])} · <a href="../../../">Browse the directory</a></footer>
+<footer>{SITE_NAME} · {SITE_TAGLINE} · Reviewed {html.escape(record["verified_at"])} · <a href="../../../">Browse the directory</a></footer>
 </body>
 </html>
 """
