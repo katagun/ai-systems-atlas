@@ -3728,7 +3728,7 @@
         "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
         "Service-managed context and memory reduce data portability and local control"
       ],
-      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use\u2014not only text chat.",
       "research_confidence": "medium",
       "verified_at": "2026-08-26",
       "licenses": [
@@ -7847,7 +7847,7 @@
       },
       "strengths": [
         "Genuinely multi-language rather than a Python project with ports: maintained Python, .NET, and Java trees in one repository with published PyPI and NuGet packages and per-language API references",
-        "A wide substitutable integration surface — OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
+        "A wide substitutable integration surface \u2014 OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
         "Explicit developer control surfaces: typed kernel functions, OpenAPI and MCP plugins, function-choice behavior, filters, reliability policies, structured output through Pydantic models, and the Process Framework for modeling business workflows"
       ],
       "weaknesses": [
@@ -8998,7 +8998,7 @@
       "weaknesses": [
         "The runtime is vendor-operated inside a customer org with no self-hosted option, so execution and data both stay on the vendor's infrastructure",
         "Capability is bounded by the surrounding platform: the richest actions, knowledge sources, and escalation targets are all first-party",
-        "The brand covers prebuilt assistants and several separately sold products, so published material about “Agentforce” often describes something other than this platform"
+        "The brand covers prebuilt assistants and several separately sold products, so published material about \u201cAgentforce\u201d often describes something other than this platform"
       ],
       "why_it_matters": "The agent-building layer inside one of the largest enterprise data platforms, where the agent's reach is defined by records and permissions the organisation already maintains.",
       "licenses": [
@@ -9884,7 +9884,7 @@
         "overall": 7.92
       },
       "strengths": [
-        "Four interfaces — terminal, web, HTTP gateway, and an embedded client — share one config, checkpointer, memory, and sandbox stack",
+        "Four interfaces \u2014 terminal, web, HTTP gateway, and an embedded client \u2014 share one config, checkpointer, memory, and sandbox stack",
         "Memory writes pass a deterministic scope and authority gate that fails closed, and facts stay readable Markdown files",
         "Sandboxed execution spans host, Docker, Kubernetes, and remote VMs with capacity limits enforced across the deployment"
       ],
@@ -12008,7 +12008,7 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts — anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors — live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
+      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts \u2014 anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors \u2014 live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
       "score": {
         "task_reliability": 7.6,
         "tool_use": 8.0,
@@ -13163,7 +13163,7 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists — role management, single sign-on with provisioning, teams, and connectors — are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
+      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists \u2014 role management, single sign-on with provisioning, teams, and connectors \u2014 are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
       "score": {
         "second_brain_fit": 7.6,
         "data_sovereignty": 6.8,
@@ -13174,7 +13174,7 @@
         "overall": 7.48
       },
       "strengths": [
-        "The governance features a competitor sells as enterprise — role management, single sign-on with provisioning, and teams — are in the permissive tree and documented",
+        "The governance features a competitor sells as enterprise \u2014 role management, single sign-on with provisioning, and teams \u2014 are in the permissive tree and documented",
         "Agents are first-class integration surfaces: any compatible client or tool-server host can call a configured agent",
         "A real correctness gate, with thousands of tests run on every push and coverage reported"
       ],
@@ -14621,6 +14621,95 @@
       "pushed_at": "2026-09-02T23:25:22Z",
       "forks": 88,
       "open_issues": 85,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": "MIT",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "babyagi",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "BabyAGI",
+      "repo": "yoheinakajima/babyagi_archive",
+      "url": "https://github.com/yoheinakajima/babyagi_archive",
+      "description": "Archived reference implementation of the original 2023 task-driven autonomous agent loop: an LLM creates, prioritizes, and executes tasks toward an objective, storing each result in a local vector store to inform the next task.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "local_runtime"
+      ],
+      "architectures": [
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "an in-memory task queue plus executed task results embedded and upserted into a local Chroma collection (or Weaviate/Pinecone) keyed by objective",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "workflows",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "archived",
+      "current_repo_note": "The live yoheinakajima/babyagi repository (22k+ stars) now hosts an unrelated, actively developed 'functionz' function-registration framework under the same name and maintainer, not a continuation of this task-loop agent; that project is tracked separately in the candidate queue. This record covers yoheinakajima/babyagi_archive, the maintainer's own September 2024 snapshot of the original, which is not itself GitHub-flagged archived but receives no further commits and is presented in its own README as a historical snapshot.",
+      "score": {
+        "task_reliability": 3.2,
+        "tool_use": 1.8,
+        "autonomy": 5.5,
+        "human_control": 2.2,
+        "observability_recovery": 2.2,
+        "data_sovereignty": 7.6,
+        "interoperability": 5.2,
+        "maturity": 1.8,
+        "overall": 3.44
+      },
+      "strengths": [
+        "Introduced the create-prioritize-execute-store loop that became the reference architecture for the 2023 wave of autonomous LLM agents; its own docs/inspired-projects.md lists the derivatives it spawned",
+        "Runs fully local-first when paired with Llama.cpp and the default local Chroma store, with no mandatory cloud dependency",
+        "A working Ray-backed cooperative mode lets multiple instances share one detached task queue and objective, a genuine (if partial) multi-instance extension"
+      ],
+      "weaknesses": [
+        "No approval step, budget cap, or stopping condition exists; task creation and prioritization run on unvalidated LLM text parsing, and continuous runs are documented as able to run up API costs indefinitely",
+        "The in-memory task queue is lost on any crash or restart; only vector-store results persist, so there is no real checkpoint or replay",
+        "The repository is a static September 2024 snapshot with no ongoing maintenance, and the live yoheinakajima/babyagi repository now reuses the same name for an unrelated project, which can mislead readers looking for the original",
+        "Distributed cooperative mode, as opposed to local, is an unimplemented stub in the shipped code"
+      ],
+      "why_it_matters": "The original create-prioritize-execute task loop that seeded the 2023 wave of autonomous LLM agents (AutoGPT and its many forks); most later agent frameworks either extended this pattern or were built explicitly to fix its lack of tool use, approvals, and recovery.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "stars": 109,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": 22356,
+      "pushed_at": "2024-09-30T07:52:44Z",
+      "forks": 26,
+      "open_issues": 1,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "MIT",
       "licenses": [

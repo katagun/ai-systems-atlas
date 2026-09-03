@@ -1632,6 +1632,26 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "yoheinakajima/babyagi",
+      "name": "BabyAGI (functionz)",
+      "url": "https://github.com/yoheinakajima/babyagi",
+      "description": "The maintainer's active, differently-scoped project now published under the BabyAGI name and repository: a 'functionz' framework for registering, storing, and executing Python functions from a database, with dependency tracking, secrets handling, and a management dashboard. Distinct in architecture and outcome from the original 2023 task-loop BabyAGI, which the maintainer moved to yoheinakajima/babyagi_archive (published separately as `babyagi`). setup.py claims the MIT License but the repository ships no LICENSE file, so source terms remain unresolved.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.4,
+      "github_detected_license": null,
+      "stars": 22356,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-02",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ],
   "generated_at": "2026-09-02"
