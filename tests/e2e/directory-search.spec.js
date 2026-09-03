@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("233 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("235 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 

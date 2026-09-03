@@ -2744,6 +2744,36 @@
           "immutable_url": "https://api.github.com/repos/exoharness/exo/git/blobs/2be669de9210f892afc3b33965c4f0c1105ad535"
         }
       ]
+    },
+    {
+      "project_id": "dendron",
+      "repo": "dendronhq/dendron",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository root under the Apache License 2.0; several packages declare no licence field and inherit it, and a notice file asserts all rights reserved beside it",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/dendronhq/dendron/blob/main/LICENSE.md",
+          "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+          "immutable_url": "https://api.github.com/repos/dendronhq/dendron/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
+        }
+      ]
+    },
+    {
+      "project_id": "vibe-kanban",
+      "repo": "BloopAI/vibe-kanban",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0 with the appendix placeholders left unfilled; it is the only licence file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/BloopAI/vibe-kanban/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/BloopAI/vibe-kanban/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"
