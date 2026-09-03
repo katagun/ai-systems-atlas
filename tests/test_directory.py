@@ -365,7 +365,7 @@ class DirectoryTests(unittest.TestCase):
             "volcengine-ark", "zhipu-bigmodel", "siliconflow-cn",
             "siliconflow-international", "qiniu-ai-inference",
             "stepfun-open-platform", "stepfun-open-platform-global",
-            "poolside-api",
+            "poolside-api", "sakana-fugu",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
