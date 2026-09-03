@@ -99,7 +99,7 @@ A GitHub-detected license mismatch is a review trigger, not a new license conclu
 4. Score only against the matching family profile.
 5. Record strengths, weaknesses, why the project matters, confidence, and verification date.
 6. Remove or resolve any corresponding candidate or license-review record.
-7. Run `uv run python scripts/sync_web_data.py`.
+7. Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py`.
 8. Run validation and tests with `uv`, then exercise the static UI.
 
 Automated discovery writes durable candidates with proposed family and role only. Candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.

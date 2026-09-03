@@ -967,7 +967,7 @@ function openLocalRuntime(id) {
 // `record=kind:id` URL, so the address bar always links to what is on screen.
 // Dispatch is static, as with comparisons, because the kind comes from the URL.
 const RECORD_DIALOG_SELECTORS = ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog"];
-const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">The current URL opens this record.</span></p>';
+const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">Copy link shares a preview page for this record.</span></p>';
 
 function openRecord(kind, id) {
   if (kind === "system") return openProject(id);
@@ -980,6 +980,8 @@ function openRecord(kind, id) {
 function showRecordDialog(selector, kind, id) {
   const dialog = $(selector);
   dialog.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  dialog.dataset.recordKind = kind;
+  dialog.dataset.recordId = id;
   writeRecordURL(kind, id);
   if (!dialog.open) dialog.showModal();
 }
@@ -1025,13 +1027,17 @@ function syncRecordWithHistory() {
   clearRecordURL();
 }
 
+// The share link is the record's static preview page, which carries its own
+// title, description, and card metadata; the address bar stays on the app URL.
 async function copyRecordLink(button) {
   const status = button.parentElement.querySelector("[data-record-link-status]");
+  const dialog = button.closest("dialog");
+  const url = new URL(AtlasCore.shareRecordPath(dialog.dataset.recordKind, dialog.dataset.recordId), window.location.href).href;
   try {
-    await navigator.clipboard.writeText(window.location.href);
-    status.textContent = "Link copied.";
+    await navigator.clipboard.writeText(url);
+    status.textContent = "Share link copied.";
   } catch {
-    status.textContent = "Copy the current browser URL to share this record.";
+    status.textContent = `Share link: ${url}`;
   }
 }
 
