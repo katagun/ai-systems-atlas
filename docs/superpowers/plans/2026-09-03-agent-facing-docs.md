@@ -181,7 +181,7 @@ Expected: PASS (2 tests: `test_skill_manifest_has_required_frontmatter`, `test_r
 - [ ] **Step 6: Run the full documentation-link test to catch any bad relative link in the two new files**
 
 Run: `uv run python -m unittest tests.test_documentation -v`
-Expected: PASS — `test_relative_markdown_links_resolve` scans every `.md` file in the repository, including the two just added, and will fail on any broken `[text](path)` link.
+Expected: PASS — `test_relative_markdown_links_resolve` scans every `.md` file in the repository, including the two just added, and will fail on any broken relative markdown link.
 
 - [ ] **Step 7: Commit**
 
