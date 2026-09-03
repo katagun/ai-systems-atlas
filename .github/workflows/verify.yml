@@ -53,6 +53,8 @@ jobs:
         run: node scripts/build_logos.mjs --check
       - name: Check vendored font freshness
         run: node scripts/build_fonts.mjs --check
+      - name: Check asset versions
+        run: node scripts/build_asset_version.mjs --check
       - name: Check share page freshness
         run: uv run python scripts/build_share_pages.py --check
       - name: Run browser end-to-end tests

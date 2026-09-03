@@ -38,6 +38,7 @@ uv run python scripts/sync_web_data.py
 uv run python scripts/build_share_pages.py
 node scripts/build_logos.mjs --check
 node scripts/build_fonts.mjs --check
+node scripts/build_asset_version.mjs --check
 uv run python scripts/build_share_pages.py --check
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
