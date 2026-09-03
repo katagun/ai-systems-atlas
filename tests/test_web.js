@@ -509,3 +509,49 @@ test("pagination of an empty list yields one empty page rather than page zero", 
   const result = paginate([], { page: 1, pageSize: 24 });
   assert.deepEqual(result, { items: [], page: 1, pageCount: 1, totalCount: 0 });
 });
+
+test("llms.txt starts with an H1 title and a blockquote summary", () => {
+  const text = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
+  assert.match(text, /^# [^\n]+\n\n> [^\n]+\n/);
+});
+
+test("llms.txt only links to files that actually exist", () => {
+  const text = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
+  const links = [...text.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)].map(match => match[1]);
+  assert.ok(links.length > 0, "llms.txt has no links");
+  const siteRoot = "https://katagun.github.io/ai-systems-atlas/";
+  const repoBlobRoot = "https://github.com/katagun/ai-systems-atlas/blob/main/";
+  for (const link of links) {
+    if (link.startsWith(siteRoot)) {
+      const file = link.slice(siteRoot.length);
+      assert.ok(fs.existsSync(path.join(__dirname, "..", "web", file)), `llms.txt links to missing web/${file}`);
+    } else if (link.startsWith(repoBlobRoot)) {
+      const file = link.slice(repoBlobRoot.length);
+      assert.ok(fs.existsSync(path.join(__dirname, "..", file)), `llms.txt links to missing ${file}`);
+    } else {
+      assert.fail(`llms.txt link ${link} is neither a site link nor a GitHub blob link: ${link}`);
+    }
+  }
+});
+
+test("llms.txt's site links use the same origin as the share-page builder", () => {
+  const llms = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const match = builder.match(/SITE_URL = "([^"]+)"/);
+  assert.ok(match, "could not find SITE_URL in scripts/build_share_pages.py");
+  const [, siteUrl] = match;
+  const siteLinks = [...llms.matchAll(/\]\((https:\/\/[^)]+)\)/g)].map(m => m[1]).filter(link => !link.startsWith("https://github.com/"));
+  assert.ok(siteLinks.length > 0, "llms.txt has no site-origin links to check");
+  for (const link of siteLinks) assert.ok(link.startsWith(siteUrl), `${link} does not start with SITE_URL (${siteUrl}); update llms.txt if the domain changed`);
+});
+
+test("llms.txt's Data section lists exactly the published catalog files", () => {
+  const llms = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
+  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
+  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
+  const dataSection = llms.split("## Data")[1].split("## Reference")[0];
+  const linked = [...dataSection.matchAll(/\]\(https:\/\/[^)]*\/([a-z-]+\.json)\)/g)].map(m => m[1]).sort();
+  assert.deepEqual(linked, published);
+});
