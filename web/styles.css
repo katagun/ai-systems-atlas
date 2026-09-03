@@ -59,6 +59,8 @@
   --card-inference: linear-gradient(145deg, #f9fdff, #fff 68%);
   --card-runtime: linear-gradient(145deg, #fffaf5, #fff 68%);
   --radius: 14px;
+  --radius-control: 8px;
+  --radius-chip: 6px;
   --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
@@ -232,7 +234,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   top: -5rem;
   z-index: 20;
   padding: .7rem 1rem;
-  border-radius: 4px;
+  border-radius: var(--radius-chip);
   background: var(--text);
   color: var(--on-ink);
 }
@@ -314,7 +316,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   display: grid;
   place-items: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--glass-weak);
   color: var(--muted);
   cursor: pointer;
@@ -331,7 +333,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   display: grid;
   place-items: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--glass-weak);
   color: var(--muted);
   text-decoration: none;
@@ -380,7 +382,7 @@ h1 {
   margin-top: .7rem;
   padding: .7rem .9rem;
   border: 1px solid var(--line-strong);
-  border-radius: 9px;
+  border-radius: var(--radius-control);
   background: var(--glass);
   color: var(--text);
   cursor: pointer;
@@ -392,7 +394,7 @@ h1 {
 .atlas-map {
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--glass);
   box-shadow: var(--shadow);
   transform: rotate(1deg);
@@ -427,7 +429,7 @@ h1 {
   padding: .58rem .68rem .55rem 1.8rem;
   position: absolute;
   border: 1px solid var(--line-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--glass-strong);
   box-shadow: var(--shadow-small);
 }
@@ -470,7 +472,7 @@ h1 {
   max-width: none;
   margin-top: 1rem;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--glass-weak);
 }
 .stat { padding: .85rem 1rem; }
@@ -496,7 +498,7 @@ h1 {
   padding: .35rem;
   overflow-x: auto;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--glass-weak);
 }
 .collection-switcher button {
@@ -507,7 +509,7 @@ h1 {
   align-items: center;
   gap: .55rem;
   border: 1px solid transparent;
-  border-radius: 9px;
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--muted);
   cursor: pointer;
@@ -594,7 +596,7 @@ input, select {
   min-height: 42px;
   padding: .66rem .72rem;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   outline: none;
   background: var(--panel);
   color: var(--text);
@@ -622,7 +624,7 @@ input:focus, select:focus {
 .primary-button {
   min-height: 40px;
   padding: .65rem .9rem;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   cursor: pointer;
   font-weight: 500;
 }
@@ -679,7 +681,7 @@ input:focus, select:focus {
   height: 38px;
   margin-top: .1rem;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: var(--radius-chip);
   background: linear-gradient(160deg, var(--panel), var(--panel-2));
   color: var(--text);
 }
@@ -703,7 +705,7 @@ input:focus, select:focus {
   min-width: 54px;
   padding: .38rem .45rem;
   border: 1px solid var(--line-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-chip);
   color: var(--cyan);
   background: var(--glass);
   font: 700 .9rem var(--font-mono);
@@ -713,7 +715,7 @@ input:focus, select:focus {
   max-width: 120px;
   padding: .38rem .48rem;
   border: 1px solid var(--status-line);
-  border-radius: 7px;
+  border-radius: var(--radius-chip);
   background: var(--status-bg);
   color: var(--status-ink);
   font: 600 .63rem var(--font-mono);
@@ -726,7 +728,7 @@ input:focus, select:focus {
   align-self: flex-start;
   margin: 1.2rem 0 .75rem;
   padding: .3rem .52rem;
-  border-radius: 999px;
+  border-radius: var(--radius-chip);
   background: var(--sage-soft);
   color: var(--sage-ink);
   font: 700 .58rem var(--font-mono);
@@ -749,7 +751,7 @@ input:focus, select:focus {
 .review-badge {
   padding: .25rem .42rem;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius-chip);
   background: var(--bg-elevated);
   color: var(--muted);
   font: 600 .62rem var(--font-mono);
@@ -770,7 +772,7 @@ input:focus, select:focus {
 .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; padding-top: 1rem; }
 .tags span {
   padding: .28rem .45rem;
-  border-radius: 6px;
+  border-radius: var(--radius-chip);
   background: var(--chip-bg);
   color: var(--chip-ink);
   font: .62rem var(--font-mono);
@@ -800,7 +802,7 @@ input:focus, select:focus {
 .card-footer .compare-toggle {
   padding: .3rem .5rem;
   border: 1px solid var(--line-strong);
-  border-radius: 6px;
+  border-radius: var(--radius-chip);
   color: var(--muted);
 }
 .card-footer .compare-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
@@ -821,7 +823,7 @@ input:focus, select:focus {
 }
 .taxonomy-group h2 { margin: 0 0 1.2rem; font-size: 1.25rem; font-weight: 600; }
 .taxonomy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
-.taxonomy-item { padding: 1rem; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+.taxonomy-item { padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); }
 .taxonomy-item strong { color: var(--text); font-size: .9rem; font-weight: 600; }
 .taxonomy-item p { margin-bottom: 0; color: var(--muted); font-size: .86rem; line-height: 1.55; }
 .definitions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
@@ -832,7 +834,7 @@ input:focus, select:focus {
   margin: 1rem 0;
   padding: 1rem;
   border: 1px solid var(--amber-line);
-  border-radius: 5px;
+  border-radius: var(--radius-chip);
   background: var(--amber-soft);
   color: var(--amber-ink);
 }
@@ -891,7 +893,7 @@ input:focus, select:focus {
   min-height: 180px;
   padding: 1.25rem;
   border: 1px solid var(--line);
-  border-radius: 11px;
+  border-radius: var(--radius-control);
   background: var(--panel);
   color: var(--text);
   cursor: pointer;
@@ -956,7 +958,7 @@ dialog {
   padding: 1.7rem;
   overflow: auto;
   border: 1px solid var(--line-strong);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--bg-elevated);
   color: var(--text);
   box-shadow: var(--shadow-dialog);
@@ -972,7 +974,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
   width: min(940px, calc(100% - 2rem));
   padding: 1rem 1.1rem;
   border: 1px solid var(--line-strong);
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--panel-glass);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
@@ -1011,7 +1013,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
   max-height: 62vh;
   overflow: auto;
   border: 1px solid var(--line-strong);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--panel);
 }
 .comparison-table {
@@ -1051,7 +1053,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
 .comparison-table tr:last-child > * { border-bottom: 0; }
 .comparison-table tr > *:last-child { border-right: 0; }
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
-.detail-block { padding: 1.05rem; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+.detail-block { padding: 1.05rem; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); }
 .detail-block h3 { margin-top: 0; color: var(--text); font-size: 1rem; font-weight: 600; }
 .detail-block p { color: var(--muted); line-height: 1.55; }
 .detail-block li { margin: .5rem 0; color: var(--muted); line-height: 1.5; }
