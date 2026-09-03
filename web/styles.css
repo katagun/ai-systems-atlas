@@ -1063,14 +1063,27 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
 
 footer {
   width: min(1360px, calc(100% - 3rem));
-  min-height: 92px;
   margin: 0 auto;
+  padding: 1.75rem 0 2rem;
   border-top: 1px solid var(--line-strong);
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 62ch) auto;
   justify-content: space-between;
+  align-items: start;
+  column-gap: 2rem;
+  row-gap: .35rem;
   color: var(--muted);
   font-size: .76rem;
+  text-align: left;
+}
+footer #data-date {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font: 500 .68rem var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
 }
 
 @media (max-width: 1300px) {
@@ -1130,7 +1143,8 @@ footer {
   .comparison-heading { align-items: stretch; flex-direction: column; padding-right: 1.5rem; }
   .comparison-heading .ghost-button { align-self: flex-start; }
   .comparison-dialog { padding: 1rem; }
-  footer { padding: 1.5rem 0; flex-direction: column; justify-content: center; gap: .35rem; text-align: center; }
+  footer { padding: 1.5rem 0 1.75rem; grid-template-columns: 1fr; }
+  footer #data-date { grid-column: 1; grid-row: auto; margin-top: .5rem; text-align: left; }
 }
 
 @media (max-width: 460px) {
