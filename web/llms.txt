@@ -1,0 +1,22 @@
+# AI Systems Atlas
+
+> A reviewed directory of agent, memory, and assistant systems, plus interoperability specifications, managed inference services, and self-operated local runtimes. Every record carries reviewed license evidence and a verified_at date rather than automated scraping or self-reported claims. Relevance and operational capability determine inclusion; license or source model never does.
+
+## Data
+
+Published JSON, no auth, no rate limit — fetch directly.
+
+- [projects.json](https://peacefulcoexistance.com/projects.json): reviewed agent, memory, and assistant systems with editorial scores
+- [taxonomy.json](https://peacefulcoexistance.com/taxonomy.json): enum values, license identifiers, and score-profile definitions used by every other file
+- [exclusions.json](https://peacefulcoexistance.com/exclusions.json): reviewed scope-boundary decisions — why a candidate was not included
+- [license-evidence.json](https://peacefulcoexistance.com/license-evidence.json): scoped, reviewed license and terms evidence per project
+- [specifications.json](https://peacefulcoexistance.com/specifications.json): unscored interoperability protocols, metadata schemas, instruction conventions, and package formats
+- [inference-services.json](https://peacefulcoexistance.com/inference-services.json): managed inference services with a dedicated operational-service score
+- [local-runtimes.json](https://peacefulcoexistance.com/local-runtimes.json): self-operated inference runtimes with a dedicated runtime score
+
+## Reference
+
+- [Taxonomy](https://github.com/katagun/ai-systems-atlas/blob/main/docs/TAXONOMY.md): family, role, and trait definitions behind every enum
+- [Curation](https://github.com/katagun/ai-systems-atlas/blob/main/docs/CURATION.md): the review workflow and inclusion rules applied to every record
+- [Data model](https://github.com/katagun/ai-systems-atlas/blob/main/docs/DATA_MODEL.md): field-by-field schema for the published files
+- [Agent Skill](https://github.com/katagun/ai-systems-atlas/blob/main/skills/ai-systems-atlas/SKILL.md): a packaged skill for querying this data, in the Agent Skills format

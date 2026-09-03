@@ -23,6 +23,7 @@ Read only the documents required by the change:
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` for the boundary, `docs/adr/017-local-runtime-eligibility-ignores-modality.md` for eligibility and the vocabulary obligation, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
+| agent-facing discovery docs, llms.txt, or the Atlas skill | `docs/AGENT_DOCS.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
