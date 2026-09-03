@@ -1,8 +1,26 @@
+const PAGE_SIZE_OPTIONS = [24, 48, 96];
+const PAGE_SIZE_STORAGE_KEY = "atlas.pageSize";
+
+function readStoredPageSize() {
+  try {
+    const stored = Number(localStorage.getItem(PAGE_SIZE_STORAGE_KEY));
+    return PAGE_SIZE_OPTIONS.includes(stored) ? stored : PAGE_SIZE_OPTIONS[0];
+  } catch {
+    return PAGE_SIZE_OPTIONS[0];
+  }
+}
+
+function writeStoredPageSize(pageSize) {
+  try { localStorage.setItem(PAGE_SIZE_STORAGE_KEY, String(pageSize)); } catch {}
+}
+
 const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], taxonomy: null, licenses: new Map(),
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
+  pageSize: readStoredPageSize(),
+  page: { all: 1, systems: 1, inference: 1, runtimes: 1, specifications: 1 },
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -439,12 +457,58 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   if (updateURL) writeDirectoryURL();
 }
 
+const PAGE_CONTAINERS = {
+  all: "#all-directory-pager",
+  systems: "#project-pager",
+  inference: "#inference-pager",
+  runtimes: "#runtime-pager",
+  specifications: "#specification-pager",
+};
+
+function pageRenderer(key) {
+  return { all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices, runtimes: renderLocalRuntimes, specifications: renderSpecifications }[key];
+}
+
+function setPageSize(pageSize) {
+  if (!PAGE_SIZE_OPTIONS.includes(pageSize) || pageSize === state.pageSize) return;
+  state.pageSize = pageSize;
+  writeStoredPageSize(pageSize);
+  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+  pageRenderer(state.directoryCollection)();
+  renderSpecifications();
+}
+
+function renderPager(key, { page, pageCount }) {
+  const container = $(PAGE_CONTAINERS[key]);
+  if (!container) return;
+  container.innerHTML = `
+    <label class="pager-size"><span>Show</span>
+      <select aria-label="Results per page">${PAGE_SIZE_OPTIONS.map(size => `<option value="${size}" ${size === state.pageSize ? "selected" : ""}>${size}</option>`).join("")}</select>
+    </label>
+    <div class="pager-nav">
+      <button type="button" class="ghost-button" data-pager-prev ${page <= 1 ? "disabled" : ""}>← Prev</button>
+      <span>Page ${page} of ${pageCount}</span>
+      <button type="button" class="ghost-button" data-pager-next ${page >= pageCount ? "disabled" : ""}>Next →</button>
+    </div>`;
+  $("select", container).addEventListener("input", event => setPageSize(Number(event.target.value)));
+  $("[data-pager-prev]", container).addEventListener("click", () => {
+    state.page[key] = Math.max(1, page - 1);
+    pageRenderer(key)();
+  });
+  $("[data-pager-next]", container).addEventListener("click", () => {
+    state.page[key] = Math.min(pageCount, page + 1);
+    pageRenderer(key)();
+  });
+}
+
 function renderAllDirectoryEntries() {
   const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, {
     term: $("#all-directory-search").value,
   });
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
-  $("#all-directory-grid").innerHTML = entries.map(({ kind, record }) => {
+  const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
+  state.page.all = paged.page;
+  $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -476,6 +540,7 @@ function renderAllDirectoryEntries() {
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
+  renderPager("all", paged);
 }
 
 function filteredProjects() {
@@ -504,7 +569,9 @@ function renderProjects() {
   const selectedProfile = state.taxonomy.score_profiles.find(profile => profile.family === family);
   const scoreContext = family ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}` : " · Scores hidden across families";
   $("#result-count").textContent = `${projects.length} ${projects.length === 1 ? "project" : "projects"}${scoreContext}`;
-  $("#project-grid").innerHTML = projects.map(project => {
+  const paged = AtlasCore.paginate(projects, { page: state.page.systems, pageSize: state.pageSize });
+  state.page.systems = paged.page;
+  $("#project-grid").innerHTML = paged.items.map(project => {
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
     const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
@@ -520,6 +587,7 @@ function renderProjects() {
   $$('[data-project]', $("#project-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   bindComparisonButtons($("#project-grid"));
   renderComparisonControls();
+  renderPager("systems", paged);
 }
 
 function renderSpecifications() {
@@ -532,7 +600,9 @@ function renderSpecifications() {
   });
   $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
   $("#specification-result-count").textContent = `${specifications.length} ${specifications.length === 1 ? "artifact" : "artifacts"} · Unscored`;
-  $("#specification-grid").innerHTML = specifications.map(specification => {
+  const paged = AtlasCore.paginate(specifications, { page: state.page.specifications, pageSize: state.pageSize });
+  state.page.specifications = paged.page;
+  $("#specification-grid").innerHTML = paged.items.map(specification => {
     const version = specification.current_version ? `Version ${specification.current_version}` : taxonomyName("specification_statuses", specification.status);
     return `<article class="project-card specification-card">
       <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${escapeHTML(version)}</span></div>
@@ -544,6 +614,7 @@ function renderSpecifications() {
     </article>`;
   }).join("") || '<div class="notice">No specifications match these filters.</div>';
   $$('[data-specification]', $("#specification-grid")).forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
+  renderPager("specifications", paged);
 }
 
 function renderInferenceServices() {
@@ -556,7 +627,9 @@ function renderInferenceServices() {
     sort: $("#inference-sort-filter").value,
   });
   $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · ${state.taxonomy.inference_service_score_profile.name}`;
-  $("#inference-grid").innerHTML = services.map(service => `<article class="project-card inference-service-card">
+  const paged = AtlasCore.paginate(services, { page: state.page.inference, pageSize: state.pageSize });
+  state.page.inference = paged.page;
+  $("#inference-grid").innerHTML = paged.items.map(service => `<article class="project-card inference-service-card">
     <div class="card-top"><div class="card-identity">${cardMark(service)}<div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
@@ -566,6 +639,7 @@ function renderInferenceServices() {
   $$('[data-inference-service]', $("#inference-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   bindComparisonButtons($("#inference-grid"));
   renderComparisonControls();
+  renderPager("inference", paged);
 }
 
 function renderLocalRuntimes() {
@@ -578,7 +652,9 @@ function renderLocalRuntimes() {
     sort: $("#runtime-sort-filter").value,
   });
   $("#runtime-result-count").textContent = `${runtimes.length} ${runtimes.length === 1 ? "runtime" : "runtimes"} · ${state.taxonomy.local_runtime_score_profile.name}`;
-  $("#runtime-grid").innerHTML = runtimes.map(runtime => `<article class="project-card local-runtime-card">
+  const paged = AtlasCore.paginate(runtimes, { page: state.page.runtimes, pageSize: state.pageSize });
+  state.page.runtimes = paged.page;
+  $("#runtime-grid").innerHTML = paged.items.map(runtime => `<article class="project-card local-runtime-card">
     <div class="card-top"><div class="card-identity">${cardMark(runtime)}<div><p class="family-label">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p><h2>${escapeHTML(runtime.name)}</h2><div class="repo">${escapeHTML(runtime.repo || runtime.maintainer)}</div></div></div><div class="score-ring" aria-label="Local-runtime score ${escapeHTML(runtime.score.overall)} out of 10">${escapeHTML(runtime.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
@@ -589,6 +665,7 @@ function renderLocalRuntimes() {
   $$('[data-local-runtime]', $("#runtime-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   bindComparisonButtons($("#runtime-grid"));
   renderComparisonControls();
+  renderPager("runtimes", paged);
 }
 
 function bindComparisonButtons(root) {
@@ -1157,26 +1234,28 @@ function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => setDirectoryCollection(button.dataset.directoryCollection)));
-  $("#all-directory-search").addEventListener("input", renderAllDirectoryEntries);
+  $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
     $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
+    state.page.systems = 1;
     renderProjects();
   });
-  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; renderProjects(); });
-  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", renderProjects));
-  ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", renderSpecifications));
-  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderInferenceServices));
-  ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", renderLocalRuntimes));
+  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.page.systems = 1; renderProjects(); });
+  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
+  ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
+  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
+  ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
     $("#specification-scope-filter").value = "";
     $("#specification-status-filter").value = "";
     $("#specification-license-filter").value = "";
+    state.page.specifications = 1;
     renderSpecifications();
   });
   $("#reset-inference-filters").addEventListener("click", () => {
@@ -1186,6 +1265,7 @@ function bindEvents() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    state.page.inference = 1;
     renderInferenceServices();
   });
   $("#reset-runtime-filters").addEventListener("click", () => {
@@ -1195,14 +1275,17 @@ function bindEvents() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    state.page.runtimes = 1;
     renderLocalRuntimes();
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
+    state.page.all = 1;
     renderAllDirectoryEntries();
   });
   $("#reset-filters").addEventListener("click", () => {
     applyDirectoryDefaults();
+    state.page.systems = 1;
     renderProjects();
   });
   $("#finder-content").addEventListener("click", event => {

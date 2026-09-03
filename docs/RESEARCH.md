@@ -161,6 +161,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Exo Harness | Self-modification over an immutable log | A substrate and semantics split keeping event log, sandbox, and secrets immutable while prompts, tools, and model choice stay agent-editable | Early-stage with no releases, and no human approval gate before the agent rebuilds its own runtime |
 | Vibe Kanban | A task board over parallel agents | Blocking tool approvals as real machinery, with nine vendors' tools supervised in separate working trees | Archived after the company's closure, and its final change retired the board it is named for |
 | Agno | Runtime operations inside the framework | One path from definitions through API runtime, interface, storage, traces, and deployment | A broad combined surface increases conceptual and upgrade complexity |
+| BabyAGI | The loop the wave was built on | The create, prioritise, execute, and store cycle that later frameworks extended or set out to fix | Archived, with no approval step, budget cap, or stopping condition, over unvalidated text parsing |
 
 ### Assistant-system research set
 

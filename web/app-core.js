@@ -167,6 +167,13 @@
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
 
+  function paginate(items, { page = 1, pageSize } = {}) {
+    const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+    const clampedPage = Math.min(Math.max(1, page), pageCount);
+    const start = (clampedPage - 1) * pageSize;
+    return { items: items.slice(start, start + pageSize), page: clampedPage, pageCount, totalCount: items.length };
+  }
+
   function updateComparisonSelection(current = {}, candidate, maxItems = 4) {
     const sameProfile = current.kind === candidate.kind && current.profile === candidate.profile;
     const ids = sameProfile ? [...(current.ids || [])] : [];
@@ -226,6 +233,7 @@
     filterSpecifications,
     matchesProject,
     monogramGlyph,
+    paginate,
     parseRecordReference,
     shareRecordPath,
     updateComparisonSelection,

@@ -90,6 +90,10 @@ This is the source of truth for actionable repository work. Policy and field def
 - [ ] Decide whether Perplexity Personal Computer is a separate record from Perplexity Computer. It has its own product page and installs on the user's machine with access to local files and applications, so its execution boundary differs from the cloud product this record reviews.
 - [ ] Revisit Xinference if its commercial terms are published; the enterprise edition is currently noted as an adjacent boundary because the vendor's terms page is a placeholder.
 
+## Completed on 2026-09-02
+
+- [x] Paginate the five directory grids now that the catalog has grown past 250 published records. Each grid (the mixed All view, Systems, Inference services, Local runtimes, Specifications) slices its filtered, sorted result set through a shared `AtlasCore.paginate` helper instead of rendering the full list into the DOM; a page-size control (24/48/96, persisted per visitor in `localStorage`) is shared across all five, while each grid keeps its own page number. Filtering, searching, sorting, and the reset buttons all return the affected grid to page 1. Share-page generation and the sitemap are untouched, since both are build-time and never read through the client render path.
+
 ## Completed on 2026-08-28
 
 - [x] Expand Specifications with WebMCP, OASF, ANP, AP2, UCP, and Commerce ACP, adding explicit web-agent, identity/discovery, metadata-schema, and agent-transaction taxonomy boundaries.

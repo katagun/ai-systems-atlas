@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("235 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("236 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -305,8 +305,11 @@ test("system comparisons require one family and restore from a shareable URL", a
   await expect(page.locator("#project-grid .compare-toggle")).toHaveCount(0);
 
   await page.locator("#family-filter").selectOption("agent_system");
+  await page.locator("#project-search").fill("Kilo Code");
   await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
+  await page.locator("#project-search").fill("Hermes Agent");
   await page.locator('#project-grid [data-compare-id="hermes-agent"]').click();
+  await page.locator("#project-search").fill("");
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
   await expect(page.locator("#comparison-tray-items")).toContainText("Kilo Code");
   await expect(page).toHaveURL(/compare=system%3Akilo-code%2Chermes-agent/);
@@ -440,13 +443,17 @@ test("the deployment filter reaches vendor-operated systems and reports itself a
   await page.goto("/?collection=systems");
 
   const names = page.locator("#project-grid .project-card h2");
+  await page.locator("#project-search").fill("Devin");
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
+  await page.locator("#project-search").fill("smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(1);
 
   await page.locator(".advanced-filter-shell summary").click();
   await page.locator("#deployment-filter").selectOption("managed_cloud");
 
+  await page.locator("#project-search").fill("Devin");
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
+  await page.locator("#project-search").fill("smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(0);
   await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
 });
@@ -473,4 +480,31 @@ test("directory cards carry product marks with monogram fallbacks", async ({ pag
   await page.locator("#all-directory-search").fill("Aider");
   const fallback = page.locator("#all-directory-grid .project-card").filter({ hasText: "Aider" }).first();
   await expect(fallback.locator(".card-monogram")).toHaveText("A");
+});
+
+test("systems pagination navigates pages, resets on filter change, and applies a new page size", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const pagerText = page.locator("#project-pager .pager-nav span");
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(pagerText).toHaveText("Page 1 of 7");
+  const firstPageFirstName = (await names.first().textContent())?.trim();
+
+  await page.locator("#project-pager [data-pager-next]").click();
+  await expect(pagerText).toHaveText("Page 2 of 7");
+  await expect(names.first()).not.toHaveText(firstPageFirstName);
+
+  await page.locator("#project-pager [data-pager-prev]").click();
+  await expect(pagerText).toHaveText("Page 1 of 7");
+  await expect(names.first()).toHaveText(firstPageFirstName);
+
+  await page.locator("#project-pager [data-pager-next]").click();
+  await page.locator("#project-search").fill("Devin");
+  await expect(pagerText).toHaveText("Page 1 of 1");
+
+  await page.locator("#project-search").fill("");
+  await page.locator("#project-pager select").selectOption("48");
+  await expect(pagerText).toHaveText("Page 1 of 4");
+  await page.reload();
+  await expect(page.locator("#project-pager select")).toHaveValue("48");
 });

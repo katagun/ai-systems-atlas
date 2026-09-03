@@ -2746,6 +2746,21 @@
       ]
     },
     {
+      "project_id": "babyagi",
+      "repo": "yoheinakajima/babyagi_archive",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/yoheinakajima/babyagi_archive/blob/main/LICENSE",
+          "blob_sha": "1edce33f223ad6f5462ebc8b6f8e73b3aaf0bcb7",
+          "immutable_url": "https://api.github.com/repos/yoheinakajima/babyagi_archive/git/blobs/1edce33f223ad6f5462ebc8b6f8e73b3aaf0bcb7"
+        }
+      ]
+    },
+    {
       "project_id": "dendron",
       "repo": "dendronhq/dendron",
       "items": [

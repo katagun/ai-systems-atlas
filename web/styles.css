@@ -633,6 +633,24 @@ input:focus, select:focus {
 .primary-button { border: 1px solid var(--cyan); background: var(--cyan); color: var(--on-accent); }
 .primary-button:hover { border-color: var(--cyan-deep); background: var(--cyan-deep); }
 
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1.15rem;
+  color: var(--muted);
+  font-size: .84rem;
+}
+.pager-size { display: flex; align-items: center; gap: .5rem; }
+.pager-size span { color: var(--muted); font: 600 .59rem var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }
+.pager-size select { width: auto; min-height: 34px; padding: .3rem .5rem; }
+.pager-nav { display: flex; align-items: center; gap: .65rem; }
+.pager-nav .ghost-button { min-height: 34px; padding: .35rem .7rem; }
+.pager-nav .ghost-button:disabled { opacity: .45; cursor: default; }
+.pager-nav .ghost-button:disabled:hover { border-color: var(--line-strong); color: var(--muted); }
+
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem; }
 .project-card {
   min-height: 340px;

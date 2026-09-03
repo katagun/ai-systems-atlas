@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=dd767330ad76">
+  <link rel="stylesheet" href="styles.css?v=9fbba0f91b4b">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -91,6 +91,7 @@
         </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
         <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, inference services, and local runtimes"></section>
+        <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
       </div>
 
       <div id="systems-directory-panel" class="collection-panel" hidden>
@@ -116,6 +117,7 @@
         </section>
         <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
         <section id="project-grid" class="project-grid" aria-label="Reviewed systems"></section>
+        <nav id="project-pager" class="pager" aria-label="Systems pagination"></nav>
       </div>
 
       <div id="inference-directory-panel" class="collection-panel" hidden>
@@ -130,6 +132,7 @@
         </section>
         <div class="result-row"><p id="inference-result-count" aria-live="polite"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
         <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
+        <nav id="inference-pager" class="pager" aria-label="Inference services pagination"></nav>
       </div>
 
       <div id="runtimes-directory-panel" class="collection-panel" hidden>
@@ -144,6 +147,7 @@
         </section>
         <div class="result-row"><p id="runtime-result-count" aria-live="polite"></p><button id="reset-runtime-filters" class="ghost-button">Clear filters</button></div>
         <section id="runtime-grid" class="project-grid inference-grid" aria-label="Reviewed local runtimes"></section>
+        <nav id="runtime-pager" class="pager" aria-label="Local runtimes pagination"></nav>
       </div>
     </section>
 
@@ -174,6 +178,7 @@
       </section>
       <div class="result-row"><p id="specification-result-count" aria-live="polite"></p><button id="reset-specification-filters" class="ghost-button">Clear</button></div>
       <section id="specification-grid" class="project-grid specification-grid" aria-label="Reviewed specifications"></section>
+      <nav id="specification-pager" class="pager" aria-label="Specifications pagination"></nav>
     </section>
 
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">
@@ -233,7 +238,7 @@
   </dialog>
 
   <footer><span>Systems scored within families. Inference services and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span id="data-date"></span></footer>
-  <script src="app-core.js?v=a3c918f6e84e" defer></script>
-  <script src="app.js?v=c8fb5dea50ea" defer></script>
+  <script src="app-core.js?v=b52c0bd895b4" defer></script>
+  <script src="app.js?v=194cecfaf1e2" defer></script>
 </body>
 </html>
