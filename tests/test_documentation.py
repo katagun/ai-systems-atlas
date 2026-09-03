@@ -30,6 +30,7 @@ class DocumentationTests(unittest.TestCase):
         for relative in (
             "ROADMAP.md",
             "BACKLOG.md",
+            "docs/AGENT_DOCS.md",
             "docs/CURATION.md",
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
