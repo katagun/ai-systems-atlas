@@ -35,8 +35,10 @@ Use `uv` for Python work.
 ```bash
 uv sync --locked
 uv run python scripts/sync_web_data.py
+uv run python scripts/build_share_pages.py
 node scripts/build_logos.mjs --check
 node scripts/build_fonts.mjs --check
+uv run python scripts/build_share_pages.py --check
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests
@@ -49,7 +51,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, inference-service, and local-runtime search/filters, cross-family score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all four dialogs in a browser.
+Run synchronization and share-page generation after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, specification, inference-service, and local-runtime search/filters, cross-family score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all four dialogs in a browser.
 
 ## Hard rules
 
@@ -66,7 +68,7 @@ Run synchronization after changing any published `directory/*.json` file. Run al
 - Keep inference services outside `system_family` and system-family score profiles; use their dedicated service profile, curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
 - Keep local runtimes outside `system_family` and system-family score profiles; use their dedicated runtime profile, curate self-operated execution software rather than models, managed services, or client libraries, and never score them with throughput, latency, or benchmark results.
 - Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`; candidate and license-review queues are not published.
+- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`; candidate and license-review queues are not published. Share pages under `web/records/` are generated from those files and never show scores.
 - Never report checks as passing unless you ran them.
 
 Existing unrelated changes belong to the user. Preserve them.

@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, parseRecordReference, updateComparisonSelection } = require("../web/app-core.js");
+const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -401,4 +401,12 @@ test("record references parse only a known kind and a plain id", () => {
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
+});
+
+test("share record paths map each kind to its collection directory", () => {
+  assert.equal(shareRecordPath("system", "kilo-code"), "records/systems/kilo-code/");
+  assert.equal(shareRecordPath("spec", "mcp"), "records/specifications/mcp/");
+  assert.equal(shareRecordPath("inference", "openai-api"), "records/inference-services/openai-api/");
+  assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
+  assert.equal(shareRecordPath("constructor", "ollama"), null);
 });

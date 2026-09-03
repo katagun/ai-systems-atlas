@@ -19,7 +19,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
 
-Run `uv run python scripts/sync_web_data.py` after manually changing published data.
+Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
 The browser presents projects and inference services through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes either canonical schema or makes their scores comparable. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
 
