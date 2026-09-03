@@ -468,7 +468,7 @@ h1 {
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(5, minmax(96px, 1fr));
+  grid-template-columns: repeat(3, minmax(96px, 1fr));
   max-width: none;
   margin-top: 1rem;
   border: 1px solid var(--line);
@@ -1138,7 +1138,7 @@ footer #data-date {
   .map-assistant { left: 17%; }
   .map-runtime { right: 5%; }
   .view, #directory.view { padding: 2.6rem 0; }
-  .hero-stats { max-width: none; grid-template-columns: repeat(2, 1fr); }
+  .hero-stats { max-width: none; grid-template-columns: repeat(3, 1fr); }
   .stat { padding-right: .45rem; }
   .stat + .stat { padding-left: .55rem; }
   .stat strong { display: block; }
