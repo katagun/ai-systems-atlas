@@ -156,6 +156,12 @@
       "repo": "Zoo-Code-Org/Zoo-Code",
       "reason": "The community continuation of an archived editor coding agent, and the derivative rule folds it into that record: its interfaces, deployment, execution boundaries, and capabilities are identical to the published predecessor's, which is the rule's definition of the same system in different packaging. What it adds is refinement inside those fields, chiefly a local on-demand semantic search binary and an opt-in downloaded command guard that ships disabled. The predecessor's own documentation names it an alternative rather than a successor, so the supersession status is unavailable in both directions, and the lineage is noted on the record it folds into. A reader wanting a maintained agent in this lineage is served by the other published fork, which is active and which this candidate does differ from.",
       "useful_lesson": "A derivative can be the only living thing in its lineage and still be packaging. The rule compares fields, not vitality, and the reader is served by whichever record in the lineage is active rather than by publishing every fork that outlives its parent."
+    },
+    {
+      "name": "Airbyte",
+      "repo": "airbytehq/airbyte",
+      "reason": "The reviewed repository is a data-movement platform, not a memory, agent, or assistant system. Its own readme states the product plainly: open-source data movement for ELT pipelines, moving data from APIs, databases, and files to warehouses, lakes, and AI applications. Its recent AI-facing surface does not cross the family boundary: a companion Agent SDK turns Airbyte connectors into typed tools for other frameworks (LangChain, pydantic-ai, the OpenAI Agents SDK) rather than owning a loop of its own; vector-database destinations and a PyAirbyte retrieval-augmented-generation quickstart move and embed data for a caller's retrieval system rather than serving as one; and a commercial context-layer product still describes itself as infrastructure AI agents call rather than an agent runtime. Every source frames Airbyte as what an agent uses, not what an agent is.",
+      "useful_lesson": "A data-connector platform can rebrand as the context layer for AI agents and ship a genuine agent-facing SDK while remaining on the tool-provider side of the boundary, the same side already established for a browser driver that lost its own loop. Check whether the reviewed repository owns the plan-act-observe loop or only hands typed tools to whatever framework supplies one."
     }
   ]
 }
