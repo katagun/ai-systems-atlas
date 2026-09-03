@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("236 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("237 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -295,7 +295,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(16);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(17);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 

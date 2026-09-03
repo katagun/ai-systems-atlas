@@ -2824,6 +2824,19 @@
           "verified_at": "2026-09-02"
         }
       ]
+    },
+    {
+      "project_id": "poolside-chat",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Poolside Terms of Use, which name Poolside Chat in the definition of Products",
+          "kind": "web_terms",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

@@ -15073,6 +15073,81 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "poolside-chat",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "Poolside Chat",
+      "repo": null,
+      "url": "https://chat.poolside.ai/",
+      "description": "Poolside's hosted web chat over its own Laguna models, with a thinking toggle, web search, document attachment, basic code execution, and voice input.",
+      "primary_role": "general_ai_assistant",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "poolside"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "service-managed account, chat history, attached documents, and generated responses",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "limited",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "Covers the hosted chat product at chat.poolside.ai. The Laguna weight releases, the hosted Poolside API, the pool coding agent, and the Poolside Assistant editor client are separate boundaries, and the enterprise Poolside Console and Platform surfaces are not represented here.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "score": {
+        "task_reliability": 6.8,
+        "context_continuity": 5.5,
+        "tools_integrations": 6.2,
+        "human_control": 6.8,
+        "data_governance": 5.6,
+        "interoperability": 5.0,
+        "usability_access": 8.4,
+        "maturity": 4.8,
+        "overall": 6.13
+      },
+      "strengths": [
+        "Usable without an account, with a thinking toggle, a web-search toggle, document attachment, and voice input exposed directly beside the prompt",
+        "Model choice is explicit between Laguna S 2.1 and the faster Laguna XS 2.1, so a reader can tell which model answered",
+        "Terms of use, privacy policy, acceptable-use policy, and the training-opt-out clause are linked from the product footer rather than buried"
+      ],
+      "weaknesses": [
+        "Poolside publishes no product documentation for this surface: it appears nowhere in the documentation site, and the only first-party description is a blog sentence calling it a simple web chat with web search and basic code execution",
+        "Chats may be used to improve Poolside models by default, with the opt-out an account setting rather than a per-conversation control, and no retention, export, or deletion behavior is documented",
+        "Durable projects, extracted memory, connectors, and governed team use are absent from the signed-out surface and undocumented elsewhere, and the models behind it are built for coding rather than broad assistance"
+      ],
+      "why_it_matters": "The consumer end of a coding-model vendor's product line, and the boundary that keeps a general chat surface separate from the same vendor's terminal agent, editor client, and hosted API.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-02",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
     }
   ]
 }
