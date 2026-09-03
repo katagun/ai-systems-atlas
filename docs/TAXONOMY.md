@@ -57,7 +57,7 @@ Specifications are also never inserted into this ranking. A protocol can be matu
 
 ## Guided finder
 
-The Atlas Finder is a transparent decision flow over the operational collections:
+The Finder is a transparent decision flow over the operational collections:
 
 1. choose a memory, agent, assistant, or inference-service direction;
 2. choose a desired job, which maps to one or more system roles or one inference-service type;
