@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, cycleThemePreference, matchesProject, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -477,4 +477,35 @@ test("corner radii outside the token block are references, never literals", () =
   for (const token of ["--radius", "--radius-control", "--radius-chip"]) assert.ok(token in light, `${token} is not defined on :root`);
   const literals = [...rest.matchAll(/border-radius:\s*([^;]+);/g)].map(match => match[1].trim()).filter(value => !/^(?:0|50%|var\(--radius(?:-\w+)?\))$/.test(value));
   assert.deepEqual(literals, []);
+});
+
+test("pagination slices an exact multiple of the page size into full pages", () => {
+  const items = Array.from({ length: 48 }, (_, index) => index);
+  const first = paginate(items, { page: 1, pageSize: 24 });
+  assert.deepEqual(first, { items: items.slice(0, 24), page: 1, pageCount: 2, totalCount: 48 });
+  const second = paginate(items, { page: 2, pageSize: 24 });
+  assert.deepEqual(second, { items: items.slice(24, 48), page: 2, pageCount: 2, totalCount: 48 });
+});
+
+test("pagination gives the last page fewer items when the count doesn't divide evenly", () => {
+  const items = Array.from({ length: 50 }, (_, index) => index);
+  const result = paginate(items, { page: 3, pageSize: 24 });
+  assert.deepEqual(result, { items: items.slice(48, 50), page: 3, pageCount: 3, totalCount: 50 });
+});
+
+test("pagination clamps a page past the end down to the last page", () => {
+  const items = Array.from({ length: 50 }, (_, index) => index);
+  const result = paginate(items, { page: 10, pageSize: 24 });
+  assert.deepEqual(result, { items: items.slice(48, 50), page: 3, pageCount: 3, totalCount: 50 });
+});
+
+test("pagination clamps a page below one up to the first page", () => {
+  const items = Array.from({ length: 50 }, (_, index) => index);
+  const result = paginate(items, { page: 0, pageSize: 24 });
+  assert.deepEqual(result, { items: items.slice(0, 24), page: 1, pageCount: 3, totalCount: 50 });
+});
+
+test("pagination of an empty list yields one empty page rather than page zero", () => {
+  const result = paginate([], { page: 1, pageSize: 24 });
+  assert.deepEqual(result, { items: [], page: 1, pageCount: 1, totalCount: 0 });
 });
