@@ -1,6 +1,6 @@
 # Contributing
 
-AI Systems Atlas accepts focused corrections, new evidence, candidate suggestions, and implementation improvements. A pull request should make one reviewable change and preserve the boundary between human editorial judgment and automated metadata.
+AI Systems Atlas accepts focused corrections, new evidence, candidate suggestions, and implementation improvements. A pull request should make one reviewable change and preserve the boundary between human editorial judgment and automated metadata. Participation is governed by [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
 ## Choose the right path
 

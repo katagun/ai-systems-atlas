@@ -39,6 +39,7 @@ Read only what your task needs:
 | Change or verify the browser UI | [`docs/WEB.md`](docs/WEB.md) |
 | Report a vulnerability | [`SECURITY.md`](SECURITY.md) |
 | Contribute a system, specification, or code change | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| Understand expected behavior or report a conduct concern | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
 | See prioritized remaining work | [`BACKLOG.md`](BACKLOG.md) |
 | Understand architectural decisions | [`docs/adr/`](docs/adr/) |
 
