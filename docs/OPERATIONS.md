@@ -6,6 +6,7 @@ Use this document for refreshes, queue review, synchronization, and incident rec
 
 ```bash
 uv run python scripts/sync_web_data.py
+uv run python scripts/build_share_pages.py
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests
@@ -14,7 +15,7 @@ node --check web/app.js
 node --test tests/test_web.js
 ```
 
-Synchronization is a write operation; the remaining commands are verification.
+Synchronization and share-page generation are write operations; the remaining commands are verification.
 
 ## Metadata refresh
 
@@ -76,6 +77,10 @@ Resolution must update all related records atomically. Validation rejects mismat
 `.github/workflows/update-directory.yml` runs weekly and on demand. It validates a complete refresh, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, and the CI result before merging. Review a failed run rather than manually committing partial runner output.
 
 The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR. GitHub may require a maintainer to approve CI on bot-created PRs; that review gate is intentional.
+
+## Share pages
+
+`uv run python scripts/build_share_pages.py` writes one static landing page per published record under `web/records/<collection>/<id>/`, plus `web/sitemap.xml` and `web/robots.txt`, from the canonical `directory/*.json` files. `--check` rebuilds in memory and fails when the committed files differ or when `web/records/` holds a file the catalog no longer produces, so a published record cannot change without its share page. The weekly refresh regenerates the pages after updating metadata, because a status promotion changes a page.
 
 ## Vendored fonts
 

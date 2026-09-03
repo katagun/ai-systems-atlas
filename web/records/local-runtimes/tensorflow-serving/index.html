@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TensorFlow Serving · peacefulcoexistance</title>
+<meta name="description" content="Production model server that loads versioned SavedModel servables from a watched model directory and answers predict, classify, regress, and metadata calls…">
+<link rel="canonical" href="https://katagun.github.io/ai-systems-atlas/records/local-runtimes/tensorflow-serving/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="peacefulcoexistance">
+<meta property="og:title" content="TensorFlow Serving">
+<meta property="og:description" content="Production model server that loads versioned SavedModel servables from a watched model directory and answers predict, classify, regress, and metadata calls…">
+<meta property="og:url" content="https://katagun.github.io/ai-systems-atlas/records/local-runtimes/tensorflow-serving/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f7f9fc">
+<link rel="stylesheet" href="../../../fonts.css">
+<style>
+:root { color-scheme: light dark; --bg: #f7f9fc; --panel: #ffffff; --text: #16233a; --muted: #5b6b82; --line: #d8e0ea; --accent: #0f766e; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f141b; --panel: #171e28; --text: #e6ebf2; --muted: #9aa7b8; --line: #2a3441; --accent: #3fb8b0; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 44rem; margin: 3rem auto 2rem; padding: 0 1.25rem; }
+.eyebrow, dt, footer, .note { font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace; }
+.eyebrow { margin: 0 0 .5rem; color: var(--accent); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+h1 { margin: 0 0 .75rem; font: 700 clamp(2rem, 6vw, 3rem)/1.05 "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.02em; text-wrap: balance; }
+.lead { margin: 0 0 1.5rem; font-size: 1.1rem; color: var(--muted); }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1rem; margin: 0 0 1.5rem; padding: 1rem 1.25rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+dt { color: var(--muted); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; padding-top: .2rem; }
+dd { margin: 0; overflow-wrap: anywhere; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 0 0 1.25rem; }
+.primary { display: inline-block; padding: .65rem 1.1rem; background: var(--text); color: var(--bg); border-radius: 999px; font-weight: 600; text-decoration: none; }
+.primary:hover { background: var(--accent); }
+a { color: var(--accent); }
+.note { margin: 0; color: var(--muted); font-size: .78rem; }
+footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .72rem; }
+@media (max-width: 560px) { dl { grid-template-columns: 1fr; gap: .1rem; } dt { margin-top: .5rem; } }
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "TensorFlow Serving", "description": "Production model server that loads versioned SavedModel servables from a watched model directory and answers predict, classify, regress, and metadata calls…", "url": "https://katagun.github.io/ai-systems-atlas/records/local-runtimes/tensorflow-serving/", "dateModified": "2026-08-30", "isPartOf": {"@type": "WebSite", "name": "peacefulcoexistance", "alternateName": "AI systems directory", "url": "https://katagun.github.io/ai-systems-atlas/"}, "about": {"@type": "SoftwareApplication", "name": "TensorFlow Serving", "url": "https://www.tensorflow.org/tfx/guide/serving", "description": "Production model server that loads versioned SavedModel servables from a watched model directory and answers predict, classify, regress, and metadata calls…", "sameAs": "https://github.com/tensorflow/serving"}}</script>
+</head>
+<body>
+<main>
+<p class="eyebrow">Local runtime · Local runtime · Server engine</p>
+<h1>TensorFlow Serving</h1>
+<p class="lead">Production model server that loads versioned SavedModel servables from a watched model directory and answers predict, classify, regress, and metadata calls over a gRPC-first interface with a mirrored REST surface.</p>
+<dl><dt>Maintainer</dt><dd>Google</dd><dt>Accelerators</dt><dd>CPU · NVIDIA CUDA</dd><dt>Model formats</dt><dd>TensorFlow SavedModel</dd><dt>Source model</dt><dd>Open source</dd><dt>Licenses</dt><dd>Apache License 2.0</dd><dt>Boundary</dt><dd>Represents the tensorflow_model_server binary and the serving libraries in the tensorflow/serving repository, not the TensorFlow framework in tensorflow/tensorflow. The framework builds and trains models and supplies the session runtime this server links against; the server&#x27;s own documentation states that it deals with the inference aspect of machine learning, taking models after training and managing their lifetimes, which is the separate product this record reviews. TensorFlow Lite and LiteRT are a different execution stack for mobile and embedded targets and are out of scope here; the server carries only an experimental --prefer_tflite_model flag that picks up a model.tflite file inside a SavedModel directory, which the flag text marks as removable at any time. Managed Google Cloud offerings that host this server for customers, including Vertex AI prebuilt TensorFlow prediction containers, hold the serving contract themselves and are inference-service boundaries rather than part of this record. The server is headless, operated as a container, an APT-installed binary, or a Kubernetes deployment, and ships no graphical or conversational interface, which keeps it on the runtime side of the ADR 015 runtime-versus-assistant test.</dd></dl>
+<p class="actions"><a class="primary" href="../../../?record=runtime:tensorflow-serving">Open in the directory →</a> <a href="https://www.tensorflow.org/tfx/guide/serving" rel="noreferrer">Open official documentation ↗</a> <a href="https://github.com/tensorflow/serving" rel="noreferrer">Repository ↗</a></p>
+<p class="note">Editorial ratings appear in the directory beside the profile they belong to and are never compared across collections.</p>
+</main>
+<footer>peacefulcoexistance · AI systems directory · Reviewed 2026-08-30 · <a href="../../../">Browse the directory</a></footer>
+</body>
+</html>
