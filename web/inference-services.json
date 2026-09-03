@@ -4008,6 +4008,81 @@
         }
       ],
       "verified_at": "2026-09-01"
+    },
+    {
+      "id": "poolside-api",
+      "name": "Poolside API",
+      "operator": "Poolside",
+      "service_type": "direct_model_api",
+      "url": "https://docs.poolside.ai/api/overview",
+      "description": "Poolside's hosted OpenAI-compatible API for its own Laguna coding models, exposing a chat-completions endpoint and a model listing with server-side thinking control.",
+      "service_boundary": "Represents Poolside-hosted inference at inference.poolside.ai, reached with a key issued from Poolside Platform. It is not the Laguna weight releases, not self-managed Poolside inference that customers deploy on their own Kubernetes or on-premises hardware, not the Poolside Agent CLI or Poolside Assistant clients, and not Poolside models served by OpenRouter or other third parties.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "first_party"
+      ],
+      "api_styles": [
+        "openai_compatible"
+      ],
+      "regional_controls": "The documentation exposes one global base URL and establishes no customer-selected processing region, regional endpoint, private networking, or dedicated placement. Customers who need to control placement are directed to a self-managed Poolside inference deployment on their own AWS EKS, OpenShift, upstream Kubernetes, or on-premises hardware, which is a customer-operated execution path rather than a mode of this service.",
+      "retention_controls": "The Poolside Terms of Use permit using Content, defined to include prompts, code, and output, to provide and improve the Products and to train Poolside models unless the user opts out. The opt-out is described as a Training Opt-Out setting for access through the Site, with third-party platforms governed by their own controls, and it does not apply to Content submitted as feedback or flagged for safety review. A Data Processing Addendum and a privacy policy are published; no zero-retention mode, per-request retention control, or customer deletion path is documented for the hosted API.",
+      "routing": "Callers name a published Poolside model id such as poolside/laguna-s-2.1. The service serves only Poolside's own models and documents no cross-provider routing, fallback, replica steering, or priority tier.",
+      "customization": "No fine-tuning, adapter training, customer-supplied weights, or dedicated deployment is documented for the hosted API. Control is per request through the OpenAI-compatible parameters and a thinking toggle, and per model through published model ids; larger context windows are directed to paid access through OpenRouter rather than a tier of this service.",
+      "strengths": [
+        "A direct first-party path to Poolside's own coding models over ordinary OpenAI-compatible chat completions, usable from any OpenAI SDK with only a base URL and key change.",
+        "Support is documented rather than implied: two published tiers with first-response time targets, a support portal with a defined scope that names inference availability and error rates, and dated model and inference release notes."
+      ],
+      "tradeoffs": [
+        "Training on customer prompts, code, and output is the documented default, and the opt-out is an account setting rather than a per-request or per-key control.",
+        "The surface is narrow: one global endpoint pair, on-demand only, no documented regions, fallback, batch, reserved capacity, or fine-tuning, with larger context windows pointed at a third-party router."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 6.0,
+        "data_governance": 5.0,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 3.0,
+        "api_interoperability": 7.5,
+        "traffic_resilience": 2.5,
+        "customization_lifecycle": 3.0,
+        "documentation_transparency": 6.8,
+        "overall": 4.63
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "Poolside Terms of Use",
+        "url": "https://poolside.ai/legal/eula",
+        "verified_at": "2026-09-02"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Poolside API overview: access methods, endpoints, and authentication",
+          "url": "https://docs.poolside.ai/api/overview",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "kind": "web",
+          "label": "Supported models and access-method differences",
+          "url": "https://docs.poolside.ai/get-started/supported-models",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "kind": "web",
+          "label": "Standard Support response-time targets and support scope",
+          "url": "https://docs.poolside.ai/support/standard-support",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "kind": "web",
+          "label": "Poolside legal index, including the Data Processing Addendum and privacy policy",
+          "url": "https://docs.poolside.ai/legal",
+          "verified_at": "2026-09-02"
+        }
+      ],
+      "verified_at": "2026-09-02"
     }
   ],
   "generated_at": "2026-09-01"

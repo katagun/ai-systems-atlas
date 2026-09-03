@@ -4,7 +4,7 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-result-count")).toContainText("236 entries · Scores hidden across collections");
+  await expect(page.locator("#all-directory-result-count")).toContainText("240 entries · Scores hidden across collections");
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
@@ -244,7 +244,7 @@ test("inference services combine filters and expose the dedicated service score"
   await page.reload();
   await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
 
-  await expect(page.locator("#inference-result-count")).toContainText("57 services · Inference-service score");
+  await expect(page.locator("#inference-result-count")).toContainText("58 services · Inference-service score");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
   await page.locator("#inference-sort-filter").selectOption("name");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("abliteration.ai");
@@ -295,7 +295,7 @@ test("scores remain hidden across families and visible within the assistant fami
   await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
 
   await page.locator("#family-filter").selectOption("assistant_system");
-  await expect(page.locator("#project-grid .score-ring")).toHaveCount(16);
+  await expect(page.locator("#project-grid .score-ring")).toHaveCount(17);
   await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
