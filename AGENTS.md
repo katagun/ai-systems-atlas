@@ -12,7 +12,7 @@ Read only the documents required by the change:
 | JSON fields, enums, queues, or timestamps | `docs/DATA_MODEL.md` |
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
 | finder, Directory collections, filters, comparison, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/013-distinct-collections-share-one-directory-surface.md` for collection boundaries and `docs/adr/014-comparisons-are-scoped-to-one-score-profile.md` for comparison |
-| system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md`, and `docs/adr/021-the-research-reference-role-is-removed.md` |
+| system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md`, `docs/adr/021-the-research-reference-role-is-removed.md`, and `docs/adr/022-general-pattern-content-is-not-a-collection.md` |
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
 | visual builders, authoring surface, or agent interfaces | `docs/TAXONOMY.md`, then `docs/adr/019-authoring-surface-is-a-trait-not-a-role.md` |
@@ -23,6 +23,7 @@ Read only the documents required by the change:
 | specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` for the boundary, `docs/adr/017-local-runtime-eligibility-ignores-modality.md` for eligibility and the vocabulary obligation, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
+| agent-facing discovery docs, llms.txt, or the Atlas skill | `docs/AGENT_DOCS.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 

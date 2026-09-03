@@ -7,6 +7,7 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
 GENERATED_DIRECTORIES = {".git", ".venv", "node_modules", "playwright-report", "test-results"}
 
 
@@ -16,7 +17,7 @@ class DocumentationTests(unittest.TestCase):
         for document in ROOT.rglob("*.md"):
             if GENERATED_DIRECTORIES.intersection(document.parts):
                 continue
-            text = document.read_text(encoding="utf-8")
+            text = CODE_FENCE.sub("", document.read_text(encoding="utf-8"))
             for target in MARKDOWN_LINK.findall(text):
                 if target.startswith(("http://", "https://", "mailto:", "#")):
                     continue
@@ -29,6 +30,7 @@ class DocumentationTests(unittest.TestCase):
         for relative in (
             "ROADMAP.md",
             "BACKLOG.md",
+            "docs/AGENT_DOCS.md",
             "docs/CURATION.md",
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
