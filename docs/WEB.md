@@ -114,6 +114,8 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
+The suite starts its own server on a port derived from the checkout's path and never adopts one it did not start, so the exploratory server below and a suite running in another worktree cannot serve it another checkout's `web/`. A stale server producing believable but wrong data is the failure this prevents; if its own port is occupied, the run stops with an error naming the port instead. Set `ATLAS_E2E_PORT` to choose the port yourself.
+
 For exploratory browser verification, serve the static application:
 
 ```bash
