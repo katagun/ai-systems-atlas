@@ -471,3 +471,10 @@ test("the GitHub link is an icon with an accessible name rather than visible tex
   assert.match(link[0], /aria-label="GitHub"/);
   assert.match(link[1], /^\s*<svg[^>]*aria-hidden="true"[^>]*>[\s\S]*<\/svg>\s*$/, "the link body must be exactly one hidden SVG with no visible text");
 });
+
+test("corner radii outside the token block are references, never literals", () => {
+  const { light, rest } = stylesheetBlocks();
+  for (const token of ["--radius", "--radius-control", "--radius-chip"]) assert.ok(token in light, `${token} is not defined on :root`);
+  const literals = [...rest.matchAll(/border-radius:\s*([^;]+);/g)].map(match => match[1].trim()).filter(value => !/^(?:0|50%|var\(--radius(?:-\w+)?\))$/.test(value));
+  assert.deepEqual(literals, []);
+});
