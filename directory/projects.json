@@ -14886,6 +14886,103 @@
       "open_issues": 539,
       "metadata_verified_at": "2026-09-02",
       "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "pool",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "pool",
+      "repo": "poolsideai/pool",
+      "url": "https://github.com/poolsideai/pool",
+      "description": "Proprietary Poolside coding agent for the terminal that also runs as an ACP server inside editors and as an ACP client driving other agent servers.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "poolside",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "local working tree and Git worktree sessions, resumable session history and trajectory logs, and settings.yaml permissions, skills, and AGENTS.md instructions",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": 418,
+      "stars_verified_at": "2026-09-02",
+      "historical_stars": null,
+      "current_repo_note": "The public repository carries documentation, a changelog, and third-party notices only; pool itself is distributed as a precompiled binary under Poolside's Terms of Use, so its GitHub metadata measures the distribution and issue-tracking repository rather than the agent's source.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 8.6,
+        "autonomy": 8.2,
+        "human_control": 8.8,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 7.0,
+        "interoperability": 9.2,
+        "maturity": 6.4,
+        "overall": 8.0
+      },
+      "strengths": [
+        "Layered human control: four approval modes including a risk-classifying Auto mode, tool and path allow/deny rules merged across personal, project, and gitignored local scopes with deny winning, mandatory approval for subshells and piped commands, and a Plan mode that requires review to leave even under Allow all",
+        "First-class on both sides of the Agent Client Protocol, running as a server inside Zed, JetBrains, and Xcode and as a client driving Claude Agent, Codex, or a remote agent server, alongside MCP, AGENTS.md, and SKILL.md support",
+        "An optional Docker sandbox with read-only or read-write workspace mounts and a proxy-enforced egress allowlist, plus Git worktree sessions, mid-turn steering, rewind, resumable cross-directory sessions, and newline-delimited JSON output with distinct exit codes for pool exec"
+      ],
+      "weaknesses": [
+        "The agent ships only as a precompiled binary: the public repository holds documentation, a changelog, and dependency notices, the terms forbid reverse engineering, and no source is published for the loop, its tools, or the Auto-mode risk classifier",
+        "On the default Poolside-hosted path the terms permit using prompts, code, and output to train Poolside models unless the user opts out, making the vendor's own inference the weakest of the supported backends for confidential work",
+        "Young and still moving: fourteen releases reaching v1.0.16 since May 2026, Windows install in preview, pool acp serve marked experimental, and hooks that run without an approval prompt and fail open by documented design rather than acting as a security boundary"
+      ],
+      "why_it_matters": "A rare coding agent that is a first-class ACP client as well as an ACP server, so one terminal interface can drive Poolside's own agent or someone else's while permissions, sandboxing, worktrees, and session handling stay on the client side.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-02",
+      "pushed_at": "2026-08-18T13:07:36Z",
+      "forks": 25,
+      "open_issues": 24,
+      "metadata_verified_at": "2026-09-02",
+      "github_detected_license": null,
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
     }
   ]
 }
