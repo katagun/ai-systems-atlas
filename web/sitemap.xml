@@ -63,7 +63,7 @@
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/llama-cpp/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/lm-studio/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/localai/</loc><lastmod>2026-08-29</lastmod></url>
-  <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/mlc-llm/</loc><lastmod>2026-08-30</lastmod></url>
+  <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/mlc-llm/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/mlx-lm/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/ollama/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/onnxruntime-genai/</loc><lastmod>2026-08-29</lastmod></url>
@@ -73,6 +73,7 @@
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/tensorrt-llm/</loc><lastmod>2026-08-30</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/text-embeddings-inference/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/vllm/</loc><lastmod>2026-08-29</lastmod></url>
+  <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/web-llm/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/local-runtimes/xinference/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/specifications/a2a/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/specifications/acp/</loc><lastmod>2026-08-25</lastmod></url>
@@ -237,6 +238,7 @@
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/roo-code/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/ruflo/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/salesforce-agentforce/</loc><lastmod>2026-08-31</lastmod></url>
+  <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/sandbase-harness/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/screenpipe/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/seekrflow/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://katagun.github.io/ai-systems-atlas/records/systems/semantic-kernel/</loc><lastmod>2026-08-29</lastmod></url>
