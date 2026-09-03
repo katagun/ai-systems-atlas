@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-02",
+  "verified_at": "2026-09-03",
   "runtimes": [
     {
       "id": "geniex",
@@ -448,15 +448,14 @@
       "runtime_type": "embedded_library",
       "repo": "mlc-ai/mlc-llm",
       "url": "https://llm.mlc.ai/docs/",
-      "description": "Machine-learning compiler and deployment engine that converts and compiles language models into platform-native binaries, then executes them on MLCEngine through Python, a command line, a REST server, and Swift, Kotlin, and JavaScript SDKs across desktop GPUs, phones, and the browser.",
-      "runtime_boundary": "Represents the MLC LLM package, its conversion and compilation tooling, and the MLCEngine runtime. It is not Apache TVM, the general-purpose tensor compiler and TensorIR stack it is built on and installs as a separate dependency; TVM supplies the code generation, while this record covers the model definitions, quantization schemes, engine, and serving surfaces layered above it. The browser path is delivered by the sibling mlc-ai/web-llm package, documented here as the web backend of MLCEngine but published and versioned separately. The iOS and Android chat applications built from this repository are demonstrations of the SDKs, not an assistant workspace, so the project stays on the runtime side of the ADR 015 test.",
+      "description": "Machine-learning compiler and deployment engine that converts and compiles language models into platform-native binaries, then executes them on MLCEngine through Python, a command line, a REST server, and Swift and Kotlin SDKs across desktop GPUs and phones.",
+      "runtime_boundary": "Represents the MLC LLM package, its conversion and compilation tooling, and the MLCEngine runtime, distributed as the Python package, CLI, REST server, and iOS/Android SDKs built from this repository. It is not Apache TVM, the general-purpose tensor compiler and TensorIR stack it is built on and installs as a separate dependency; TVM supplies the code generation, while this record covers the model definitions, quantization schemes, engine, and serving surfaces layered above it. It is also not WebLLM: mlc-ai/web-llm is a separately maintained, versioned, and licensed package with its own record that runs MLCEngine inside a browser through WebGPU; both consume the same compiled MLC model format, but only mlc-ai/mlc-llm's own release is scored here. The iOS and Android chat applications built from this repository are demonstrations of the SDKs, not an assistant workspace, so the project stays on the runtime side of the ADR 015 test.",
       "accelerators": [
         "cuda",
         "rocm",
         "metal",
         "vulkan",
         "opencl",
-        "webgpu",
         "multi_gpu"
       ],
       "model_formats": [
@@ -477,22 +476,20 @@
       "deployment_surfaces": [
         "local_cli",
         "library",
-        "mobile_device",
-        "browser"
+        "mobile_device"
       ],
       "model_management": "A model reference of the form HF://org/repo resolves against the Hugging Face Hub, downloading pre-quantized weights into a local cache and compiling a model library on first use, after which both are reused. Custom models go through mlc_llm convert_weight to quantize a Hugging Face checkpoint into the project's own sharded parameter format, mlc_llm gen_config to emit mlc-chat-config.json and process tokenizers, and mlc_llm compile to produce the platform binary; the result can be uploaded back to the Hub. Packaging tooling bundles libraries and weights into iOS and Android application builds. There is no pinning, listing, or removal command for cached artifacts.",
-      "hardware_requirements": "The project's platform table documents AMD, NVIDIA, and Intel GPUs on Linux and Windows through Vulkan, with ROCm and CUDA as vendor backends; Apple and Intel GPUs on macOS through Metal; Apple A-series GPUs on iOS and iPadOS through Metal; Adreno and Mali GPUs on Android through OpenCL; and WebGPU with WebAssembly in the browser. The server accepts a device string of cuda, metal, vulkan, rocm, opencl, or auto. There is no documented CPU-only execution path, and compiling for a new target requires the TVM compiler installed alongside the package.",
+      "hardware_requirements": "The project's platform table documents AMD, NVIDIA, and Intel GPUs on Linux and Windows through Vulkan, with ROCm and CUDA as vendor backends; Apple and Intel GPUs on macOS through Metal; and Apple A-series GPUs on iOS and iPadOS through Metal, plus Adreno and Mali GPUs on Android through OpenCL. The server accepts a device string of cuda, metal, vulkan, rocm, opencl, or auto. There is no documented CPU-only execution path, and compiling for a new target requires the TVM compiler installed alongside the package.",
       "operational_controls": "The server takes one of three preset engine modes — interactive, local, and server — which set maximum concurrent sequences, total sequence length, and prefill chunk size, each overridable individually along with tensor-parallel shards, GPU memory utilization, prefix-cache recycling, context or sliding-window size, and attention-sink size. Speculative decoding is selected per launch as small-draft, Eagle, or Medusa with an additional draft model. Per-request event logging is enabled with a tracing flag, and CORS origins, methods, headers, and credentials are configurable. There is no authentication, metrics endpoint, or health endpoint.",
       "strengths": [
-        "One compiler and one engine target an unusually wide set of execution surfaces — desktop GPUs on three operating systems, iOS and Android phones, and WebGPU in the browser — with the same OpenAI-compatible interface on each.",
+        "One compiler and one engine target an unusually wide set of execution surfaces — desktop GPUs on three operating systems plus iOS and Android phones — with the same OpenAI-compatible interface on each.",
         "Compilation is a first-class, documented workflow: weight conversion, quantization configuration, model-library compilation, packaging for mobile builds, and defining a new model architecture each have their own reference page.",
         "The server exposes tensor-parallel sharding, prefix caching, configurable batch sizing through engine modes, and three families of speculative decoding without requiring a separate orchestrator."
       ],
       "tradeoffs": [
         "Nothing runs without conversion and compilation: weights must be transformed into the project's own quantized shard format and paired with a compiled model library for the exact target, so a stock checkpoint cannot be pointed at and served directly.",
         "Operational visibility is minimal, with per-request tracing and a CLI statistics command but no metrics endpoint, health endpoint, authentication, container image, or orchestration guidance.",
-        "The supported model architecture list is narrower than mainstream server engines, and the published documentation is still versioned 0.1.0 with pages of differing freshness, so capability must be confirmed per model and per release.",
-        "Browser execution is documented here but shipped from a separate repository and package, so the reviewed runtime's own release does not carry that surface."
+        "The supported model architecture list is narrower than mainstream server engines, and the published documentation is still versioned 0.1.0 with pages of differing freshness, so capability must be confirmed per model and per release."
       ],
       "licenses": [
         "Apache-2.0"
@@ -512,7 +509,7 @@
       ],
       "score_profile": "local_runtime",
       "score": {
-        "hardware_accelerator_coverage": 8.0,
+        "hardware_accelerator_coverage": 7.5,
         "model_format_support": 4.5,
         "serving_concurrency": 6.0,
         "api_interoperability": 6.5,
@@ -520,7 +517,7 @@
         "model_lifecycle_management": 6.5,
         "observability_control": 3.5,
         "documentation_transparency": 5.5,
-        "overall": 5.79
+        "overall": 5.71
       },
       "evidence": [
         {
@@ -561,12 +558,6 @@
         },
         {
           "kind": "web",
-          "label": "WebLLM JavaScript SDK and the WebGPU browser backend",
-          "url": "https://llm.mlc.ai/docs/deploy/webllm.html",
-          "verified_at": "2026-08-30"
-        },
-        {
-          "kind": "web",
           "label": "Python package installation options",
           "url": "https://llm.mlc.ai/docs/install/mlc_llm.html",
           "verified_at": "2026-08-30"
@@ -578,9 +569,9 @@
           "verified_at": "2026-08-30"
         }
       ],
-      "verified_at": "2026-08-30",
-      "stars": 23117,
-      "stars_verified_at": "2026-08-31"
+      "verified_at": "2026-09-03",
+      "stars": 23130,
+      "stars_verified_at": "2026-09-03"
     },
     {
       "id": "mlx-lm",
@@ -1630,6 +1621,109 @@
       "verified_at": "2026-08-29",
       "stars": 90626,
       "stars_verified_at": "2026-08-31"
+    },
+    {
+      "id": "web-llm",
+      "name": "WebLLM",
+      "maintainer": "MLC AI community",
+      "runtime_type": "embedded_library",
+      "repo": "mlc-ai/web-llm",
+      "url": "https://webllm.mlc.ai/",
+      "description": "In-browser LLM inference engine built on MLCEngine that runs entirely client-side through WebGPU, exposing an OpenAI-compatible JavaScript and TypeScript API with streaming, JSON-mode structured generation, and Web Worker, Service Worker, and browser-extension integration.",
+      "runtime_boundary": "Represents the mlc-ai/web-llm package: its TypeScript API, prebuilt-model registry, and the browser-side MLCEngine that runs entirely inside a web page through WebGPU and WebAssembly, with no local server process. It is published, versioned, and licensed separately from mlc-ai/mlc-llm, the sibling record covering the Python compiler, CLI, and REST server; both consume the same compiled MLC model format, but a genuinely new model architecture still depends on mlc-llm's Python compilation pipeline to produce the WASM model library this package loads. WebLLM Chat (chat.webllm.ai) and the community web-llm-chat project are demonstration and third-party chat applications built on this engine, not part of the reviewed package, so it stays on the runtime side of the ADR 015 test.",
+      "accelerators": [
+        "webgpu"
+      ],
+      "model_formats": [
+        "mlc"
+      ],
+      "serving_modes": [
+        "single_stream"
+      ],
+      "api_styles": [
+        "openai_compatible"
+      ],
+      "deployment_surfaces": [
+        "browser",
+        "library"
+      ],
+      "model_management": "Prebuilt models are referenced by ID against webllm.prebuiltAppConfig.model_list (for example Llama-3-8B-Instruct-q4f32_1-MLC), which points at MLC-quantized weights hosted on the Hugging Face Hub and a matching WebGPU-targeted WASM model library; the browser fetches and reuses both, though official docs do not specify the underlying cache API or eviction behavior. A new quantized variant of an already-supported architecture can be registered as a custom ModelRecord pointing at Hub-hosted weights without local compilation; a genuinely new architecture still requires running mlc_llm compile with the separate Python package to produce a new WASM model library before it can be registered the same way. There is no documented command to list, pin, or remove cached model artifacts from within the library itself.",
+      "hardware_requirements": "The only documented requirement is a WebGPU-capable browser; the project points users at a recent Chrome release and an external WebGPU support-check tool. No CPU-only fallback, minimum VRAM, or non-Chrome compatibility matrix is stated in official sources, so behavior on other WebGPU-shipping browsers is unconfirmed.",
+      "operational_controls": "The JavaScript API exposes chat-completion parameters including temperature, JSON-mode and grammar-constrained structured generation, and streaming, plus explicit engine construction options for Web Worker and Service Worker offload and progress callbacks during model loading. There is no documented authentication, metrics endpoint, health endpoint, or request-level tracing; the runtime executes inside the host page's own security context and origin.",
+      "strengths": [
+        "Runs a full OpenAI-compatible chat-completion API, including streaming and JSON-mode structured generation, entirely client-side with no inference server to operate or secure.",
+        "First-class Web Worker, Service Worker, and Chrome-extension integration patterns let a host application offload inference off the main thread without a separate runtime process.",
+        "Reuses MLC LLM's compiled model libraries and Hugging Face-hosted quantized weights, so architectures already supported by the desktop engine reach the browser without a parallel compilation effort."
+      ],
+      "tradeoffs": [
+        "Execution is documented against a single accelerator path, WebGPU in Chrome, with no stated CPU fallback or cross-browser compatibility matrix from official sources.",
+        "Serving is inherently single-stream, one browser tab per user, with no batching, request queuing, or multi-user concurrency of any kind.",
+        "A genuinely new model architecture still depends on mlc-llm's separate Python compiler to produce a WASM model library, so the package cannot originate full compilation support on its own.",
+        "No authentication, metrics endpoint, health endpoint, or request tracing is documented; observability is whatever the host web application builds around the library."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes its own verbatim Apache-2.0 license file, separate from and identical in terms to mlc-ai/mlc-llm's license file; no additional NOTICE or component-specific terms were found.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file for the WebLLM package and browser-side MLCEngine",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mlc-ai/web-llm/blob/main/LICENSE",
+          "blob_sha": "7d10a85f06eeca6d5b96769e1941b3d55109c055",
+          "immutable_url": "https://api.github.com/repos/mlc-ai/web-llm/git/blobs/7d10a85f06eeca6d5b96769e1941b3d55109c055"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 2.5,
+        "model_format_support": 4.0,
+        "serving_concurrency": 2.0,
+        "api_interoperability": 5.0,
+        "deployment_operations": 4.5,
+        "model_lifecycle_management": 4.0,
+        "observability_control": 1.5,
+        "documentation_transparency": 5.0,
+        "overall": 3.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Repository overview, feature list, and hosted chat demo",
+          "url": "https://github.com/mlc-ai/web-llm/blob/main/README.md",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "kind": "web",
+          "label": "Get-started guide and WebGPU browser requirement",
+          "url": "https://webllm.mlc.ai/docs/user/get_started.html",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "kind": "web",
+          "label": "WebLLM deployment guide covering prebuilt models and custom model registration",
+          "url": "https://llm.mlc.ai/docs/deploy/webllm.html",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "kind": "web",
+          "label": "npm package manifest and published version",
+          "url": "https://www.npmjs.com/package/@mlc-ai/web-llm",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "kind": "web",
+          "label": "Repository license file",
+          "url": "https://github.com/mlc-ai/web-llm/blob/main/LICENSE",
+          "verified_at": "2026-09-03"
+        }
+      ],
+      "verified_at": "2026-09-03",
+      "stars": 18942,
+      "stars_verified_at": "2026-09-03"
     },
     {
       "id": "xinference",

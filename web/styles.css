@@ -340,6 +340,21 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 }
 .github-link svg { width: 18px; height: 18px; fill: currentColor; }
 .github-link:hover { color: var(--text); border-color: var(--line-strong); }
+.suggest-link {
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0 .75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--glass-weak);
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.suggest-link:hover { color: var(--text); border-color: var(--line-strong); }
 
 main { width: min(1360px, calc(100% - 3rem)); margin: 0 auto; }
 .view { display: none; padding: clamp(3.5rem, 7vw, 7rem) 0; }
