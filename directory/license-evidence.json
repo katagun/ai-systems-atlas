@@ -2811,6 +2811,19 @@
           "verified_at": "2026-09-02"
         }
       ]
+    },
+    {
+      "project_id": "poolside-assistant",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Poolside Terms of Use, which govern software Poolside makes publicly available; Poolside Assistant is not among the products the definition enumerates",
+          "kind": "web_terms",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

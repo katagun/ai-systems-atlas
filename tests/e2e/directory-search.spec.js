@@ -244,7 +244,7 @@ test("inference services combine filters and expose the dedicated service score"
   await page.reload();
   await expect(page.getByRole("button", { name: /^Inference services / })).toHaveAttribute("aria-pressed", "true");
 
-  await expect(page.locator("#inference-result-count")).toContainText("57 services · Inference-service score");
+  await expect(page.locator("#inference-result-count")).toContainText("58 services · Inference-service score");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
   await page.locator("#inference-sort-filter").selectOption("name");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("abliteration.ai");
