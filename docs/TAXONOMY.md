@@ -15,6 +15,8 @@ Every catalog entry therefore receives:
 
 Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status and remain unscored. Inference services are classified by service type, delivery mode, model-source scope, and API style, then compared through their own operational-service score profile. That score is not comparable to any system-family score. Systems and inference services share the Directory browsing surface without sharing schemas or rankings. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
 
+General agent-architecture pattern content — harness shapes, failure taxonomies, and similar concepts with no single authoritative steward — is not a further collection. Every collection here pins evidence to one steward's own reviewable artifact; a pattern synthesized across independent literature cannot meet that bar without inviting figures that only look sourced. See [ADR 022](adr/022-general-pattern-content-is-not-a-collection.md).
+
 ## Family 1: memory systems
 
 Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, and retrieval infrastructure.
