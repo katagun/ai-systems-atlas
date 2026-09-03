@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-08-30",
+  "verified_at": "2026-09-02",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -2694,6 +2694,21 @@
           "kind": "web_terms",
           "url": "https://www.seekr.com/terms-conditions/",
           "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "exo-harness",
+      "repo": "exoharness/exo",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/exoharness/exo/blob/main/LICENSE",
+          "blob_sha": "2be669de9210f892afc3b33965c4f0c1105ad535",
+          "immutable_url": "https://api.github.com/repos/exoharness/exo/git/blobs/2be669de9210f892afc3b33965c4f0c1105ad535"
         }
       ]
     }
