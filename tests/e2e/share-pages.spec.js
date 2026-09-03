@@ -4,7 +4,7 @@ test("a share page carries record metadata and opens the record in the Atlas", a
   await page.goto("/records/systems/kilo-code/");
 
   await expect(page).toHaveTitle("Kilo Code · peacefulcoexistance");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://katagun.github.io/ai-systems-atlas/records/systems/kilo-code/");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://peacefulcoexistance.com/records/systems/kilo-code/");
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "Kilo Code");
   await expect(page.locator("h1")).toHaveText("Kilo Code");
   await expect(page.locator("main")).not.toContainText(/\d\.\d/);

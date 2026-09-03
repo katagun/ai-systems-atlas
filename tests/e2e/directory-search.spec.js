@@ -21,7 +21,7 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
 
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
-    "https://katagun.github.io/ai-systems-atlas/",
+    "https://peacefulcoexistance.com/",
   );
   await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute(
     "href",

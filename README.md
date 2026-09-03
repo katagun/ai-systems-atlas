@@ -2,7 +2,7 @@
 
 AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, the managed services that run model inference, and the runtimes you host yourself. One Directory surface discovers systems, inference services, and local runtimes while preserving their separate schemas and score profiles; specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
 
-Browse the published directory at [katagun.github.io/ai-systems-atlas](https://katagun.github.io/ai-systems-atlas/).
+Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/).
 
 The repository contains the canonical editorial catalog, its validation and refresh automation, and a dependency-free static web interface. The local-first second-brain implementation informed by this research lives in [Cognosaic](https://github.com/embark-delve/cognosaic).
 
