@@ -2698,6 +2698,39 @@
       ]
     },
     {
+      "project_id": "ozbrain",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Terms of Service for the OzBrain hosted platform (Monsef Holdings Pty Ltd), covering the shared knowledge base, staged writes, tasks, and MCP integrations",
+          "kind": "web_terms",
+          "url": "https://ozbrain.com/terms",
+          "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "nia",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "nozomio-labs/nia-cli, the open command-line client for the hosted platform, whose LICENSE blob is pinned at 261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "kind": "web_terms",
+          "url": "https://github.com/nozomio-labs/nia-cli/blob/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64/LICENSE",
+          "verified_at": "2026-09-02"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Terms & Conditions for Nia AI (Nozomio Labs Inc.), covering the hosted trynia.ai website and Nia Cloud API/indexing service",
+          "kind": "web_terms",
+          "url": "https://www.termsfeed.com/live/7c132509-fee8-48cb-ae8d-587d6eeb6a0d",
+          "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
       "project_id": "exo-harness",
       "repo": "exoharness/exo",
       "items": [
