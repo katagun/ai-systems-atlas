@@ -5,7 +5,7 @@ description: Query the AI Systems Atlas, a reviewed directory of agent, memory, 
 
 # AI Systems Atlas
 
-The Atlas (https://katagun.github.io/ai-systems-atlas/) reviews and curates AI agent, memory, and assistant systems, plus interoperability specifications, managed inference services, and self-operated local runtimes. Every published record carries reviewed license evidence and a `verified_at` date; nothing is scraped or self-scored.
+The Atlas (https://peacefulcoexistance.com/) reviews and curates AI agent, memory, and assistant systems, plus interoperability specifications, managed inference services, and self-operated local runtimes. Every published record carries reviewed license evidence and a `verified_at` date; nothing is scraped or self-scored.
 
 ## Fetch the right file for the question
 
@@ -18,7 +18,7 @@ The Atlas (https://katagun.github.io/ai-systems-atlas/) reviews and curates AI a
 | Enum meanings, license identifiers, score-profile definitions | `taxonomy.json` |
 | Why something was reviewed and not included | `exclusions.json` |
 
-All files live at `https://katagun.github.io/ai-systems-atlas/<file>` and are plain JSON with no auth and no rate limit.
+All files live at `https://peacefulcoexistance.com/<file>` and are plain JSON with no auth and no rate limit.
 
 ## Vocabulary you need to filter correctly
 

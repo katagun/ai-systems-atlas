@@ -6,13 +6,13 @@
 
 Published JSON, no auth, no rate limit — fetch directly.
 
-- [projects.json](https://katagun.github.io/ai-systems-atlas/projects.json): reviewed agent, memory, and assistant systems with editorial scores
-- [taxonomy.json](https://katagun.github.io/ai-systems-atlas/taxonomy.json): enum values, license identifiers, and score-profile definitions used by every other file
-- [exclusions.json](https://katagun.github.io/ai-systems-atlas/exclusions.json): reviewed scope-boundary decisions — why a candidate was not included
-- [license-evidence.json](https://katagun.github.io/ai-systems-atlas/license-evidence.json): scoped, reviewed license and terms evidence per project
-- [specifications.json](https://katagun.github.io/ai-systems-atlas/specifications.json): unscored interoperability protocols, metadata schemas, instruction conventions, and package formats
-- [inference-services.json](https://katagun.github.io/ai-systems-atlas/inference-services.json): managed inference services with a dedicated operational-service score
-- [local-runtimes.json](https://katagun.github.io/ai-systems-atlas/local-runtimes.json): self-operated inference runtimes with a dedicated runtime score
+- [projects.json](https://peacefulcoexistance.com/projects.json): reviewed agent, memory, and assistant systems with editorial scores
+- [taxonomy.json](https://peacefulcoexistance.com/taxonomy.json): enum values, license identifiers, and score-profile definitions used by every other file
+- [exclusions.json](https://peacefulcoexistance.com/exclusions.json): reviewed scope-boundary decisions — why a candidate was not included
+- [license-evidence.json](https://peacefulcoexistance.com/license-evidence.json): scoped, reviewed license and terms evidence per project
+- [specifications.json](https://peacefulcoexistance.com/specifications.json): unscored interoperability protocols, metadata schemas, instruction conventions, and package formats
+- [inference-services.json](https://peacefulcoexistance.com/inference-services.json): managed inference services with a dedicated operational-service score
+- [local-runtimes.json](https://peacefulcoexistance.com/local-runtimes.json): self-operated inference runtimes with a dedicated runtime score
 
 ## Reference
 

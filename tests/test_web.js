@@ -519,7 +519,10 @@ test("llms.txt only links to files that actually exist", () => {
   const text = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
   const links = [...text.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)].map(match => match[1]);
   assert.ok(links.length > 0, "llms.txt has no links");
-  const siteRoot = "https://katagun.github.io/ai-systems-atlas/";
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const siteUrlMatch = builder.match(/SITE_URL = "([^"]+)"/);
+  assert.ok(siteUrlMatch, "could not find SITE_URL in scripts/build_share_pages.py");
+  const siteRoot = siteUrlMatch[1];
   const repoBlobRoot = "https://github.com/katagun/ai-systems-atlas/blob/main/";
   for (const link of links) {
     if (link.startsWith(siteRoot)) {
