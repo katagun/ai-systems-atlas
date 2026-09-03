@@ -1269,6 +1269,47 @@ function bindEvents() {
   $("#comparison-dialog").addEventListener("click", event => { if (event.target === $("#comparison-dialog")) $("#comparison-dialog").close(); });
 }
 
+// Theme: "system" leaves the root unstamped so the OS preference decides;
+// "light" and "dark" stamp data-theme and persist. The inline script in
+// index.html applies a stored choice before first paint; this keeps the
+// control, the storage, and the browser chrome colour in step afterwards.
+const THEME_STORAGE_KEY = "theme";
+
+function readThemePreference() {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    return stored === "light" || stored === "dark" ? stored : "system";
+  } catch {
+    return "system";
+  }
+}
+
+function syncThemeColor() {
+  const background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  const meta = $('meta[name="theme-color"]');
+  if (meta && background) meta.setAttribute("content", background);
+}
+
+function applyThemePreference(preference) {
+  if (preference === "system") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = preference;
+  try {
+    if (preference === "system") localStorage.removeItem(THEME_STORAGE_KEY);
+    else localStorage.setItem(THEME_STORAGE_KEY, preference);
+  } catch {
+    // Storage may be unavailable; the choice still applies for this page.
+  }
+  $("#theme-toggle")?.setAttribute("aria-label", `Theme: ${preference}`);
+  syncThemeColor();
+}
+
+function bindTheme() {
+  applyThemePreference(readThemePreference());
+  $("#theme-toggle")?.addEventListener("click", () => applyThemePreference(AtlasCore.cycleThemePreference(readThemePreference())));
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeColor);
+}
+
+bindTheme();
 bootstrap().catch(error => {
   document.body.innerHTML = `<main><div class="notice">peacefulcoexistance failed to load: ${escapeHTML(error.message)}</div></main>`;
 });

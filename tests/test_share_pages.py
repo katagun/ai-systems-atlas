@@ -54,6 +54,11 @@ class SharePageTests(unittest.TestCase):
         self.assertIn("Coding agent", page)
         self.assertNotIn("score", page.lower().replace("score profile", ""))
 
+    def test_pages_follow_the_os_colour_scheme(self) -> None:
+        page = self.pages["records/systems/kilo-code/index.html"]
+        self.assertIn("color-scheme: light dark", page)
+        self.assertIn("@media (prefers-color-scheme: dark)", page)
+
     def test_other_collections_link_back_with_their_own_kind(self) -> None:
         self.assertIn('href="../../../?record=spec:mcp"', self.pages["records/specifications/mcp/index.html"])
         self.assertIn('href="../../../?record=inference:openai-api"', self.pages["records/inference-services/openai-api/index.html"])
