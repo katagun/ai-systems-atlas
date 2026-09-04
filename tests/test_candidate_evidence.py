@@ -159,6 +159,37 @@ class RecheckTests(unittest.TestCase):
                 "content": base64.b64encode(b"MIT").decode(),
                 "html_url": "https://github.com/a/one/blob/main/LICENSE"}
 
+    def test_a_block_identical_to_the_baseline_is_not_refetched(self) -> None:
+        """An accepted block describes a document as it stood when a human accepted it."""
+        queue = self.triaged(harness.content_hash("MIT"))
+        baseline = json.loads(json.dumps(queue))
+
+        def refuse(_path, _token):
+            self.fail("a block unchanged since origin/main must not be re-fetched")
+
+        self.assertEqual([], harness.recheck_candidates(queue, refuse, None, baseline))
+
+    def test_a_block_absent_from_the_baseline_is_refetched(self) -> None:
+        queue = self.triaged("a" * 64)
+        baseline = [candidate("a/one")]
+        problems = harness.recheck_candidates(queue, self.getter, None, baseline)
+        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+
+    def test_a_back_dated_block_is_still_refetched(self) -> None:
+        """proposed_at is written by the agent, so it can never decide what gets verified."""
+        queue = self.triaged("a" * 64)
+        queue[0]["triage"]["proposed_at"] = "2020-01-01"
+        baseline = [candidate("a/one")]
+        problems = harness.recheck_candidates(queue, self.getter, None, baseline)
+        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+
+    def test_an_edited_block_is_refetched_even_though_the_candidate_had_one(self) -> None:
+        queue = self.triaged("a" * 64)
+        baseline = json.loads(json.dumps(queue))
+        baseline[0]["triage"]["evidence"][0]["content_sha256"] = "b" * 64
+        problems = harness.recheck_candidates(queue, self.getter, None, baseline)
+        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+
     def test_matching_evidence_rechecks_clean(self) -> None:
         self.assertEqual([], harness.recheck_candidates(
             self.triaged(harness.content_hash("MIT")), self.getter, None, "2026-09-04"))
@@ -192,16 +223,6 @@ class RecheckTests(unittest.TestCase):
         problems = harness.recheck_candidates(queue, self.getter, None, "2026-09-04")
         self.assertTrue(any("invented" in problem for problem in problems), problems)
         self.assertFalse(any("content_sha256" in problem for problem in problems), problems)
-
-    def test_a_block_from_an_earlier_run_is_not_re_fetched(self) -> None:
-        queue = self.triaged(harness.content_hash("MIT"))
-        queue[0]["triage"]["proposed_at"] = "2026-08-20"
-        queue[0]["triage"]["evidence"][0]["content_sha256"] = "a" * 64
-
-        def unexpected(_path, _token):
-            self.fail("a block written by an earlier run must not be re-fetched")
-
-        self.assertEqual([], harness.recheck_candidates(queue, unexpected, None, "2026-09-04"))
 
     def test_a_non_list_evidence_is_reported_not_raised(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
@@ -715,6 +736,34 @@ class PrepareTests(unittest.TestCase):
             self.fail(f"no command should run once the prompt has drifted, got: {command}")
 
         self.assertEqual(1, runner.prepare(limit=5, run=fail_if_called))
+
+
+class CommittedOverreachTests(unittest.TestCase):
+    def test_a_committed_edit_outside_the_queue_is_reported(self) -> None:
+        self.assertEqual(
+            ["directory/projects.json"],
+            runner.unexpected_committed_changes("directory/candidates.json\ndirectory/projects.json\n"),
+        )
+
+    def test_a_commit_touching_only_the_queue_is_allowed(self) -> None:
+        self.assertEqual([], runner.unexpected_committed_changes("directory/candidates.json\n"))
+
+    def test_finish_rejects_a_commit_that_touched_another_file(self) -> None:
+        """A clean working tree is not proof: the agent may have committed its own edit."""
+        calls = []
+
+        def fake_run(command, _cwd=None):
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, ""
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, "aaa\n" if command[2] == "HEAD" else "bbb\n"
+            if command[:3] == ["git", "diff", "--name-only"]:
+                return 0, "directory/candidates.json\ndirectory/projects.json\n"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run, read=lambda _p: "{}"))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
 
 
 class PromptDriftTests(unittest.TestCase):
