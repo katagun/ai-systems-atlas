@@ -42,9 +42,20 @@ def candidate_key(candidate: dict[str, Any]) -> str:
     return str(candidate.get("repo") or candidate.get("url") or "").lower()
 
 
+def untriageable_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return untriaged candidates this harness can never gather evidence for.
+
+    Every document it fetches comes from a GitHub repository, and the schema requires a
+    triage block to cite at least one. A candidate with no `repo` is therefore not a
+    transient failure to route around; it is permanently out of this harness's reach, and
+    leaving it in the selection would starve the queue behind it on every future run.
+    """
+    return [item for item in candidates if "triage" not in item and not item.get("repo")]
+
+
 def select_candidates(candidates: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
-    """Return untriaged candidates, oldest discovery first, at most `limit`."""
-    pending = [item for item in candidates if "triage" not in item]
+    """Return untriaged candidates with a repository, oldest discovery first, at most `limit`."""
+    pending = [item for item in candidates if "triage" not in item and item.get("repo")]
     pending.sort(key=lambda item: str(item.get("discovered_at") or ""))
     return pending[:limit]
 
@@ -146,13 +157,19 @@ def fetch_candidate_evidence(
 
 
 def recheck_candidates(
-    candidates: list[dict[str, Any]], getter: GitHubGetter, token: str | None
+    candidates: list[dict[str, Any]], getter: GitHubGetter, token: str | None, today: str
 ) -> list[str]:
-    """Re-fetch every cited document and confirm it still hashes to what was recorded."""
+    """Re-fetch this run's cited documents and confirm they still hash to what was recorded.
+
+    Scoped to blocks proposed today, which are exactly the ones this run wrote. An older
+    block describes a document as it stood when a human accepted it; re-verifying it here
+    would turn ordinary upstream drift — a README edited after the fact — into a guard
+    failure that no triage run can clear, deadlocking the routine permanently.
+    """
     problems: list[str] = []
     for candidate in candidates:
         triage = candidate.get("triage")
-        if not isinstance(triage, dict):
+        if not isinstance(triage, dict) or triage.get("proposed_at") != today:
             continue
         repo = candidate.get("repo")
         evidence = triage.get("evidence") or []
@@ -209,6 +226,15 @@ def previous_candidates(branch: str) -> list[dict[str, Any]]:
     return json.loads(finished.stdout).get("candidates") or []
 
 
+def persist_candidates(path: Path, candidates: list[dict[str, Any]]) -> None:
+    """Write the queue back, preserving every other key in the document."""
+    document = json.loads(path.read_text(encoding="utf-8"))
+    document["candidates"] = candidates
+    path.write_text(
+        json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
 def load_catalog(directory: Path) -> dict[str, list[dict[str, Any]]]:
     catalog: dict[str, list[dict[str, Any]]] = {}
     for name in CATALOG_FILES:
@@ -217,11 +243,27 @@ def load_catalog(directory: Path) -> dict[str, list[dict[str, Any]]]:
     return catalog
 
 
-def run_build(*, candidates, catalog, getter, token, today, limit, bundle_path, previous=()) -> int:
+def run_build(
+    *, candidates, catalog, getter, token, today, limit, bundle_path, previous=(),
+    candidates_path=None,
+) -> int:
     """Build the evidence bundle. Returns a process exit code."""
     carried = carry_forward(candidates, list(previous))
     if carried:
         print(f"carried {carried} triage blocks forward from the previous run")
+        # Carrying forward in memory alone loses the previous run's unmerged work: the
+        # branch it lived on is force-reset onto a fresh origin/main by `finish`, and the
+        # carried block also removes the candidate from this run's selection, so nobody
+        # redoes it either. The carry-forward is only real once it is on disk.
+        if candidates_path is not None:
+            persist_candidates(candidates_path, candidates)
+    unreachable = untriageable_candidates(candidates)
+    if unreachable:
+        print(
+            f"skipped {len(unreachable)} candidates with no GitHub repository, which this "
+            f"harness cannot gather evidence for: "
+            f"{', '.join(sorted(candidate_key(item) for item in unreachable))}"
+        )
     selected = select_candidates(candidates, limit)
     entries = []
     for item in selected:
@@ -251,18 +293,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--previous-branch", default="")
     args = parser.parse_args(argv)
     directory = ROOT / "directory"
-    candidates = json.loads((directory / "candidates.json").read_text(encoding="utf-8"))["candidates"]
+    candidates_path = directory / "candidates.json"
+    candidates = json.loads(candidates_path.read_text(encoding="utf-8"))["candidates"]
     token = os.environ.get("GITHUB_TOKEN")
     today = date.today().isoformat()
     if args.recheck:
-        problems = recheck_candidates(candidates, github_get, token)
+        problems = recheck_candidates(candidates, github_get, token, today)
         for problem in problems:
             print(f"error: {problem}", file=sys.stderr)
         return 1 if problems else 0
     return run_build(
         candidates=candidates, catalog=load_catalog(directory), getter=github_get,
         token=token, today=today, limit=args.limit, bundle_path=BUNDLE_PATH,
-        previous=previous_candidates(args.previous_branch),
+        previous=previous_candidates(args.previous_branch), candidates_path=candidates_path,
     )
 
 

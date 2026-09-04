@@ -94,7 +94,16 @@ def finish(*, run=shell) -> int:
     if forbidden:
         print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
         return 1
-    if not porcelain.strip():
+    # A clean tree is not the same as an idle run: an agent that stages and commits its
+    # own work leaves nothing in `git status` while its commit sits on the branch. The
+    # guards must run against anything HEAD carries beyond origin/main, however it got there.
+    head_code, head = run(["git", "rev-parse", "HEAD"], WORKTREE)
+    base_code, base = run(["git", "rev-parse", "origin/main"], WORKTREE)
+    if head_code != 0 or base_code != 0:
+        print("error: could not compare HEAD against origin/main", file=sys.stderr)
+        return 1
+    dirty = bool(porcelain.strip())
+    if not dirty and head.strip() == base.strip():
         print("no triage proposals to commit")
         return 0
     for command in CHECKS:
@@ -102,11 +111,14 @@ def finish(*, run=shell) -> int:
         if code != 0:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
             return 1
-    for command in (
-        ["git", "add", "directory/candidates.json"],
-        ["git", "checkout", "-B", "triage/pending"],
-        ["git", "commit", "-m", f"Propose candidate triage for {date.today().isoformat()}"],
-    ):
+    commands = [["git", "checkout", "-B", "triage/pending"]]
+    if dirty:
+        commands = [
+            ["git", "add", "directory/candidates.json"],
+            ["git", "checkout", "-B", "triage/pending"],
+            ["git", "commit", "-m", f"Propose candidate triage for {date.today().isoformat()}"],
+        ]
+    for command in commands:
         code, output = run(command, WORKTREE)
         if code != 0:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)

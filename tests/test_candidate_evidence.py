@@ -24,6 +24,24 @@ class SelectionTests(unittest.TestCase):
         queue = [candidate("a/new", "2026-09-03"), candidate("b/old", "2026-08-25")]
         self.assertEqual(["b/old"], [item["repo"] for item in harness.select_candidates(queue, 1)])
 
+    def test_selection_skips_a_candidate_with_no_repository(self) -> None:
+        queue = [{"url": "https://example.com/x", "discovered_at": "2026-08-01"}, candidate("b/two")]
+        self.assertEqual(["b/two"], [item["repo"] for item in harness.select_candidates(queue, 10)])
+
+    def test_a_repo_less_candidate_never_consumes_a_limit_slot(self) -> None:
+        queue = [{"url": "https://example.com/x", "discovered_at": "2026-08-01"}, candidate("b/two")]
+        self.assertEqual(["b/two"], [item["repo"] for item in harness.select_candidates(queue, 1)])
+
+    def test_untriageable_candidates_are_reported_so_they_stay_visible(self) -> None:
+        queue = [
+            {"url": "https://example.com/x", "discovered_at": "2026-08-01"},
+            candidate("b/two"),
+            {"url": "https://example.com/y", "discovered_at": "2026-08-02",
+             "triage": {"verdict": "held"}},
+        ]
+        unreachable = harness.untriageable_candidates(queue)
+        self.assertEqual(["https://example.com/x"], [item["url"] for item in unreachable])
+
     def test_carry_forward_restores_prior_work_by_repo(self) -> None:
         queue = [candidate("a/one")]
         previous = [candidate("A/One", triage={"verdict": "held", "held_by": "x"})]
@@ -140,17 +158,18 @@ class RecheckTests(unittest.TestCase):
 
     def test_matching_evidence_rechecks_clean(self) -> None:
         self.assertEqual([], harness.recheck_candidates(
-            self.triaged(harness.content_hash("MIT")), self.getter, None))
+            self.triaged(harness.content_hash("MIT")), self.getter, None, "2026-09-04"))
 
     def test_a_wrong_content_hash_is_reported(self) -> None:
-        problems = harness.recheck_candidates(self.triaged("a" * 64), self.getter, None)
+        problems = harness.recheck_candidates(
+            self.triaged("a" * 64), self.getter, None, "2026-09-04")
         self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
 
     def test_an_unreachable_citation_is_reported(self) -> None:
         def failing(_path, _token):
             raise OSError("404")
         problems = harness.recheck_candidates(
-            self.triaged(harness.content_hash("MIT")), failing, None)
+            self.triaged(harness.content_hash("MIT")), failing, None, "2026-09-04")
         self.assertTrue(any("could not be re-fetched" in problem for problem in problems), problems)
 
     def test_an_unknown_evidence_label_is_reported_not_guessed(self) -> None:
@@ -160,13 +179,23 @@ class RecheckTests(unittest.TestCase):
         def unexpected(_path, _token):
             self.fail("an unknown label must never be turned into a fetch")
 
-        problems = harness.recheck_candidates(queue, unexpected, None)
+        problems = harness.recheck_candidates(queue, unexpected, None, "2026-09-04")
         self.assertTrue(any("unknown evidence label" in problem for problem in problems), problems)
+
+    def test_a_block_from_an_earlier_run_is_not_re_fetched(self) -> None:
+        queue = self.triaged(harness.content_hash("MIT"))
+        queue[0]["triage"]["proposed_at"] = "2026-08-20"
+        queue[0]["triage"]["evidence"][0]["content_sha256"] = "a" * 64
+
+        def unexpected(_path, _token):
+            self.fail("a block written by an earlier run must not be re-fetched")
+
+        self.assertEqual([], harness.recheck_candidates(queue, unexpected, None, "2026-09-04"))
 
     def test_a_non_list_evidence_is_reported_not_raised(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
         queue[0]["triage"]["evidence"] = "not-a-list"
-        problems = harness.recheck_candidates(queue, self.getter, None)
+        problems = harness.recheck_candidates(queue, self.getter, None, "2026-09-04")
         self.assertTrue(any("evidence must be a list" in problem for problem in problems), problems)
 
 
@@ -228,6 +257,53 @@ class MainTests(unittest.TestCase):
         self.assertIn("warning", captured.getvalue())
 
 
+    def test_a_carried_forward_block_is_written_back_to_the_queue(self) -> None:
+        block = {"verdict": "held", "held_by": "BACKLOG.md — skill packs"}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "candidates.json"
+            path.write_text(json.dumps({
+                "version": 1, "updated_at": "2026-09-01", "candidates": [candidate("a/one")],
+            }), encoding="utf-8")
+            queue = json.loads(path.read_text(encoding="utf-8"))["candidates"]
+            code = harness.run_build(
+                candidates=queue, catalog={}, getter=self.fail_if_fetched,
+                token=None, today="2026-09-04", limit=5, bundle_path=None,
+                previous=[candidate("a/one", triage=block)], candidates_path=path)
+            written = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(0, code)
+        self.assertEqual(block, written["candidates"][0]["triage"])
+        self.assertEqual(1, written["version"], "other document keys must survive the write")
+
+    def test_nothing_is_written_back_when_no_block_is_carried(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "candidates.json"
+            original = json.dumps({"version": 1, "candidates": [candidate("a/one")]})
+            path.write_text(original, encoding="utf-8")
+            queue = json.loads(original)["candidates"]
+            harness.run_build(
+                candidates=queue, catalog={}, getter=self.fail_if_fetched,
+                token=None, today="2026-09-04", limit=0, bundle_path=None,
+                previous=[], candidates_path=path)
+            self.assertEqual(original, path.read_text(encoding="utf-8"))
+
+    def test_run_build_reports_the_candidates_it_cannot_reach(self) -> None:
+        import contextlib
+        import io
+
+        queue = [{"url": "https://example.com/x", "discovered_at": "2026-08-01"}]
+        captured = io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            code = harness.run_build(
+                candidates=queue, catalog={}, getter=self.fail_if_fetched,
+                token=None, today="2026-09-04", limit=5, bundle_path=None)
+        self.assertEqual(0, code)
+        self.assertIn("skipped 1 candidates with no GitHub repository", captured.getvalue())
+        self.assertIn("https://example.com/x", captured.getvalue())
+
+    def fail_if_fetched(self, _path, _token):
+        self.fail("a candidate with a carried block or no repository must never be fetched")
+
+
 class BlastRadiusTests(unittest.TestCase):
     def test_only_candidates_json_is_allowed_to_change(self) -> None:
         self.assertEqual([], runner.unexpected_changes(" M directory/candidates.json\n"))
@@ -279,16 +355,59 @@ class FinishTests(unittest.TestCase):
         self.assertEqual(0, runner.finish(run=fake_run))
         self.assertIn(["git", "commit"], [call[:2] for call in calls])
 
-    def test_finish_reports_no_proposals_when_the_worktree_is_clean(self) -> None:
+    def test_finish_reports_no_proposals_when_the_run_left_nothing_behind(self) -> None:
+        """Nothing to do means a clean tree AND a HEAD that never moved off origin/main."""
         calls = []
 
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, "1111111\n"
             return 0, ""
 
         self.assertEqual(0, runner.finish(run=fake_run))
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
         self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "checkout"], [call[:2] for call in calls])
+        self.assertFalse([call for call in calls if call[0] == "uv"], calls)
+
+    def test_a_clean_tree_whose_head_moved_still_runs_every_guard(self) -> None:
+        """An agent that commits its own work leaves no diff; the guards must run anyway."""
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111111\n" if command[2] == "HEAD" else "2222222\n")
+            return 0, ""
+
+        self.assertEqual(0, runner.finish(run=fake_run))
+        for check in runner.CHECKS:
+            self.assertIn(list(check), calls)
+        self.assertIn(["git", "checkout", "-B", "triage/pending"], calls)
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_a_failing_guard_on_a_clean_tree_whose_head_moved_aborts(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111111\n" if command[2] == "HEAD" else "2222222\n")
+            if any("validate_directory.py" in part for part in command):
+                return 1, "invalid catalog"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "checkout"], [call[:2] for call in calls])
+
+    def test_finish_aborts_when_head_cannot_be_compared_to_origin_main(self) -> None:
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            if command[:2] == ["git", "rev-parse"] and command[2] == "origin/main":
+                return 128, "fatal: ambiguous argument"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
 
     def test_a_failing_check_short_circuits_before_any_commit(self) -> None:
         calls = []
