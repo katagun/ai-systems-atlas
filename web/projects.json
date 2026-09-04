@@ -733,6 +733,111 @@
       "license_review_status": "verified"
     },
     {
+      "id": "cursor",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Cursor",
+      "repo": null,
+      "url": "https://cursor.com/",
+      "description": "Anysphere's agentic code editor and agent platform, spanning a desktop Agents Window, a CLI, isolated cloud VMs, customer-operated workers, and a first-party model line.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "moonshot_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log",
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned",
+        "self_editing"
+      ],
+      "canonical_data": "the working tree and Git worktrees, .cursor rules, hooks, permissions, and MCP definitions, local checkpoints held outside Git, and service-side cloud sessions, automation memories, and organizational settings",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "local_cli",
+        "ide_extension",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "cursor/cursor is a README and security-policy landing repository with issues disabled, no license, and no operational source, so the record carries no repository and imports none of its star count. Anysphere's public Apache-2.0 and MIT repositories are worker templates and a bridge, not the operational core.",
+      "score": {
+        "task_reliability": 8.6,
+        "tool_use": 9.0,
+        "autonomy": 9.0,
+        "human_control": 7.0,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 4.4,
+        "interoperability": 7.6,
+        "maturity": 9.2,
+        "overall": 7.89
+      },
+      "strengths": [
+        "One agent core reaches the editor, a CLI, cloud VMs, mobile, and an SDK, and a session hands off between local and cloud without changing rules, hooks, or MCP configuration",
+        "Terminal commands run under OS-level sandboxing — macOS Seatbelt, Linux Landlock and seccomp — with network blocked by default behind a published package-manager allowlist",
+        "Self-hosted machines split the planes: Cursor runs the agent loop and inference while file edits and commands execute on infrastructure the customer operates"
+      ],
+      "weaknesses": [
+        "Bringing your own key does not buy independence or zero retention: requests still traverse Anysphere's backend for prompt building, and the documentation states plainly that zero data retention does not apply to your own keys",
+        "The recommended autonomy default is documented as not being a security boundary — a small classifier judges plain-English policy and \"can allow a call you would have blocked\" — and blocking its two classifier models through enterprise model access control silently disables it",
+        "Run modes, allowlists, and deletion protections apply only to local agents; Cloud Agents, the surface built for long-running autonomous work, never ask for approval at all",
+        "Third-party model requests carry a per-token surcharge on Teams and Enterprise from which the first-party Grok and Composer models are exempt, so provider neutrality is a documented cost",
+        "The legal surface contradicts itself: the privacy policy predates cloud self-hosting, the git forge, and the SpaceX acquisition, and the official compliance page publishes two document URLs that both return 404"
+      ],
+      "why_it_matters": "The most widely adopted proprietary coding agent, and the clearest worked example of one agent loop stretched across a local editor, a vendor cloud, and customer-operated execution planes.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-03",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null
+    },
+    {
       "id": "db-gpt",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -1045,6 +1150,108 @@
       "source_model": "proprietary"
     },
     {
+      "id": "devin-desktop",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Devin Desktop",
+      "repo": null,
+      "url": "https://docs.devin.ai/desktop/getting-started",
+      "description": "Cognition's local agentic IDE, formerly Windsurf: a VS Code OSS-derived editor running a bundled local agent harness, an Agent Client Protocol host for third-party agents, and a launcher into Devin's cloud sessions.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "moonshot_ai",
+        "nvidia",
+        "x_ai",
+        "z_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "local working trees and Git worktrees, .devin rules, skills, workflows, and plans, legacy Cascade memories under the user's home directory, and service-side accounts, usage, and optional remote repository indexes",
+      "deployment": [
+        "desktop",
+        "ide_extension",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Renamed from Windsurf on 2026-06-02 following Cognition's July 2025 acquisition of the product, IP, trademark, and brand from Exafunction; the vendor states that only the name and branding changed, so this is one record under the rename rule rather than a supersession. windsurf.com and codeium.com now redirect to the Devin Desktop product page, while legacy Windsurf plan settings, the team admin portal, the remote-indexing console, and the Windsurf editor plugins keep the Windsurf name. The record is distinct from the published Devin record, which is the cloud agent Cognition sells as a separate SKU.",
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 8.2,
+        "autonomy": 8.0,
+        "human_control": 7.0,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 4.6,
+        "interoperability": 8.8,
+        "maturity": 7.0,
+        "overall": 7.21
+      },
+      "strengths": [
+        "An Agent Client Protocol host: any conforming third-party agent — Codex, Claude Agent, OpenCode, Junie, Gemini CLI — becomes a first-class session inside the editor",
+        "The default local agent carries a permission model with deny, ask, and allow rules over file reads, writes, command execution, HTTP fetches, and MCP tools, scoped at project, user, and organization level",
+        "The widest reviewed provider surface among proprietary editors, spanning nine model families alongside an in-house model line and a purpose-built retrieval model"
+      ],
+      "weaknesses": [
+        "Two local agents ship side by side with divergent controls, and the pages a reader lands on for memories, MCP, and command auto-execution are all scoped to the legacy one",
+        "Durable memory does not survive adopting the default agent, which does not persist memories at all and offers a migration wizard instead",
+        "The announced end of the legacy agent has passed without resolution: the vendor said it remained available through July, and it is still documented and still appearing in the August changelog",
+        "Customer data may be used for model training by default, the opt-out is available only on paid plans and only to administrators on team plans, and remote indexing clones repositories to vendor servers",
+        "Third-party agents hosted over the protocol run outside the product's own governance — the vendor states its privacy policy and legal terms do not apply to them"
+      ],
+      "why_it_matters": "The rename that consolidated the best-known independent agentic IDE into Cognition's line, and the reviewed catalog's clearest case of an editor that hosts other vendors' agents as peers rather than replacing them.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-03",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null
+    },
+    {
       "id": "dspy",
       "system_family": "agent_system",
       "score_profile": "agent",
@@ -1179,7 +1386,7 @@
       "stars": 106678,
       "stars_verified_at": "2026-08-25",
       "historical_stars": null,
-      "current_repo_note": null,
+      "current_repo_note": "Google's May 2026 transition post says it is unifying its efforts into Antigravity and that Gemini CLI stopped serving free and Google AI Pro or Ultra requests on 2026-06-18, while committing to continue supporting the tool for Code Assist Standard and Enterprise licensees. The repository is not archived and shipped code during this review, and Google designated no successor record, so the status stays active and no supersession is recorded.",
       "score": {
         "task_reliability": 8.2,
         "tool_use": 8.7,
@@ -1198,11 +1405,12 @@
       ],
       "weaknesses": [
         "Centered on Gemini model access",
-        "Recovery and trace ergonomics are still evolving"
+        "Recovery and trace ergonomics are still evolving",
+        "Google stopped serving free and consumer-subscription requests on 2026-06-18 while directing those users to Antigravity, so the open repository remains active but its no-cost path now requires a paid Code Assist license"
       ],
       "why_it_matters": "Shows how a provider-backed terminal agent can remain extensible and open source.",
       "research_confidence": "high",
-      "verified_at": "2026-08-23",
+      "verified_at": "2026-09-03",
       "pushed_at": "2026-08-25T02:02:13Z",
       "forks": 14480,
       "open_issues": 864,
@@ -1322,6 +1530,102 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "antigravity",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Google Antigravity",
+      "repo": null,
+      "url": "https://antigravity.google/",
+      "description": "Google's agent-first development platform: a desktop agent manager, editor, terminal-native CLI, and five editor extensions that run agents on the host against reviewable artifacts.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "the working tree and Git worktrees, AGENTS.md and GEMINI.md context files, .agents configuration and MCP definitions, and agent-produced artifacts, alongside interaction records Google retains service-side",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "ide_extension",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": "Google publishes google-antigravity/antigravity-cli as a README, changelog, and examples surface carrying no license and no operational source; the Python SDK is a separate Apache-2.0 repository queued as a candidate rather than folded into this record.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.8,
+        "autonomy": 8.4,
+        "human_control": 6.8,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 3.8,
+        "interoperability": 7.6,
+        "maturity": 7.6,
+        "overall": 7.36
+      },
+      "strengths": [
+        "Artifacts make the reviewable unit a plan, diff, diagram, or browser recording that a person steers before files change, rather than a transcript read after the fact",
+        "One permission grammar over reads, writes, commands, URLs, and MCP calls covers the desktop app, the CLI, and five third-party editors from the same rules",
+        "Subagents can take an isolated Git worktree instead of the live workspace, and the browser subagent drives Chrome through a separate profile under a server-side denylist"
+      ],
+      "weaknesses": [
+        "The terminal sandbox is opt-in, still labelled Preview, and Google's own page states that none of the shipped presets turn it on; anything unsandboxed \"runs on your host with full privileges\"",
+        "The product terms carry no effective date, record every interaction by default, permit Google employees and contractors to review them, offer deletion only by emailing support, and make reaching the same account from any third-party client grounds for suspension",
+        "Google publishes enterprise controls it says do not work: admin browser URL allowlists are \"currently being integrated and are not yet honored\", and there is no security advisory or known-issues page for a tool that executes shell commands",
+        "The documentation contradicts itself on which models each tier gets, whether an organizational contract exists, and what the sandbox presets are called"
+      ],
+      "why_it_matters": "Google's consolidation of its consumer developer-agent line into one host-executing platform, and the clearest production example of agent output reviewed as artifacts rather than as chat.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-03",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null
     },
     {
       "id": "goose",
@@ -3124,6 +3428,108 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "shinkaevolve",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ShinkaEvolve",
+      "repo": "SakanaAI/ShinkaEvolve",
+      "url": "https://github.com/SakanaAI/ShinkaEvolve",
+      "description": "Framework that evolves a population of programs by using an ensemble of language models, or whole coding agents, as mutation operators and dispatching each candidate to a local, container, or Slurm evaluator.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "a run directory holding the program archive, island populations, per-generation evaluation results, and configuration under the user's own filesystem or Slurm scratch",
+      "deployment": [
+        "local_cli",
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 7.4,
+        "autonomy": 7.8,
+        "human_control": 6.4,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.2,
+        "maturity": 6.6,
+        "overall": 7.39
+      },
+      "strengths": [
+        "The correctness gate is real for a research lab's release: roughly seventy test files, a continuous-integration job that runs type checking and coverage-reported tests, and a weekly credential-backed job exercising six live providers",
+        "A headless mode makes the mutation operator a full coding agent the user already subscribes to, driving Codex or Claude Code under the evolutionary loop instead of a raw completion call",
+        "Evaluation dispatch spans the local host, containers, and Slurm, so the same run definition scales from a laptop to a cluster without changing the search configuration"
+      ],
+      "weaknesses": [
+        "The published package still declares alpha development status, which sits oddly beside three releases in three months and a coverage-gated pipeline",
+        "In the default path the model fills one slot — propose a mutation — inside a pipeline the caller configured, and only the headless mode puts a tool-using agent in that position",
+        "The loop is long-running and unattended by design, and the primary controls are configuration files set before the run rather than intervention during it"
+      ],
+      "why_it_matters": "The only one of its lab's published agentic systems that is engineered as software rather than as a paper artifact, and a working example of coding agents used as the variation operator inside an outer search loop.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-03",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 1367,
+      "stars_verified_at": "2026-09-03",
+      "historical_stars": null,
+      "pushed_at": "2026-08-21T13:07:37Z",
+      "forks": 275,
+      "open_issues": 4,
+      "metadata_verified_at": "2026-09-03",
+      "github_detected_license": "Apache-2.0"
     },
     {
       "id": "smolagents",
