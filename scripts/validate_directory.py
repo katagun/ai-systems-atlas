@@ -25,6 +25,9 @@ CATALOG_DOCUMENTS = (
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
+CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
+EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
+BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
 
 TAXONOMY_GROUPS = (
     "system_families",
@@ -98,6 +101,17 @@ INFERENCE_SERVICE_REQUIRED = {
     "retention_controls", "routing", "customization", "strengths", "tradeoffs",
     "score_profile", "score", "terms", "evidence", "verified_at",
 }
+
+CANDIDATE_REQUIRED = {
+    "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
+    "classification_confidence", "github_detected_license", "stars", "topics", "status",
+    "discovered_at", "review_required",
+}
+CANDIDATE_OPTIONAL = {"triage"}
+
+TRIAGE_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
+TRIAGE_OPTIONAL = {"held_by"}
+TRIAGE_VERDICTS = {"out_of_scope", "held", "review_ready"}
 
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
@@ -989,6 +1003,79 @@ def validate_unique_record_ids(
             )
 
 
+def validate_triage(
+    triage: Any, repo: Any, prefix: str, tax: Taxonomy, errors: list[str]
+) -> None:
+    """Validate an unaccepted triage proposal: gathered evidence, never a conclusion."""
+    if not isinstance(triage, dict):
+        errors.append(f"candidate {prefix}: triage must be an object")
+        return
+    missing = sorted(TRIAGE_REQUIRED - set(triage))
+    unknown = sorted(set(triage) - TRIAGE_REQUIRED - TRIAGE_OPTIONAL)
+    if missing or unknown:
+        errors.append(
+            f"candidate {prefix}: triage fields differ from schema: missing={missing}, extra={unknown}"
+        )
+        return
+    verdict = triage["verdict"]
+    if verdict not in TRIAGE_VERDICTS:
+        errors.append(f"candidate {prefix}: unknown triage verdict {verdict!r}")
+    if (verdict == "held") != ("held_by" in triage):
+        errors.append(
+            f"candidate {prefix}: held_by is required for a held verdict and forbidden otherwise"
+        )
+    elif "held_by" in triage and (
+        not isinstance(triage["held_by"], str) or not triage["held_by"].strip()
+    ):
+        errors.append(f"candidate {prefix}: held_by must name the decision that holds the record")
+    for field in ("rule", "proposer"):
+        if not isinstance(triage[field], str) or not triage[field].strip():
+            errors.append(f"candidate {prefix}: triage {field} must be a non-empty string")
+    finding = triage["finding"]
+    if not isinstance(finding, str) or not finding.strip():
+        errors.append(f"candidate {prefix}: triage requires a finding")
+    else:
+        classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
+        finding_lower = finding.lower()
+        leaked = sorted(name for name in classifying if name in finding_lower)
+        if leaked:
+            errors.append(
+                f"candidate {prefix}: finding must not classify; it names taxonomy ids {leaked}"
+            )
+    if not valid_date(triage["proposed_at"]):
+        errors.append(f"candidate {prefix}: triage proposed_at must be an ISO date")
+    items = triage["evidence"]
+    if not isinstance(items, list) or not items:
+        errors.append(f"candidate {prefix}: triage evidence must be a non-empty list")
+        return
+    for item in items:
+        if not isinstance(item, dict):
+            errors.append(f"candidate {prefix}: every evidence item must be an object")
+            continue
+        allowed = EVIDENCE_REQUIRED | (BLOB_EVIDENCE_REQUIRED if item.get("kind") == "git_blob" else set())
+        if set(item) != allowed:
+            errors.append(f"candidate {prefix}: evidence fields differ from schema")
+            continue
+        if not isinstance(item["label"], str) or not item["label"].strip():
+            errors.append(f"candidate {prefix}: evidence requires a label")
+        if not isinstance(item["url"], str) or not item["url"].startswith("https://"):
+            errors.append(f"candidate {prefix}: evidence requires an authoritative HTTPS URL")
+        if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
+            item["content_sha256"]
+        ):
+            errors.append(f"candidate {prefix}: evidence requires a content_sha256")
+        if not valid_date(item["fetched_at"]):
+            errors.append(f"candidate {prefix}: evidence requires fetched_at")
+        if item["kind"] == "git_blob":
+            blob_sha = item["blob_sha"]
+            if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                errors.append(f"candidate {prefix}: invalid evidence blob SHA")
+            elif item["immutable_url"] != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                errors.append(f"candidate {prefix}: immutable evidence URL must address the blob SHA")
+        elif item["kind"] != "web":
+            errors.append(f"candidate {prefix}: unknown evidence kind {item['kind']!r}")
+
+
 def validate_candidates(
     candidates_data: dict[str, Any], tax: Taxonomy, index: ProjectIndex, errors: list[str]
 ) -> set[str]:
@@ -1003,12 +1090,10 @@ def validate_candidates(
     candidate_keys: set[str] = set()
     for candidate in candidate_entries:
         prefix = (candidate.get("repo") or candidate.get("url") or "unknown") if isinstance(candidate, dict) else "unknown"
-        required = {
-            "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
-            "classification_confidence", "github_detected_license", "stars", "topics", "status",
-            "discovered_at", "review_required",
-        }
-        if not isinstance(candidate, dict) or set(candidate) != required:
+        if not isinstance(candidate, dict) or (
+            CANDIDATE_REQUIRED - set(candidate)
+            or set(candidate) - CANDIDATE_REQUIRED - CANDIDATE_OPTIONAL
+        ):
             errors.append(f"candidate {prefix}: fields do not match candidate schema")
             continue
         candidate_repo = candidate["repo"]
@@ -1033,7 +1118,15 @@ def validate_candidates(
             errors.append(f"candidate {prefix}: non-GitHub candidate requires an HTTPS URL")
         family = candidate["proposed_system_family"]
         role = candidate["proposed_primary_role"]
-        if family not in families or role not in roles or roles.get(role) != family:
+        triage = candidate.get("triage")
+        held_by = triage.get("held_by") if isinstance(triage, dict) else None
+        if family is None and role is None:
+            if not held_by:
+                errors.append(
+                    f"candidate {prefix}: family and role may only be null while "
+                    "triage.held_by names the decision that holds the record"
+                )
+        elif family not in families or role not in roles or roles.get(role) != family:
             errors.append(f"candidate {prefix}: proposed family and role are incompatible")
         if candidate["github_detected_license"] is not None and not isinstance(
             candidate["github_detected_license"], str
@@ -1052,6 +1145,8 @@ def validate_candidates(
             errors.append(f"candidate {prefix}: review_required is incomplete")
         if not valid_date(candidate["discovered_at"]):
             errors.append(f"candidate {prefix}: discovered_at must be an ISO date")
+        if "triage" in candidate:
+            validate_triage(candidate["triage"], candidate_repo, prefix, tax, errors)
     return candidate_repos
 
 

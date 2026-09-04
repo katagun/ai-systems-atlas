@@ -93,6 +93,8 @@ Human review owns classification, traits, editorial prose, scores, confidence, l
 
 A GitHub-detected license mismatch is a review trigger, not a new license conclusion. Automation marks `license_review_status` as `review_required` and opens a durable incident without hiding the project or changing its reviewed licenses or source model. A human resolves the evidence and classification.
 
+A candidate's `triage` block is likewise evidence, not a conclusion: accepting a proposed verdict remains a human act. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md).
+
 ## Review workflow
 
 1. Review authoritative license or terms sources, understand their component scope, and pin Git blobs when available.
