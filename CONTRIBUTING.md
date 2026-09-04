@@ -17,3 +17,7 @@ Suggest an unreviewed project through the issue form rather than adding it direc
 Run the commands in [`AGENTS.md`](AGENTS.md). After changing a published `directory/*.json` file, run synchronization before validation. Commit generated `web/` copies with their canonical directory files. Never report checks as passing unless you ran them.
 
 Pull requests must pass the required `verify` job, including dependency review for lockfile changes. Suspected vulnerabilities follow [`SECURITY.md`](SECURITY.md), not public issues.
+
+## Licensing your contribution
+
+Contributions to the software are accepted under [Apache-2.0](LICENSE); contributions to the curated catalog under [CC BY 4.0](LICENSE-DATA). Contribute only evidence and prose you are free to license this way. Quote source documents sparingly and cite them; do not paste licence or terms text wholesale into a record.

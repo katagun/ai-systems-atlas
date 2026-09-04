@@ -60,7 +60,7 @@ def validate_discovery_sources(document: object) -> list[str]:
         errors.append("discovery-sources.json: unsupported version")
     sources = document.get("sources")
     if not isinstance(sources, list):
-        return errors + ["discovery-sources.json: sources must be a list"]
+        return [*errors, "discovery-sources.json: sources must be a list"]
 
     source_ids: list[str] = []
     for source in sources:

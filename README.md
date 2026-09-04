@@ -10,11 +10,13 @@ The repository contains the canonical editorial catalog, its validation and refr
 
 ```bash
 uv sync --locked
+uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 node --test tests/test_web.js
 npm ci
 npx playwright install chromium
+npm run lint:js
 npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
@@ -80,4 +82,9 @@ The weekly workflow refreshes live metadata, preserves candidate and license-rev
 
 ## License
 
-Apache-2.0. Project names and descriptions remain the property of their respective projects and are used for factual identification and commentary.
+The repository carries two licences, because the code and the catalog are different kinds of work.
+
+- **Software** — `scripts/`, `web/*.js`, `web/*.css`, `tests/` — is [Apache-2.0](LICENSE).
+- **The curated catalog** — `directory/*.json` and its synchronized `web/*.json` copies — is [CC BY 4.0](LICENSE-DATA). Share it and adapt it, including commercially; credit the Atlas and link the licence.
+
+Project names, descriptions, and marks remain the property of their respective projects and are used for factual identification and commentary. Linked licence and terms documents stay under the terms of the projects that published them.
