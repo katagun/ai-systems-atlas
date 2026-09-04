@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-04
 **Status:** Proposed design, pending approval
-**Ripple analysis pinned to:** `f9bacbe` (`origin/main`, merged 2026-09-04; re-verified after #94)
+**Ripple analysis pinned to:** `530cea5` (`origin/main`, merged 2026-09-04; re-verified after #94 and #95)
 **Line references:** `web/app.js` line numbers assume steps 1 and 2 are applied (this branch); every other file is unmodified `5af4f67`
 
 ## Problem
@@ -36,7 +36,7 @@ Minifying was considered first and rejected: across all of `web/*.json` it saves
 - `directory/*.json` stays pretty-printed and diffable. Curation review depends on it.
 - No new dependency, no bundler, no framework. The app stays dependency-free.
 - No search-behaviour change. See decision 4.
-- This design does not render `current_repo_note`; it only stops the split from foreclosing it (`BACKLOG.md` item 36 owns that decision).
+- This design does not render `current_repo_note`; it only stops the split from foreclosing it (`BACKLOG.md` "Render `current_repo_note`, or decide it is not reader-facing" owns that decision).
 
 ## Decisions
 
@@ -65,9 +65,9 @@ Per record: the fields the card, the filters, the sort, and the finder read, plu
 - **runtimes**: `id`, `name`, `runtime_type`, `maintainer`, `repo`, `url`, `api_styles`, `accelerators`, `model_formats`, `serving_modes`, `deployment_surfaces`, `licenses`, `source_model`, `stars`, `description`, `score_profile`, `score.overall`
 - **specifications**: `id`, `name`, `short_name`, `specification_type`, `scope`, `status`, `current_version`, `repo`, `url`, `licenses`, `description`, `stewards`, `related_specifications`
 
-`stars` is in the systems and runtimes boot payloads deliberately: the weekly refresh changes it (decision 7), and `BACKLOG.md` item 38 wants a runtime star badge on the card.
+`stars` is in the systems and runtimes boot payloads deliberately: the weekly refresh changes it (decision 7), and `BACKLOG.md` "Surface local-runtime GitHub star counts" wants a runtime star badge on the card.
 
-`superseded_by` is in boot because the successor lookup at `web/app.js:1035` resolves the target's name out of the in-memory collection, and because `BACKLOG.md` item 37 (related records, previous/next) wants role, family, and successor links available while a dialog is open.
+`superseded_by` is in boot because the successor lookup at `web/app.js:1035` resolves the target's name out of the in-memory collection, and because `BACKLOG.md` "Show related records and previous/next navigation" (related records, previous/next) wants role, family, and successor links available while a dialog is open.
 
 The top-level `policy` string in `projects.json` is read by nothing in the app and is omitted.
 
@@ -75,7 +75,7 @@ The top-level `policy` string in `projects.json` is read by nothing in the app a
 
 **A detail file is the published record minus the boot fields.** Not a hand-picked set.
 
-This is the most load-bearing decision in the design, and it exists because of a mistake caught during review. An earlier pass identified nine "never-rendered" fields in `projects.json` — `current_repo_note`, `forks`, `github_detected_license`, `historical_stars`, `metadata_verified_at`, `open_issues`, `pushed_at`, `secondary_roles`, `stars_verified_at` — worth 14.6 KB gzipped, and proposed dropping them. `BACKLOG.md` item 36, filed 2026-09-03 on `claude/ai-scientist-ingestion-planning-d14f93`, reaches the opposite conclusion about the largest of them: `current_repo_note` is "editorial prose written for readers that no reader can see," it is load-bearing for product-boundary distinctions `docs/CURATION.md` requires reviewers to write, and the open question is whether to **render** it — not whether to drop it.
+This is the most load-bearing decision in the design, and it exists because of a mistake caught during review. An earlier pass identified nine "never-rendered" fields in `projects.json` — `current_repo_note`, `forks`, `github_detected_license`, `historical_stars`, `metadata_verified_at`, `open_issues`, `pushed_at`, `secondary_roles`, `stars_verified_at` — worth 14.6 KB gzipped, and proposed dropping them. `BACKLOG.md` "Render `current_repo_note`, or decide it is not reader-facing", filed 2026-09-03 on `claude/ai-scientist-ingestion-planning-d14f93`, reaches the opposite conclusion about the largest of them: `current_repo_note` is "editorial prose written for readers that no reader can see," it is load-bearing for product-boundary distinctions `docs/CURATION.md` requires reviewers to write, and the open question is whether to **render** it — not whether to drop it.
 
 A complement rule makes that whole class of error impossible. Nothing is ever dropped, the builder needs no field list to drift out of date, and any future feature finds its field already in detail. The cost is a few hundred bytes per record of fields nothing reads yet, against a boot payload that is 43.6 KB.
 
@@ -91,7 +91,7 @@ Per-collection index files matter because the All view searches three collection
 
 **Timing:** the fetch starts on `focus` of a search input — before the first keystroke, and only for people who intend to search. Until it resolves, filtering runs against the card-level text already in the boot payload; the filter re-runs when it lands. No spinner, no disabled input, no visible two-stage result in the common case.
 
-`BACKLOG.md` item 35 wants one search across records, specifications, and taxonomy terms. Per-collection index files compose into that (fetch all four and concatenate) rather than blocking it, but that item will revisit this decision and should say so.
+`BACKLOG.md` "Replace the five per-collection search boxes" wants one search across records, specifications, and taxonomy terms. Per-collection index files compose into that (fetch all four and concatenate) rather than blocking it, but that item will revisit this decision and should say so.
 
 ### 5. Everything async follows the hydrate pattern already in the code
 
@@ -157,7 +157,7 @@ The large win belongs to the majority who never type. A visitor who both searche
 - **Search test rewrite is the schedule risk**, not the payload builder.
 - **A record open now depends on a second request.** Mitigated by the hydrate pattern, but a reader on a bad connection sees the dialog frame before its body. The share pages under `web/records/` remain the complete no-JS view.
 - **279 committed generated files** enlarge diffs on every curation change. `web/records/` already sets this precedent at 273 files; the payload tree roughly doubles it.
-- **`BACKLOG.md` item 35 (unified search) will revisit decision 4.** Building per-collection index files keeps that path open rather than closing it.
+- **`BACKLOG.md` "Replace the five per-collection search boxes" (unified search) will revisit decision 4.** Building per-collection index files keeps that path open rather than closing it.
 
 ## Ripple analysis: re-verify before implementing
 
@@ -175,7 +175,9 @@ Every claim below was verified against `5af4f67`. Work is in flight on at least 
 | Search field lists per collection are unchanged | `sed -n '43,53p;88,95p;126,143p' web/app-core.js` |
 | The card, filter, and sort field lists in decision 2 are still complete | re-read the `COLLECTIONS` card renderers in `web/app.js` and `matchesProject` in `web/app-core.js` |
 | The "What is not published" section still exists | `grep -n "What is not published" web/index.html` |
+| The ADR number the plan claims is still free | `ls docs/adr/ \| grep '^025'` — must print nothing |
 | The routing manifest still hardcodes every ADR | `grep -n -A6 "def test_task_routing_documents_exist" tests/test_documentation.py` |
+| The four backlog items this design turns on still exist | `grep -n "^- \[ \]" BACKLOG.md \| grep -iE "per-collection search\|current_repo_note\|related records\|local-runtime GitHub star"` |
 | No new backlog item contradicts a decision here | `grep -n "^- \[ \]" BACKLOG.md \| grep -iE "search\|dialog\|card\|render\|directory ui"` |
 
-Two backlog items already changed this design once and must be re-read each time: item 36 (`current_repo_note` should probably be rendered) drove decision 3, and item 35 (one unified search) constrains decision 4.
+Two backlog items already changed this design once and must be re-read each time: "Render `current_repo_note`, or decide it is not reader-facing" (`current_repo_note` should probably be rendered) drove decision 3, and "Replace the five per-collection search boxes" (one unified search) constrains decision 4.
