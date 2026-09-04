@@ -2,9 +2,9 @@
 
 This roadmap describes outcomes and sequencing. [`BACKLOG.md`](BACKLOG.md) is the source of truth for executable work; policy and architectural decisions live in `docs/`.
 
-## Current: comprehensive coverage within a declared operational scope
+## Current: comprehensive coverage and evidence that stays true
 
-Make the Atlas broad enough to represent important memory, agent, and assistant-system choices without hiding systems because of their source model.
+Make the Atlas broad enough to represent important memory, agent, and assistant-system choices without hiding systems because of their source model. Coverage build-out has reached the point where adding records is no longer the binding constraint, so a second outcome now runs alongside it: keeping the reviewed claim true as the catalog ages, and keeping the decisions that gate the queue moving.
 
 - Separate relevance from licensing: include by operational role and expose source model, licenses, and evidence as filters and labels.
 - Compare memory, agent, and assistant products only within their outcome-specific family and score profile.
@@ -17,24 +17,27 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Maintain a bounded inference-service collection with a dedicated operational score, surfaced alongside systems in one Directory without treating providers as a fourth system family or ranking model quality, price, and transient performance.
 - Maintain a bounded local-runtime collection with a dedicated execution-capability score for software the user operates on their own hardware, keeping managed tiers of a runtime in the inference-service collection and keeping throughput, latency, and benchmark rank out of the score.
 - Support side-by-side shortlists only within one score profile, preserving collection-specific decision context and shareable URL state.
+- Detect evidence decay rather than relying on maintainer memory: link and terms-drift checks must reach every collection, not only the records whose license the repository host can detect.
+- Keep editorial age distinguishable from live-metadata age, so a stale review is a visible fact about the record rather than a gap in someone's recollection.
+- Make decision debt legible in the data: a queued candidate should name the open question that holds it instead of leaving the held set to be re-derived from prose.
+- Settle the treatment of agent skill packs before the class grows further, separating the authoring convention from a skills runtime from a collection of skill documents; only the middle case can own an operational outcome, and adoption does not settle any of them.
+- Give every record one review of its own; a shared boilerplate review across several products is a coverage claim the catalog cannot support.
 
-Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, and users can filter by source model, license, and provider constraints without confusing those traits with capability.
+Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, users can filter by source model, license, and provider constraints without confusing those traits with capability, and no published record's evidence can go stale without raising a signal.
 
 ## Next: efficient curation
 
-Reduce repetitive review work while preserving deliberate editorial judgment.
+Reduce repetitive review work while preserving deliberate editorial judgment. The decay-detection half of this phase moved into Current: a directory that cannot say what has rotted has a correctness problem, not an efficiency one.
 
-- Add guarded candidate-promotion and stale-review reporting commands.
-- Make repository transfers, license drift, and link failures explicit, recoverable review events.
-- Add accessibility and link checks that fit the dependency-light static site; keep the Pages deployment path validated and reproducible.
+- Add a guarded candidate-promotion command that refuses to promote until every required editorial, source-model, license, and evidence field is present.
+- Make repository transfers and renames explicit, recoverable review events that preserve evidence history.
+- Add accessibility checks to the browser end-to-end suite the repository already runs, keeping the shipped application dependency-free; keep the Pages deployment path validated and reproducible.
 
 Exit signal: routine catalog maintenance is repeatable, evidence-safe, and documented without relying on maintainer memory.
 
 ## Later: ecosystem context
 
 Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary. Local runtimes now have such a boundary under ADR 015; expand that collection only when a record answers a distinct execution, hardware, format, or deployment question.
-
-Decide the treatment of agent skill packs before the class grows further, separating the authoring convention from a skills runtime from a collection of skill documents; only the middle case can own an operational outcome, and adoption does not settle any of them.
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 

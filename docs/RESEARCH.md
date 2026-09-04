@@ -162,6 +162,10 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Vibe Kanban | A task board over parallel agents | Blocking tool approvals as real machinery, with nine vendors' tools supervised in separate working trees | Archived after the company's closure, and its final change retired the board it is named for |
 | Agno | Runtime operations inside the framework | One path from definitions through API runtime, interface, storage, traces, and deployment | A broad combined surface increases conceptual and upgrade complexity |
 | BabyAGI | The loop the wave was built on | The create, prioritise, execute, and store cycle that later frameworks extended or set out to fix | Archived, with no approval step, budget cap, or stopping condition, over unvalidated text parsing |
+| Cursor | One agent core, three execution planes | A session that moves between the local host, vendor cloud VMs, and customer-operated workers without changing its rules, hooks, or tool servers | The permission model applies only locally: cloud agents never ask for approval, and bringing your own key forfeits zero retention |
+| Google Antigravity | Agent output reviewed as artifacts | Plans, diffs, diagrams, and browser recordings a person steers before files change, under one permission grammar shared by every surface | The terminal sandbox is opt-in, still in preview, and no shipped preset enables it; the product terms carry no date and retain everything by default |
+| Devin Desktop | An editor that hosts rival agents | An Agent Client Protocol host running five other vendors' agents as first-class sessions | Those hosted agents fall outside its own privacy policy and terms, and its two local agents ship with divergent controls and no completed migration |
+| ShinkaEvolve | Coding agents as a variation operator | An evolutionary loop that can put a full subscription-backed coding agent in the mutation slot, with dispatch across host, container, and cluster | In the default path the model fills one slot in a caller-configured pipeline, and the published package still declares alpha status |
 
 ### Assistant-system research set
 
@@ -248,6 +252,7 @@ This set records managed services that accept model-inference requests, reviewed
 | StepFun Open Platform (mainland China) | Limits published as numbers | Concurrency, request, and token limits across six spend tiers, and a dated deprecation map to replacements | No service agreement, status page, or changelog; one capacity path, and a routing alias fronts an unlisted third-party model |
 | StepFun Open Platform (international) | Compliance paperwork, harsher terms | A data-processing agreement with standard contractual clauses that the sibling platform does not publish | A perpetual licence over prompts, outputs, and logs with training permitted and no opt-out; thinner documentation |
 | abliteration.ai | Modified weights as the service | Per-endpoint retention with named exceptions, a compatibility matrix marking gaps, and numeric limits at three scopes | Product pages promise zero retention the terms do not; one synchronous host, no agreements or audits, undisclosed base model |
+| Sakana Fugu | A model name over a hidden pool | Excluding named models from the pool as a customer-operated privacy control, and three request contracts behind one key | Training on customer content is the default with a non-retroactive opt-out; the pool is undisclosed by design and the EU and EEA are excluded outright |
 
 ### Local-runtime research set
 

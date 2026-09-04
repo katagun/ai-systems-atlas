@@ -174,6 +174,72 @@
       "repo": null,
       "reason": "Poolside's self-managed inference deployment serves models on customer hardware, which is the local-runtime gate, but the execution boundary is not Poolside's. Its own metrics reference calls the serving process the Poolside vLLM model server and documents native vLLM metrics on the vllm:*, http_* and python_* prefixes, so the runtime, its server interface, and its observability are vLLM's, and vLLM is already published. The certified stack confirms the shape: RKE2, SeaweedFS, an NVIDIA GPU Operator, cert-manager, a container registry, and Terraform providers are third-party components, and the only entries listed as Poolside inference components are a control plane and the documentation bundle. What Poolside adds is real work — validated hardware options, pinned component versions, an air-gapped Terraform bundle, checkpoint upload and model lifecycle, ingress, an admin toolkit, and support tiers with response-time targets — but it is deployment and distribution around an existing execution path rather than a separate one, on the same ground as a previously excluded portable packaging of another serving engine.",
       "useful_lesson": "Ask what actually holds the request when a vendor ships an enterprise inference stack. Here the tell was free: the operator-facing metrics page names the upstream engine and its metric prefixes, so the serving contract was identifiable without reading a single Helm chart. A closed catalog of first-party models and an impressive certified bill of materials describe the bundle, not the runtime."
+    },
+    {
+      "name": "HyperAgents",
+      "repo": "facebookresearch/HyperAgents",
+      "reason": "The repository is the reference implementation for a Meta research publication on self-referential self-modifying agents, published on the lab's own research index rather than as a product. It has no continuous-integration directory, no test suite, no releases or tags, and no package manifest of any kind; the entire tree is evaluation domains and baselines for the paper's five benchmarks, and its only operator surface is a batch experiment loop. The self-modification the paper demonstrates is an offline evolutionary search scored against those benchmarks, not a runtime a reader could adopt.",
+      "useful_lesson": "A repository can carry a first-party research announcement, a strong author list, and thousands of stars while shipping no operational product, and a recent push date can belong entirely to dependency-bot branches while the default branch has been static for months."
+    },
+    {
+      "name": "Dr. Zero",
+      "repo": "facebookresearch/drzero",
+      "reason": "A reinforcement-learning training recipe for search agents, distributed as shell scripts over a third-party training library and requiring multi-GPU training infrastructure and a self-hosted retrieval index. It has no continuous integration, no tests, no releases, and no published package, and its last commit predates this review by more than five months. Its self-evolution is a proposer-and-solver curriculum that runs during training, not a harness that modifies itself at run time.",
+      "useful_lesson": "\"Self-evolving\" in a paper title can describe a training curriculum rather than runtime behavior; the two claims live at different layers and only one of them describes something a reader operates."
+    },
+    {
+      "name": "Meta Agents Research Environments",
+      "repo": "facebookresearch/meta-agents-research-environments",
+      "reason": "A simulation platform whose stated purpose is training and evaluating agents, and whose flagship output is a published benchmark. Unlike the other research artifacts screened in this pass it is genuinely well engineered — six continuous-integration workflows, type checking, a permissive license, and commits within the last fortnight — so the exclusion rests on the boundary rather than on quality: the Atlas scores systems a reader deploys, and benchmarks and evaluation environments remain research inputs.",
+      "useful_lesson": "Engineering quality and product boundary are independent tests. Recording why a well-built repository is out of scope keeps a later sweep from re-proposing it on the strength of its continuous integration."
+    },
+    {
+      "name": "The AI Scientist",
+      "repo": "SakanaAI/AI-Scientist",
+      "reason": "A paper implementation rather than an operational system. The repository has no test file of any kind, no continuous-integration directory, and no release ever cut, and its last substantive code change predates this review by more than a year; the only recent commits replaced its permissive license with a bespoke use-restricted one. Its readme is paper-and-artifact framing throughout, and it states that the templates it ships are not maintained.",
+      "useful_lesson": "Star count is the weakest signal available: this was the highest-starred candidate in its batch and the only one with neither a test file nor a workflow file. A relicensing commit can also make a dormant repository look freshly maintained to any check that reads the push date."
+    },
+    {
+      "name": "The AI Scientist-v2",
+      "repo": "SakanaAI/AI-Scientist-v2",
+      "reason": "The successor implementation shares its predecessor's disposition and its bespoke use-restricted license. It has no tests, no continuous integration, and no releases, and its last substantive code change is a revert of a community contribution. It is a second paper's reference code, not a second product.",
+      "useful_lesson": "A version-two repository inherits the boundary question rather than answering it; the relevant evidence is its own correctness gate, not the reputation of the line."
+    },
+    {
+      "name": "Darwin Gödel Machine",
+      "repo": "jennyzzt/dgm",
+      "reason": "Reference code for one paper on self-improving coding agents, published from the first author's personal account rather than the lab's organisation. It has no continuous integration and no releases, and its two tool-level tests sit beside a tree that is otherwise benchmark harnesses and archived evaluation logs; its last commit predates this review by more than a year. The maintainer's own write-up reports the system removing the markers used to detect hallucination in its reward function, and concludes that further work is needed — a research finding rather than an operational posture.",
+      "useful_lesson": "The publication account is the tell that reads earliest. The same lab shipped a paper from a personal account and a maintained framework from its organisation in the same year, which makes the contrast legible before any code is read."
+    },
+    {
+      "name": "ALE-Agent",
+      "repo": null,
+      "reason": "The agent is real and its contest result is documented first-hand by its maintainer, but no repository, package, endpoint, or purchasable product exists for it, and the maintainer's own announcement points at future productization rather than present availability. There is nothing a reader could adopt and nothing whose behavior could be reviewed.",
+      "useful_lesson": "A contest placement is the strongest possible evidence of capability and no evidence at all of an operational boundary. The two questions are independent, and a first-place finish answers only the first."
+    },
+    {
+      "name": "ALE-Bench",
+      "repo": "SakanaAI/ALE-Bench",
+      "reason": "A benchmark and evaluation toolkit for score-based algorithmic contests. Its engineering is strong — tagged releases, a continuous-integration check, and judge tests across sixteen language runtimes — but its readme disclaims official-product status and support in its own words, and the agent whose results it measures is not in the repository.",
+      "useful_lesson": "The inverse of the artifact case: release discipline says a repository is well built and says nothing about whether it is a system. Here the maintainer disclaims producthood in the readme itself."
+    },
+    {
+      "name": "TreeQuest",
+      "repo": "SakanaAI/treequest",
+      "reason": "An inference-time tree-search library. It is well tested and properly released, but its own quick start hands the caller the model call, the scoring function, and the loop, leaving the library owning only the search policy. It has no tool loop, no execution boundary, and no agent of its own, which places it with the general libraries the curation rules keep outside the scored catalog.",
+      "useful_lesson": "The question is who owns the loop. A search policy a caller parameterises is a component, however good its test suite, and the readme's own five-step quick start is usually where the answer is written down."
+    },
+    {
+      "name": "Cursor Origin",
+      "repo": null,
+      "reason": "Anysphere's git forge for storing, browsing, and sharing repositories, documented as an early beta alongside the Cursor coding agent. Repository hosting and pull requests are not a memory, agent, or assistant outcome; the product is adjacent infrastructure that Cursor's agents consume, in the same class as the general backend platforms already excluded.",
+      "useful_lesson": "A vendor shipping an agent also ships supporting infrastructure under the same brand. Keeping the forge out preserves the record boundary the curation rules draw between a vendor's assistant, agent, and platform products."
+    },
+    {
+      "name": "Hugging Face Transformers",
+      "repo": "huggingface/transformers",
+      "reason": "Transformers executes model inference on hardware the user operates, but it is the substrate layer the local-runtime boundary keeps out rather than a runtime of its own. Its repository description and readme call it the model-definition framework for text, vision, audio, and multimodal models \"for both inference and training\", and state the position directly: a supported model definition is compatible with the majority of training frameworks (Axolotl, Unsloth, DeepSpeed, FSDP, PyTorch-Lightning), inference engines (vLLM, SGLang, TGI), and adjacent modeling libraries (llama.cpp, mlx). Serving is a capability of software built to define and train models, not the product, and admitting it would record one execution stack twice: vLLM's Transformers backend loads model implementations from the library and documents performance identical to a dedicated vLLM implementation, Xinference launches a Transformers backend beside its other engines, Text Embeddings Inference loads directories written by Transformers' save_pretrained, and TensorRT LLM carries code derived from it. The bundled transformers serve command is an OpenAI-compatible local server with continuous batching, but its own documentation scopes it to evaluation, experimentation, and moderate load and directs large-scale production to vLLM or SGLang with a Transformers model as the backend, so it is a subcommand of the framework rather than the dedicated serving product the substrate test admits on separate terms. Hugging Face's serving products are already adjudicated: Text Generation Inference is excluded as archived, Text Embeddings Inference is a published runtime, and Inference Endpoints and Inference Providers are inference-service records. Reviewed at v5.16.1, Apache-2.0.",
+      "useful_lesson": "The substrate test turns on purpose, not capability, and a framework can grow a genuine OpenAI-compatible server with continuous batching without becoming a runtime. The framework's own documentation drew the line here by sending production users to the engines built on top of it, and the archive notice on its dedicated serving product pointed the same way — a vendor retiring its serving engine in favour of downstream engines that adopted its model definitions confirms the substrate relationship rather than freeing the framework to take the retired product's place."
     }
   ]
 }
