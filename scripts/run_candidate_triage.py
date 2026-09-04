@@ -7,14 +7,23 @@ described in docs/routines/candidate-triage.md. Everything here is mechanical.
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 
-ALLOWED_CHANGES = {"directory/candidates.json"}
+QUEUE = "directory/candidates.json"
+ALLOWED_CHANGES = {QUEUE}
+
+# The only fields the routine may write. Everything else in a candidate record —
+# classification, confidence, status, the membership of the queue itself — belongs to
+# human review under docs/CURATION.md, and a file-level guard cannot tell the difference.
+NULLABLE_WHEN_HELD = ("proposed_system_family", "proposed_primary_role")
+MISSING = object()
 
 CHECKS = (
     ["uv", "run", "python", "scripts/build_candidate_evidence.py", "--recheck"],
@@ -35,11 +44,99 @@ def unexpected_changes(porcelain: str) -> list[str]:
         if not line.strip():
             continue
         path = line[3:].strip()
-        if " -> " in path:  # a rename reports "old -> new"
-            path = path.split(" -> ", 1)[1]
+        if " -> " in path:  # a rename reports "old -> new"; both ends are a change
+            for side in path.split(" -> ", 1):
+                if side.strip() not in ALLOWED_CHANGES:
+                    changed.append(side.strip())
+            continue
         if path not in ALLOWED_CHANGES:
             changed.append(path)
     return changed
+
+
+def candidate_key(candidate: dict[str, Any]) -> str:
+    """Identify a candidate the same way the queue and the evidence harness do."""
+    return str(candidate.get("repo") or candidate.get("url") or "").lower()
+
+
+def index_candidates(candidates: Any, side: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """Key a candidate list for comparison, refusing anything it cannot compare reliably."""
+    if not isinstance(candidates, list):
+        return {}, [f"{side}: candidates must be a list"]
+    indexed: dict[str, dict[str, Any]] = {}
+    problems: list[str] = []
+    for position, candidate in enumerate(candidates):
+        if not isinstance(candidate, dict):
+            problems.append(f"{side}: the candidate at position {position} is not an object")
+            continue
+        key = candidate_key(candidate)
+        if not key:
+            problems.append(
+                f"{side}: the candidate at position {position} has neither a repo nor a url"
+            )
+        elif key in indexed:
+            problems.append(f"{side}: more than one candidate is keyed {key!r}")
+        else:
+            indexed[key] = candidate
+    return indexed, problems
+
+
+def candidate_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) -> list[str]:
+    """Report every field of one candidate the routine changed but may not."""
+    added_block = new.get("triage") if "triage" not in old else None
+    held = isinstance(added_block, dict) and bool(added_block.get("held_by"))
+    problems: list[str] = []
+    for field in sorted(set(old) | set(new)):
+        was, now = old.get(field, MISSING), new.get(field, MISSING)
+        if was == now:
+            continue
+        if field == "triage" and was is MISSING:
+            continue  # adding a block to a candidate that lacks one is the routine's whole job
+        if field in NULLABLE_WHEN_HELD and now is None and held:
+            continue  # a held record may wait for a collection that does not exist yet
+        problems.append(f"candidate {key}: {field!r} is human review's field and the run changed it")
+    return problems
+
+
+def unexpected_field_changes(before: str, after: str) -> list[str]:
+    """Report every change to the queue beyond the two the routine is permitted to make.
+
+    Permitted: adding a `triage` block to a candidate that has none, and nulling
+    `proposed_system_family` / `proposed_primary_role` on a candidate whose new block
+    names the decision holding it. Everything else — a rewritten classification, a nudged
+    confidence, a changed status, an added or deleted candidate — is a human's, and the
+    blast-radius check cannot see it because it all lands in the one permitted file.
+    """
+    try:
+        old_document, new_document = json.loads(before), json.loads(after)
+    except json.JSONDecodeError as exc:
+        return [f"{QUEUE} is not valid JSON: {exc}"]
+    if not isinstance(old_document, dict) or not isinstance(new_document, dict):
+        return [f"{QUEUE} must be a JSON object"]
+    problems = [
+        f"the run changed the document field {key!r}"
+        for key in sorted(set(old_document) | set(new_document))
+        if key != "candidates" and old_document.get(key, MISSING) != new_document.get(key, MISSING)
+    ]
+    old, old_problems = index_candidates(old_document.get("candidates"), "origin/main")
+    new, new_problems = index_candidates(new_document.get("candidates"), "the run")
+    problems.extend(old_problems + new_problems)
+    problems.extend(
+        f"the run added the candidate {key!r}; only discovery adds to the queue"
+        for key in sorted(set(new) - set(old))
+    )
+    problems.extend(
+        f"the run removed the candidate {key!r}; only a human resolves a candidate"
+        for key in sorted(set(old) - set(new))
+    )
+    for key in sorted(set(old) & set(new)):
+        problems.extend(candidate_field_changes(key, old[key], new[key]))
+    return problems
+
+
+def worktree_text(path: str) -> str:
+    """Read a file out of the run's worktree. Injected in tests, which have no worktree."""
+    return (WORKTREE / path).read_text(encoding="utf-8")
 
 
 def shell(command: list[str], cwd: Path | None = None) -> tuple[int, str]:
@@ -84,7 +181,7 @@ def prepare(*, limit: int, run=shell) -> int:
     return code
 
 
-def finish(*, run=shell) -> int:
+def finish(*, run=shell, read=worktree_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
     status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
     if status_code != 0:
@@ -106,6 +203,21 @@ def finish(*, run=shell) -> int:
     if not dirty and head.strip() == base.strip():
         print("no triage proposals to commit")
         return 0
+    show_code, before = run(["git", "show", f"origin/main:{QUEUE}"], WORKTREE)
+    if show_code != 0:
+        print(f"error: could not read {QUEUE} from origin/main\n{before}", file=sys.stderr)
+        return 1
+    try:
+        after = read(QUEUE)
+    except OSError as exc:
+        print(f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr)
+        return 1
+    overreach = unexpected_field_changes(before, after)
+    if overreach:
+        print("error: the run wrote outside the fields it may write:", file=sys.stderr)
+        for problem in overreach:
+            print(f"  {problem}", file=sys.stderr)
+        return 1
     for command in CHECKS:
         code, output = run(list(command), WORKTREE)
         if code != 0:

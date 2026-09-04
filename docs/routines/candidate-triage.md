@@ -27,8 +27,24 @@ human decides what your evidence means.
 
 NEVER FETCH ANYTHING. You have no need to: `prepare` already fetched and hashed every
 document, and recorded the blob SHA for each licence. `finish` re-fetches every citation
-and compares hashes, so a URL that was not in the bundle fails the run. Cite the bundle
-and nothing else.
+and compares its `url`, its `content_sha256`, and its `blob_sha` against what the document
+actually is, so a citation you did not copy verbatim out of the bundle fails the run. Cite
+the bundle and nothing else.
+
+THE SHAPE OF A BLOCK. Validation rejects any field set but this one, exactly. See
+`docs/DATA_MODEL.md` for the canonical definition.
+
+A `triage` block has `verdict`, `rule`, `finding`, `evidence`, `proposed_at`, and
+`proposer` — plus `held_by`, which is present if and only if `verdict` is `held`, and
+forbidden otherwise. Set `proposed_at` to today and `proposer` to `candidate-triage`.
+
+An `evidence` entry has `label`, `url`, `kind`, `content_sha256`, and `fetched_at`. When
+`kind` is `git_blob` it also has `blob_sha` and `immutable_url`; when `kind` is `web` it
+has neither. Copy every one of those values from the bundle document unchanged.
+
+The bundle's documents also carry a `content` field. That is the document's text, given to
+you so you can quote it in `finding`. It is not a citation field: an evidence entry
+containing `content` fails validation. Copy the other fields; leave `content` behind.
 
 THE THREE VERDICTS.
 

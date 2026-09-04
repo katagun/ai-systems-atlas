@@ -199,6 +199,16 @@ def recheck_candidates(
                     f"{type(exc).__name__}: {exc}"
                 )
                 continue
+            # A hash alone proves only that some document reads this way. Without this
+            # check a fabricated `url` pointing anywhere at all passes the guard, because
+            # the path re-fetched is derived from the label and the repo, never read from
+            # the citation. The prompt promises this check; here it is.
+            expected_url = payload.get("html_url") or f"https://github.com/{repo}"
+            if item.get("url") != expected_url:
+                problems.append(
+                    f"{candidate_key(candidate)}: {label} cites {item.get('url')!r} but the "
+                    f"document this harness fetched is at {expected_url!r}"
+                )
             actual = content_hash(_decode(payload))
             if actual != item.get("content_sha256"):
                 problems.append(
@@ -233,6 +243,24 @@ def persist_candidates(path: Path, candidates: list[dict[str, Any]]) -> None:
     path.write_text(
         json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+
+
+def github_token(run=subprocess.run) -> str | None:
+    """Prefer GITHUB_TOKEN, then `gh auth token`; no secret is stored either way.
+
+    A scheduled local run has no environment to put a token in, and unauthenticated
+    GitHub allows 60 requests an hour against the 80 a default `--limit 40` issues.
+    """
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        return token
+    try:
+        finished = run(["gh", "auth", "token"], capture_output=True, text=True, timeout=15)
+    except (OSError, subprocess.SubprocessError):
+        return None  # gh is not installed, or not on this PATH
+    if finished.returncode != 0:
+        return None  # gh is installed but not authenticated
+    return finished.stdout.strip() or None
 
 
 def load_catalog(directory: Path) -> dict[str, list[dict[str, Any]]]:
@@ -295,7 +323,7 @@ def main(argv: list[str] | None = None) -> int:
     directory = ROOT / "directory"
     candidates_path = directory / "candidates.json"
     candidates = json.loads(candidates_path.read_text(encoding="utf-8"))["candidates"]
-    token = os.environ.get("GITHUB_TOKEN")
+    token = github_token()
     today = date.today().isoformat()
     if args.recheck:
         problems = recheck_candidates(candidates, github_get, token, today)

@@ -623,6 +623,18 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.candidate_with_triage(mutate)
         self.assertFalse([e for e in errors if "sample/candidate" in e], errors)
 
+    def test_evidence_carrying_the_bundle_content_field_is_rejected(self) -> None:
+        """The harness records `content` to quote from; it is context, never a citation field."""
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"content": "The MIT License"}))
+        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+
+    def test_evidence_missing_a_required_field_is_rejected(self) -> None:
+        def mutate(triage, _candidate):
+            del triage["evidence"][0]["fetched_at"]
+        errors = self.candidate_with_triage(mutate)
+        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+
     def test_a_finding_may_not_name_a_taxonomy_role(self) -> None:
         errors = self.candidate_with_triage(
             lambda triage, _: triage.update({"finding": "This is clearly a coding_agent."}))
