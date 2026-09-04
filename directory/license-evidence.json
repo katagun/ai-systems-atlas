@@ -2906,6 +2906,33 @@
           "immutable_url": "https://api.github.com/repos/SakanaAI/ShinkaEvolve/git/blobs/1684699ee4d8e98bd3df9f0c4e405fc620139f4c"
         }
       ]
+    },
+    {
+      "project_id": "kosmos",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Kosmos hosted research service governed by the Edison Scientific terms of service, effective 2025-10-30",
+          "kind": "web_terms",
+          "url": "https://edisonscientific.com/terms-of-service",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Data handling, trainable-data opt-out, and retention boundary for the hosted service, effective 2025-10-30",
+          "kind": "web_terms",
+          "url": "https://edisonscientific.com/privacy-policy",
+          "verified_at": "2026-09-03"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "edison-client 0.16.1 Python API client only; the Kosmos service itself is closed and not covered by this license",
+          "kind": "web_terms",
+          "url": "https://pypi.org/pypi/edison-client/json",
+          "verified_at": "2026-09-03"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-02"

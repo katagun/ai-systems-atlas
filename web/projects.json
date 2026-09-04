@@ -15652,6 +15652,92 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "kosmos",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Kosmos",
+      "repo": null,
+      "url": "https://docs.edisonscientific.com/",
+      "description": "Edison Scientific's hosted autonomous research agent, which reads literature, writes and executes analysis code over uploaded scientific datasets, and returns a cited report whose conclusions trace back to the code or passage that produced them, sold apart from the Literature, Analysis, Precedent, and Molecules agents on the same platform.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed run trajectories, uploaded datasets and data-storage entries, generated notebooks and figures, and the cited report a run produces",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the Kosmos research product, not Edison Scientific's Literature, Analysis, Precedent, or Molecules agents, which share the platform and terms as distinct products, though Kosmos reaches Literature, Analysis, and Molecules as sub-agents inside its own run. The Kosmos service is closed and hosted; only edison-client, the Apache-2.0 Python client for the platform API, is open.",
+      "score": {
+        "task_reliability": 5.6,
+        "tool_use": 8.4,
+        "autonomy": 9.2,
+        "human_control": 6.6,
+        "observability_recovery": 6.4,
+        "data_sovereignty": 5.4,
+        "interoperability": 6.6,
+        "maturity": 6.6,
+        "overall": 6.77
+      },
+      "strengths": [
+        "Documents every conclusion as traceable to the analysis code or literature passage that produced it, giving a reviewer artifacts to check rather than prose to trust",
+        "One objective drives literature retrieval, code execution over uploaded datasets, and sub-agent delegation without a human steering each step",
+        "An unusually legible commercial boundary for a closed product: a published per-run price, dated terms and privacy policy, and an Apache-2.0 Python client for the platform API",
+        "The privacy policy states that uploaded scientific data is not intentionally used for model training, and the client exposes explicit storage deletion"
+      ],
+      "weaknesses": [
+        "The seven discoveries the product is marketed on are reported only by the vendor, in a preprint it authored itself with no peer review, and its own text notes that one target preprint predates the model training cutoff; that is evidence about the claim, not about the system",
+        "The vendor documents that longer runs are likelier to chase statistically significant but scientifically irrelevant findings, and prescribes repeated runs on the same objective as the remedy",
+        "Closed managed execution with no documented task states, retry, resume, or credit boundary when a non-refundable run ends unusable",
+        "Agent-trajectory and interaction data trains the vendor's models unless the account explicitly opts out, and all processing is United States hosted with no regional or self-operated option"
+      ],
+      "why_it_matters": "The one autonomous-discovery product that publishes enough of an operational boundary to review, which is what lets the Atlas classify this class by the outcome a system owns rather than by the significance it claims.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-03",
+      "licenses": [
+        "LicenseRef-Proprietary",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified"
     }
   ]
 }
