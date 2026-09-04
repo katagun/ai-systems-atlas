@@ -292,6 +292,40 @@ class DirectoryTests(unittest.TestCase):
         self.assertEqual("proprietary", projects["replit-agent"]["source_model"])
         self.assertNotIn("Replit Agent", {candidate["name"] for candidate in candidates["candidates"]})
 
+    def test_alpha_lineage_batch_has_evidence_backed_dispositions(self) -> None:
+        candidates = json.loads((ROOT / "directory" / "candidates.json").read_text(encoding="utf-8"))
+        exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+        excluded_repos = {entry["repo"] for entry in exclusions["entries"]}
+        excluded_names = {entry["name"] for entry in exclusions["entries"]}
+        candidate_names = {candidate["name"] for candidate in candidates["candidates"]}
+
+        research_repos = {
+            "google-deepmind/alphafold",
+            "google-deepmind/alphafold3",
+            "google-deepmind/alphagenome",
+            "google-deepmind/alphaevolve_results",
+            "google-deepmind/open_spiel",
+            "aqlaboratory/openfold",
+            "jwohlwend/boltz",
+        }
+        domain_engines = {"lightvector/KataGo", "LeelaChessZero/lc0"}
+
+        self.assertLessEqual(research_repos | domain_engines, excluded_repos)
+        self.assertLessEqual(
+            {"AlphaGo", "AlphaFold Server", "Google Co-Scientist"}, excluded_names
+        )
+        self.assertTrue(
+            (research_repos | domain_engines).isdisjoint(
+                {project["repo"] for project in self.document["projects"]}
+            )
+        )
+
+        # AlphaEvolve reached general availability, so it is queued rather than excluded;
+        # its results repository is excluded because it is not the system.
+        self.assertLessEqual({"AlphaEvolve", "OpenEvolve"}, candidate_names)
+        self.assertNotIn("AlphaEvolve", excluded_names)
+        self.assertIn("algorithmicsuperintelligence/openevolve", {c["repo"] for c in candidates["candidates"]})
+
     def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(self) -> None:
         projects = {project["id"]: project for project in self.document["projects"]}
 
