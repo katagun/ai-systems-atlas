@@ -123,3 +123,38 @@ def fetch_candidate_evidence(
             document["immutable_url"] = f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
         bundle["documents"].append(document)
     return bundle
+
+
+def recheck_candidates(
+    candidates: list[dict[str, Any]], getter: GitHubGetter, token: str | None
+) -> list[str]:
+    """Re-fetch every cited document and confirm it still hashes to what was recorded."""
+    problems: list[str] = []
+    for candidate in candidates:
+        triage = candidate.get("triage")
+        if not isinstance(triage, dict):
+            continue
+        repo = candidate.get("repo")
+        for item in triage.get("evidence") or []:
+            label = item.get("label")
+            path = f"/repos/{repo}/license" if label == "LICENSE" else f"/repos/{repo}/readme"
+            try:
+                payload = getter(path, token)
+            except Exception as exc:
+                problems.append(
+                    f"{candidate_key(candidate)}: {label} could not be re-fetched: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                continue
+            actual = content_hash(_decode(payload))
+            if actual != item.get("content_sha256"):
+                problems.append(
+                    f"{candidate_key(candidate)}: {label} content_sha256 recorded "
+                    f"{item.get('content_sha256')} but re-fetched {actual}"
+                )
+            if item.get("kind") == "git_blob" and payload.get("sha") != item.get("blob_sha"):
+                problems.append(
+                    f"{candidate_key(candidate)}: {label} blob_sha recorded "
+                    f"{item.get('blob_sha')} but re-fetched {payload.get('sha')}"
+                )
+    return problems

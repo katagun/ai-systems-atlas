@@ -103,5 +103,45 @@ class FetchTests(unittest.TestCase):
         self.assertEqual(64, len(harness.content_hash("MIT")))
 
 
+class RecheckTests(unittest.TestCase):
+    def triaged(self, content_sha256: str) -> list[dict]:
+        return [candidate("a/one", triage={
+            "verdict": "review_ready",
+            "rule": "r",
+            "finding": "f",
+            "evidence": [{
+                "label": "LICENSE",
+                "url": "https://github.com/a/one/blob/main/LICENSE",
+                "kind": "git_blob",
+                "blob_sha": "0" * 40,
+                "immutable_url": "https://api.github.com/repos/a/one/git/blobs/" + "0" * 40,
+                "content_sha256": content_sha256,
+                "fetched_at": "2026-09-04",
+            }],
+            "proposed_at": "2026-09-04",
+            "proposer": "candidate-triage",
+        })]
+
+    def getter(self, path: str, _token):
+        return {"sha": "0" * 40, "encoding": "base64",
+                "content": base64.b64encode(b"MIT").decode(),
+                "html_url": "https://github.com/a/one/blob/main/LICENSE"}
+
+    def test_matching_evidence_rechecks_clean(self) -> None:
+        self.assertEqual([], harness.recheck_candidates(
+            self.triaged(harness.content_hash("MIT")), self.getter, None))
+
+    def test_a_wrong_content_hash_is_reported(self) -> None:
+        problems = harness.recheck_candidates(self.triaged("a" * 64), self.getter, None)
+        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+
+    def test_an_unreachable_citation_is_reported(self) -> None:
+        def failing(_path, _token):
+            raise OSError("404")
+        problems = harness.recheck_candidates(
+            self.triaged(harness.content_hash("MIT")), failing, None)
+        self.assertTrue(any("could not be re-fetched" in problem for problem in problems), problems)
+
+
 if __name__ == "__main__":
     unittest.main()
