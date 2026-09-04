@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from scripts import build_candidate_evidence as harness
+from scripts import run_candidate_triage as runner
 
 
 def candidate(repo: str, discovered_at: str = "2026-09-01", **extra) -> dict:
@@ -224,6 +225,21 @@ class MainTests(unittest.TestCase):
         self.assertEqual(0, code)
         self.assertIn("a/one", captured.getvalue())
         self.assertIn("warning", captured.getvalue())
+
+
+class BlastRadiusTests(unittest.TestCase):
+    def test_only_candidates_json_is_allowed_to_change(self) -> None:
+        self.assertEqual([], runner.unexpected_changes(" M directory/candidates.json\n"))
+
+    def test_an_edit_to_projects_json_is_reported(self) -> None:
+        porcelain = " M directory/candidates.json\n M directory/projects.json\n"
+        self.assertEqual(["directory/projects.json"], runner.unexpected_changes(porcelain))
+
+    def test_an_untracked_file_is_reported(self) -> None:
+        self.assertEqual(["scratch.txt"], runner.unexpected_changes("?? scratch.txt\n"))
+
+    def test_an_empty_diff_is_clean(self) -> None:
+        self.assertEqual([], runner.unexpected_changes(""))
 
 
 if __name__ == "__main__":
