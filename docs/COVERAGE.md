@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-09-04
 
-The reviewed catalog contains 174 systems: forty-five memory systems, one hundred and twelve agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 162 satisfy active-choice coverage. The provisional queue contains fifty-five records, several of them held pending open questions recorded in `BACKLOG.md`, and fifty-five candidates have been excluded with reasons. The separate collections contain twenty-one unscored specifications, fifty-nine scored inference services, and sixteen scored local runtimes. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
+The reviewed catalog contains 174 systems: forty-five memory systems, one hundred and twelve agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 162 satisfy active-choice coverage. The provisional queue contains fifty-five records, several of them held pending open questions recorded in `BACKLOG.md`, and fifty-five candidates have been excluded with reasons. The separate collections contain twenty-two unscored specifications, fifty-nine scored inference services, and sixteen scored local runtimes. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
 
 ### Local runtimes
 
