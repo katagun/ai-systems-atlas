@@ -80,6 +80,7 @@ RELEVANT = {
     "memory", "second brain", "knowledge", "pkm", "note", "rag", "retrieval",
     "vector", "graph", "context", "agent", "recall", "lifelog", "markdown",
     "sql", "database", "data assistant", "text-to-sql", "text2sql", "nl2sql",
+    "scientific", "discovery", "hypothesis", "experiment",
 }
 EXCLUDED = {"game", "awesome list", "interview questions", "tutorial only", "course only"}
 
@@ -217,6 +218,12 @@ def classify(text: str) -> tuple[str | None, float]:
         return "coding_agent_workflow", max(relevance, 0.86)
     if "coding agent" in lowered or "ai pair programmer" in lowered:
         return "coding_agent", max(relevance, 0.82)
+    if any(term in lowered for term in (
+        "ai scientist", "ai-scientist", "autonomous discovery", "autonomous science",
+        "scientific discovery",
+    )):
+        # ADR 023: autonomous scientific-discovery systems take an existing role.
+        return "research_agent", max(relevance, 0.82)
     if "research agent" in lowered or "deep research" in lowered:
         return "research_agent", max(relevance, 0.82)
     if "browser agent" in lowered or "computer use agent" in lowered:

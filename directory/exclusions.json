@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02",
+  "generated_at": "2026-09-04",
   "entries": [
     {
       "name": "Claude Agent SDK for TypeScript",
@@ -312,6 +312,24 @@
       "repo": "jwohlwend/boltz",
       "reason": "An MIT-licensed structure and binding-affinity prediction model with a pip-installable CLI, and the cleanest test of ADR 007 in this batch because its licence answers every objection that could be raised against the AlphaFold records. Its readme states that 'all the code and weights are provided under MIT license, making them freely available for both academic and commercial uses' — no non-commercial clause, no redistribution ban, no request form, no separate output terms. It is nonetheless excluded on exactly the same ground as AlphaFold 3, whose weights forbid nearly everything Boltz permits: `boltz predict` runs one model family and returns a prediction, which is a research input rather than a memory, agent, or assistant system.",
       "useful_lesson": "This is what it looks like when licences genuinely do not decide inclusion. The most permissive record in a cluster and the most restricted one are excluded by the same sentence of the same rule, and a reader can check that the Atlas applies ADR 007 symmetrically rather than only when the restrictive answer is convenient."
+    },
+    {
+      "name": "Coscientist",
+      "repo": "gomesgroup/coscientist",
+      "reason": "The published repository is not the system its Nature paper describes. The tree is 21 entries, mostly result CSVs, and the whole of its code is three files whose complete tool set is eval(), a random integer generator, and a stop command; the demo task it ships is generating a random number and taking its square root. There is no instrument control, no liquid handler, and no search anywhere in the tree, and the only disclosure of that gap is the word simple in a directory name. It fails inclusion-gate conditions 1 and 3: the claimed behaviour cannot be assessed from what was published. Its licence is Apache-2.0 with a Commons Clause, applied retroactively in August 2025, nearly two years after the paper.",
+      "useful_lesson": "A paper's reputation and its repository's contents are independent. The repository is the reviewable artifact, so read the tree before inheriting a journal's confidence; here the published code implements none of the capabilities the work is cited for."
+    },
+    {
+      "name": "The Virtual Lab",
+      "repo": "zou-group/virtual-lab",
+      "reason": "The best-engineered candidate in its batch — MIT, published to PyPI at 1.2.0, and actively maintained — and still not the system it is known for. Its library exports Agent and run_meeting, which is to say it simulates agent meetings. The nanobody discovery loop the project is cited for was human-run SLURM scripts copied out of a notebook by hand, so the repository does not own the loop a record would be scored on.",
+      "useful_lesson": "Packaging quality and owning the advertised loop are independent tests, and the best-maintained candidate in a batch can be the one whose library does not do the advertised thing. The exported names of the public interface are where that shows up first."
+    },
+    {
+      "name": "Agent Laboratory",
+      "repo": "SamuelSchmidgall/AgentLaboratory",
+      "reason": "MIT, published from a personal account, and it does own a genuine multi-phase research loop — but the loop closes on get_score(...), which prompts a model as an expert reward model and parses the float it writes about its own output, so nothing outside the system measures the result. Its source has been untouched since March 2025, with no tests, no continuous integration, no releases, and no installable package. This is the repository that ADR 023's third ground turns on, where a boundary test keyed on closing the loop on a measurement the system did not author convicted the inspectable and acquitted the opaque; the entry exists so that reasoning is findable from the evidence that produced it.",
+      "useful_lesson": "A loop that closes on a model's own score of its own output is architecture without measurement. The shape is identical to a system that measures, and only reading the evaluator distinguishes them, which is why the evaluator is worth locating before the loop diagram is believed."
     }
   ]
 }

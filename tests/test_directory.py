@@ -509,6 +509,26 @@ class DirectoryTests(unittest.TestCase):
             else:
                 self.assertNotIn("superseded_by", project, project["id"])
 
+    def test_autonomous_science_systems_use_existing_roles(self) -> None:
+        """ADR 023: a discovery system classifies by the outcome it owns.
+
+        Also guards the source-model classification, which ADR 023 does not decide:
+        Kosmos is mixed_source because an Apache-2.0 client sits over a closed hosted
+        core, and reverting it to proprietary would contradict that license, which the
+        validator forbids.
+        """
+        projects = {item["id"]: item for item in self.document["projects"]}
+        kosmos = projects["kosmos"]
+        self.assertEqual("agent_system", kosmos["system_family"])
+        self.assertEqual("research_agent", kosmos["primary_role"])
+        self.assertEqual("mixed_source", kosmos["source_model"])
+        self.assertIsNone(kosmos["repo"])
+        self.assertIn(
+            kosmos["research_confidence"],
+            {"low", "medium"},
+            "outcome claims evidenced only by the vendor cannot support high confidence",
+        )
+
     def test_superseded_is_a_reviewed_project_status(self) -> None:
         statuses = {item["id"] for item in self.taxonomy["project_statuses"]}
         self.assertEqual({"active", "archived", "superseded", "removed"}, statuses)

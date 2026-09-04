@@ -17,6 +17,8 @@ Specifications and inference services are separate collections, not additional s
 
 General agent-architecture pattern content — harness shapes, failure taxonomies, and similar concepts with no single authoritative steward — is not a further collection. Every collection here pins evidence to one steward's own reviewable artifact; a pattern synthesized across independent literature cannot meet that bar without inviting figures that only look sourced. See [ADR 022](adr/022-general-pattern-content-is-not-a-collection.md).
 
+Autonomous scientific-discovery systems are not a further role either. They are classified by the operational outcome they own — sourced investigation is `research_agent` — while the discovery mechanism itself, writing and executing code against data or instruments, is carried by `agent_capabilities` and `execution_boundaries` like any other agent trait. See [ADR 023](adr/023-autonomous-science-systems-are-not-a-role.md).
+
 ## Family 1: memory systems
 
 Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, and retrieval infrastructure.
