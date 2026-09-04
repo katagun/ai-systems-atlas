@@ -15,7 +15,8 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], taxonomy: null, licenses: new Map(),
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], taxonomy: null,
+  licenses: new Map(), logos: { icons: {}, records: {} },
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
@@ -136,17 +137,18 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory, logos] = await Promise.all([
-    loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json"), loadJSON("logos.json")
+  // Only the files the first paint reads are awaited here. logos.json is
+  // decorative and license-evidence.json is read solely inside a record
+  // dialog, so both are fetched off the critical path below.
+  const [directory, taxonomy, specificationDirectory, inferenceDirectory, runtimeDirectory] = await Promise.all([
+    loadJSON("projects.json"), loadJSON("taxonomy.json"),
+    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json")
   ]);
   state.projects = directory.projects;
   state.specifications = specificationDirectory.specifications;
   state.inferenceServices = inferenceDirectory.services;
   state.localRuntimes = runtimeDirectory.runtimes;
   state.taxonomy = taxonomy;
-  state.logos = logos;
-  state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
   const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at]
     .filter(Boolean)
     .sort()
@@ -164,6 +166,7 @@ async function bootstrap() {
   }
   restoreViewFromURL();
   restoreRecordFromURL();
+  loadMarks();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -171,8 +174,27 @@ async function bootstrap() {
 // logos.json; every dynamic value still passes through escapeHTML.
 function cardMark(record) {
   const icon = state.logos.icons[state.logos.records[record.id]];
-  if (icon) return `<span class="card-mark" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
-  return `<span class="card-mark card-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
+  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(record.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
+}
+
+// The icon bodies are the largest file the page loads and nothing about the
+// page depends on them: a card without one already renders its monogram. So
+// they arrive after the first paint, and every mark on screen is filled in
+// once they do. Cards rendered later pick their icon up through cardMark.
+function loadMarks() {
+  return loadJSON("logos.json")
+    .then(logos => { state.logos = logos; paintMarks(); })
+    .catch(() => {});
+}
+
+function paintMarks(root = document) {
+  $$("[data-mark]", root).forEach(mark => {
+    const icon = state.logos.icons[state.logos.records[mark.dataset.mark]];
+    if (!icon) return;
+    mark.classList.remove("card-monogram");
+    mark.innerHTML = `<svg viewBox="0 0 24 24">${icon.body}</svg>`;
+  });
 }
 
 function taxonomyName(group, id) {
@@ -1082,12 +1104,29 @@ function runtimeDialogMarkup(runtime) {
     </div>`;
 }
 
+// The reviewed license evidence is read in one place — the system dialog —
+// so it is fetched the first time a record is opened rather than at boot. A
+// failed fetch clears the request so the next open retries; until it lands the
+// dialog shows the license ids the record already carries.
+let licenseEvidenceRequest = null;
+
+function ensureLicenseEvidence() {
+  if (state.licenses.size) return null;
+  if (!licenseEvidenceRequest) {
+    licenseEvidenceRequest = loadJSON("license-evidence.json")
+      .then(evidence => { state.licenses = new Map(evidence.entries.map(item => [item.project_id, item])); })
+      .catch(() => { licenseEvidenceRequest = null; });
+  }
+  return licenseEvidenceRequest;
+}
+
 const RECORD_DIALOGS = {
   system: {
     dialog: "#project-dialog",
     content: "#dialog-content",
     find: id => state.projects.find(item => item.id === id),
     markup: systemDialogMarkup,
+    hydrate: ensureLicenseEvidence,
     afterRender: () => $$('[data-successor]', $("#dialog-content")).forEach(button =>
       button.addEventListener("click", () => openProject(button.dataset.successor))),
   },
@@ -1111,13 +1150,26 @@ const RECORD_DIALOGS = {
   },
 };
 
+function paintRecordDialog(dialog, record) {
+  const content = $(dialog.content);
+  content.innerHTML = dialog.markup(record);
+  content.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  dialog.afterRender?.();
+}
+
 function openRecordDialog(kind, id) {
   const dialog = RECORD_DIALOGS[kind];
   const record = dialog.find(id);
   if (!record) return false;
-  $(dialog.content).innerHTML = dialog.markup(record);
-  dialog.afterRender?.();
+  paintRecordDialog(dialog, record);
   showRecordDialog(dialog.dialog, kind, id);
+  // A dialog that needs a lazily fetched file paints immediately from the
+  // record and repaints when the file lands — unless the reader has moved on
+  // to a different record by then.
+  dialog.hydrate?.()?.then(() => {
+    const element = $(dialog.dialog);
+    if (element.dataset.recordKind === kind && element.dataset.recordId === id) paintRecordDialog(dialog, record);
+  });
   return true;
 }
 
@@ -1169,7 +1221,6 @@ function openRecord(kind, id) {
 
 function showRecordDialog(selector, kind, id) {
   const dialog = $(selector);
-  dialog.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
   dialog.dataset.recordKind = kind;
   dialog.dataset.recordId = id;
   writeRecordURL(kind, id);
