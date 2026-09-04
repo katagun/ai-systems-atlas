@@ -12,6 +12,7 @@ Read only the documents required by the change:
 | JSON fields, enums, queues, or timestamps | `docs/DATA_MODEL.md` |
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
 | finder, Directory collections, filters, comparison, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/013-distinct-collections-share-one-directory-surface.md` for collection boundaries and `docs/adr/014-comparisons-are-scoped-to-one-score-profile.md` for comparison |
+| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md` |
 | system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md`, `docs/adr/021-the-research-reference-role-is-removed.md`, `docs/adr/022-general-pattern-content-is-not-a-collection.md`, and `docs/adr/023-autonomous-science-systems-are-not-a-role.md` |
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
@@ -37,6 +38,7 @@ Use `uv` for Python work.
 ```bash
 uv sync --locked
 uv run python scripts/sync_web_data.py
+uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
 node scripts/build_logos.mjs --check
 node scripts/build_fonts.mjs --check
@@ -73,7 +75,7 @@ Run synchronization and share-page generation after changing any published `dire
 - Keep inference services outside `system_family` and system-family score profiles; use their dedicated service profile, curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
 - Keep local runtimes outside `system_family` and system-family score profiles; use their dedicated runtime profile, curate self-operated execution software rather than models, managed services, or client libraries, and never score them with throughput, latency, or benchmark results.
 - Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`; candidate and license-review queues are not published. Share pages under `web/records/` are generated from those files and never show scores.
+- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`; candidate and license-review queues are not published. Share pages under `web/records/` and app payloads under `web/app/` are generated from those files, never edited by hand, and never published as endpoints. Share pages never show scores.
 - Never report checks as passing unless you ran them.
 
 Existing unrelated changes belong to the user. Preserve them.
