@@ -1036,7 +1036,8 @@ def validate_triage(
         errors.append(f"candidate {prefix}: triage requires a finding")
     else:
         classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
-        leaked = sorted(name for name in classifying if name in finding)
+        finding_lower = finding.lower()
+        leaked = sorted(name for name in classifying if name in finding_lower)
         if leaked:
             errors.append(
                 f"candidate {prefix}: finding must not classify; it names taxonomy ids {leaked}"

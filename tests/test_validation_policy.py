@@ -628,6 +628,11 @@ class ValidationPolicyTests(unittest.TestCase):
             lambda triage, _: triage.update({"finding": "This is clearly a coding_agent."}))
         self.assertTrue(any("finding must not classify" in error for error in errors), errors)
 
+    def test_a_finding_may_not_name_a_taxonomy_role_in_any_case(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": "This is clearly a Coding_Agent."}))
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
     def test_a_finding_may_quote_prose_that_resembles_a_role(self) -> None:
         errors = self.candidate_with_triage(
             lambda triage, _: triage.update({"finding": 'The README calls it a "coding agent".'}))
