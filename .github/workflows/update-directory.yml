@@ -45,6 +45,11 @@ jobs:
         run: uv run python scripts/update_directory.py
       - name: Regenerate share pages
         run: uv run python scripts/build_share_pages.py
+      - name: Regenerate asset versions
+        # A refresh changes the published catalog files, and index.html carries a
+        # content hash for each thing it serves. Regenerate here or the refresh
+        # opens a pull request that fails the asset-version check every week.
+        run: node scripts/build_asset_version.mjs
       - name: Verify the refreshed catalog
         id: verify
         # A refreshed catalog that fails verification is still worth publishing
@@ -84,6 +89,7 @@ jobs:
           check "unittest" uv run python -m unittest discover -s tests -v
           check "compileall" uv run python -m compileall scripts tests
           check "share page freshness" uv run python scripts/build_share_pages.py --check
+          check "asset versions" node scripts/build_asset_version.mjs --check
           check "app-core.js syntax" node --check web/app-core.js
           check "app.js syntax" node --check web/app.js
           check "web behavior tests" node --test tests/test_web.js
