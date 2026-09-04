@@ -242,5 +242,30 @@ class BlastRadiusTests(unittest.TestCase):
         self.assertEqual([], runner.unexpected_changes(""))
 
 
+class FinishTests(unittest.TestCase):
+    def test_finish_refuses_when_a_forbidden_file_changed(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/projects.json\n"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+
+class PromptDriftTests(unittest.TestCase):
+    def test_an_uninstalled_prompt_is_drift(self) -> None:
+        self.assertIsNotNone(runner.prompt_drift("body", None))
+
+    def test_a_changed_installed_prompt_is_drift(self) -> None:
+        self.assertIsNotNone(runner.prompt_drift("body", "different body"))
+
+    def test_an_identical_prompt_is_not_drift(self) -> None:
+        self.assertIsNone(runner.prompt_drift("body\n", "  body  "))
+
+
 if __name__ == "__main__":
     unittest.main()
