@@ -35,3 +35,42 @@ def carry_forward(candidates: list[dict[str, Any]], previous: list[dict[str, Any
             item["triage"] = block
             carried += 1
     return carried
+
+
+CLASS_SIGNALS = {
+    "awesome list": ("awesome-", "awesome ", "curated list"),
+    "benchmark": ("benchmark", "eval suite", "evaluation suite", "leaderboard"),
+    "dataset": ("dataset", "corpus"),
+    "course or tutorial": ("tutorial", "course", "learning path", "roadmap"),
+    "paper or research artifact": ("official implementation of", "paper implementation"),
+}
+
+
+def cross_collection_hits(
+    candidate: dict[str, Any], catalog: dict[str, list[dict[str, Any]]]
+) -> list[str]:
+    """Report every collection that already holds this repository, id, or URL."""
+    key = candidate_key(candidate)
+    url = str(candidate.get("url") or "").lower().rstrip("/")
+    hits: list[str] = []
+    for name, records in sorted(catalog.items()):
+        for record in records:
+            values = {
+                str(record.get(field) or "").lower().rstrip("/")
+                for field in ("repo", "id", "url")
+            }
+            if key and key in values:
+                hits.append(f"{name}: already holds {key}")
+            elif url and url in values:
+                hits.append(f"{name}: already holds {url}")
+    return hits
+
+
+def class_signals(candidate: dict[str, Any]) -> list[str]:
+    """Flag obvious non-operational classes visible in the queued record itself."""
+    haystack = " ".join([
+        str(candidate.get("name") or ""),
+        str(candidate.get("description") or ""),
+        " ".join(candidate.get("topics") or []),
+    ]).lower()
+    return [name for name, terms in CLASS_SIGNALS.items() if any(term in haystack for term in terms)]

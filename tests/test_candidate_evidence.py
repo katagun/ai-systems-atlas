@@ -31,5 +31,36 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual("review_ready", queue[0]["triage"]["verdict"])
 
 
+class CrossCheckTests(unittest.TestCase):
+    def test_a_repo_already_excluded_is_reported(self) -> None:
+        catalog = {"exclusions.json": [{"repo": "A/One"}], "projects.json": []}
+        hits = harness.cross_collection_hits(candidate("a/one"), catalog)
+        self.assertTrue(any("exclusions.json" in hit for hit in hits), hits)
+
+    def test_a_repo_already_published_is_reported(self) -> None:
+        catalog = {"projects.json": [{"repo": "a/one", "id": "one"}], "exclusions.json": []}
+        hits = harness.cross_collection_hits(candidate("a/one"), catalog)
+        self.assertTrue(any("projects.json" in hit for hit in hits), hits)
+
+    def test_a_clean_candidate_reports_nothing(self) -> None:
+        catalog = {"projects.json": [{"repo": "b/two", "id": "two"}], "exclusions.json": []}
+        self.assertEqual([], harness.cross_collection_hits(candidate("a/one"), catalog))
+
+
+class ClassSignalTests(unittest.TestCase):
+    def test_an_awesome_list_is_flagged(self) -> None:
+        item = candidate("aristoapp/awesome-second-brain", name="awesome-second-brain",
+                         description="A curated list of tools.", topics=[])
+        self.assertIn("awesome list", harness.class_signals(item))
+
+    def test_a_benchmark_topic_is_flagged(self) -> None:
+        item = candidate("x/y", name="y", description="An evaluation suite.", topics=["benchmark"])
+        self.assertIn("benchmark", harness.class_signals(item))
+
+    def test_an_ordinary_candidate_is_not_flagged(self) -> None:
+        item = candidate("x/y", name="y", description="An agent runtime.", topics=["agents"])
+        self.assertEqual([], harness.class_signals(item))
+
+
 if __name__ == "__main__":
     unittest.main()
