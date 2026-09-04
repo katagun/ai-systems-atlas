@@ -59,6 +59,65 @@ Never copy proposed classification into the catalog without human confirmation. 
 
 Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
 
+## Review a triage batch
+
+`scripts/run_candidate_triage.py finish` commits proposed `triage` blocks to the
+`triage/pending` branch in an isolated worktree; it never pushes and never touches `main`
+or `origin`. To review a run:
+
+1. See what it proposed: `git log --oneline main..triage/pending` and
+   `git diff main..triage/pending -- directory/candidates.json`.
+2. Treat every proposal as evidence, never a conclusion. Check the sources a `triage`
+   block cites — the pinned `evidence` items and the quoted `finding` — not the `verdict`
+   it reached. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md).
+3. Re-verify the pinned evidence by hand with
+   `uv run python scripts/build_candidate_evidence.py --recheck`. It re-fetches each
+   citation and fails, naming it, when the URL it cites or the hash it recorded no longer
+   matches the document. Run it from a checkout that actually holds the blocks — the run's
+   worktree, or `triage/pending` checked out — because `main` holds none and the command
+   exits 0 having verified nothing. It re-checks only blocks whose `proposed_at` is today,
+   which are the ones the current run wrote; an older block describes a document as it
+   stood when a human accepted it, and re-verifying those would turn ordinary upstream
+   drift into a failure no run can clear. To check an older citation, open its
+   `immutable_url`, which addresses a blob SHA and cannot change under it.
+
+Then, per candidate:
+
+- **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion and remove the
+  candidate in the same change. The `triage` block is removed with the candidate; nothing
+  separate needs deleting.
+- **Accepting `held`:** keep the candidate, keep its `triage.held_by`, and record the
+  decision in `BACKLOG.md` so the open question stays visible outside the queue.
+- **Accepting `review_ready`:** follow "Review a candidate" above, using the block's
+  `finding` as research to check against its cited sources, not as a pre-made editorial
+  conclusion to copy in.
+- **Rejecting a proposal:** *edit* its `triage` block in `directory/candidates.json` to
+  record your disposition — do not delete it. The routine never overwrites a block that is
+  already there, so an edited block stays exactly as you left it. A deleted one does not:
+  the candidate is untriaged again, and the next `prepare` carries the old block back from
+  `triage/pending`, because the queue on that branch still has it and the harness cannot
+  tell a block a human deleted from one that was never merged. Keeping the block, with
+  your correction in it, is what makes a rejection durable. If the proposal is worthless
+  rather than wrong, resolve the candidate instead: exclude it, or promote it.
+
+`finish` refuses to commit a run that wrote anything but the two changes the routine is
+allowed to make: adding a `triage` block to a candidate that had none, and nulling
+`proposed_system_family` and `proposed_primary_role` on a candidate whose new block names
+the decision holding it. Every other field of `directory/candidates.json` — a
+classification, a confidence, a status — and the membership of the queue itself is human
+review's, and a run that touches one aborts naming the candidate and the field. Reviewing
+a batch therefore means judging verdicts and evidence, not auditing the diff for overreach.
+
+The harness authenticates with `GITHUB_TOKEN` when it is set and otherwise falls back to
+`gh auth token`, so a scheduled run needs no secret stored anywhere. With neither, GitHub
+allows 60 anonymous requests an hour against the roughly 80 a default `--limit 40` run
+issues, and the run fails on the rate limit before any judgment happens.
+
+To install the routine as a scheduled task, sync `docs/routines/candidate-triage.md` to
+`~/.claude/scheduled-tasks/candidate-triage/SKILL.md` and schedule it for Tuesday morning
+local time. Scheduled tasks only run while the desktop app is open; a missed run catches
+up the next time the app launches, so a run is not guaranteed at the exact scheduled time.
+
 ## Review an inference service
 
 Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.

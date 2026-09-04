@@ -503,6 +503,173 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("duplicate candidate identity" in error for error in errors), errors)
 
+    def catalog_with_candidate(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog whose queue holds one synthetic candidate."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "candidates.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        candidate = {
+            "repo": "sample/candidate",
+            "name": "candidate",
+            "url": "https://github.com/sample/candidate",
+            "description": "A synthetic candidate used to exercise queue validation.",
+            "proposed_system_family": "agent_system",
+            "proposed_primary_role": "coding_agent",
+            "classification_confidence": 0.8,
+            "github_detected_license": "MIT",
+            "stars": 100,
+            "topics": ["agent"],
+            "status": "provisional",
+            "discovered_at": "2026-09-04",
+            "review_required": ["licensing", "classification", "traits", "editorial_score"],
+        }
+        document["candidates"] = [candidate]
+        if mutate is not None:
+            mutate(candidate)
+        self.write_json(path, document)
+        return validate(root)
+
+    def test_a_candidate_without_a_triage_block_is_valid(self) -> None:
+        errors = self.catalog_with_candidate()
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_a_candidate_rejects_a_field_outside_the_schema(self) -> None:
+        errors = self.catalog_with_candidate(lambda candidate: candidate.update({"surprise": 1}))
+        self.assertTrue(any("fields do not match candidate schema" in error for error in errors), errors)
+
+    TRIAGE: ClassVar[dict] = {
+        "verdict": "review_ready",
+        "rule": "CURATION.md § Inclusion gate — operational product is identifiable",
+        "finding": "The README documents a tool-using loop over a local index.",
+        "evidence": [{
+            "label": "README",
+            "url": "https://github.com/sample/candidate/blob/main/README.md",
+            "kind": "web",
+            "content_sha256": "a" * 64,
+            "fetched_at": "2026-09-04",
+        }],
+        "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage",
+    }
+
+    def candidate_with_triage(self, mutate=None) -> list[str]:
+        def apply(candidate):
+            candidate["triage"] = json.loads(json.dumps(self.TRIAGE))
+            if mutate is not None:
+                mutate(candidate["triage"], candidate)
+        return self.catalog_with_candidate(apply)
+
+    def test_a_valid_triage_block_passes(self) -> None:
+        errors = self.candidate_with_triage()
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_triage_rejects_an_unknown_verdict(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "publish"}))
+        self.assertTrue(any("unknown triage verdict" in error for error in errors), errors)
+
+    def test_triage_rejects_a_field_outside_its_schema(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"score": 9}))
+        self.assertTrue(any("triage fields differ from schema" in error for error in errors), errors)
+
+    def test_held_by_is_required_for_a_held_verdict(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "held"}))
+        self.assertTrue(any("held_by is required" in error for error in errors), errors)
+
+    def test_held_by_is_forbidden_on_any_other_verdict(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"held_by": "BACKLOG.md — skill packs"}))
+        self.assertTrue(any("held_by is required" in error for error in errors), errors)
+
+    def test_triage_evidence_requires_an_https_url(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"url": "http://example.com"}))
+        self.assertTrue(any("evidence requires an authoritative HTTPS URL" in e for e in errors), errors)
+
+    def test_triage_evidence_requires_a_content_hash(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"content_sha256": "nope"}))
+        self.assertTrue(any("evidence requires a content_sha256" in e for e in errors), errors)
+
+    def test_triage_evidence_must_not_be_empty(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"evidence": []}))
+        self.assertTrue(any("triage evidence must be a non-empty list" in e for e in errors), errors)
+
+    def test_git_blob_evidence_must_address_the_recorded_sha(self) -> None:
+        def mutate(triage, _candidate):
+            triage["evidence"][0] = {
+                "label": "LICENSE",
+                "url": "https://github.com/sample/candidate/blob/main/LICENSE",
+                "kind": "git_blob",
+                "blob_sha": "0" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "1" * 40,
+                "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-04",
+            }
+        errors = self.candidate_with_triage(mutate)
+        self.assertTrue(any("immutable evidence URL must address the blob SHA" in e for e in errors), errors)
+
+    def test_valid_git_blob_evidence_passes(self) -> None:
+        def mutate(triage, _candidate):
+            triage["evidence"][0] = {
+                "label": "LICENSE",
+                "url": "https://github.com/sample/candidate/blob/main/LICENSE",
+                "kind": "git_blob",
+                "blob_sha": "0" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "0" * 40,
+                "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-04",
+            }
+        errors = self.candidate_with_triage(mutate)
+        self.assertFalse([e for e in errors if "sample/candidate" in e], errors)
+
+    def test_evidence_carrying_the_bundle_content_field_is_rejected(self) -> None:
+        """The harness records `content` to quote from; it is context, never a citation field."""
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"content": "The MIT License"}))
+        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+
+    def test_evidence_missing_a_required_field_is_rejected(self) -> None:
+        def mutate(triage, _candidate):
+            del triage["evidence"][0]["fetched_at"]
+        errors = self.candidate_with_triage(mutate)
+        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+
+    def test_a_finding_may_not_name_a_taxonomy_role(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": "This is clearly a coding_agent."}))
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
+    def test_a_finding_may_not_name_a_taxonomy_role_in_any_case(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": "This is clearly a Coding_Agent."}))
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
+    def test_a_finding_may_quote_prose_that_resembles_a_role(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": 'The README calls it a "coding agent".'}))
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_a_finding_must_be_a_non_empty_string(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"finding": "  "}))
+        self.assertTrue(any("triage requires a finding" in error for error in errors), errors)
+
+    def test_family_and_role_may_be_null_while_a_decision_holds_the_record(self) -> None:
+        def mutate(triage, candidate):
+            triage["verdict"] = "held"
+            triage["held_by"] = "BACKLOG.md — labs whose models you serve yourself"
+            candidate["proposed_system_family"] = None
+            candidate["proposed_primary_role"] = None
+        errors = self.candidate_with_triage(mutate)
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_family_and_role_may_not_be_null_without_a_holding_decision(self) -> None:
+        def mutate(candidate):
+            candidate["proposed_system_family"] = None
+            candidate["proposed_primary_role"] = None
+        errors = self.catalog_with_candidate(mutate)
+        self.assertTrue(any("may only be null" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

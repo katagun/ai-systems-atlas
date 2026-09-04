@@ -26,6 +26,22 @@ class DocumentationTests(unittest.TestCase):
                     broken.append(f"{document.relative_to(ROOT)} -> {target}")
         self.assertEqual([], broken)
 
+    def test_the_routine_prompt_states_its_boundary(self) -> None:
+        """The prompt is the only instruction a scheduled run sees, so its limits must be in it.
+
+        Drift between this file and the installed copy is checked by
+        scripts/run_candidate_triage.py prepare, which runs where ~/.claude exists.
+        """
+        prompt = (ROOT / "docs" / "routines" / "candidate-triage.md").read_text(encoding="utf-8")
+        for required in (
+            "directory/candidates.json",
+            "run_candidate_triage.py prepare",
+            "run_candidate_triage.py finish",
+            "NEVER FETCH",
+            "024",
+        ):
+            self.assertIn(required, prompt, required)
+
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
             "ROADMAP.md",
@@ -61,6 +77,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/021-the-research-reference-role-is-removed.md",
             "docs/adr/022-general-pattern-content-is-not-a-collection.md",
             "docs/adr/023-autonomous-science-systems-are-not-a-role.md",
+            "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

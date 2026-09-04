@@ -10,3 +10,4 @@ playwright-report/
 test-results/
 .DS_Store
 agent_workspace/
+.candidate-evidence/
