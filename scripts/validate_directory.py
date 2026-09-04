@@ -574,16 +574,24 @@ def validate_projects(
         errors.append("projects.json: generated_at must be an ISO date")
     if not isinstance(projects_value, list):
         return None
-    projects: list[dict[str, Any]] = projects_value
+    entries: list[Any] = projects_value
     ids: set[str] = set()
     repos: set[str] = set()
     project_url_keys: set[str] = set()
 
-    for project in projects:
-        validate_project_record(project, tax, ids, repos, project_url_keys, errors)
+    for entry in entries:
+        validate_project_record(entry, tax, ids, repos, project_url_keys, errors)
+
+    # An entry that is not an object was reported above and is dropped here. Every
+    # later pass cross-checks records against each other — supersession, license
+    # evidence, id collisions across collections — and a non-record has nothing to
+    # cross-check. Carrying one in the index makes ProjectIndex.projects lie about
+    # its own type, which is how a malformed entry used to replace the whole error
+    # report with an AttributeError from the evidence pass.
+    projects: list[dict[str, Any]] = [entry for entry in entries if isinstance(entry, dict)]
 
     for project in projects:
-        if not isinstance(project, dict) or "superseded_by" not in project:
+        if "superseded_by" not in project:
             continue
         successor = project["superseded_by"]
         if successor != project.get("id") and successor not in ids:
