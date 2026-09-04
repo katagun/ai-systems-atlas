@@ -43,6 +43,8 @@ Expand the specification collection in question-driven batches. Prefer agent-spe
 
 A separately published, unscored collection of general architecture and safety patterns, in the ADR 008 shape that ADR 021 reserved for research material, is declined under [ADR 022](docs/adr/022-general-pattern-content-is-not-a-collection.md): such patterns have no single authoritative steward to pin evidence to, and a reviewed reference implementation of the idea already shows the result — invented figures presented beside a real citation. An explanatory diagram layer confined to the Atlas's own taxonomy boundaries is a narrower, still-open question; see `BACKLOG.md`.
 
+A vertical role for autonomous scientific-discovery systems is likewise declined, under [ADR 023](docs/adr/023-autonomous-science-systems-are-not-a-role.md): records route to existing roles until three or more systems clear the full inclusion gate around one operational outcome no existing role names, established without reading source.
+
 Evaluate additional scored families only when a distinct operational outcome cannot fit the memory, agent, or assistant profiles. The broader AI Systems Atlas brand is permission to grow deliberately, not permission to compare incompatible systems.
 
 Exit signal: evidence of user value justifies the additional model and maintenance surface.
