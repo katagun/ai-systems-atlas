@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-04
 **Status:** Proposed design, pending approval
-**Ripple analysis pinned to:** `5af4f67` (`origin/main` at time of writing)
+**Ripple analysis pinned to:** `f9bacbe` (`origin/main`, merged 2026-09-04; re-verified after #94)
 **Line references:** `web/app.js` line numbers assume steps 1 and 2 are applied (this branch); every other file is unmodified `5af4f67`
 
 ## Problem
@@ -54,7 +54,7 @@ web/app/detail/<kind>/<id>.json  271 files   record detail  0.5–4.2 KB each
 
 **Not** `web/app/records/`: `web/records/` already means share pages, and two directories called "records" holding different things is a trap.
 
-These files are never added to `PUBLISHED_DATA` (`scripts/validate_directory.py:18`). That tuple drives three checks — the API-view test (`tests/test_web.js:578`), the `llms.txt` test (`:574`), and `validate_published_copies` (`scripts/validate_directory.py:1119`) — so the boundary enforces itself: a payload added there would immediately demand both an endpoint listing and a byte-identical twin in `directory/`, and fail.
+These files are never added to `PUBLISHED_DATA` (`scripts/validate_directory.py:18`). That tuple drives three checks — the API-view test (`tests/test_web.js:578`), the `llms.txt` test (`:574`), and `validate_published_copies` (`scripts/validate_directory.py:1214`) — so the boundary enforces itself: a payload added there would immediately demand both an endpoint listing and a byte-identical twin in `directory/`, and fail.
 
 ### 2. Boot payloads carry exactly what renders before a click
 
@@ -122,13 +122,13 @@ Two call sites, and the second is the one that would fail silently:
 
 Order is fixed: `sync_web_data` → `build_web_payload` → `build_share_pages` → `build_asset_version`.
 
-### 8. Governance: ADR 024, plus the documents it touches
+### 8. Governance: ADR 025, plus the documents it touches
 
 `AGENTS.md` states: "Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`." Generated payloads are a different category — generated, not synchronized, like `web/records/` — and the rule has to name both.
 
-- **`docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md`** — the endpoints are a stable public contract; payloads are a regenerable projection with no compatibility promise, never advertised, never in `PUBLISHED_DATA`.
+- **`docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md`** — the endpoints are a stable public contract; payloads are a regenerable projection with no compatibility promise, never advertised, never in `PUBLISHED_DATA`.
 - **`AGENTS.md`** — amend the hard rule; add the build command; add a routing row for the ADR.
-- **`tests/test_documentation.py:29`** — add ADR 024 to the hardcoded manifest. `test_routing_documents_are_reachable_from_agents` then requires it to be named in `AGENTS.md`, which the routing row satisfies.
+- **`tests/test_documentation.py:29`** — add ADR 025 to the hardcoded manifest. `test_routing_documents_are_reachable_from_agents` then requires it to be named in `AGENTS.md`, which the routing row satisfies.
 - **`docs/WEB.md`** — the loading model under "Behavioral contracts"; the payload tree under "Change surfaces"; the browser pass under "Verification".
 - **`docs/OPERATIONS.md`** — an "App payloads" section beside the existing "Share pages", "Asset versions", and "Logo coverage" sections.
 - **`docs/AGENT_DOCS.md`** — record that payloads are deliberately absent from `llms.txt` and the Atlas skill, and why.

@@ -23,14 +23,14 @@
 
 ---
 
-### Task 1: Authorize the new artifact class (ADR 024)
+### Task 1: Authorize the new artifact class (ADR 025)
 
 `AGENTS.md` currently says "Keep only `projects.json` … synchronized into `web/`". Task 2 violates that sentence as written, so the governing decision lands first.
 
 **Files:**
-- Create: `docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md`
+- Create: `docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md`
 - Modify: `AGENTS.md` (routing table, Commands block, hard rules)
-- Modify: `tests/test_documentation.py:29-63` (routing manifest)
+- Modify: `tests/test_documentation.py:29-81` (routing manifest)
 
 **Interfaces:**
 - Consumes: nothing.
@@ -38,11 +38,11 @@
 
 - [ ] **Step 1: Write the failing test**
 
-Add the ADR to the hardcoded manifest in `tests/test_documentation.py`, in the alphabetical position after ADR 023:
+Add the ADR to the hardcoded manifest in `tests/test_documentation.py`, in the alphabetical position after ADR 024:
 
 ```python
-            "docs/adr/023-autonomous-science-systems-are-not-a-role.md",
-            "docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md",
+            "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
+            "docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md",
 ```
 
 - [ ] **Step 2: Run the tests to verify both fail**
@@ -52,7 +52,7 @@ Expected: FAIL on `test_task_routing_documents_exist` (the file does not exist) 
 
 - [ ] **Step 3: Write the ADR**
 
-Create `docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md`. Match the house shape of `docs/adr/013-distinct-collections-share-one-directory-surface.md` — read it first for tone and section headings. It must state:
+Create `docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md`. Match the house shape of `docs/adr/013-distinct-collections-share-one-directory-surface.md` — read it first for tone and section headings. It must state:
 
 - **Context.** The seven files under `web/` are a public API: documented at `web/index.html:227`, listed in `web/llms.txt`, licensed CC BY 4.0, fetched by parties the project cannot see. They are also what the page loads, and they are shaped for reading a record, not for rendering a grid — 64% of `projects.json` is prose behind a click. One artifact cannot be both a stable contract and a payload tuned to how the page happens to load today.
 - **Decision.** The endpoints are the contract and never change shape for the app's convenience. The app reads a generated projection under `web/app/`, regenerated from the endpoints by `scripts/build_web_payload.py`, carrying no compatibility promise, never advertised in `llms.txt`, the Atlas skill, or the API view's endpoint list, and never added to `PUBLISHED_DATA`.
@@ -66,7 +66,7 @@ Three edits:
 1. Routing table — add a row after the `finder, Directory collections, …` row:
 
 ```markdown
-| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md` |
+| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md` |
 ```
 
 2. Commands block — add after the `sync_web_data.py` line:
@@ -89,8 +89,8 @@ Expected: PASS, 11 tests.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md AGENTS.md tests/test_documentation.py
-git commit -m "Separate the published endpoints from the app's payload (ADR 024)"
+git add docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md AGENTS.md tests/test_documentation.py
+git commit -m "Separate the published endpoints from the app's payload (ADR 025)"
 ```
 
 ---
@@ -106,7 +106,7 @@ git commit -m "Separate the published endpoints from the app's payload (ADR 024)
 - Generated: `web/app/**` (279 files, committed)
 
 **Interfaces:**
-- Consumes: ADR 024 from Task 1.
+- Consumes: ADR 025 from Task 1.
 - Produces: `load_catalog(root) -> dict[str, dict]`, `build_payloads(catalog) -> dict[str, str]` mapping a `web/`-relative path to its exact file text, `main(argv) -> int`. `BOOT_FIELDS: dict[str, tuple[str, ...]]` and `SEARCH_FIELDS: dict[str, tuple[str, ...]]` keyed by collection. Task 3 reads the payload paths; Task 5 reads the payload shapes.
 
 - [ ] **Step 1: Write the failing tests**
@@ -208,7 +208,7 @@ Create `scripts/build_web_payload.py`. `BOOT_FIELDS` and `SEARCH_FIELDS` are cop
 The seven files under web/ are a published API with a compatibility promise.
 These payloads are a projection of them shaped for how the page loads: a small
 boot payload per collection, a lazily fetched search index, and one detail file
-per record. See docs/adr/024-app-payloads-are-a-projection-of-the-published-endpoints.md.
+per record. See docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md.
 """
 from __future__ import annotations
 
@@ -736,7 +736,7 @@ async function loadJSON(path) {
 ```javascript
 async function bootstrap() {
   // The published endpoints are an API, not this page's payload: the page reads
-  // a projection of them shaped for a first render. See ADR 024.
+  // a projection of them shaped for a first render. See ADR 025.
   const [systems, inference, runtimes, specifications, taxonomy] = await Promise.all([
     loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
     loadJSON("app/specifications.json"), loadJSON("taxonomy.json")
@@ -906,7 +906,7 @@ git commit -m "Load the directory from app payloads instead of the endpoints"
 - Modify: `docs/WEB.md`, `docs/OPERATIONS.md`, `docs/AGENT_DOCS.md`
 
 **Interfaces:**
-- Consumes: ADR 024 (Task 1), the builder (Task 2), the loading model (Task 5).
+- Consumes: ADR 025 (Task 1), the builder (Task 2), the loading model (Task 5).
 - Produces: nothing code reads.
 
 - [ ] **Step 1: Extend the API view's "What is not published"**
