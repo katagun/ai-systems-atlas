@@ -61,5 +61,7 @@ jobs:
         run: node scripts/build_asset_version.mjs --check
       - name: Check share page freshness
         run: uv run python scripts/build_share_pages.py --check
+      - name: Check app payload freshness
+        run: uv run python scripts/build_web_payload.py --check
       - name: Run browser end-to-end tests
         run: npm run test:e2e

@@ -43,6 +43,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run python scripts/update_directory.py
+      - name: Regenerate app payloads
+        run: uv run python scripts/build_web_payload.py
       - name: Regenerate share pages
         run: uv run python scripts/build_share_pages.py
       - name: Regenerate asset versions
