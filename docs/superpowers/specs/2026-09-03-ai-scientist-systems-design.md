@@ -1,7 +1,9 @@
 # Design: AI Scientist systems route to existing roles
 
 **Date:** 2026-09-03
-**Status:** Approved design, pending implementation plan
+**Status:** Implemented — see [ADR 023](../../adr/023-autonomous-science-systems-are-not-a-role.md) and the plan at [`docs/superpowers/plans/2026-09-03-ai-scientist-systems.md`](../plans/2026-09-03-ai-scientist-systems.md)
+
+> **One correction, recorded rather than rewritten.** This design specified `source_model: proprietary` for Kosmos. `scripts/validate_directory.py` makes that value unreachable alongside the Apache-2.0 client this same design requires, and the record was published as `mixed_source` on the `seekrflow` precedent. Read every statement below that Kosmos "has no source" as *publishes no source for the system itself* — the loop, the world model, the agent — while shipping an open client library. The arguments are unaffected; the classification is not.
 
 ## Problem
 
