@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=75fc8fa6712d">
+  <link rel="stylesheet" href="styles.css?v=e10880c79a51">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -40,6 +40,7 @@
       <button class="tab" data-tab="finder">Finder</button>
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
+      <button class="tab" data-tab="api">API</button>
     </nav>
     <div class="header-tools">
       <a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>
@@ -200,6 +201,80 @@
         <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. PKM tools, RAG apps, memory services, and agents can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
+
+    <section id="api" class="view" aria-labelledby="api-title">
+      <div class="section-heading">
+        <p class="eyebrow">Published data</p>
+        <h1 id="api-title">Every record here is a JSON file.</h1>
+        <p>This directory is built from seven static files served straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent. They are the same files this page loads.</p>
+      </div>
+
+      <div class="api-facts">
+        <article>
+          <h2>Fetching</h2>
+          <p>A plain <code>GET</code> over HTTPS. Each file returns <code>application/json</code> with <code>access-control-allow-origin: *</code>, so a page on another origin can read it without a proxy.</p>
+        </article>
+        <article>
+          <h2>Caching</h2>
+          <p>Responses carry a ten-minute <code>cache-control</code> and an <code>ETag</code>; send <code>If-None-Match</code> to poll cheaply. The <code>?v=</code> value this page appends is its own content hash for cache busting—leave it off and you still get the current file.</p>
+        </article>
+        <article>
+          <h2>Reuse</h2>
+          <p>The catalog is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Use it commercially if you like, with credit to AI Systems Atlas and a link to the license.</p>
+        </article>
+      </div>
+
+      <div class="endpoint-list">
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/taxonomy.json">taxonomy.json</a></h2>
+          <p>The vocabulary every other file uses: system families, primary roles, orthogonal traits, license identifiers, and score profiles. The other files refer to these by id, so start here.</p>
+          <p class="endpoint-shape"><code>system_families[]</code> · <code>primary_roles[]</code> · <code>licenses[]</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/projects.json">projects.json</a></h2>
+          <p>Reviewed memory, agent, and assistant systems. Each record carries its family, role, traits, licenses, editorial score, and the strengths and watchouts behind that score.</p>
+          <p class="endpoint-shape"><code>projects[]</code> · <code>generated_at</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/inference-services.json">inference-services.json</a></h2>
+          <p>Managed inference services, each scored on how the service is operated—never on model quality, current price, or transient speed.</p>
+          <p class="endpoint-shape"><code>services[]</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/local-runtimes.json">local-runtimes.json</a></h2>
+          <p>Inference runtimes you run yourself, with their accelerators, model formats, serving modes, deployment surfaces, and hardware requirements.</p>
+          <p class="endpoint-shape"><code>runtimes[]</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/specifications.json">specifications.json</a></h2>
+          <p>Protocols, instruction conventions, metadata schemas, and package formats. These carry no score: they are contracts between systems rather than products to rank.</p>
+          <p class="endpoint-shape"><code>specifications[]</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/license-evidence.json">license-evidence.json</a></h2>
+          <p>The reviewed license and terms evidence behind each record, scoped to the components it covers and pinned to the exact file or page it was read from.</p>
+          <p class="endpoint-shape"><code>entries[]</code> · <code>verified_at</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/exclusions.json">exclusions.json</a></h2>
+          <p>Projects that were reviewed and deliberately left out, each with its reason. Read it to tell a considered boundary from a gap in coverage.</p>
+          <p class="endpoint-shape"><code>entries[]</code> · <code>generated_at</code></p>
+        </article>
+      </div>
+
+      <section class="api-notes">
+        <article>
+          <h2>What is not published</h2>
+          <p>The candidate and license-review queues stay in the repository. They hold unreviewed entries a script classified automatically, and serving them would blur the line between a machine's guess and a reviewed record.</p>
+          <p><code>logos.json</code> is served because this page needs it, but it holds vendored product marks rather than catalog data. Those marks identify their owners' products and are not covered by the catalog license.</p>
+        </article>
+        <article>
+          <h2>Reading the fields</h2>
+          <p>The <a href="https://github.com/katagun/ai-systems-atlas/blob/main/docs/DATA_MODEL.md" target="_blank" rel="noreferrer">data model</a> defines every field, the <a href="https://github.com/katagun/ai-systems-atlas/blob/main/docs/TAXONOMY.md" target="_blank" rel="noreferrer">taxonomy</a> defines every enum, and <a href="https://github.com/katagun/ai-systems-atlas/blob/main/docs/CURATION.md" target="_blank" rel="noreferrer">curation</a> describes the review a record passes before it appears.</p>
+          <p>An agent landing here can read <a href="llms.txt">llms.txt</a> for the same list in one file, or install the <a href="https://github.com/katagun/ai-systems-atlas/blob/main/skills/ai-systems-atlas/SKILL.md" target="_blank" rel="noreferrer">Atlas skill</a> to keep the vocabulary between sessions.</p>
+        </article>
+      </section>
+    </section>
   </main>
 
   <dialog id="project-dialog">
@@ -242,7 +317,7 @@
 
   <footer><span>Systems scored within families. Inference services and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; the site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"5f254ce4b007","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","logos.json":"34ac4a7c29b1"}</script>
-  <script src="app-core.js?v=b52c0bd895b4" defer></script>
-  <script src="app.js?v=bcb975286351" defer></script>
+  <script src="app-core.js?v=bc1375e62afc" defer></script>
+  <script src="app.js?v=b32061632e69" defer></script>
 </body>
 </html>

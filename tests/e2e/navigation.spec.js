@@ -16,7 +16,7 @@ test("the primary navigation is plain text with an underline rather than a fille
   expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
 });
 
-test("the four tabs fit on a phone with room to spare", async ({ page }) => {
+test("every tab fits on a phone with room to spare", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto("/");
 
@@ -28,4 +28,34 @@ test("the four tabs fit on a phone with room to spare", async ({ page }) => {
   });
   expect(slack).toBeGreaterThanOrEqual(24);
   expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
+});
+
+test("choosing a view writes a shareable URL and reloading restores it", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator('.tab[data-tab="api"]').click();
+  await expect(page.locator("#api")).toHaveClass(/is-active/);
+  await expect(page).toHaveURL(/view=api/);
+
+  await page.reload();
+  await expect(page.locator("#api")).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="api"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#directory")).not.toHaveClass(/is-active/);
+});
+
+test("returning to the directory drops the view parameter", async ({ page }) => {
+  await page.goto("/?view=taxonomy");
+  await expect(page.locator("#taxonomy")).toHaveClass(/is-active/);
+
+  await page.locator('.tab[data-tab="directory"]').click();
+  await expect(page.locator("#directory")).toHaveClass(/is-active/);
+  await expect(page).not.toHaveURL(/view=/);
+});
+
+test("an unknown view parameter falls back to the directory rather than showing nothing", async ({ page }) => {
+  await page.goto("/?view=records");
+
+  await expect(page.locator("#directory")).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page).not.toHaveURL(/view=/);
 });
