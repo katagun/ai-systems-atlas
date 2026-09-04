@@ -6,14 +6,33 @@ routine acting under docs/adr/023, decides what the evidence means.
 """
 from __future__ import annotations
 
+import argparse
 import base64
 import hashlib
+import json
+import os
+import subprocess
+import sys
+from datetime import date
+from pathlib import Path
 from typing import Any
 
 try:
-    from .update_directory import GitHubGetter
+    from .update_directory import GitHubGetter, github_get
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from update_directory import GitHubGetter
+    from update_directory import GitHubGetter, github_get
+
+ROOT = Path(__file__).resolve().parents[1]
+BUNDLE_PATH = ROOT / ".candidate-evidence" / "bundle.json"
+CATALOG_FILES = (
+    "projects.json", "exclusions.json", "specifications.json",
+    "inference-services.json", "local-runtimes.json",
+)
+COLLECTION_KEYS = {
+    "projects.json": "projects", "exclusions.json": "entries",
+    "specifications.json": "specifications", "inference-services.json": "services",
+    "local-runtimes.json": "runtimes",
+}
 
 ROOT_KEYS = ("repo", "url")
 
@@ -158,3 +177,72 @@ def recheck_candidates(
                     f"{item.get('blob_sha')} but re-fetched {payload.get('sha')}"
                 )
     return problems
+
+
+def previous_candidates(branch: str) -> list[dict[str, Any]]:
+    """Read the queue from a previous unmerged triage branch, if one exists."""
+    if not branch:
+        return []
+    finished = subprocess.run(
+        ["git", "show", f"{branch}:directory/candidates.json"],
+        capture_output=True, text=True, cwd=ROOT,
+    )
+    if finished.returncode != 0:
+        return []
+    return json.loads(finished.stdout).get("candidates") or []
+
+
+def load_catalog(directory: Path) -> dict[str, list[dict[str, Any]]]:
+    catalog: dict[str, list[dict[str, Any]]] = {}
+    for name in CATALOG_FILES:
+        document = json.loads((directory / name).read_text(encoding="utf-8"))
+        catalog[name] = document.get(COLLECTION_KEYS[name]) or []
+    return catalog
+
+
+def run_build(*, candidates, catalog, getter, token, today, limit, bundle_path, previous=()) -> int:
+    """Build the evidence bundle. Returns a process exit code."""
+    carried = carry_forward(candidates, list(previous))
+    if carried:
+        print(f"carried {carried} triage blocks forward from the previous run")
+    selected = select_candidates(candidates, limit)
+    entries = []
+    for item in selected:
+        bundle = fetch_candidate_evidence(item, getter, token, today)
+        if bundle["errors"] and not bundle["documents"]:
+            print(f"error: {candidate_key(item)}: {bundle['errors']}", file=sys.stderr)
+            return 1
+        bundle["cross_collection_hits"] = cross_collection_hits(item, catalog)
+        bundle["class_signals"] = class_signals(item)
+        entries.append(bundle)
+    if bundle_path is not None:
+        bundle_path.parent.mkdir(parents=True, exist_ok=True)
+        bundle_path.write_text(json.dumps({"candidates": entries}, indent=2) + "\n", encoding="utf-8")
+    print(f"prepared evidence for {len(entries)} candidates")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--limit", type=int, default=40)
+    parser.add_argument("--recheck", action="store_true")
+    parser.add_argument("--previous-branch", default="")
+    args = parser.parse_args(argv)
+    directory = ROOT / "directory"
+    candidates = json.loads((directory / "candidates.json").read_text(encoding="utf-8"))["candidates"]
+    token = os.environ.get("GITHUB_TOKEN")
+    today = date.today().isoformat()
+    if args.recheck:
+        problems = recheck_candidates(candidates, github_get, token)
+        for problem in problems:
+            print(f"error: {problem}", file=sys.stderr)
+        return 1 if problems else 0
+    return run_build(
+        candidates=candidates, catalog=load_catalog(directory), getter=github_get,
+        token=token, today=today, limit=args.limit, bundle_path=BUNDLE_PATH,
+        previous=previous_candidates(args.previous_branch),
+    )
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

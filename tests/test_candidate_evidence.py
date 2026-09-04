@@ -143,5 +143,14 @@ class RecheckTests(unittest.TestCase):
         self.assertTrue(any("could not be re-fetched" in problem for problem in problems), problems)
 
 
+class MainTests(unittest.TestCase):
+    def test_an_unreachable_github_fails_before_any_agent_work(self) -> None:
+        def failing(_path, _token):
+            raise OSError("network down")
+        self.assertEqual(1, harness.run_build(
+            candidates=[candidate("a/one")], catalog={}, getter=failing,
+            token=None, today="2026-09-04", limit=5, bundle_path=None))
+
+
 if __name__ == "__main__":
     unittest.main()
