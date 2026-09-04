@@ -2,7 +2,7 @@
 """Gather pinned, verifiable evidence for queued candidates.
 
 This script makes no editorial judgment. It fetches and records; a human, or a
-routine acting under docs/adr/023, decides what the evidence means.
+routine acting under docs/adr/024, decides what the evidence means.
 """
 from __future__ import annotations
 
@@ -33,8 +33,6 @@ COLLECTION_KEYS = {
     "specifications.json": "specifications", "inference-services.json": "services",
     "local-runtimes.json": "runtimes",
 }
-
-ROOT_KEYS = ("repo", "url")
 
 
 def candidate_key(candidate: dict[str, Any]) -> str:

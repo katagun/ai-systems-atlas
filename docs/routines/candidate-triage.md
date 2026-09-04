@@ -5,7 +5,9 @@ description: Sort the Atlas candidate queue and gather pinned evidence, without 
 
 Triage the AI Systems Atlas candidate queue, once.
 
-    cd /Users/shamil/projects/github/embark-delve/agent-systems-atlas
+Work from the root of the Atlas checkout — the directory holding
+`directory/candidates.json`. Every command below is run from there.
+
     uv run python scripts/run_candidate_triage.py prepare
 
 `prepare` refreshes an isolated worktree from `origin/main` and prints its path.
