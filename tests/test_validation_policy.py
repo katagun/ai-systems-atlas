@@ -503,6 +503,41 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("duplicate candidate identity" in error for error in errors), errors)
 
+    def catalog_with_candidate(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog whose queue holds one synthetic candidate."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "candidates.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        candidate = {
+            "repo": "sample/candidate",
+            "name": "candidate",
+            "url": "https://github.com/sample/candidate",
+            "description": "A synthetic candidate used to exercise queue validation.",
+            "proposed_system_family": "agent_system",
+            "proposed_primary_role": "coding_agent",
+            "classification_confidence": 0.8,
+            "github_detected_license": "MIT",
+            "stars": 100,
+            "topics": ["agent"],
+            "status": "provisional",
+            "discovered_at": "2026-09-04",
+            "review_required": ["licensing", "classification", "traits", "editorial_score"],
+        }
+        document["candidates"] = [candidate]
+        if mutate is not None:
+            mutate(candidate)
+        self.write_json(path, document)
+        return validate(root)
+
+    def test_a_candidate_without_a_triage_block_is_valid(self) -> None:
+        errors = self.catalog_with_candidate()
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_a_candidate_rejects_a_field_outside_the_schema(self) -> None:
+        errors = self.catalog_with_candidate(lambda candidate: candidate.update({"surprise": 1}))
+        self.assertTrue(any("fields do not match candidate schema" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

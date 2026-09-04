@@ -99,6 +99,13 @@ INFERENCE_SERVICE_REQUIRED = {
     "score_profile", "score", "terms", "evidence", "verified_at",
 }
 
+CANDIDATE_REQUIRED = {
+    "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
+    "classification_confidence", "github_detected_license", "stars", "topics", "status",
+    "discovered_at", "review_required",
+}
+CANDIDATE_OPTIONAL: set[str] = set()
+
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
     return json.loads((directory / name).read_text(encoding="utf-8"))
@@ -1003,12 +1010,10 @@ def validate_candidates(
     candidate_keys: set[str] = set()
     for candidate in candidate_entries:
         prefix = (candidate.get("repo") or candidate.get("url") or "unknown") if isinstance(candidate, dict) else "unknown"
-        required = {
-            "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
-            "classification_confidence", "github_detected_license", "stars", "topics", "status",
-            "discovered_at", "review_required",
-        }
-        if not isinstance(candidate, dict) or set(candidate) != required:
+        if not isinstance(candidate, dict) or (
+            CANDIDATE_REQUIRED - set(candidate)
+            or set(candidate) - CANDIDATE_REQUIRED - CANDIDATE_OPTIONAL
+        ):
             errors.append(f"candidate {prefix}: fields do not match candidate schema")
             continue
         candidate_repo = candidate["repo"]
