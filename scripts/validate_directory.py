@@ -25,6 +25,9 @@ CATALOG_DOCUMENTS = (
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
+CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
+EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
+BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
 
 TAXONOMY_GROUPS = (
     "system_families",
@@ -1030,6 +1033,36 @@ def validate_triage(
             errors.append(f"candidate {prefix}: triage {field} must be a non-empty string")
     if not valid_date(triage["proposed_at"]):
         errors.append(f"candidate {prefix}: triage proposed_at must be an ISO date")
+    items = triage["evidence"]
+    if not isinstance(items, list) or not items:
+        errors.append(f"candidate {prefix}: triage evidence must be a non-empty list")
+        return
+    for item in items:
+        if not isinstance(item, dict):
+            errors.append(f"candidate {prefix}: every evidence item must be an object")
+            continue
+        allowed = EVIDENCE_REQUIRED | (BLOB_EVIDENCE_REQUIRED if item.get("kind") == "git_blob" else set())
+        if set(item) != allowed:
+            errors.append(f"candidate {prefix}: evidence fields differ from schema")
+            continue
+        if not isinstance(item["label"], str) or not item["label"].strip():
+            errors.append(f"candidate {prefix}: evidence requires a label")
+        if not isinstance(item["url"], str) or not item["url"].startswith("https://"):
+            errors.append(f"candidate {prefix}: evidence requires an authoritative HTTPS URL")
+        if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
+            item["content_sha256"]
+        ):
+            errors.append(f"candidate {prefix}: evidence requires a content_sha256")
+        if not valid_date(item["fetched_at"]):
+            errors.append(f"candidate {prefix}: evidence requires fetched_at")
+        if item["kind"] == "git_blob":
+            blob_sha = item["blob_sha"]
+            if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                errors.append(f"candidate {prefix}: invalid evidence blob SHA")
+            elif item["immutable_url"] != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                errors.append(f"candidate {prefix}: immutable evidence URL must address the blob SHA")
+        elif item["kind"] != "web":
+            errors.append(f"candidate {prefix}: unknown evidence kind {item['kind']!r}")
 
 
 def validate_candidates(

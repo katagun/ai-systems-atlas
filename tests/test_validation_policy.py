@@ -581,6 +581,48 @@ class ValidationPolicyTests(unittest.TestCase):
             lambda triage, _: triage.update({"held_by": "BACKLOG.md — skill packs"}))
         self.assertTrue(any("held_by is required" in error for error in errors), errors)
 
+    def test_triage_evidence_requires_an_https_url(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"url": "http://example.com"}))
+        self.assertTrue(any("evidence requires an authoritative HTTPS URL" in e for e in errors), errors)
+
+    def test_triage_evidence_requires_a_content_hash(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage["evidence"][0].update({"content_sha256": "nope"}))
+        self.assertTrue(any("evidence requires a content_sha256" in e for e in errors), errors)
+
+    def test_triage_evidence_must_not_be_empty(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"evidence": []}))
+        self.assertTrue(any("triage evidence must be a non-empty list" in e for e in errors), errors)
+
+    def test_git_blob_evidence_must_address_the_recorded_sha(self) -> None:
+        def mutate(triage, _candidate):
+            triage["evidence"][0] = {
+                "label": "LICENSE",
+                "url": "https://github.com/sample/candidate/blob/main/LICENSE",
+                "kind": "git_blob",
+                "blob_sha": "0" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "1" * 40,
+                "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-04",
+            }
+        errors = self.candidate_with_triage(mutate)
+        self.assertTrue(any("immutable evidence URL must address the blob SHA" in e for e in errors), errors)
+
+    def test_valid_git_blob_evidence_passes(self) -> None:
+        def mutate(triage, _candidate):
+            triage["evidence"][0] = {
+                "label": "LICENSE",
+                "url": "https://github.com/sample/candidate/blob/main/LICENSE",
+                "kind": "git_blob",
+                "blob_sha": "0" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "0" * 40,
+                "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-04",
+            }
+        errors = self.candidate_with_triage(mutate)
+        self.assertFalse([e for e in errors if "sample/candidate" in e], errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
