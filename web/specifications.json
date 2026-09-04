@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-08-28",
+  "verified_at": "2026-09-03",
   "specifications": [
     {
       "id": "mcp",
@@ -151,7 +151,7 @@
       "does_not_standardize": "A vendor-neutral repository instruction format, a wire protocol, or behavior in agents that do not implement Claude Code's convention.",
       "licenses": ["LicenseRef-Unclear"],
       "license_note": "The product documentation defines the convention, but no standalone reusable format license was identified during review.",
-      "related_specifications": ["agents-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md"],
+      "related_specifications": ["agents-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md", "claude-code-plugins"],
       "evidence": [
         {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
       ],
@@ -361,7 +361,7 @@
       "does_not_standardize": "A marketplace, runtime permission model, inter-agent messaging, or the quality and safety of bundled scripts.",
       "licenses": ["Apache-2.0", "CC-BY-4.0"],
       "license_note": "Repository code is Apache-2.0; the specification documentation is licensed under CC BY 4.0.",
-      "related_specifications": ["agents-md", "claude-md", "agent-plugins"],
+      "related_specifications": ["agents-md", "claude-md", "agent-plugins", "claude-code-plugins"],
       "evidence": [
         {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.mdx", "url": "https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx", "blob_sha": "d9a2db099d905da8b879a5c6f996728073985279", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/d9a2db099d905da8b879a5c6f996728073985279"},
         {"kind": "web", "label": "Current specification", "url": "https://agentskills.io/specification", "verified_at": "2026-08-25"},
@@ -384,12 +384,12 @@
       "stewards": ["Agent Plugins project"],
       "repo": "agentplugins/agent-plugins-spec",
       "url": "https://agent-plugins.org/specification",
-      "description": "An open package format for distributing commands, agents, skills, hooks, and integrations as one installable plugin.",
-      "standardizes": "Plugin manifests, directory layout, component discovery, validation, naming, and composition of agent extensions.",
-      "does_not_standardize": "A plugin marketplace, runtime sandbox, universal permission system, or inter-agent communication.",
+      "description": "An open package format for distributing agent skills and MCP server configuration as one portable, client-neutral plugin.",
+      "standardizes": "The plugin.json manifest, plugin root containment, fixed discovery locations for skills and MCP servers, namespaced client extensions, placeholder expansion, and client conformance requirements.",
+      "does_not_standardize": "A marketplace, runtime sandbox, universal permission system, inter-agent communication, or portable commands, agents, and hooks, which version 1 leaves to namespaced client extensions.",
       "licenses": ["Apache-2.0", "CC-BY-4.0"],
       "license_note": "Schemas and code samples are Apache-2.0; the specification and documentation are CC BY 4.0.",
-      "related_specifications": ["agent-skills"],
+      "related_specifications": ["agent-skills", "claude-code-plugins"],
       "evidence": [
         {"kind": "git_blob", "label": "Published 1.0.0 specification snapshot", "path": "spec/1.0.0.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md", "blob_sha": "c95263bd61fc16608390006bc461e964ce21cd12", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/c95263bd61fc16608390006bc461e964ce21cd12"},
         {"kind": "web", "label": "Published specification", "url": "https://agent-plugins.org/specification", "verified_at": "2026-08-25"}
@@ -399,6 +399,34 @@
         {"license_id": "CC-BY-4.0", "scope": "Specification and documentation", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"}
       ],
       "verified_at": "2026-08-25"
+    },
+    {
+      "id": "claude-code-plugins",
+      "name": "Claude Code Plugins",
+      "short_name": "Claude Code Plugins",
+      "specification_type": "package_format",
+      "scope": "plugin_packaging",
+      "status": "vendor_specific",
+      "current_version": null,
+      "stewards": ["Anthropic"],
+      "repo": "anthropics/claude-code",
+      "url": "https://code.claude.com/docs/en/plugins-reference",
+      "description": "Claude Code's documented plugin package and marketplace convention for installing skills, agents, hooks, and servers as one bundle.",
+      "standardizes": "The optional .claude-plugin/plugin.json manifest and its component path fields, default locations for skills, commands, agents, hooks, MCP servers, LSP servers, and experimental themes and monitors, CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA path expansion, installation scopes, and .claude-plugin/marketplace.json catalog entries and plugin sources.",
+      "does_not_standardize": "A portable contract other clients implement, the SKILL.md format itself, MCP wire behavior, a runtime sandbox or permission model, or plugin behavior in agents that do not implement Claude Code's loader.",
+      "licenses": ["LicenseRef-Unclear", "LicenseRef-Proprietary"],
+      "license_note": "Product documentation defines the convention and no standalone reusable format license was identified during review; the steward's own plugin repository content, including the reviewed marketplace manifest, is reserved under Anthropic's Commercial Terms of Service.",
+      "related_specifications": ["agent-plugins", "agent-skills", "claude-md"],
+      "evidence": [
+        {"kind": "git_blob", "label": "Steward's published marketplace manifest", "path": ".claude-plugin/marketplace.json", "url": "https://github.com/anthropics/claude-code/blob/main/.claude-plugin/marketplace.json", "blob_sha": "30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f"},
+        {"kind": "web", "label": "Plugin manifest schema, component locations, and path expansion", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-03"},
+        {"kind": "web", "label": "Marketplace schema, plugin entries, and plugin sources", "url": "https://code.claude.com/docs/en/plugin-marketplaces", "verified_at": "2026-09-03"}
+      ],
+      "license_evidence": [
+        {"license_id": "LicenseRef-Unclear", "scope": "The plugin and marketplace convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-03"},
+        {"license_id": "LicenseRef-Proprietary", "scope": "anthropics/claude-code repository content supplying the reviewed marketplace manifest", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/anthropics/claude-code/blob/main/LICENSE.md", "blob_sha": "645a5d67c6d1e16437bec850dad5bd3b6c81f77c", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/645a5d67c6d1e16437bec850dad5bd3b6c81f77c"}
+      ],
+      "verified_at": "2026-09-03"
     },
     {
       "id": "webmcp",
