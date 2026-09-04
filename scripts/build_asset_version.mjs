@@ -7,7 +7,7 @@
 // changing any file under web/ that index.html references; `--check`
 // recomputes in memory and fails when the committed page differs.
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,14 +22,22 @@ const REFERENCE = /((?:href|src)=")([\w./-]+)\?v=[^"]*(")/g;
 const DATA_FILES = [
   "projects.json", "taxonomy.json", "license-evidence.json", "specifications.json",
   "inference-services.json", "local-runtimes.json", "logos.json",
+  "app/systems.json", "app/inference.json", "app/runtimes.json", "app/specifications.json",
+  "app/search/systems.json", "app/search/inference.json",
+  "app/search/runtimes.json", "app/search/specifications.json",
 ];
+
+// 271 detail files would put 8-10 KB of hashes in index.html to save it, so they
+// share one stamp over the whole tree. A change to any record busts them all,
+// which is the right trade for files fetched on demand and rarely.
+const DETAIL_VERSION_KEY = "app/detail";
 const DATA_VERSIONS = /(<script type="application\/json" id="data-versions">)[^<]*(<\/script>)/;
 
 export function assetVersion(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 12);
 }
 
-export function stampAssetVersions(html, readAsset) {
+export function stampAssetVersions(html, readAsset, readDetailTree) {
   const stamped = html.replace(
     REFERENCE,
     (_, open, file, close) => `${open}${file}?v=${assetVersion(readAsset(file))}${close}`,
@@ -37,13 +45,27 @@ export function stampAssetVersions(html, readAsset) {
   const versions = Object.fromEntries(
     DATA_FILES.map(file => [file, assetVersion(readAsset(file))]),
   );
+  const detailFiles = readDetailTree();
+  versions[DETAIL_VERSION_KEY] = assetVersion(
+    Buffer.concat(detailFiles.flatMap(([path, contents]) => [Buffer.from(path), contents])),
+  );
   return stamped.replace(DATA_VERSIONS, (_, open, close) => `${open}${JSON.stringify(versions)}${close}`);
 }
 
-export { DATA_FILES };
+export { DATA_FILES, DETAIL_VERSION_KEY };
+
+const readDetailTree = () => {
+  const detailRoot = join(root, "web", "app", "detail");
+  if (!existsSync(detailRoot)) return [];
+  return readdirSync(detailRoot, { recursive: true })
+    .map(name => join(detailRoot, name))
+    .filter(path => statSync(path).isFile())
+    .sort()
+    .map(path => [path, readFileSync(path)]);
+};
 
 const committed = readFileSync(indexPath, "utf8");
-const stamped = stampAssetVersions(committed, file => readFileSync(join(root, "web", file)));
+const stamped = stampAssetVersions(committed, file => readFileSync(join(root, "web", file)), readDetailTree);
 if (process.argv.includes("--check")) {
   if (stamped !== committed) {
     console.error("web/index.html references an asset under a stale version; run node scripts/build_asset_version.mjs");

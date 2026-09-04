@@ -469,11 +469,26 @@ test("every catalog file app.js fetches is stamped with its content hash so the 
   const stamped = JSON.parse(indexHTML().match(/<script type="application\/json" id="data-versions">([^<]*)<\/script>/)[1]);
   const fetched = [...fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8")
     .matchAll(/loadJSON\("([\w./-]+)"\)/g)].map(match => match[1]);
-  assert.deepEqual(fetched.sort(), Object.keys(stamped).sort(), "app.js fetches a catalog file index.html does not stamp");
+  for (const file of fetched) {
+    assert.ok(file in stamped, `app.js fetches ${file} but index.html does not stamp it`);
+  }
   for (const [file, version] of Object.entries(stamped)) {
+    if (file === "app/detail") continue; // one shared stamp over a directory, not a single file's hash
     const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
     assert.equal(version, digest, `${file} is stamped ${version} but hashes to ${digest}; run node scripts/build_asset_version.mjs`);
   }
+});
+
+test("every app payload class is versioned, with one shared stamp for detail", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+  for (const collection of ["systems", "inference", "runtimes", "specifications"]) {
+    assert.match(versions[`app/${collection}.json`], /^[0-9a-f]{12}$/);
+    assert.match(versions[`app/search/${collection}.json`], /^[0-9a-f]{12}$/);
+  }
+  assert.match(versions["app/detail"], /^[0-9a-f]{12}$/);
+  const perRecord = Object.keys(versions).filter(key => key.startsWith("app/detail/"));
+  assert.deepEqual(perRecord, [], "detail files share one stamp; they are not versioned individually");
 });
 
 test("the app does not disable the HTTP cache it just earned a content hash for", () => {
