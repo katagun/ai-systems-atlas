@@ -8,5 +8,30 @@ license = "Apache-2.0"
 authors = [{ name = "Shamil Assylbekov" }]
 dependencies = []
 
+[dependency-groups]
+dev = ["ruff==0.16.6"]
+
 [tool.uv]
 package = false
+
+[tool.ruff]
+# py311 is the floor pyproject declares, and it is enforced: an f-string trick
+# that only parses on 3.12 shipped undetected because CI only ever ran 3.12.
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "F",    # pyflakes: undefined names, unused imports and variables
+    "E4",   # pycodestyle: import placement
+    "E7",   # pycodestyle: statement-level mistakes
+    "E9",   # pycodestyle: syntax and IO errors
+    "W",    # pycodestyle warnings
+    "I",    # import sorting
+    "UP",   # pyupgrade: modern syntax for the declared target version
+    "B",    # bugbear: likely bugs and footguns
+    "SIM",  # simplifiable constructs
+    "RUF",  # ruff's own checks
+]
+# E501 is deliberately absent, matching ruff's own default. The catalog
+# validators carry long quoted error messages, and rewrapping them to satisfy a
+# column limit would hurt the diffs without catching a single defect.

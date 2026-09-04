@@ -1,28 +1,45 @@
 from __future__ import annotations
 
 import json
-import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 
-from scripts.validate_directory import validate
+from scripts.validate_directory import CATALOG_DOCUMENTS, PUBLISHED_DATA, validate
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class ValidationPolicyTests(unittest.TestCase):
+    # validate() reads exactly these files. Copying the whole tree instead meant
+    # 295 files and 271 directories per test, almost all of them share pages the
+    # validator never opens, for a suite that mutates one JSON document at a time.
+    _catalog: ClassVar[dict[str, bytes]] = {}
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._catalog = {
+            f"directory/{name}": (ROOT / "directory" / name).read_bytes()
+            for name in CATALOG_DOCUMENTS
+        }
+        cls._catalog.update({
+            f"web/{name}": (ROOT / "web" / name).read_bytes() for name in PUBLISHED_DATA
+        })
+
     def temporary_catalog(self) -> tuple[tempfile.TemporaryDirectory, Path]:
         temporary = tempfile.TemporaryDirectory()
         root = Path(temporary.name)
-        shutil.copytree(ROOT / "directory", root / "directory")
-        shutil.copytree(ROOT / "web", root / "web")
+        (root / "directory").mkdir()
+        (root / "web").mkdir()
+        for relative, payload in self._catalog.items():
+            (root / relative).write_bytes(payload)
         return temporary, root
 
     def write_json(self, path: Path, value: dict) -> None:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    SAMPLE_RUNTIME = {
+    SAMPLE_RUNTIME: ClassVar[dict] = {
         "id": "sample-runtime",
         "name": "Sample Runtime",
         "maintainer": "Sample Maintainer",
@@ -186,6 +203,33 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertTrue(
             any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
         )
+
+    def catalog_with_malformed_record(self, document: str, key: str, entry: object) -> list[str]:
+        """Validate a temporary catalog whose collection holds a non-object entry."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / document
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value[key].append(entry)
+        self.write_json(path, value)
+        self.write_json(root / "web" / document, value)
+        return validate(root)
+
+    def test_a_non_object_project_is_reported_rather_than_crashing_the_run(self) -> None:
+        """A malformed entry must not deny the operator every other error in the catalog."""
+        errors = self.catalog_with_malformed_record("projects.json", "projects", "not a project")
+        self.assertTrue(any("every project must be an object" in error for error in errors), errors)
+
+    def test_a_non_object_record_never_crashes_any_collection(self) -> None:
+        for document, key, message in (
+            ("projects.json", "projects", "every project must be an object"),
+            ("specifications.json", "specifications", "every specification must be an object"),
+            ("inference-services.json", "services", "every service must be an object"),
+            ("local-runtimes.json", "runtimes", "every runtime must be an object"),
+        ):
+            with self.subTest(document=document):
+                errors = self.catalog_with_malformed_record(document, key, ["not", "a", "record"])
+                self.assertTrue(any(message in error for error in errors), errors)
 
     def catalog_with_superseded(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose first project is marked superseded."""

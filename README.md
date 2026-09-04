@@ -10,11 +10,13 @@ The repository contains the canonical editorial catalog, its validation and refr
 
 ```bash
 uv sync --locked
+uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 node --test tests/test_web.js
 npm ci
 npx playwright install chromium
+npm run lint:js
 npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
