@@ -1579,6 +1579,56 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": null,
+      "name": "AlphaEvolve",
+      "url": "https://docs.cloud.google.com/gemini/enterprise/docs/alphaevolve/developer-guide/overview",
+      "description": "Google Cloud's managed evolutionary coding agent, generally available since 2026-07-09 under Gemini Enterprise; it iterates generations of candidate programs against caller-supplied evaluation metrics to discover optimised algorithms, driven through a documented API and a first-party client library.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "evolutionary-search",
+        "gemini-enterprise",
+        "managed"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "algorithmicsuperintelligence/openevolve",
+      "name": "OpenEvolve",
+      "url": "https://github.com/algorithmicsuperintelligence/openevolve",
+      "description": "Apache-2.0 open implementation of AlphaEvolve that mutates candidate programs with an LLM ensemble, executes and scores them through caller-supplied evaluators with cascade stages, timeouts, and retries, and keeps survivors in a MAP-Elites archive across migrating islands.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 7319,
+      "topics": [
+        "alphaevolve",
+        "coding-agent",
+        "evolutionary-algorithms",
+        "llm-ensemble"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ],
   "generated_at": "2026-09-02"
