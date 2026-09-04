@@ -254,6 +254,38 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertGreaterEqual(confidence, 0.84)
         self.assertEqual("agent_system", candidate["proposed_system_family"])
 
+    def test_autonomous_science_systems_reach_the_candidate_queue(self) -> None:
+        """ADR 023 routes discovery systems to research_agent, so discovery must see them.
+
+        The vocabulary this class uses says nothing about memory, retrieval, or
+        agents, so before ADR 023 every one of these scored 0.0 and was dropped --
+        including the published Kosmos record's own paper title.
+        """
+        cases = (
+            "Kosmos: an AI Scientist for autonomous discovery",
+            "An AI scientist that generates and tests hypotheses over your data",
+            "Autonomous discovery platform for scientific research",
+            "Fully automated open-ended scientific discovery",
+        )
+
+        for description in cases:
+            with self.subTest(description=description):
+                role, confidence = update_directory.classify(description)
+                self.assertEqual("research_agent", role)
+                self.assertGreaterEqual(confidence, 0.75)
+
+    def test_science_wording_does_not_capture_ordinary_research_agents(self) -> None:
+        """The existing research-agent and orchestrator branches keep their answers."""
+        role, _confidence = update_directory.classify(
+            "Autonomous research agent that produces cited reports"
+        )
+        self.assertEqual("research_agent", role)
+
+        role, _confidence = update_directory.classify(
+            "A multi-agent orchestrator for handoffs and shared execution"
+        )
+        self.assertEqual("multi_agent_orchestrator", role)
+
     def test_agent_harness_does_not_need_memory_wording(self) -> None:
         role, confidence = update_directory.classify(
             "An agent harness with sessions, tools, plugins, and an interactive runtime"
