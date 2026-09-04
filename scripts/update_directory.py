@@ -17,11 +17,12 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import xml.parsers.expat as expat
+from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 try:
     from .discovery_sources import (
@@ -31,7 +32,11 @@ try:
     )
     from .sync_web_data import main as sync_web_data
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from discovery_sources import canonical_url_key, https_url_host, validate_discovery_sources
+    from discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
     from sync_web_data import main as sync_web_data
 
 ROOT = Path(__file__).resolve().parents[1]

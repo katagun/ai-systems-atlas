@@ -7,15 +7,19 @@ Use this document for refreshes, queue review, synchronization, and incident rec
 ```bash
 uv run python scripts/sync_web_data.py
 uv run python scripts/build_share_pages.py
+uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
+npm run lint:js
 ```
 
 Synchronization and share-page generation are write operations; the remaining commands are verification.
+
+`ruff` is pinned in the `dev` dependency group and installed by `uv sync`. Its rule set is configured in `pyproject.toml`; `eslint.config.mjs` covers the browser bundle, the build scripts, and the test suites. Both run in `verify.yml`. Ruff enforces the `requires-python` floor, which matters because CI only ever runs one Python version.
 
 ## Metadata refresh
 

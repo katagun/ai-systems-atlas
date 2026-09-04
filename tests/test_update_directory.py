@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import copy
+import unittest
 import urllib.error
 import urllib.request
-import unittest
 from unittest import mock
 
 from scripts import update_directory

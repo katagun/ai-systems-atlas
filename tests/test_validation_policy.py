@@ -1,28 +1,45 @@
 from __future__ import annotations
 
 import json
-import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 
-from scripts.validate_directory import validate
+from scripts.validate_directory import CATALOG_DOCUMENTS, PUBLISHED_DATA, validate
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class ValidationPolicyTests(unittest.TestCase):
+    # validate() reads exactly these files. Copying the whole tree instead meant
+    # 295 files and 271 directories per test, almost all of them share pages the
+    # validator never opens, for a suite that mutates one JSON document at a time.
+    _catalog: ClassVar[dict[str, bytes]] = {}
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._catalog = {
+            f"directory/{name}": (ROOT / "directory" / name).read_bytes()
+            for name in CATALOG_DOCUMENTS
+        }
+        cls._catalog.update({
+            f"web/{name}": (ROOT / "web" / name).read_bytes() for name in PUBLISHED_DATA
+        })
+
     def temporary_catalog(self) -> tuple[tempfile.TemporaryDirectory, Path]:
         temporary = tempfile.TemporaryDirectory()
         root = Path(temporary.name)
-        shutil.copytree(ROOT / "directory", root / "directory")
-        shutil.copytree(ROOT / "web", root / "web")
+        (root / "directory").mkdir()
+        (root / "web").mkdir()
+        for relative, payload in self._catalog.items():
+            (root / relative).write_bytes(payload)
         return temporary, root
 
     def write_json(self, path: Path, value: dict) -> None:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    SAMPLE_RUNTIME = {
+    SAMPLE_RUNTIME: ClassVar[dict] = {
         "id": "sample-runtime",
         "name": "Sample Runtime",
         "maintainer": "Sample Maintainer",
