@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-02",
+  "verified_at": "2026-09-03",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -2850,6 +2850,60 @@
           "kind": "web_terms",
           "url": "https://poolside.ai/legal/eula",
           "verified_at": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "project_id": "antigravity",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Google Antigravity desktop application, CLI, and editor extensions under the product's own additional terms, which carry no printed effective date and incorporate the Google Terms of Service; selecting a Claude model additionally binds the user to Anthropic's commercial terms, and access through Gemini Enterprise is governed by Google Cloud terms instead",
+          "kind": "web_terms",
+          "url": "https://antigravity.google/terms",
+          "verified_at": "2026-09-03"
+        }
+      ]
+    },
+    {
+      "project_id": "cursor",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Cursor editor, CLI, Cloud Agents, and SDK under the Anysphere, Inc. terms of service last updated 2026-09-03; enterprise use is governed by the separately published master services agreement and data processing addendum",
+          "kind": "web_terms",
+          "url": "https://cursor.com/terms-of-service",
+          "verified_at": "2026-09-03"
+        }
+      ]
+    },
+    {
+      "project_id": "devin-desktop",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Devin Desktop under the Cognition AI, Inc. platform terms of service last updated 2026-06-30, whose section 14 names the product \"Devin Desktop (fka Windsurf)\" and preserves an Exafunction, Inc. carve-out for users who licensed the predecessor; the legacy Windsurf terms URL now redirects to this document",
+          "kind": "web_terms",
+          "url": "https://cognition.com/legal/platform-terms-of-service",
+          "verified_at": "2026-09-03"
+        }
+      ]
+    },
+    {
+      "project_id": "shinkaevolve",
+      "repo": "SakanaAI/ShinkaEvolve",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "ShinkaEvolve repository and the shinka-evolve distribution published from it",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SakanaAI/ShinkaEvolve/blob/main/LICENSE",
+          "blob_sha": "1684699ee4d8e98bd3df9f0c4e405fc620139f4c",
+          "immutable_url": "https://api.github.com/repos/SakanaAI/ShinkaEvolve/git/blobs/1684699ee4d8e98bd3df9f0c4e405fc620139f4c"
         }
       ]
     }

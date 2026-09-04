@@ -21,6 +21,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RECORD_MARKS = {
   // Systems — agent
   "amazon-quick": "lobe:aws",
+  antigravity: "lobe:antigravity",
   autogen: "lobe:microsoft",
   "bedrock-agentcore": "lobe:bedrock",
   chatgpt: "lobe:openai",
@@ -31,9 +32,11 @@ const RECORD_MARKS = {
   cline: "lobe:cline",
   codex: "lobe:codex",
   crewai: "lobe:crewai",
+  cursor: "lobe:cursor",
   deepseek: "lobe:deepseek",
   "deepseek-harness": "lobe:deepseek",
   devin: "lobe:devin",
+  "devin-desktop": "lobe:devin",
   dify: "lobe:dify",
   "gemini-apps": "lobe:gemini",
   "gemini-cli": "lobe:geminicli",

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-08-30",
+  "updated_at": "2026-09-03",
   "candidates": [
     {
       "repo": "agiresearch/A-mem",
@@ -382,29 +382,6 @@
     },
     {
       "repo": null,
-      "name": "Cursor",
-      "url": "https://cursor.com/",
-      "description": "Proprietary agentic code editor with repository context, tool use, and delegated coding workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "ide"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
       "name": "Amazon Q Developer",
       "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
       "description": "AWS coding agent that understands workspaces, plans changes, edits files, suggests or runs shell commands, generates tests, and performs software upgrades.",
@@ -564,29 +541,6 @@
         "local-storage",
         "semantic-search",
         "windows"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Windsurf",
-      "url": "https://windsurf.com/",
-      "description": "Proprietary agentic development environment with code editing, terminal tools, and project context.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "ide"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1596,6 +1550,29 @@
       "topics": [],
       "status": "provisional",
       "discovered_at": "2026-09-02",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "google-antigravity/antigravity-sdk-python",
+      "name": "Antigravity SDK",
+      "url": "https://github.com/google-antigravity/antigravity-sdk-python",
+      "description": "Apache-2.0 Python framework for building custom agents on Google's Antigravity runtime; its Agent class discovers and drives the closed Antigravity binary rather than shipping an agent loop of its own.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.75,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3279,
+      "topics": [
+        "agent-framework",
+        "sdk"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
       "review_required": [
         "licensing",
         "classification",
