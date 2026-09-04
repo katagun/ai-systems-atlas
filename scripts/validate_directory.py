@@ -1031,6 +1031,16 @@ def validate_triage(
     for field in ("rule", "proposer"):
         if not isinstance(triage[field], str) or not triage[field].strip():
             errors.append(f"candidate {prefix}: triage {field} must be a non-empty string")
+    finding = triage["finding"]
+    if not isinstance(finding, str) or not finding.strip():
+        errors.append(f"candidate {prefix}: triage requires a finding")
+    else:
+        classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
+        leaked = sorted(name for name in classifying if name in finding)
+        if leaked:
+            errors.append(
+                f"candidate {prefix}: finding must not classify; it names taxonomy ids {leaked}"
+            )
     if not valid_date(triage["proposed_at"]):
         errors.append(f"candidate {prefix}: triage proposed_at must be an ISO date")
     items = triage["evidence"]

@@ -623,6 +623,20 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.candidate_with_triage(mutate)
         self.assertFalse([e for e in errors if "sample/candidate" in e], errors)
 
+    def test_a_finding_may_not_name_a_taxonomy_role(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": "This is clearly a coding_agent."}))
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
+    def test_a_finding_may_quote_prose_that_resembles_a_role(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": 'The README calls it a "coding agent".'}))
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_a_finding_must_be_a_non_empty_string(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"finding": "  "}))
+        self.assertTrue(any("triage requires a finding" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
