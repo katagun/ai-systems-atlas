@@ -59,6 +59,41 @@ Never copy proposed classification into the catalog without human confirmation. 
 
 Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
 
+## Review a triage batch
+
+`scripts/run_candidate_triage.py finish` commits proposed `triage` blocks to the
+`triage/pending` branch in an isolated worktree; it never pushes and never touches `main`
+or `origin`. To review a run:
+
+1. See what it proposed: `git log --oneline main..triage/pending` and
+   `git diff main..triage/pending -- directory/candidates.json`.
+2. Treat every proposal as evidence, never a conclusion. Check the sources a `triage`
+   block cites — the pinned `evidence` items and the quoted `finding` — not the `verdict`
+   it reached. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md).
+3. Re-verify the pinned evidence by hand at any time with
+   `uv run python scripts/build_candidate_evidence.py --recheck`, which re-fetches every
+   cited document and fails, naming the citation, if a hash no longer matches.
+
+Then, per candidate:
+
+- **Accepting `out_of_scope`:** follow the exclusion workflow in `CURATION.md` — write
+  the exclusion and remove the candidate in the same change. The `triage` block is
+  removed with the candidate; nothing separate needs deleting.
+- **Accepting `held`:** keep the candidate, keep its `triage.held_by`, and record the
+  decision in `BACKLOG.md` so the open question stays visible outside the queue.
+- **Accepting `review_ready`:** follow "Review a candidate" above, using the block's
+  `finding` as research to check against its cited sources, not as a pre-made editorial
+  conclusion to copy in.
+- **Rejecting a proposal:** edit or delete its `triage` block directly in
+  `directory/candidates.json`. The routine only ever adds a block to a candidate that
+  lacks one — it never overwrites an existing block — so a rejected or corrected block
+  stays exactly as a human left it until the candidate is otherwise resolved.
+
+To install the routine as a scheduled task, sync `docs/routines/candidate-triage.md` to
+`~/.claude/scheduled-tasks/candidate-triage/SKILL.md` and schedule it for Tuesday morning
+local time. Scheduled tasks only run while the desktop app is open; a missed run catches
+up the next time the app launches, so a run is not guaranteed at the exact scheduled time.
+
 ## Review an inference service
 
 Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.
