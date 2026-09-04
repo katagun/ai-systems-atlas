@@ -204,6 +204,33 @@ class ValidationPolicyTests(unittest.TestCase):
             any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
         )
 
+    def catalog_with_malformed_record(self, document: str, key: str, entry: object) -> list[str]:
+        """Validate a temporary catalog whose collection holds a non-object entry."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / document
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value[key].append(entry)
+        self.write_json(path, value)
+        self.write_json(root / "web" / document, value)
+        return validate(root)
+
+    def test_a_non_object_project_is_reported_rather_than_crashing_the_run(self) -> None:
+        """A malformed entry must not deny the operator every other error in the catalog."""
+        errors = self.catalog_with_malformed_record("projects.json", "projects", "not a project")
+        self.assertTrue(any("every project must be an object" in error for error in errors), errors)
+
+    def test_a_non_object_record_never_crashes_any_collection(self) -> None:
+        for document, key, message in (
+            ("projects.json", "projects", "every project must be an object"),
+            ("specifications.json", "specifications", "every specification must be an object"),
+            ("inference-services.json", "services", "every service must be an object"),
+            ("local-runtimes.json", "runtimes", "every runtime must be an object"),
+        ):
+            with self.subTest(document=document):
+                errors = self.catalog_with_malformed_record(document, key, ["not", "a", "record"])
+                self.assertTrue(any(message in error for error in errors), errors)
+
     def catalog_with_superseded(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose first project is marked superseded."""
         temporary, root = self.temporary_catalog()
