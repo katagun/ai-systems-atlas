@@ -4,7 +4,9 @@
 
 ## Data
 
-Published JSON, no auth, no rate limit — fetch directly.
+Published JSON, no auth, no rate limit — fetch directly. Licensed under CC BY 4.0:
+reuse it, including commercially, with credit to AI Systems Atlas
+(https://peacefulcoexistance.com/) and a link to the licence.
 
 - [projects.json](https://peacefulcoexistance.com/projects.json): reviewed agent, memory, and assistant systems with editorial scores
 - [taxonomy.json](https://peacefulcoexistance.com/taxonomy.json): enum values, license identifiers, and score-profile definitions used by every other file

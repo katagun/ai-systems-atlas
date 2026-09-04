@@ -80,4 +80,9 @@ The weekly workflow refreshes live metadata, preserves candidate and license-rev
 
 ## License
 
-Apache-2.0. Project names and descriptions remain the property of their respective projects and are used for factual identification and commentary.
+The repository carries two licences, because the code and the catalog are different kinds of work.
+
+- **Software** — `scripts/`, `web/*.js`, `web/*.css`, `tests/` — is [Apache-2.0](LICENSE).
+- **The curated catalog** — `directory/*.json` and its synchronized `web/*.json` copies — is [CC BY 4.0](LICENSE-DATA). Share it and adapt it, including commercially; credit the Atlas and link the licence.
+
+Project names, descriptions, and marks remain the property of their respective projects and are used for factual identification and commentary. Linked licence and terms documents stay under the terms of the projects that published them.

@@ -465,6 +465,22 @@ test("index.html references each web asset under its content hash so a change is
   }
 });
 
+test("every catalog file app.js fetches is stamped with its content hash so the data can be cached", () => {
+  const stamped = JSON.parse(indexHTML().match(/<script type="application\/json" id="data-versions">([^<]*)<\/script>/)[1]);
+  const fetched = [...fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8")
+    .matchAll(/loadJSON\("([\w./-]+)"\)/g)].map(match => match[1]);
+  assert.deepEqual(fetched.sort(), Object.keys(stamped).sort(), "app.js fetches a catalog file index.html does not stamp");
+  for (const [file, version] of Object.entries(stamped)) {
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} is stamped ${version} but hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+  }
+});
+
+test("the app does not disable the HTTP cache it just earned a content hash for", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  assert.ok(!/cache:\s*"no-store"/.test(app), "app.js re-disables caching; the ?v= stamp already guarantees freshness");
+});
+
 test("the GitHub link is an icon with an accessible name rather than visible text", () => {
   const link = indexHTML().match(/<a class="github-link"[^>]*>([\s\S]*?)<\/a>/);
   assert.ok(link, "no .github-link anchor in index.html");
