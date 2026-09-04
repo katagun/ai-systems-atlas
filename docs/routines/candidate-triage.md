@@ -28,7 +28,7 @@ block is gathered evidence and a routing proposal, never an editorial conclusion
 human decides what your evidence means.
 
 NEVER FETCH ANYTHING. You have no need to: `prepare` already fetched and hashed every
-document, and recorded the blob SHA for each licence. `finish` re-fetches every citation
+document, and recorded the blob SHA for each licence. `finish` re-fetches every citation you add or change
 and compares its `url`, its `content_sha256`, and its `blob_sha` against what the document
 actually is, so a citation you did not copy verbatim out of the bundle fails the run. Cite
 the bundle and nothing else.

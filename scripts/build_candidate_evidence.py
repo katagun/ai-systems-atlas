@@ -154,21 +154,40 @@ def fetch_candidate_evidence(
     return bundle
 
 
+def blocks_to_recheck(
+    candidates: list[dict[str, Any]], baseline: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Candidates whose triage block this run introduced or changed.
+
+    Judged by comparing against a reference queue, never by a date. `proposed_at` is
+    written by the agent being policed, so scoping on it let a back-dated block skip
+    verification entirely — the guard could be switched off by the thing it guards.
+    """
+    prior = {
+        candidate_key(item): item.get("triage") for item in baseline if isinstance(item, dict)
+    }
+    return [
+        item for item in candidates
+        if isinstance(item.get("triage"), dict)
+        and item["triage"] != prior.get(candidate_key(item))
+    ]
+
+
 def recheck_candidates(
-    candidates: list[dict[str, Any]], getter: GitHubGetter, token: str | None, today: str
+    candidates: list[dict[str, Any]],
+    getter: GitHubGetter,
+    token: str | None,
+    baseline: list[dict[str, Any]],
 ) -> list[str]:
     """Re-fetch this run's cited documents and confirm they still hash to what was recorded.
 
-    Scoped to blocks proposed today, which are exactly the ones this run wrote. An older
-    block describes a document as it stood when a human accepted it; re-verifying it here
-    would turn ordinary upstream drift — a README edited after the fact — into a guard
-    failure that no triage run can clear, deadlocking the routine permanently.
+    Scoped to blocks this run introduced or changed. A block already on the reference
+    describes a document as a human accepted it; re-verifying it would turn ordinary
+    upstream drift — a README edited afterwards — into a guard failure no run can clear.
     """
     problems: list[str] = []
-    for candidate in candidates:
-        triage = candidate.get("triage")
-        if not isinstance(triage, dict) or triage.get("proposed_at") != today:
-            continue
+    for candidate in blocks_to_recheck(candidates, baseline):
+        triage = candidate["triage"]
         repo = candidate.get("repo")
         evidence = triage.get("evidence") or []
         if not isinstance(evidence, list):
@@ -317,6 +336,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int, default=40)
     parser.add_argument("--recheck", action="store_true")
     parser.add_argument("--previous-branch", default="")
+    parser.add_argument("--baseline-ref", default="origin/main")
     args = parser.parse_args(argv)
     directory = ROOT / "directory"
     candidates_path = directory / "candidates.json"
@@ -324,9 +344,15 @@ def main(argv: list[str] | None = None) -> int:
     token = github_token()
     today = date.today().isoformat()
     if args.recheck:
-        problems = recheck_candidates(candidates, github_get, token, today)
+        baseline = previous_candidates(args.baseline_ref)
+        scoped = blocks_to_recheck(candidates, baseline)
+        problems = recheck_candidates(candidates, github_get, token, baseline)
         for problem in problems:
             print(f"error: {problem}", file=sys.stderr)
+        cited = sum(len(item["triage"].get("evidence") or []) for item in scoped)
+        # Say what was verified. A silent "0 problems" reads identically whether the
+        # citations held up or whether nothing was examined at all.
+        print(f"rechecked {cited} citations across {len(scoped)} candidates")
         return 1 if problems else 0
     return run_build(
         candidates=candidates, catalog=load_catalog(directory), getter=github_get,
