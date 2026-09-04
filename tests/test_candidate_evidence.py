@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from scripts import build_candidate_evidence as harness
 from scripts import run_candidate_triage as runner
@@ -241,6 +242,17 @@ class BlastRadiusTests(unittest.TestCase):
     def test_an_empty_diff_is_clean(self) -> None:
         self.assertEqual([], runner.unexpected_changes(""))
 
+    def test_a_rename_from_the_allowed_path_is_reported(self) -> None:
+        porcelain = "R  directory/candidates.json -> scratch.txt\n"
+        self.assertEqual(["scratch.txt"], runner.unexpected_changes(porcelain))
+
+    def test_a_staged_and_modified_allowed_path_is_clean(self) -> None:
+        self.assertEqual([], runner.unexpected_changes("MM directory/candidates.json\n"))
+
+    def test_a_path_containing_spaces_is_reported(self) -> None:
+        porcelain = " M directory/my file.json\n"
+        self.assertEqual(["directory/my file.json"], runner.unexpected_changes(porcelain))
+
 
 class FinishTests(unittest.TestCase):
     def test_finish_refuses_when_a_forbidden_file_changed(self) -> None:
@@ -254,6 +266,135 @@ class FinishTests(unittest.TestCase):
 
         self.assertEqual(1, runner.finish(run=fake_run))
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_finish_commits_when_every_check_passes(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            return 0, ""
+
+        self.assertEqual(0, runner.finish(run=fake_run))
+        self.assertIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_finish_reports_no_proposals_when_the_worktree_is_clean(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            return 0, ""
+
+        self.assertEqual(0, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+
+    def test_a_failing_check_short_circuits_before_any_commit(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if any("build_candidate_evidence.py" in part for part in command):
+                return 1, "recheck failed"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+
+    def test_finish_does_not_commit_when_git_add_fails(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "add"]:
+                return 1, "fatal: could not add"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_finish_does_not_report_success_when_checkout_fails(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "checkout"]:
+                return 1, "fatal: branch is checked out elsewhere"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_finish_does_not_report_success_when_commit_fails(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "commit"]:
+                return 1, "fatal: nothing to commit"
+            return 0, ""
+
+        self.assertEqual(1, runner.finish(run=fake_run))
+
+
+class PrepareTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        prompt_path = Path(self.tmp.name) / "candidate-triage.md"
+        installed_path = Path(self.tmp.name) / "SKILL.md"
+        prompt_path.write_text("routine body\n", encoding="utf-8")
+        installed_path.write_text("routine body\n", encoding="utf-8")
+        self.prompt_path = prompt_path
+        self.installed_path = installed_path
+        for patcher in (
+            mock.patch.object(runner, "PROMPT", prompt_path),
+            mock.patch.object(runner, "INSTALLED_PROMPT", installed_path),
+        ):
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def test_a_failed_worktree_add_aborts_and_never_runs_the_harness(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "worktree", "add"]:
+                return 1, "fatal: could not create worktree"
+            return 0, ""
+
+        self.assertEqual(1, runner.prepare(limit=5, run=fake_run))
+        self.assertFalse(any("build_candidate_evidence.py" in part for call in calls for part in call))
+
+    def test_a_failed_worktree_remove_is_tolerated_and_the_run_continues(self) -> None:
+        calls = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "worktree", "remove"]:
+                return 1, "fatal: no such worktree"
+            return 0, ""
+
+        self.assertEqual(0, runner.prepare(limit=5, run=fake_run))
+        self.assertTrue(any("build_candidate_evidence.py" in part for call in calls for part in call))
+
+    def test_prompt_drift_aborts_before_any_git_command_runs(self) -> None:
+        self.installed_path.unlink()
+
+        def fail_if_called(command: list[str], _cwd=None) -> tuple[int, str]:
+            self.fail(f"no command should run once the prompt has drifted, got: {command}")
+
+        self.assertEqual(1, runner.prepare(limit=5, run=fail_if_called))
 
 
 class PromptDriftTests(unittest.TestCase):

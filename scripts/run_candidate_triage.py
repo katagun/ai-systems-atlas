@@ -63,14 +63,15 @@ def prepare(*, limit: int, run=shell) -> int:
     if drift:
         print(f"error: {drift}", file=sys.stderr)
         return 1
-    for command in (
-        ["git", "fetch", "--quiet", "origin"],
-        ["git", "worktree", "remove", "--force", str(WORKTREE)],
-        ["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), "origin/main"],
-    ):
-        code, output = run(command, ROOT)
+    steps = (
+        (["git", "fetch", "--quiet", "origin"], False),
         # Removing a worktree that does not exist is expected on a first run.
-        if code != 0 and command[1] != "worktree":
+        (["git", "worktree", "remove", "--force", str(WORKTREE)], True),
+        (["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), "origin/main"], False),
+    )
+    for command, tolerate_failure in steps:
+        code, output = run(command, ROOT)
+        if code != 0 and not tolerate_failure:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
             return 1
     code, output = run([
@@ -101,9 +102,15 @@ def finish(*, run=shell) -> int:
         if code != 0:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
             return 1
-    run(["git", "add", "directory/candidates.json"], WORKTREE)
-    run(["git", "checkout", "-B", "triage/pending"], WORKTREE)
-    run(["git", "commit", "-m", f"Propose candidate triage for {date.today().isoformat()}"], WORKTREE)
+    for command in (
+        ["git", "add", "directory/candidates.json"],
+        ["git", "checkout", "-B", "triage/pending"],
+        ["git", "commit", "-m", f"Propose candidate triage for {date.today().isoformat()}"],
+    ):
+        code, output = run(command, WORKTREE)
+        if code != 0:
+            print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
+            return 1
     print("committed triage proposals")
     return 0
 
