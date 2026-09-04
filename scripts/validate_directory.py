@@ -104,7 +104,11 @@ CANDIDATE_REQUIRED = {
     "classification_confidence", "github_detected_license", "stars", "topics", "status",
     "discovered_at", "review_required",
 }
-CANDIDATE_OPTIONAL: set[str] = set()
+CANDIDATE_OPTIONAL = {"triage"}
+
+TRIAGE_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
+TRIAGE_OPTIONAL = {"held_by"}
+TRIAGE_VERDICTS = {"out_of_scope", "held", "review_ready"}
 
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
@@ -996,6 +1000,38 @@ def validate_unique_record_ids(
             )
 
 
+def validate_triage(
+    triage: Any, repo: Any, prefix: str, tax: Taxonomy, errors: list[str]
+) -> None:
+    """Validate an unaccepted triage proposal: gathered evidence, never a conclusion."""
+    if not isinstance(triage, dict):
+        errors.append(f"candidate {prefix}: triage must be an object")
+        return
+    missing = sorted(TRIAGE_REQUIRED - set(triage))
+    unknown = sorted(set(triage) - TRIAGE_REQUIRED - TRIAGE_OPTIONAL)
+    if missing or unknown:
+        errors.append(
+            f"candidate {prefix}: triage fields differ from schema: missing={missing}, extra={unknown}"
+        )
+        return
+    verdict = triage["verdict"]
+    if verdict not in TRIAGE_VERDICTS:
+        errors.append(f"candidate {prefix}: unknown triage verdict {verdict!r}")
+    if (verdict == "held") != ("held_by" in triage):
+        errors.append(
+            f"candidate {prefix}: held_by is required for a held verdict and forbidden otherwise"
+        )
+    elif "held_by" in triage and (
+        not isinstance(triage["held_by"], str) or not triage["held_by"].strip()
+    ):
+        errors.append(f"candidate {prefix}: held_by must name the decision that holds the record")
+    for field in ("rule", "proposer"):
+        if not isinstance(triage[field], str) or not triage[field].strip():
+            errors.append(f"candidate {prefix}: triage {field} must be a non-empty string")
+    if not valid_date(triage["proposed_at"]):
+        errors.append(f"candidate {prefix}: triage proposed_at must be an ISO date")
+
+
 def validate_candidates(
     candidates_data: dict[str, Any], tax: Taxonomy, index: ProjectIndex, errors: list[str]
 ) -> set[str]:
@@ -1057,6 +1093,8 @@ def validate_candidates(
             errors.append(f"candidate {prefix}: review_required is incomplete")
         if not valid_date(candidate["discovered_at"]):
             errors.append(f"candidate {prefix}: discovered_at must be an ISO date")
+        if "triage" in candidate:
+            validate_triage(candidate["triage"], candidate_repo, prefix, tax, errors)
     return candidate_repos
 
 

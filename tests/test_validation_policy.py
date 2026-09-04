@@ -538,6 +538,49 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_candidate(lambda candidate: candidate.update({"surprise": 1}))
         self.assertTrue(any("fields do not match candidate schema" in error for error in errors), errors)
 
+    TRIAGE: ClassVar[dict] = {
+        "verdict": "review_ready",
+        "rule": "CURATION.md § Inclusion gate — operational product is identifiable",
+        "finding": "The README documents a tool-using loop over a local index.",
+        "evidence": [{
+            "label": "README",
+            "url": "https://github.com/sample/candidate/blob/main/README.md",
+            "kind": "web",
+            "content_sha256": "a" * 64,
+            "fetched_at": "2026-09-04",
+        }],
+        "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage",
+    }
+
+    def candidate_with_triage(self, mutate=None) -> list[str]:
+        def apply(candidate):
+            candidate["triage"] = json.loads(json.dumps(self.TRIAGE))
+            if mutate is not None:
+                mutate(candidate["triage"], candidate)
+        return self.catalog_with_candidate(apply)
+
+    def test_a_valid_triage_block_passes(self) -> None:
+        errors = self.candidate_with_triage()
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_triage_rejects_an_unknown_verdict(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "publish"}))
+        self.assertTrue(any("unknown triage verdict" in error for error in errors), errors)
+
+    def test_triage_rejects_a_field_outside_its_schema(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"score": 9}))
+        self.assertTrue(any("triage fields differ from schema" in error for error in errors), errors)
+
+    def test_held_by_is_required_for_a_held_verdict(self) -> None:
+        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "held"}))
+        self.assertTrue(any("held_by is required" in error for error in errors), errors)
+
+    def test_held_by_is_forbidden_on_any_other_verdict(self) -> None:
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"held_by": "BACKLOG.md — skill packs"}))
+        self.assertTrue(any("held_by is required" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
