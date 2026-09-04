@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-09-03
 
-The reviewed catalog contains 173 systems: forty-five memory systems, one hundred and eleven agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 161 satisfy active-choice coverage. The provisional queue contains fifty-three records, several of them held pending open questions recorded in `BACKLOG.md`, and thirty-nine candidates have been excluded with reasons. The separate collections contain twenty-one unscored specifications, fifty-nine scored inference services, and sixteen scored local runtimes. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
+The reviewed catalog contains 173 systems: forty-five memory systems, one hundred and eleven agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 161 satisfy active-choice coverage. The provisional queue contains fifty-three records, several of them held pending open questions recorded in `BACKLOG.md`, and forty candidates have been excluded with reasons. The separate collections contain twenty-one unscored specifications, fifty-nine scored inference services, and sixteen scored local runtimes. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
 
 ### Local runtimes
 
@@ -33,7 +33,7 @@ The local-runtime collection covers self-operated inference software under [ADR 
 
 Execution now reaches past the desktop and the single server: phones, embedded boards, and the browser are represented, alongside NPU, OpenCL, WebGPU, DirectML, and ONNX paths.
 
-Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and DirectML paths, and format coverage includes ONNX alongside GGUF, safetensors, MLX, and the quantized schemes. Coverage is representative of material execution choices rather than exhaustive. Text Generation Inference was screened and excluded because its repository is archived. Jan was screened and routed to the candidate queue as an assistant, because conversations, projects, assistants, agents, and connectors place it on the assistant side of the ADR 015 runtime test.
+Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and DirectML paths, and format coverage includes ONNX alongside GGUF, safetensors, MLX, and the quantized schemes. Coverage is representative of material execution choices rather than exhaustive. Text Generation Inference was screened and excluded because its repository is archived. Hugging Face Transformers was screened and excluded as substrate: it is the model-definition framework the published engines load their model implementations from, and its own documentation sends production serving to vLLM or SGLang with a Transformers model as the backend, so `transformers serve` does not make it the dedicated serving product ADR 015 admits on separate terms. Jan was screened and routed to the candidate queue as an assistant, because conversations, projects, assistants, agents, and connectors place it on the assistant side of the ADR 015 runtime test.
 
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
