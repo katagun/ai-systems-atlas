@@ -166,6 +166,7 @@ The catalog is coverage-weighted rather than a naïve star leaderboard. Populari
 | Google Antigravity | Agent output reviewed as artifacts | Plans, diffs, diagrams, and browser recordings a person steers before files change, under one permission grammar shared by every surface | The terminal sandbox is opt-in, still in preview, and no shipped preset enables it; the product terms carry no date and retain everything by default |
 | Devin Desktop | An editor that hosts rival agents | An Agent Client Protocol host running five other vendors' agents as first-class sessions | Those hosted agents fall outside its own privacy policy and terms, and its two local agents ship with divergent controls and no completed migration |
 | ShinkaEvolve | Coding agents as a variation operator | An evolutionary loop that can put a full subscription-backed coding agent in the mutation slot, with dispatch across host, container, and cluster | In the default path the model fills one slot in a caller-configured pipeline, and the published package still declares alpha status |
+| Kosmos | A claimed discovery is not evidence of system reliability | One objective drives literature retrieval, executed analysis code, and write-up in a single run, with every conclusion traceable to the code or passage behind it | The seven discoveries it is marketed on are vendor-reported in a preprint with no peer review, and the hosted run is closed, non-refundable, and United States only |
 
 ### Assistant-system research set
 
