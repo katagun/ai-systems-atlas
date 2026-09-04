@@ -82,7 +82,9 @@ def preview_description(text: str, limit: int = 160) -> str:
 
 def load_catalog(root: Path = ROOT) -> dict:
     directory = root / "directory"
-    read = lambda name: json.loads((directory / name).read_text(encoding="utf-8"))
+    def read(name: str) -> dict:
+        return json.loads((directory / name).read_text(encoding="utf-8"))
+
     return {
         "projects": read("projects.json")["projects"],
         "specifications": read("specifications.json")["specifications"],
@@ -172,6 +174,10 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
         "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "alternateName": SITE_TAGLINE, "url": SITE_URL},
         "about": about,
     }
+    # Escaping "<" keeps the JSON-LD payload from closing its own <script> element.
+    # It stays outside the f-string: a backslash in an f-string expression is a
+    # syntax error before Python 3.12, and this project supports 3.11.
+    json_ld_script = json.dumps(json_ld, ensure_ascii=False).replace("<", "\\u003c")
     escaped_facts = [(label, value if label == "Superseded by" else html.escape(value)) for label, value in facts]
     facts_html = "".join(f"<dt>{html.escape(label)}</dt><dd>{value}</dd>" for label, value in escaped_facts)
     repo_link = f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>' if record.get("repo") and kind != "system" else ""
@@ -194,7 +200,7 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
 <style>
 {STYLE}
 </style>
-<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False).replace("<", "\\u003c")}</script>
+<script type="application/ld+json">{json_ld_script}</script>
 </head>
 <body>
 <main>

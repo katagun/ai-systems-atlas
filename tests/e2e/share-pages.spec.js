@@ -24,7 +24,7 @@ test("copy link in a record dialog copies the share page URL", async ({ page, co
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`${baseURL}/records/local-runtimes/ollama/`);
 });
 
-test("the sitemap and robots file are served", async ({ request, baseURL }) => {
+test("the sitemap and robots file are served", async ({ request }) => {
   const sitemap = await request.get("/sitemap.xml");
   expect(sitemap.status()).toBe(200);
   expect(await sitemap.text()).toContain("records/specifications/mcp/");
