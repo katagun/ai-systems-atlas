@@ -381,7 +381,7 @@ tax=len(gzip.compress(open('web/taxonomy.json','rb').read(),9))
 print(f'boot {(boot+tax)/1024:.1f} KB gz | search index {idx/1024:.1f} KB gz')"
 ```
 
-Expected: boot near 43.6 KB, index near 100.3 KB. A boot payload materially over 50 KB means `BOOT_FIELDS` has picked up prose — re-read spec decision 2 before continuing.
+Expected: boot 41.3 KB, index 100.3 KB. (43.6 KB appears in the design spec; that figure was measured pretty-printed, and the builder minifies.) A boot payload materially over 50 KB means `BOOT_FIELDS` has picked up prose — re-read spec decision 2 before continuing.
 
 - [ ] **Step 6: Wire the builder into the refresh**
 
@@ -884,7 +884,7 @@ print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
 ```
 
-Expected: near 43.6 KB. Anything over 60 KB means a prose field reached a boot payload.
+Expected: 41.3 KB. (The design spec's 43.6 KB estimate was computed on pretty-printed JSON; the builder writes payloads minified, which is correct for machine-read files and accounts for the whole difference.) Anything over 60 KB means a prose field reached a boot payload.
 
 - [ ] **Step 11: The browser pass AGENTS.md requires**
 
