@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import unittest
 
 from scripts import build_candidate_evidence as harness
@@ -60,6 +61,46 @@ class ClassSignalTests(unittest.TestCase):
     def test_an_ordinary_candidate_is_not_flagged(self) -> None:
         item = candidate("x/y", name="y", description="An agent runtime.", topics=["agents"])
         self.assertEqual([], harness.class_signals(item))
+
+
+class FetchTests(unittest.TestCase):
+    def responses(self, license_payload=None, readme_payload=None):
+        def getter(path: str, _token):
+            if path.endswith("/license"):
+                if license_payload is None:
+                    raise KeyError("no license")
+                return license_payload
+            if path.endswith("/readme"):
+                return readme_payload or {}
+            return {"full_name": "a/one", "description": "d", "topics": [], "archived": False}
+        return getter
+
+    def test_license_evidence_pins_the_blob_sha_the_api_returns(self) -> None:
+        payload = {
+            "sha": "0" * 40,
+            "path": "LICENSE",
+            "html_url": "https://github.com/a/one/blob/main/LICENSE",
+            "content": base64.b64encode(b"MIT").decode(),
+            "encoding": "base64",
+        }
+        bundle = harness.fetch_candidate_evidence(
+            candidate("a/one"), self.responses(payload), None, "2026-09-04")
+        licence = next(d for d in bundle["documents"] if d["label"] == "LICENSE")
+        self.assertEqual("git_blob", licence["kind"])
+        self.assertEqual("0" * 40, licence["blob_sha"])
+        self.assertEqual(
+            "https://api.github.com/repos/a/one/git/blobs/" + "0" * 40, licence["immutable_url"])
+        self.assertEqual(harness.content_hash("MIT"), licence["content_sha256"])
+
+    def test_a_missing_license_is_recorded_as_an_error_not_a_crash(self) -> None:
+        bundle = harness.fetch_candidate_evidence(
+            candidate("a/one"), self.responses(None), None, "2026-09-04")
+        self.assertTrue(bundle["errors"])
+        self.assertFalse([d for d in bundle["documents"] if d["label"] == "LICENSE"])
+
+    def test_content_hash_is_stable(self) -> None:
+        self.assertEqual(harness.content_hash("MIT"), harness.content_hash("MIT"))
+        self.assertEqual(64, len(harness.content_hash("MIT")))
 
 
 if __name__ == "__main__":

@@ -6,7 +6,14 @@ routine acting under docs/adr/023, decides what the evidence means.
 """
 from __future__ import annotations
 
+import base64
+import hashlib
 from typing import Any
+
+try:
+    from .update_directory import GitHubGetter
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from update_directory import GitHubGetter
 
 ROOT_KEYS = ("repo", "url")
 
@@ -74,3 +81,45 @@ def class_signals(candidate: dict[str, Any]) -> list[str]:
         " ".join(candidate.get("topics") or []),
     ]).lower()
     return [name for name, terms in CLASS_SIGNALS.items() if any(term in haystack for term in terms)]
+
+
+def content_hash(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _decode(payload: dict[str, Any]) -> str:
+    if payload.get("encoding") == "base64":
+        return base64.b64decode(payload.get("content") or "").decode("utf-8", "replace")
+    return str(payload.get("content") or "")
+
+
+def fetch_candidate_evidence(
+    candidate: dict[str, Any], getter: GitHubGetter, token: str | None, today: str
+) -> dict[str, Any]:
+    """Fetch and hash a candidate's licence and README. Failures are recorded, never raised."""
+    repo = candidate.get("repo")
+    bundle: dict[str, Any] = {"repo": repo, "documents": [], "errors": []}
+    if not repo:
+        bundle["errors"].append("candidate has no GitHub repository")
+        return bundle
+    for label, path in (("LICENSE", f"/repos/{repo}/license"), ("README", f"/repos/{repo}/readme")):
+        try:
+            payload = getter(path, token)
+        except Exception as exc:  # a missing document is data, not a failure
+            bundle["errors"].append(f"{label}: {type(exc).__name__}: {exc}")
+            continue
+        text = _decode(payload)
+        blob_sha = payload.get("sha")
+        document = {
+            "label": label,
+            "url": payload.get("html_url") or f"https://github.com/{repo}",
+            "kind": "git_blob" if blob_sha else "web",
+            "content": text,
+            "content_sha256": content_hash(text),
+            "fetched_at": today,
+        }
+        if blob_sha:
+            document["blob_sha"] = blob_sha
+            document["immutable_url"] = f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+        bundle["documents"].append(document)
+    return bundle
