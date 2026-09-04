@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import base64
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts import build_candidate_evidence as harness
 
@@ -30,6 +33,12 @@ class SelectionTests(unittest.TestCase):
         previous = [candidate("a/one", triage={"verdict": "out_of_scope"})]
         self.assertEqual(0, harness.carry_forward(queue, previous))
         self.assertEqual("review_ready", queue[0]["triage"]["verdict"])
+
+    def test_carry_forward_does_not_collapse_two_keyless_candidates_onto_each_other(self) -> None:
+        queue = [{"discovered_at": "2026-09-01"}]
+        previous = [{"discovered_at": "2026-08-01", "triage": {"verdict": "held", "held_by": "x"}}]
+        self.assertEqual(0, harness.carry_forward(queue, previous))
+        self.assertNotIn("triage", queue[0])
 
 
 class CrossCheckTests(unittest.TestCase):
@@ -142,6 +151,51 @@ class RecheckTests(unittest.TestCase):
             self.triaged(harness.content_hash("MIT")), failing, None)
         self.assertTrue(any("could not be re-fetched" in problem for problem in problems), problems)
 
+    def test_an_unknown_evidence_label_is_reported_not_guessed(self) -> None:
+        queue = self.triaged(harness.content_hash("MIT"))
+        queue[0]["triage"]["evidence"][0]["label"] = "CONTRIBUTING"
+
+        def unexpected(_path, _token):
+            self.fail("an unknown label must never be turned into a fetch")
+
+        problems = harness.recheck_candidates(queue, unexpected, None)
+        self.assertTrue(any("unknown evidence label" in problem for problem in problems), problems)
+
+    def test_a_non_list_evidence_is_reported_not_raised(self) -> None:
+        queue = self.triaged(harness.content_hash("MIT"))
+        queue[0]["triage"]["evidence"] = "not-a-list"
+        problems = harness.recheck_candidates(queue, self.getter, None)
+        self.assertTrue(any("evidence must be a list" in problem for problem in problems), problems)
+
+
+class LoadCatalogTests(unittest.TestCase):
+    def test_load_catalog_returns_the_right_list_per_collection(self) -> None:
+        contents = {
+            "projects.json": {"projects": [{"id": "p"}]},
+            "exclusions.json": {"entries": [{"repo": "a/one"}]},
+            "specifications.json": {"specifications": [{"id": "s"}]},
+            "inference-services.json": {"services": [{"id": "i"}]},
+            "local-runtimes.json": {"runtimes": [{"id": "r"}]},
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            for name, document in contents.items():
+                (directory / name).write_text(json.dumps(document), encoding="utf-8")
+            catalog = harness.load_catalog(directory)
+        self.assertEqual([{"id": "p"}], catalog["projects.json"])
+        self.assertEqual([{"repo": "a/one"}], catalog["exclusions.json"])
+        self.assertEqual([{"id": "s"}], catalog["specifications.json"])
+        self.assertEqual([{"id": "i"}], catalog["inference-services.json"])
+        self.assertEqual([{"id": "r"}], catalog["local-runtimes.json"])
+
+
+class PreviousCandidatesTests(unittest.TestCase):
+    def test_a_nonexistent_branch_returns_no_candidates(self) -> None:
+        self.assertEqual([], harness.previous_candidates("no-such-branch-xyz"))
+
+    def test_an_empty_branch_name_returns_no_candidates_without_running_git(self) -> None:
+        self.assertEqual([], harness.previous_candidates(""))
+
 
 class MainTests(unittest.TestCase):
     def test_an_unreachable_github_fails_before_any_agent_work(self) -> None:
@@ -150,6 +204,26 @@ class MainTests(unittest.TestCase):
         self.assertEqual(1, harness.run_build(
             candidates=[candidate("a/one")], catalog={}, getter=failing,
             token=None, today="2026-09-04", limit=5, bundle_path=None))
+
+    def test_a_partial_fetch_still_succeeds_but_warns_on_stderr(self) -> None:
+        def license_only(path: str, _token):
+            if path.endswith("/license"):
+                return {"sha": "0" * 40, "encoding": "base64",
+                         "content": base64.b64encode(b"MIT").decode(),
+                         "html_url": "https://github.com/a/one/blob/main/LICENSE"}
+            raise OSError("readme unreachable")
+
+        import contextlib
+        import io
+
+        captured = io.StringIO()
+        with contextlib.redirect_stderr(captured):
+            code = harness.run_build(
+                candidates=[candidate("a/one")], catalog={}, getter=license_only,
+                token=None, today="2026-09-04", limit=5, bundle_path=None)
+        self.assertEqual(0, code)
+        self.assertIn("a/one", captured.getvalue())
+        self.assertIn("warning", captured.getvalue())
 
 
 if __name__ == "__main__":

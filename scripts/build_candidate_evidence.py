@@ -56,7 +56,8 @@ def carry_forward(candidates: list[dict[str, Any]], previous: list[dict[str, Any
     }
     carried = 0
     for item in candidates:
-        block = prior.get(candidate_key(item))
+        key = candidate_key(item)
+        block = prior.get(key) if key else None
         if block is not None and "triage" not in item:
             item["triage"] = block
             carried += 1
@@ -154,9 +155,25 @@ def recheck_candidates(
         if not isinstance(triage, dict):
             continue
         repo = candidate.get("repo")
-        for item in triage.get("evidence") or []:
+        evidence = triage.get("evidence") or []
+        if not isinstance(evidence, list):
+            problems.append(
+                f"{candidate_key(candidate)}: evidence must be a list, got "
+                f"{type(evidence).__name__}"
+            )
+            continue
+        for item in evidence:
             label = item.get("label")
-            path = f"/repos/{repo}/license" if label == "LICENSE" else f"/repos/{repo}/readme"
+            if label == "LICENSE":
+                path = f"/repos/{repo}/license"
+            elif label == "README":
+                path = f"/repos/{repo}/readme"
+            else:
+                problems.append(
+                    f"{candidate_key(candidate)}: unknown evidence label {label!r} is not "
+                    "one this harness ever emits"
+                )
+                continue
             try:
                 payload = getter(path, token)
             except Exception as exc:
@@ -212,6 +229,11 @@ def run_build(*, candidates, catalog, getter, token, today, limit, bundle_path, 
         if bundle["errors"] and not bundle["documents"]:
             print(f"error: {candidate_key(item)}: {bundle['errors']}", file=sys.stderr)
             return 1
+        if bundle["errors"]:
+            print(
+                f"warning: {candidate_key(item)}: partial evidence, {bundle['errors']}",
+                file=sys.stderr,
+            )
         bundle["cross_collection_hits"] = cross_collection_hits(item, catalog)
         bundle["class_signals"] = class_signals(item)
         entries.append(bundle)
