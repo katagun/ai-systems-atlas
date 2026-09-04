@@ -59,6 +59,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/019-authoring-surface-is-a-trait-not-a-role.md",
             "docs/adr/020-derivative-records-turn-on-operational-boundary.md",
             "docs/adr/021-the-research-reference-role-is-removed.md",
+            "docs/adr/023-autonomous-science-systems-are-not-a-role.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
