@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-import json
 import unittest
 from pathlib import Path
 
-from scripts.build_share_pages import SITE_URL, build_pages, load_catalog, preview_description, share_page_path
+from scripts.build_share_pages import (
+    SITE_URL,
+    build_pages,
+    load_catalog,
+    preview_description,
+    share_page_path,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 

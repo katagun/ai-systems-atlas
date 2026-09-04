@@ -41,6 +41,7 @@ node scripts/build_logos.mjs --check
 node scripts/build_fonts.mjs --check
 node scripts/build_asset_version.mjs --check
 uv run python scripts/build_share_pages.py --check
+uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 uv run python -m compileall scripts tests
@@ -49,6 +50,7 @@ node --check web/app.js
 node --test tests/test_web.js
 npm ci
 npx playwright install chromium
+npm run lint:js
 npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```

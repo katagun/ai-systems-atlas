@@ -1,0 +1,4 @@
+# Every change needs an owner who knows the curation contract in AGENTS.md.
+# Review is advisory while the project has one maintainer; enable
+# "Require review from Code Owners" on main once a second one is available.
+* @katagun

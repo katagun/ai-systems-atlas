@@ -116,8 +116,21 @@ const FINDER_PRIORITIES = {
   ]
 };
 
+// Content hashes stamped into index.html by scripts/build_asset_version.mjs.
+// They let the catalog files be cached: the URL changes whenever the data does,
+// so `no-store` — which threw away 261 KB of gzipped JSON on every single load,
+// including the ETag the server offered — is no longer needed to stay current.
+const dataVersions = (() => {
+  try {
+    return JSON.parse(document.getElementById("data-versions")?.textContent || "{}");
+  } catch {
+    return {};
+  }
+})();
+
 async function loadJSON(path) {
-  const response = await fetch(path, { cache: "no-store" });
+  const version = dataVersions[path];
+  const response = await fetch(version ? `${path}?v=${version}` : path);
   if (!response.ok) throw new Error(`Unable to load ${path}`);
   return response.json();
 }
@@ -140,9 +153,7 @@ async function bootstrap() {
     .at(-1);
   $("#data-date").textContent = `Data updated ${dataDate}`;
   populateFilters();
-  populateSpecificationFilters();
-  populateInferenceServiceFilters();
-  populateLocalRuntimeFilters();
+  populateCollectionFilters();
   renderStats();
   renderFinder();
   renderSpecifications();
@@ -309,62 +320,54 @@ function populateRoleFilter() {
   if (roles.some(item => item.id === selected)) role.value = selected;
 }
 
-function populateSpecificationFilters() {
-  const published = {
-    specification_types: new Set(state.specifications.map(item => item.specification_type)),
-    specification_scopes: new Set(state.specifications.map(item => item.scope)),
-    specification_statuses: new Set(state.specifications.map(item => item.status)),
-  };
-  for (const [group, selector] of [
-    ["specification_types", "#specification-type-filter"],
-    ["specification_scopes", "#specification-scope-filter"],
-    ["specification_statuses", "#specification-status-filter"],
-  ]) {
-    state.taxonomy[group].filter(item => published[group].has(item.id)).forEach(item =>
-      $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`)
+// Every scored collection populates its filters the same way: for each taxonomy
+// group, list only the values the published records actually use, so a filter
+// never offers a choice that returns nothing. Adding a collection is a row here.
+const COLLECTION_FILTERS = {
+  specifications: {
+    records: () => state.specifications,
+    groups: [
+      ["specification_types", "#specification-type-filter", item => [item.specification_type]],
+      ["specification_scopes", "#specification-scope-filter", item => [item.scope]],
+      ["specification_statuses", "#specification-status-filter", item => [item.status]],
+    ],
+    // Licences read "MIT — Massachusetts Institute of Technology License".
+    licenseFilter: "#specification-license-filter",
+  },
+  inference: {
+    records: () => state.inferenceServices,
+    groups: [
+      ["inference_service_types", "#inference-type-filter", item => [item.service_type]],
+      ["inference_delivery_modes", "#inference-delivery-filter", item => item.delivery_modes],
+      ["inference_model_sources", "#inference-model-source-filter", item => item.model_sources],
+      ["inference_api_styles", "#inference-api-filter", item => item.api_styles],
+    ],
+  },
+  runtimes: {
+    records: () => state.localRuntimes,
+    groups: [
+      ["local_runtime_types", "#runtime-type-filter", item => [item.runtime_type]],
+      ["runtime_accelerators", "#runtime-accelerator-filter", item => item.accelerators],
+      ["runtime_model_formats", "#runtime-format-filter", item => item.model_formats],
+      ["inference_api_styles", "#runtime-api-filter", item => item.api_styles],
+    ],
+  },
+};
+
+function populateCollectionFilters() {
+  for (const collection of Object.values(COLLECTION_FILTERS)) {
+    const records = collection.records();
+    for (const [group, selector, values] of collection.groups) {
+      const published = new Set(records.flatMap(values));
+      state.taxonomy[group]
+        .filter(item => published.has(item.id))
+        .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+    }
+    if (!collection.licenseFilter) continue;
+    const licenses = new Set(records.flatMap(item => item.licenses));
+    state.taxonomy.licenses.filter(item => licenses.has(item.id)).forEach(item =>
+      $(collection.licenseFilter).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`)
     );
-  }
-  const licenses = new Set(state.specifications.flatMap(item => item.licenses));
-  state.taxonomy.licenses.filter(item => licenses.has(item.id)).forEach(item =>
-    $("#specification-license-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`)
-  );
-}
-
-function populateInferenceServiceFilters() {
-  const groups = {
-    inference_service_types: new Set(state.inferenceServices.map(item => item.service_type)),
-    inference_delivery_modes: new Set(state.inferenceServices.flatMap(item => item.delivery_modes)),
-    inference_model_sources: new Set(state.inferenceServices.flatMap(item => item.model_sources)),
-    inference_api_styles: new Set(state.inferenceServices.flatMap(item => item.api_styles)),
-  };
-  for (const [group, selector] of [
-    ["inference_service_types", "#inference-type-filter"],
-    ["inference_delivery_modes", "#inference-delivery-filter"],
-    ["inference_model_sources", "#inference-model-source-filter"],
-    ["inference_api_styles", "#inference-api-filter"],
-  ]) {
-    state.taxonomy[group]
-      .filter(item => groups[group].has(item.id))
-      .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
-  }
-}
-
-function populateLocalRuntimeFilters() {
-  const groups = {
-    local_runtime_types: new Set(state.localRuntimes.map(item => item.runtime_type)),
-    runtime_accelerators: new Set(state.localRuntimes.flatMap(item => item.accelerators)),
-    runtime_model_formats: new Set(state.localRuntimes.flatMap(item => item.model_formats)),
-    inference_api_styles: new Set(state.localRuntimes.flatMap(item => item.api_styles)),
-  };
-  for (const [group, selector] of [
-    ["local_runtime_types", "#runtime-type-filter"],
-    ["runtime_accelerators", "#runtime-accelerator-filter"],
-    ["runtime_model_formats", "#runtime-format-filter"],
-    ["inference_api_styles", "#runtime-api-filter"],
-  ]) {
-    state.taxonomy[group]
-      .filter(item => groups[group].has(item.id))
-      .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   }
 }
 
@@ -577,17 +580,35 @@ function filteredProjects() {
   });
 }
 
-function renderProjects() {
-  updateAdvancedFilterSummary();
-  const projects = filteredProjects();
-  const family = $("#family-filter").value;
-  const finderContext = state.directoryRoles ? " · Finder match" : "";
-  const selectedProfile = state.taxonomy.score_profiles.find(profile => profile.family === family);
-  const scoreContext = family ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}` : " · Scores hidden across families";
-  $("#result-count").textContent = `${projects.length} ${projects.length === 1 ? "project" : "projects"}${scoreContext}`;
-  const paged = AtlasCore.paginate(projects, { page: state.page.systems, pageSize: state.pageSize });
-  state.page.systems = paged.page;
-  $("#project-grid").innerHTML = paged.items.map(project => {
+// One rendering path for every collection. Each entry supplies what actually
+// differs — where its records come from, how its cards look, which dialog a
+// card opens — and renderCollection owns the shape they all shared: filter,
+// count, paginate, paint, bind, page. A fifth collection is a new entry here,
+// not a fifth near-identical function.
+const COLLECTIONS = {
+  systems: {
+    grid: "#project-grid",
+    resultCount: "#result-count",
+    pageKey: "systems",
+    dataset: "project",
+    noun: ["project", "projects"],
+    empty: "No projects match these filters.",
+    open: id => openProject(id),
+    context() {
+      updateAdvancedFilterSummary();
+      const family = $("#family-filter").value;
+      const finderContext = state.directoryRoles ? " · Finder match" : "";
+      const selectedProfile = state.taxonomy.score_profiles.find(profile => profile.family === family);
+      const suffix = family
+        ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
+        : " · Scores hidden across families";
+      // Scores are never comparable across families, so the compare control
+      // only exists once a family narrows the grid to one score profile.
+      return { family, suffix, comparable: Boolean(family) };
+    },
+    records: () => filteredProjects(),
+    card: (project, { family }) => {
+
     const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
     const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
@@ -599,26 +620,29 @@ function renderProjects() {
       <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
       <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
     </article>`;
-  }).join("") || '<div class="notice">No projects match these filters.</div>';
-  $$('[data-project]', $("#project-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
-  bindComparisonButtons($("#project-grid"));
-  renderComparisonControls();
-  renderPager("systems", paged);
-}
+    },
+  },
+  specifications: {
+    grid: "#specification-grid",
+    resultCount: "#specification-result-count",
+    pageKey: "specifications",
+    dataset: "specification",
+    noun: ["artifact", "artifacts"],
+    empty: "No specifications match these filters.",
+    open: id => openSpecification(id),
+    context() {
+      $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
+      return { suffix: " · Unscored", comparable: false };
+    },
+    records: () => AtlasCore.filterSpecifications(state.specifications, {
+      term: $("#specification-search").value,
+      type: $("#specification-type-filter").value,
+      scope: $("#specification-scope-filter").value,
+      status: $("#specification-status-filter").value,
+      license: $("#specification-license-filter").value,
+    }),
+    card: specification => {
 
-function renderSpecifications() {
-  const specifications = AtlasCore.filterSpecifications(state.specifications, {
-    term: $("#specification-search").value,
-    type: $("#specification-type-filter").value,
-    scope: $("#specification-scope-filter").value,
-    status: $("#specification-status-filter").value,
-    license: $("#specification-license-filter").value,
-  });
-  $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
-  $("#specification-result-count").textContent = `${specifications.length} ${specifications.length === 1 ? "artifact" : "artifacts"} · Unscored`;
-  const paged = AtlasCore.paginate(specifications, { page: state.page.specifications, pageSize: state.pageSize });
-  state.page.specifications = paged.page;
-  $("#specification-grid").innerHTML = paged.items.map(specification => {
     const version = specification.current_version ? `Version ${specification.current_version}` : taxonomyName("specification_statuses", specification.status);
     return `<article class="project-card specification-card">
       <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${escapeHTML(version)}</span></div>
@@ -628,61 +652,94 @@ function renderSpecifications() {
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
       <div class="card-footer"><span>No editorial score</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
     </article>`;
-  }).join("") || '<div class="notice">No specifications match these filters.</div>';
-  $$('[data-specification]', $("#specification-grid")).forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
-  renderPager("specifications", paged);
-}
-
-function renderInferenceServices() {
-  const services = AtlasCore.filterInferenceServices(state.inferenceServices, {
-    term: $("#inference-search").value,
-    type: $("#inference-type-filter").value,
-    delivery: $("#inference-delivery-filter").value,
-    modelSource: $("#inference-model-source-filter").value,
-    apiStyle: $("#inference-api-filter").value,
-    sort: $("#inference-sort-filter").value,
-  });
-  $("#inference-result-count").textContent = `${services.length} ${services.length === 1 ? "service" : "services"} · ${state.taxonomy.inference_service_score_profile.name}`;
-  const paged = AtlasCore.paginate(services, { page: state.page.inference, pageSize: state.pageSize });
-  state.page.inference = paged.page;
-  $("#inference-grid").innerHTML = paged.items.map(service => `<article class="project-card inference-service-card">
+    },
+  },
+  inference: {
+    grid: "#inference-grid",
+    resultCount: "#inference-result-count",
+    pageKey: "inference",
+    dataset: "inferenceService",
+    noun: ["service", "services"],
+    empty: "No inference services match these filters.",
+    open: id => openInferenceService(id),
+    context: () => ({
+      suffix: ` · ${state.taxonomy.inference_service_score_profile.name}`,
+      comparable: true,
+    }),
+    records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
+      term: $("#inference-search").value,
+      type: $("#inference-type-filter").value,
+      delivery: $("#inference-delivery-filter").value,
+      modelSource: $("#inference-model-source-filter").value,
+      apiStyle: $("#inference-api-filter").value,
+      sort: $("#inference-sort-filter").value,
+    }),
+    card: service => `<article class="project-card inference-service-card">
     <div class="card-top"><div class="card-identity">${cardMark(service)}<div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
     <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div></div>
-  </article>`).join("") || '<div class="notice">No inference services match these filters.</div>';
-  $$('[data-inference-service]', $("#inference-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
-  bindComparisonButtons($("#inference-grid"));
-  renderComparisonControls();
-  renderPager("inference", paged);
-}
-
-function renderLocalRuntimes() {
-  const runtimes = AtlasCore.filterLocalRuntimes(state.localRuntimes, {
-    term: $("#runtime-search").value,
-    type: $("#runtime-type-filter").value,
-    accelerator: $("#runtime-accelerator-filter").value,
-    modelFormat: $("#runtime-format-filter").value,
-    apiStyle: $("#runtime-api-filter").value,
-    sort: $("#runtime-sort-filter").value,
-  });
-  $("#runtime-result-count").textContent = `${runtimes.length} ${runtimes.length === 1 ? "runtime" : "runtimes"} · ${state.taxonomy.local_runtime_score_profile.name}`;
-  const paged = AtlasCore.paginate(runtimes, { page: state.page.runtimes, pageSize: state.pageSize });
-  state.page.runtimes = paged.page;
-  $("#runtime-grid").innerHTML = paged.items.map(runtime => `<article class="project-card local-runtime-card">
+  </article>`,
+  },
+  runtimes: {
+    grid: "#runtime-grid",
+    resultCount: "#runtime-result-count",
+    pageKey: "runtimes",
+    dataset: "localRuntime",
+    noun: ["runtime", "runtimes"],
+    empty: "No local runtimes match these filters.",
+    open: id => openLocalRuntime(id),
+    context: () => ({
+      suffix: ` · ${state.taxonomy.local_runtime_score_profile.name}`,
+      comparable: true,
+    }),
+    records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
+      term: $("#runtime-search").value,
+      type: $("#runtime-type-filter").value,
+      accelerator: $("#runtime-accelerator-filter").value,
+      modelFormat: $("#runtime-format-filter").value,
+      apiStyle: $("#runtime-api-filter").value,
+      sort: $("#runtime-sort-filter").value,
+    }),
+    card: runtime => `<article class="project-card local-runtime-card">
     <div class="card-top"><div class="card-identity">${cardMark(runtime)}<div><p class="family-label">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p><h2>${escapeHTML(runtime.name)}</h2><div class="repo">${escapeHTML(runtime.repo || runtime.maintainer)}</div></div></div><div class="score-ring" aria-label="Local-runtime score ${escapeHTML(runtime.score.overall)} out of 10">${escapeHTML(runtime.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
     <div class="tags">${runtime.accelerators.map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
     <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
-  </article>`).join("") || '<div class="notice">No local runtimes match these filters.</div>';
-  $$('[data-local-runtime]', $("#runtime-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
-  bindComparisonButtons($("#runtime-grid"));
-  renderComparisonControls();
-  renderPager("runtimes", paged);
+  </article>`,
+  },
+};
+
+// dataset keys are camelCase; the matching attribute is kebab-case.
+const datasetAttribute = key => `data-${key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}`;
+
+function renderCollection(name) {
+  const collection = COLLECTIONS[name];
+  const context = collection.context();
+  const records = collection.records(context);
+  const noun = collection.noun[records.length === 1 ? 0 : 1];
+  $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
+  const paged = AtlasCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
+  state.page[collection.pageKey] = paged.page;
+  const grid = $(collection.grid);
+  grid.innerHTML = paged.items.map(record => collection.card(record, context)).join("")
+    || `<div class="notice">${collection.empty}</div>`;
+  $$(`[${datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
+    button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
+  if (context.comparable) {
+    bindComparisonButtons(grid);
+    renderComparisonControls();
+  }
+  renderPager(collection.pageKey, paged);
 }
+
+const renderProjects = () => renderCollection("systems");
+const renderSpecifications = () => renderCollection("specifications");
+const renderInferenceServices = () => renderCollection("inference");
+const renderLocalRuntimes = () => renderCollection("runtimes");
 
 function bindComparisonButtons(root) {
   $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
@@ -930,9 +987,11 @@ function renderTaxonomy() {
   $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
-function openProject(id) {
-  const project = state.projects.find(item => item.id === id);
-  if (!project) return false;
+// Every record dialog is the same frame — find the record, paint one content
+// element, register the open record for deep links and the back button — around
+// markup that is genuinely per-collection. The frame lives here once; the
+// entries below hold only what differs.
+function systemDialogMarkup(project) {
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
   let familyDetail;
@@ -956,7 +1015,7 @@ function openProject(id) {
   const statusNotice = project.status === "superseded"
     ? `<section class="detail-block status-notice"><h3>Superseded</h3><p>The maintainer designates ${successor ? `<button class="link-button" data-successor="${escapeHTML(successor.id)}">${escapeHTML(successor.name)}</button>` : "a named successor"} as this project's successor. The review below stands; the record is kept as a historical reference rather than a current recommendation.</p></section>`
     : "";
-  $("#dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
+  return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
@@ -968,24 +1027,11 @@ function openProject(id) {
       ${providerDetail}
       ${familyDetail}
     </div>`;
-  $$('[data-successor]', $("#dialog-content")).forEach(button =>
-    button.addEventListener("click", () => openProject(button.dataset.successor)));
-  showRecordDialog("#project-dialog", "system", id);
-  return true;
 }
 
-function specificationEvidenceLink(item) {
-  if (item.kind === "git_blob") {
-    return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`;
-  }
-  return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>`;
-}
-
-function openSpecification(id) {
-  const specification = state.specifications.find(item => item.id === id);
-  if (!specification) return false;
+function specificationDialogMarkup(specification) {
   const related = specification.related_specifications.map(relatedId => state.specifications.find(item => item.id === relatedId)).filter(Boolean);
-  $("#specification-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
+  return `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>What it standardizes</h3><p>${escapeHTML(specification.standardizes)}</p></section>
@@ -994,20 +1040,12 @@ function openSpecification(id) {
       <section class="detail-block"><h3>Reviewed sources</h3>${specification.evidence.map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
-  showRecordDialog("#specification-dialog", "spec", id);
-  return true;
 }
 
-function inferenceEvidenceLink(item) {
-  return `<p><strong>${escapeHTML(item.label)}:</strong> <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span></p>`;
-}
-
-function openInferenceService(id) {
-  const service = state.inferenceServices.find(item => item.id === id);
-  if (!service) return false;
+function inferenceDialogMarkup(service) {
   const profile = state.taxonomy.inference_service_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(service.score[dimension.id])}</td></tr>`).join("");
-  $("#inference-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
+  return `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(service.score.overall)}</td></tr></table><p class="unscored-note">Operational service score only. It excludes model quality, current price, and transient latency or throughput.</p></section>
@@ -1021,23 +1059,12 @@ function openInferenceService(id) {
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${service.evidence.map(inferenceEvidenceLink).join("")}</section>
     </div>`;
-  showRecordDialog("#inference-dialog", "inference", id);
-  return true;
 }
 
-function runtimeLicenseEvidenceLink(item) {
-  const source = item.kind === "git_blob"
-    ? `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">${escapeHTML(item.path)} ↗</a> · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable blob ↗</a>`
-    : `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span>`;
-  return `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} — ${source}</p>`;
-}
-
-function openLocalRuntime(id) {
-  const runtime = state.localRuntimes.find(item => item.id === id);
-  if (!runtime) return false;
+function runtimeDialogMarkup(runtime) {
   const profile = state.taxonomy.local_runtime_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(runtime.score[dimension.id])}</td></tr>`).join("");
-  $("#runtime-dialog-content").innerHTML = `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
+  return `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(runtime.score.overall)}</td></tr></table><p class="unscored-note">Documented execution capability only. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.</p></section>
@@ -1052,9 +1079,78 @@ function openLocalRuntime(id) {
       <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${runtime.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${runtime.evidence.map(inferenceEvidenceLink).join("")}</section>
     </div>`;
-  showRecordDialog("#runtime-dialog", "runtime", id);
+}
+
+const RECORD_DIALOGS = {
+  system: {
+    dialog: "#project-dialog",
+    content: "#dialog-content",
+    find: id => state.projects.find(item => item.id === id),
+    markup: systemDialogMarkup,
+    afterRender: () => $$('[data-successor]', $("#dialog-content")).forEach(button =>
+      button.addEventListener("click", () => openProject(button.dataset.successor))),
+  },
+  spec: {
+    dialog: "#specification-dialog",
+    content: "#specification-dialog-content",
+    find: id => state.specifications.find(item => item.id === id),
+    markup: specificationDialogMarkup,
+  },
+  inference: {
+    dialog: "#inference-dialog",
+    content: "#inference-dialog-content",
+    find: id => state.inferenceServices.find(item => item.id === id),
+    markup: inferenceDialogMarkup,
+  },
+  runtime: {
+    dialog: "#runtime-dialog",
+    content: "#runtime-dialog-content",
+    find: id => state.localRuntimes.find(item => item.id === id),
+    markup: runtimeDialogMarkup,
+  },
+};
+
+function openRecordDialog(kind, id) {
+  const dialog = RECORD_DIALOGS[kind];
+  const record = dialog.find(id);
+  if (!record) return false;
+  $(dialog.content).innerHTML = dialog.markup(record);
+  dialog.afterRender?.();
+  showRecordDialog(dialog.dialog, kind, id);
   return true;
 }
+
+// Kept as declarations: they are referenced before this point in the file and
+// openProject recurses through the superseded-by link in its own markup.
+function openProject(id) { return openRecordDialog("system", id); }
+function openSpecification(id) { return openRecordDialog("spec", id); }
+function openInferenceService(id) { return openRecordDialog("inference", id); }
+function openLocalRuntime(id) { return openRecordDialog("runtime", id); }
+
+
+function specificationEvidenceLink(item) {
+  if (item.kind === "git_blob") {
+    return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`;
+  }
+  return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>`;
+}
+
+
+
+function inferenceEvidenceLink(item) {
+  return `<p><strong>${escapeHTML(item.label)}:</strong> <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span></p>`;
+}
+
+
+
+function runtimeLicenseEvidenceLink(item) {
+  const source = item.kind === "git_blob"
+    ? `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">${escapeHTML(item.path)} ↗</a> · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable blob ↗</a>`
+    : `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span>`;
+  return `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} — ${source}</p>`;
+}
+
+
 
 // A record dialog is the shareable unit of the site: opening one writes a
 // `record=kind:id` URL, so the address bar always links to what is on screen.

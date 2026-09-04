@@ -15,13 +15,32 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const indexPath = join(root, "web", "index.html");
 const REFERENCE = /((?:href|src)=")([\w./-]+)\?v=[^"]*(")/g;
 
+// The catalog files app.js fetches. They are content-addressed the same way as
+// the stylesheet and the scripts, so the app can drop `cache: "no-store"` and
+// let the browser keep 261 KB of gzipped JSON between visits: a change to any
+// of them changes its URL, so a stale copy can never be served under it.
+const DATA_FILES = [
+  "projects.json", "taxonomy.json", "license-evidence.json", "specifications.json",
+  "inference-services.json", "local-runtimes.json", "logos.json",
+];
+const DATA_VERSIONS = /(<script type="application\/json" id="data-versions">)[^<]*(<\/script>)/;
+
 export function assetVersion(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 12);
 }
 
 export function stampAssetVersions(html, readAsset) {
-  return html.replace(REFERENCE, (_, open, file, close) => `${open}${file}?v=${assetVersion(readAsset(file))}${close}`);
+  const stamped = html.replace(
+    REFERENCE,
+    (_, open, file, close) => `${open}${file}?v=${assetVersion(readAsset(file))}${close}`,
+  );
+  const versions = Object.fromEntries(
+    DATA_FILES.map(file => [file, assetVersion(readAsset(file))]),
+  );
+  return stamped.replace(DATA_VERSIONS, (_, open, close) => `${open}${JSON.stringify(versions)}${close}`);
 }
+
+export { DATA_FILES };
 
 const committed = readFileSync(indexPath, "utf8");
 const stamped = stampAssetVersions(committed, file => readFileSync(join(root, "web", file)));

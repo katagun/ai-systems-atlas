@@ -1,0 +1,30 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Shamil Assylbekov
+
+This licence covers the curated catalog — the reviewed records, classifications,
+editorial prose, scores, and evidence — published as:
+
+    directory/*.json
+    web/*.json  (the synchronized copies of the same files)
+
+Software in this repository is licensed separately under Apache-2.0; see LICENSE.
+
+You are free to share and adapt this catalog, including commercially, provided
+you give appropriate credit, link to the licence, and indicate whether you made
+changes. The full legal code is at:
+
+    https://creativecommons.org/licenses/by/4.0/legalcode
+
+A suggested attribution:
+
+    AI Systems Atlas (https://peacefulcoexistance.com/), by Shamil Assylbekov,
+    licensed under CC BY 4.0. Retrieved <date>.
+
+Two things this licence does not cover, because they are not the Atlas's to
+grant. Project, product, and organisation names, along with their logos and
+other marks, remain the property of their respective owners and appear here for
+factual identification and commentary; their presence implies no affiliation or
+endorsement. Linked licence and terms documents remain under the terms of the
+projects that published them; the Atlas records and cites that evidence, it does
+not relicense it.
