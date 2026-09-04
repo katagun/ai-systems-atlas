@@ -61,6 +61,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/021-the-research-reference-role-is-removed.md",
             "docs/adr/022-general-pattern-content-is-not-a-collection.md",
             "docs/adr/023-autonomous-science-systems-are-not-a-role.md",
+            "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
