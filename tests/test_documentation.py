@@ -75,6 +75,55 @@ class DocumentationTests(unittest.TestCase):
         end = source.index("self.assertTrue((ROOT / relative).is_file()", start)
         return source[start:end]
 
+    def refresh_workflow(self) -> str:
+        return (ROOT / ".github" / "workflows" / "update-directory.yml").read_text(encoding="utf-8")
+
+    def refresh_step(self, name: str) -> str:
+        """Return one step's block from the refresh workflow, without a YAML parser."""
+        workflow = self.refresh_workflow()
+        start = workflow.index(f"      - name: {name}\n")
+        end = workflow.find("\n      - name: ", start + 1)
+        return workflow[start:] if end == -1 else workflow[start:end]
+
+    def test_refresh_withholds_push_credentials_while_parsing_third_party_input(self) -> None:
+        """Feeds and search results are parsed before the push credential exists."""
+        self.assertIn("persist-credentials: false", self.refresh_step("Check out repository"))
+
+    def test_refresh_verification_does_not_abort_the_run(self) -> None:
+        """Every check reports, so one failure never hides the rest."""
+        self.assertIn("continue-on-error: true", self.refresh_step("Verify the refreshed catalog"))
+
+    def test_refresh_publishes_its_branch_even_when_an_earlier_step_failed(self) -> None:
+        """A failed crawl stays recoverable from the branch instead of dying with the runner."""
+        self.assertIn("if: always()", self.refresh_step("Open or update the refresh pull request"))
+
+    def test_refresh_still_fails_when_the_catalog_does_not_verify(self) -> None:
+        """Publishing the branch must not turn a failing refresh green."""
+        self.assertIn(
+            "if: steps.verify.outcome == 'failure'",
+            self.refresh_step("Fail when the refreshed catalog did not verify"),
+        )
+
+    def test_refresh_prefers_a_token_that_lets_the_required_check_run(self) -> None:
+        """A pull request opened with GITHUB_TOKEN never triggers `verify`."""
+        self.assertIn(
+            "${{ secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}",
+            self.refresh_step("Open or update the refresh pull request"),
+        )
+
+    def test_refresh_failures_reach_a_maintainer(self) -> None:
+        """A red scheduled run nobody watches is not a signal."""
+        workflow = self.refresh_workflow()
+        self.assertIn("  report-failure:\n", workflow)
+        report = workflow[workflow.index("  report-failure:\n"):]
+        self.assertIn("if: failure()", report)
+        self.assertIn("gh issue create", report)
+
+    def test_every_path_has_a_code_owner(self) -> None:
+        owners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")
+        rules = [line.split() for line in owners.splitlines() if line.strip() and not line.startswith("#")]
+        self.assertTrue(any(rule[0] == "*" and len(rule) > 1 for rule in rules), owners)
+
     def test_pages_deploy_accepts_only_trusted_main_verification(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
         match = re.search(r"(?m)^  build:\n    if: >-\n((?:      .*\n)+)", workflow)

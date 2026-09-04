@@ -74,9 +74,21 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. It validates a complete refresh, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, and the CI result before merging. Review a failed run rather than manually committing partial runner output.
+`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes metadata, regenerates share pages, verifies the result, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, and the CI result before merging.
 
-The workflow uses `GITHUB_TOKEN` with job-scoped `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR. GitHub may require a maintainer to approve CI on bot-created PRs; that review gate is intentional.
+Verification is reported, not fatal. Every check runs even after an earlier one fails, so a single broken record cannot hide the rest, and the branch is pushed either way. A refresh that fails verification opens its pull request as a **draft** titled `(verification failed)`, carrying the per-check results and a link to the run. Repair the branch and push; the next run promotes it out of draft once the catalog verifies. The job itself still fails, so the run stays red.
+
+This is deliberate: a crawl costs an hour of live GitHub and feed reads, and discarding it because two records disagree with an editorial invariant means waiting a week. The fail-closed gate belongs on merging into `main`, which branch protection already enforces — not on preserving the work.
+
+Any failed run opens or updates one issue labeled `automation-failure` and comments the run link on later failures. Close it once a refresh succeeds. A red scheduled run that nobody is told about is not a signal.
+
+The refresh checks out with `persist-credentials: false` and only configures git authentication in the publishing step, so third-party feeds and search results are never parsed beside a writable token.
+
+### Tokens
+
+The job runs with `GITHUB_TOKEN` scoped to `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR.
+
+A pull request opened with `GITHUB_TOKEN` does not trigger workflows, so `verify` — the required check — never runs on it and the pull request cannot reach a mergeable state. Add a repository secret named `ATLAS_AUTOMATION_TOKEN` holding a fine-grained personal access token or GitHub App installation token for this repository with **Contents: read and write** and **Pull requests: read and write**. The workflow prefers it and falls back to `GITHUB_TOKEN`, so the refresh still runs without the secret; it just produces a pull request whose required check has to be started by hand.
 
 ## Share pages
 
@@ -109,6 +121,8 @@ The site URL follows the repository owner and name. After a transfer or rename, 
 ## Repository safeguards
 
 `.github/workflows/verify.yml` is the required CI check. Classic `main` protection requires pull requests, a current `verify` result, conversation resolution, and an up-to-date branch; it blocks force-pushes and deletion. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
+
+`.github/CODEOWNERS` assigns every path to the maintainer. Ownership is advisory while required approvals are zero; enable **Require review from Code Owners** on `main` once a second maintainer exists.
 
 All actions are pinned to immutable commit SHAs, and repository settings enforce those pins while allowing only GitHub-owned actions plus `astral-sh/setup-uv`. The required verification job includes dependency review for pull requests. `.github/dependabot.yml` opens weekly pull requests for Actions and npm updates. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.
 
