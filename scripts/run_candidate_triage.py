@@ -181,6 +181,18 @@ def prepare(*, limit: int, run=shell) -> int:
     return code
 
 
+def unexpected_committed_changes(name_only: str) -> list[str]:
+    """Paths a commit already on the branch touched that the routine may not write.
+
+    A clean working tree proves nothing on its own: an agent that commits its own edit
+    leaves `git status` empty while the change rides on the branch the reviewer merges.
+    """
+    return [
+        line.strip() for line in name_only.splitlines()
+        if line.strip() and line.strip() not in ALLOWED_CHANGES
+    ]
+
+
 def finish(*, run=shell, read=worktree_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
     status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
@@ -203,6 +215,22 @@ def finish(*, run=shell, read=worktree_text) -> int:
     if not dirty and head.strip() == base.strip():
         print("no triage proposals to commit")
         return 0
+    # --no-renames so a rename shows as a delete and an add, putting both paths in front
+    # of the guard rather than only the destination.
+    diff_code, committed = run(
+        ["git", "diff", "--name-only", "--no-renames", "origin/main", "HEAD"], WORKTREE
+    )
+    if diff_code != 0:
+        print("error: could not diff HEAD against origin/main", file=sys.stderr)
+        return 1
+    forbidden_commits = unexpected_committed_changes(committed)
+    if forbidden_commits:
+        print(
+            f"error: a commit on this branch touched files the run may not write: "
+            f"{forbidden_commits}",
+            file=sys.stderr,
+        )
+        return 1
     show_code, before = run(["git", "show", f"origin/main:{QUEUE}"], WORKTREE)
     if show_code != 0:
         print(f"error: could not read {QUEUE} from origin/main\n{before}", file=sys.stderr)

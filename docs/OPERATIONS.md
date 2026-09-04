@@ -75,11 +75,16 @@ or `origin`. To review a run:
    citation and fails, naming it, when the URL it cites or the hash it recorded no longer
    matches the document. Run it from a checkout that actually holds the blocks — the run's
    worktree, or `triage/pending` checked out — because `main` holds none and the command
-   exits 0 having verified nothing. It re-checks only blocks whose `proposed_at` is today,
-   which are the ones the current run wrote; an older block describes a document as it
+   exits 0 having verified nothing. It re-checks the blocks that differ from
+   `origin/main` — the ones this run introduced or changed — and reports how many
+   citations it examined, so a run that verified nothing cannot read as a run that
+   verified everything. A block already on `origin/main` describes a document as it
    stood when a human accepted it, and re-verifying those would turn ordinary upstream
-   drift into a failure no run can clear. To check an older citation, open its
+   drift into a failure no run can clear. Scoping is deliberately not based on
+   `proposed_at`: that field is written by the agent being checked, so a back-dated
+   block could have skipped verification entirely. To check an older citation, open its
    `immutable_url`, which addresses a blob SHA and cannot change under it.
+   Pass `--baseline-ref` to compare against something other than `origin/main`.
 
 Then, per candidate:
 
