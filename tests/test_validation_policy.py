@@ -637,6 +637,22 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.candidate_with_triage(lambda triage, _: triage.update({"finding": "  "}))
         self.assertTrue(any("triage requires a finding" in error for error in errors), errors)
 
+    def test_family_and_role_may_be_null_while_a_decision_holds_the_record(self) -> None:
+        def mutate(triage, candidate):
+            triage["verdict"] = "held"
+            triage["held_by"] = "BACKLOG.md — labs whose models you serve yourself"
+            candidate["proposed_system_family"] = None
+            candidate["proposed_primary_role"] = None
+        errors = self.candidate_with_triage(mutate)
+        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+
+    def test_family_and_role_may_not_be_null_without_a_holding_decision(self) -> None:
+        def mutate(candidate):
+            candidate["proposed_system_family"] = None
+            candidate["proposed_primary_role"] = None
+        errors = self.catalog_with_candidate(mutate)
+        self.assertTrue(any("may only be null" in error for error in errors), errors)
+
     def test_unknown_specification_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

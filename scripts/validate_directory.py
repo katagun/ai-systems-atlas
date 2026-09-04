@@ -1117,7 +1117,15 @@ def validate_candidates(
             errors.append(f"candidate {prefix}: non-GitHub candidate requires an HTTPS URL")
         family = candidate["proposed_system_family"]
         role = candidate["proposed_primary_role"]
-        if family not in families or role not in roles or roles.get(role) != family:
+        triage = candidate.get("triage")
+        held_by = triage.get("held_by") if isinstance(triage, dict) else None
+        if family is None and role is None:
+            if not held_by:
+                errors.append(
+                    f"candidate {prefix}: family and role may only be null while "
+                    "triage.held_by names the decision that holds the record"
+                )
+        elif family not in families or role not in roles or roles.get(role) != family:
             errors.append(f"candidate {prefix}: proposed family and role are incompatible")
         if candidate["github_detected_license"] is not None and not isinstance(
             candidate["github_detected_license"], str
