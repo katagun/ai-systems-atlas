@@ -162,6 +162,7 @@ async function bootstrap() {
   if (!restoreComparisonFromURL()) {
     setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
   }
+  restoreViewFromURL();
   restoreRecordFromURL();
 }
 
@@ -1330,6 +1331,29 @@ function openComparison() {
   $("#comparison-dialog").showModal();
 }
 
+// The directory is the default view, so it stays out of the URL; every other
+// view names itself so the address bar is the shareable state, as it already is
+// for a collection, a comparison, and a record.
+function writeViewURL(id) {
+  const url = new URL(window.location.href);
+  if (id === "directory") url.searchParams.delete("view");
+  else url.searchParams.set("view", id);
+  window.history.replaceState(null, "", url);
+}
+
+function restoreViewFromURL() {
+  const url = new URL(window.location.href);
+  const raw = url.searchParams.get("view");
+  if (raw === null) return;
+  const id = AtlasCore.parseViewId(raw);
+  if (id) {
+    activateView(id);
+    return;
+  }
+  url.searchParams.delete("view");
+  window.history.replaceState(null, "", url);
+}
+
 function activateView(id) {
   if (id === "inference-services" || id === "local-runtimes") {
     setDirectoryCollection(id === "inference-services" ? "inference" : "runtimes");
@@ -1339,6 +1363,7 @@ function activateView(id) {
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   if (id === "directory") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
+  writeViewURL(id);
   window.scrollTo({ top: 0 });
 }
 

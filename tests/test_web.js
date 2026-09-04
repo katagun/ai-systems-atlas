@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -573,4 +573,41 @@ test("llms.txt's Data section lists exactly the published catalog files", () => 
   const dataSection = llms.split("## Data")[1].split("## Reference")[0];
   const linked = [...dataSection.matchAll(/\]\(https:\/\/[^)]*\/([a-z-]+\.json)\)/g)].map(m => m[1]).sort();
   assert.deepEqual(linked, published);
+});
+
+test("the API view lists exactly the published catalog files", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
+  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
+  const linked = [...html.matchAll(/class="endpoint-link" href="https:\/\/[^"]*\/([a-z-]+\.json)"/g)].map(m => m[1]).sort();
+  assert.deepEqual(linked, published);
+});
+
+test("the API view's endpoint links use the same origin as the share-page builder", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const match = builder.match(/SITE_URL = "([^"]+)"/);
+  assert.ok(match, "could not find SITE_URL in scripts/build_share_pages.py");
+  const [, siteUrl] = match;
+  const links = [...html.matchAll(/class="endpoint-link" href="([^"]+)"/g)].map(m => m[1]);
+  assert.ok(links.length > 0, "the API view has no endpoint links to check");
+  for (const link of links) assert.ok(link.startsWith(siteUrl), `${link} does not start with SITE_URL (${siteUrl}); update index.html if the domain changed`);
+});
+
+test("every primary navigation tab is addressable as a view parameter", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  const tabs = [...html.matchAll(/class="tab[^"]*" data-tab="([a-z-]+)"/g)].map(m => m[1]);
+  assert.ok(tabs.length > 0, "index.html has no primary navigation tabs");
+  for (const tab of tabs) assert.equal(parseViewId(tab), tab, `${tab} is a tab but not an addressable view`);
+});
+
+test("an unknown or malformed view parameter resolves to no view", () => {
+  assert.equal(parseViewId("records"), null);
+  assert.equal(parseViewId(""), null);
+  assert.equal(parseViewId(null), null);
+  assert.equal(parseViewId(undefined), null);
+  assert.equal(parseViewId("API"), null);
+  assert.equal(parseViewId("constructor"), null);
 });
