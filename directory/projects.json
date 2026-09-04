@@ -15660,7 +15660,7 @@
       "name": "Kosmos",
       "repo": null,
       "url": "https://docs.edisonscientific.com/",
-      "description": "Edison Scientific's hosted autonomous research agent, which reads literature, writes and executes analysis code over uploaded scientific datasets, and returns a cited report whose conclusions trace back to the code or passage that produced them, sold apart from the Literature, Analysis, Precedent, and Molecules agents on the same platform.",
+      "description": "Hosted autonomous research agent that reads literature, writes and runs analysis code over uploaded datasets, and traces every conclusion in its report to the code or passage behind it, distinct from Edison Scientific's Literature, Analysis, Precedent, and Molecules agents.",
       "primary_role": "research_agent",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
@@ -15729,7 +15729,7 @@
         "Closed managed execution with no documented task states, retry, resume, or credit boundary when a non-refundable run ends unusable",
         "Agent-trajectory and interaction data trains the vendor's models unless the account explicitly opts out, and all processing is United States hosted with no regional or self-operated option"
       ],
-      "why_it_matters": "The one autonomous-discovery product that publishes enough of an operational boundary to review, which is what lets the Atlas classify this class by the outcome a system owns rather than by the significance it claims.",
+      "why_it_matters": "The clearest shipped example of delegating an entire research pass, from literature through analysis code to write-up, to one autonomous run whose report a reviewer can check against the code and passages it cites.",
       "research_confidence": "medium",
       "verified_at": "2026-09-03",
       "licenses": [
