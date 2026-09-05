@@ -36,8 +36,12 @@ COLLECTIONS = {
     "spec": ("specifications", "specifications"),
     "inference": ("inference-services", "services"),
     "runtime": ("local-runtimes", "runtimes"),
+    "model": ("models", "models"),
 }
-COLLECTION_LABELS = {"system": "System", "spec": "Specification", "inference": "Inference service", "runtime": "Local runtime"}
+COLLECTION_LABELS = {
+    "system": "System", "spec": "Specification", "inference": "Inference service",
+    "runtime": "Local runtime", "model": "Model",
+}
 
 
 
@@ -73,6 +77,7 @@ def load_catalog(root: Path = ROOT) -> dict:
         "specifications": read("specifications.json")["specifications"],
         "services": read("inference-services.json")["services"],
         "runtimes": read("local-runtimes.json")["runtimes"],
+        "models": read("models.json")["models"],
         "taxonomy": read("taxonomy.json"),
     }
 
@@ -126,6 +131,16 @@ def _facts_for(kind: str, record: dict, taxonomy: dict, by_id: dict) -> tuple[st
             ("Boundary", record["service_boundary"]),
         ]
         return eyebrow, record["description"], facts, "Service", "Open official service documentation"
+    if kind == "model":
+        eyebrow = f"Model · {taxonomy_name(taxonomy, 'model_types', record['model_type'])}"
+        facts = [
+            ("Developer", record["developer"]),
+            ("Distribution", names(taxonomy, "model_distribution_modes", record["distribution_modes"])),
+            ("Source model", taxonomy_name(taxonomy, "source_models", record["source_model"])),
+            ("Licenses", names(taxonomy, "licenses", record["licenses"])),
+            ("Boundary", record["access_boundary"]),
+        ]
+        return eyebrow, record["description"], facts, "SoftwareSourceCode", "Open official model page"
     eyebrow = f"Local runtime · {taxonomy_name(taxonomy, 'local_runtime_types', record['runtime_type'])}"
     facts = [
         ("Maintainer", record["maintainer"]),
@@ -145,6 +160,8 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
     about: dict = {"@type": about_type, "name": name, "url": record["url"], "description": description}
     if kind == "inference":
         about["provider"] = {"@type": "Organization", "name": record["operator"]}
+    if kind == "model":
+        about["creator"] = {"@type": "Organization", "name": record["developer"]}
     if record.get("repo"):
         about["sameAs"] = f"https://github.com/{record['repo']}"
     json_ld = {

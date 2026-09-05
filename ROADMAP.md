@@ -16,6 +16,7 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Maintain an unscored specification collection for the contracts between systems, without treating conventions as products or ranking unlike artifacts.
 - Maintain a bounded inference-service collection with a dedicated operational score, surfaced alongside systems in one Directory without treating providers as a fourth system family or ranking model quality, price, and transient performance.
 - Maintain a bounded local-runtime collection with a dedicated execution-capability score for software the user operates on their own hardware, keeping managed tiers of a runtime in the inference-service collection and keeping throughput, latency, and benchmark rank out of the score.
+- Maintain a bounded provider-independent Models collection with models.dev-backed discovery and a dedicated access-and-deployability score, keeping labs, APIs, hosts, runtimes, applications, quality rankings, benchmarks, parameter counts, prices, and transient performance outside the model record.
 - Support side-by-side shortlists only within one score profile, preserving collection-specific decision context and shareable URL state.
 - Detect evidence decay rather than relying on maintainer memory: link and terms-drift checks must reach every collection, not only the records whose license the repository host can detect.
 - Keep editorial age distinguishable from live-metadata age, so a stale review is a visible fact about the record rather than a gap in someone's recollection.
@@ -29,7 +30,7 @@ Exit signal: every supported role has several meaningful reviewed alternatives w
 
 Reduce repetitive review work while preserving deliberate editorial judgment. The decay-detection half of this phase moved into Current: a directory that cannot say what has rotted has a correctness problem, not an efficiency one.
 
-- Add a guarded candidate-promotion command that refuses to promote until every required editorial, source-model, license, and evidence field is present.
+- Extend the guarded promotion workflow from model candidates to system candidates; model promotion already refuses incomplete editorial, source-model, license, evidence, identity, date, taxonomy, and score fields.
 - Make repository transfers and renames explicit, recoverable review events that preserve evidence history.
 - Add accessibility checks to the browser end-to-end suite the repository already runs, keeping the shipped application dependency-free; keep the Pages deployment path validated and reproducible.
 
@@ -37,7 +38,7 @@ Exit signal: routine catalog maintenance is repeatable, evidence-safe, and docum
 
 ## Later: ecosystem context
 
-Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, observability SDKs, model catalogs, prices, and performance rankings outside that collection unless they receive their own evidence-backed boundary. Local runtimes now have such a boundary under ADR 015; expand that collection only when a record answers a distinct execution, hardware, format, or deployment question.
+Expand the inference-service pilot only when a new record answers a distinct deployment, routing, residency, retention, or procurement question. Keep plain API clients, adapters, observability SDKs, model catalogs, prices, and performance rankings outside that collection. Local runtimes have their own boundary under ADR 015, and provider-independent model releases have theirs under ADR 025; expand either only when a record answers its collection's distinct execution or model-access question.
 
 Expand the specification collection in question-driven batches. Prefer agent-specific contracts with authoritative version and license evidence; do not absorb every general-purpose web standard used by an agent implementation.
 

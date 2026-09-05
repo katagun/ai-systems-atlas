@@ -6,7 +6,7 @@ Use this document to choose research batches. The canonical project and candidat
 
 AI Systems Atlas aims to be comprehensive within its declared operational scope, not an indiscriminate list of every model, API, prompt wrapper, or branded feature. Coverage is healthy when a user can compare materially different approaches within a supported role, understand source-model and licensing tradeoffs, and see important systems that failed review with a concrete reason.
 
-The operational-system universe is deployable or directly usable memory, agent, and assistant systems. Managed inference services and self-operated local runtimes each form a separately scored collection with its own rubric; specifications remain separate and unscored. Plain inference clients, model repositories, and observability-only services remain adjacent components unless a future collection defines their distinct user question and boundary.
+The operational-system universe is deployable or directly usable memory, agent, and assistant systems. Managed inference services, self-operated local runtimes, and provider-independent model releases each form a separately scored collection with its own rubric; specifications remain separate and unscored. Plain inference clients and observability-only services remain adjacent components. A model repository is evidence for a model-release record under ADR 025, not an operational system by itself.
 
 Measure coverage across three axes:
 
@@ -18,7 +18,7 @@ Do not add a new family merely to fit a famous product. Add one only when its pr
 
 ## Snapshot — 2026-09-04
 
-The reviewed catalog contains 174 systems: forty-five memory systems, one hundred and twelve agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 162 satisfy active-choice coverage. The provisional queue contains fifty-five records, several of them held pending open questions recorded in `BACKLOG.md`, and fifty-five candidates have been excluded with reasons. The separate collections contain twenty-two unscored specifications, fifty-nine scored inference services, and sixteen scored local runtimes. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
+The reviewed catalog contains 174 systems: forty-five memory systems, one hundred and twelve agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 162 satisfy active-choice coverage. The system provisional queue contains fifty-five records, several of them held pending open questions recorded in `BACKLOG.md`, and fifty-five candidates have been excluded with reasons. The separate collections contain twenty-two unscored specifications, fifty-nine scored inference services, sixteen scored local runtimes, and seven scored model releases; the models.dev queue contains 351 further text-output model candidates awaiting complete review. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise.
 
 ### Local runtimes
 

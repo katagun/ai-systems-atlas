@@ -28,3 +28,9 @@ factual identification and commentary; their presence implies no affiliation or
 endorsement. Linked licence and terms documents remain under the terms of the
 projects that published them; the Atlas records and cites that evidence, it does
 not relicense it.
+
+The `source_metadata` fields in `directory/models.json`, `web/models.json`, and
+the unpublished `directory/model-candidates.json` are derived from models.dev's
+provider-independent model metadata under the MIT License. See
+`third_party/models.dev-LICENSE.txt`. Atlas model classification, prose, scores,
+and reviewed evidence remain original catalog material under CC BY 4.0.

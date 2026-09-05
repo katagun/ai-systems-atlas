@@ -1150,7 +1150,7 @@ footer #data-date {
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .header-tools { order: 2; }
   .brand small { display: none; }
-  .tabs { order: 3; width: 100%; gap: 1.1rem; overflow-x: auto; }
+  .tabs { order: 3; width: 100%; gap: .8rem; overflow-x: auto; }
   .tab { flex: 0 0 auto; font-size: .7rem; }
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
   .hero h1 { font-size: clamp(2.55rem, 11vw, 3.7rem); }

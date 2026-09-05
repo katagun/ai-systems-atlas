@@ -49,6 +49,16 @@ test("a local runtime record URL opens inside the runtimes scope", async ({ page
   await expect(page).toHaveURL(/collection=runtimes/);
 });
 
+test("a model record URL opens the Models view and keeps its distinct boundary", async ({ page }) => {
+  await page.goto("/?record=model:model-alibaba-qwen2-5-coder-0-5b");
+
+  await expect(page.locator("#model-dialog-content h1")).toHaveText("Qwen2.5-Coder-0.5B");
+  await expect(page.locator("#model-dialog-content")).toContainText("Model boundary");
+  await page.locator("#model-dialog .dialog-close").click();
+  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models")).toHaveClass(/is-active/);
+});
+
 test("following a successor link updates the record URL", async ({ page }) => {
   await page.goto("/?record=system:autogen");
 
@@ -66,7 +76,7 @@ test("unknown, malformed, and inherited-property record URLs are discarded witho
     await page.goto(`/?record=${raw}`);
     await expect(page.locator("#all-directory-result-count")).toContainText("entries");
     await expect(page).not.toHaveURL(/record=/);
-    for (const id of ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog"]) {
+    for (const id of ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#model-dialog"]) {
       await expect(page.locator(id)).toBeHidden();
     }
   }
