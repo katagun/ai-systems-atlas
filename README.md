@@ -4,7 +4,7 @@ AI Systems Atlas is a curated directory of operational AI systems, provider-inde
 
 Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/). Every reviewed record is also published as JSON with no key and no rate limit — the [API page](https://peacefulcoexistance.com/?view=api) lists each file, and [llms.txt](https://peacefulcoexistance.com/llms.txt) says the same thing for an agent.
 
-The repository contains the canonical editorial catalog, its validation and refresh automation, and a dependency-free static web interface. The local-first second-brain implementation informed by this research lives in [Cognosaic](https://github.com/embark-delve/cognosaic).
+The repository contains the canonical editorial catalog, its validation and refresh automation, and a dependency-free static web interface.
 
 ## Start here
 
