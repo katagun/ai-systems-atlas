@@ -577,9 +577,12 @@ test("search falls back to card text before the index arrives", () => {
 });
 
 test("indexed search keeps infix matching, which is why the index is raw text", () => {
-  const records = [{ id: "ollama", name: "Ollama", description: "Runner." }];
-  const searchIndex = { ollama: "ollama runner. runs gguf models locally." };
+  // The term must appear ONLY in the index: a record whose own id or name
+  // contains it would match through the fallback and prove nothing.
+  const records = [{ id: "ol", name: "Ol", description: "Runner.", score: { overall: 1 } }];
+  const searchIndex = { ol: "ollama runner. runs gguf models locally." };
   assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "llama" }).length, 0);
 });
 
 test("a one-character term still matches only the start of a word in the name", () => {
