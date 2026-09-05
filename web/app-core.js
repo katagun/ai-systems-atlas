@@ -121,7 +121,7 @@
         return Array.isArray(value) ? value.includes(selected) : value === selected;
       });
     }).sort(filters.sort === "score"
-      ? (a, b) => b.score.overall - a.score.overall || a.name.localeCompare(b.name)
+      ? (a, b) => (b.score?.overall ?? -1) - (a.score?.overall ?? -1) || a.name.localeCompare(b.name)
       : (a, b) => a.name.localeCompare(b.name));
   }
 

@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases, the specifications that connect systems, managed inference services, and runtimes you host yourself. One Directory surface discovers systems, model releases, inference services, and local runtimes while preserving their separate schemas and score profiles; Models remains a specialist sibling view and Specifications remains a separate artifact view. Terms, licensing, source attribution, and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases, the specifications that connect systems, managed inference services, and runtimes you host yourself. One Directory surface discovers systems, the complete models.dev source catalog, inference services, and local runtimes while preserving the distinction between attributed source metadata and Atlas-reviewed records. Models remains a specialist sibling view and Specifications remains a separate artifact view.
 
 Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/). Every reviewed record is also published as JSON with no key and no rate limit — the [API page](https://peacefulcoexistance.com/?view=api) lists each file, and [llms.txt](https://peacefulcoexistance.com/llms.txt) says the same thing for an agent.
 
@@ -56,6 +56,9 @@ directory/license-evidence.json reviewed source paths and immutable blob evidenc
 directory/specifications.json  reviewed unscored protocols, conventions, and formats
 directory/inference-services.json reviewed and separately scored managed inference services
 directory/local-runtimes.json  reviewed and separately scored self-operated inference runtimes
+directory/models.json         reviewed and separately scored model releases
+directory/models-dev.json     complete commit-pinned models.dev source snapshot
+directory/model-candidates.json unpublished text-output model review queue
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
@@ -71,7 +74,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Operational relevance determines inclusion; source model and licenses are reviewed traits and filters.
 - Authoritative license and terms sources are human-reviewed; GitHub metadata is only a drift signal.
 - A detected license mismatch marks evidence for review without hiding the project or rewriting human conclusions.
-- Automated discoveries remain provisional and receive no editorial score or review date.
+- Automated model-source records are visibly attributed and receive no editorial score or review date; workflow candidates remain unpublished.
 - Editorial verification dates are separate from live GitHub metadata dates.
 - Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.
@@ -85,6 +88,6 @@ The weekly workflow refreshes live metadata, preserves candidate and license-rev
 The repository carries two licences, because the code and the catalog are different kinds of work.
 
 - **Software** — `scripts/`, `web/*.js`, `web/*.css`, `tests/` — is [Apache-2.0](LICENSE).
-- **The curated catalog** — `directory/*.json` and its synchronized `web/*.json` copies — is [CC BY 4.0](LICENSE-DATA). Share it and adapt it, including commercially; credit the Atlas and link the licence.
+- **The curated catalog** — reviewed `directory/*.json` data and its synchronized `web/*.json` copies — is [CC BY 4.0](LICENSE-DATA). Share it and adapt it, including commercially; credit the Atlas and link the licence. The derived `models-dev.json` snapshot remains attributed to models.dev under its MIT License, preserved in `third_party/models.dev-LICENSE.txt`.
 
 Project names, descriptions, and marks remain the property of their respective projects and are used for factual identification and commentary. Linked licence and terms documents stay under the terms of the projects that published them.

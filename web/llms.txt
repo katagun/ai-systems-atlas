@@ -1,10 +1,10 @@
 # AI Systems Atlas
 
-> A reviewed directory of agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes. Published records carry reviewed evidence and a verified_at date; imported discovery metadata remains distinct from human conclusions.
+> A directory of reviewed agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes, plus a complete attributed models.dev source snapshot. Imported source metadata remains distinct from human conclusions.
 
 ## Data
 
-Published JSON, no auth, no rate limit — fetch directly. Licensed under CC BY 4.0:
+Published JSON, no auth, no rate limit — fetch directly. Atlas-authored data is licensed under CC BY 4.0:
 reuse it, including commercially, with credit to AI Systems Atlas
 (https://peacefulcoexistance.com/) and a link to the licence.
 
@@ -16,6 +16,7 @@ reuse it, including commercially, with credit to AI Systems Atlas
 - [inference-services.json](https://peacefulcoexistance.com/inference-services.json): managed inference services with a dedicated operational-service score
 - [local-runtimes.json](https://peacefulcoexistance.com/local-runtimes.json): self-operated inference runtimes with a dedicated runtime score
 - [models.json](https://peacefulcoexistance.com/models.json): reviewed provider-independent model releases with a dedicated access-and-deployability score and models.dev source metadata
+- [models-dev.json](https://peacefulcoexistance.com/models-dev.json): complete commit-pinned models.dev source catalog, attributed under its MIT License and carrying no Atlas review or score
 
 ## Reference
 

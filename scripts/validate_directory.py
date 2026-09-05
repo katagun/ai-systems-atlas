@@ -18,6 +18,7 @@ DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
     "specifications.json", "inference-services.json", "local-runtimes.json", "models.json",
+    "models-dev.json",
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "license-review.json",
@@ -1019,7 +1020,7 @@ def validate_local_runtimes(
 
 
 def validate_model_source_metadata(
-    metadata: object, prefix: str, tax: Taxonomy, errors: list[str]
+    metadata: object, prefix: str, tax: Taxonomy, errors: list[str], *, require_text: bool = True
 ) -> None:
     """Validate the models.dev-owned snapshot without treating it as editorial truth."""
     if not isinstance(metadata, dict) or set(metadata) != MODEL_SOURCE_METADATA_REQUIRED:
@@ -1047,7 +1048,7 @@ def validate_model_source_metadata(
                 modalities, field, tax.enum_ids["model_modalities"],
                 f"{prefix}: source_metadata.modalities", errors,
             )
-        if "text" not in modalities.get("output", []):
+        if require_text and "text" not in modalities.get("output", []):
             errors.append(f"{prefix}: model candidates must produce text")
 
     capabilities = metadata.get("capabilities")
@@ -1181,8 +1182,74 @@ def validate_models(
     return models_value
 
 
+def validate_models_dev(
+    source_data: dict[str, Any], tax: Taxonomy, errors: list[str]
+) -> list[Any]:
+    """Validate the complete, attributed models.dev snapshot separately from reviews."""
+    expected_fields = {"version", "updated_at", "source_record_count", "source", "models"}
+    if set(source_data) != expected_fields:
+        errors.append("models-dev.json: document fields differ from schema")
+    if source_data.get("version") != "1.0":
+        errors.append("models-dev.json: unsupported version")
+    if not valid_date(source_data.get("updated_at")):
+        errors.append("models-dev.json: updated_at must be an ISO date")
+    source = source_data.get("source")
+    source_fields = {"repo", "ref", "commit", "url", "immutable_url", "path", "license", "sha256"}
+    if not isinstance(source, dict) or set(source) != source_fields:
+        errors.append("models-dev.json: source fields differ from schema")
+    else:
+        commit = source.get("commit")
+        if source.get("repo") != "anomalyco/models.dev" or source.get("ref") != "dev":
+            errors.append("models-dev.json: source repo and ref must identify models.dev")
+        if not isinstance(commit, str) or not SHA_PATTERN.fullmatch(commit):
+            errors.append("models-dev.json: source commit must be a full Git SHA")
+        elif source.get("immutable_url") != f"https://codeload.github.com/anomalyco/models.dev/tar.gz/{commit}":
+            errors.append("models-dev.json: immutable URL must address the source commit")
+        if source.get("url") != "https://github.com/anomalyco/models.dev":
+            errors.append("models-dev.json: source URL must be the models.dev repository")
+        if source.get("path") != "models/**/*.toml" or source.get("license") != "MIT":
+            errors.append("models-dev.json: source path and license must identify model TOMLs")
+        if not isinstance(source.get("sha256"), str) or not CONTENT_SHA_PATTERN.fullmatch(source["sha256"]):
+            errors.append("models-dev.json: source sha256 is invalid")
+
+    records = source_data.get("models")
+    if not isinstance(records, list):
+        errors.append("models-dev.json: models must be a list")
+        return []
+    if source_data.get("source_record_count") != len(records):
+        errors.append("models-dev.json: source_record_count must equal the models list length")
+    ids: set[str] = set()
+    source_ids: set[str] = set()
+    for record in records:
+        prefix = f"models.dev source {record.get('source_id', 'unknown') if isinstance(record, dict) else 'unknown'}"
+        if not isinstance(record, dict) or set(record) != {"id", "source_id", "source_metadata"}:
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        model_id = record.get("id")
+        source_id = record.get("source_id")
+        if not isinstance(model_id, str) or not ID_PATTERN.fullmatch(model_id) or not model_id.startswith("model-"):
+            errors.append(f"{prefix}: invalid id")
+        elif model_id in ids:
+            errors.append(f"{prefix}: duplicate id")
+        else:
+            ids.add(model_id)
+        if not isinstance(source_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id):
+            errors.append(f"{prefix}: invalid source_id")
+        elif source_id in source_ids:
+            errors.append(f"{prefix}: duplicate source_id")
+        else:
+            source_ids.add(source_id)
+            expected_id = "model-" + re.sub(r"[^a-z0-9]+", "-", source_id.lower()).strip("-")
+            if model_id != expected_id:
+                errors.append(f"{prefix}: id must be the stable source-derived id {expected_id}")
+        validate_model_source_metadata(
+            record.get("source_metadata"), prefix, tax, errors, require_text=False,
+        )
+    return records
+
+
 def validate_model_candidates(
-    candidates_data: dict[str, Any], published_models: list[Any], tax: Taxonomy,
+    candidates_data: dict[str, Any], published_models: list[Any], source_models: list[Any], tax: Taxonomy,
     errors: list[str],
 ) -> None:
     """Validate the automated models.dev queue and keep it disjoint from reviewed records."""
@@ -1221,6 +1288,11 @@ def validate_model_candidates(
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     candidate_ids: set[str] = set()
+    source_by_id = {
+        item.get("source_id"): item
+        for item in source_models
+        if isinstance(item, dict) and isinstance(item.get("source_id"), str)
+    }
     for candidate in candidates:
         prefix = f"model candidate {candidate.get('source_id', 'unknown') if isinstance(candidate, dict) else 'unknown'}"
         required = {
@@ -1249,6 +1321,11 @@ def validate_model_candidates(
         if not isinstance(review_required, list) or set(review_required) != MODEL_REVIEW_REQUIRED:
             errors.append(f"{prefix}: review_required is incomplete")
         validate_model_source_metadata(candidate.get("source_metadata"), prefix, tax, errors)
+        source_record = source_by_id.get(source_id)
+        if source_record is None:
+            errors.append(f"{prefix}: missing from the complete models.dev source snapshot")
+        elif source_record.get("source_metadata") != candidate.get("source_metadata"):
+            errors.append(f"{prefix}: metadata differs from the complete models.dev source snapshot")
     eligible_count = candidates_data.get("eligible_record_count")
     if isinstance(eligible_count, int) and eligible_count != len(candidates) + len(published_ids):
         errors.append("model-candidates.json: eligible count must equal queued plus reviewed source ids")
@@ -1524,6 +1601,11 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     local_runtimes_value = validate_local_runtimes(catalog["local-runtimes.json"], tax, errors)
     models_value = validate_models(catalog["models.json"], tax, errors)
+    source_models_value = validate_models_dev(catalog["models-dev.json"], tax, errors)
+    if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get("source"):
+        errors.append("model-candidates.json: source snapshot differs from models-dev.json")
+    if catalog["model-candidates.json"].get("source_record_count") != catalog["models-dev.json"].get("source_record_count"):
+        errors.append("model-candidates.json: source_record_count differs from models-dev.json")
 
     validate_unique_record_ids(
         index.projects, specifications_value, inference_services_value, local_runtimes_value,
@@ -1531,7 +1613,9 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
-    validate_model_candidates(catalog["model-candidates.json"], models_value, tax, errors)
+    validate_model_candidates(
+        catalog["model-candidates.json"], models_value, source_models_value, tax, errors,
+    )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(catalog["exclusions.json"], index.repos, candidate_repos, errors)
     validate_queue_envelopes(catalog["candidates.json"], catalog["license-review.json"], errors)
@@ -1550,11 +1634,13 @@ def main() -> int:
     inference_service_count = len(load("inference-services.json")["services"])
     local_runtime_count = len(load("local-runtimes.json")["runtimes"])
     model_count = len(load("models.json")["models"])
+    source_model_count = len(load("models-dev.json")["models"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
         f"{inference_service_count} scored inference services; "
-        f"{local_runtime_count} scored local runtimes; {model_count} scored model releases"
+        f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
+        f"{source_model_count} attributed models.dev source records"
     )
     return 0
 

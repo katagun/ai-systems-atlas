@@ -61,6 +61,7 @@ test("boot fetches payloads, not the published endpoints", async ({ page }) => {
   expect(requested.filter(path => path.endsWith("/app/systems.json"))).toHaveLength(1);
   expect(requested.filter(path => path.endsWith("/projects.json"))).toHaveLength(0);
   expect(requested.filter(path => path.includes("/app/search/"))).toHaveLength(0);
+  expect(requested.filter(path => path.endsWith("/app/model-source-details.json"))).toHaveLength(0);
 });
 
 test("a deep-linked record fetches its detail and renders the full dialog", async ({ page }) => {

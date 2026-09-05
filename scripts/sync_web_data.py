@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
     "specifications.json", "inference-services.json", "local-runtimes.json", "models.json",
+    "models-dev.json",
 )
 
 
