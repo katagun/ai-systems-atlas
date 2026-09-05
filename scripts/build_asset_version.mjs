@@ -21,9 +21,10 @@ const REFERENCE = /((?:href|src)=")([\w./-]+)\?v=[^"]*(")/g;
 // of them changes its URL, so a stale copy can never be served under it.
 const DATA_FILES = [
   "projects.json", "taxonomy.json", "license-evidence.json", "specifications.json",
-  "inference-services.json", "local-runtimes.json", "models.json", "logos.json",
+  "inference-services.json", "local-runtimes.json", "models.json", "models-dev.json", "logos.json",
   "app/systems.json", "app/inference.json", "app/runtimes.json", "app/specifications.json",
   "app/models.json",
+  "app/model-source-details.json",
   "app/search/systems.json", "app/search/inference.json",
   "app/search/runtimes.json", "app/search/specifications.json", "app/search/models.json",
 ];

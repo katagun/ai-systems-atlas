@@ -7,10 +7,12 @@ from unittest.mock import patch
 
 from scripts.import_models_dev import (
     build_document,
+    build_source_document,
     catalog_from_archive,
     get_bytes,
     get_json,
     normalize_catalog,
+    normalize_source_catalog,
     stable_model_id,
 )
 
@@ -98,6 +100,35 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertEqual(["acme/chat"], [item["source_id"] for item in candidates])
         self.assertIsNone(candidates[0]["source_metadata"]["capabilities"]["reasoning"])
         self.assertIsNone(candidates[0]["source_metadata"]["limits"]["input"])
+
+    def test_source_snapshot_keeps_every_model_regardless_of_output_modality(self) -> None:
+        catalog = {
+            "acme/chat": model_record("acme/chat"),
+            "acme/image": model_record("acme/image", output=["image"]),
+        }
+
+        records = normalize_source_catalog(catalog, minimum_records=1)
+
+        self.assertEqual(["acme/chat", "acme/image"], [item["source_id"] for item in records])
+        self.assertEqual(["image"], records[1]["source_metadata"]["modalities"]["output"])
+
+    def test_source_document_records_the_complete_commit_pinned_catalog(self) -> None:
+        catalog = {
+            "acme/chat": model_record("acme/chat"),
+            "acme/image": model_record("acme/image", output=["image"]),
+        }
+
+        document = build_source_document(
+            catalog,
+            b"source archive",
+            COMMIT,
+            observed_at="2026-09-05",
+            minimum_records=1,
+        )
+
+        self.assertEqual(2, document["source_record_count"])
+        self.assertEqual(2, len(document["models"]))
+        self.assertEqual(COMMIT, document["source"]["commit"])
 
     def test_optional_description_is_preserved_as_unknown(self) -> None:
         record = model_record("acme/chat")

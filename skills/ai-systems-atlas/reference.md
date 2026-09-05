@@ -9,6 +9,7 @@ Loaded on demand from [SKILL.md](SKILL.md) when a query needs a field the summar
 - `inference-services.json`: `{version, verified_at, services: [...], generated_at}`
 - `local-runtimes.json`: `{version, verified_at, runtimes: [...]}`
 - `models.json`: `{version, verified_at, source: {...}, models: [...]}`
+- `models-dev.json`: `{version, updated_at, source_record_count, source: {...}, models: [...]}`
 - `taxonomy.json`: `{version, principle, <enum and score-profile groups, listed below>}`
 - `exclusions.json`: `{generated_at, entries: [...]}`
 
@@ -41,6 +42,10 @@ Never scored. `specification_type` is one of `protocol`, `metadata_schema`, `ins
 `id, source_id, name, developer, url, description, model_type, distribution_modes, source_metadata, licenses, source_model, license_review_status, license_note, license_evidence, access_boundary, strengths, tradeoffs, score_profile, score, evidence, metadata_verified_at, verified_at`
 
 `source_metadata` preserves provider-independent discovery facts imported from the pinned models.dev snapshot. The surrounding fields are human-reviewed Atlas conclusions. `score_profile` is always `model_access`; see [docs/MODELS.md](../../docs/MODELS.md). The profile never scores output quality, benchmarks, parameter count, current price, latency, or throughput.
+
+## `models-dev.json` source fields
+
+Each source row contains `id, source_id, source_metadata`. `source_metadata` contains `name, description, family, release_date, last_updated, knowledge_cutoff, modalities, capabilities, limits, reported_open_weights, reported_license, links, weights`. These are models.dev-attributed source claims, not Atlas conclusions. They carry no Atlas model type, distribution mode, license classification, evidence, score, or `verified_at`; use `models.json` when the question requires reviewed terms or comparison.
 
 ## `taxonomy.json` top-level groups
 

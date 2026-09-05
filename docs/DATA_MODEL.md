@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of eight files:
+`directory/` is canonical. The browser consumes synchronized copies of nine files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -16,6 +16,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `inference-services.json` | Reviewed managed inference services, dedicated service scores, and evidence | Yes |
 | `local-runtimes.json` | Reviewed self-operated inference runtimes, dedicated runtime scores, and evidence | Yes |
 | `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
+| `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `license-review.json` | Open license-evidence review incidents | No |
@@ -23,7 +24,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
-The browser presents projects, inference services, and local runtimes through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md) and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
+The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Project record
 
@@ -84,7 +85,7 @@ Candidate records contain discovery facts and proposed classification only. They
 
 A candidate may optionally carry a `triage` block: gathered evidence and a routing proposal, never an editorial conclusion. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md). Its fields are `verdict` (`out_of_scope`, `held`, or `review_ready`), `rule`, `finding`, non-empty `evidence`, `proposed_at`, and `proposer`; `held_by` is optional and present if and only if `verdict` is `held`. Validation rejects a `finding` that names a `system_family` or `primary_role` taxonomy id. Each evidence entry carries `label`, `url`, `kind` (`git_blob` or `web`), `content_sha256`, and `fetched_at`; `git_blob` evidence additionally carries `blob_sha` and a matching `immutable_url`. `proposed_system_family` and `proposed_primary_role` may be null only when the candidate's `triage.held_by` is set — a record can wait for a collection that does not exist yet, but only while a human-named decision holds it.
 
-Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Published model `source_id` values must be absent from this queue.
+Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Reviewed model `source_id` values must be absent from this queue. Every candidate must match the same source row in `models-dev.json`, but the source snapshot is not itself workflow state.
 
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
@@ -152,3 +153,11 @@ Model records are independent from projects, specifications, inference services,
 - **Evidence and review:** non-empty dated authoritative evidence, human-reviewed `metadata_verified_at` for the attributed source snapshot, and human-owned `verified_at` for Atlas conclusions. The queue importer never updates either field on a published record.
 
 Strict validation rejects extra fields, unknown taxonomy values, incomplete evidence, score mismatches, duplicate `source_id` values, overlap with the model candidate queue, and model IDs that collide with any other published collection. See [`MODELS.md`](MODELS.md) and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
+
+## models.dev source record
+
+`models-dev.json` is an automated, attributed source snapshot rather than an Atlas-reviewed collection. Its envelope is `{"version": "1.0", "updated_at": <ISO date>, "source_record_count": n, "source": {...}, "models": [...]}`. `source` pins the models.dev repository ref to a full commit and immutable archive URL, records the archive SHA-256, source path, and MIT license.
+
+Each source row contains only `id`, `source_id`, and `source_metadata`. The metadata shape is the same attributed block a reviewed model preserves: name, nullable description and family, partial release/update/knowledge dates, input and output modalities, tri-state reported capabilities, nullable token limits, reported open-weight and license values, and selected HTTPS source or weight links. Every valid upstream `models/**/*.toml` row is retained, including records that do not output text.
+
+Source rows carry no Atlas `developer` conclusion, model type, distribution mode, source model, reviewed license, evidence, prose boundary, score, or verification date. The web projection derives display-only fields, overlays a reviewed `models.json` record with the same `source_id`, and labels every remaining row as imported and unscored. See [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).

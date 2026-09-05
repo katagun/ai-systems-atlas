@@ -9,6 +9,7 @@ from scripts.build_web_payload import (
     SEARCH_FIELDS,
     build_payloads,
     load_catalog,
+    model_records,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,8 +58,37 @@ class WebPayloadTests(unittest.TestCase):
     def test_search_index_covers_every_record(self) -> None:
         for collection, name, key, _ in COLLECTIONS:
             index = json.loads(self.payloads[f"app/search/{collection}.json"])
-            ids = {record["id"] for record in self.catalog[name][key]}
+            records = model_records(self.catalog) if collection == "models" else self.catalog[name][key]
+            ids = {record["id"] for record in records}
             self.assertEqual(ids, set(index), collection)
+
+    def test_models_payload_overlays_reviews_on_every_source_record(self) -> None:
+        payload = json.loads(self.payloads["app/models.json"])
+        source = self.catalog["models-dev.json"]
+        reviewed = self.catalog["models.json"]["models"]
+
+        self.assertEqual(source["source_record_count"], len(payload["models"]))
+        self.assertEqual(len(reviewed), payload["reviewed_count"])
+        self.assertEqual(len(reviewed), sum(item["review_status"] == "reviewed" for item in payload["models"]))
+        self.assertEqual(len(payload["models"]), len({item["source_id"] for item in payload["models"]}))
+
+    def test_every_imported_model_keeps_its_complete_source_metadata(self) -> None:
+        records = {item["id"]: item for item in model_records(self.catalog)}
+        boot = {
+            item["id"]: item
+            for item in json.loads(self.payloads["app/models.json"])["models"]
+            if item["review_status"] == "imported"
+        }
+        details = json.loads(self.payloads["app/model-source-details.json"])
+
+        self.assertEqual(set(boot), set(details))
+        for record_id, entry in boot.items():
+            self.assertEqual(records[record_id]["description"], details[record_id]["description"])
+            self.assertEqual(records[record_id]["source_metadata"], details[record_id]["source_metadata"])
+            self.assertEqual(
+                {"family", "modalities", "reported_open_weights", "reported_license"},
+                set(entry["source_metadata"]),
+            )
 
     def test_search_index_holds_lowercased_prose(self) -> None:
         """Every indexed field of every collection reaches the index, lowercased."""

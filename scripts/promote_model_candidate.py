@@ -142,11 +142,22 @@ def _promotion_specific_errors(
     candidate: dict[str, Any],
     candidates_data: dict[str, Any],
     models_data: dict[str, Any],
+    source_models_data: dict[str, Any],
 ) -> list[str]:
     errors: list[str] = []
     for field in ("id", "source_id", "source_metadata"):
         if record.get(field) != candidate.get(field):
             errors.append(f"review record must preserve candidate {field} exactly")
+
+    source_models = source_models_data.get("models")
+    source_matches = [
+        item for item in source_models or []
+        if isinstance(item, dict) and item.get("source_id") == candidate.get("source_id")
+    ] if isinstance(source_models, list) else []
+    if len(source_matches) != 1:
+        errors.append("candidate must appear exactly once in the complete models.dev source snapshot")
+    elif source_matches[0].get("source_metadata") != candidate.get("source_metadata"):
+        errors.append("candidate metadata differs from the complete models.dev source snapshot")
 
     models = models_data.get("models")
     if not isinstance(models, list):
@@ -198,6 +209,7 @@ def preflight_promotion(
     """Return complete proposed documents or raise without writing anything."""
     directory = root / "directory"
     models_data = load_json(directory / "models.json")
+    source_models_data = load_json(directory / "models-dev.json")
     candidates_data = load_json(directory / "model-candidates.json")
     taxonomy_data = load_json(directory / "taxonomy.json")
     projects_data = load_json(directory / "projects.json")
@@ -209,7 +221,9 @@ def preflight_promotion(
         raise PromotionError("review record requires a models.dev source_id")
     candidate = candidate_for(candidates_data, source_id)
 
-    errors = _promotion_specific_errors(record, candidate, candidates_data, models_data)
+    errors = _promotion_specific_errors(
+        record, candidate, candidates_data, models_data, source_models_data,
+    )
     proposed_models = deepcopy(models_data)
     proposed_candidates = deepcopy(candidates_data)
     if isinstance(proposed_models.get("models"), list):
@@ -246,6 +260,7 @@ def preflight_promotion(
     validate_model_candidates(
         proposed_candidates,
         published_models if isinstance(published_models, list) else [],
+        source_models_data.get("models", []) if isinstance(source_models_data.get("models"), list) else [],
         taxonomy,
         errors,
     )

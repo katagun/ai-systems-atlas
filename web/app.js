@@ -16,6 +16,7 @@ function writeStoredPageSize(pageSize) {
 
 const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], taxonomy: null,
+  reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
@@ -53,6 +54,7 @@ const label = value => String(value || "")
   .replace(/\bApi\b/g, "API")
   .replace(/\bAi\b/g, "AI");
 const projectLocation = project => project.repo || new URL(project.url).hostname.replace(/^www\./, "");
+const isReviewedModel = model => model.review_status === "reviewed";
 
 const FINDER_DIRECTIONS = [
   { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
@@ -172,8 +174,10 @@ async function bootstrap() {
   state.localRuntimes = runtimes.runtimes;
   state.specifications = specifications.specifications;
   state.models = models.models;
+  state.reviewedModelCount = models.reviewed_count;
+  state.modelSourceCount = models.source_record_count;
   state.taxonomy = taxonomy;
-  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at]
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -244,7 +248,7 @@ function comparisonCollection(kind) {
   if (kind === "system") return state.projects;
   if (kind === "inference") return state.inferenceServices;
   if (kind === "runtime") return state.localRuntimes;
-  if (kind === "model") return state.models;
+  if (kind === "model") return state.models.filter(isReviewedModel);
   return null;
 }
 
@@ -314,7 +318,7 @@ function restoreComparisonFromURL() {
   const collection = comparisonCollection(kind);
   const records = collection ? ids.map(id => collection.find(item => item.id === id)).filter(Boolean) : [];
   const profiles = new Set(records.map(item => item.score_profile));
-  if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1) {
+  if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1 || profiles.has(undefined)) {
     url.searchParams.delete("compare");
     window.history.replaceState(null, "", url);
     return false;
@@ -407,11 +411,11 @@ const COLLECTION_FILTERS = {
     records: () => state.models,
     groups: [
       ["model_types", "#model-type-filter", item => [item.model_type]],
-      ["model_distribution_modes", "#model-distribution-filter", item => item.distribution_modes],
+      ["model_distribution_modes", "#model-distribution-filter", item => item.distribution_modes || []],
       ["model_modalities", "#model-modality-filter", item => [
         ...item.source_metadata.modalities.input, ...item.source_metadata.modalities.output,
       ]],
-      ["source_models", "#model-source-filter", item => [item.source_model]],
+      ["source_models", "#model-source-filter", item => item.source_model ? [item.source_model] : []],
     ],
     licenseFilter: "#model-license-filter",
   },
@@ -427,7 +431,7 @@ function populateCollectionFilters() {
         .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
     }
     if (!collection.licenseFilter) continue;
-    const licenses = new Set(records.flatMap(item => item.licenses));
+    const licenses = new Set(records.flatMap(item => item.licenses || []));
     state.taxonomy.licenses.filter(item => licenses.has(item.id)).forEach(item =>
       $(collection.licenseFilter).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.id)} — ${escapeHTML(item.name)}</option>`)
     );
@@ -480,7 +484,7 @@ function renderStats() {
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
   const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length;
-  $("#hero-kicker").textContent = `${total} reviewed systems, models, services, and runtimes`;
+  $("#hero-kicker").textContent = `${total} systems, source models, services, and runtimes`;
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#memory-collection-count").textContent = memories;
@@ -488,6 +492,7 @@ function renderStats() {
   $("#assistant-collection-count").textContent = assistants;
   $("#inference-collection-count").textContent = state.inferenceServices.length;
   $("#runtime-collection-count").textContent = state.localRuntimes.length;
+  $("#model-collection-count").textContent = state.models.length;
 }
 
 function syncCollectionSwitcher() {
@@ -588,6 +593,27 @@ function renderPager(key, { page, pageCount }) {
   });
 }
 
+function modelModalityRoute(model) {
+  const modalities = model.source_metadata.modalities;
+  return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
+}
+
+function importedModelCard(model, { mixed = false } = {}) {
+  const metadata = model.source_metadata;
+  const reportedLicense = metadata.reported_license || "Not reported";
+  const openWeights = metadata.reported_open_weights == null
+    ? "Open weights not reported"
+    : metadata.reported_open_weights ? "Open weights reported" : "Closed weights reported";
+  return `<article class="project-card model-card imported-model-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">Namespace · ${escapeHTML(model.developer)}</div></div></div></div>
+    <span class="role-badge">Imported metadata · Not Atlas reviewed</span>
+    <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
+    <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
+    <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
+    <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><button data-model="${escapeHTML(model.id)}">View source details →</button></div>
+  </article>`;
+}
+
 function renderAllDirectoryEntries() {
   // The mixed directory searches four collections, so it reads four index
   // namespaces; each is absent until that collection's index lands, and the
@@ -604,14 +630,13 @@ function renderAllDirectoryEntries() {
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
     if (kind === "model") {
-      const modalities = record.source_metadata.modalities;
-      const route = `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
+      if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
-        <div class="tags"><span>${escapeHTML(route)}</span>${record.source_metadata.family ? `<span>${escapeHTML(record.source_metadata.family)}</span>` : ""}</div>
+        <div class="tags"><span>${escapeHTML(modelModalityRoute(record))}</span>${record.source_metadata.family ? `<span>${escapeHTML(record.source_metadata.family)}</span>` : ""}</div>
         <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -809,11 +834,11 @@ const COLLECTIONS = {
     pageKey: "models",
     dataset: "model",
     noun: ["model", "models"],
-    empty: "No reviewed models match these filters.",
+    empty: "No models match these filters.",
     open: id => openModel(id),
     context() {
-      $("#models-kicker").textContent = `${state.models.length} reviewed model releases`;
-      return { suffix: ` · ${state.taxonomy.model_score_profile.name}`, comparable: true };
+      $("#models-kicker").textContent = `${state.modelSourceCount} models.dev records · ${state.reviewedModelCount} Atlas reviewed`;
+      return { suffix: ` · ${state.reviewedModelCount} Atlas reviewed; source imports are unscored`, comparable: true };
     },
     records: () => AtlasCore.filterModels(state.models, {
       term: $("#model-search").value,
@@ -826,14 +851,13 @@ const COLLECTIONS = {
       searchIndex: searchIndexes.models,
     }),
     card: model => {
-      const modalities = model.source_metadata.modalities;
-      const route = `${modalities.input.map(label).join(" + ")} → ${modalities.output.map(label).join(" + ")}`;
+      if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
         <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
         <span class="role-badge">${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
-        <div class="tags"><span>${escapeHTML(route)}</span>${model.source_metadata.family ? `<span>${escapeHTML(model.source_metadata.family)}</span>` : ""}</div>
+        <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${model.source_metadata.family ? `<span>${escapeHTML(model.source_metadata.family)}</span>` : ""}</div>
         <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },
@@ -1313,8 +1337,31 @@ function ensureLicenseEvidence() {
 // fetch clears the request so the next reader retries.
 const loadedDetail = new Set();
 const detailRequests = new Map();
+let modelSourceDetails = null;
+let modelSourceDetailsRequest = null;
+
+function loadModelSourceDetail(record) {
+  const key = `model:${record.id}`;
+  if (loadedDetail.has(key)) return null;
+  if (modelSourceDetails) {
+    Object.assign(record, modelSourceDetails[record.id]);
+    loadedDetail.add(key);
+    return Promise.resolve();
+  }
+  if (!modelSourceDetailsRequest) {
+    modelSourceDetailsRequest = loadJSON("app/model-source-details.json")
+      .then(details => { modelSourceDetails = details; return details; })
+      .catch(() => { modelSourceDetailsRequest = null; return null; });
+  }
+  return modelSourceDetailsRequest.then(details => {
+    if (!details?.[record.id]) return;
+    Object.assign(record, details[record.id]);
+    loadedDetail.add(key);
+  });
+}
 
 function loadDetail(kind, record) {
+  if (kind === "model" && !isReviewedModel(record)) return loadModelSourceDetail(record);
   const key = `${kind}:${record.id}`;
   if (loadedDetail.has(key)) return null;
   if (!detailRequests.has(key)) {
@@ -1341,6 +1388,30 @@ function loadSearchIndex(collection) {
   return searchIndexRequests[collection];
 }
 
+const reportedCapability = value => value == null ? "Not reported" : value ? "Yes" : "No";
+const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
+
+function modelSourceLinks(metadata) {
+  return [...(metadata.links || []), ...(metadata.weights || [])].map(item =>
+    `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
+  ).join("") || "<p>No source links reported by models.dev.</p>";
+}
+
+function importedModelDialogMarkup(model) {
+  const metadata = model.source_metadata;
+  const capabilities = metadata.capabilities || {};
+  const limits = metadata.limits || {};
+  return `<p class="eyebrow">models.dev source record · Not Atlas reviewed</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description || "Loading the models.dev source description…")}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p></section>
+      <section class="detail-block"><h3>Review status</h3><p>This is attributed metadata imported directly from models.dev. Atlas has not reviewed its identity boundary, licensing, distribution, evidence, or access score.</p><p class="unscored-note">Reported license and open-weight fields are source claims, not Atlas conclusions.</p></section>
+      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
+      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
+      <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata)}</section>
+    </div>`;
+}
+
 // Like the other four record dialogs, this paints from the boot record the
 // moment it opens and repaints when app/detail/model/<id>.json lands. Only
 // the imported models.dev block, the identity fields and the overall score
@@ -1348,24 +1419,20 @@ function loadSearchIndex(collection) {
 // the official model page link and every score dimension come from detail,
 // so each of those goes through detailText, detailList or detailScore.
 function modelDialogMarkup(model) {
+  if (!isReviewedModel(model)) return importedModelDialogMarkup(model);
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
-  const capability = value => value == null ? "Not reported" : value ? "Yes" : "No";
-  const tokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
-  const sourceLinks = [...metadata.links, ...metadata.weights].map(item =>
-    `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
-  ).join("") || "<p>No source links reported by models.dev.</p>";
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
-      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(tokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.output))}</p></section>
-      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(capability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
-      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(capability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
+      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
+      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Source links from models.dev</h3>${sourceLinks}</section>
+      <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata)}</section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(model.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
@@ -1411,7 +1478,9 @@ const RECORD_DIALOGS = {
 function paintRecordDialog(dialog, record) {
   const content = $(dialog.content);
   content.innerHTML = dialog.markup(record);
-  content.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  if (!record.review_status || isReviewedModel(record)) {
+    content.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  }
   dialog.afterRender?.();
 }
 
@@ -1780,11 +1849,17 @@ function bindEvents() {
   // second character, so the widened results arrive before anyone sees the
   // narrow ones. The All view searches four collections, so it loads four.
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
-    $(selector).addEventListener("focus", () => {
+    const input = $(selector);
+    const loadIndexes = () => {
       for (const collection of collections) {
         loadSearchIndex(collection)?.then(renderSearchSurfaces);
       }
-    });
+    };
+    input.addEventListener("focus", loadIndexes);
+    // Boot data can take longer to parse as catalogs grow. If someone focuses
+    // a search field before bootstrap binds events, honor that existing focus
+    // instead of waiting for a second focus cycle.
+    if (document.activeElement === input) loadIndexes();
   }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   $("#family-filter").addEventListener("input", () => {

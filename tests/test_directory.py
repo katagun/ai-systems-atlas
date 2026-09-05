@@ -17,6 +17,21 @@ class DirectoryTests(unittest.TestCase):
         cls.inference_services = json.loads((ROOT / "directory" / "inference-services.json").read_text(encoding="utf-8"))
         cls.local_runtimes = json.loads((ROOT / "directory" / "local-runtimes.json").read_text(encoding="utf-8"))
         cls.models = json.loads((ROOT / "directory" / "models.json").read_text(encoding="utf-8"))
+        cls.models_dev = json.loads((ROOT / "directory" / "models-dev.json").read_text(encoding="utf-8"))
+
+    def test_models_dev_source_snapshot_contains_every_upstream_record(self) -> None:
+        source_records = self.models_dev["models"]
+        self.assertEqual(self.models_dev["source_record_count"], len(source_records))
+        self.assertEqual(len(source_records), len({item["source_id"] for item in source_records}))
+        self.assertEqual(
+            {model["source_id"] for model in self.models["models"]},
+            {item["source_id"] for item in source_records}
+            & {model["source_id"] for model in self.models["models"]},
+        )
+        self.assertTrue(any(
+            "text" not in item["source_metadata"]["modalities"]["output"]
+            for item in source_records
+        ))
 
     def test_model_collection_is_independent_and_reviewed(self) -> None:
         source_ids = [model["source_id"] for model in self.models["models"]]
