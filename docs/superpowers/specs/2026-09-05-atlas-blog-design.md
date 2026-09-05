@@ -27,14 +27,16 @@ There is no markdown library available for the same reason. `scripts/build_blog.
 
 Two properties make this safe rather than reckless, and both mirror rules the repository already holds:
 
-- **Escape first, then render.** Every character of post text passes through `html.escape` before any markup is emitted, exactly as `scripts/build_share_pages.py` does. Post text can never introduce an element.
-- **Reject what it does not understand.** An unsupported construct — a table, an image, a raw HTML tag, an ordered list — fails the build naming the file and line, rather than being passed through or silently mangled. This is the same fail-closed posture as [ADR 005](../../adr/005-fail-closed-license-drift.md): an unrecognised input stops the run instead of producing a quiet wrong answer.
+- **Escape first, then render.** Every character of post text passes through `html.escape` before any markup is emitted, exactly as `scripts/build_share_pages.py` does. Post text can never introduce an element, so a raw HTML tag in a draft renders as visible text rather than being rejected — escaping is the stronger answer than refusal here.
+- **Reject what it does not understand.** An unsupported construct — a table, an image, an ordered list, a reference link — fails the build naming the file and line, rather than being passed through or silently mangled. This is the same fail-closed posture as [ADR 005](../../adr/005-fail-closed-license-drift.md): an unrecognised input stops the run instead of producing a quiet wrong answer.
 
 The subset is documented in `docs/BLOG.md` so an author knows the vocabulary before writing rather than discovering it at build time.
 
 ### 3. `build_blog.py` owns blog pages; `build_share_pages.py` keeps the sitemap
 
-The blog generator writes `web/blog/index.html` and `web/blog/<slug>/index.html`. It imports `SITE_URL`, `SITE_NAME`, `SITE_TAGLINE`, and `STYLE` from `scripts/build_share_pages.py` so the visual language has exactly one definition.
+The blog generator writes `web/blog/index.html` and `web/blog/<slug>/index.html`. It imports `SITE_URL`, `SITE_NAME`, `SITE_TAGLINE`, and `STYLE` from `scripts/page_shell.py` so the visual language has exactly one definition.
+
+Those constants were originally read straight out of `build_share_pages.py`, which produced a circular import the moment that module needed the blog's URLs — and a further trap, because naming the extracted module `site.py` silently shadows a standard library module and only breaks when the script is run directly, which is how this repository runs it. Both were caught before commit; the constants now live in `page_shell.py`, which is what they always were.
 
 `build_share_pages.py` already owns `web/sitemap.xml` and `web/robots.txt`. Rather than a second writer for one file, it imports `blog_sitemap_entries()` from the blog module and folds those URLs into the sitemap it already builds. One owner per output; neither module duplicates the other's knowledge of where pages live.
 
@@ -54,7 +56,7 @@ A post page loads `fonts.css` and its own inlined `STYLE`, like a share page. No
 
 ### 7. The first post: evidence discipline applied to itself
 
-`blog/2026-09-05-building-an-atlas-of-agents.md`, written in the first person by Claude, with the human maintainer as editor and driver, and labelled as such on the page. Its organising rule is the catalog's own: every factual claim points at a commit, a session transcript, or a file in the repository.
+`blog/2026-09-05-cite-your-sources-including-yourself.md`, written in the first person by Claude, with the human maintainer as editor and driver, and labelled as such on the page. Its organising rule is the catalog's own: every factual claim points at a commit, a session transcript, or a file in the repository.
 
 It covers what the sources actually support: the limit of the author's own recall, what the catalog is and the project it split from, the discipline of exclusion, four named and dated errors with the mechanism that caught each, and what adversarial review bought. Failures are included as evidence that the method works, not as confession.
 
