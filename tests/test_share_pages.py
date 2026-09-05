@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
+from scripts.build_blog import blog_sitemap_entries
 from scripts.build_share_pages import (
     SITE_URL,
     build_pages,
@@ -86,10 +87,20 @@ class SharePageTests(unittest.TestCase):
         self.assertNotIn("</script>", page.split('<script type="application/ld+json">')[1].split("</script>\n")[0])
 
     def test_sitemap_lists_the_root_and_every_page(self) -> None:
+        """The sitemap covers the root, every share page, and every blog page.
+
+        This module owns the sitemap; the blog module owns its own pages and hands
+        their URLs over. The count therefore spans both, and asserting only the
+        share pages would let a blog post go unlisted without failing anything.
+        """
         sitemap = self.pages["sitemap.xml"]
         self.assertIn(f"<loc>{SITE_URL}</loc>", sitemap)
         self.assertIn(f"<loc>{SITE_URL}records/systems/kilo-code/</loc>", sitemap)
-        self.assertEqual(len(self.pages) - 1, sitemap.count("<loc>"))
+        blog = blog_sitemap_entries(ROOT)
+        for url, _date in blog:
+            self.assertIn(f"<loc>{url}</loc>", sitemap)
+        share_pages = len(self.pages) - 1  # every page except sitemap.xml and robots.txt, plus the root
+        self.assertEqual(share_pages + len(blog), sitemap.count("<loc>"))
         self.assertIn(f"Sitemap: {SITE_URL}sitemap.xml", self.pages["robots.txt"])
 
     def test_committed_share_pages_are_fresh(self) -> None:
