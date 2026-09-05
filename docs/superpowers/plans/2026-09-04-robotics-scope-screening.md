@@ -388,7 +388,9 @@ The test is purpose, not capability: if serving is a capability of software buil
 
 - [ ] **Step 3: Hardware — expect condition 4 to fail, and handle the repo-less exclusion problem**
 
-An exclusion entry is exactly `{name, repo, reason, useful_lesson}` and every one of the 55 existing entries has a repository. A humanoid vendor with no repository therefore has **no valid exclusion shape**. Do not invent a field and do not put a placeholder in `repo`. Instead keep it in `directory/candidates.json` with a `held` verdict whose finding records the failing condition:
+An exclusion entry is exactly `{name, repo, reason, useful_lesson}`, and `repo` may be `null` — ten existing entries are repo-less, including Gorgias Cortex, Unify, and Poolside Laguna. So a vendor with no repository **can** be excluded; the shape exists.
+
+Hold them anyway, and for the right reason. These four fail inclusion-gate condition 4 because authoritative terms cannot be established from what the vendor publishes — the gate is unmeetable rather than failed on the merits, which is the distinction [ADR 023](../../adr/023-autonomous-science-systems-are-not-a-role.md) drew when it held Microsoft Discovery instead of excluding it. Record that condition in the finding:
 
 ```json
 "triage": {
