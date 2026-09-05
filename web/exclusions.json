@@ -348,6 +348,42 @@
       "repo": "SamuelSchmidgall/AgentLaboratory",
       "reason": "MIT, published from a personal account, and it does own a genuine multi-phase research loop — but the loop closes on get_score(...), which prompts a model as an expert reward model and parses the float it writes about its own output, so nothing outside the system measures the result. Its source has been untouched since March 2025, with no tests, no continuous integration, no releases, and no installable package. This is the repository that ADR 023's third ground turns on, where a boundary test keyed on closing the loop on a measurement the system did not author convicted the inspectable and acquitted the opaque; the entry exists so that reasoning is findable from the evidence that produced it.",
       "useful_lesson": "A loop that closes on a model's own score of its own output is architecture without measurement. The shape is identical to a system that measures, and only reading the evaluator distinguishes them, which is why the evaluator is worth locating before the loop diagram is believed."
+    },
+    {
+      "name": "MuJoCo",
+      "repo": "google-deepmind/mujoco",
+      "reason": "MuJoCo is a general-purpose physics engine -- articulated rigid-body dynamics and contact simulation exposed through a C API, Python bindings, and an interactive viewer -- and its README documents no model, language-driven decision loop, or conversational component anywhere in the library; the tutorials it links teach physics simulation, procedural model editing, and a differentiable-physics locomotion example, not planning, retrieval, or conversation. Inclusion-gate condition 2 in docs/CURATION.md fails because a general physics-simulation library is not materially relevant to any family in directory/taxonomy.json. Applying the same purpose-over-capability test the Atlas uses for self-hosted execution software, MuJoCo's documented product is simulating physics for other software to build on -- training, control, biomechanics, graphics -- not an operational system in its own right, and no dedicated serving product built on MuJoCo was reviewed separately.",
+      "useful_lesson": "A physics engine that many published robot-learning systems depend on is still excluded on a category mismatch even though it is foundational infrastructure; being load-bearing for the field is not the same as being an operational agent, memory, or assistant product."
+    },
+    {
+      "name": "Isaac Lab",
+      "repo": "isaac-sim/IsaacLab",
+      "reason": "Isaac Lab is a GPU-accelerated robot-learning framework built on NVIDIA Isaac Sim; its README describes the product as unifying reinforcement learning, imitation learning, and motion-planning research workflows, and lists ready-to-train environments meant to be trained with external reinforcement-learning frameworks (RSL RL, SKRL, RL Games, Stable Baselines). No model, language-driven decision loop, or conversational component is documented anywhere in the README. Inclusion-gate condition 2 in docs/CURATION.md fails because a training and simulation framework is not materially relevant to any family in directory/taxonomy.json; applying the purpose-over-capability test, its documented outcome is building and training robot-learning policies, and no dedicated serving product built on it was reviewed separately.",
+      "useful_lesson": "A framework whose own README frames its purpose as unifying research workflows for training, not as an agent that plans or acts, fails the family test regardless of how central it is to the surrounding ecosystem -- here, the same NVIDIA Isaac Sim stack that GR00T also finetunes and evaluates against."
+    },
+    {
+      "name": "ManiSkill",
+      "repo": "mani-skill/ManiSkill",
+      "reason": "ManiSkill is an open-source robot simulation and training framework built on the SAPIEN physics engine, documented as providing GPU-parallelized data collection and simulation for training reinforcement-learning, imitation-learning, and vision-language-action baselines; the README documents no model or conversational component belonging to ManiSkill itself, only that externally trained policies (Octo, RDT-1B, RT-X, and others) can be evaluated inside its environments. Inclusion-gate condition 2 in docs/CURATION.md fails because a simulation and training benchmark is not materially relevant to any family in directory/taxonomy.json; its documented outcome is generating training and evaluation data for policies developed elsewhere, not operating a model-driven system itself.",
+      "useful_lesson": "A simulator that lists compatibility with well-known VLA models in its own feature list can look adjacent to those models' agent behavior; the simulator's documented product is still the environment and data pipeline, not the policy or its decisions."
+    },
+    {
+      "name": "robosuite",
+      "repo": "ARISE-Initiative/robosuite",
+      "reason": "robosuite is a MuJoCo-based simulation framework for robot learning that provides standardized manipulation benchmark tasks, robot controllers, and teleoperation and human-demonstration tooling for reinforcement- and imitation-learning research; its README documents no model, language-driven decision loop, or conversational component. Inclusion-gate condition 2 in docs/CURATION.md fails because a benchmark and controller simulation framework is not materially relevant to any family in directory/taxonomy.json; its documented outcome is standardizing training and evaluation environments for algorithms developed and run elsewhere.",
+      "useful_lesson": "A simulation framework maintained across multiple academic and industry robotics labs is still a research and benchmarking substrate rather than an operational system; institutional pedigree does not substitute for a model-driven decision loop."
+    },
+    {
+      "name": "LIBERO",
+      "repo": "Lifelong-Robot-Learning/LIBERO",
+      "reason": "LIBERO is a benchmark suite of manipulation task suites and human-teleoperation demonstration datasets for studying knowledge transfer in lifelong and multitask robot learning; its README's own minimal example steps its environment with a hardcoded all-zero dummy action, and its training and evaluation scripts run externally supplied policy architectures and lifelong-learning algorithms against these environments. No model, language-driven decision loop, or conversational component belongs to LIBERO itself. Inclusion-gate condition 2 in docs/CURATION.md fails because a benchmark and dataset suite is not materially relevant to any family in directory/taxonomy.json.",
+      "useful_lesson": "A benchmark whose own quickstart example steps its environment with a dummy all-zero action is transparently an evaluation harness for externally supplied policies, not a system with its own decision loop -- the README shows this before any source needs reading."
+    },
+    {
+      "name": "Bullet",
+      "repo": "bulletphysics/bullet3",
+      "reason": "Bullet is a general-purpose real-time collision-detection and multi-physics simulation SDK used across games, visual effects, robotics, and machine learning, most commonly accessed through the PyBullet Python bindings; its README documents no model, language-driven decision loop, or conversational component, only physics simulation demos and an example browser. Inclusion-gate condition 2 in docs/CURATION.md fails because a general physics-simulation library is not materially relevant to any family in directory/taxonomy.json, for the same reason MuJoCo fails it.",
+      "useful_lesson": "Two independently maintained general-purpose physics engines can both fail the same family test the same way; a physics substrate does not become an operational system merely because robotics and reinforcement-learning projects are built on top of it."
     }
   ]
 }

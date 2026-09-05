@@ -1743,8 +1743,8 @@
       "name": "openpi",
       "url": "https://github.com/Physical-Intelligence/openpi",
       "description": "openpi holds Physical Intelligence's open-source vision-language-action robot policy models (pi0, pi0-FAST, pi0.5) and the packages to run or fine-tune them.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": "Apache-2.0",
       "stars": 13639,
@@ -1756,15 +1756,43 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "567fc57766bd736664f50126cab8145af4071ca16cc5e238f2b11e369169c3b5",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "d16e43d4790c60d9e22e67c58a407594fa6fb772",
+            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/d16e43d4790c60d9e22e67c58a407594fa6fb772"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "f49a4e16e68b128803cc2dcea614603632b04eac",
+            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "google-deepmind/gemini-robotics-sdk",
       "name": "Safari SDK",
       "url": "https://github.com/google-deepmind/gemini-robotics-sdk",
       "description": "Safari SDK provides full lifecycle tooling for Google DeepMind's Gemini Robotics models, including checkpoint access, serving, evaluation, and fine-tuning.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.2,
       "github_detected_license": "Apache-2.0",
       "stars": 606,
@@ -1779,15 +1807,43 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "NVlabs/alpamayo",
       "name": "Alpamayo",
       "url": "https://github.com/NVlabs/alpamayo",
       "description": "Alpamayo is NVIDIA's open reasoning vision-language-action model that pairs autonomous-vehicle driving trajectories with chain-of-causation reasoning.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": "Apache-2.0",
       "stars": 2015,
@@ -1815,136 +1871,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "google-deepmind/mujoco",
-      "name": "MuJoCo",
-      "url": "https://github.com/google-deepmind/mujoco",
-      "description": "MuJoCo (Multi-Joint dynamics with Contact) is a general-purpose physics engine used to simulate articulated and robotic systems.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 14929,
-      "topics": [
-        "mujoco",
-        "physics",
-        "robotics"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "isaac-sim/IsaacLab",
-      "name": "Isaac Lab",
-      "url": "https://github.com/isaac-sim/IsaacLab",
-      "description": "Isaac Lab is a unified robot-learning framework built on NVIDIA Isaac Sim for training and evaluating robot policies in simulation.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": "BSD-3-Clause",
-      "stars": 8041,
-      "topics": [
-        "isaac-sim",
-        "omniverse-kit-extension",
-        "robot-learning",
-        "robotics"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "mani-skill/ManiSkill",
-      "name": "ManiSkill",
-      "url": "https://github.com/mani-skill/ManiSkill",
-      "description": "ManiSkill is a GPU-parallelized robotics simulator and benchmark for manipulation-skill research.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3291,
-      "topics": [
-        "embodied-ai",
-        "reinforcement-learning",
-        "robot-learning",
-        "robot-manipulation",
-        "robotics",
-        "simulation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "ARISE-Initiative/robosuite",
-      "name": "robosuite",
-      "url": "https://github.com/ARISE-Initiative/robosuite",
-      "description": "robosuite is a modular simulation framework and benchmark suite for robot learning, built on the MuJoCo physics engine.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": null,
-      "stars": 2594,
-      "topics": [
-        "physics-simulation",
-        "reinforcement-learning",
-        "robot-learning",
-        "robot-manipulation",
-        "robotics"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "Lifelong-Robot-Learning/LIBERO",
-      "name": "LIBERO",
-      "url": "https://github.com/Lifelong-Robot-Learning/LIBERO",
-      "description": "LIBERO is a benchmark suite for evaluating knowledge transfer in lifelong robot learning across manipulation tasks.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": "MIT",
-      "stars": 2274,
-      "topics": [
-        "benchmark",
-        "imitation-learning",
-        "lifelong-learning",
-        "manipulation",
-        "multitask-learning",
-        "robot-learning"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Ships Apache-2.0 inference code plus a link to separately Hugging-Face-hosted weights under a distinct OpenMDW-1.1 licence, and its own disclaimer describes the release as provided solely for research, experimentation, and evaluation -- lacking real-world sensor access and required safety mechanisms, and explicitly 'not a fully fledged driving stack,' positioned as a building block rather than a deployed system. Its documented output is a predicted multi-second driving trajectory (waypoints) paired with a natural-language reasoning trace; the trajectory is numeric rather than text, image, audio, video, or PDF, and the reasoning trace is auxiliary to it rather than the release's primary output. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is a predicted trajectory.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/NVlabs/alpamayo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f1e4e490ac6d2628592db39e3154a41a919cad656120859bfa99d0a093348a47",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "7cd073a6e65a04026a64595cd9a23e5b0591b355",
+            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/7cd073a6e65a04026a64595cd9a23e5b0591b355"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/NVlabs/alpamayo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "062ed60a2a6568e04f07f3e2ae2b8cea94d1ce8813021f26a0758e2de5efd794",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "6ffaf0ddddd0c7761f592482ea0fa86ffb0af921",
+            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/6ffaf0ddddd0c7761f592482ea0fa86ffb0af921"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "foxglove/mcap",
@@ -2001,8 +1956,8 @@
       "name": "Spot",
       "url": "https://bostondynamics.com/products/spot/",
       "description": "Spot is Boston Dynamics' commercially sold agile mobile robot for autonomous site inspection and remote operation.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.2,
       "github_detected_license": null,
       "stars": null,
@@ -2014,15 +1969,32 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, but the only terms document linked from the product page is a generic website Terms of Use governing use of bostondynamics.com itself, not a purchase agreement, EULA, or licence for the product. Pricing and purchase both route through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
+        "evidence": [
+          {
+            "label": "Spot SDK documentation",
+            "url": "https://dev.bostondynamics.com/",
+            "kind": "web",
+            "content_sha256": "1616be0909be7c97f12e5d248748778a76f46634833f4ae8fd7ed9e6fcd10611",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": null,
       "name": "Unitree G1",
       "url": "https://www.unitree.com/g1/",
       "description": "The Unitree G1 is a commercially sold humanoid robot with force-position hybrid control and imitation- and reinforcement-learned manipulation skills.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": null,
       "stars": null,
@@ -2034,15 +2006,39 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "Unitree publishes a public price (from $13.5K) for the G1 on its own product page and a Terms & Policies page, but that page's only substantive content is an after-sales warranty policy for the physical hardware (repair eligibility, damage exclusions, shipping responsibility); it establishes no software licence, source-model classification, or complete licence list for the robot's onboard AI stack or control software. The site links an 'Official Open Source' page, but that page renders no first-party list of components or licences in its own markup. No authoritative first-party source establishes a reviewed source model and complete licence list for the product as sold.",
+        "evidence": [
+          {
+            "label": "G1 product page",
+            "url": "https://www.unitree.com/g1/",
+            "kind": "web",
+            "content_sha256": "942804cf597a33a6f994c859588af47ce9be97519608b302e578e069a2358700",
+            "fetched_at": "2026-09-04"
+          },
+          {
+            "label": "Terms & Policies",
+            "url": "https://www.unitree.com/terms",
+            "kind": "web",
+            "content_sha256": "852ed22ce2f0e277217ec2cf63c8310843dc860fda061c35c72c66021e63e8a9",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": null,
       "name": "Figure",
       "url": "https://www.figure.ai/",
       "description": "Figure is an AI robotics company building a general-purpose humanoid robot for commercial deployment.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": null,
       "stars": null,
@@ -2054,15 +2050,32 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "Figure's own website carries only a generic website Terms and Conditions document, last updated February 2023, governing use of figure.ai itself -- account access, electronic communications, linked sites -- with no mention of the robot as a product, its sale, its licensing, or its onboard software. No product page publishes a price, a purchase path, or any product-specific terms; the site describes the robot only through narrative and video demonstrations. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page. (Every live figure.ai page, including this one, embeds a random per-request SVG gradient identifier in its markup, so a fixed capture of the page is cited instead of the live URL to keep the citation byte-stable.)",
+        "evidence": [
+          {
+            "label": "Terms and Conditions (fixed capture; the live page is not byte-stable)",
+            "url": "https://web.archive.org/web/20260905035946if_/https://www.figure.ai/terms-and-conditions",
+            "kind": "web",
+            "content_sha256": "b1d2346195940d51c28680e84aec8a50e3538b28d5d6808dca1db88c9622fb02",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": null,
       "name": "1X NEO",
       "url": "https://www.1x.tech/neo",
       "description": "NEO is 1X's humanoid home robot, sold to perform household chores and provide personalized in-home assistance.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": null,
       "stars": null,
@@ -2074,37 +2087,31 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "bulletphysics/bullet3",
-      "name": "Bullet",
-      "url": "https://github.com/bulletphysics/bullet3",
-      "description": "Bullet Physics SDK provides real-time collision detection and multi-physics simulation used in VR, games, visual effects, robotics, and machine learning.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.1,
-      "github_detected_license": null,
-      "stars": 14713,
-      "topics": [
-        "computer-animation",
-        "game-development",
-        "kinematics",
-        "pybullet",
-        "reinforcement-learning",
-        "robotics",
-        "simulation",
-        "simulator",
-        "virtual-reality"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "1X publishes public pricing and reservation plans for NEO on its own order page ($499/mo subscription or $20,000 ownership, a refundable $200 deposit), but the Terms and Conditions page linked from both the product and order pages returns HTTP 404 -- the document does not exist at review time, even though the sibling Privacy Policy page resolves. No reachable first-party page therefore establishes a reviewed source model or complete licence list covering the hardware, its built-in large language model, or its Redwood AI vision-language model; the order page's own feature list describes capability through marketing prose rather than a governing agreement.",
+        "evidence": [
+          {
+            "label": "NEO product page",
+            "url": "https://www.1x.tech/neo",
+            "kind": "web",
+            "content_sha256": "7b5e2e66b705abc689605b8adaf34e0f7e9ad3425d56a3798241ea180701d44a",
+            "fetched_at": "2026-09-04"
+          },
+          {
+            "label": "NEO order page",
+            "url": "https://www.1x.tech/order",
+            "kind": "web",
+            "content_sha256": "ccc7a569b67b78d79829efdc73697bc1a0bf3b336c19b6592aa788db744f80fc",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "huggingface/lerobot",
@@ -2159,8 +2166,8 @@
       "name": "Isaac GR00T",
       "url": "https://github.com/NVIDIA/Isaac-GR00T",
       "description": "Isaac GR00T N1.7 is NVIDIA's open foundation model for generalist humanoid robots.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": "Apache-2.0",
       "stars": 8005,
@@ -2172,15 +2179,43 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Publishes pre-trained checkpoints under the NVIDIA Open Model License alongside Apache-2.0 code implementing a vision-language-action architecture whose action head is a diffusion transformer that denoises continuous actions. The README's own workflow overview ends with 'Connect Gr00tPolicy to your robot controller,' and its deployment section documents a server-client architecture where a policy server sends predicted actions to a client controlling real DROID hardware. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is continuous robot-control actions rather than text, image, audio, video, or PDF, and this is stated directly in the README's workflow-overview and deployment sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "62f6c55a356be039287416f97e03a3b5541052d038a3daec208ea9ff8045a067",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3",
+            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "93363510f62ce25ad1a47605b0b06ab335edd82f1a444531c58dd30b6e5a5a0c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "c6b51dc2713a75b943191f5767865b372a3cc80e",
+            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/c6b51dc2713a75b943191f5767865b372a3cc80e"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "openvla/openvla",
       "name": "OpenVLA",
       "url": "https://github.com/openvla/openvla",
       "description": "OpenVLA is an open-source vision-language-action model for robotic manipulation.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
       "classification_confidence": 0.15,
       "github_detected_license": "MIT",
       "stars": 6955,
@@ -2192,7 +2227,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Publishes pre-trained checkpoints on Hugging Face that, per the README's own licensing note, inherit the Llama-2 Community License even though the repository's code is MIT-licensed. The README states the released checkpoints are trained 'to generate actions, and actions alone,' and its getting-started example predicts an action from a camera image and instruction and passes the result straight to 'robot.act(action, ...)'; a separate deployment script serves the model over a REST API for integration into existing robot control stacks. No model type or modality already in this catalog's vocabulary names a released policy whose sole documented output is a robot action rather than text, image, audio, video, or PDF, and this is stated directly in the README's getting-started example without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/openvla/openvla/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ba8e9a2884e38a8000dafc98af4116512e37b0e143dad2f940100482bfd6b75c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "075feef94adfeb802d1d89856159a974bf5358f8",
+            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/075feef94adfeb802d1d89856159a974bf5358f8"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/openvla/openvla/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c4ee2ba5958af03d74b1d3dfa174e3749171d689fb4c23cc170749c05ae3eeb5",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "04f26a7d0bfdeb89ce54681c695a40df21aa6d96",
+            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/04f26a7d0bfdeb89ce54681c695a40df21aa6d96"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     }
   ],
   "generated_at": "2026-09-02"
