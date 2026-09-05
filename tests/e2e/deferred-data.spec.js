@@ -152,3 +152,55 @@ test("a record dialog prints an em dash under a heading whose detail never arriv
   await expect(hardware.locator("p")).toHaveText("—");
   await expect(page.locator("#runtime-dialog-content")).not.toContainText("undefined");
 });
+
+// The dash has to hold for every heading and every bold label, not just the
+// prose ones — a heading over an empty <ul>, or a label followed by nothing, is
+// the same blank to a reader. This walks one record of each kind, and one of
+// each system_family because the systems dialog branches on it, and asserts
+// that nothing a detail file would have filled is left empty.
+const blankBodies = content => content.evaluate(root => {
+  const blanks = [];
+  const text = element => (element.textContent || "").trim();
+  for (const section of root.querySelectorAll(".detail-block")) {
+    const body = [...section.children].filter(child => child.tagName !== "H3");
+    if (!body.map(text).join("")) blanks.push(`empty section: ${text(section.querySelector("h3"))}`);
+  }
+  for (const list of root.querySelectorAll("ul")) {
+    if (!list.querySelector("li")) blanks.push(`empty list: ${text(list.previousElementSibling)}`);
+  }
+  for (const paragraph of root.querySelectorAll("p")) {
+    if (!text(paragraph)) blanks.push(`empty paragraph: ${text(paragraph.previousElementSibling)}`);
+    const strong = paragraph.querySelector("strong");
+    if (strong && text(paragraph) === text(strong)) blanks.push(`dangling label: ${text(strong)}`);
+  }
+  return blanks;
+});
+
+const BLANK_CHECKS = [
+  ["an agent system", "/?collection=systems&record=system:kilo-code", "#dialog-content", "Kilo Code"],
+  ["a memory system", "/?collection=systems&record=system:activitywatch", "#dialog-content", "ActivityWatch"],
+  ["an assistant system", "/?collection=systems&record=system:chatgpt", "#dialog-content", "ChatGPT"],
+  ["a specification", "/?record=spec:mcp", "#specification-dialog-content", "Model Context Protocol"],
+  ["an inference service", "/?record=inference:openai-api", "#inference-dialog-content", "OpenAI API"],
+  ["a local runtime", "/?collection=runtimes&record=runtime:ollama", "#runtime-dialog-content", "Ollama"],
+];
+
+for (const [kind, url, selector, name] of BLANK_CHECKS) {
+  test(`the dialog for ${kind} leaves no blank body when detail never arrives`, async ({ page }) => {
+    await page.route("**/app/detail/**", route => route.abort());
+    await page.goto(url);
+
+    const content = page.locator(selector);
+    await expect(content.locator("h1")).toHaveText(name);
+    expect(await blankBodies(content)).toEqual([]);
+    await expect(content).not.toContainText("undefined");
+  });
+}
+
+test("a strengths list prints one em dash when detail never arrives", async ({ page }) => {
+  await page.route("**/app/detail/**", route => route.abort());
+  await page.goto("/?collection=systems&record=system:kilo-code");
+
+  const strengths = page.locator("#dialog-content .detail-block").filter({ hasText: "Strengths" });
+  await expect(strengths.locator("li")).toHaveText(["—"]);
+});

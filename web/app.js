@@ -34,6 +34,11 @@ const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"
 // a page that is broken. It is the fallback comparisonTable already makes for
 // an absent cell, held to across the finder and all four record dialogs.
 const detailText = value => escapeHTML(value || "—");
+// The same rule for the lists a detail file carries. An absent list renders an
+// empty <ul> under its heading — a heading over nothing, which reads as a broken
+// page rather than a value that is missing — so the bullets fall back to the one
+// em dash detailText prints for absent prose. A list that has items is untouched.
+const detailList = values => `<ul>${(values || []).map(item => `<li>${escapeHTML(item)}</li>`).join("") || "<li>—</li>"}</ul>`;
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "")
   .replaceAll("_", " ")
@@ -1104,20 +1109,22 @@ function renderTaxonomy() {
 // entries below hold only what differs.
 //
 // Each of these paints twice on a first open: once from the boot record, once
-// when that record's detail lands. So every list a detail file carries is read
-// through `|| []`. Prose fields need no guard — escapeHTML defaults an absent
-// value to "" and traitNames defaults an absent list to [] — and the score
-// table renders its Overall row first, then the dimensions on the repaint.
+// when that record's detail lands — and only once, on the boot record, when
+// that fetch fails. So nothing a detail file carries is printed raw: prose goes
+// through detailText, bulleted lists through detailList, and a list joined into
+// one line through detailText as well, so a heading or a bold label that has
+// nothing under it yet shows the em dash rather than a blank. The score table
+// renders its Overall row first, then the dimensions on the repaint.
 function systemDialogMarkup(project) {
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
   let familyDetail;
   if (project.system_family === "agent_system") {
-    familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${detailText(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${detailText(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${detailText(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
   } else if (project.system_family === "memory_system") {
-    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${(project.capture_modes || []).map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${(project.memory_lifecycle || []).map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${detailText((project.capture_modes || []).map(label).join(" · "))}</p><p><strong>Lifecycle:</strong> ${detailText((project.memory_lifecycle || []).map(label).join(" · "))}</p></section>`;
   } else {
-    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${(project.capture_modes || []).map(label).map(escapeHTML).join(" · ")}</p><p><strong>Continuity:</strong> ${(project.memory_lifecycle || []).map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${detailText((project.capture_modes || []).map(label).join(" · "))}</p><p><strong>Continuity:</strong> ${detailText((project.memory_lifecycle || []).map(label).join(" · "))}</p></section>`;
   }
   const licenseLinks = proof ? proof.items.map(item => item.kind === "git_blob"
     ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
@@ -1132,15 +1139,15 @@ function systemDialogMarkup(project) {
   const statusNotice = project.status === "superseded"
     ? `<section class="detail-block status-notice"><h3>Superseded</h3><p>The maintainer designates ${successor ? `<button class="link-button" data-successor="${escapeHTML(successor.id)}">${escapeHTML(successor.name)}</button>` : "a named successor"} as this project's successor. The review below stands; the record is kept as a historical reference rather than a current recommendation.</p></section>`
     : "";
-  return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
+  return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${detailText(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${(project.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Weaknesses</h3><ul>${(project.weaknesses || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${(project.retrieval_modes || []).map(label).map(escapeHTML).join(" · ")}</p></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(project.strengths)}</section>
+      <section class="detail-block"><h3>Weaknesses</h3>${detailList(project.weaknesses)}</section>
+      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${detailText((project.retrieval_modes || []).map(label).join(" · "))}</p></section>
       ${providerDetail}
       ${familyDetail}
     </div>`;
@@ -1154,7 +1161,7 @@ function specificationDialogMarkup(specification) {
       <section class="detail-block"><h3>What it standardizes</h3><p>${detailText(specification.standardizes)}</p></section>
       <section class="detail-block"><h3>What it does not standardize</h3><p>${detailText(specification.does_not_standardize)}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
 }
@@ -1171,10 +1178,10 @@ function inferenceDialogMarkup(service) {
       <section class="detail-block"><h3>Regional controls</h3><p>${detailText(service.regional_controls)}</p></section>
       <section class="detail-block"><h3>Retention controls</h3><p>${detailText(service.retention_controls)}</p></section>
       <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${detailText(service.routing)}</p><p><strong>Customization:</strong> ${detailText(service.customization)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${(service.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${(service.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(service.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(service.tradeoffs)}</section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${(service.evidence || []).map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(service.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
@@ -1191,10 +1198,10 @@ function runtimeDialogMarkup(runtime) {
       <section class="detail-block"><h3>Hardware requirements</h3><p>${detailText(runtime.hardware_requirements)}</p></section>
       <section class="detail-block"><h3>Model management</h3><p>${detailText(runtime.model_management)}</p></section>
       <section class="detail-block"><h3>Operational controls</h3><p>${detailText(runtime.operational_controls)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${(runtime.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${(runtime.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(runtime.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(runtime.tradeoffs)}</section>
       <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${detailText(runtime.license_note)}</p>${(runtime.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${(runtime.evidence || []).map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(runtime.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
