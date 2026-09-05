@@ -126,6 +126,31 @@ test("short searches match words instead of fragments such as pi in API", () => 
   assert.deepEqual(results.map(project => project.name), ["Pi"]);
 });
 
+test("an indexed search matches prose the boot payload does not carry", () => {
+  const records = [{ id: "a", name: "Alpha", description: "A card line.", score: { overall: 1 } }];
+  const searchIndex = { a: "alpha a card line. it consolidates episodic memory." };
+  assert.equal(filterAndSortProjects(records, { term: "episodic", searchIndex }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "episodic" }).length, 0);
+});
+
+test("search falls back to card text before the index arrives", () => {
+  const records = [{ id: "a", name: "Alpha", description: "A card line.", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "card" }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "card", searchIndex: {} }).length, 1);
+});
+
+test("indexed search keeps infix matching, which is why the index is raw text", () => {
+  const records = [{ id: "ollama", name: "Ollama", description: "Runner.", score: { overall: 1 } }];
+  const searchIndex = { ollama: "ollama runner. runs gguf models locally." };
+  assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
+});
+
+test("a one-character term still matches only the start of a word in the name", () => {
+  const records = [{ id: "a", name: "Alpha", description: "zebra", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "a" }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "z" }).length, 0);
+});
+
 const specifications = [
   { name: "Model Context Protocol", short_name: "MCP", description: "Connect models to tools and data.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"] },
   { name: "AGENTS.md", short_name: "AGENTS.md", description: "Repository instructions for coding agents.", specification_type: "instruction_convention", scope: "project_instructions", status: "evolving", licenses: ["MIT"] },
