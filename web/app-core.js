@@ -32,33 +32,28 @@
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
   }
 
-  function matchesProjectSearch(project, term) {
-    if (term.length === 1) {
-      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return new RegExp(`(^|[^a-z0-9])${escaped}`).test(project.name.toLowerCase());
-    }
-    return matchesSearchTerm(JSON.stringify(project).toLowerCase(), term);
+  // The systems grid's own haystack: an optional index entry for the record,
+  // or (until an index arrives) the whole record stringified and lowercased —
+  // exactly what this search already matched against before indexes existed,
+  // so no index keeps this collection's search a no-op.
+  function recordHaystack(record, index) {
+    const indexed = index && index[record.id];
+    if (indexed) return indexed;
+    return JSON.stringify(record).toLowerCase();
   }
 
-  function matchesDirectoryProjectSearch(project, term) {
-    if (term.length === 1) return matchesProjectSearch(project, term);
-    const haystack = [
-      project.id,
-      project.name,
-      project.description,
-      project.repo,
-      project.url,
-      project.why_it_matters,
-      ...(project.strengths || []),
-      ...(project.weaknesses || []),
-    ].filter(Boolean).join(" ").toLowerCase();
-    return matchesSearchTerm(haystack, term);
+  function matchesRecordSearch(record, term, index) {
+    if (term.length === 1) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`(^|[^a-z0-9])${escaped}`).test(String(record.name || "").toLowerCase());
+    }
+    return matchesSearchTerm(recordHaystack(record, index), term);
   }
 
   function matchesProject(project, filters) {
     const term = (filters.term || "").trim().toLowerCase();
     const roles = filters.roles || [];
-    return matchesProjectSearch(project, term) &&
+    return matchesRecordSearch(project, term, filters.searchIndex) &&
       (!filters.family || project.system_family === filters.family) &&
       (!filters.role || project.primary_role === filters.role) &&
       (!roles.length || roles.includes(project.primary_role)) &&
@@ -82,10 +77,16 @@
     return projects.filter(project => matchesProject(project, filters)).sort(compareProjects(filters.sort));
   }
 
+  // Specifications, inference services, and local runtimes each document a
+  // narrower search surface than the systems grid: visible identity and
+  // boundary prose, never a relationship id or an evidence URL. An index
+  // entry stands in for that surface once one exists; absent one, the
+  // collection's own field list still builds it exactly as it always has.
   function filterSpecifications(specifications, filters = {}) {
     const term = (filters.term || "").trim().toLowerCase();
     return specifications.filter(specification => {
-      const haystack = [
+      const indexed = filters.searchIndex && filters.searchIndex[specification.id];
+      const haystack = indexed || [
         specification.id,
         specification.name,
         specification.short_name,
@@ -108,7 +109,8 @@
     const searchFields = options.searchFields || [];
     const facets = options.facets || {};
     return records.filter(record => {
-      const haystack = searchFields
+      const indexed = filters.searchIndex && filters.searchIndex[record.id];
+      const haystack = indexed || searchFields
         .flatMap(field => Array.isArray(record[field]) ? record[field] : [record[field]])
         .filter(Boolean).join(" ").toLowerCase();
       if (!matchesSearchTerm(haystack, term)) return false;
@@ -179,12 +181,39 @@
     );
   }
 
+  // The mixed directory searches the same visible identity, editorial, and
+  // boundary prose as the Systems finder's advanced view, never the hidden
+  // provider metadata or evidence URLs that only ever show up in detail
+  // dialogs; an index entry stands in for that surface once one exists.
+  function matchesDirectoryProjectSearch(project, term, index) {
+    if (term.length === 1) return matchesRecordSearch(project, term, index);
+    const indexed = index && index[project.id];
+    const haystack = indexed || [
+      project.id,
+      project.name,
+      project.description,
+      project.repo,
+      project.url,
+      project.why_it_matters,
+      ...(project.strengths || []),
+      ...(project.weaknesses || []),
+    ].filter(Boolean).join(" ").toLowerCase();
+    return matchesSearchTerm(haystack, term);
+  }
+
+  // Each collection in the unified directory keeps its own index namespace:
+  // filters.searchIndex covers systems (the same shape filterAndSortProjects
+  // takes), filters.serviceSearchIndex covers inference services, and
+  // filters.runtimeSearchIndex covers local runtimes. Models reach
+  // filterScoredCollection through filterModels, so they read filters.searchIndex
+  // in their own call. Each is supplied independently, so a missing one only
+  // widens that collection's fallback.
   function filterDirectoryEntries(projects, services, runtimes = [], filters = {}) {
     const term = (filters.term || "").trim().toLowerCase();
     const entries = [
-      ...projects.filter(project => matchesDirectoryProjectSearch(project, term)).map(record => ({ kind: "system", record })),
-      ...filterInferenceServices(services, { term, sort: "name" }).map(record => ({ kind: "inference", record })),
-      ...filterLocalRuntimes(runtimes, { term, sort: "name" }).map(record => ({ kind: "runtime", record })),
+      ...projects.filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex)).map(record => ({ kind: "system", record })),
+      ...filterInferenceServices(services, { term, sort: "name", searchIndex: filters.serviceSearchIndex }).map(record => ({ kind: "inference", record })),
+      ...filterLocalRuntimes(runtimes, { term, sort: "name", searchIndex: filters.runtimeSearchIndex }).map(record => ({ kind: "runtime", record })),
     ];
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
@@ -264,10 +293,12 @@
     filterScoredCollection,
     filterSpecifications,
     matchesProject,
+    matchesRecordSearch,
     monogramGlyph,
     paginate,
     parseRecordReference,
     parseViewId,
+    recordHaystack,
     shareRecordPath,
     updateComparisonSelection,
   };

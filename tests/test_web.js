@@ -126,6 +126,33 @@ test("short searches match words instead of fragments such as pi in API", () => 
   assert.deepEqual(results.map(project => project.name), ["Pi"]);
 });
 
+test("an indexed search matches prose the boot payload does not carry", () => {
+  const records = [{ id: "a", name: "Alpha", description: "A card line.", score: { overall: 1 } }];
+  const searchIndex = { a: "alpha a card line. it consolidates episodic memory." };
+  assert.equal(filterAndSortProjects(records, { term: "episodic", searchIndex }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "episodic" }).length, 0);
+});
+
+test("search falls back to card text before the index arrives", () => {
+  const records = [{ id: "a", name: "Alpha", description: "A card line.", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "card" }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "card", searchIndex: {} }).length, 1);
+});
+
+test("indexed search keeps infix matching, which is why the index is raw text", () => {
+  // "llama" appears only in the index text, never in the record's own id,
+  // name, or description — so this fails if recordHaystack ignores the index.
+  const records = [{ id: "ol", name: "Ol", description: "Runner.", score: { overall: 1 } }];
+  const searchIndex = { ol: "ollama runner. runs gguf models locally." };
+  assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
+});
+
+test("a one-character term still matches only the start of a word in the name", () => {
+  const records = [{ id: "a", name: "Alpha", description: "zebra", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "a" }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "z" }).length, 0);
+});
+
 const specifications = [
   { name: "Model Context Protocol", short_name: "MCP", description: "Connect models to tools and data.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"] },
   { name: "AGENTS.md", short_name: "AGENTS.md", description: "Repository instructions for coding agents.", specification_type: "instruction_convention", scope: "project_instructions", status: "evolving", licenses: ["MIT"] },
@@ -169,6 +196,15 @@ test("vendor instruction search finds Copilot, Gemini, and Cline conventions", (
   }
 });
 
+test("indexed search reaches filterSpecifications through filters.searchIndex", () => {
+  // "prompts" lives only in the index text, not in the record's own fields —
+  // so this fails if filterSpecifications ignores filters.searchIndex.
+  const records = [{ id: "proto", name: "Proto", short_name: "Proto", description: "A protocol.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"], score: { overall: 1 } }];
+  const searchIndex = { proto: "a protocol. defines resources, tools, and prompts for hosts." };
+  assert.equal(filterSpecifications(records, { term: "prompts", searchIndex }).length, 1);
+  assert.equal(filterSpecifications(records, { term: "prompts" }).length, 0);
+});
+
 const inferenceServices = [
   { id: "openai-api", name: "OpenAI API", operator: "OpenAI", description: "First-party multimodal API.", service_boundary: "API, not ChatGPT.", service_type: "direct_model_api", delivery_modes: ["on_demand", "batch"], model_sources: ["first_party"], api_styles: ["openai_native"], regional_controls: "Regional projects.", retention_controls: "Endpoint-specific controls.", routing: "One provider.", customization: "Fine-tuning.", strengths: ["Broad modalities"], tradeoffs: ["First-party catalog"], score: { overall: 8.4 }, evidence: [{ url: "https://hidden.example/models" }] },
   { id: "amazon-bedrock", name: "Amazon Bedrock", operator: "Amazon Web Services", description: "Cloud model platform.", service_boundary: "Bedrock, not SageMaker.", service_type: "cloud_model_platform", delivery_modes: ["on_demand", "batch", "reserved_capacity"], model_sources: ["first_party", "third_party_proprietary", "open_weight", "customer_supplied"], api_styles: ["aws_native", "openai_compatible"], regional_controls: "Regional inference profiles.", retention_controls: "Model-specific terms.", routing: "Cross-region.", customization: "Custom models.", strengths: ["AWS governance"], tradeoffs: ["Regional variation"], score: { overall: 8.9 }, evidence: [] },
@@ -198,6 +234,15 @@ test("inference services can sort by their dedicated score", () => {
     filterInferenceServices(inferenceServices, { sort: "score" }).map(item => item.name),
     ["Amazon Bedrock", "OpenAI API", "OpenRouter"],
   );
+});
+
+test("indexed search reaches filterInferenceServices through filters.searchIndex", () => {
+  // "quotas" lives only in the index text, not in the record's own fields —
+  // so this fails if filterInferenceServices ignores filters.searchIndex.
+  const records = [{ id: "svc", name: "Svc", operator: "Op", description: "A service.", service_boundary: "Boundary.", service_type: "direct_model_api", delivery_modes: ["on_demand"], model_sources: ["first_party"], api_styles: ["openai_native"], score: { overall: 1 }, evidence: [] }];
+  const searchIndex = { svc: "a service. supports fine-grained retention quotas." };
+  assert.equal(filterInferenceServices(records, { term: "quotas", searchIndex }).length, 1);
+  assert.equal(filterInferenceServices(records, { term: "quotas" }).length, 0);
 });
 
 test("the unified directory discovers both collections without indexing hidden provider metadata", () => {
@@ -276,6 +321,15 @@ test("local runtimes sort by name by default and by their dedicated score on req
   );
 });
 
+test("indexed search reaches filterLocalRuntimes through filters.searchIndex", () => {
+  // "quantization" lives only in the index text, not in the record's own
+  // fields — so this fails if filterLocalRuntimes ignores filters.searchIndex.
+  const records = [{ id: "rt", name: "Rt", maintainer: "Maintainer", description: "A runtime.", runtime_boundary: "Boundary.", runtime_type: "desktop_runner", accelerators: ["cpu"], model_formats: ["gguf"], api_styles: ["openai_compatible"], score: { overall: 1 }, evidence: [] }];
+  const searchIndex = { rt: "a runtime. ships with quantization presets." };
+  assert.equal(filterLocalRuntimes(records, { term: "quantization", searchIndex }).length, 1);
+  assert.equal(filterLocalRuntimes(records, { term: "quantization" }).length, 0);
+});
+
 test("scored collection filtering treats scalar and list facets alike", () => {
   const options = {
     searchFields: ["name", "strengths"],
@@ -312,6 +366,37 @@ test("mixed directory browsing includes local runtimes alongside the other colle
   assert.deepEqual(
     filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, { term: "MLX" }).map(item => item.record.name),
     ["MLX LM"],
+  );
+});
+
+test("indexed search reaches filterDirectoryEntries through all three index keys", () => {
+  // Each term lives only in one collection's own index entry, never in any
+  // record's own fields — so this fails if filterDirectoryEntries wires a
+  // wrong key (e.g. filters.serviceIndex instead of filters.serviceSearchIndex)
+  // or ignores an index outright.
+  const dirProjects = [{ ...projects[3], id: "proj", name: "Proj", description: "A system.", score: { overall: 1 } }];
+  const dirServices = [{ id: "svc", name: "Svc", operator: "Op", description: "A service.", service_boundary: "Boundary.", service_type: "direct_model_api", delivery_modes: ["on_demand"], model_sources: ["first_party"], api_styles: ["openai_native"], score: { overall: 1 }, evidence: [] }];
+  const dirRuntimes = [{ id: "rt", name: "Rt", maintainer: "Maintainer", description: "A runtime.", runtime_boundary: "Boundary.", runtime_type: "desktop_runner", accelerators: ["cpu"], model_formats: ["gguf"], api_styles: ["openai_compatible"], score: { overall: 1 }, evidence: [] }];
+
+  const searchIndex = { proj: "a system. handles episodic recall for agents." };
+  const serviceSearchIndex = { svc: "a service. offers regional failover routing." };
+  const runtimeSearchIndex = { rt: "a runtime. ships with quantization presets." };
+  const filters = { searchIndex, serviceSearchIndex, runtimeSearchIndex };
+
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "episodic" })
+      .map(item => [item.kind, item.record.name]),
+    [["system", "Proj"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "failover" })
+      .map(item => [item.kind, item.record.name]),
+    [["inference", "Svc"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "quantization" })
+      .map(item => [item.kind, item.record.name]),
+    [["runtime", "Rt"]],
   );
 });
 
@@ -490,11 +575,50 @@ test("every catalog file app.js fetches is stamped with its content hash so the 
   const stamped = JSON.parse(indexHTML().match(/<script type="application\/json" id="data-versions">([^<]*)<\/script>/)[1]);
   const fetched = [...fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8")
     .matchAll(/loadJSON\("([\w./-]+)"\)/g)].map(match => match[1]);
-  assert.deepEqual(fetched.sort(), Object.keys(stamped).sort(), "app.js fetches a catalog file index.html does not stamp");
+  for (const file of fetched) {
+    assert.ok(file in stamped, `app.js fetches ${file} but index.html does not stamp it`);
+  }
   for (const [file, version] of Object.entries(stamped)) {
+    if (file === "app/detail") continue; // one shared stamp over a directory, not a single file's hash
     const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
     assert.equal(version, digest, `${file} is stamped ${version} but hashes to ${digest}; run node scripts/build_asset_version.mjs`);
   }
+});
+
+// The loop above exempts app/detail because it stamps a tree rather than a
+// file. Nothing else checked its value, so a builder whose hashing changed —
+// or one whose stamp depended on where the checkout lived — was invisible
+// here. This recomputes it independently: over the whole tree, in sorted order,
+// under each file's slash-separated path relative to the detail root.
+test("the shared app/detail stamp hashes every detail file's content under a checkout-independent name", () => {
+  const detailRoot = path.join(__dirname, "..", "web", "app", "detail");
+  const names = fs.readdirSync(detailRoot, { recursive: true })
+    .filter(name => fs.statSync(path.join(detailRoot, name)).isFile())
+    .map(name => name.split(path.sep).join("/"))
+    .sort();
+  assert.ok(names.length > 200, `only ${names.length} detail files walked; the tree should hold one per record`);
+  assert.ok(names.every(name => !path.isAbsolute(name)), "a stamp over absolute paths differs between checkouts");
+  const hash = crypto.createHash("sha256");
+  for (const name of names) {
+    hash.update(Buffer.from(name));
+    hash.update(fs.readFileSync(path.join(detailRoot, name)));
+  }
+  const digest = hash.digest("hex").slice(0, 12);
+  const versions = JSON.parse(indexHTML().match(/id="data-versions">([^<]*)</)[1]);
+  assert.equal(versions["app/detail"], digest,
+    `index.html stamps app/detail ${versions["app/detail"]} but the tree hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+});
+
+test("every app payload class is versioned, with one shared stamp for detail", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+  for (const collection of ["systems", "inference", "runtimes", "specifications"]) {
+    assert.match(versions[`app/${collection}.json`], /^[0-9a-f]{12}$/);
+    assert.match(versions[`app/search/${collection}.json`], /^[0-9a-f]{12}$/);
+  }
+  assert.match(versions["app/detail"], /^[0-9a-f]{12}$/);
+  const perRecord = Object.keys(versions).filter(key => key.startsWith("app/detail/"));
+  assert.deepEqual(perRecord, [], "detail files share one stamp; they are not versioned individually");
 });
 
 test("the app does not disable the HTTP cache it just earned a content hash for", () => {

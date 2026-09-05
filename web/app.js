@@ -15,7 +15,8 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], taxonomy: null, licenses: new Map(),
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], taxonomy: null,
+  licenses: new Map(), logos: { icons: {}, records: {} },
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
@@ -26,6 +27,25 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+// A card or a dialog paints from the boot record — before that record's detail
+// file has landed, and forever if the fetch for it failed. Every detail-only
+// prose field is therefore printed through this: a heading over an em dash
+// reads as a value that is missing, where a heading over a blank line reads as
+// a page that is broken. It is the fallback comparisonTable already makes for
+// an absent cell, held to across the finder and all four record dialogs.
+const detailText = value => escapeHTML(value || "—");
+// The same rule for the lists a detail file carries. An absent list renders an
+// empty <ul> under its heading — a heading over nothing, which reads as a broken
+// page rather than a value that is missing — so the bullets fall back to the one
+// em dash detailText prints for absent prose. A list that has items is untouched.
+const detailList = values => `<ul>${(values || []).map(item => `<li>${escapeHTML(item)}</li>`).join("") || "<li>—</li>"}</ul>`;
+// And the same for a score dimension. The inference and runtime tables label
+// their rows from the taxonomy profile, which is always loaded, and read the
+// value off the record, which the boot payload does not carry — so a failed
+// detail fetch leaves a full table of labels with blank cells. The test is
+// `== null`, not truthiness, for the reason scoreCell tests that way: zero is
+// a score a record can actually hold, and a dash would be a lie about it.
+const detailScore = value => value == null ? "—" : escapeHTML(value);
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "")
   .replaceAll("_", " ")
@@ -129,27 +149,31 @@ const dataVersions = (() => {
 })();
 
 async function loadJSON(path) {
-  const version = dataVersions[path];
+  // Record detail shares one stamp rather than carrying 271 hashes in the page.
+  const version = dataVersions[path] || (path.startsWith("app/detail/") ? dataVersions["app/detail"] : undefined);
   const response = await fetch(version ? `${path}?v=${version}` : path);
   if (!response.ok) throw new Error(`Unable to load ${path}`);
   return response.json();
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory, modelDirectory, logos] = await Promise.all([
-    loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json"),
-    loadJSON("models.json"), loadJSON("logos.json")
+  // The published endpoints are an API, not this page's payload: the page reads
+  // a projection of them shaped for a first render. See ADR 026. Only the files
+  // the first paint reads are awaited here — taxonomy.json is small and wholly
+  // needed, so it stays a direct read of the endpoint. Everything else arrives
+  // on demand: a record's detail when a dialog or comparison needs it, a search
+  // index when a search box takes focus, logos.json off the critical path.
+  const [systems, inference, runtimes, specifications, models, taxonomy] = await Promise.all([
+    loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
+    loadJSON("app/specifications.json"), loadJSON("app/models.json"), loadJSON("taxonomy.json")
   ]);
-  state.projects = directory.projects;
-  state.specifications = specificationDirectory.specifications;
-  state.inferenceServices = inferenceDirectory.services;
-  state.localRuntimes = runtimeDirectory.runtimes;
-  state.models = modelDirectory.models;
+  state.projects = systems.systems;
+  state.inferenceServices = inference.inference;
+  state.localRuntimes = runtimes.runtimes;
+  state.specifications = specifications.specifications;
+  state.models = models.models;
   state.taxonomy = taxonomy;
-  state.logos = logos;
-  state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
-  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at, modelDirectory.verified_at]
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -167,6 +191,7 @@ async function bootstrap() {
   }
   restoreViewFromURL();
   restoreRecordFromURL();
+  loadMarks();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -174,8 +199,27 @@ async function bootstrap() {
 // logos.json; every dynamic value still passes through escapeHTML.
 function cardMark(record) {
   const icon = state.logos.icons[state.logos.records[record.id]];
-  if (icon) return `<span class="card-mark" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
-  return `<span class="card-mark card-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
+  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(record.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
+}
+
+// The icon bodies are the largest file the page loads and nothing about the
+// page depends on them: a card without one already renders its monogram. So
+// they arrive after the first paint, and every mark on screen is filled in
+// once they do. Cards rendered later pick their icon up through cardMark.
+function loadMarks() {
+  return loadJSON("logos.json")
+    .then(logos => { state.logos = logos; paintMarks(); })
+    .catch(() => {});
+}
+
+function paintMarks(root = document) {
+  $$("[data-mark]", root).forEach(mark => {
+    const icon = state.logos.icons[state.logos.records[mark.dataset.mark]];
+    if (!icon) return;
+    mark.classList.remove("card-monogram");
+    mark.innerHTML = `<svg viewBox="0 0 24 24">${icon.body}</svg>`;
+  });
 }
 
 function taxonomyName(group, id) {
@@ -545,8 +589,14 @@ function renderPager(key, { page, pageCount }) {
 }
 
 function renderAllDirectoryEntries() {
+  // The mixed directory searches three collections, so it reads three index
+  // namespaces; each is absent until that collection's index lands, and the
+  // filter falls back to the boot record for whichever is still missing.
   const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, {
     term: $("#all-directory-search").value,
+    searchIndex: searchIndexes.systems,
+    serviceSearchIndex: searchIndexes.inference,
+    runtimeSearchIndex: searchIndexes.runtimes,
   });
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
@@ -589,6 +639,7 @@ function renderAllDirectoryEntries() {
 function filteredProjects() {
   return AtlasCore.filterAndSortProjects(state.projects, {
     term: $("#project-search").value,
+    searchIndex: searchIndexes.systems,
     family: $("#family-filter").value,
     role: $("#role-filter").value,
     roles: state.directoryRoles || [],
@@ -660,6 +711,7 @@ const COLLECTIONS = {
     },
     records: () => AtlasCore.filterSpecifications(state.specifications, {
       term: $("#specification-search").value,
+      searchIndex: searchIndexes.specifications,
       type: $("#specification-type-filter").value,
       scope: $("#specification-scope-filter").value,
       status: $("#specification-status-filter").value,
@@ -692,6 +744,7 @@ const COLLECTIONS = {
     }),
     records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
       term: $("#inference-search").value,
+      searchIndex: searchIndexes.inference,
       type: $("#inference-type-filter").value,
       delivery: $("#inference-delivery-filter").value,
       modelSource: $("#inference-model-source-filter").value,
@@ -720,6 +773,7 @@ const COLLECTIONS = {
     }),
     records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
       term: $("#runtime-search").value,
+      searchIndex: searchIndexes.runtimes,
       type: $("#runtime-type-filter").value,
       accelerator: $("#runtime-accelerator-filter").value,
       modelFormat: $("#runtime-format-filter").value,
@@ -755,6 +809,7 @@ const COLLECTIONS = {
       sourceModel: $("#model-source-filter").value,
       license: $("#model-license-filter").value,
       sort: $("#model-sort-filter").value,
+      searchIndex: searchIndexes.models,
     }),
     card: model => {
       const modalities = model.source_metadata.modalities;
@@ -800,6 +855,22 @@ const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
 
+// Repaint whatever a search index could have widened. A search box may have a
+// term in it already when its index lands, so this runs for the collection on
+// screen and for specifications, which live on their own view.
+function renderSearchSurfaces() {
+  const renderers = {
+    all: renderAllDirectoryEntries, systems: renderProjects,
+    inference: renderInferenceServices, runtimes: renderLocalRuntimes,
+  };
+  renderers[state.directoryCollection]?.();
+  // Specifications and Models are sibling views rather than directory
+  // collections, so neither is in the map above and both repaint every time.
+  renderSpecifications();
+  renderModels();
+  if (state.directoryRoles) renderFinder();
+}
+
 function bindComparisonButtons(root) {
   $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
     toggleComparison(button.dataset.compareKind, button.dataset.compareId);
@@ -835,68 +906,91 @@ function renderFinder() {
     content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
   } else if (step === 2) {
+    // The shortlist's candidates are known once the goal is: fetch their detail
+    // now, while the priority question is on screen.
+    ensureFinderDetail();
     const choices = FINDER_PRIORITIES[answers.direction];
     content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
-    content = renderFinderResults();
+    const { direction, goal } = answers;
+    const pending = ensureFinderDetail();
+    if (pending) {
+      pending.then(() => {
+        if (state.finder.step === 3 && answers.direction === direction && answers.goal === goal) renderFinder();
+      });
+      content = `<div class="finder-question"><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div>`;
+    } else {
+      content = renderFinderResults();
+    }
   }
   const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
   $("#finder-content").innerHTML = content + navigation;
 }
 
+// A boot record carries only its overall score, so every other dimension this
+// weighting reads may still be in flight. One undefined turns the whole match
+// into NaN and the shortlist's order into whatever the sort happened to do, so
+// a dimension that has not arrived counts as zero — the ordering stays
+// deterministic, the same way recommendationReasons below stays readable.
+const scoreDimension = (project, name) => project.score?.[name] ?? 0;
+
 function priorityBoost(project, priority) {
+  const dimension = name => scoreDimension(project, name);
   if (project.score_profile === "inference_service") {
-    if (priority === "governance") return project.score.data_governance / 2;
-    if (priority === "regions") return project.score.regional_deployment_control / 2;
-    if (priority === "portable") return project.score.api_interoperability / 2 + project.score.serving_flexibility / 4;
-    if (priority === "resilience") return project.score.traffic_resilience / 2 + project.score.operational_maturity / 4;
-    return project.score.overall / 3;
+    if (priority === "governance") return dimension("data_governance") / 2;
+    if (priority === "regions") return dimension("regional_deployment_control") / 2;
+    if (priority === "portable") return dimension("api_interoperability") / 2 + dimension("serving_flexibility") / 4;
+    if (priority === "resilience") return dimension("traffic_resilience") / 2 + dimension("operational_maturity") / 4;
+    return dimension("overall") / 3;
   }
   if (project.score_profile === "local_runtime") {
-    if (priority === "hardware") return project.score.hardware_accelerator_coverage / 2;
-    if (priority === "formats") return project.score.model_format_support / 2;
-    if (priority === "serving") return project.score.serving_concurrency / 2 + project.score.api_interoperability / 4;
-    if (priority === "operability") return project.score.deployment_operations / 2 + project.score.observability_control / 4;
-    return project.score.overall / 3;
+    if (priority === "hardware") return dimension("hardware_accelerator_coverage") / 2;
+    if (priority === "formats") return dimension("model_format_support") / 2;
+    if (priority === "serving") return dimension("serving_concurrency") / 2 + dimension("api_interoperability") / 4;
+    if (priority === "operability") return dimension("deployment_operations") / 2 + dimension("observability_control") / 4;
+    return dimension("overall") / 3;
   }
   if (project.system_family === "memory_system") {
     if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
-    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + project.score.data_sovereignty / 10;
-    if (priority === "easy") return project.score.operational_simplicity / 2;
-    if (priority === "portable") return project.score.interoperability / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
-    return project.score.overall / 3;
+    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
+    if (priority === "easy") return dimension("operational_simplicity") / 2;
+    if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
+    return dimension("overall") / 3;
   }
   if (project.system_family === "agent_system") {
     if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
     if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-    if (priority === "local") return (project.local_first ? 3 : 0) + (project.execution_boundaries.includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
-    if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
-    return project.score.overall / 3;
+    if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
+    if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
+    return dimension("overall") / 3;
   }
-  if (priority === "tools") return project.score.tools_integrations / 2;
-  if (priority === "continuity") return project.score.context_continuity / 2;
-  if (priority === "governance") return project.score.data_governance / 3 + project.score.human_control / 4;
-  if (priority === "portable") return project.score.interoperability / 1.8;
-  return project.score.overall / 3;
+  if (priority === "tools") return dimension("tools_integrations") / 2;
+  if (priority === "continuity") return dimension("context_continuity") / 2;
+  if (priority === "governance") return dimension("data_governance") / 3 + dimension("human_control") / 4;
+  if (priority === "portable") return dimension("interoperability") / 1.8;
+  return dimension("overall") / 3;
 }
 
+// A reason chip quotes a score dimension, which only a detail file carries. It
+// cannot throw, but it can print "Simplicity undefined/10" at a reader when a
+// detail file never arrived, so every dimension here falls back to an em dash.
 function recommendationReasons(project, priority) {
   if (project.score_profile === "local_runtime") {
     const reasons = [taxonomyName("local_runtime_types", project.runtime_type)];
-    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage}/10`);
-    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support}/10`);
-    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency}/10`);
-    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations}/10`, `Observability ${project.score.observability_control}/10`);
+    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage ?? "—"}/10`);
+    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support ?? "—"}/10`);
+    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency ?? "—"}/10`);
+    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations ?? "—"}/10`, `Observability ${project.score.observability_control ?? "—"}/10`);
     reasons.push(...project.accelerators.slice(0, 2).map(item => taxonomyName("runtime_accelerators", item)));
     return [...new Set(reasons)].slice(0, 4);
   }
   if (project.score_profile === "inference_service") {
     const reasons = [taxonomyName("inference_service_types", project.service_type)];
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
-    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control}/10`);
-    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability}/10`, `Serving flexibility ${project.score.serving_flexibility}/10`);
-    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience}/10`);
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability ?? "—"}/10`, `Serving flexibility ${project.score.serving_flexibility ?? "—"}/10`);
+    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience ?? "—"}/10`);
     reasons.push(...project.delivery_modes.slice(0, 2).map(item => taxonomyName("inference_delivery_modes", item)));
     return [...new Set(reasons)].slice(0, 4);
   }
@@ -904,32 +998,63 @@ function recommendationReasons(project, priority) {
   if (project.local_first) reasons.push("Local-first");
   if (project.system_family === "memory_system") {
     if (project.human_editable) reasons.push("Human-editable data");
-    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
+    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
   } else if (project.system_family === "agent_system") {
     const interfaces = project.agent_interfaces.slice(0, 2).map(item => taxonomyName("agent_interfaces", item));
     reasons.push(...interfaces);
-    if (priority === "control") reasons.push(`Human control ${project.score.human_control}/10`);
+    if (priority === "control") reasons.push(`Human control ${project.score.human_control ?? "—"}/10`);
   } else {
-    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations}/10`);
-    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity}/10`);
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
+    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations ?? "—"}/10`);
+    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity ?? "—"}/10`);
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
   }
   return [...new Set(reasons)].slice(0, 4);
+}
+
+// The shortlist is the one surface that reads detail for records nobody has
+// opened: it ranks on the full score dimensions and quotes a tradeoff, and
+// boot carries neither. So a direction and a goal name a bounded candidate set
+// — one goal's classifications, a few dozen records at most — and that set is
+// hydrated before results paint. The fetches start when the goal is chosen, so
+// the priority question usually covers the wait.
+const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
+const finderDetailAwaited = new Set();
+
+function finderCandidates() {
+  const { direction, goal } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[direction]?.find(item => item.id === goal);
+  if (!goalConfig) return [];
+  const records = direction === "inference_service" ? state.inferenceServices
+    : direction === "local_runtime" ? state.localRuntimes : state.projects;
+  return records.filter(project => {
+    if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
+    if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
+    return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
+  });
+}
+
+// Null once this goal's candidates have been waited on, so a detail file that
+// never arrives costs one wait and then a shortlist built from what landed —
+// never an endless retry.
+function ensureFinderDetail() {
+  const { direction, goal } = state.finder.answers;
+  const key = `${direction}:${goal}`;
+  if (finderDetailAwaited.has(key)) return null;
+  const kind = FINDER_DETAIL_KINDS[direction] || "system";
+  const pending = finderCandidates().map(record => loadDetail(kind, record)).filter(Boolean);
+  if (!pending.length) {
+    finderDetailAwaited.add(key);
+    return null;
+  }
+  return Promise.all(pending).then(() => { finderDetailAwaited.add(key); });
 }
 
 function recommendedFinderRecords() {
   const { direction, goal, priority } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
-  const records = direction === "inference_service" ? state.inferenceServices
-    : direction === "local_runtime" ? state.localRuntimes : state.projects;
-  return records
-    .filter(project => {
-      if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
-      if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
-      return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
-    })
+  return finderCandidates()
     .map(project => {
       const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type)
         : direction === "local_runtime" ? goalConfig.runtimeTypes.indexOf(project.runtime_type)
@@ -965,7 +1090,7 @@ function renderFinderResults() {
         <div class="license-row">${identityRow(project)}</div>
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
-      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference || isRuntime ? project.tradeoffs[0] : project.weaknesses[0])}</p>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
       <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
@@ -1054,16 +1179,24 @@ function renderTaxonomy() {
 // element, register the open record for deep links and the back button — around
 // markup that is genuinely per-collection. The frame lives here once; the
 // entries below hold only what differs.
+//
+// Each of these paints twice on a first open: once from the boot record, once
+// when that record's detail lands — and only once, on the boot record, when
+// that fetch fails. So nothing a detail file carries is printed raw: prose goes
+// through detailText, bulleted lists through detailList, and a list joined into
+// one line through detailText as well, so a heading or a bold label that has
+// nothing under it yet shows the em dash rather than a blank. The score table
+// renders its Overall row first, then the dimensions on the repaint.
 function systemDialogMarkup(project) {
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
   let familyDetail;
   if (project.system_family === "agent_system") {
-    familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${detailText(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${detailText(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${detailText(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
   } else if (project.system_family === "memory_system") {
-    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${detailText((project.capture_modes || []).map(label).join(" · "))}</p><p><strong>Lifecycle:</strong> ${detailText((project.memory_lifecycle || []).map(label).join(" · "))}</p></section>`;
   } else {
-    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Continuity:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${detailText((project.capture_modes || []).map(label).join(" · "))}</p><p><strong>Continuity:</strong> ${detailText((project.memory_lifecycle || []).map(label).join(" · "))}</p></section>`;
   }
   const licenseLinks = proof ? proof.items.map(item => item.kind === "git_blob"
     ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
@@ -1078,15 +1211,15 @@ function systemDialogMarkup(project) {
   const statusNotice = project.status === "superseded"
     ? `<section class="detail-block status-notice"><h3>Superseded</h3><p>The maintainer designates ${successor ? `<button class="link-button" data-successor="${escapeHTML(successor.id)}">${escapeHTML(successor.name)}</button>` : "a named successor"} as this project's successor. The review below stands; the record is kept as a historical reference rather than a current recommendation.</p></section>`
     : "";
-  return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
+  return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${detailText(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
-      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Weaknesses</h3><ul>${project.weaknesses.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${project.retrieval_modes.map(label).map(escapeHTML).join(" · ")}</p></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(project.strengths)}</section>
+      <section class="detail-block"><h3>Weaknesses</h3>${detailList(project.weaknesses)}</section>
+      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${detailText((project.retrieval_modes || []).map(label).join(" · "))}</p></section>
       ${providerDetail}
       ${familyDetail}
     </div>`;
@@ -1097,57 +1230,113 @@ function specificationDialogMarkup(specification) {
   return `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
-      <section class="detail-block"><h3>What it standardizes</h3><p>${escapeHTML(specification.standardizes)}</p></section>
-      <section class="detail-block"><h3>What it does not standardize</h3><p>${escapeHTML(specification.does_not_standardize)}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p>${escapeHTML(specification.license_note)}</p>${specification.license_evidence.map(specificationEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${specification.evidence.map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>What it standardizes</h3><p>${detailText(specification.standardizes)}</p></section>
+      <section class="detail-block"><h3>What it does not standardize</h3><p>${detailText(specification.does_not_standardize)}</p></section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
 }
 
 function inferenceDialogMarkup(service) {
   const profile = state.taxonomy.inference_service_score_profile;
-  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(service.score[dimension.id])}</td></tr>`).join("");
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(service.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(service.score.overall)}</td></tr></table><p class="unscored-note">Operational service score only. It excludes model quality, current price, and transient latency or throughput.</p></section>
-      <section class="detail-block"><h3>Service boundary</h3><p>${escapeHTML(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Service boundary</h3><p>${detailText(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Delivery and model sources</h3><p><strong>Delivery:</strong> ${escapeHTML(service.delivery_modes.map(item => taxonomyName("inference_delivery_modes", item)).join(" · "))}</p><p><strong>Model sources:</strong> ${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</p><p><strong>API styles:</strong> ${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p></section>
-      <section class="detail-block"><h3>Regional controls</h3><p>${escapeHTML(service.regional_controls)}</p></section>
-      <section class="detail-block"><h3>Retention controls</h3><p>${escapeHTML(service.retention_controls)}</p></section>
-      <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${escapeHTML(service.routing)}</p><p><strong>Customization:</strong> ${escapeHTML(service.customization)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${service.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${service.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Regional controls</h3><p>${detailText(service.regional_controls)}</p></section>
+      <section class="detail-block"><h3>Retention controls</h3><p>${detailText(service.retention_controls)}</p></section>
+      <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${detailText(service.routing)}</p><p><strong>Customization:</strong> ${detailText(service.customization)}</p></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(service.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(service.tradeoffs)}</section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${service.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(service.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
 function runtimeDialogMarkup(runtime) {
   const profile = state.taxonomy.local_runtime_score_profile;
-  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(runtime.score[dimension.id])}</td></tr>`).join("");
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(runtime.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(runtime.score.overall)}</td></tr></table><p class="unscored-note">Documented execution capability only. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.</p></section>
-      <section class="detail-block"><h3>Runtime boundary</h3><p>${escapeHTML(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Runtime boundary</h3><p>${detailText(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Execution</h3><p><strong>Accelerators:</strong> ${escapeHTML(runtime.accelerators.map(item => taxonomyName("runtime_accelerators", item)).join(" · "))}</p><p><strong>Model formats:</strong> ${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</p><p><strong>Serving:</strong> ${escapeHTML(runtime.serving_modes.map(item => taxonomyName("runtime_serving_modes", item)).join(" · "))}</p></section>
       <section class="detail-block"><h3>Interfaces and deployment</h3><p><strong>API styles:</strong> ${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p><p><strong>Deployment:</strong> ${escapeHTML(runtime.deployment_surfaces.map(item => taxonomyName("runtime_deployment_surfaces", item)).join(" · "))}</p></section>
-      <section class="detail-block"><h3>Hardware requirements</h3><p>${escapeHTML(runtime.hardware_requirements)}</p></section>
-      <section class="detail-block"><h3>Model management</h3><p>${escapeHTML(runtime.model_management)}</p></section>
-      <section class="detail-block"><h3>Operational controls</h3><p>${escapeHTML(runtime.operational_controls)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${runtime.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${runtime.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${runtime.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${runtime.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Hardware requirements</h3><p>${detailText(runtime.hardware_requirements)}</p></section>
+      <section class="detail-block"><h3>Model management</h3><p>${detailText(runtime.model_management)}</p></section>
+      <section class="detail-block"><h3>Operational controls</h3><p>${detailText(runtime.operational_controls)}</p></section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(runtime.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(runtime.tradeoffs)}</section>
+      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${detailText(runtime.license_note)}</p>${(runtime.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(runtime.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
+// The reviewed license evidence is read in one place — the system dialog —
+// so it is fetched the first time a record is opened rather than at boot. A
+// failed fetch clears the request so the next open retries; until it lands the
+// dialog shows the license ids the record already carries.
+let licenseEvidenceRequest = null;
+
+function ensureLicenseEvidence() {
+  if (state.licenses.size) return null;
+  if (!licenseEvidenceRequest) {
+    licenseEvidenceRequest = loadJSON("license-evidence.json")
+      .then(evidence => { state.licenses = new Map(evidence.entries.map(item => [item.project_id, item])); })
+      .catch(() => { licenseEvidenceRequest = null; });
+  }
+  return licenseEvidenceRequest;
+}
+
+// A record's detail is merged into the boot record in place, so every existing
+// reference to it — the dialog, the comparison table, the finder shortlist —
+// sees the full record afterwards without being handed a new object. A failed
+// fetch clears the request so the next reader retries.
+const loadedDetail = new Set();
+const detailRequests = new Map();
+
+function loadDetail(kind, record) {
+  const key = `${kind}:${record.id}`;
+  if (loadedDetail.has(key)) return null;
+  if (!detailRequests.has(key)) {
+    detailRequests.set(key, loadJSON(`app/detail/${kind}/${record.id}.json`)
+      .then(detail => { Object.assign(record, detail); loadedDetail.add(key); })
+      .catch(() => { detailRequests.delete(key); }));
+  }
+  return detailRequests.get(key);
+}
+
+// A collection's search index is the editorial prose its filter matches on,
+// keyed by record id. It is worth a fetch only once someone means to search,
+// and every filter falls back to the boot record until it lands.
+const searchIndexes = {};
+const searchIndexRequests = {};
+
+function loadSearchIndex(collection) {
+  if (searchIndexes[collection]) return null;
+  if (!searchIndexRequests[collection]) {
+    searchIndexRequests[collection] = loadJSON(`app/search/${collection}.json`)
+      .then(index => { searchIndexes[collection] = index; })
+      .catch(() => { delete searchIndexRequests[collection]; });
+  }
+  return searchIndexRequests[collection];
+}
+
+// Like the other four record dialogs, this paints from the boot record the
+// moment it opens and repaints when app/detail/model/<id>.json lands. Only
+// the imported models.dev block, the identity fields and the overall score
+// are on the boot record; the reviewed prose, the licence note and evidence,
+// the official model page link and every score dimension come from detail,
+// so each of those goes through detailText, detailList or detailScore.
 function modelDialogMarkup(model) {
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
-  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(model.score[dimension.id])}</td></tr>`).join("");
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
   const capability = value => value == null ? "Not reported" : value ? "Yes" : "No";
   const tokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
   const sourceLinks = [...metadata.links, ...metadata.weights].map(item =>
@@ -1155,17 +1344,17 @@ function modelDialogMarkup(model) {
   ).join("") || "<p>No source links reported by models.dev.</p>";
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p><a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a></p></section>
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
-      <section class="detail-block"><h3>Model boundary</h3><p>${escapeHTML(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(tokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(capability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(capability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${escapeHTML(model.license_note)}</p>${model.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Source links from models.dev</h3>${sourceLinks}</section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${model.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${model.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${model.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(model.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
@@ -1175,6 +1364,7 @@ const RECORD_DIALOGS = {
     content: "#dialog-content",
     find: id => state.projects.find(item => item.id === id),
     markup: systemDialogMarkup,
+    hydrate: ensureLicenseEvidence,
     afterRender: () => $$('[data-successor]', $("#dialog-content")).forEach(button =>
       button.addEventListener("click", () => openProject(button.dataset.successor))),
   },
@@ -1204,13 +1394,29 @@ const RECORD_DIALOGS = {
   },
 };
 
+function paintRecordDialog(dialog, record) {
+  const content = $(dialog.content);
+  content.innerHTML = dialog.markup(record);
+  content.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
+  dialog.afterRender?.();
+}
+
 function openRecordDialog(kind, id) {
   const dialog = RECORD_DIALOGS[kind];
   const record = dialog.find(id);
   if (!record) return false;
-  $(dialog.content).innerHTML = dialog.markup(record);
-  dialog.afterRender?.();
+  paintRecordDialog(dialog, record);
   showRecordDialog(dialog.dialog, kind, id);
+  // A dialog that needs a lazily fetched file paints immediately from the
+  // record and repaints when the file lands — unless the reader has moved on
+  // to a different record by then. The RECORD_DIALOGS key is also the record's
+  // detail directory, so one kind names both.
+  const repaint = () => {
+    const element = $(dialog.dialog);
+    if (element.dataset.recordKind === kind && element.dataset.recordId === id) paintRecordDialog(dialog, record);
+  };
+  dialog.hydrate?.()?.then(repaint);
+  loadDetail(kind, record)?.then(repaint);
   return true;
 }
 
@@ -1266,7 +1472,6 @@ function openRecord(kind, id) {
 
 function showRecordDialog(selector, kind, id) {
   const dialog = $(selector);
-  dialog.querySelector(".detail-grid").insertAdjacentHTML("beforebegin", RECORD_LINK_MARKUP);
   dialog.dataset.recordKind = kind;
   dialog.dataset.recordId = id;
   writeRecordURL(kind, id);
@@ -1329,6 +1534,14 @@ async function copyRecordLink(button) {
   }
 }
 
+// A score cell reads "8 / 10", or nothing at all when that dimension has not
+// arrived: returning null hands the cell to comparisonTable's own "—" fallback,
+// which a template literal would have stringified into "undefined / 10".
+const scoreCell = value => value == null ? null : `${value} / 10`;
+// The same for a list a detail file carries: absent and empty both become "—",
+// so a degraded table reads consistently rather than mixing blanks and dashes.
+const listCell = values => (values || []).join(" • ") || null;
+
 function comparisonTable(records, rows) {
   return `<div class="comparison-table-wrap"><table class="comparison-table">
     <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
@@ -1336,9 +1549,45 @@ function comparisonTable(records, rows) {
   </table></div>`;
 }
 
+// Every row below a comparison's overall score reads a detail field, and a
+// half-filled table is worse than a moment's wait, so a comparison opens whole.
+// A selection is waited on at most once, tracked here: a detail file that never
+// arrives then costs one beat and a table built from what landed. Without that,
+// loadDetail's catch — which clears its request so the next reader retries —
+// would turn the re-entry below into an unbounded fetch loop.
+const comparisonDetailAwaited = new Set();
+
+// Because the comparison opens whole, pressing Compare can be followed by
+// nothing at all on a slow connection — the dialog is waiting on the fetch
+// above. The tray's own polite live region says so, and stops saying it the
+// moment the wait ends; it is cleared only while it still carries this line,
+// so a "four is the maximum" written meanwhile survives.
+const COMPARISON_PENDING = "Loading the full details for this comparison.";
+const showComparisonPending = () => { const status = $("#comparison-status"); if (status) status.textContent = COMPARISON_PENDING; };
+const clearComparisonPending = () => {
+  const status = $("#comparison-status");
+  if (status && status.textContent === COMPARISON_PENDING) status.textContent = "";
+};
+
 function openComparison() {
   const records = comparisonRecords();
   if (records.length < 2) return;
+  const selection = `${state.comparison.kind}:${state.comparison.ids.join(",")}`;
+  if (!comparisonDetailAwaited.has(selection)) {
+    // The selection is capped at four, so this is at most four small fetches.
+    const pending = records.map(record => loadDetail(state.comparison.kind, record)).filter(Boolean);
+    if (pending.length) {
+      showComparisonPending();
+      Promise.all(pending).then(() => {
+        comparisonDetailAwaited.add(selection);
+        clearComparisonPending();
+        if (comparisonRecords().length === records.length) openComparison();
+      });
+      return;
+    }
+    comparisonDetailAwaited.add(selection);
+  }
+  clearComparisonPending();
   let profile;
   let rows;
   let eyebrow;
@@ -1349,18 +1598,18 @@ function openComparison() {
     note = "Scores and weights are comparable only inside this system family. They are editorial judgments—not workload benchmarks.";
     rows = [
       ["Primary role", records.map(item => roleName(item.primary_role))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Source model", records.map(item => sourceModelName(item.source_model))],
       ["Licenses / terms", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Deployment", records.map(item => item.deployment.map(value => taxonomyName("deployment_modes", value)).join(" · "))],
       ["Local-first", records.map(item => item.local_first ? "Yes" : "No")],
       ["Architecture", records.map(item => item.architectures.map(architectureName).join(" · "))],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Watchouts", records.map(item => item.weaknesses.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Watchouts", records.map(item => listCell(item.weaknesses))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else if (state.comparison.kind === "model") {
@@ -1392,10 +1641,10 @@ function openComparison() {
     rows = [
       ["Maintainer", records.map(item => item.maintainer)],
       ["Runtime type", records.map(item => taxonomyName("local_runtime_types", item.runtime_type))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Accelerators", records.map(item => item.accelerators.map(value => taxonomyName("runtime_accelerators", value)).join(" · "))],
       ["Model formats", records.map(item => item.model_formats.map(value => taxonomyName("runtime_model_formats", value)).join(" · "))],
@@ -1406,8 +1655,8 @@ function openComparison() {
       ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Hardware requirements", records.map(item => item.hardware_requirements)],
       ["Model management", records.map(item => item.model_management)],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else {
@@ -1417,10 +1666,10 @@ function openComparison() {
     rows = [
       ["Operator", records.map(item => item.operator)],
       ["Service type", records.map(item => taxonomyName("inference_service_types", item.service_type))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Delivery", records.map(item => item.delivery_modes.map(value => taxonomyName("inference_delivery_modes", value)).join(" · "))],
       ["Model sources", records.map(item => item.model_sources.map(value => taxonomyName("inference_model_sources", value)).join(" · "))],
@@ -1429,8 +1678,8 @@ function openComparison() {
       ["Retention controls", records.map(item => item.retention_controls)],
       ["Routing", records.map(item => item.routing)],
       ["Customization", records.map(item => item.customization)],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   }
@@ -1496,6 +1745,15 @@ function activateView(id) {
   window.scrollTo({ top: 0 });
 }
 
+// Which collections a search box can widen, and so which indexes its focus
+// is worth fetching.
+const SEARCH_SCOPES = {
+  "#project-search": ["systems"], "#specification-search": ["specifications"],
+  "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
+  "#model-search": ["models"],
+  "#all-directory-search": ["systems", "inference", "runtimes"],
+};
+
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
@@ -1504,6 +1762,16 @@ function bindEvents() {
     if (family !== undefined) jumpToDirectoryFamily(family);
     else setDirectoryCollection(button.dataset.directoryCollection);
   }));
+  // Fetching on focus rather than on the first keystroke usually beats the
+  // second character, so the widened results arrive before anyone sees the
+  // narrow ones. The All view searches three collections, so it loads three.
+  for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
+    $(selector).addEventListener("focus", () => {
+      for (const collection of collections) {
+        loadSearchIndex(collection)?.then(renderSearchSurfaces);
+      }
+    });
+  }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   $("#family-filter").addEventListener("input", () => {
     clearComparison();

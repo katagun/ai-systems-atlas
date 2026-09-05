@@ -296,6 +296,7 @@
           <h2>What is not published</h2>
           <p>The system candidate, model candidate, and license-review queues stay in the repository. They hold unreviewed entries or imported discovery facts, and serving them would blur the line between machine-managed metadata and a reviewed record.</p>
           <p><code>logos.json</code> is served because this page needs it, but it holds vendored product marks rather than catalog data. Those marks identify their owners' products and are not covered by the catalog license.</p>
+          <p>The files under <code>/app/</code> are this page's own payload: the same records, split into what a card needs and what a record dialog needs, so the directory renders without downloading every review first. They are regenerated from the files above and carry no compatibility promise. Build against the endpoints on this page, not against those.</p>
         </article>
         <article>
           <h2>Reading the fields</h2>
@@ -350,8 +351,8 @@
   </dialog>
 
   <footer><span>Systems score within families. Models, inference services, and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; the site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"013602d5c0dd","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","models.json":"825f5bd67563","logos.json":"34ac4a7c29b1"}</script>
-  <script src="app-core.js?v=dcd46c9a5323" defer></script>
-  <script src="app.js?v=de42b5b4d7a7" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"013602d5c0dd","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","models.json":"825f5bd67563","logos.json":"34ac4a7c29b1","app/systems.json":"d6a99395e80c","app/inference.json":"28aa03393916","app/runtimes.json":"5d5c7d7cd08c","app/specifications.json":"b510514cd03f","app/models.json":"e6e9a07b678b","app/search/systems.json":"fd823a822e7a","app/search/inference.json":"e22f4d078444","app/search/runtimes.json":"38154eb28017","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"525d988ae1fa","app/detail":"3567186f2238"}</script>
+  <script src="app-core.js?v=ace0f1af1355" defer></script>
+  <script src="app.js?v=13942a73da08" defer></script>
 </body>
 </html>

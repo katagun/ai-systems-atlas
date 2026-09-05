@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from .build_web_payload import main as build_web_payload
     from .discovery_sources import (
         canonical_url_key,
         https_url_host,
@@ -32,6 +33,7 @@ try:
     )
     from .sync_web_data import main as sync_web_data
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from build_web_payload import main as build_web_payload
     from discovery_sources import (
         canonical_url_key,
         https_url_host,
@@ -707,6 +709,7 @@ def main() -> int:
     write_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": refreshed_at, "entries": reviews})
     write_json(LOCAL_RUNTIMES_PATH, local_runtimes_document)
     sync_web_data()
+    build_web_payload([])
 
     print(json.dumps({
         "metadata_refreshed": successes,

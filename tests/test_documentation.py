@@ -78,6 +78,8 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/022-general-pattern-content-is-not-a-collection.md",
             "docs/adr/023-autonomous-science-systems-are-not-a-role.md",
             "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
+            "docs/adr/025-model-releases-are-independent-curated-records.md",
+            "docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
