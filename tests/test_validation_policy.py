@@ -226,10 +226,20 @@ class ValidationPolicyTests(unittest.TestCase):
             ("specifications.json", "specifications", "every specification must be an object"),
             ("inference-services.json", "services", "every service must be an object"),
             ("local-runtimes.json", "runtimes", "every runtime must be an object"),
+            ("models.json", "models", "every model must be an object"),
         ):
             with self.subTest(document=document):
                 errors = self.catalog_with_malformed_record(document, key, ["not", "a", "record"])
                 self.assertTrue(any(message in error for error in errors), errors)
+
+    def test_model_candidates_must_not_be_published(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        (root / "web" / "model-candidates.json").write_text("{}\n", encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(any("provisional model candidates must not be published" in error for error in errors), errors)
 
     def catalog_with_superseded(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose first project is marked superseded."""

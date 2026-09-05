@@ -149,12 +149,34 @@
     },
   };
 
+  const MODEL_VIEW = {
+    searchFields: [
+      "id", "source_id", "name", "developer", "description", "access_boundary",
+      "strengths", "tradeoffs",
+    ],
+    facets: {
+      type: "model_type",
+      distribution: "distribution_modes",
+      sourceModel: "source_model",
+      license: "licenses",
+    },
+  };
+
   function filterInferenceServices(services, filters = {}) {
     return filterScoredCollection(services, filters, INFERENCE_SERVICE_VIEW);
   }
 
   function filterLocalRuntimes(runtimes, filters = {}) {
     return filterScoredCollection(runtimes, filters, LOCAL_RUNTIME_VIEW);
+  }
+
+  function filterModels(models, filters = {}) {
+    return filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
+      !filters.modality || [
+        ...(model.source_metadata?.modalities?.input || []),
+        ...(model.source_metadata?.modalities?.output || []),
+      ].includes(filters.modality)
+    );
   }
 
   function filterDirectoryEntries(projects, services, runtimes = [], filters = {}) {
@@ -192,7 +214,7 @@
   // Record references come from the URL. The kind is checked against a static
   // list on purpose: a lookup keyed on user input could resolve inherited names
   // such as "constructor", and an id is a plain slug or it is nothing.
-  const RECORD_KINDS = ["system", "spec", "inference", "runtime"];
+  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model"];
   const RECORD_ID = /^[\w.-]+$/;
   function parseRecordReference(raw) {
     if (typeof raw !== "string") return null;
@@ -207,7 +229,7 @@
   // The view parameter names a primary navigation tab. It is matched against a
   // static list for the same reason a record kind is: a lookup keyed on the URL
   // could resolve an inherited name such as "constructor".
-  const VIEW_IDS = ["directory", "finder", "specifications", "taxonomy", "api"];
+  const VIEW_IDS = ["directory", "finder", "models", "specifications", "taxonomy", "api"];
   function parseViewId(raw) {
     return typeof raw === "string" && VIEW_IDS.includes(raw) ? raw : null;
   }
@@ -219,6 +241,7 @@
     if (kind === "spec") return `records/specifications/${id}/`;
     if (kind === "inference") return `records/inference-services/${id}/`;
     if (kind === "runtime") return `records/local-runtimes/${id}/`;
+    if (kind === "model") return `records/models/${id}/`;
     return null;
   }
 
@@ -237,6 +260,7 @@
     filterDirectoryEntries,
     filterInferenceServices,
     filterLocalRuntimes,
+    filterModels,
     filterScoredCollection,
     filterSpecifications,
     matchesProject,

@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications and inference services are separate collections, not additional system families. Specifications are classified by artifact type, integration scope, and publication status and remain unscored. Inference services are classified by service type, delivery mode, model-source scope, and API style, then compared through their own operational-service score profile. That score is not comparable to any system-family score. Systems and inference services share the Directory browsing surface without sharing schemas or rankings. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 008](adr/008-specifications-are-unscored-artifacts.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
+Specifications, inference services, local runtimes, and models are separate collections, not additional system families. Specifications remain unscored. Inference services, local runtimes, and provider-independent model releases each use their own taxonomy and dedicated score profile, none comparable with a system-family profile or with one another. Systems, services, and runtimes share the mixed Directory only as a presentation union; Models and Specifications are sibling views with their own boundaries. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md), [`MODELS.md`](MODELS.md), [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
 
 General agent-architecture pattern content — harness shapes, failure taxonomies, and similar concepts with no single authoritative steward — is not a further collection. Every collection here pins evidence to one steward's own reviewable artifact; a pattern synthesized across independent literature cannot meet that bar without inviting figures that only look sourced. See [ADR 022](adr/022-general-pattern-content-is-not-a-collection.md).
 
@@ -58,6 +58,8 @@ Include a framework when building or running tool-using agents is a primary prod
 An 8.4 agent score, assistant score, and memory score answer different questions. The web directory shows editorial scores only when one family is selected. “All families” supports discovery by name or GitHub stars, not a synthetic best-overall list.
 
 Specifications are also never inserted into this ranking. A protocol can be mature and widely adopted without being a deployable agent, and an instruction convention cannot be meaningfully scored against a memory service.
+
+The same rule applies to the collection-specific `inference_service`, `local_runtime`, and `model_access` profiles. A model-access score describes obtainability and deployment, not whether a model is more capable than another, and it cannot be compared with a runtime or service score.
 
 ## Guided finder
 

@@ -16,6 +16,21 @@ class DirectoryTests(unittest.TestCase):
         cls.specifications = json.loads((ROOT / "directory" / "specifications.json").read_text(encoding="utf-8"))
         cls.inference_services = json.loads((ROOT / "directory" / "inference-services.json").read_text(encoding="utf-8"))
         cls.local_runtimes = json.loads((ROOT / "directory" / "local-runtimes.json").read_text(encoding="utf-8"))
+        cls.models = json.loads((ROOT / "directory" / "models.json").read_text(encoding="utf-8"))
+
+    def test_model_collection_is_independent_and_reviewed(self) -> None:
+        source_ids = [model["source_id"] for model in self.models["models"]]
+        queued = json.loads(
+            (ROOT / "directory" / "model-candidates.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(len(source_ids), len(set(source_ids)))
+        self.assertTrue(set(source_ids).isdisjoint(
+            {candidate["source_id"] for candidate in queued["candidates"]}
+        ))
+        for model in self.models["models"]:
+            self.assertEqual("model_access", model["score_profile"])
+            self.assertNotIn("system_family", model)
+            self.assertEqual("verified", model["license_review_status"])
 
     def test_projects_have_unique_ids_and_reviewed_source_models(self) -> None:
         projects = self.document["projects"]

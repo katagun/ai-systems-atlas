@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of six files:
+`directory/` is canonical. The browser consumes synchronized copies of eight files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -15,13 +15,15 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `specifications.json` | Reviewed, unscored interoperability artifacts and evidence | Yes |
 | `inference-services.json` | Reviewed managed inference services, dedicated service scores, and evidence | Yes |
 | `local-runtimes.json` | Reviewed self-operated inference runtimes, dedicated runtime scores, and evidence | Yes |
+| `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
+| `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
-The browser presents projects and inference services through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes either canonical schema or makes their scores comparable. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
+The browser presents projects, inference services, and local runtimes through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md) and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
 
 ## Project record
 
@@ -82,6 +84,8 @@ Candidate records contain discovery facts and proposed classification only. They
 
 A candidate may optionally carry a `triage` block: gathered evidence and a routing proposal, never an editorial conclusion. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md). Its fields are `verdict` (`out_of_scope`, `held`, or `review_ready`), `rule`, `finding`, non-empty `evidence`, `proposed_at`, and `proposer`; `held_by` is optional and present if and only if `verdict` is `held`. Validation rejects a `finding` that names a `system_family` or `primary_role` taxonomy id. Each evidence entry carries `label`, `url`, `kind` (`git_blob` or `web`), `content_sha256`, and `fetched_at`; `git_blob` evidence additionally carries `blob_sha` and a matching `immutable_url`. `proposed_system_family` and `proposed_primary_role` may be null only when the candidate's `triage.held_by` is set — a record can wait for a collection that does not exist yet, but only while a human-named decision holds it.
 
+Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Published model `source_id` values must be absent from this queue.
+
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
 See `OPERATIONS.md` for promotion and resolution procedures.
@@ -134,3 +138,17 @@ Local-runtime records are independent from project, specification, and inference
 - **Live metadata (optional):** `stars` and `stars_verified_at`, automation-refreshed GitHub star counts for records with a `repo`. This is descriptive only and never enters `score`; ADR 015 deliberately excludes repository popularity from the local-runtime rubric. Both fields are `null` for a record without a `repo`.
 
 Strict validation rejects fields outside this schema, enforces taxonomy membership, and verifies every score against the taxonomy weights. A cross-collection check additionally rejects any identifier that appears in more than one published collection, which is what keeps a runtime and its vendor's managed service distinct. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md), [ADR 015](adr/015-local-runtimes-are-self-operated-execution-records.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
+
+## Model record
+
+Model records are independent from projects, specifications, inference services, and local runtimes. They contain no `system_family`, role, popularity field, price, parameter count, benchmark, or performance measurement. Every record uses the dedicated `model_access` score profile. The envelope is `{"version": "1.0", "verified_at": <ISO date>, "source": {...}, "models": [...]}`; `source` identifies the models.dev repository and pinned full commit used for attributed discovery metadata.
+
+- **Identity and boundary:** `id`, models.dev `source_id`, `name`, `developer`, authoritative `url`, `description`, and `access_boundary`, which distinguishes the release from its developer, APIs, hosts, runtimes, quantizations, fine-tunes, and applications.
+- **Classification:** one taxonomy-backed `model_type` and non-empty `distribution_modes`.
+- **Imported source metadata:** `source_metadata` contains models.dev's name, description, family, partial dates, modalities, tri-state capability flags, nullable token limits, reported open-weight and license values, and source/weight links. It is attributed discovery metadata, never a substitute for reviewed evidence.
+- **Licensing:** complete `licenses`, one coherent `source_model`, `license_review_status`, `license_note`, and inline scoped `license_evidence`. Models stay out of `license-evidence.json`, whose invariant applies only to projects.
+- **Editorial analysis:** strengths and tradeoffs describe access and deployability without making a quality claim.
+- **Editorial score:** `score_profile` is `model_access`; `score` holds license clarity, artifact availability, deployment portability, serving reach, lifecycle transparency, documentation provenance, and calculated overall. It excludes output quality, benchmarks, parameter count, price, latency, throughput, popularity, and safety rankings.
+- **Evidence and review:** non-empty dated authoritative evidence, human-reviewed `metadata_verified_at` for the attributed source snapshot, and human-owned `verified_at` for Atlas conclusions. The queue importer never updates either field on a published record.
+
+Strict validation rejects extra fields, unknown taxonomy values, incomplete evidence, score mismatches, duplicate `source_id` values, overlap with the model candidate queue, and model IDs that collide with any other published collection. See [`MODELS.md`](MODELS.md) and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).

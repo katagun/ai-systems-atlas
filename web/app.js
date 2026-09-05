@@ -15,12 +15,12 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], taxonomy: null, licenses: new Map(),
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], taxonomy: null, licenses: new Map(),
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
-  page: { all: 1, systems: 1, inference: 1, runtimes: 1, specifications: 1 },
+  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1 },
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -136,18 +136,20 @@ async function loadJSON(path) {
 }
 
 async function bootstrap() {
-  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory, logos] = await Promise.all([
+  const [directory, taxonomy, licenseEvidence, specificationDirectory, inferenceDirectory, runtimeDirectory, modelDirectory, logos] = await Promise.all([
     loadJSON("projects.json"), loadJSON("taxonomy.json"), loadJSON("license-evidence.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json"), loadJSON("logos.json")
+    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json"),
+    loadJSON("models.json"), loadJSON("logos.json")
   ]);
   state.projects = directory.projects;
   state.specifications = specificationDirectory.specifications;
   state.inferenceServices = inferenceDirectory.services;
   state.localRuntimes = runtimeDirectory.runtimes;
+  state.models = modelDirectory.models;
   state.taxonomy = taxonomy;
   state.logos = logos;
   state.licenses = new Map(licenseEvidence.entries.map(item => [item.project_id, item]));
-  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at]
+  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at, modelDirectory.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -156,6 +158,7 @@ async function bootstrap() {
   populateCollectionFilters();
   renderStats();
   renderFinder();
+  renderModels();
   renderSpecifications();
   renderTaxonomy();
   bindEvents();
@@ -197,6 +200,7 @@ function comparisonCollection(kind) {
   if (kind === "system") return state.projects;
   if (kind === "inference") return state.inferenceServices;
   if (kind === "runtime") return state.localRuntimes;
+  if (kind === "model") return state.models;
   return null;
 }
 
@@ -280,6 +284,8 @@ function restoreComparisonFromURL() {
     populateRoleFilter();
     updateScoreSortAvailability();
     setDirectoryCollection("systems", { updateURL: false });
+  } else if (kind === "model") {
+    activateView("models");
   } else {
     setDirectoryCollection(kind === "runtime" ? "runtimes" : "inference", { updateURL: false });
   }
@@ -352,6 +358,18 @@ const COLLECTION_FILTERS = {
       ["runtime_model_formats", "#runtime-format-filter", item => item.model_formats],
       ["inference_api_styles", "#runtime-api-filter", item => item.api_styles],
     ],
+  },
+  models: {
+    records: () => state.models,
+    groups: [
+      ["model_types", "#model-type-filter", item => [item.model_type]],
+      ["model_distribution_modes", "#model-distribution-filter", item => item.distribution_modes],
+      ["model_modalities", "#model-modality-filter", item => [
+        ...item.source_metadata.modalities.input, ...item.source_metadata.modalities.output,
+      ]],
+      ["source_models", "#model-source-filter", item => [item.source_model]],
+    ],
+    licenseFilter: "#model-license-filter",
   },
 };
 
@@ -482,11 +500,15 @@ const PAGE_CONTAINERS = {
   systems: "#project-pager",
   inference: "#inference-pager",
   runtimes: "#runtime-pager",
+  models: "#model-pager",
   specifications: "#specification-pager",
 };
 
 function pageRenderer(key) {
-  return { all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices, runtimes: renderLocalRuntimes, specifications: renderSpecifications }[key];
+  return {
+    all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
+    runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
+  }[key];
 }
 
 function setPageSize(pageSize) {
@@ -495,6 +517,7 @@ function setPageSize(pageSize) {
   writeStoredPageSize(pageSize);
   Object.keys(state.page).forEach(key => { state.page[key] = 1; });
   pageRenderer(state.directoryCollection)();
+  renderModels();
   renderSpecifications();
 }
 
@@ -712,6 +735,40 @@ const COLLECTIONS = {
     <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
   </article>`,
   },
+  models: {
+    grid: "#model-grid",
+    resultCount: "#model-result-count",
+    pageKey: "models",
+    dataset: "model",
+    noun: ["model", "models"],
+    empty: "No reviewed models match these filters.",
+    open: id => openModel(id),
+    context() {
+      $("#models-kicker").textContent = `${state.models.length} reviewed model releases`;
+      return { suffix: ` · ${state.taxonomy.model_score_profile.name}`, comparable: true };
+    },
+    records: () => AtlasCore.filterModels(state.models, {
+      term: $("#model-search").value,
+      type: $("#model-type-filter").value,
+      distribution: $("#model-distribution-filter").value,
+      modality: $("#model-modality-filter").value,
+      sourceModel: $("#model-source-filter").value,
+      license: $("#model-license-filter").value,
+      sort: $("#model-sort-filter").value,
+    }),
+    card: model => {
+      const modalities = model.source_metadata.modalities;
+      const route = `${modalities.input.map(label).join(" + ")} → ${modalities.output.map(label).join(" + ")}`;
+      return `<article class="project-card model-card">
+        <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
+        <span class="role-badge">${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
+        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <p>${escapeHTML(model.description)}</p>
+        <div class="tags"><span>${escapeHTML(route)}</span>${model.source_metadata.family ? `<span>${escapeHTML(model.source_metadata.family)}</span>` : ""}</div>
+        <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
+      </article>`;
+    },
+  },
 };
 
 // dataset keys are camelCase; the matching attribute is kebab-case.
@@ -741,6 +798,7 @@ const renderProjects = () => renderCollection("systems");
 const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
+const renderModels = () => renderCollection("models");
 
 function bindComparisonButtons(root) {
   $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
@@ -981,6 +1039,10 @@ function renderTaxonomy() {
     ["Runtime serving modes", state.taxonomy.runtime_serving_modes],
     ["Runtime deployment surfaces", state.taxonomy.runtime_deployment_surfaces],
     ["Local-runtime score", state.taxonomy.local_runtime_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ["Model types", state.taxonomy.model_types],
+    ["Model modalities", state.taxonomy.model_modalities],
+    ["Model distribution modes", state.taxonomy.model_distribution_modes],
+    ["Model-access score", state.taxonomy.model_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Licenses and terms", state.taxonomy.licenses]
@@ -1082,6 +1144,31 @@ function runtimeDialogMarkup(runtime) {
     </div>`;
 }
 
+function modelDialogMarkup(model) {
+  const profile = state.taxonomy.model_score_profile;
+  const metadata = model.source_metadata;
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(model.score[dimension.id])}</td></tr>`).join("");
+  const capability = value => value == null ? "Not reported" : value ? "Yes" : "No";
+  const tokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
+  const sourceLinks = [...metadata.links, ...metadata.weights].map(item =>
+    `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
+  ).join("") || "<p>No source links reported by models.dev.</p>";
+  return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p><a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a></p></section>
+      <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
+      <section class="detail-block"><h3>Model boundary</h3><p>${escapeHTML(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(tokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.output))}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(capability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
+      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(capability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${escapeHTML(model.license_note)}</p>${model.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Source links from models.dev</h3>${sourceLinks}</section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${model.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Tradeoffs</h3><ul>${model.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${model.evidence.map(inferenceEvidenceLink).join("")}</section>
+    </div>`;
+}
+
 const RECORD_DIALOGS = {
   system: {
     dialog: "#project-dialog",
@@ -1109,6 +1196,12 @@ const RECORD_DIALOGS = {
     find: id => state.localRuntimes.find(item => item.id === id),
     markup: runtimeDialogMarkup,
   },
+  model: {
+    dialog: "#model-dialog",
+    content: "#model-dialog-content",
+    find: id => state.models.find(item => item.id === id),
+    markup: modelDialogMarkup,
+  },
 };
 
 function openRecordDialog(kind, id) {
@@ -1127,6 +1220,7 @@ function openProject(id) { return openRecordDialog("system", id); }
 function openSpecification(id) { return openRecordDialog("spec", id); }
 function openInferenceService(id) { return openRecordDialog("inference", id); }
 function openLocalRuntime(id) { return openRecordDialog("runtime", id); }
+function openModel(id) { return openRecordDialog("model", id); }
 
 
 function specificationEvidenceLink(item) {
@@ -1156,7 +1250,9 @@ function runtimeLicenseEvidenceLink(item) {
 // A record dialog is the shareable unit of the site: opening one writes a
 // `record=kind:id` URL, so the address bar always links to what is on screen.
 // Dispatch is static, as with comparisons, because the kind comes from the URL.
-const RECORD_DIALOG_SELECTORS = ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog"];
+const RECORD_DIALOG_SELECTORS = [
+  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#model-dialog",
+];
 const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">Copy link shares a preview page for this record.</span></p>';
 
 function openRecord(kind, id) {
@@ -1164,6 +1260,7 @@ function openRecord(kind, id) {
   if (kind === "spec") return openSpecification(id);
   if (kind === "inference") return openInferenceService(id);
   if (kind === "runtime") return openLocalRuntime(id);
+  if (kind === "model") return openModel(id);
   return false;
 }
 
@@ -1202,6 +1299,7 @@ function restoreRecordFromURL() {
   const reference = AtlasCore.parseRecordReference(raw);
   if (reference && openRecord(reference.kind, reference.id)) {
     if (reference.kind === "spec") activateView("specifications");
+    if (reference.kind === "model") activateView("models");
     return;
   }
   url.searchParams.delete("record");
@@ -1263,6 +1361,28 @@ function openComparison() {
       ["Architecture", records.map(item => item.architectures.map(architectureName).join(" · "))],
       ["Strengths", records.map(item => item.strengths.join(" • "))],
       ["Watchouts", records.map(item => item.weaknesses.join(" • "))],
+      ["Editorially verified", records.map(item => item.verified_at)],
+    ];
+  } else if (state.comparison.kind === "model") {
+    profile = state.taxonomy.model_score_profile;
+    eyebrow = profile.name;
+    note = "This comparison covers model access, distribution, and deployability. It excludes output quality, benchmarks, parameter count, current price, latency, and throughput.";
+    rows = [
+      ["Developer", records.map(item => item.developer)],
+      ["Model type", records.map(item => taxonomyName("model_types", item.model_type))],
+      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ...profile.dimensions.map(dimension => [
+        `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
+        records.map(item => `${item.score[dimension.id]} / 10`),
+      ]),
+      ["Distribution", records.map(item => item.distribution_modes.map(value => taxonomyName("model_distribution_modes", value)).join(" · "))],
+      ["Input modalities", records.map(item => item.source_metadata.modalities.input.map(value => taxonomyName("model_modalities", value)).join(" · "))],
+      ["Output modalities", records.map(item => item.source_metadata.modalities.output.map(value => taxonomyName("model_modalities", value)).join(" · "))],
+      ["Context limit", records.map(item => item.source_metadata.limits.context == null ? "Not reported" : Intl.NumberFormat("en").format(item.source_metadata.limits.context))],
+      ["Source model", records.map(item => sourceModelName(item.source_model))],
+      ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
+      ["Strengths", records.map(item => item.strengths.join(" • "))],
+      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else if (state.comparison.kind === "runtime") {
@@ -1359,9 +1479,18 @@ function activateView(id) {
     setDirectoryCollection(id === "inference-services" ? "inference" : "runtimes");
     id = "directory";
   }
+  const comparisonFitsView = (id === "models" && state.comparison.kind === "model")
+    || (id === "directory" && (
+      (state.directoryCollection === "systems" && state.comparison.kind === "system")
+      || (state.directoryCollection === "inference" && state.comparison.kind === "inference")
+      || (state.directoryCollection === "runtimes" && state.comparison.kind === "runtime")
+    ));
+  if ((id === "directory" || id === "models") && state.comparison.ids.length && !comparisonFitsView) {
+    clearComparison();
+  }
   $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
-  if (id === "directory") renderComparisonControls();
+  if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
   writeViewURL(id);
   window.scrollTo({ top: 0 });
@@ -1391,6 +1520,7 @@ function bindEvents() {
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
   ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
+  ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -1419,6 +1549,17 @@ function bindEvents() {
     $("#runtime-sort-filter").value = "score";
     state.page.runtimes = 1;
     renderLocalRuntimes();
+  });
+  $("#reset-model-filters").addEventListener("click", () => {
+    $("#model-search").value = "";
+    $("#model-type-filter").value = "";
+    $("#model-distribution-filter").value = "";
+    $("#model-modality-filter").value = "";
+    $("#model-source-filter").value = "";
+    $("#model-license-filter").value = "";
+    $("#model-sort-filter").value = "score";
+    state.page.models = 1;
+    renderModels();
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
@@ -1482,6 +1623,8 @@ function bindEvents() {
   $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
   $("#runtime-dialog .dialog-close").addEventListener("click", () => $("#runtime-dialog").close());
   $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
+  $("#model-dialog .dialog-close").addEventListener("click", () => $("#model-dialog").close());
+  $("#model-dialog").addEventListener("click", event => { if (event.target === $("#model-dialog")) $("#model-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
   window.addEventListener("popstate", syncRecordWithHistory);
   document.addEventListener("click", event => {

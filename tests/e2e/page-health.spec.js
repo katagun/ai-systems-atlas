@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-const VIEWS = ["Directory", "Finder", "Specifications", "Taxonomy"];
+const VIEWS = ["Directory", "Finder", "Models", "Specifications", "Taxonomy"];
 
 test("every view and a detail dialog render without console or page errors", async ({ page }) => {
   const errors = [];
@@ -38,6 +38,11 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await page.locator("#runtime-grid [data-local-runtime=\"ollama\"]").click();
   const dialogOverflow = await page.locator("#runtime-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(dialogOverflow).toBeLessThanOrEqual(0);
+  await page.locator("#runtime-dialog .dialog-close").click();
+  await page.getByRole("button", { name: "Models", exact: true }).click();
+  await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
+  const modelDialogOverflow = await page.locator("#model-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
+  expect(modelDialogOverflow).toBeLessThanOrEqual(0);
 });
 
 test("the page loads without third-party runtime requests", async ({ page, baseURL }) => {

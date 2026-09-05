@@ -1,6 +1,6 @@
 {
-  "version": "3.0",
-  "principle": "Each project belongs to one system family, has one primary role, and carries orthogonal traits. Scores are comparable only inside the same score profile.",
+  "version": "4.0",
+  "principle": "Operational projects belong to one system family and primary role. Models, inference services, local runtimes, and specifications retain independent collection schemas. Scores are comparable only inside the same score profile.",
   "system_families": [
     {"id": "memory_system", "name": "Memory systems", "definition": "Systems whose primary value is capturing, organizing, preserving, retrieving, or reasoning over durable knowledge."},
     {"id": "agent_system", "name": "Agent systems", "definition": "Systems whose primary value is planning and taking actions through tools on a person's behalf."},
@@ -56,6 +56,22 @@
     {"id": "perplexity", "name": "Perplexity"},
     {"id": "x_ai", "name": "SpaceXAI / xAI"},
     {"id": "z_ai", "name": "Z.ai"}
+  ],
+  "model_types": [
+    {"id": "language_model", "name": "Language model", "definition": "A model whose documented input and output are text."},
+    {"id": "multimodal_language_model", "name": "Multimodal language model", "definition": "A model that accepts image, audio, video, or document input and produces text as a primary output."}
+  ],
+  "model_modalities": [
+    {"id": "text", "name": "Text", "definition": "Natural-language or code tokens."},
+    {"id": "image", "name": "Image", "definition": "Still-image input or output."},
+    {"id": "audio", "name": "Audio", "definition": "Speech or other audio input or output."},
+    {"id": "video", "name": "Video", "definition": "Moving-image input or output."},
+    {"id": "pdf", "name": "PDF", "definition": "PDF document input handled as a documented model modality."}
+  ],
+  "model_distribution_modes": [
+    {"id": "downloadable_weights", "name": "Downloadable weights", "definition": "The developer publishes model weights that an operator can download and execute under the recorded terms."},
+    {"id": "developer_api", "name": "Developer API", "definition": "The model developer offers the release through a separately governed managed API."},
+    {"id": "third_party_hosting", "name": "Third-party hosting", "definition": "One or more unrelated inference operators document a hosted path for the release."}
   ],
   "inference_service_types": [
     {"id": "direct_model_api", "name": "Direct model API", "definition": "A model developer operates the primary API for its own model families."},
@@ -157,6 +173,18 @@
       {"id": "model_lifecycle_management", "weight": 0.10, "definition": "Fetching, pinning, custom model import, adapter support, storage control, and removal for local model artifacts."},
       {"id": "observability_control", "weight": 0.10, "definition": "Metrics, health endpoints, logging, request introspection, and administrative surfaces for an operator running the software."},
       {"id": "documentation_transparency", "weight": 0.08, "definition": "Clarity and specificity of authoritative documentation for accelerators, formats, serving, deployment, limits, and known exceptions."}
+    ]
+  },
+  "model_score_profile": {
+    "id": "model_access",
+    "name": "Model access and deployability score",
+    "dimensions": [
+      {"id": "license_clarity", "weight": 0.22, "definition": "Clarity, scope, and practical reuse of the documented model, weight, tokenizer, and accompanying terms; open weights alone do not earn this score."},
+      {"id": "artifact_availability", "weight": 0.18, "definition": "Availability of developer-published weights, manifests, checksums, formats, and versioned artifacts rather than third-party repackaging."},
+      {"id": "deployment_portability", "weight": 0.20, "definition": "Documented portability across self-operated runtimes, accelerators, formats, and deployment paths without measuring speed."},
+      {"id": "serving_reach", "weight": 0.14, "definition": "Documented availability through first-party or independent serving paths, without using price, latency, or catalog size as a proxy."},
+      {"id": "lifecycle_transparency", "weight": 0.12, "definition": "Clear release identity, versioning, update dates, deprecation posture, and distinction between base, instruct, preview, and served variants."},
+      {"id": "documentation_provenance", "weight": 0.14, "definition": "Specific first-party model cards, technical documentation, provenance statements, limitations, and links to governing artifacts."}
     ]
   },
   "specification_types": [
@@ -300,6 +328,13 @@
     {"id": "Unlicense", "name": "The Unlicense", "kind": "open_source"},
     {"id": "OFL-1.1", "name": "SIL Open Font License 1.1", "kind": "open_content"},
     {"id": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0", "kind": "open_content"},
+    {"id": "CC-BY-NC-4.0", "name": "Creative Commons Attribution-NonCommercial 4.0", "kind": "restricted"},
+    {"id": "LicenseRef-Cohere-Labs-AUP", "name": "Cohere Labs Acceptable Use Policy", "kind": "restricted"},
+    {"id": "LicenseRef-DeepSeek-Model-1.0", "name": "DeepSeek Model License 1.0", "kind": "restricted"},
+    {"id": "LicenseRef-Llama-3.2-Community", "name": "Llama 3.2 Community License", "kind": "restricted"},
+    {"id": "LicenseRef-Llama-3.2-AUP", "name": "Llama 3.2 Acceptable Use Policy", "kind": "restricted"},
+    {"id": "LicenseRef-OpenAI-Services-Agreement", "name": "OpenAI Services Agreement", "kind": "proprietary"},
+    {"id": "LicenseRef-Anthropic-Commercial-Terms", "name": "Anthropic Commercial Terms of Service", "kind": "proprietary"},
     {"id": "LicenseRef-W3C-Software-Document", "name": "W3C Software and Document License", "kind": "open_content"},
     {"id": "LicenseRef-Commercial", "name": "Commercial or production-restricted terms", "kind": "restricted"},
     {"id": "LicenseRef-Proprietary", "name": "Proprietary", "kind": "proprietary"},
