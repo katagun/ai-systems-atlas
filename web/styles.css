@@ -293,8 +293,10 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 }
 
 .tabs { display: flex; align-self: center; gap: 1.4rem; padding: 0; border: 0; border-radius: 0; background: none; }
-.tab {
+.tab,
+.tab-link {
   position: relative;
+  text-decoration: none;
   padding: .3rem .05rem .5rem;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -305,10 +307,10 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   font-size: .78rem;
   font-weight: 600;
 }
-.tab::after { display: none; }
-.tab:hover { color: var(--text); }
+.tab::after, .tab-link::after { display: none; }
+.tab:hover, .tab-link:hover { color: var(--text); }
 .tab.is-active { background: none; color: var(--text); box-shadow: none; border-bottom-color: var(--text); }
-.tab:focus-visible { outline-offset: 2px; }
+.tab:focus-visible, .tab-link:focus-visible { outline-offset: 2px; }
 .header-tools { display: flex; align-items: center; gap: .5rem; justify-self: end; }
 .theme-toggle {
   width: 38px;

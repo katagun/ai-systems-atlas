@@ -72,8 +72,8 @@ test("the blog index and its posts are reachable and self-contained", async ({ p
   expect(external).toEqual([]);
 });
 
-test("the directory header links to the blog", async ({ page }) => {
+test("the primary navigation links to the blog", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.getByRole("link", { name: "Writing" }).click();
+  await page.getByRole("link", { name: "Blog" }).click();
   await expect(page).toHaveURL(/\/blog\/$/);
 });

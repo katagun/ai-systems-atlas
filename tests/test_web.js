@@ -481,10 +481,10 @@ test("the app does not disable the HTTP cache it just earned a content hash for"
   assert.ok(!/cache:\s*"no-store"/.test(app), "app.js re-disables caching; the ?v= stamp already guarantees freshness");
 });
 
-test("the header links to the blog, so writing about the catalog is reachable from it", () => {
+test("the primary navigation links to the blog, so it is found by scanning the nav", () => {
   const html = indexHTML();
-  assert.match(html, /<a class="suggest-link" href="blog\/">Writing<\/a>/,
-    "index.html should link to blog/ from the header tools");
+  assert.match(html, /<a class="tab-link" href="blog\/">Blog<\/a>/,
+    "index.html should link to blog/ from the primary tab row");
 });
 
 test("the GitHub link is an icon with an accessible name rather than visible text", () => {
