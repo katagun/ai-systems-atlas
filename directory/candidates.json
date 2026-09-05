@@ -658,7 +658,7 @@
       "repo": "mateaix/mateclaw",
       "name": "mateclaw",
       "url": "https://github.com/mateaix/mateclaw",
-      "description": "🤖 MateClaw — Your second brain with Multi-Agent Orchestration, MCP Protocol, Skills & Memory, Dream, and Multi-Channel Support. Built on Spring AI Alibaba.",
+      "description": "\ud83e\udd16 MateClaw \u2014 Your second brain with Multi-Agent Orchestration, MCP Protocol, Skills & Memory, Dream, and Multi-Channel Support. Built on Spring AI Alibaba.",
       "proposed_system_family": "agent_system",
       "proposed_primary_role": "multi_agent_orchestrator",
       "classification_confidence": 0.8,
@@ -814,7 +814,7 @@
       "repo": "NVIDIA/skills",
       "name": "skills",
       "url": "https://github.com/NVIDIA/skills",
-      "description": "Agent Skills for NVIDIA products — install into Claude Code, Codex, and other coding agents to run Physical AI, robotics, simulation, CUDA, and RAG workflows end to end.",
+      "description": "Agent Skills for NVIDIA products \u2014 install into Claude Code, Codex, and other coding agents to run Physical AI, robotics, simulation, CUDA, and RAG workflows end to end.",
       "proposed_system_family": "agent_system",
       "proposed_primary_role": "coding_agent_workflow",
       "classification_confidence": 0.86,
@@ -849,7 +849,7 @@
       "repo": "oldwinter/knowledge-garden",
       "name": "knowledge-garden",
       "url": "https://github.com/oldwinter/knowledge-garden",
-      "description": "我的第二大脑 second brain，我的数字花园 digital garden，用obsidian双链笔记软件写作而成",
+      "description": "\u6211\u7684\u7b2c\u4e8c\u5927\u8111 second brain\uff0c\u6211\u7684\u6570\u5b57\u82b1\u56ed digital garden\uff0c\u7528obsidian\u53cc\u94fe\u7b14\u8bb0\u8f6f\u4ef6\u5199\u4f5c\u800c\u6210",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "human_pkm",
       "classification_confidence": 1,
@@ -990,7 +990,7 @@
       "repo": "revezone/revezone",
       "name": "revezone",
       "url": "https://github.com/revezone/revezone",
-      "description": "A lightweight local-first graphic-centric  productivity tool to build your second brain. Supporting Excalidraw/Tldraw whiteboard and notion-like note. 一款以图形为中心、轻量级、本地优先的用于构建第二大脑的效率工具。支持 Excalidraw、Tldraw 白板和类 Notion 笔记。",
+      "description": "A lightweight local-first graphic-centric  productivity tool to build your second brain. Supporting Excalidraw/Tldraw whiteboard and notion-like note. \u4e00\u6b3e\u4ee5\u56fe\u5f62\u4e3a\u4e2d\u5fc3\u3001\u8f7b\u91cf\u7ea7\u3001\u672c\u5730\u4f18\u5148\u7684\u7528\u4e8e\u6784\u5efa\u7b2c\u4e8c\u5927\u8111\u7684\u6548\u7387\u5de5\u5177\u3002\u652f\u6301 Excalidraw\u3001Tldraw \u767d\u677f\u548c\u7c7b Notion \u7b14\u8bb0\u3002",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "human_pkm",
       "classification_confidence": 1,
@@ -1224,7 +1224,7 @@
       "repo": "withkynam/vibecode-pro-max-kit",
       "name": "vibecode-pro-max-kit",
       "url": "https://github.com/withkynam/vibecode-pro-max-kit",
-      "description": "Your AI forgets. This remembers. Spec-driven coding harness for vibecoders, product owners, CEOs and real builders — self-improving context memory, 15 agents, 33 skills working with /goal, agent-team, & workflow on autopilot loops with 0 need for human gate. Kills context rot, ships features, not spaghetti. Claude Code & Codex. Any stack",
+      "description": "Your AI forgets. This remembers. Spec-driven coding harness for vibecoders, product owners, CEOs and real builders \u2014 self-improving context memory, 15 agents, 33 skills working with /goal, agent-team, & workflow on autopilot loops with 0 need for human gate. Kills context rot, ships features, not spaghetti. Claude Code & Codex. Any stack",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
       "classification_confidence": 0.8,
@@ -1623,6 +1623,420 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "dora-rs/dora",
+      "name": "Dora",
+      "url": "https://github.com/dora-rs/dora",
+      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3922,
+      "topics": [
+        "dataflow",
+        "embodied-ai",
+        "low-latency",
+        "robotics",
+        "rust"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "OpenMind/OM1",
+      "name": "OM1",
+      "url": "https://github.com/OpenMind/OM1",
+      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.25,
+      "github_detected_license": "MIT",
+      "stars": 2904,
+      "topics": [
+        "llm",
+        "multiagent",
+        "robotics",
+        "ros2",
+        "zenoh"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ros-navigation/navigation2",
+      "name": "Nav2",
+      "url": "https://github.com/ros-navigation/navigation2",
+      "description": "Nav2 is the ROS 2 navigation framework and system for mobile-robot path planning, obstacle avoidance, and autonomous navigation.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": 4662,
+      "topics": [
+        "navigation",
+        "robotics",
+        "ros2"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Physical-Intelligence/openpi",
+      "name": "openpi",
+      "url": "https://github.com/Physical-Intelligence/openpi",
+      "description": "openpi holds Physical Intelligence's open-source vision-language-action robot policy models (pi0, pi0-FAST, pi0.5) and the packages to run or fine-tune them.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 13639,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "google-deepmind/gemini-robotics-sdk",
+      "name": "Safari SDK",
+      "url": "https://github.com/google-deepmind/gemini-robotics-sdk",
+      "description": "Safari SDK provides full lifecycle tooling for Google DeepMind's Gemini Robotics models, including checkpoint access, serving, evaluation, and fine-tuning.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 606,
+      "topics": [
+        "gemini",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "NVlabs/alpamayo",
+      "name": "Alpamayo",
+      "url": "https://github.com/NVlabs/alpamayo",
+      "description": "Alpamayo is NVIDIA's open reasoning vision-language-action model that pairs autonomous-vehicle driving trajectories with chain-of-causation reasoning.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2015,
+      "topics": [
+        "alpamayo",
+        "autonomous-driving",
+        "autonomous-vehicles",
+        "chain-of-causation",
+        "computer-vision",
+        "end-to-end-driving",
+        "nvidia",
+        "physical-ai",
+        "reasoning",
+        "robotics",
+        "self-driving-car",
+        "trajectory-prediction",
+        "vision-language-action",
+        "vla",
+        "world-models"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "google-deepmind/mujoco",
+      "name": "MuJoCo",
+      "url": "https://github.com/google-deepmind/mujoco",
+      "description": "MuJoCo (Multi-Joint dynamics with Contact) is a general-purpose physics engine used to simulate articulated and robotic systems.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": "Apache-2.0",
+      "stars": 14929,
+      "topics": [
+        "mujoco",
+        "physics",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "isaac-sim/IsaacLab",
+      "name": "Isaac Lab",
+      "url": "https://github.com/isaac-sim/IsaacLab",
+      "description": "Isaac Lab is a unified robot-learning framework built on NVIDIA Isaac Sim for training and evaluating robot policies in simulation.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": "BSD-3-Clause",
+      "stars": 8041,
+      "topics": [
+        "isaac-sim",
+        "omniverse-kit-extension",
+        "robot-learning",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "mani-skill/ManiSkill",
+      "name": "ManiSkill",
+      "url": "https://github.com/mani-skill/ManiSkill",
+      "description": "ManiSkill is a GPU-parallelized robotics simulator and benchmark for manipulation-skill research.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3291,
+      "topics": [
+        "embodied-ai",
+        "reinforcement-learning",
+        "robot-learning",
+        "robot-manipulation",
+        "robotics",
+        "simulation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ARISE-Initiative/robosuite",
+      "name": "robosuite",
+      "url": "https://github.com/ARISE-Initiative/robosuite",
+      "description": "robosuite is a modular simulation framework and benchmark suite for robot learning, built on the MuJoCo physics engine.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": null,
+      "stars": 2594,
+      "topics": [
+        "physics-simulation",
+        "reinforcement-learning",
+        "robot-learning",
+        "robot-manipulation",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Lifelong-Robot-Learning/LIBERO",
+      "name": "LIBERO",
+      "url": "https://github.com/Lifelong-Robot-Learning/LIBERO",
+      "description": "LIBERO is a benchmark suite for evaluating knowledge transfer in lifelong robot learning across manipulation tasks.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": "MIT",
+      "stars": 2274,
+      "topics": [
+        "benchmark",
+        "imitation-learning",
+        "lifelong-learning",
+        "manipulation",
+        "multitask-learning",
+        "robot-learning"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "foxglove/mcap",
+      "name": "MCAP",
+      "url": "https://github.com/foxglove/mcap",
+      "description": "MCAP is a modular, serialization-agnostic container file format for logging and exchanging multimodal pub/sub and robotics data.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "retrieval_infrastructure",
+      "classification_confidence": 0.15,
+      "github_detected_license": "MIT",
+      "stars": 1077,
+      "topics": [
+        "cpp",
+        "data",
+        "deserialization",
+        "golang",
+        "python",
+        "robotics",
+        "serialization",
+        "swift",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ros/urdfdom",
+      "name": "urdfdom",
+      "url": "https://github.com/ros/urdfdom",
+      "description": "urdfdom is the reference parser library for URDF (Unified Robot Description Format), the XML format ROS uses to describe a robot's kinematic and visual structure.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": null,
+      "stars": 136,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Spot",
+      "url": "https://bostondynamics.com/products/spot/",
+      "description": "Spot is Boston Dynamics' commercially sold agile mobile robot for autonomous site inspection and remote operation.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Unitree G1",
+      "url": "https://www.unitree.com/g1/",
+      "description": "The Unitree G1 is a commercially sold humanoid robot with force-position hybrid control and imitation- and reinforcement-learned manipulation skills.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Figure",
+      "url": "https://www.figure.ai/",
+      "description": "Figure is an AI robotics company building a general-purpose humanoid robot for commercial deployment.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "1X NEO",
+      "url": "https://www.1x.tech/neo",
+      "description": "NEO is 1X's humanoid home robot, sold to perform household chores and provide personalized in-home assistance.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
       "review_required": [
         "licensing",
         "classification",
