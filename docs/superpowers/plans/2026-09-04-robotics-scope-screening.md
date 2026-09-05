@@ -229,9 +229,9 @@ Every candidate object has exactly these 13 keys. `repo` is `null` for a product
   "name": "Example Robot Platform",
   "url": "https://example.invalid/platform",
   "description": "One sentence from first-party material describing what it does.",
-  "proposed_system_family": null,
-  "proposed_primary_role": null,
-  "classification_confidence": 0.5,
+  "proposed_system_family": "agent_system",
+  "proposed_primary_role": "general_work_agent",
+  "classification_confidence": 0.3,
   "github_detected_license": null,
   "stars": null,
   "topics": [],
@@ -241,7 +241,9 @@ Every candidate object has exactly these 13 keys. `repo` is `null` for a product
 }
 ```
 
-Leave `proposed_system_family` and `proposed_primary_role` populated with a compatible pair only where an existing role plainly holds the candidate. Otherwise leave both null — Task 3 attaches the `triage.held_by` that makes null legal.
+Every candidate gets a **compatible** `proposed_system_family` and `proposed_primary_role` pair from `directory/taxonomy.json`, even where you expect the screening to reject it. A proposed pair is a provisional discovery guess, never an editorial conclusion, and a low `classification_confidence` is how you say so.
+
+Do **not** leave the pair null here. `docs/OPERATIONS.md` describes nulling the pair and attaching the `triage` block as one change, made together — so Tasks 3–5 null the pair in the same edit that adds `triage.held_by`. Nulling it now would commit a catalog that fails validation.
 
 - [ ] **Step 5: Validate**
 
@@ -249,7 +251,7 @@ Leave `proposed_system_family` and `proposed_primary_role` populated with a comp
 uv run python scripts/validate_directory.py
 ```
 
-Expected: a `family and role may only be null while triage.held_by names the decision that holds the record` error for each candidate you left null. That failure is correct at this point and Task 3 clears it. Any *other* error is a schema mistake to fix now.
+Expected: silent. Every commit must leave the catalog valid; if the validator reports anything, fix it before committing.
 
 - [ ] **Step 6: Commit**
 
@@ -257,9 +259,9 @@ Expected: a `family and role may only be null while triage.held_by names the dec
 git add directory/candidates.json
 git commit -m "Queue the robotics screening batch
 
-Candidates from reproducible topic and vendor queries, not recall. Family
-and role are left null where no existing role plainly holds the record;
-the triage blocks that legalise that follow."
+Candidates from reproducible topic and vendor queries, not recall. Each
+carries a provisional family and role pair at low confidence; the screening
+replaces or nulls it in the same edit that attaches a triage block."
 ```
 
 ---
@@ -554,15 +556,18 @@ Expected: all pass. `build_share_pages.py --check` should report no difference, 
 - [ ] **Step 2: Confirm the working tree holds only what this plan changed**
 
 ```bash
-git status --short && git diff --stat origin/main..HEAD
+BRANCH_BASE=5c78839fe2ef06128236c481f48af88b894c8267
+git status --short && git diff --stat $BRANCH_BASE..HEAD
 ```
+
+`BRANCH_BASE` is where this branch started. Do **not** diff `origin/main..HEAD`: this branch is stacked on an unmerged models.dev commit, so an origin/main diff attributes `directory/models.json`, `directory/taxonomy.json`, and `docs/adr/025-*` to this plan and fires a false scope violation.
 
 Expected: a clean tree, and a diff touching only `scripts/build_candidate_evidence.py`, `tests/test_candidate_evidence.py`, `directory/candidates.json`, `directory/exclusions.json`, `web/exclusions.json`, `docs/COVERAGE.md`, and `BACKLOG.md`.
 
 - [ ] **Step 3: Confirm the sweep decided nothing it was not meant to decide**
 
 ```bash
-git diff origin/main..HEAD --name-only | grep -E "directory/(projects|models|specifications|inference-services|local-runtimes|taxonomy)\.json|docs/adr/" && echo "SCOPE VIOLATION" || echo "scope clean"
+git diff $BRANCH_BASE..HEAD --name-only | grep -E "directory/(projects|models|specifications|inference-services|local-runtimes|taxonomy)\.json|docs/adr/" && echo "SCOPE VIOLATION" || echo "scope clean"
 ```
 
 Expected: `scope clean`. This sweep publishes no record, extends no vocabulary, and writes no ADR.
