@@ -91,6 +91,7 @@ jobs:
           check "unittest" uv run python -m unittest discover -s tests -v
           check "compileall" uv run python -m compileall scripts tests
           check "share page freshness" uv run python scripts/build_share_pages.py --check
+          check "app payload freshness" uv run python scripts/build_web_payload.py --check
           check "asset versions" node scripts/build_asset_version.mjs --check
           check "app-core.js syntax" node --check web/app-core.js
           check "app.js syntax" node --check web/app.js

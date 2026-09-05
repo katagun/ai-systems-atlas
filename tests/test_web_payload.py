@@ -4,7 +4,12 @@ import json
 import unittest
 from pathlib import Path
 
-from scripts.build_web_payload import build_payloads, load_catalog
+from scripts.build_web_payload import (
+    COLLECTIONS,
+    SEARCH_FIELDS,
+    build_payloads,
+    load_catalog,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,19 +22,31 @@ class WebPayloadTests(unittest.TestCase):
 
     def test_every_published_field_lands_in_boot_or_detail(self) -> None:
         """Detail is the complement of boot: no field is dropped, none is duplicated."""
-        boot = {item["id"]: item for item in json.loads(self.payloads["app/systems.json"])["systems"]}
-        for record in self.catalog["projects.json"]["projects"]:
-            entry = boot[record["id"]]
-            detail = json.loads(self.payloads[f"app/detail/system/{record['id']}.json"])
-            for field in record:
-                if field == "score":
-                    self.assertIn("overall", entry["score"])
-                    self.assertEqual(record["score"], detail["score"])
-                    continue
-                self.assertTrue(
-                    (field in entry) != (field in detail),
-                    f"{record['id']}.{field} must be in exactly one of boot and detail",
-                )
+        for collection, name, key, kind in COLLECTIONS:
+            boot = {
+                item["id"]: item
+                for item in json.loads(self.payloads[f"app/{collection}.json"])[collection]
+            }
+            for record in self.catalog[name][key]:
+                entry = boot[record["id"]]
+                detail = json.loads(self.payloads[f"app/detail/{kind}/{record['id']}.json"])
+                for field in record:
+                    # A score is the one field deliberately split: boot carries
+                    # the overall a card prints, detail carries every dimension.
+                    # Specifications are unscored, so they never take this path.
+                    if field == "score":
+                        self.assertIn("overall", entry["score"])
+                        self.assertEqual(record["score"], detail["score"])
+                        continue
+                    self.assertTrue(
+                        (field in entry) != (field in detail),
+                        f"{collection}/{record['id']}.{field} must be in exactly one of boot and detail",
+                    )
+
+    def test_specifications_are_unscored_so_no_field_is_split(self) -> None:
+        """The score exception above must never fire for specifications."""
+        for record in self.catalog["specifications.json"]["specifications"]:
+            self.assertNotIn("score", record)
 
     def test_boot_carries_the_dates_the_page_prints(self) -> None:
         """bootstrap() derives the 'Data updated' line from these envelope keys."""
@@ -38,17 +55,27 @@ class WebPayloadTests(unittest.TestCase):
             self.assertIn("verified_at", json.loads(self.payloads[f"app/{collection}.json"]))
 
     def test_search_index_covers_every_record(self) -> None:
-        index = json.loads(self.payloads["app/search/systems.json"])
-        ids = {record["id"] for record in self.catalog["projects.json"]["projects"]}
-        self.assertEqual(ids, set(index))
+        for collection, name, key, _ in COLLECTIONS:
+            index = json.loads(self.payloads[f"app/search/{collection}.json"])
+            ids = {record["id"] for record in self.catalog[name][key]}
+            self.assertEqual(ids, set(index), collection)
 
     def test_search_index_holds_lowercased_prose(self) -> None:
-        index = json.loads(self.payloads["app/search/systems.json"])
-        record = self.catalog["projects.json"]["projects"][0]
-        self.assertEqual(index[record["id"]], index[record["id"]].lower())
-        self.assertIn(record["why_it_matters"].lower(), index[record["id"]])
-        for item in record["strengths"]:
-            self.assertIn(item.lower(), index[record["id"]])
+        """Every indexed field of every collection reaches the index, lowercased."""
+        for collection, name, key, _ in COLLECTIONS:
+            index = json.loads(self.payloads[f"app/search/{collection}.json"])
+            for record in self.catalog[name][key]:
+                text = index[record["id"]]
+                self.assertEqual(text, text.lower(), f"{collection}/{record['id']}")
+                for field in SEARCH_FIELDS[collection]:
+                    value = record.get(field)
+                    if value is None:
+                        continue
+                    items = value if isinstance(value, list) else [value]
+                    for item in items:
+                        self.assertIn(
+                            str(item).lower(), text, f"{collection}/{record['id']}.{field}"
+                        )
 
     def test_payloads_never_carry_the_published_policy_string(self) -> None:
         self.assertNotIn("policy", json.loads(self.payloads["app/systems.json"]))

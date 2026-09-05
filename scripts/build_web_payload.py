@@ -104,7 +104,11 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                 entry["score"] = {"overall": record["score"]["overall"]}
             entries.append(entry)
 
-        envelope = {key: document[key] for key in ENVELOPE_KEYS if key in document}
+        envelope = {
+            envelope_key: document[envelope_key]
+            for envelope_key in ENVELOPE_KEYS
+            if envelope_key in document
+        }
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})
 
         payloads[f"app/search/{collection}.json"] = dumps({
