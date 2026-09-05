@@ -96,3 +96,17 @@ test("the page still renders when a payload class never arrives", async ({ page 
   await page.locator("#project-search").fill("kilo");
   await expect(page.locator('#project-grid [data-project="kilo-code"]')).toBeVisible();
 });
+
+test("a comparison opens degraded, and bounded, when detail never arrives", async ({ page }) => {
+  // A comparison waits for its records' detail before opening, and loadDetail
+  // clears a failed request so the next reader retries. Waiting more than once
+  // would therefore fetch forever and never open the dialog at all.
+  let detailRequests = 0;
+  await page.route("**/app/detail/**", route => { detailRequests += 1; route.abort(); });
+  await page.goto("/?collection=systems&compare=system:kilo-code,cline");
+
+  await expect(page.locator(".comparison-table")).toBeVisible();
+  await expect(page.locator(".comparison-table tbody tr").filter({ hasText: "Strengths" })).toHaveCount(1);
+  await expect(page.locator(".comparison-table")).not.toContainText("undefined");
+  expect(detailRequests).toBeLessThanOrEqual(4);
+});

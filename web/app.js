@@ -884,22 +884,25 @@ function priorityBoost(project, priority) {
   return project.score.overall / 3;
 }
 
+// A reason chip quotes a score dimension, which only a detail file carries. It
+// cannot throw, but it can print "Simplicity undefined/10" at a reader when a
+// detail file never arrived, so every dimension here falls back to an em dash.
 function recommendationReasons(project, priority) {
   if (project.score_profile === "local_runtime") {
     const reasons = [taxonomyName("local_runtime_types", project.runtime_type)];
-    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage}/10`);
-    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support}/10`);
-    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency}/10`);
-    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations}/10`, `Observability ${project.score.observability_control}/10`);
+    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage ?? "—"}/10`);
+    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support ?? "—"}/10`);
+    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency ?? "—"}/10`);
+    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations ?? "—"}/10`, `Observability ${project.score.observability_control ?? "—"}/10`);
     reasons.push(...project.accelerators.slice(0, 2).map(item => taxonomyName("runtime_accelerators", item)));
     return [...new Set(reasons)].slice(0, 4);
   }
   if (project.score_profile === "inference_service") {
     const reasons = [taxonomyName("inference_service_types", project.service_type)];
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
-    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control}/10`);
-    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability}/10`, `Serving flexibility ${project.score.serving_flexibility}/10`);
-    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience}/10`);
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability ?? "—"}/10`, `Serving flexibility ${project.score.serving_flexibility ?? "—"}/10`);
+    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience ?? "—"}/10`);
     reasons.push(...project.delivery_modes.slice(0, 2).map(item => taxonomyName("inference_delivery_modes", item)));
     return [...new Set(reasons)].slice(0, 4);
   }
@@ -907,17 +910,17 @@ function recommendationReasons(project, priority) {
   if (project.local_first) reasons.push("Local-first");
   if (project.system_family === "memory_system") {
     if (project.human_editable) reasons.push("Human-editable data");
-    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
+    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
   } else if (project.system_family === "agent_system") {
     const interfaces = project.agent_interfaces.slice(0, 2).map(item => taxonomyName("agent_interfaces", item));
     reasons.push(...interfaces);
-    if (priority === "control") reasons.push(`Human control ${project.score.human_control}/10`);
+    if (priority === "control") reasons.push(`Human control ${project.score.human_control ?? "—"}/10`);
   } else {
-    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations}/10`);
-    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity}/10`);
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability}/10`);
+    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations ?? "—"}/10`);
+    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity ?? "—"}/10`);
+    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
   }
   return [...new Set(reasons)].slice(0, 4);
 }
@@ -1395,6 +1398,14 @@ async function copyRecordLink(button) {
   }
 }
 
+// A score cell reads "8 / 10", or nothing at all when that dimension has not
+// arrived: returning null hands the cell to comparisonTable's own "—" fallback,
+// which a template literal would have stringified into "undefined / 10".
+const scoreCell = value => value == null ? null : `${value} / 10`;
+// The same for a list a detail file carries: absent and empty both become "—",
+// so a degraded table reads consistently rather than mixing blanks and dashes.
+const listCell = values => (values || []).join(" • ") || null;
+
 function comparisonTable(records, rows) {
   return `<div class="comparison-table-wrap"><table class="comparison-table">
     <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
@@ -1402,16 +1413,29 @@ function comparisonTable(records, rows) {
   </table></div>`;
 }
 
+// Every row below a comparison's overall score reads a detail field, and a
+// half-filled table is worse than a moment's wait, so a comparison opens whole.
+// A selection is waited on at most once, tracked here: a detail file that never
+// arrives then costs one beat and a table built from what landed. Without that,
+// loadDetail's catch — which clears its request so the next reader retries —
+// would turn the re-entry below into an unbounded fetch loop.
+const comparisonDetailAwaited = new Set();
+
 function openComparison() {
   const records = comparisonRecords();
   if (records.length < 2) return;
-  // Every row below a score's overall reads a detail field, and a half-filled
-  // comparison is worse than a moment's wait, so this one opens whole. The
-  // selection is capped at four, so that is at most four small fetches.
-  const pending = records.map(record => loadDetail(state.comparison.kind, record)).filter(Boolean);
-  if (pending.length) {
-    Promise.all(pending).then(() => { if (comparisonRecords().length === records.length) openComparison(); });
-    return;
+  const selection = `${state.comparison.kind}:${state.comparison.ids.join(",")}`;
+  if (!comparisonDetailAwaited.has(selection)) {
+    // The selection is capped at four, so this is at most four small fetches.
+    const pending = records.map(record => loadDetail(state.comparison.kind, record)).filter(Boolean);
+    if (pending.length) {
+      Promise.all(pending).then(() => {
+        comparisonDetailAwaited.add(selection);
+        if (comparisonRecords().length === records.length) openComparison();
+      });
+      return;
+    }
+    comparisonDetailAwaited.add(selection);
   }
   let profile;
   let rows;
@@ -1423,18 +1447,18 @@ function openComparison() {
     note = "Scores and weights are comparable only inside this system family. They are editorial judgments—not workload benchmarks.";
     rows = [
       ["Primary role", records.map(item => roleName(item.primary_role))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Source model", records.map(item => sourceModelName(item.source_model))],
       ["Licenses / terms", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Deployment", records.map(item => item.deployment.map(value => taxonomyName("deployment_modes", value)).join(" · "))],
       ["Local-first", records.map(item => item.local_first ? "Yes" : "No")],
       ["Architecture", records.map(item => item.architectures.map(architectureName).join(" · "))],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Watchouts", records.map(item => item.weaknesses.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Watchouts", records.map(item => listCell(item.weaknesses))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else if (state.comparison.kind === "runtime") {
@@ -1444,10 +1468,10 @@ function openComparison() {
     rows = [
       ["Maintainer", records.map(item => item.maintainer)],
       ["Runtime type", records.map(item => taxonomyName("local_runtime_types", item.runtime_type))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Accelerators", records.map(item => item.accelerators.map(value => taxonomyName("runtime_accelerators", value)).join(" · "))],
       ["Model formats", records.map(item => item.model_formats.map(value => taxonomyName("runtime_model_formats", value)).join(" · "))],
@@ -1458,8 +1482,8 @@ function openComparison() {
       ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Hardware requirements", records.map(item => item.hardware_requirements)],
       ["Model management", records.map(item => item.model_management)],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else {
@@ -1469,10 +1493,10 @@ function openComparison() {
     rows = [
       ["Operator", records.map(item => item.operator)],
       ["Service type", records.map(item => taxonomyName("inference_service_types", item.service_type))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
       ["Delivery", records.map(item => item.delivery_modes.map(value => taxonomyName("inference_delivery_modes", value)).join(" · "))],
       ["Model sources", records.map(item => item.model_sources.map(value => taxonomyName("inference_model_sources", value)).join(" · "))],
@@ -1481,8 +1505,8 @@ function openComparison() {
       ["Retention controls", records.map(item => item.retention_controls)],
       ["Routing", records.map(item => item.routing)],
       ["Customization", records.map(item => item.customization)],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   }
