@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02",
+  "generated_at": "2026-09-05",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -15737,6 +15737,82 @@
         "Apache-2.0"
       ],
       "source_model": "mixed_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "a-mem",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "A-MEM",
+      "repo": "agiresearch/A-mem",
+      "url": "https://github.com/agiresearch/A-mem",
+      "description": "Source-installable Python library that stores agent memories as structured notes in Chroma, retrieves semantic neighbors and linked notes, and uses OpenAI or a local Ollama model to evolve tags, context, and connections.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "local_runtime"
+      ],
+      "architectures": [
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "self_editing"
+      ],
+      "canonical_data": "in-process MemoryNote objects mirrored into a Chroma collection, with content, tags, context, links, timestamps, retrieval counts, and evolution history in metadata",
+      "deployment": [
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "limited",
+      "status": "active",
+      "stars": 1167,
+      "stars_verified_at": "2026-09-05",
+      "historical_stars": null,
+      "current_repo_note": "Source-installable at version 0.0.1 with no tagged GitHub release. The documented AgenticMemorySystem creates an in-memory Chroma client and resets it on initialization; persistent retriever classes exist in the package but are not wired into the documented main constructor.",
+      "pushed_at": "2025-12-12T21:15:29Z",
+      "forks": 121,
+      "open_issues": 20,
+      "metadata_verified_at": "2026-09-05",
+      "github_detected_license": "MIT",
+      "score": {
+        "second_brain_fit": 5.0,
+        "data_sovereignty": 7.2,
+        "interoperability": 5.8,
+        "memory_intelligence": 5.6,
+        "operational_simplicity": 5.6,
+        "maturity": 3.8,
+        "overall": 5.54
+      },
+      "strengths": [
+        "The small MIT-licensed package exposes direct add, read, update, delete, and search operations, with tests covering the core memory and retriever surfaces",
+        "Both embeddings and memory evolution can stay on the operator's machine through Sentence Transformers and the documented Ollama backend",
+        "Memory evolution records semantic links and can revise neighboring tags and context instead of treating every stored item as an isolated embedding"
+      ],
+      "weaknesses": [
+        "The documented main class resets an in-memory Chroma collection whenever it starts, while the package's persistent retriever is not accepted by that constructor, so the primary path does not preserve memory across process restarts",
+        "Retrieval is vector similarity plus one-hop linked neighbors; imported lexical-ranking code is unused, and there is no temporal query, contradiction handling, or source-level provenance",
+        "The package remains version 0.0.1 with no tagged release, no standard service or tool-protocol interface, and no repository commit since December 2025"
+      ],
+      "why_it_matters": "A compact, inspectable implementation of the A-MEM idea that cleanly separates the adoptable library from the paper-reproduction repository, while exposing how much production memory lifecycle work remains beyond semantic linking.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-05",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
       "license_review_status": "verified"
     }
   ]

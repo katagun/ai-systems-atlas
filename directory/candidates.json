@@ -1,31 +1,7 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-03",
+  "updated_at": "2026-09-05",
   "candidates": [
-    {
-      "repo": "agiresearch/A-mem",
-      "name": "A-mem",
-      "url": "https://github.com/agiresearch/A-mem",
-      "description": "A-MEM: Agentic Memory for LLM Agents",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 1158,
-      "topics": [
-        "agent",
-        "llm",
-        "memory"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
     {
       "repo": "AgriciDaniel/claude-obsidian",
       "name": "claude-obsidian",
@@ -117,45 +93,6 @@
         "lovable",
         "qwen",
         "web-builder"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "aristoapp/awesome-second-brain",
-      "name": "awesome-second-brain",
-      "url": "https://github.com/aristoapp/awesome-second-brain",
-      "description": "A curated solutions to building a self-evolving second brain that helps AI agents understand your personal and team context.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 517,
-      "topics": [
-        "anthropic",
-        "awesome",
-        "awesome-lists",
-        "brain",
-        "chatgpt",
-        "claude",
-        "context",
-        "copilot",
-        "cursor",
-        "gemini",
-        "knowledge",
-        "llm",
-        "local-llm",
-        "mcp",
-        "memory",
-        "openai",
-        "personalization",
-        "second-brain"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -770,47 +707,6 @@
       ]
     },
     {
-      "repo": "NirDiamant/Agent_Memory_Techniques",
-      "name": "Agent_Memory_Techniques",
-      "url": "https://github.com/NirDiamant/Agent_Memory_Techniques",
-      "description": "Agent memory for LLMs: 30 runnable Jupyter notebooks covering conversation buffers, vector stores, knowledge graphs, episodic and semantic memory, MemGPT, Mem0, Letta, Zep, Graphiti, LoCoMo benchmarks, and production patterns.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 932,
-      "topics": [
-        "agent-memory",
-        "ai-agents",
-        "anthropic",
-        "episodic-memory",
-        "generative-ai",
-        "graphiti",
-        "knowledge-graph",
-        "langchain",
-        "letta",
-        "llm",
-        "llm-agents",
-        "llm-memory",
-        "mem0",
-        "memgpt",
-        "openai",
-        "python",
-        "rag",
-        "semantic-memory",
-        "vector-database",
-        "zep"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "NVIDIA/skills",
       "name": "skills",
       "url": "https://github.com/NVIDIA/skills",
@@ -835,46 +731,6 @@
         "rag",
         "robotics",
         "simulation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "oldwinter/knowledge-garden",
-      "name": "knowledge-garden",
-      "url": "https://github.com/oldwinter/knowledge-garden",
-      "description": "\u6211\u7684\u7b2c\u4e8c\u5927\u8111 second brain\uff0c\u6211\u7684\u6570\u5b57\u82b1\u56ed digital garden\uff0c\u7528obsidian\u53cc\u94fe\u7b14\u8bb0\u8f6f\u4ef6\u5199\u4f5c\u800c\u6210",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 1,
-      "github_detected_license": "MIT",
-      "stars": 2460,
-      "topics": [
-        "anki-cards",
-        "base",
-        "canvas",
-        "digital-garden",
-        "evergreen-notes",
-        "knowledge-base",
-        "local-first",
-        "logseq",
-        "markdown",
-        "moc",
-        "notes",
-        "obsidian",
-        "para",
-        "pkm",
-        "privacy-first",
-        "second-brain",
-        "spaced-repetition",
-        "tana",
-        "vscode"
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
@@ -1186,41 +1042,6 @@
       ]
     },
     {
-      "repo": "TeleAI-UAGI/Awesome-Agent-Memory",
-      "name": "Awesome-Agent-Memory",
-      "url": "https://github.com/TeleAI-UAGI/Awesome-Agent-Memory",
-      "description": "Curated systems, benchmarks, and papers etc. on memory for LLMs/MLLMs --- long-term context, retrieval, and reasoning.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 605,
-      "topics": [
-        "agent-memory",
-        "ai-agent",
-        "ai-agent-memory",
-        "awesome",
-        "awesome-agent-memory",
-        "awesome-list",
-        "continual-learning",
-        "llm",
-        "llm-memory",
-        "long-term-memory",
-        "memory",
-        "memory-management",
-        "multimodal-llm-memory",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "withkynam/vibecode-pro-max-kit",
       "name": "vibecode-pro-max-kit",
       "url": "https://github.com/withkynam/vibecode-pro-max-kit",
@@ -1252,26 +1073,6 @@
         "vibe-coding",
         "vibecoding"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "WujiangXu/A-mem",
-      "name": "A-mem",
-      "url": "https://github.com/WujiangXu/A-mem",
-      "description": "The code for NeurIPS 2025 paper \"A-Mem: Agentic Memory for LLM Agents\"",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 946,
-      "topics": [],
       "status": "provisional",
       "discovered_at": "2026-08-25",
       "review_required": [
@@ -2254,6 +2055,290 @@
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
       }
+    },
+    {
+      "repo": null,
+      "name": "Genspark AI Workspace",
+      "url": "https://www.genspark.ai/",
+      "description": "All-in-one AI workspace whose Super Agent plans and acts across research, content creation, data analysis, calls, email, documents, spreadsheets, coding, and other workflows by coordinating specialized agents and connected tools.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.94,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "general-work-agent",
+        "official-product",
+        "user-submitted",
+        "workspace"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Manus",
+      "url": "https://manus.im/",
+      "description": "Cloud general-purpose agent that autonomously plans and executes multi-step tasks spanning research, data processing, code, websites, documents, slides, media, connected tools, and scheduled workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.96,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "cloud-agent",
+        "general-work-agent",
+        "official-product",
+        "workspace"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Notion Agents",
+      "url": "https://www.notion.com/product/agents",
+      "description": "Personal and scheduled custom agents that perform multi-step knowledge work across Notion pages, databases, Slack, mail, calendars, MCP integrations, and other connected tools with permissions, audit logs, and reversible changes.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.9,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "enterprise",
+        "general-work-agent",
+        "knowledge-work",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Lindy",
+      "url": "https://www.lindy.ai/",
+      "description": "AI teammate for cross-application work through Slack, Gmail, Google Drive, Calendar, Notion, computer use, MCP servers, and a large integration catalog, with persistent meeting and workspace context.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.88,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "general-work-agent",
+        "integrations",
+        "official-product",
+        "work-automation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Gumloop",
+      "url": "https://www.gumloop.com/",
+      "description": "No-code platform for building and operating AI agents that use connected company knowledge, recurring and event triggers, hundreds of application connectors, skills, code execution, and organization-wide audit controls.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.91,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agent-builder",
+        "enterprise",
+        "no-code",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Fellou",
+      "url": "https://fellou.ai/",
+      "description": "Downloadable agentic browser that plans and executes cross-application web workflows, conducts multi-source research, automates logged-in browser actions, and can operate local applications and files with visible plans and intervention controls.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agentic-browser",
+        "browser-automation",
+        "computer-use",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Aera Browser",
+      "url": "https://aerabrowser.com/",
+      "description": "Downloadable agentic browser with autonomous browsing, scheduled tasks, parallel agents and subagents, MCP integrations, local-model support, and releases for macOS, Windows, and Linux.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.97,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agentic-browser",
+        "browser-automation",
+        "official-product",
+        "scheduled-tasks"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Asana AI Teammates",
+      "url": "https://asana.com/product/ai/ai-teammates",
+      "description": "Collaborative AI agents for coordination-heavy team work inside Asana, using Work Graph context, shared memory, configurable roles and permissions, connected applications, and no-code authoring through AI Studio.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.86,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "enterprise",
+        "general-work-agent",
+        "official-product",
+        "project-management"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ClickHouse/nerve",
+      "name": "Nerve",
+      "url": "https://github.com/ClickHouse/nerve",
+      "description": "Self-hosted AI agent runtime built around the Claude Agent SDK, with persistent memory, scheduled execution, task and plan management, evolving skills, approval gates, source synchronization, and web and Telegram channels.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.98,
+      "github_detected_license": "Apache-2.0",
+      "stars": 78,
+      "topics": [
+        "ai-agents",
+        "autonomous-agents",
+        "claude",
+        "self-hosted"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "mindscale-noah/MindMemOS",
+      "name": "MindMemOS",
+      "url": "https://github.com/mindscale-noah/MindMemOS",
+      "description": "Portable memory service for agents with cloud and self-hosted deployment, HTTP and Python interfaces, plugins, schema-based extraction, consolidation and feedback loops, and experience-to-skill evolution.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.96,
+      "github_detected_license": null,
+      "stars": 978,
+      "topics": [
+        "agent",
+        "agent-memory",
+        "agent-skills",
+        "agentic",
+        "dsh-plugin",
+        "dsh-plugins",
+        "openclaw",
+        "openclaw-agent",
+        "openclaw-plugin",
+        "rag",
+        "skills"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "matrixorigin/memoria",
+      "name": "Memoria",
+      "url": "https://github.com/matrixorigin/memoria",
+      "description": "Persistent memory layer for AI agents with versioned snapshots, branches, merges and rollback, hybrid semantic and full-text retrieval, provenance and audit trails, MCP access, and cloud or self-hosted deployment.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.98,
+      "github_detected_license": "Apache-2.0",
+      "stars": 593,
+      "topics": [
+        "agent",
+        "ai",
+        "database",
+        "llm",
+        "memory",
+        "storage"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ],
   "generated_at": "2026-09-02"

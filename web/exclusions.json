@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04",
+  "generated_at": "2026-09-05",
   "entries": [
     {
       "name": "Nav2",
@@ -390,6 +390,36 @@
       "repo": "foxglove/mcap",
       "reason": "MCAP was screened as a specification candidate, not an operational system. docs/SPECIFICATIONS.md admits 'a reusable contract at a meaningful boundary between agents, tools, clients, users, repositories, or extension packages' but separately refuses to add 'a general transport, serialization format, or API description language solely because an agent uses it.' MCAP's own README opens by calling itself 'a logging library and file format,' and its suggested academic citation titles it 'MCAP: serialization-agnostic log container file format' -- a domain-agnostic container format, not a contract tied to any agent, tool, client, user, repository, or extension-package boundary. The closest of the ten specification_scopes is tool_data_integration ('Connects model applications to tools, resources, prompts, and external data'), since an MCAP file is the kind of external data a tool or model application could consume, but MCAP itself defines no agent-facing interaction contract at all -- it is exactly the general serialization/container format the boundary's refusal sentence excludes, regardless of any agent's incidental use of it. This is stated directly in the README's opening description and its own citation block, without reading the source tree.",
       "useful_lesson": "A format's own README volunteering the words 'logging library,' 'file format,' and 'serialization-agnostic ... container' for itself is the cheapest possible signal that the specification boundary's refusal of a general transport, serialization format, or API description language applies directly -- check that sentence before asking which agent-to-software scope might fit."
+    },
+    {
+      "name": "awesome-second-brain",
+      "repo": "aristoapp/awesome-second-brain",
+      "reason": "The repository describes itself as a curated comparison of second-brain, AI-memory, and knowledge systems and tells readers to use it to decide which external solution to adopt. Its tree is documentation, comparison tables, setup guides, templates, and links to systems maintained elsewhere; it does not publish the memory service or knowledge application the provisional classification proposed. The curation rules keep directories and other non-operational research inputs outside the scored catalog.",
+      "useful_lesson": "A directory can use the Atlas's own lifecycle vocabulary and offer unusually thoughtful comparisons without becoming one of the systems it compares; it is a discovery source, not an operational record."
+    },
+    {
+      "name": "Agent Memory Techniques",
+      "repo": "NirDiamant/Agent_Memory_Techniques",
+      "reason": "The repository is an educational cookbook of thirty runnable Jupyter notebooks, organized as learning paths across memory patterns and third-party frameworks. Its README explicitly says the project is for educational purposes, is not production-ready software, and belongs to a broader collection of AI technique tutorials. Individual demonstrations do not form one adoptable memory product or service, so the curation rules for courses, tutorials, and non-operational research inputs apply.",
+      "useful_lesson": "Runnable examples, tests, and production-pattern chapters can make a tutorial collection rigorous without creating one operational boundary that can be deployed, governed, and scored as a system."
+    },
+    {
+      "name": "knowledge-garden",
+      "repo": "oldwinter/knowledge-garden",
+      "reason": "The maintainer describes the repository as a complete snapshot of personal notes, reading, writing, Obsidian plugins, and workflows, states that ninety percent of the notes are written for the maintainer, and does not accept other people's notes into the vault. Readers may download it as a template or inspect its publishing workflow, but the operational software is Obsidian or VS Code with plugins rather than this person's content repository. The curation rules keep templates and non-operational research inputs outside the scored catalog.",
+      "useful_lesson": "An exemplary, reusable knowledge garden can teach PKM practice while remaining user content; the recordable system is the software that stores and operates the vault, not one public vault built with it."
+    },
+    {
+      "name": "Awesome Agent Memory",
+      "repo": "TeleAI-UAGI/Awesome-Agent-Memory",
+      "reason": "The repository calls itself a curated map of memory systems, benchmarks, tutorials, surveys, and papers, and its editorial rules rank external projects and move inactive entries into an archival subsection. It publishes no memory runtime, service, or end-user knowledge workspace of its own. The curation rules keep bibliographies, directories, and other non-operational research inputs outside the scored catalog.",
+      "useful_lesson": "A maintained catalogue can supply valuable discovery and archival signals, but its entries remain other parties' systems; scoring the catalogue itself would confuse ecosystem research with an adoptable memory layer."
+    },
+    {
+      "name": "A-MEM paper implementation",
+      "repo": "WujiangXu/A-mem",
+      "reason": "The repository describes itself as the code for reproducing the NeurIPS 2025 A-MEM paper and directs users seeking the maintained system to a separate official implementation repository. That implementation's own installation path resolves to agiresearch/A-mem, which is curated separately as the operational package. This paper-reproduction repository is therefore a research artifact rather than a second deployable memory-system boundary.",
+      "useful_lesson": "When an author separates paper-reproduction code from a maintained operational package, follow the author's implementation pointer and review the package once instead of treating both repositories as independent systems."
     }
   ]
 }

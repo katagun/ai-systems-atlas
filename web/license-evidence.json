@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-03",
+  "verified_at": "2026-09-05",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -2933,7 +2933,22 @@
           "verified_at": "2026-09-03"
         }
       ]
+    },
+    {
+      "project_id": "a-mem",
+      "repo": "agiresearch/A-mem",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole A-MEM repository and the agentic-memory Python package declared by pyproject.toml",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agiresearch/A-mem/blob/12597231b2c37fef747a2e39df55cccba71c3ceb/LICENSE",
+          "blob_sha": "12597231b2c37fef747a2e39df55cccba71c3ceb",
+          "immutable_url": "https://api.github.com/repos/agiresearch/A-mem/git/blobs/12597231b2c37fef747a2e39df55cccba71c3ceb"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-03"
+  "generated_at": "2026-09-05"
 }
