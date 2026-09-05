@@ -2,6 +2,24 @@
   "generated_at": "2026-09-04",
   "entries": [
     {
+      "name": "Nav2",
+      "repo": "ros-navigation/navigation2",
+      "reason": "Nav2 is a ROS 2 motion-planning and navigation stack -- costmaps, behavior trees, and path planners -- and its README and linked documentation describe no model-driven decision loop, language model, or generative component anywhere in the stack. Inclusion-gate condition 2 in docs/CURATION.md fails because a classical, non-model-driven robotics library is not materially relevant to any family in directory/taxonomy.json, all of which are built around planning, retrieval, or conversation carried out by a model.",
+      "useful_lesson": "A robotics project that ships a mature, widely adopted package with clear licensing can still fail the family test outright when nothing in its documented behavior puts a model in the loop; maturity and adoption do not substitute for that."
+    },
+    {
+      "name": "openpilot",
+      "repo": "commaai/openpilot",
+      "reason": "openpilot is a driver-assistance operating system for production cars: a fixed real-time perception-and-control pipeline dedicated to keeping a vehicle in its lane and managing speed, installed on dedicated hardware, and documented with no language model, tool-calling, or delegated-task framing anywhere in its README. Inclusion-gate condition 2 in docs/CURATION.md fails because a vehicle-automation control system is not materially relevant to any family in directory/taxonomy.json. Whether purpose-built autonomous-vehicle software is a shape the Atlas should represent under some future category is a separate, unresolved question this exclusion does not answer -- it is excluded here only because the reviewed evidence shows no model-driven agent, memory, or conversational behavior, not because vehicle autonomy was judged out of scope as a category.",
+      "useful_lesson": "Being swept in by a topic query that matches on 'robotics' or 'AI' does not establish that a system's documented behavior involves a model in the loop; the README has to show an actual model-driven decision or conversation, not just a marketing description."
+    },
+    {
+      "name": "Autoware",
+      "repo": "autowarefoundation/autoware",
+      "reason": "Autoware is a production-oriented autonomous-driving software stack built on ROS 2 for perception, planning, and control of self-driving vehicles; its README documents installation and a simulator demo with no language model, tool-calling, or delegated-task framing anywhere in the reviewed evidence. Inclusion-gate condition 2 in docs/CURATION.md fails because a vehicle-automation control stack is not materially relevant to any family in directory/taxonomy.json. As with commaai/openpilot, whether purpose-built autonomous-vehicle software belongs in the Atlas under some future category is a separate, unresolved question that this exclusion does not settle.",
+      "useful_lesson": "A large, well-governed, foundation-backed robotics project (contributors, sponsors, long history) is still excluded on a category mismatch, not a maturity or licensing gap; the two axes are independent."
+    },
+    {
       "name": "Claude Agent SDK for TypeScript",
       "repo": "anthropics/claude-agent-sdk-typescript",
       "reason": "Anthropic presents the Python and TypeScript libraries as language bindings for one Claude Agent SDK product; the Atlas represents that product through the canonical Python repository rather than duplicating the same operational system.",
