@@ -2043,6 +2043,146 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "commaai/openpilot",
+      "name": "openpilot",
+      "url": "https://github.com/commaai/openpilot",
+      "description": "openpilot is an open-source operating system for robotics that upgrades the driver-assistance system on 300+ supported production cars.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.15,
+      "github_detected_license": "MIT",
+      "stars": 63575,
+      "topics": [
+        "advanced-driver-assistance-systems",
+        "driver-assistance-systems",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "autowarefoundation/autoware",
+      "name": "Autoware",
+      "url": "https://github.com/autowarefoundation/autoware",
+      "description": "Autoware is an open-source software stack, built on ROS 2, for autonomous-driving perception, planning, and control.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 12043,
+      "topics": [
+        "autonomous-driving",
+        "autonomous-vehicles",
+        "autoware",
+        "ros",
+        "ros2"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "bulletphysics/bullet3",
+      "name": "Bullet",
+      "url": "https://github.com/bulletphysics/bullet3",
+      "description": "Bullet Physics SDK provides real-time collision detection and multi-physics simulation used in VR, games, visual effects, robotics, and machine learning.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.1,
+      "github_detected_license": null,
+      "stars": 14713,
+      "topics": [
+        "computer-animation",
+        "game-development",
+        "kinematics",
+        "pybullet",
+        "reinforcement-learning",
+        "robotics",
+        "simulation",
+        "simulator",
+        "virtual-reality"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "huggingface/lerobot",
+      "name": "LeRobot",
+      "url": "https://github.com/huggingface/lerobot",
+      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 27219,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "NVIDIA/Isaac-GR00T",
+      "name": "Isaac GR00T",
+      "url": "https://github.com/NVIDIA/Isaac-GR00T",
+      "description": "Isaac GR00T N1.7 is NVIDIA's open foundation model for generalist humanoid robots.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 8005,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "openvla/openvla",
+      "name": "OpenVLA",
+      "url": "https://github.com/openvla/openvla",
+      "description": "OpenVLA is an open-source vision-language-action model for robotic manipulation.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.15,
+      "github_detected_license": "MIT",
+      "stars": 6955,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ],
   "generated_at": "2026-09-02"
