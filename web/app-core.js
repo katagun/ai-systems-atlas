@@ -203,17 +203,18 @@
 
   // Each collection in the unified directory keeps its own index namespace:
   // filters.searchIndex covers systems (the same shape filterAndSortProjects
-  // takes), filters.serviceSearchIndex covers inference services, and
-  // filters.runtimeSearchIndex covers local runtimes. Models reach
-  // filterScoredCollection through filterModels, so they read filters.searchIndex
-  // in their own call. Each is supplied independently, so a missing one only
-  // widens that collection's fallback.
-  function filterDirectoryEntries(projects, services, runtimes = [], filters = {}) {
+  // takes), filters.serviceSearchIndex covers inference services,
+  // filters.runtimeSearchIndex covers local runtimes, and
+  // filters.modelSearchIndex covers model releases. Each is supplied
+  // independently, so a missing one only narrows that collection to the
+  // searchable fields present in its boot records.
+  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}) {
     const term = (filters.term || "").trim().toLowerCase();
     const entries = [
       ...projects.filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex)).map(record => ({ kind: "system", record })),
       ...filterInferenceServices(services, { term, sort: "name", searchIndex: filters.serviceSearchIndex }).map(record => ({ kind: "inference", record })),
       ...filterLocalRuntimes(runtimes, { term, sort: "name", searchIndex: filters.runtimeSearchIndex }).map(record => ({ kind: "runtime", record })),
+      ...filterModels(models, { term, sort: "name", searchIndex: filters.modelSearchIndex }).map(record => ({ kind: "model", record })),
     ];
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }

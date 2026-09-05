@@ -479,8 +479,8 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length;
-  $("#hero-kicker").textContent = `${total} reviewed systems, services, and runtimes`;
+  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length;
+  $("#hero-kicker").textContent = `${total} reviewed systems, models, services, and runtimes`;
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#memory-collection-count").textContent = memories;
@@ -589,19 +589,32 @@ function renderPager(key, { page, pageCount }) {
 }
 
 function renderAllDirectoryEntries() {
-  // The mixed directory searches three collections, so it reads three index
+  // The mixed directory searches four collections, so it reads four index
   // namespaces; each is absent until that collection's index lands, and the
   // filter falls back to the boot record for whichever is still missing.
-  const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, {
+  const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
     term: $("#all-directory-search").value,
     searchIndex: searchIndexes.systems,
     serviceSearchIndex: searchIndexes.inference,
     runtimeSearchIndex: searchIndexes.runtimes,
+    modelSearchIndex: searchIndexes.models,
   });
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
+    if (kind === "model") {
+      const modalities = record.source_metadata.modalities;
+      const route = `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
+      return `<article class="project-card model-card mixed-directory-card">
+        <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
+        <span class="role-badge">${escapeHTML(record.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
+        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <p>${escapeHTML(record.description)}</p>
+        <div class="tags"><span>${escapeHTML(route)}</span>${record.source_metadata.family ? `<span>${escapeHTML(record.source_metadata.family)}</span>` : ""}</div>
+        <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
+      </article>`;
+    }
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -629,10 +642,11 @@ function renderAllDirectoryEntries() {
       <div class="tags">${record.architectures.slice(0, 3).map(item => `<span>${escapeHTML(architectureName(item))}</span>`).join("")}</div>
       <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
     </article>`;
-  }).join("") || '<div class="notice">No systems, inference services, or local runtimes match this search.</div>';
+  }).join("") || '<div class="notice">No systems, model releases, inference services, or local runtimes match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
+  $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   renderPager("all", paged);
 }
 
@@ -1751,7 +1765,7 @@ const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
   "#model-search": ["models"],
-  "#all-directory-search": ["systems", "inference", "runtimes"],
+  "#all-directory-search": ["systems", "inference", "runtimes", "models"],
 };
 
 function bindEvents() {
@@ -1764,7 +1778,7 @@ function bindEvents() {
   }));
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
-  // narrow ones. The All view searches three collections, so it loads three.
+  // narrow ones. The All view searches four collections, so it loads four.
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
     $(selector).addEventListener("focus", () => {
       for (const collection of collections) {

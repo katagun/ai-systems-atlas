@@ -4,7 +4,7 @@
 
 Memory systems preserve and retrieve knowledge. Agent systems plan and take actions through tools. Assistant systems provide broad interactive help in an end-user conversational workspace. They overlap, but their primary outcomes and failure modes differ. One flat category would reward a vector database, coding agent, note-taking app, and hosted assistant against the same rubric.
 
-Every catalog entry therefore receives:
+Every operational system entry therefore receives:
 
 1. exactly one `system_family`;
 2. exactly one family-compatible `primary_role`;
@@ -13,7 +13,7 @@ Every catalog entry therefore receives:
 
 `directory/taxonomy.json` is the executable source for families, roles, traits, source models, licenses, statuses, deployment modes, confidence and provenance levels, and score weights. This document explains the model; validation enforces the JSON definitions.
 
-Specifications, inference services, local runtimes, and models are separate collections, not additional system families. Specifications remain unscored. Inference services, local runtimes, and provider-independent model releases each use their own taxonomy and dedicated score profile, none comparable with a system-family profile or with one another. Systems, services, and runtimes share the mixed Directory only as a presentation union; Models and Specifications are sibling views with their own boundaries. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md), [`MODELS.md`](MODELS.md), [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
+Specifications, inference services, local runtimes, and models are separate collections, not additional system families. Specifications remain unscored. Inference services, local runtimes, and provider-independent model releases each use their own taxonomy and dedicated score profile, none comparable with a system-family profile or with one another. Systems, model releases, services, and runtimes share the mixed Directory only as a presentation union; Models remains a sibling specialist view and Specifications remains a separate artifact view. See [`SPECIFICATIONS.md`](SPECIFICATIONS.md), [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md), [`MODELS.md`](MODELS.md), [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
 
 General agent-architecture pattern content — harness shapes, failure taxonomies, and similar concepts with no single authoritative steward — is not a further collection. Every collection here pins evidence to one steward's own reviewable artifact; a pattern synthesized across independent literature cannot meet that bar without inviting figures that only look sourced. See [ADR 022](adr/022-general-pattern-content-is-not-a-collection.md).
 
