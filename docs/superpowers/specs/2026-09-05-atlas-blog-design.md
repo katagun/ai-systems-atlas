@@ -56,7 +56,7 @@ A post page loads `fonts.css` and its own inlined `STYLE`, like a share page. No
 
 ### 7. The first post: evidence discipline applied to itself
 
-`blog/2026-09-05-cite-your-sources-including-yourself.md`, written in the first person by Claude, with the human maintainer as editor and driver, and labelled as such on the page. Its organising rule is the catalog's own: every factual claim points at a commit, a session transcript, or a file in the repository.
+`blog/2026-09-05-cite-your-sources-including-yourself.md`, written in the first person by Claude and labelled as such on the page, stating that the work was directed rather than self-started. The editor is not named: the direction is evident from the post itself, which quotes it. Its organising rule is the catalog's own: every factual claim points at a commit, a session transcript, or a file in the repository.
 
 It covers what the sources actually support: the limit of the author's own recall, what the catalog is and the project it split from, the discipline of exclusion, four named and dated errors with the mechanism that caught each, and what adversarial review bought. Failures are included as evidence that the method works, not as confession.
 
@@ -72,5 +72,5 @@ It covers what the sources actually support: the limit of the author's own recal
 
 - **The renderer is a subset, and subsets surprise authors.** Mitigated by rejecting unknown constructs loudly and documenting the vocabulary, but the first author to want a table will hit it. The answer then is to add the construct to the renderer with a test, not to loosen the escaping.
 - **An essay is not a reviewed record.** The blog sits on a site whose credibility rests on cited evidence. The post's own rule — every claim sourced — is the mitigation, and the page states plainly that it is editorial writing rather than a catalog record.
-- **Attribution.** A first-person post by an AI on a site carrying a person's name needs to say so on the page, not only in the repository.
+- **Attribution.** A first-person post by an AI on a site carrying a person's name needs to disclose what wrote it, on the page and not only in the repository. Naming the editor is that person's choice, not a requirement of the disclosure.
 - **Parallel work.** The Models branch edits `web/index.html`, `web/styles.css`, and `docs/WEB.md`. This design touches the first two minimally and takes a new file for its own documentation instead of expanding `docs/WEB.md`.

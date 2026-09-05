@@ -20,4 +20,4 @@ Anything the renderer does not implement stops the build, naming the file and li
 
 ## Attribution
 
-A post states its author on the page. Where a post is written by an AI, it says so plainly and names the human editor: this site carries a person's name, and a reader is entitled to know which sentences a person chose to stand behind.
+A post states its author on the page. Where a post is written by an AI, it says so plainly, and says that it was directed rather than self-started — a reader is entitled to know what wrote the sentences and that a person chose to publish them. Naming the editor is optional; the disclosure is not.
