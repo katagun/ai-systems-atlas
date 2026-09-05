@@ -245,19 +245,19 @@ test("indexed search reaches filterInferenceServices through filters.searchIndex
   assert.equal(filterInferenceServices(records, { term: "quotas" }).length, 0);
 });
 
-test("the unified directory discovers both collections without indexing hidden provider metadata", () => {
+test("the unified directory preserves collection-specific search boundaries", () => {
   const combinedProjects = [
     { ...projects[3], id: "agent", description: "Coding system", model_backends: ["hidden-provider"] },
   ];
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, [], {}).map(item => [item.kind, item.record.name]),
+    filterDirectoryEntries(combinedProjects, inferenceServices, [], [], {}).map(item => [item.kind, item.record.name]),
     [["system", "Agent"], ["inference", "Amazon Bedrock"], ["inference", "OpenAI API"], ["inference", "OpenRouter"]],
   );
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, [], { term: "Bedrock" }).map(item => item.record.name),
+    filterDirectoryEntries(combinedProjects, inferenceServices, [], [], { term: "Bedrock" }).map(item => item.record.name),
     ["Amazon Bedrock"],
   );
-  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, [], { term: "hidden-provider" }), []);
+  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, [], [], { term: "hidden-provider" }), []);
 });
 
 const localRuntimes = [
@@ -349,10 +349,10 @@ test("scored collection filtering treats scalar and list facets alike", () => {
   );
 });
 
-test("mixed directory browsing includes local runtimes alongside the other collections", () => {
+test("mixed directory browsing includes local runtimes and models alongside the other collections", () => {
   const combinedProjects = [{ ...projects[3], id: "agent", description: "Coding system" }];
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, {}).map(item => [item.kind, item.record.name]),
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, {}).map(item => [item.kind, item.record.name]),
     [
       ["system", "Agent"],
       ["inference", "Amazon Bedrock"],
@@ -360,16 +360,22 @@ test("mixed directory browsing includes local runtimes alongside the other colle
       ["runtime", "Ollama"],
       ["inference", "OpenAI API"],
       ["inference", "OpenRouter"],
+      ["model", "Qwen"],
+      ["model", "Vision Model"],
       ["runtime", "vLLM"],
     ],
   );
   assert.deepEqual(
-    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, { term: "MLX" }).map(item => item.record.name),
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "MLX" }).map(item => item.record.name),
     ["MLX LM"],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Qwen" }).map(item => item.record.name),
+    ["Qwen"],
   );
 });
 
-test("indexed search reaches filterDirectoryEntries through all three index keys", () => {
+test("indexed search reaches filterDirectoryEntries through all four index keys", () => {
   // Each term lives only in one collection's own index entry, never in any
   // record's own fields — so this fails if filterDirectoryEntries wires a
   // wrong key (e.g. filters.serviceIndex instead of filters.serviceSearchIndex)
@@ -377,26 +383,33 @@ test("indexed search reaches filterDirectoryEntries through all three index keys
   const dirProjects = [{ ...projects[3], id: "proj", name: "Proj", description: "A system.", score: { overall: 1 } }];
   const dirServices = [{ id: "svc", name: "Svc", operator: "Op", description: "A service.", service_boundary: "Boundary.", service_type: "direct_model_api", delivery_modes: ["on_demand"], model_sources: ["first_party"], api_styles: ["openai_native"], score: { overall: 1 }, evidence: [] }];
   const dirRuntimes = [{ id: "rt", name: "Rt", maintainer: "Maintainer", description: "A runtime.", runtime_boundary: "Boundary.", runtime_type: "desktop_runner", accelerators: ["cpu"], model_formats: ["gguf"], api_styles: ["openai_compatible"], score: { overall: 1 }, evidence: [] }];
+  const dirModels = [{ ...models[0], id: "mdl", name: "Mdl", description: "A model." }];
 
   const searchIndex = { proj: "a system. handles episodic recall for agents." };
   const serviceSearchIndex = { svc: "a service. offers regional failover routing." };
   const runtimeSearchIndex = { rt: "a runtime. ships with quantization presets." };
-  const filters = { searchIndex, serviceSearchIndex, runtimeSearchIndex };
+  const modelSearchIndex = { mdl: "a model. portable transformer release." };
+  const filters = { searchIndex, serviceSearchIndex, runtimeSearchIndex, modelSearchIndex };
 
   assert.deepEqual(
-    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "episodic" })
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, dirModels, { ...filters, term: "episodic" })
       .map(item => [item.kind, item.record.name]),
     [["system", "Proj"]],
   );
   assert.deepEqual(
-    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "failover" })
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, dirModels, { ...filters, term: "failover" })
       .map(item => [item.kind, item.record.name]),
     [["inference", "Svc"]],
   );
   assert.deepEqual(
-    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "quantization" })
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, dirModels, { ...filters, term: "quantization" })
       .map(item => [item.kind, item.record.name]),
     [["runtime", "Rt"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, dirModels, { ...filters, term: "transformer" })
+      .map(item => [item.kind, item.record.name]),
+    [["model", "Mdl"]],
   );
 });
 

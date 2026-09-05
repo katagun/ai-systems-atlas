@@ -15,7 +15,7 @@ models.dev now publishes provider-independent model metadata separately from pro
 
 Create Models as a fifth canonical record collection and a sibling top-level web view.
 
-The record unit is one provider-independent model release. Models remain outside `system_family`, system roles, Specifications, Inference Services, Local Runtimes, and the mixed Directory union. A record explicitly names the adjacent APIs, hosts, runtimes, quantizations, fine-tunes, and applications it does not represent.
+The record unit is one provider-independent model release. Models remain outside `system_family`, system roles, Specifications, Inference Services, and Local Runtimes. Reviewed model records join the mixed Directory union for discovery, where scores are hidden across collections; Models remains a sibling specialist view for model-specific filters and `model_access` comparison. A record explicitly names the adjacent APIs, hosts, runtimes, quantizations, fine-tunes, and applications it does not represent.
 
 Use models.dev as an automated discovery source by resolving its Git ref to a full commit, importing only `models/**/*.toml` from the pinned archive, and preserving selected facts under `source_metadata`. Provider-specific metadata, benchmarks, and prices are excluded. Automated records remain in unpublished `model-candidates.json`; automation may not publish or edit human-owned fields.
 
@@ -26,6 +26,7 @@ Allow comparison only among records sharing `model_access`. Model record and com
 ## Consequences
 
 - The same model can relate to several inference services and runtimes without merging their operational or contractual boundaries.
+- One common Directory search can discover model releases beside operational products without presenting their unlike scores as comparable.
 - Public weights and upstream license labels remain discovery facts until human review establishes their scope and source-model classification.
 - Candidate volume can grow automatically while published claims remain bounded by evidence review.
 - The Atlas accepts a new taxonomy, validation, UI, documentation, attribution, and maintenance surface.

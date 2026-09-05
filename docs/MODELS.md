@@ -12,7 +12,7 @@ A model record represents one identifiable model release independently of where 
 - an assistant, agent, or memory product built on the model;
 - a downstream quantization, repackaging, fine-tune, or hosted endpoint unless that artifact has its own reviewed release boundary.
 
-Models therefore do not receive `system_family`, `primary_role`, or a system-family score. They are also excluded from the mixed Directory surface: Models is a sibling view whose records share one dedicated profile.
+Models therefore do not receive `system_family`, `primary_role`, or a system-family score. Reviewed releases participate in the mixed Directory for common discovery with numeric scores hidden; Models remains a sibling specialist view whose records share one dedicated profile for filtering and comparison.
 
 ## Eligibility
 

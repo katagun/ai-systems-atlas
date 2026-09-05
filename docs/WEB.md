@@ -8,7 +8,7 @@ The interface uses a technical editorial system: cool paper backgrounds, crisp w
 
 ## Content hierarchy
 
-The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Finder action. It presents systems, inference services, and local runtimes through collection scopes without merging their canonical records or scores.
+The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and one optional Finder action. Its All scope presents systems, model releases, inference services, and local runtimes without merging their canonical records or scores.
 
 Use progressive disclosure for explanation and specialist controls:
 
@@ -26,13 +26,13 @@ Use progressive disclosure for explanation and specialist controls:
 - Keep Specifications as a sibling view with direct filters; show contract boundaries and evidence only on demand.
 - Keep inference-service constraints, score dimensions, terms, and evidence in its record-specific detail dialog even though discovery shares the Directory surface.
 - Keep local-runtime execution traits, hardware requirements, score dimensions, licensing, and evidence in its record-specific detail dialog.
-- Keep Models as a sibling primary view rather than adding model artifacts to the operational mixed Directory. Show imported source metadata as attributed facts and reviewed boundary, licensing, score dimensions, and evidence in its detail dialog.
+- Keep Models as a sibling primary specialist view while also including reviewed model releases in the mixed Directory for common discovery. Show imported source metadata as attributed facts and reviewed boundary, licensing, score dimensions, and evidence in its detail dialog.
 
 Prefer plain interface labels over methodology language. Use exact taxonomy terms when changing their meaning would introduce ambiguity, but do not repeat the taxonomy thesis in the hero, filters, and footer.
 
 ## Behavioral contracts
 
-- The default Directory scope shows every reviewed system, inference service, and local runtime alphabetically, including archived system references, with scores hidden across collections.
+- The default Directory scope shows every reviewed system, model release, inference service, and local runtime alphabetically, including archived system references, with scores hidden across collections.
 - Mixed Directory search indexes visible identity, editorial, and boundary prose rather than hidden provider metadata or evidence URLs.
 - Collection controls are mutually exclusive, expose their selected state accessibly, and preserve the selected Systems, Inference services, or Local runtimes scope in the `collection` URL parameter.
 - The Systems scope defaults to every active memory, agent, and assistant family alphabetically, with cross-family scores hidden.
@@ -128,14 +128,14 @@ sleep 2
 python3 -c "
 import urllib.request, gzip
 total = 0
-for path in ['app/systems.json','app/inference.json','app/runtimes.json','app/specifications.json','taxonomy.json']:
+for path in ['app/systems.json','app/inference.json','app/runtimes.json','app/specifications.json','app/models.json','taxonomy.json']:
     body = urllib.request.urlopen(f'http://localhost:8765/{path}').read()
     total += len(gzip.compress(body, 9))
 print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
 ```
 
-Expected: 41.3 KB gzipped. Anything over 60 KB means a prose field reached a boot payload.
+Expected: 44.0 KB gzipped. Anything over 60 KB means a prose field reached a boot payload.
 
 Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 
@@ -165,7 +165,7 @@ Then verify in a browser:
 8. navigate taxonomy groups;
 9. check narrow and wide layouts and browser console errors.
 10. search and combine filters in Specifications; open a protocol and instruction-convention detail view.
-11. search the mixed Directory for both a system and an inference service; confirm mixed cards hide scores and open the correct detail dialogs.
+11. search the mixed Directory for a system, model release, inference service, and local runtime; confirm mixed cards hide scores and open the correct detail dialogs.
 12. switch to Inference services, reload the scoped URL, combine every filter, verify score and name sorting, and open direct API, cloud platform, inference host, and routing-aggregator details.
 13. confirm comparison controls are hidden in mixed and all-family views, then compare two to four systems within each family.
 14. compare inference services, reload a comparison URL, test an invalid or cross-family URL, clear or change scope, and inspect the table at narrow and wide widths.
@@ -173,7 +173,7 @@ Then verify in a browser:
 16. compare two to four local runtimes, reload a `runtime:` comparison URL, confirm a cross-profile URL is discarded rather than partially restored, and confirm changing scope clears the selection.
 17. complete a local-runtime Finder path and confirm the Directory handoff preselects the runtime type.
 18. confirm the five-node atlas map and the hero statistics row render without wrapping at narrow and wide widths.
-19. confirm directory cards lead with product marks in all three collections and that unmapped records show monogram fallbacks.
+19. confirm directory cards lead with product marks in all four collections and that unmapped records show monogram fallbacks.
 20. open a record from each Directory collection, Models, and Specifications, confirm the URL carries `record=`, reload it, press back to close it, and use Copy link; open the copied share page and follow its link back into the dialog.
 21. confirm the network panel shows no request outside the site origin.
 22. cycle the theme control through system, light, and dark with the OS set to each preference; reload under a stored choice and confirm there is no flash; check cards, badges, dialogs, the comparison table, and the Finder in dark.
