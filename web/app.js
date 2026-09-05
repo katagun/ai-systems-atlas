@@ -809,6 +809,7 @@ const COLLECTIONS = {
       sourceModel: $("#model-source-filter").value,
       license: $("#model-license-filter").value,
       sort: $("#model-sort-filter").value,
+      searchIndex: searchIndexes.models,
     }),
     card: model => {
       const modalities = model.source_metadata.modalities;
@@ -863,7 +864,10 @@ function renderSearchSurfaces() {
     inference: renderInferenceServices, runtimes: renderLocalRuntimes,
   };
   renderers[state.directoryCollection]?.();
+  // Specifications and Models are sibling views rather than directory
+  // collections, so neither is in the map above and both repaint every time.
   renderSpecifications();
+  renderModels();
   if (state.directoryRoles) renderFinder();
 }
 
@@ -1323,10 +1327,16 @@ function loadSearchIndex(collection) {
   return searchIndexRequests[collection];
 }
 
+// Like the other four record dialogs, this paints from the boot record the
+// moment it opens and repaints when app/detail/model/<id>.json lands. Only
+// the imported models.dev block, the identity fields and the overall score
+// are on the boot record; the reviewed prose, the licence note and evidence,
+// the official model page link and every score dimension come from detail,
+// so each of those goes through detailText, detailList or detailScore.
 function modelDialogMarkup(model) {
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
-  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${escapeHTML(model.score[dimension.id])}</td></tr>`).join("");
+  const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
   const capability = value => value == null ? "Not reported" : value ? "Yes" : "No";
   const tokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
   const sourceLinks = [...metadata.links, ...metadata.weights].map(item =>
@@ -1334,17 +1344,17 @@ function modelDialogMarkup(model) {
   ).join("") || "<p>No source links reported by models.dev.</p>";
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p><a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a></p></section>
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
-      <section class="detail-block"><h3>Model boundary</h3><p>${escapeHTML(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(tokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(tokenLimit(metadata.limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(capability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(capability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${escapeHTML(model.license_note)}</p>${model.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Source links from models.dev</h3>${sourceLinks}</section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${model.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${model.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${model.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
+      <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(model.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
 }
 
@@ -1740,6 +1750,7 @@ function activateView(id) {
 const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
+  "#model-search": ["models"],
   "#all-directory-search": ["systems", "inference", "runtimes"],
 };
 

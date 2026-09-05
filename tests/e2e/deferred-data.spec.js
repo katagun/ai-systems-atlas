@@ -181,6 +181,7 @@ const BLANK_CHECKS = [
   ["a specification", "/?record=spec:mcp", "#specification-dialog-content", "Model Context Protocol"],
   ["an inference service", "/?record=inference:openai-api", "#inference-dialog-content", "OpenAI API"],
   ["a local runtime", "/?collection=runtimes&record=runtime:ollama", "#runtime-dialog-content", "Ollama"],
+  ["a model release", "/?record=model:model-anthropic-claude-sonnet-4-6", "#model-dialog-content", "Claude Sonnet 4.6"],
 ];
 
 for (const [kind, url, selector, name] of BLANK_CHECKS) {
@@ -217,4 +218,56 @@ test("a score table built from the profile prints a dash in every cell detail wo
   const dimensions = table.locator("tr").filter({ hasNotText: "Overall" });
   await expect(dimensions.locator("td").nth(1)).toHaveText("—");
   expect(await dimensions.locator("td:nth-child(2)").allInnerTexts()).not.toContain("");
+});
+
+// Models are the fifth payload collection, and the last one wired up, so they
+// get the same three lines the other four hold: boot reads the payload rather
+// than the endpoint, a deep link fetches the record's own detail, and the
+// search box fetches its index only once it has focus.
+test("a deep-linked model boots from its payload and fetches its own detail", async ({ page }) => {
+  const requested = dataRequests(page);
+  await page.goto("/?record=model:model-anthropic-claude-sonnet-4-6");
+
+  await expect(page.locator("#model-dialog h1")).toHaveText("Claude Sonnet 4.6");
+  expect(requested.filter(path => path.endsWith("/app/models.json"))).toHaveLength(1);
+  expect(requested.filter(path => path.endsWith("/models.json") && !path.includes("/app/"))).toHaveLength(0);
+  expect(requested.filter(path =>
+    path.endsWith("/app/detail/model/model-anthropic-claude-sonnet-4-6.json"))).toHaveLength(1);
+
+  const strengths = page.locator("#model-dialog-content .detail-block").filter({ hasText: "Strengths" });
+  await expect(strengths.locator("li").first()).not.toHaveText("—");
+  const dimensions = page.locator("#model-dialog-content .score-table tr").filter({ hasNotText: "Overall" });
+  expect(await dimensions.locator("td:nth-child(2)").allInnerTexts()).not.toContain("—");
+});
+
+test("a model dialog degrades to dashes when its detail never arrives", async ({ page }) => {
+  await page.route("**/app/detail/**", route => route.abort());
+  await page.goto("/?record=model:model-anthropic-claude-sonnet-4-6");
+
+  const content = page.locator("#model-dialog-content");
+  await expect(content.locator("h1")).toHaveText("Claude Sonnet 4.6");
+  // The overall score is a card field, so it survives; every dimension is
+  // detail-only, and detailScore is null-safe so a real 0 still prints as 0.
+  await expect(content.locator(".score-table tr").filter({ hasText: "Overall" })).toContainText("5.06");
+  const dimensions = content.locator(".score-table tr").filter({ hasNotText: "Overall" });
+  await expect(dimensions.locator("td").nth(1)).toHaveText("—");
+  const boundary = content.locator(".detail-block").filter({ hasText: "Model boundary" });
+  await expect(boundary.locator("p").first()).toHaveText("—");
+  await expect(content.locator(".detail-block").filter({ hasText: "Tradeoffs" }).locator("li")).toHaveText(["—"]);
+  await expect(content).not.toContainText("undefined");
+});
+
+test("focusing the model search loads the models index and widens the results", async ({ page }) => {
+  const requested = dataRequests(page);
+  await page.goto("/?view=models");
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  expect(requested.filter(path => path.includes("/app/search/"))).toHaveLength(0);
+
+  await page.locator("#model-search").focus();
+  await expect.poll(() => requested.filter(path => path.endsWith("/app/search/models.json")).length).toBe(1);
+
+  // "retirement" appears only in the reviewed prose the index carries, never in
+  // a boot record, so a match here proves the index is doing the widening.
+  await page.locator("#model-search").fill("retirement");
+  await expect(page.locator('#model-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
 });
