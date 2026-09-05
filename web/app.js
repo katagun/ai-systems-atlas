@@ -130,26 +130,30 @@ const dataVersions = (() => {
 })();
 
 async function loadJSON(path) {
-  const version = dataVersions[path];
+  // Record detail shares one stamp rather than carrying 271 hashes in the page.
+  const version = dataVersions[path] || (path.startsWith("app/detail/") ? dataVersions["app/detail"] : undefined);
   const response = await fetch(version ? `${path}?v=${version}` : path);
   if (!response.ok) throw new Error(`Unable to load ${path}`);
   return response.json();
 }
 
 async function bootstrap() {
-  // Only the files the first paint reads are awaited here. logos.json is
-  // decorative and license-evidence.json is read solely inside a record
-  // dialog, so both are fetched off the critical path below.
-  const [directory, taxonomy, specificationDirectory, inferenceDirectory, runtimeDirectory] = await Promise.all([
-    loadJSON("projects.json"), loadJSON("taxonomy.json"),
-    loadJSON("specifications.json"), loadJSON("inference-services.json"), loadJSON("local-runtimes.json")
+  // The published endpoints are an API, not this page's payload: the page reads
+  // a projection of them shaped for a first render. See ADR 025. Only the files
+  // the first paint reads are awaited here — taxonomy.json is small and wholly
+  // needed, so it stays a direct read of the endpoint. Everything else arrives
+  // on demand: a record's detail when a dialog or comparison needs it, a search
+  // index when a search box takes focus, logos.json off the critical path.
+  const [systems, inference, runtimes, specifications, taxonomy] = await Promise.all([
+    loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
+    loadJSON("app/specifications.json"), loadJSON("taxonomy.json")
   ]);
-  state.projects = directory.projects;
-  state.specifications = specificationDirectory.specifications;
-  state.inferenceServices = inferenceDirectory.services;
-  state.localRuntimes = runtimeDirectory.runtimes;
+  state.projects = systems.systems;
+  state.inferenceServices = inference.inference;
+  state.localRuntimes = runtimes.runtimes;
+  state.specifications = specifications.specifications;
   state.taxonomy = taxonomy;
-  const dataDate = [directory.generated_at, specificationDirectory.verified_at, inferenceDirectory.verified_at, runtimeDirectory.verified_at]
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -544,8 +548,14 @@ function renderPager(key, { page, pageCount }) {
 }
 
 function renderAllDirectoryEntries() {
+  // The mixed directory searches three collections, so it reads three index
+  // namespaces; each is absent until that collection's index lands, and the
+  // filter falls back to the boot record for whichever is still missing.
   const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, {
     term: $("#all-directory-search").value,
+    searchIndex: searchIndexes.systems,
+    serviceSearchIndex: searchIndexes.inference,
+    runtimeSearchIndex: searchIndexes.runtimes,
   });
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
@@ -588,6 +598,7 @@ function renderAllDirectoryEntries() {
 function filteredProjects() {
   return AtlasCore.filterAndSortProjects(state.projects, {
     term: $("#project-search").value,
+    searchIndex: searchIndexes.systems,
     family: $("#family-filter").value,
     role: $("#role-filter").value,
     roles: state.directoryRoles || [],
@@ -659,6 +670,7 @@ const COLLECTIONS = {
     },
     records: () => AtlasCore.filterSpecifications(state.specifications, {
       term: $("#specification-search").value,
+      searchIndex: searchIndexes.specifications,
       type: $("#specification-type-filter").value,
       scope: $("#specification-scope-filter").value,
       status: $("#specification-status-filter").value,
@@ -691,6 +703,7 @@ const COLLECTIONS = {
     }),
     records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
       term: $("#inference-search").value,
+      searchIndex: searchIndexes.inference,
       type: $("#inference-type-filter").value,
       delivery: $("#inference-delivery-filter").value,
       modelSource: $("#inference-model-source-filter").value,
@@ -719,6 +732,7 @@ const COLLECTIONS = {
     }),
     records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
       term: $("#runtime-search").value,
+      searchIndex: searchIndexes.runtimes,
       type: $("#runtime-type-filter").value,
       accelerator: $("#runtime-accelerator-filter").value,
       modelFormat: $("#runtime-format-filter").value,
@@ -764,6 +778,19 @@ const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 
+// Repaint whatever a search index could have widened. A search box may have a
+// term in it already when its index lands, so this runs for the collection on
+// screen and for specifications, which live on their own view.
+function renderSearchSurfaces() {
+  const renderers = {
+    all: renderAllDirectoryEntries, systems: renderProjects,
+    inference: renderInferenceServices, runtimes: renderLocalRuntimes,
+  };
+  renderers[state.directoryCollection]?.();
+  renderSpecifications();
+  if (state.directoryRoles) renderFinder();
+}
+
 function bindComparisonButtons(root) {
   $$('[data-compare-kind]', root).forEach(button => button.addEventListener("click", () => {
     toggleComparison(button.dataset.compareKind, button.dataset.compareId);
@@ -799,11 +826,23 @@ function renderFinder() {
     content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
   } else if (step === 2) {
+    // The shortlist's candidates are known once the goal is: fetch their detail
+    // now, while the priority question is on screen.
+    ensureFinderDetail();
     const choices = FINDER_PRIORITIES[answers.direction];
     content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
-    content = renderFinderResults();
+    const { direction, goal } = answers;
+    const pending = ensureFinderDetail();
+    if (pending) {
+      pending.then(() => {
+        if (state.finder.step === 3 && answers.direction === direction && answers.goal === goal) renderFinder();
+      });
+      content = `<div class="finder-question"><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div>`;
+    } else {
+      content = renderFinderResults();
+    }
   }
   const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
   $("#finder-content").innerHTML = content + navigation;
@@ -834,7 +873,7 @@ function priorityBoost(project, priority) {
   if (project.system_family === "agent_system") {
     if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
     if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-    if (priority === "local") return (project.local_first ? 3 : 0) + (project.execution_boundaries.includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
+    if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
     if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
     return project.score.overall / 3;
   }
@@ -883,17 +922,48 @@ function recommendationReasons(project, priority) {
   return [...new Set(reasons)].slice(0, 4);
 }
 
+// The shortlist is the one surface that reads detail for records nobody has
+// opened: it ranks on the full score dimensions and quotes a tradeoff, and
+// boot carries neither. So a direction and a goal name a bounded candidate set
+// — one goal's classifications, a few dozen records at most — and that set is
+// hydrated before results paint. The fetches start when the goal is chosen, so
+// the priority question usually covers the wait.
+const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
+const finderDetailAwaited = new Set();
+
+function finderCandidates() {
+  const { direction, goal } = state.finder.answers;
+  const goalConfig = FINDER_GOALS[direction]?.find(item => item.id === goal);
+  if (!goalConfig) return [];
+  const records = direction === "inference_service" ? state.inferenceServices
+    : direction === "local_runtime" ? state.localRuntimes : state.projects;
+  return records.filter(project => {
+    if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
+    if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
+    return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
+  });
+}
+
+// Null once this goal's candidates have been waited on, so a detail file that
+// never arrives costs one wait and then a shortlist built from what landed —
+// never an endless retry.
+function ensureFinderDetail() {
+  const { direction, goal } = state.finder.answers;
+  const key = `${direction}:${goal}`;
+  if (finderDetailAwaited.has(key)) return null;
+  const kind = FINDER_DETAIL_KINDS[direction] || "system";
+  const pending = finderCandidates().map(record => loadDetail(kind, record)).filter(Boolean);
+  if (!pending.length) {
+    finderDetailAwaited.add(key);
+    return null;
+  }
+  return Promise.all(pending).then(() => { finderDetailAwaited.add(key); });
+}
+
 function recommendedFinderRecords() {
   const { direction, goal, priority } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
-  const records = direction === "inference_service" ? state.inferenceServices
-    : direction === "local_runtime" ? state.localRuntimes : state.projects;
-  return records
-    .filter(project => {
-      if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
-      if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
-      return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
-    })
+  return finderCandidates()
     .map(project => {
       const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type)
         : direction === "local_runtime" ? goalConfig.runtimeTypes.indexOf(project.runtime_type)
@@ -929,7 +999,7 @@ function renderFinderResults() {
         <div class="license-row">${identityRow(project)}</div>
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
-      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference || isRuntime ? project.tradeoffs[0] : project.weaknesses[0])}</p>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
       <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
@@ -1014,6 +1084,12 @@ function renderTaxonomy() {
 // element, register the open record for deep links and the back button — around
 // markup that is genuinely per-collection. The frame lives here once; the
 // entries below hold only what differs.
+//
+// Each of these paints twice on a first open: once from the boot record, once
+// when that record's detail lands. So every list a detail file carries is read
+// through `|| []`. Prose fields need no guard — escapeHTML defaults an absent
+// value to "" and traitNames defaults an absent list to [] — and the score
+// table renders its Overall row first, then the dimensions on the repaint.
 function systemDialogMarkup(project) {
   const proof = state.licenses.get(project.id);
   const dimensions = Object.entries(project.score).filter(([key]) => key !== "overall");
@@ -1021,9 +1097,9 @@ function systemDialogMarkup(project) {
   if (project.system_family === "agent_system") {
     familyDetail = `<section class="detail-block"><h3>Agent operation</h3><p><strong>Interfaces:</strong> ${escapeHTML(traitNames("agent_interfaces", project.agent_interfaces))}</p><p><strong>Execution:</strong> ${escapeHTML(traitNames("execution_boundaries", project.execution_boundaries))}</p><p><strong>Capabilities:</strong> ${escapeHTML(traitNames("agent_capabilities", project.agent_capabilities))}</p></section>`;
   } else if (project.system_family === "memory_system") {
-    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Capture & lifecycle</h3><p><strong>Capture:</strong> ${(project.capture_modes || []).map(label).map(escapeHTML).join(" · ")}</p><p><strong>Lifecycle:</strong> ${(project.memory_lifecycle || []).map(label).map(escapeHTML).join(" · ")}</p></section>`;
   } else {
-    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${project.capture_modes.map(label).map(escapeHTML).join(" · ")}</p><p><strong>Continuity:</strong> ${project.memory_lifecycle.map(label).map(escapeHTML).join(" · ")}</p></section>`;
+    familyDetail = `<section class="detail-block"><h3>Context & continuity</h3><p><strong>Inputs:</strong> ${(project.capture_modes || []).map(label).map(escapeHTML).join(" · ")}</p><p><strong>Continuity:</strong> ${(project.memory_lifecycle || []).map(label).map(escapeHTML).join(" · ")}</p></section>`;
   }
   const licenseLinks = proof ? proof.items.map(item => item.kind === "git_blob"
     ? `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`
@@ -1044,9 +1120,9 @@ function systemDialogMarkup(project) {
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${project.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Weaknesses</h3><ul>${project.weaknesses.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${project.retrieval_modes.map(label).map(escapeHTML).join(" · ")}</p></section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${(project.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Weaknesses</h3><ul>${(project.weaknesses || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${(project.retrieval_modes || []).map(label).map(escapeHTML).join(" · ")}</p></section>
       ${providerDetail}
       ${familyDetail}
     </div>`;
@@ -1059,8 +1135,8 @@ function specificationDialogMarkup(specification) {
       <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>What it standardizes</h3><p>${escapeHTML(specification.standardizes)}</p></section>
       <section class="detail-block"><h3>What it does not standardize</h3><p>${escapeHTML(specification.does_not_standardize)}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p>${escapeHTML(specification.license_note)}</p>${specification.license_evidence.map(specificationEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${specification.evidence.map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p>${escapeHTML(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
 }
@@ -1077,10 +1153,10 @@ function inferenceDialogMarkup(service) {
       <section class="detail-block"><h3>Regional controls</h3><p>${escapeHTML(service.regional_controls)}</p></section>
       <section class="detail-block"><h3>Retention controls</h3><p>${escapeHTML(service.retention_controls)}</p></section>
       <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${escapeHTML(service.routing)}</p><p><strong>Customization:</strong> ${escapeHTML(service.customization)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${service.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${service.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${(service.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Tradeoffs</h3><ul>${(service.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${service.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(service.evidence || []).map(inferenceEvidenceLink).join("")}</section>
     </div>`;
 }
 
@@ -1097,10 +1173,10 @@ function runtimeDialogMarkup(runtime) {
       <section class="detail-block"><h3>Hardware requirements</h3><p>${escapeHTML(runtime.hardware_requirements)}</p></section>
       <section class="detail-block"><h3>Model management</h3><p>${escapeHTML(runtime.model_management)}</p></section>
       <section class="detail-block"><h3>Operational controls</h3><p>${escapeHTML(runtime.operational_controls)}</p></section>
-      <section class="detail-block"><h3>Strengths</h3><ul>${runtime.strengths.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Tradeoffs</h3><ul>${runtime.tradeoffs.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${runtime.license_evidence.map(runtimeLicenseEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${runtime.evidence.map(inferenceEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Strengths</h3><ul>${(runtime.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Tradeoffs</h3><ul>${(runtime.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
+      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${(runtime.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(runtime.evidence || []).map(inferenceEvidenceLink).join("")}</section>
     </div>`;
 }
 
@@ -1118,6 +1194,40 @@ function ensureLicenseEvidence() {
       .catch(() => { licenseEvidenceRequest = null; });
   }
   return licenseEvidenceRequest;
+}
+
+// A record's detail is merged into the boot record in place, so every existing
+// reference to it — the dialog, the comparison table, the finder shortlist —
+// sees the full record afterwards without being handed a new object. A failed
+// fetch clears the request so the next reader retries.
+const loadedDetail = new Set();
+const detailRequests = new Map();
+
+function loadDetail(kind, record) {
+  const key = `${kind}:${record.id}`;
+  if (loadedDetail.has(key)) return null;
+  if (!detailRequests.has(key)) {
+    detailRequests.set(key, loadJSON(`app/detail/${kind}/${record.id}.json`)
+      .then(detail => { Object.assign(record, detail); loadedDetail.add(key); })
+      .catch(() => { detailRequests.delete(key); }));
+  }
+  return detailRequests.get(key);
+}
+
+// A collection's search index is the editorial prose its filter matches on,
+// keyed by record id. It is worth a fetch only once someone means to search,
+// and every filter falls back to the boot record until it lands.
+const searchIndexes = {};
+const searchIndexRequests = {};
+
+function loadSearchIndex(collection) {
+  if (searchIndexes[collection]) return null;
+  if (!searchIndexRequests[collection]) {
+    searchIndexRequests[collection] = loadJSON(`app/search/${collection}.json`)
+      .then(index => { searchIndexes[collection] = index; })
+      .catch(() => { delete searchIndexRequests[collection]; });
+  }
+  return searchIndexRequests[collection];
 }
 
 const RECORD_DIALOGS = {
@@ -1165,11 +1275,14 @@ function openRecordDialog(kind, id) {
   showRecordDialog(dialog.dialog, kind, id);
   // A dialog that needs a lazily fetched file paints immediately from the
   // record and repaints when the file lands — unless the reader has moved on
-  // to a different record by then.
-  dialog.hydrate?.()?.then(() => {
+  // to a different record by then. The RECORD_DIALOGS key is also the record's
+  // detail directory, so one kind names both.
+  const repaint = () => {
     const element = $(dialog.dialog);
     if (element.dataset.recordKind === kind && element.dataset.recordId === id) paintRecordDialog(dialog, record);
-  });
+  };
+  dialog.hydrate?.()?.then(repaint);
+  loadDetail(kind, record)?.then(repaint);
   return true;
 }
 
@@ -1292,6 +1405,14 @@ function comparisonTable(records, rows) {
 function openComparison() {
   const records = comparisonRecords();
   if (records.length < 2) return;
+  // Every row below a score's overall reads a detail field, and a half-filled
+  // comparison is worse than a moment's wait, so this one opens whole. The
+  // selection is capped at four, so that is at most four small fetches.
+  const pending = records.map(record => loadDetail(state.comparison.kind, record)).filter(Boolean);
+  if (pending.length) {
+    Promise.all(pending).then(() => { if (comparisonRecords().length === records.length) openComparison(); });
+    return;
+  }
   let profile;
   let rows;
   let eyebrow;
@@ -1418,6 +1539,14 @@ function activateView(id) {
   window.scrollTo({ top: 0 });
 }
 
+// Which collections a search box can widen, and so which indexes its focus
+// is worth fetching.
+const SEARCH_SCOPES = {
+  "#project-search": ["systems"], "#specification-search": ["specifications"],
+  "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
+  "#all-directory-search": ["systems", "inference", "runtimes"],
+};
+
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
@@ -1426,6 +1555,16 @@ function bindEvents() {
     if (family !== undefined) jumpToDirectoryFamily(family);
     else setDirectoryCollection(button.dataset.directoryCollection);
   }));
+  // Fetching on focus rather than on the first keystroke usually beats the
+  // second character, so the widened results arrive before anyone sees the
+  // narrow ones. The All view searches three collections, so it loads three.
+  for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
+    $(selector).addEventListener("focus", () => {
+      for (const collection of collections) {
+        loadSearchIndex(collection)?.then(renderSearchSurfaces);
+      }
+    });
+  }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
