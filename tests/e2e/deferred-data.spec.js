@@ -110,3 +110,45 @@ test("a comparison opens degraded, and bounded, when detail never arrives", asyn
   await expect(page.locator(".comparison-table")).not.toContainText("undefined");
   expect(detailRequests).toBeLessThanOrEqual(4);
 });
+
+// Blankness is the failure mode a payload split invites: a heading, a label or
+// a whole dialog renders from the boot record while the detail file it reads is
+// still in flight or never lands. Every check but a browser sees valid markup,
+// so these three hold the line the reader actually sees.
+
+test("pressing Compare says the details are loading rather than showing nothing", async ({ page }) => {
+  await page.route("**/app/detail/**", async route => {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    await route.continue();
+  });
+  await page.goto("/?collection=systems&compare=system:kilo-code,cline");
+
+  // The dialog cannot open until the detail lands, so the tray's live region
+  // must be the thing that speaks in the meantime.
+  await expect(page.locator("#comparison-status")).toContainText("Loading");
+  await expect(page.locator(".comparison-table")).toBeVisible();
+  await expect(page.locator("#comparison-status")).toHaveText("");
+});
+
+test("a finder shortlist prints an em dash, not a dangling label, when detail never arrives", async ({ page }) => {
+  await page.route("**/app/detail/**", route => route.abort());
+  await page.goto("/");
+  await page.locator('[data-tab="finder"]').click();
+  for (let step = 0; step < 3; step += 1) {
+    await page.locator("#finder-content .finder-choice").first().click();
+  }
+
+  const tradeoff = page.locator(".finder-result .finder-tradeoff").first();
+  await expect(tradeoff).toBeVisible();
+  await expect(tradeoff).toHaveText("Watch for: —");
+});
+
+test("a record dialog prints an em dash under a heading whose detail never arrives", async ({ page }) => {
+  await page.route("**/app/detail/**", route => route.abort());
+  await page.goto("/?collection=runtimes&record=runtime:ollama");
+
+  await expect(page.locator("#runtime-dialog h1")).toHaveText("Ollama");
+  const hardware = page.locator("#runtime-dialog-content .detail-block").filter({ hasText: "Hardware requirements" });
+  await expect(hardware.locator("p")).toHaveText("—");
+  await expect(page.locator("#runtime-dialog-content")).not.toContainText("undefined");
+});

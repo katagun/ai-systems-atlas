@@ -27,6 +27,13 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+// A card or a dialog paints from the boot record — before that record's detail
+// file has landed, and forever if the fetch for it failed. Every detail-only
+// prose field is therefore printed through this: a heading over an em dash
+// reads as a value that is missing, where a heading over a blank line reads as
+// a page that is broken. It is the fallback comparisonTable already makes for
+// an absent cell, held to across the finder and all four record dialogs.
+const detailText = value => escapeHTML(value || "—");
 const compactNumber = value => value == null ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 const label = value => String(value || "")
   .replaceAll("_", " ")
@@ -848,40 +855,48 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
+// A boot record carries only its overall score, so every other dimension this
+// weighting reads may still be in flight. One undefined turns the whole match
+// into NaN and the shortlist's order into whatever the sort happened to do, so
+// a dimension that has not arrived counts as zero — the ordering stays
+// deterministic, the same way recommendationReasons below stays readable.
+const scoreDimension = (project, name) => project.score?.[name] ?? 0;
+
 function priorityBoost(project, priority) {
+  const dimension = name => scoreDimension(project, name);
   if (project.score_profile === "inference_service") {
-    if (priority === "governance") return project.score.data_governance / 2;
-    if (priority === "regions") return project.score.regional_deployment_control / 2;
-    if (priority === "portable") return project.score.api_interoperability / 2 + project.score.serving_flexibility / 4;
-    if (priority === "resilience") return project.score.traffic_resilience / 2 + project.score.operational_maturity / 4;
-    return project.score.overall / 3;
+    if (priority === "governance") return dimension("data_governance") / 2;
+    if (priority === "regions") return dimension("regional_deployment_control") / 2;
+    if (priority === "portable") return dimension("api_interoperability") / 2 + dimension("serving_flexibility") / 4;
+    if (priority === "resilience") return dimension("traffic_resilience") / 2 + dimension("operational_maturity") / 4;
+    return dimension("overall") / 3;
   }
   if (project.score_profile === "local_runtime") {
-    if (priority === "hardware") return project.score.hardware_accelerator_coverage / 2;
-    if (priority === "formats") return project.score.model_format_support / 2;
-    if (priority === "serving") return project.score.serving_concurrency / 2 + project.score.api_interoperability / 4;
-    if (priority === "operability") return project.score.deployment_operations / 2 + project.score.observability_control / 4;
-    return project.score.overall / 3;
+    if (priority === "hardware") return dimension("hardware_accelerator_coverage") / 2;
+    if (priority === "formats") return dimension("model_format_support") / 2;
+    if (priority === "serving") return dimension("serving_concurrency") / 2 + dimension("api_interoperability") / 4;
+    if (priority === "operability") return dimension("deployment_operations") / 2 + dimension("observability_control") / 4;
+    return dimension("overall") / 3;
   }
   if (project.system_family === "memory_system") {
     if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
-    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + project.score.data_sovereignty / 10;
-    if (priority === "easy") return project.score.operational_simplicity / 2;
-    if (priority === "portable") return project.score.interoperability / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
-    return project.score.overall / 3;
+    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
+    if (priority === "easy") return dimension("operational_simplicity") / 2;
+    if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
+    return dimension("overall") / 3;
   }
   if (project.system_family === "agent_system") {
     if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
     if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-    if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + project.score.data_sovereignty / 10;
-    if (priority === "control") return project.score.human_control / 3 + project.score.observability_recovery / 4;
-    return project.score.overall / 3;
+    if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
+    if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
+    return dimension("overall") / 3;
   }
-  if (priority === "tools") return project.score.tools_integrations / 2;
-  if (priority === "continuity") return project.score.context_continuity / 2;
-  if (priority === "governance") return project.score.data_governance / 3 + project.score.human_control / 4;
-  if (priority === "portable") return project.score.interoperability / 1.8;
-  return project.score.overall / 3;
+  if (priority === "tools") return dimension("tools_integrations") / 2;
+  if (priority === "continuity") return dimension("context_continuity") / 2;
+  if (priority === "governance") return dimension("data_governance") / 3 + dimension("human_control") / 4;
+  if (priority === "portable") return dimension("interoperability") / 1.8;
+  return dimension("overall") / 3;
 }
 
 // A reason chip quotes a score dimension, which only a detail file carries. It
@@ -1002,7 +1017,7 @@ function renderFinderResults() {
         <div class="license-row">${identityRow(project)}</div>
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
-      <p class="finder-tradeoff"><strong>Watch for:</strong> ${escapeHTML(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
+      <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
       <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
@@ -1120,7 +1135,7 @@ function systemDialogMarkup(project) {
   return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${escapeHTML(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
-      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${escapeHTML(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(label).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${(project.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
@@ -1136,9 +1151,9 @@ function specificationDialogMarkup(specification) {
   return `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
-      <section class="detail-block"><h3>What it standardizes</h3><p>${escapeHTML(specification.standardizes)}</p></section>
-      <section class="detail-block"><h3>What it does not standardize</h3><p>${escapeHTML(specification.does_not_standardize)}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p>${escapeHTML(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>What it standardizes</h3><p>${detailText(specification.standardizes)}</p></section>
+      <section class="detail-block"><h3>What it does not standardize</h3><p>${detailText(specification.does_not_standardize)}</p></section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
     </div>`;
@@ -1151,11 +1166,11 @@ function inferenceDialogMarkup(service) {
     <div class="detail-grid">
       <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(service.score.overall)}</td></tr></table><p class="unscored-note">Operational service score only. It excludes model quality, current price, and transient latency or throughput.</p></section>
-      <section class="detail-block"><h3>Service boundary</h3><p>${escapeHTML(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Service boundary</h3><p>${detailText(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Delivery and model sources</h3><p><strong>Delivery:</strong> ${escapeHTML(service.delivery_modes.map(item => taxonomyName("inference_delivery_modes", item)).join(" · "))}</p><p><strong>Model sources:</strong> ${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</p><p><strong>API styles:</strong> ${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p></section>
-      <section class="detail-block"><h3>Regional controls</h3><p>${escapeHTML(service.regional_controls)}</p></section>
-      <section class="detail-block"><h3>Retention controls</h3><p>${escapeHTML(service.retention_controls)}</p></section>
-      <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${escapeHTML(service.routing)}</p><p><strong>Customization:</strong> ${escapeHTML(service.customization)}</p></section>
+      <section class="detail-block"><h3>Regional controls</h3><p>${detailText(service.regional_controls)}</p></section>
+      <section class="detail-block"><h3>Retention controls</h3><p>${detailText(service.retention_controls)}</p></section>
+      <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${detailText(service.routing)}</p><p><strong>Customization:</strong> ${detailText(service.customization)}</p></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${(service.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Tradeoffs</h3><ul>${(service.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
@@ -1170,15 +1185,15 @@ function runtimeDialogMarkup(runtime) {
     <div class="detail-grid">
       <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(runtime.score.overall)}</td></tr></table><p class="unscored-note">Documented execution capability only. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.</p></section>
-      <section class="detail-block"><h3>Runtime boundary</h3><p>${escapeHTML(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
+      <section class="detail-block"><h3>Runtime boundary</h3><p>${detailText(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Execution</h3><p><strong>Accelerators:</strong> ${escapeHTML(runtime.accelerators.map(item => taxonomyName("runtime_accelerators", item)).join(" · "))}</p><p><strong>Model formats:</strong> ${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</p><p><strong>Serving:</strong> ${escapeHTML(runtime.serving_modes.map(item => taxonomyName("runtime_serving_modes", item)).join(" · "))}</p></section>
       <section class="detail-block"><h3>Interfaces and deployment</h3><p><strong>API styles:</strong> ${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p><p><strong>Deployment:</strong> ${escapeHTML(runtime.deployment_surfaces.map(item => taxonomyName("runtime_deployment_surfaces", item)).join(" · "))}</p></section>
-      <section class="detail-block"><h3>Hardware requirements</h3><p>${escapeHTML(runtime.hardware_requirements)}</p></section>
-      <section class="detail-block"><h3>Model management</h3><p>${escapeHTML(runtime.model_management)}</p></section>
-      <section class="detail-block"><h3>Operational controls</h3><p>${escapeHTML(runtime.operational_controls)}</p></section>
+      <section class="detail-block"><h3>Hardware requirements</h3><p>${detailText(runtime.hardware_requirements)}</p></section>
+      <section class="detail-block"><h3>Model management</h3><p>${detailText(runtime.model_management)}</p></section>
+      <section class="detail-block"><h3>Operational controls</h3><p>${detailText(runtime.operational_controls)}</p></section>
       <section class="detail-block"><h3>Strengths</h3><ul>${(runtime.strengths || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
       <section class="detail-block"><h3>Tradeoffs</h3><ul>${(runtime.tradeoffs || []).map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>
-      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${escapeHTML(runtime.license_note)}</p>${(runtime.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licensing</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(runtime.source_model))}</p><p>${detailText(runtime.license_note)}</p>${(runtime.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(runtime.evidence || []).map(inferenceEvidenceLink).join("")}</section>
     </div>`;
 }
@@ -1421,6 +1436,18 @@ function comparisonTable(records, rows) {
 // would turn the re-entry below into an unbounded fetch loop.
 const comparisonDetailAwaited = new Set();
 
+// Because the comparison opens whole, pressing Compare can be followed by
+// nothing at all on a slow connection — the dialog is waiting on the fetch
+// above. The tray's own polite live region says so, and stops saying it the
+// moment the wait ends; it is cleared only while it still carries this line,
+// so a "four is the maximum" written meanwhile survives.
+const COMPARISON_PENDING = "Loading the full details for this comparison.";
+const showComparisonPending = () => { const status = $("#comparison-status"); if (status) status.textContent = COMPARISON_PENDING; };
+const clearComparisonPending = () => {
+  const status = $("#comparison-status");
+  if (status && status.textContent === COMPARISON_PENDING) status.textContent = "";
+};
+
 function openComparison() {
   const records = comparisonRecords();
   if (records.length < 2) return;
@@ -1429,14 +1456,17 @@ function openComparison() {
     // The selection is capped at four, so this is at most four small fetches.
     const pending = records.map(record => loadDetail(state.comparison.kind, record)).filter(Boolean);
     if (pending.length) {
+      showComparisonPending();
       Promise.all(pending).then(() => {
         comparisonDetailAwaited.add(selection);
+        clearComparisonPending();
         if (comparisonRecords().length === records.length) openComparison();
       });
       return;
     }
     comparisonDetailAwaited.add(selection);
   }
+  clearComparisonPending();
   let profile;
   let rows;
   let eyebrow;
