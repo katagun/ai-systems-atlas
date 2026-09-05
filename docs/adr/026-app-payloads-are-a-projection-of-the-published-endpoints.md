@@ -1,4 +1,4 @@
-# ADR 025: App payloads are a projection of the published endpoints
+# ADR 026: App payloads are a projection of the published endpoints
 
 **Status:** Accepted
 

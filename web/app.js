@@ -158,7 +158,7 @@ async function loadJSON(path) {
 
 async function bootstrap() {
   // The published endpoints are an API, not this page's payload: the page reads
-  // a projection of them shaped for a first render. See ADR 025. Only the files
+  // a projection of them shaped for a first render. See ADR 026. Only the files
   // the first paint reads are awaited here — taxonomy.json is small and wholly
   // needed, so it stays a direct read of the endpoint. Everything else arrives
   // on demand: a record's detail when a dialog or comparison needs it, a search

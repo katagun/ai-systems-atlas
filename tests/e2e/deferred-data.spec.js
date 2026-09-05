@@ -49,7 +49,7 @@ test("the directory renders complete when the card marks never arrive", async ({
 });
 
 // The directory boots from web/app/*.json — a projection of the published
-// endpoints shaped for a first render (ADR 025) — and reaches for the rest on
+// endpoints shaped for a first render (ADR 026) — and reaches for the rest on
 // demand: a record's detail when a dialog or a comparison needs it, a search
 // index when a search box takes focus. These tests hold each of those lines.
 

@@ -4,7 +4,7 @@
 The seven files under web/ are a published API with a compatibility promise.
 These payloads are a projection of them shaped for how the page loads: a small
 boot payload per collection, a lazily fetched search index, and one detail file
-per record. See docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md.
+per record. See docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
 """
 from __future__ import annotations
 

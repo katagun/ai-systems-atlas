@@ -122,13 +122,13 @@ Two call sites, and the second is the one that would fail silently:
 
 Order is fixed: `sync_web_data` → `build_web_payload` → `build_share_pages` → `build_asset_version`.
 
-### 8. Governance: ADR 025, plus the documents it touches
+### 8. Governance: ADR 026, plus the documents it touches
 
 `AGENTS.md` states: "Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, and `local-runtimes.json` synchronized into `web/`." Generated payloads are a different category — generated, not synchronized, like `web/records/` — and the rule has to name both.
 
-- **`docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md`** — the endpoints are a stable public contract; payloads are a regenerable projection with no compatibility promise, never advertised, never in `PUBLISHED_DATA`.
+- **`docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md`** — the endpoints are a stable public contract; payloads are a regenerable projection with no compatibility promise, never advertised, never in `PUBLISHED_DATA`.
 - **`AGENTS.md`** — amend the hard rule; add the build command; add a routing row for the ADR.
-- **`tests/test_documentation.py:29`** — add ADR 025 to the hardcoded manifest. `test_routing_documents_are_reachable_from_agents` then requires it to be named in `AGENTS.md`, which the routing row satisfies.
+- **`tests/test_documentation.py:29`** — add ADR 026 to the hardcoded manifest. `test_routing_documents_are_reachable_from_agents` then requires it to be named in `AGENTS.md`, which the routing row satisfies.
 - **`docs/WEB.md`** — the loading model under "Behavioral contracts"; the payload tree under "Change surfaces"; the browser pass under "Verification".
 - **`docs/OPERATIONS.md`** — an "App payloads" section beside the existing "Share pages", "Asset versions", and "Logo coverage" sections.
 - **`docs/AGENT_DOCS.md`** — record that payloads are deliberately absent from `llms.txt` and the Atlas skill, and why.
@@ -175,7 +175,7 @@ Every claim below was verified against `5af4f67`. Work is in flight on at least 
 | Search field lists per collection are unchanged | `sed -n '43,53p;88,95p;126,143p' web/app-core.js` |
 | The card, filter, and sort field lists in decision 2 are still complete | re-read the `COLLECTIONS` card renderers in `web/app.js` and `matchesProject` in `web/app-core.js` |
 | The "What is not published" section still exists | `grep -n "What is not published" web/index.html` |
-| The ADR number the plan claims is still free | `ls docs/adr/ \| grep '^025'` — must print nothing |
+| The ADR number the plan claims is still free | `ls docs/adr/ \| grep '^026'` — must print nothing |
 | The routing manifest still hardcodes every ADR | `grep -n -A6 "def test_task_routing_documents_exist" tests/test_documentation.py` |
 | The four backlog items this design turns on still exist | `grep -n "^- \[ \]" BACKLOG.md \| grep -iE "per-collection search\|current_repo_note\|related records\|local-runtime GitHub star"` |
 | No new backlog item contradicts a decision here | `grep -n "^- \[ \]" BACKLOG.md \| grep -iE "search\|dialog\|card\|render\|directory ui"` |

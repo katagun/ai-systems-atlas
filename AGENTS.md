@@ -12,7 +12,7 @@ Read only the documents required by the change:
 | JSON fields, enums, queues, or timestamps | `docs/DATA_MODEL.md` |
 | updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
 | finder, Directory collections, filters, comparison, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/013-distinct-collections-share-one-directory-surface.md` for collection boundaries and `docs/adr/014-comparisons-are-scoped-to-one-score-profile.md` for comparison |
-| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/025-app-payloads-are-a-projection-of-the-published-endpoints.md` |
+| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md` |
 | system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md`, `docs/adr/021-the-research-reference-role-is-removed.md`, `docs/adr/022-general-pattern-content-is-not-a-collection.md`, and `docs/adr/023-autonomous-science-systems-are-not-a-role.md` |
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
