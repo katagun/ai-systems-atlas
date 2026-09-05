@@ -17,6 +17,7 @@ import sys
 import tarfile
 import tomllib
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from datetime import UTC, datetime
@@ -57,17 +58,24 @@ def write_json(path: Path, value: dict[str, Any]) -> None:
 
 
 def get_json(url: str, token: str | None) -> tuple[Any, bytes]:
-    allowed_prefixes = (
-        "https://api.github.com/",
-        "https://raw.githubusercontent.com/anomalyco/models.dev/",
+    parsed = urllib.parse.urlsplit(url)
+    is_api_url = (
+        parsed.scheme == "https"
+        and parsed.netloc == "api.github.com"
+        and parsed.path.startswith(f"/repos/{UPSTREAM_REPO}/")
     )
-    if not url.startswith(allowed_prefixes):
+    is_raw_url = (
+        parsed.scheme == "https"
+        and parsed.netloc == "raw.githubusercontent.com"
+        and parsed.path.startswith(f"/{UPSTREAM_REPO}/")
+    )
+    if parsed.fragment or not (is_api_url or is_raw_url):
         raise ValueError("models.dev import URL is outside the fixed HTTPS allowlist")
     headers = {
-        "Accept": "application/vnd.github+json" if "api.github.com" in url else "application/json",
+        "Accept": "application/vnd.github+json" if is_api_url else "application/json",
         "User-Agent": "ai-systems-atlas-model-importer/1.0",
     }
-    if token and "api.github.com" in url:
+    if token and is_api_url:
         headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -78,8 +86,13 @@ def get_json(url: str, token: str | None) -> tuple[Any, bytes]:
 
 
 def get_bytes(url: str, token: str | None) -> bytes:
-    allowed_prefix = "https://codeload.github.com/anomalyco/models.dev/tar.gz/"
-    if not url.startswith(allowed_prefix):
+    parsed = urllib.parse.urlsplit(url)
+    is_archive_url = (
+        parsed.scheme == "https"
+        and parsed.netloc == "codeload.github.com"
+        and parsed.path.startswith(f"/{UPSTREAM_REPO}/tar.gz/")
+    )
+    if parsed.query or parsed.fragment or not is_archive_url:
         raise ValueError("models.dev archive URL is outside the fixed HTTPS allowlist")
     headers = {"User-Agent": "ai-systems-atlas-model-importer/1.0"}
     if token:

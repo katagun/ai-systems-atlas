@@ -3,10 +3,13 @@ from __future__ import annotations
 import io
 import tarfile
 import unittest
+from unittest.mock import patch
 
 from scripts.import_models_dev import (
     build_document,
     catalog_from_archive,
+    get_bytes,
+    get_json,
     normalize_catalog,
     stable_model_id,
 )
@@ -39,6 +42,30 @@ def archive_with(files: dict[str, str]) -> bytes:
 
 
 class ModelsDevImportTests(unittest.TestCase):
+    def test_json_fetch_rejects_hosts_that_only_contain_an_allowed_hostname(self) -> None:
+        malicious_urls = (
+            "https://api.github.com.attacker.invalid/repos/anomalyco/models.dev/commits/dev",
+            "https://attacker.invalid/?next=https://api.github.com/repos/anomalyco/models.dev/commits/dev",
+            "https://raw.githubusercontent.com.attacker.invalid/anomalyco/models.dev/dev/models.json",
+        )
+
+        with patch("scripts.import_models_dev.urllib.request.urlopen") as urlopen:
+            for url in malicious_urls:
+                with self.subTest(url=url), self.assertRaisesRegex(ValueError, "allowlist"):
+                    get_json(url, "secret")
+            urlopen.assert_not_called()
+
+    def test_archive_fetch_rejects_hosts_that_only_contain_the_allowed_hostname(self) -> None:
+        malicious_url = (
+            "https://codeload.github.com.attacker.invalid/"
+            "anomalyco/models.dev/tar.gz/0123456789abcdef"
+        )
+
+        with patch("scripts.import_models_dev.urllib.request.urlopen") as urlopen:
+            with self.assertRaisesRegex(ValueError, "allowlist"):
+                get_bytes(malicious_url, "secret")
+            urlopen.assert_not_called()
+
     def test_archive_reads_only_provider_independent_model_tomls(self) -> None:
         body = archive_with({
             "models/acme/example.toml": (
