@@ -55,9 +55,9 @@
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <div class="hero">
         <div class="hero-copy-block">
-          <p class="eyebrow" id="hero-kicker">Reviewed systems, models, services, and runtimes</p>
+          <p class="eyebrow" id="hero-kicker">Systems, source models, services, and runtimes</p>
           <h1 id="directory-title">Find the AI layer <span>that fits.</span></h1>
-          <p class="hero-copy">Reviewed AI systems—including model releases, applications, inference services, and local runtimes. Every entry shows its license, terms, and the evidence behind its score.</p>
+          <p class="hero-copy">One directory for reviewed applications, inference services, and local runtimes plus the complete models.dev source catalog. Imported models are labeled separately from Atlas-reviewed releases.</p>
           <button class="hero-action" data-open-tab="finder">Need a starting point? Use the finder <span aria-hidden="true">→</span></button>
         </div>
         <div class="atlas-map" aria-hidden="true">
@@ -86,6 +86,7 @@
         <button data-directory-collection="systems" data-directory-family="memory_system" aria-pressed="false"><span>Memory</span><strong id="memory-collection-count"></strong></button>
         <button data-directory-collection="systems" data-directory-family="agent_system" aria-pressed="false"><span>Agents</span><strong id="agent-collection-count"></strong></button>
         <button data-directory-collection="systems" data-directory-family="assistant_system" aria-pressed="false"><span>Assistants</span><strong id="assistant-collection-count"></strong></button>
+        <button data-open-tab="models"><span>Models</span><strong id="model-collection-count"></strong></button>
         <button data-directory-collection="inference" aria-pressed="false"><span>Inference services</span><strong id="inference-collection-count"></strong></button>
         <button data-directory-collection="runtimes" aria-pressed="false"><span>Local runtimes</span><strong id="runtime-collection-count"></strong></button>
       </nav>
@@ -171,9 +172,9 @@
 
     <section id="models" class="view" aria-labelledby="models-title">
       <div class="section-heading specifications-heading">
-        <p class="eyebrow" id="models-kicker">Reviewed model releases</p>
+        <p class="eyebrow" id="models-kicker">models.dev source catalog and Atlas reviews</p>
         <h1 id="models-title">The model artifacts beneath the stack.</h1>
-        <p>Provider-independent language-model releases sourced from models.dev, then reviewed for identity, distribution terms, evidence, and deployability. Quality and benchmark rankings are deliberately out of scope.</p>
+        <p>Every provider-independent model record from models.dev is discoverable here. Source imports are visibly unscored; releases with completed Atlas identity, licensing, evidence, and deployability review add the dedicated access score.</p>
       </div>
       <section class="control-panel inference-controls" aria-label="Model filters">
         <label class="search-field"><span>Search</span><input id="model-search" type="search" placeholder="Search models, developers, and boundaries" autocomplete="off"></label>
@@ -182,11 +183,11 @@
         <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
         <label><span>Source model</span><select id="model-source-filter"><option value="">All source models</option></select></label>
         <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
-        <label><span>Sort</span><select id="model-sort-filter"><option value="score" selected>Access score</option><option value="name">Name</option></select></label>
-        <p class="filter-guidance">Scores compare access and deployability only. They exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
+        <label><span>Sort</span><select id="model-sort-filter"><option value="score" selected>Review and access score</option><option value="name">Name</option></select></label>
+        <p class="filter-guidance">Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
       </section>
       <div class="result-row"><p id="model-result-count" aria-live="polite"></p><button id="reset-model-filters" class="ghost-button">Clear filters</button></div>
-      <section id="model-grid" class="project-grid inference-grid" aria-label="Reviewed model releases"></section>
+      <section id="model-grid" class="project-grid inference-grid" aria-label="models.dev source records and Atlas-reviewed model releases"></section>
       <nav id="model-pager" class="pager" aria-label="Models pagination"></nav>
     </section>
 
@@ -230,7 +231,7 @@
       <div class="section-heading">
         <p class="eyebrow">Published data</p>
         <h1 id="api-title">Every record here is a JSON file.</h1>
-        <p>This directory is built from eight static files served straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent. They are the same files this page loads.</p>
+        <p>This directory publishes nine static data files straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent.</p>
       </div>
 
       <div class="api-facts">
@@ -244,7 +245,7 @@
         </article>
         <article>
           <h2>Reuse</h2>
-          <p>The catalog is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Use it commercially if you like, with credit to AI Systems Atlas and a link to the license.</p>
+          <p>Atlas-authored catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. The derived <code>models-dev.json</code> snapshot retains models.dev's MIT attribution.</p>
         </article>
       </div>
 
@@ -275,6 +276,11 @@
           <p class="endpoint-shape"><code>models[]</code> · <code>source</code> · <code>verified_at</code> · <code>version</code></p>
         </article>
         <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/models-dev.json">models-dev.json</a></h2>
+          <p>The complete commit-pinned provider-independent model catalog imported from models.dev. These are attributed source records, not Atlas-reviewed licensing, evidence, or scores.</p>
+          <p class="endpoint-shape"><code>models[]</code> · <code>source</code> · <code>source_record_count</code> · <code>updated_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/specifications.json">specifications.json</a></h2>
           <p>Protocols, instruction conventions, metadata schemas, and package formats. These carry no score: they are contracts between systems rather than products to rank.</p>
           <p class="endpoint-shape"><code>specifications[]</code> · <code>verified_at</code> · <code>version</code></p>
@@ -294,7 +300,7 @@
       <section class="api-notes">
         <article>
           <h2>What is not published</h2>
-          <p>The system candidate, model candidate, and license-review queues stay in the repository. They hold unreviewed entries or imported discovery facts, and serving them would blur the line between machine-managed metadata and a reviewed record.</p>
+          <p>The system candidate, model-review candidate, and license-review queues stay in the repository. The complete models.dev source snapshot is published separately above, while workflow state and proposed review decisions remain private to the repository.</p>
           <p><code>logos.json</code> is served because this page needs it, but it holds vendored product marks rather than catalog data. Those marks identify their owners' products and are not covered by the catalog license.</p>
           <p>The files under <code>/app/</code> are this page's own payload: the same records, split into what a card needs and what a record dialog needs, so the directory renders without downloading every review first. They are regenerated from the files above and carry no compatibility promise. Build against the endpoints on this page, not against those.</p>
         </article>
@@ -350,9 +356,9 @@
     <div id="comparison-dialog-content"></div>
   </dialog>
 
-  <footer><span>Systems score within families. Models, inference services, and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; the site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"013602d5c0dd","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","models.json":"825f5bd67563","logos.json":"34ac4a7c29b1","app/systems.json":"d6a99395e80c","app/inference.json":"28aa03393916","app/runtimes.json":"5d5c7d7cd08c","app/specifications.json":"b510514cd03f","app/models.json":"e6e9a07b678b","app/search/systems.json":"fd823a822e7a","app/search/inference.json":"e22f4d078444","app/search/runtimes.json":"38154eb28017","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"525d988ae1fa","app/detail":"3567186f2238"}</script>
-  <script src="app-core.js?v=12f31461c00a" defer></script>
-  <script src="app.js?v=86c9db4031e8" defer></script>
+  <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
+  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"013602d5c0dd","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","models.json":"825f5bd67563","models-dev.json":"8bdd0f2f7f9f","logos.json":"34ac4a7c29b1","app/systems.json":"d6a99395e80c","app/inference.json":"28aa03393916","app/runtimes.json":"5d5c7d7cd08c","app/specifications.json":"b510514cd03f","app/models.json":"da86cb1ceaba","app/model-source-details.json":"54c821c3b4b1","app/search/systems.json":"fd823a822e7a","app/search/inference.json":"e22f4d078444","app/search/runtimes.json":"38154eb28017","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"1c103d50ae5b","app/detail":"3567186f2238"}</script>
+  <script src="app-core.js?v=4e6d7fe1b86b" defer></script>
+  <script src="app.js?v=3c9278aaa512" defer></script>
 </body>
 </html>

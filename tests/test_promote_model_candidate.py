@@ -48,13 +48,28 @@ class PromoteModelCandidateTests(unittest.TestCase):
                 "model_access_score",
             ],
         }
+        pinned_url = (
+            "https://github.com/anomalyco/models.dev/blob/"
+            f"{queue['source']['commit']}/models/{self.record['source_id']}.toml"
+        )
+        for evidence in self.record["evidence"]:
+            if "github.com/anomalyco/models.dev/blob/" in evidence["url"]:
+                evidence["url"] = pinned_url
         queue["updated_at"] = "2026-09-04"
         queue["source_record_count"] = len(models["models"]) + 1
         queue["eligible_record_count"] = len(models["models"]) + 1
         queue["candidates"] = [deepcopy(self.candidate)]
+        source_models = {
+            "models": [{
+                "id": self.candidate["id"],
+                "source_id": self.candidate["source_id"],
+                "source_metadata": deepcopy(self.candidate["source_metadata"]),
+            }],
+        }
 
         write_json(directory / "taxonomy.json", taxonomy)
         write_json(directory / "models.json", models)
+        write_json(directory / "models-dev.json", source_models)
         write_json(directory / "model-candidates.json", queue)
         for name in (
             "projects.json",
@@ -128,6 +143,15 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
         with self.assertRaisesRegex(PromotionError, "preserve candidate source_metadata"):
             preflight_promotion(self.root, record)
+
+    def test_candidate_metadata_must_match_complete_source_snapshot(self) -> None:
+        path = self.root / "directory" / "models-dev.json"
+        source_models = json.loads(path.read_text())
+        source_models["models"][0]["source_metadata"]["limits"]["context"] += 1
+        write_json(path, source_models)
+
+        with self.assertRaisesRegex(PromotionError, "complete models.dev source snapshot"):
+            preflight_promotion(self.root, self.record)
 
     def test_missing_authoritative_model_evidence_is_rejected(self) -> None:
         record = deepcopy(self.record)

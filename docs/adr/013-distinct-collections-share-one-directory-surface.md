@@ -14,15 +14,15 @@ Present systems, model releases, inference services, and local runtimes through 
 
 The Directory provides four browsing scopes and one specialist model view:
 
-- **All:** alphabetical discovery across all four collections, with numeric scores hidden;
+- **All:** alphabetical discovery across systems, the complete models.dev source catalog, inference services, and local runtimes, with numeric scores hidden;
 - **Systems:** the existing family, role, project-trait, status, and family-scoped score behavior;
 - **Inference services:** the existing service-type, delivery, model-source, API-style, and inference-service score behavior;
 - **Local runtimes:** the existing runtime-type, accelerator, model-format, API-style, and local-runtime score behavior; and
-- **Models:** a sibling primary view retains model-specific filters and `model_access` comparison while its reviewed records also appear in All.
+- **Models:** both a visible quick-filter destination and a sibling primary view, combining complete attributed source discovery with reviewed-only `model_access` filters and comparison.
 
 The browser may normalize the four record types into a small presentation-only shape for mixed search and cards. It must not create a shared canonical schema, add services, runtimes, or models to `system_family`, reuse a primary role, combine unlike licensing or terms fields, or rank different score profiles.
 
-Mixed cards identify both the collection and the record's native classification. Collection-specific detail dialogs continue to render the original canonical record. The selected Directory scope is represented in the URL so every specialist Directory scope remains directly addressable; the sibling Models specialist view uses the `view` parameter.
+Mixed cards identify both the collection and the record's native classification or imported-source status. Collection-specific detail dialogs continue to render the original canonical record; imported model details render only attributed models.dev fields and a commit-pinned source link. The selected Directory scope is represented in the URL so every specialist Directory scope remains directly addressable; the sibling Models specialist view uses the `view` parameter and is also reachable from the quick filters.
 
 The Atlas Finder may guide the operational system, inference-service, and local-runtime collections, but its branches remain schema-specific. System jobs map to family-compatible roles and use only that family's score dimensions. Inference and runtime jobs map to their native types and dimensions. The results and Directory handoff retain the native classification, and no Finder ranking may pool scores across profiles.
 
@@ -30,7 +30,7 @@ Specifications remain a sibling view because they are interoperability artifacts
 
 ## Consequences
 
-- One search entry point can discover operational systems, model releases, managed inference services, and local runtimes without flattening their meanings.
+- One search entry point can discover operational systems, every models.dev source record, managed inference services, and local runtimes without flattening their meanings.
 - Inference services no longer require a top-level navigation destination.
 - Mixed browsing cannot display or sort by numeric score; users must choose a comparable scope first.
 - Filters change with the selected collection instead of exposing controls that do not apply to most records.

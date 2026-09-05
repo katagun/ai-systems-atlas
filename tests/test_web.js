@@ -271,6 +271,12 @@ const models = [
   { id: "model-vision", source_id: "acme/vision", name: "Vision Model", developer: "Acme", description: "Hosted multimodal model.", access_boundary: "Model release, not the host.", model_type: "multimodal_language_model", distribution_modes: ["developer_api"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], source_metadata: { family: null, modalities: { input: ["text", "image"], output: ["text"] } }, strengths: ["Image input"], tradeoffs: ["No weights"], score: { overall: 6.0 } },
 ];
 
+const importedModel = {
+  id: "model-acme-audio", source_id: "acme/audio", name: "Audio Source", developer: "acme",
+  description: "Source-only audio model metadata.", review_status: "imported",
+  source_metadata: { family: "audio", modalities: { input: ["text"], output: ["audio"] } },
+};
+
 test("model filters combine provider-independent facets and modalities", () => {
   assert.deepEqual(
     filterModels(models, { type: "language_model", distribution: "downloadable_weights", sourceModel: "open_source", license: "Apache-2.0", modality: "text" }).map(item => item.name),
@@ -282,6 +288,18 @@ test("model filters combine provider-independent facets and modalities", () => {
 test("model search indexes editorial boundary prose but not nested source metadata", () => {
   assert.deepEqual(filterModels(models, { term: "not an API" }).map(item => item.name), ["Qwen"]);
   assert.deepEqual(filterModels(models, { term: "qwen", sort: "score" }).map(item => item.name), ["Qwen"]);
+});
+
+test("model filtering keeps unscored source imports and sorts them after reviews", () => {
+  assert.deepEqual(
+    filterModels([...models, importedModel], { sort: "score" }).map(item => item.name),
+    ["Qwen", "Vision Model", "Audio Source"],
+  );
+  assert.deepEqual(
+    filterModels([...models, importedModel], { modality: "audio" }).map(item => item.name),
+    ["Audio Source"],
+  );
+  assert.deepEqual(filterModels([importedModel], { type: "language_model" }), []);
 });
 
 test("local runtime search covers visible boundary prose but not evidence URLs", () => {

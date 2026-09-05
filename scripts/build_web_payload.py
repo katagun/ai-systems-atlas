@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Generate the web application's data payloads from the published catalog.
 
-The eight files under web/ are a published API with a compatibility promise.
+The published files under web/ are an API with a compatibility promise.
 These payloads are a projection of them shaped for how the page loads: a small
-boot payload per collection, a lazily fetched search index, and one detail file
-per record. See docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
+boot payload per collection, a lazily fetched search index, per-reviewed-record
+detail files, and one shared imported-model detail payload. See
+docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
 """
 from __future__ import annotations
 
@@ -53,7 +54,8 @@ BOOT_FIELDS = {
     # lands.
     "models": (
         "id", "name", "model_type", "developer", "description", "source_id", "source_model",
-        "licenses", "distribution_modes", "score_profile", "source_metadata",
+        "licenses", "distribution_modes", "score_profile", "source_metadata", "review_status",
+        "source_url",
     ),
 }
 
@@ -78,6 +80,10 @@ SEARCH_FIELDS = {
     ),
 }
 
+MODEL_SOURCE_CARD_METADATA = (
+    "family", "modalities", "reported_open_weights", "reported_license",
+)
+
 # Envelope keys the page reads: bootstrap() prints the newest of these as "Data updated".
 ENVELOPE_KEYS = ("generated_at", "verified_at")
 
@@ -85,10 +91,41 @@ ENVELOPE_KEYS = ("generated_at", "verified_at")
 def load_catalog(root: Path) -> dict[str, dict]:
     """Read the published copies the payloads project from."""
     web = root / "web"
-    return {
+    catalog = {
         name: json.loads((web / name).read_text(encoding="utf-8"))
         for _, name, _, _ in COLLECTIONS
     }
+    catalog["models-dev.json"] = json.loads((web / "models-dev.json").read_text(encoding="utf-8"))
+    return catalog
+
+
+def model_records(catalog: dict[str, dict]) -> list[dict]:
+    """Overlay reviewed Atlas models on the complete attributed source snapshot."""
+    reviewed = {
+        record["source_id"]: {**record, "review_status": "reviewed"}
+        for record in catalog["models.json"]["models"]
+    }
+    source = catalog["models-dev.json"]
+    commit = source["source"]["commit"]
+    combined: list[dict] = []
+    for source_record in source["models"]:
+        source_id = source_record["source_id"]
+        if source_id in reviewed:
+            combined.append(reviewed.pop(source_id))
+            continue
+        metadata = source_record["source_metadata"]
+        combined.append({
+            "id": source_record["id"],
+            "source_id": source_id,
+            "name": metadata["name"],
+            "developer": source_id.split("/", 1)[0],
+            "description": metadata["description"] or "No description reported by models.dev.",
+            "source_metadata": metadata,
+            "review_status": "imported",
+            "source_url": f"https://github.com/anomalyco/models.dev/blob/{commit}/models/{source_id}.toml",
+        })
+    combined.extend(reviewed.values())
+    return combined
 
 
 def searchable_text(value) -> str:
@@ -107,14 +144,25 @@ def dumps(payload) -> str:
 
 def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
     payloads: dict[str, str] = {}
+    model_source_details: dict[str, dict] = {}
     for collection, name, key, kind in COLLECTIONS:
         document = catalog[name]
-        records = document[key]
+        records = model_records(catalog) if collection == "models" else document[key]
         boot_fields = BOOT_FIELDS[collection]
 
         entries = []
         for record in records:
             entry = {field: record[field] for field in boot_fields if field in record}
+            if collection == "models" and record.get("review_status") == "imported":
+                entry.pop("description", None)
+                entry["source_metadata"] = {
+                    field: record["source_metadata"][field]
+                    for field in MODEL_SOURCE_CARD_METADATA
+                }
+                model_source_details[record["id"]] = {
+                    "description": record["description"],
+                    "source_metadata": record["source_metadata"],
+                }
             if "score" in record:
                 entry["score"] = {"overall": record["score"]["overall"]}
             entries.append(entry)
@@ -124,6 +172,12 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
             for envelope_key in ENVELOPE_KEYS
             if envelope_key in document
         }
+        if collection == "models":
+            envelope.update({
+                "source_updated_at": catalog["models-dev.json"]["updated_at"],
+                "source_record_count": catalog["models-dev.json"]["source_record_count"],
+                "reviewed_count": len(document[key]),
+            })
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})
 
         payloads[f"app/search/{collection}.json"] = dumps({
@@ -134,10 +188,13 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
         })
 
         for record in records:
+            if collection == "models" and record.get("review_status") == "imported":
+                continue
             detail = {field: value for field, value in record.items() if field not in boot_fields}
             if "score" in record:
                 detail["score"] = record["score"]
             payloads[f"app/detail/{kind}/{record['id']}.json"] = dumps(detail)
+    payloads["app/model-source-details.json"] = dumps(model_source_details)
     return payloads
 
 

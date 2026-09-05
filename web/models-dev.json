@@ -2,7 +2,6 @@
   "version": "1.0",
   "updated_at": "2026-09-05",
   "source_record_count": 370,
-  "eligible_record_count": 358,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
@@ -13,7 +12,7 @@
     "license": "MIT",
     "sha256": "16d86cec9bead8e3f424c1a60f1c8ad2fedb8fb88ef4e0b92f14898bce318533"
   },
-  "candidates": [
+  "models": [
     {
       "id": "model-aisingapore-gemma-sea-lion-v4-27b-it",
       "source_id": "aisingapore/gemma-sea-lion-v4-27b-it",
@@ -53,17 +52,7 @@
             "url": "https://huggingface.co/aisingapore/Gemma-SEA-LION-v4-27B-IT"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-flash",
@@ -99,17 +88,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-max",
@@ -145,17 +124,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-omni-turbo",
@@ -195,17 +164,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-plus",
@@ -241,17 +200,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-turbo",
@@ -287,17 +236,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-vl-max",
@@ -334,17 +273,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen-vl-plus",
@@ -381,17 +310,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen2-5-vl-72b-instruct",
@@ -433,17 +352,48 @@
             "url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-alibaba-qwen2-5-coder-0-5b",
+      "source_id": "alibaba/qwen2.5-coder-0.5b",
+      "source_metadata": {
+        "name": "Qwen2.5-Coder-0.5B",
+        "description": "Tiny open Qwen code model for lightweight completion and on-device coding",
+        "family": "qwen",
+        "release_date": "2024-11-12",
+        "last_updated": "2024-11-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B"
+          }
+        ]
+      }
     },
     {
       "id": "model-alibaba-qwen2-5-coder-32b-instruct",
@@ -484,17 +434,7 @@
             "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-235b-a22b",
@@ -535,17 +475,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-235b-a22b-instruct-2507",
@@ -586,17 +516,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B-Instruct-2507"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-30b-a3b",
@@ -637,17 +557,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-30B-A3B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-32b",
@@ -688,17 +598,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-32B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-coder-30b-a3b-instruct",
@@ -739,17 +639,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-coder-480b-a35b-instruct",
@@ -790,17 +680,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-coder-flash",
@@ -836,17 +716,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-coder-next",
@@ -887,17 +757,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-coder-plus",
@@ -933,17 +793,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-max",
@@ -979,17 +829,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-next-80b-a3b-instruct",
@@ -1030,17 +870,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-next-80b-a3b-thinking",
@@ -1081,17 +911,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Thinking"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-vl-235b-a22b-instruct",
@@ -1133,17 +953,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-vl-235b-a22b-thinking",
@@ -1185,17 +995,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Thinking"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-vl-plus",
@@ -1232,17 +1032,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-122b-a10b",
@@ -1286,17 +1076,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-27b",
@@ -1340,17 +1120,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.5-27B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-35b-a3b",
@@ -1394,17 +1164,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-397b-a17b",
@@ -1448,17 +1208,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-9b",
@@ -1501,17 +1251,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.5-9B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-flash",
@@ -1549,17 +1289,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-5-plus",
@@ -1597,17 +1327,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-6-27b",
@@ -1651,17 +1371,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.6-27B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-6-35b-a3b",
@@ -1705,17 +1415,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-6-flash",
@@ -1753,17 +1453,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-6-max-preview",
@@ -1799,17 +1489,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-6-plus",
@@ -1847,17 +1527,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-7-flash",
@@ -1895,17 +1565,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-7-max",
@@ -1941,17 +1601,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-7-plus",
@@ -1989,17 +1639,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-2-4t-a95b",
@@ -2040,17 +1680,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-27b",
@@ -2093,17 +1723,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-flash",
@@ -2141,17 +1761,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-flash-next",
@@ -2194,17 +1804,7 @@
             "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-max",
@@ -2243,17 +1843,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-max-0902",
@@ -2292,17 +1882,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwen3-8-max-preview",
@@ -2340,17 +1920,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwq-32b",
@@ -2391,17 +1961,7 @@
             "url": "https://huggingface.co/Qwen/QwQ-32B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-alibaba-qwq-plus",
@@ -2437,17 +1997,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-3-5-haiku-20241022",
@@ -2485,17 +2035,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-3-5-sonnet-20241022",
@@ -2533,17 +2073,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-3-7-sonnet-20250219",
@@ -2581,17 +2111,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-3-haiku-20240307",
@@ -2629,17 +2149,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-fable-5",
@@ -2677,17 +2187,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-fable-5-1",
@@ -2725,17 +2225,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-haiku-4-5",
@@ -2773,17 +2263,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-haiku-4-5-20251001",
@@ -2821,17 +2301,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-mythos-5",
@@ -2869,17 +2339,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-0",
@@ -2917,17 +2377,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-1",
@@ -2965,17 +2415,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-1-20250805",
@@ -3013,17 +2453,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-20250514",
@@ -3061,17 +2491,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-5",
@@ -3109,17 +2529,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-5-20251101",
@@ -3157,17 +2567,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-6",
@@ -3205,17 +2605,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-7",
@@ -3253,17 +2643,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-4-8",
@@ -3301,17 +2681,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-opus-5",
@@ -3349,17 +2719,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-sonnet-4-0",
@@ -3397,17 +2757,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-sonnet-4-20250514",
@@ -3445,17 +2795,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-sonnet-4-5",
@@ -3493,17 +2833,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-anthropic-claude-sonnet-4-5-20250929",
@@ -3541,17 +2871,45 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-anthropic-claude-sonnet-4-6",
+      "source_id": "anthropic/claude-sonnet-4-6",
+      "source_metadata": {
+        "name": "Claude Sonnet 4.6",
+        "description": "Claude workhorse for coding agents, careful analysis, and production cost control",
+        "family": "claude-sonnet",
+        "release_date": "2026-02-17",
+        "last_updated": "2026-03-13",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-anthropic-claude-sonnet-5",
@@ -3589,17 +2947,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-arcee-ai-trinity-large-preview",
@@ -3657,17 +3005,7 @@
             "format": "safetensors"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-arcee-ai-trinity-large-thinking",
@@ -3725,17 +3063,7 @@
             "format": "safetensors"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-arcee-ai-trinity-mini",
@@ -3793,17 +3121,7 @@
             "format": "safetensors"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-arcee-ai-trinity-nano-preview",
@@ -3861,17 +3179,7 @@
             "format": "safetensors"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-1-6",
@@ -3907,17 +3215,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-1-6-flash",
@@ -3954,17 +3252,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-1-6-vision",
@@ -4001,17 +3289,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-1-8",
@@ -4048,17 +3326,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-0-code",
@@ -4096,17 +3364,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-0-lite",
@@ -4144,17 +3402,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-0-mini",
@@ -4192,17 +3440,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-0-pro",
@@ -4240,17 +3478,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-1-pro",
@@ -4288,17 +3516,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-2-1-turbo",
@@ -4336,17 +3554,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-character",
@@ -4384,17 +3592,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-bytedance-seed-seed-evolving",
@@ -4432,17 +3630,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-c4ai-aya-expanse-32b",
@@ -4483,17 +3671,48 @@
             "url": "https://huggingface.co/CohereLabs/aya-expanse-32b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-cohere-c4ai-aya-expanse-8b",
+      "source_id": "cohere/c4ai-aya-expanse-8b",
+      "source_metadata": {
+        "name": "Aya Expanse 8B",
+        "description": "Compact open multilingual model optimized for generation across 23 languages",
+        "family": null,
+        "release_date": "2024-10-24",
+        "last_updated": "2024-10-24",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/aya-expanse-8b"
+          }
+        ]
+      }
     },
     {
       "id": "model-cohere-c4ai-aya-vision-32b",
@@ -4535,17 +3754,7 @@
             "url": "https://huggingface.co/CohereLabs/aya-vision-32b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-c4ai-aya-vision-8b",
@@ -4587,17 +3796,7 @@
             "url": "https://huggingface.co/CohereLabs/aya-vision-8b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-a-03-2025",
@@ -4638,17 +3837,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-a-plus-05-2026",
@@ -4685,17 +3874,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-a-reasoning-08-2025",
@@ -4736,17 +3915,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-a-reasoning-08-2025"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-a-translate-08-2025",
@@ -4787,17 +3956,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-a-translate-08-2025"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-a-vision-07-2025",
@@ -4839,17 +3998,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-a-vision-07-2025"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-r-08-2024",
@@ -4890,17 +4039,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-r-08-2024"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-r-plus-08-2024",
@@ -4941,17 +4080,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-r7b-12-2024",
@@ -4992,17 +4121,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-command-r7b-arabic-02-2025",
@@ -5043,17 +4162,7 @@
             "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-arabic-02-2025"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-cohere-north-mini-code-1-0",
@@ -5089,17 +4198,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepreinforce-ornith-1-0-31b",
@@ -5142,17 +4241,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepreinforce-ornith-1-0-35b",
@@ -5205,17 +4294,7 @@
             "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-35B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepreinforce-ornith-1-0-397b",
@@ -5273,17 +4352,7 @@
             "quantization": "fp8"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepreinforce-ornith-1-0-9b",
@@ -5336,17 +4405,7 @@
             "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-9B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepreinforce-ornith-1-5-35b-a3b",
@@ -5394,17 +4453,7 @@
             "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-chat",
@@ -5445,17 +4494,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-ocr-2",
@@ -5492,17 +4531,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-r1",
@@ -5543,17 +4572,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-r1-distill-qwen-32b",
@@ -5594,17 +4613,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-reasoner",
@@ -5645,17 +4654,48 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-deepseek-deepseek-v3",
+      "source_id": "deepseek/deepseek-v3",
+      "source_metadata": {
+        "name": "DeepSeek-V3",
+        "description": "Open DeepSeek MoE chat model for coding, math, and general reasoning",
+        "family": "deepseek",
+        "release_date": "2024-12-26",
+        "last_updated": "2024-12-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": "DeepSeek Model License",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3"
+          }
+        ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v3-0324",
@@ -5697,17 +4737,7 @@
             "format": "safetensors"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v3-1",
@@ -5748,17 +4778,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v3-2",
@@ -5799,17 +4819,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-flash",
@@ -5850,17 +4860,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-flash-0731",
@@ -5901,17 +4901,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-flash-vision-exp",
@@ -5948,17 +4938,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-pro",
@@ -5999,17 +4979,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-pro-0423",
@@ -6045,17 +5015,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-deepseek-deepseek-v4-pro-0813",
@@ -6096,17 +5056,7 @@
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-deep-research-max-preview-04-2026",
@@ -6147,17 +5097,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-deep-research-preview-04-2026",
@@ -6198,17 +5138,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-0-flash",
@@ -6248,17 +5178,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-0-flash-lite",
@@ -6298,17 +5218,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-5-computer-use-preview-10-2025",
@@ -6345,17 +5255,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-5-flash",
@@ -6395,17 +5295,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-5-flash-image",
@@ -6443,17 +5333,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-2-5-flash-lite",
@@ -6493,17 +5373,43 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-google-gemini-2-5-flash-tts",
+      "source_id": "google/gemini-2.5-flash-tts",
+      "source_metadata": {
+        "name": "Gemini 2.5 Flash TTS",
+        "description": "Speech generation model for controllable voice, narration, and audio delivery",
+        "family": "gemini-flash",
+        "release_date": "2025-09-30",
+        "last_updated": "2025-12-10",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-google-gemini-2-5-pro",
@@ -6543,17 +5449,43 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-google-gemini-2-5-pro-tts",
+      "source_id": "google/gemini-2.5-pro-tts",
+      "source_metadata": {
+        "name": "Gemini 2.5 Pro TTS",
+        "description": "Speech generation model for controllable voice, narration, and audio delivery",
+        "family": "gemini-pro",
+        "release_date": "2025-09-30",
+        "last_updated": "2025-12-10",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-google-gemini-3-flash-preview",
@@ -6593,17 +5525,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-pro-image",
@@ -6641,17 +5563,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-pro-image-preview",
@@ -6689,17 +5601,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-pro-preview",
@@ -6739,17 +5641,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-image",
@@ -6789,17 +5681,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-image-preview",
@@ -6838,17 +5720,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-lite",
@@ -6888,17 +5760,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-lite-image",
@@ -6936,17 +5798,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-lite-preview",
@@ -6986,17 +5838,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-flash-live-preview",
@@ -7036,17 +5878,43 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-google-gemini-3-1-flash-tts-preview",
+      "source_id": "google/gemini-3.1-flash-tts-preview",
+      "source_metadata": {
+        "name": "Gemini 3.1 Flash TTS Preview",
+        "description": "Low-latency speech generation with steerable prompts and expressive audio tags",
+        "family": "gemini-flash",
+        "release_date": "2026-04-15",
+        "last_updated": "2026-04-15",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-google-gemini-3-1-pro-preview",
@@ -7086,17 +5954,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-1-pro-preview-customtools",
@@ -7136,17 +5994,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-5-flash",
@@ -7186,17 +6034,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-5-flash-lite",
@@ -7236,17 +6074,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-5-live-translate-preview",
@@ -7283,17 +6111,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-5-transcribe-live",
@@ -7329,17 +6147,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-6-flash",
@@ -7379,17 +6187,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-7-flash",
@@ -7429,17 +6227,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-3-8-flash",
@@ -7479,17 +6267,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-embedding-001",
@@ -7525,17 +6303,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-embedding-2",
@@ -7575,17 +6343,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-flash-latest",
@@ -7625,17 +6383,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemini-flash-lite-latest",
@@ -7675,17 +6423,45 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-google-gemini-omni-flash-preview",
+      "source_id": "google/gemini-omni-flash-preview",
+      "source_metadata": {
+        "name": "Gemini Omni Flash Preview",
+        "description": "Video generation and editing model for fast, conversational text- and image-to-video workflows",
+        "family": "gemini",
+        "release_date": "2026-06-30",
+        "last_updated": "2026-06-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 57920
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-google-gemini-robotics-er-1-6-preview",
@@ -7724,17 +6500,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemma-4-26b-a4b-it",
@@ -7776,17 +6542,7 @@
             "url": "https://huggingface.co/google/gemma-4-26B-A4B-it"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemma-4-31b-it",
@@ -7828,17 +6584,7 @@
             "url": "https://huggingface.co/google/gemma-4-31B-it"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemma-4-e2b-it",
@@ -7881,17 +6627,7 @@
             "url": "https://huggingface.co/google/gemma-4-E2B-it"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-gemma-4-e4b-it",
@@ -7934,17 +6670,7 @@
             "url": "https://huggingface.co/google/gemma-4-E4B-it"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-lyria-3-clip-preview",
@@ -7982,17 +6708,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-google-lyria-3-pro-preview",
@@ -8030,17 +6746,119 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-google-veo-3-1-fast-generate-preview",
+      "source_id": "google/veo-3.1-fast-generate-preview",
+      "source_metadata": {
+        "name": "Veo 3.1 Fast Preview",
+        "description": "Video model for prompt-guided generation, editing, and motion workflows",
+        "family": "veo",
+        "release_date": "2025-10-15",
+        "last_updated": "2026-01-01",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1024,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-google-veo-3-1-generate-preview",
+      "source_id": "google/veo-3.1-generate-preview",
+      "source_metadata": {
+        "name": "Veo 3.1 Preview",
+        "description": "Video model for prompt-guided generation, editing, and motion workflows",
+        "family": "veo",
+        "release_date": "2025-10-15",
+        "last_updated": "2026-01",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1024,
+          "input": null,
+          "output": 1
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-google-veo-3-1-lite-generate-preview",
+      "source_id": "google/veo-3.1-lite-generate-preview",
+      "source_metadata": {
+        "name": "Veo 3.1 Lite Preview",
+        "description": "Video model for prompt-guided generation, editing, and motion workflows",
+        "family": "veo",
+        "release_date": "2026-03-31",
+        "last_updated": "2026-03-31",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1024,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-ibm-granite-4-h-micro",
@@ -8081,17 +6899,7 @@
             "url": "https://huggingface.co/ibm-granite/granite-4.0-h-micro"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-ibm-granite-4-h-small",
@@ -8132,17 +6940,7 @@
             "url": "https://huggingface.co/ibm-granite/granite-4.0-h-small"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-inclusionai-ling-3-0-flash-fin",
@@ -8178,17 +6976,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meituan-longcat-2-0",
@@ -8224,17 +7012,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-3-1-8b-instruct",
@@ -8275,17 +7053,49 @@
             "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-meta-llama-3-2-11b-vision-instruct",
+      "source_id": "meta/llama-3.2-11b-vision-instruct",
+      "source_metadata": {
+        "name": "Llama-3.2-11B-Vision-Instruct",
+        "description": "Open multimodal Llama model for image understanding, captioning, and visual QA",
+        "family": "llama",
+        "release_date": "2024-09-25",
+        "last_updated": "2024-09-25",
+        "knowledge_cutoff": "2023-12",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct"
+          }
+        ]
+      }
     },
     {
       "id": "model-meta-llama-3-2-1b",
@@ -8326,17 +7136,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-3.2-1B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-3-2-3b",
@@ -8377,17 +7177,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-3.2-3B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-3-3-70b-instruct",
@@ -8428,17 +7218,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-4-maverick-17b-instruct",
@@ -8480,17 +7260,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-4-scout-17b-instruct",
@@ -8532,17 +7302,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-llama-guard-3-8b",
@@ -8583,17 +7343,7 @@
             "url": "https://huggingface.co/meta-llama/Llama-Guard-3-8B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-muse-glimmer-30b",
@@ -8651,17 +7401,7 @@
             "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-muse-spark-1-1",
@@ -8700,17 +7440,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-muse-spark-1-2",
@@ -8750,17 +7480,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-meta-muse-spark-1-3",
@@ -8800,17 +7520,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-microsoft-mai-code-1-flash",
@@ -8857,17 +7567,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-microsoft-mai-code-1-1-flash",
@@ -8910,17 +7610,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-microsoft-phi-4-mini",
@@ -8962,17 +7652,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2",
@@ -9013,17 +7693,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-her",
@@ -9059,17 +7729,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-1",
@@ -9110,17 +7770,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-5",
@@ -9161,17 +7811,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-5-highspeed",
@@ -9212,17 +7852,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-7",
@@ -9263,17 +7893,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m2-7-highspeed",
@@ -9314,17 +7934,7 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-minimax-minimax-m3",
@@ -9367,17 +7977,44 @@
             "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-minimax-image-01",
+      "source_id": "minimax/image-01",
+      "source_metadata": {
+        "name": "MiniMax image-01",
+        "description": "MiniMax text-to-image generation model with reference-image support",
+        "family": "minimax",
+        "release_date": "2025-02-15",
+        "last_updated": "2026-08-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-mistral-codestral-22b-v0-1",
@@ -9418,17 +8055,7 @@
             "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-codestral-latest",
@@ -9469,17 +8096,7 @@
             "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-devstral-2512",
@@ -9520,17 +8137,7 @@
             "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-devstral-medium-2507",
@@ -9566,17 +8173,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-devstral-medium-latest",
@@ -9617,17 +8214,7 @@
             "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-devstral-small-2507",
@@ -9668,17 +8255,7 @@
             "url": "https://huggingface.co/mistralai/Devstral-Small-2507"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-magistral-medium-latest",
@@ -9714,17 +8291,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-magistral-small-2506",
@@ -9765,17 +8332,7 @@
             "url": "https://huggingface.co/mistralai/Magistral-Small-2506"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-ministral-8b-instruct-2410",
@@ -9816,17 +8373,7 @@
             "url": "https://huggingface.co/mistralai/Ministral-8B-Instruct-2410"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-large-2411",
@@ -9867,17 +8414,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Large-Instruct-2411"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-large-2512",
@@ -9919,17 +8456,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-large-latest",
@@ -9971,17 +8498,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-medium-2505",
@@ -10018,17 +8535,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-medium-2604",
@@ -10070,17 +8577,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-medium-latest",
@@ -10122,17 +8619,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-nemo",
@@ -10173,17 +8660,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-small-2506",
@@ -10225,17 +8702,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-small-2603",
@@ -10277,17 +8744,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-small-3-1-24b-instruct-2503",
@@ -10329,17 +8786,7 @@
             "url": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-mistral-small-latest",
@@ -10381,17 +8828,49 @@
             "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-mistral-pixtral-12b",
+      "source_id": "mistral/pixtral-12b",
+      "source_metadata": {
+        "name": "Pixtral 12B",
+        "description": "Mistral vision-language model for image understanding and multimodal chat",
+        "family": "pixtral",
+        "release_date": "2024-09-01",
+        "last_updated": "2024-09-01",
+        "knowledge_cutoff": "2024-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Pixtral-12B-2409"
+          }
+        ]
+      }
     },
     {
       "id": "model-mistral-pixtral-large-latest",
@@ -10433,17 +8912,7 @@
             "url": "https://huggingface.co/mistralai/Pixtral-Large-Instruct-2411"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-mistral-voxtral-small-latest",
@@ -10480,17 +8949,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-thinking",
@@ -10531,17 +8990,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2-Thinking"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-thinking-turbo",
@@ -10582,17 +9031,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2-Thinking"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-5",
@@ -10635,17 +9074,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2.5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-6",
@@ -10688,17 +9117,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2.6"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-7-code",
@@ -10741,17 +9160,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k2-7-code-highspeed",
@@ -10794,17 +9203,7 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-moonshotai-kimi-k3",
@@ -10842,17 +9241,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-3-1-nemotron-70b-instruct",
@@ -10888,17 +9277,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3",
@@ -10934,17 +9313,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-3-1-nemotron-ultra-253b",
@@ -10980,17 +9349,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1",
@@ -11026,17 +9385,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1-5",
@@ -11072,17 +9421,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-nemotron-embed-vl-1b-v2",
@@ -11119,17 +9458,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-llama-nemotron-rerank-vl-1b-v2",
@@ -11166,17 +9495,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-mistral-nemotron",
@@ -11212,17 +9531,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-content-safety",
@@ -11258,17 +9567,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-nano-30b-a3b",
@@ -11304,17 +9603,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -11353,17 +9642,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-super-120b-a12b",
@@ -11399,17 +9678,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-ultra-550b-a55b",
@@ -11445,17 +9714,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-5-content-safety",
@@ -11492,17 +9751,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-3-5-lightning",
@@ -11538,17 +9787,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-cascade-2-30b-a3b",
@@ -11584,17 +9823,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-content-safety-reasoning-4b",
@@ -11630,17 +9859,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-mini-4b-instruct",
@@ -11676,17 +9895,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-nano-12b-v2-vl",
@@ -11724,17 +9933,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-nano-9b-v2",
@@ -11770,17 +9969,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-nvidia-nemotron-voicechat",
@@ -11817,17 +10006,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-3-5-turbo",
@@ -11863,17 +10042,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4",
@@ -11909,17 +10078,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4-turbo",
@@ -11956,17 +10115,45 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-openai-gpt-4-1",
+      "source_id": "openai/gpt-4.1",
+      "source_metadata": {
+        "name": "GPT-4.1",
+        "description": "Long-lived GPT workhorse for coding, instruction following, and production apps",
+        "family": "gpt",
+        "release_date": "2025-04-14",
+        "last_updated": "2025-04-14",
+        "knowledge_cutoff": "2024-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1047576,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-openai-gpt-4-1-mini",
@@ -12004,17 +10191,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4-1-nano",
@@ -12051,17 +10228,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4o",
@@ -12099,17 +10266,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4o-2024-05-13",
@@ -12146,17 +10303,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4o-2024-08-06",
@@ -12193,17 +10340,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4o-2024-11-20",
@@ -12240,17 +10377,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-4o-mini",
@@ -12288,17 +10415,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5",
@@ -12335,17 +10452,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-chat-latest",
@@ -12382,17 +10489,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-codex",
@@ -12429,17 +10526,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-mini",
@@ -12476,17 +10563,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-nano",
@@ -12523,17 +10600,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-pro",
@@ -12570,17 +10637,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-1",
@@ -12617,17 +10674,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-1-chat-latest",
@@ -12664,17 +10711,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-1-codex",
@@ -12711,17 +10748,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-1-codex-max",
@@ -12758,17 +10785,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-1-codex-mini",
@@ -12805,17 +10822,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-2",
@@ -12852,17 +10859,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-2-chat-latest",
@@ -12899,17 +10896,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-2-codex",
@@ -12947,17 +10934,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-2-pro",
@@ -12994,17 +10971,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-3-chat-latest",
@@ -13041,17 +11008,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-3-codex",
@@ -13089,17 +11046,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-3-codex-spark",
@@ -13137,17 +11084,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-4",
@@ -13185,17 +11122,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-4-mini",
@@ -13232,17 +11159,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-4-nano",
@@ -13279,17 +11196,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-4-pro",
@@ -13326,17 +11233,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-5",
@@ -13374,17 +11271,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-5-instant",
@@ -13422,17 +11309,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-5-pro",
@@ -13470,17 +11347,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-6-luna",
@@ -13518,17 +11385,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-6-sol",
@@ -13566,17 +11423,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-5-6-terra",
@@ -13614,17 +11461,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-6-astra",
@@ -13662,17 +11499,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-6-astra-fast",
@@ -13710,17 +11537,44 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-openai-gpt-image-1",
+      "source_id": "openai/gpt-image-1",
+      "source_metadata": {
+        "name": "GPT-Image-1",
+        "description": "OpenAI image model for production generation, edits, and brand-safe visual workflows",
+        "family": "gpt-image",
+        "release_date": "2025-04-24",
+        "last_updated": "2025-04-24",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-openai-gpt-image-1-5",
@@ -13758,17 +11612,44 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-openai-gpt-image-2",
+      "source_id": "openai/gpt-image-2",
+      "source_metadata": {
+        "name": "GPT-Image-2",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "gpt-image",
+        "release_date": "2026-04-21",
+        "last_updated": "2026-04-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-openai-gpt-oss-120b",
@@ -13809,17 +11690,7 @@
             "url": "https://huggingface.co/openai/gpt-oss-120b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-oss-20b",
@@ -13860,17 +11731,7 @@
             "url": "https://huggingface.co/openai/gpt-oss-20b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-oss-safeguard-120b",
@@ -13911,17 +11772,7 @@
             "url": "https://huggingface.co/openai/gpt-oss-safeguard-120b"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-realtime-2-1",
@@ -13960,17 +11811,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-gpt-realtime-whisper",
@@ -14006,17 +11847,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o1",
@@ -14054,17 +11885,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o1-pro",
@@ -14101,17 +11922,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o3",
@@ -14149,17 +11960,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o3-deep-research",
@@ -14196,17 +11997,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o3-mini",
@@ -14242,17 +12033,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o3-pro",
@@ -14289,17 +12070,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o4-mini",
@@ -14336,17 +12107,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-o4-mini-deep-research",
@@ -14383,17 +12144,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-whisper-large-v3",
@@ -14429,17 +12180,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openai-whisper-large-v3-turbo",
@@ -14475,17 +12216,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-openbmb-minicpm5-1b",
@@ -14526,17 +12257,7 @@
             "url": "https://huggingface.co/openbmb/MiniCPM5-1B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-perplexity-sonar",
@@ -14572,17 +12293,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-perplexity-sonar-deep-research",
@@ -14618,17 +12329,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-perplexity-sonar-pro",
@@ -14665,17 +12366,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-perplexity-sonar-reasoning-pro",
@@ -14712,17 +12403,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-poolside-laguna-m-1",
@@ -14758,17 +12439,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-poolside-laguna-s-2-1",
@@ -14804,17 +12475,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-poolside-laguna-xs-2-1",
@@ -14850,17 +12511,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-poolside-laguna-xs-2",
@@ -14896,17 +12547,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sakana-fugu",
@@ -14949,17 +12590,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sakana-fugu-ultra",
@@ -15002,17 +12633,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sakana-sakana-namazu",
@@ -15061,17 +12682,7 @@
           }
         ],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sarvam-sarvam-105b",
@@ -15107,17 +12718,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sarvam-sarvam-30b",
@@ -15153,17 +12754,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-sdaia-allam-2-7b",
@@ -15204,17 +12795,7 @@
             "url": "https://huggingface.co/ALLaM-AI/ALLaM-2.0-7B-Instruct"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-stepfun-step-3-5-flash",
@@ -15255,17 +12836,7 @@
             "url": "https://huggingface.co/stepfun-ai/Step-3.5-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-stepfun-step-3-5-flash-2603",
@@ -15306,17 +12877,7 @@
             "url": "https://huggingface.co/stepfun-ai/Step-3.5-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-stepfun-step-3-7-flash",
@@ -15359,17 +12920,7 @@
             "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-swiss-ai-apertus-70b",
@@ -15416,17 +12967,7 @@
             "url": "https://huggingface.co/swiss-ai/Apertus-70B-Instruct-2509"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-swiss-ai-apertus-8b",
@@ -15473,17 +13014,7 @@
             "url": "https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-tencent-hy3",
@@ -15524,17 +13055,7 @@
             "url": "https://huggingface.co/tencent/Hy3"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-tencent-hy3-preview",
@@ -15575,17 +13096,7 @@
             "url": "https://huggingface.co/tencent/Hy3-preview"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-tencent-hy4-preview",
@@ -15621,17 +13132,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-thinkingmachines-inkling",
@@ -15674,17 +13175,7 @@
             "url": "https://huggingface.co/thinkingmachines/Inkling"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-thinkingmachines-inkling-small",
@@ -15727,17 +13218,7 @@
             "url": "https://huggingface.co/thinkingmachines/Inkling-Small"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-trendyol-asure-12b",
@@ -15779,17 +13260,7 @@
             "url": "https://huggingface.co/Trendyol/Trendyol-LLM-Asure-12B"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-upstage-solar-pro2",
@@ -15825,17 +13296,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-upstage-solar-pro3",
@@ -15871,17 +13332,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-upstage-solar-pro4",
@@ -15917,17 +13368,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-1-fast",
@@ -15964,17 +13405,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-20-0309-non-reasoning",
@@ -16012,17 +13443,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-20-0309-reasoning",
@@ -16060,17 +13481,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-3",
@@ -16108,17 +13519,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-5",
@@ -16155,17 +13556,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-4-6",
@@ -16202,17 +13593,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xai-grok-build-0-1",
@@ -16250,17 +13631,82 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
+    },
+    {
+      "id": "model-xai-grok-imagine-image-2-0",
+      "source_id": "xai/grok-imagine-image-2.0",
+      "source_metadata": {
+        "name": "Grok Imagine Image 2.0",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "grok",
+        "release_date": "2026-08-07",
+        "last_updated": "2026-08-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-xai-grok-imagine-video-1-5",
+      "source_id": "xai/grok-imagine-video-1.5",
+      "source_metadata": {
+        "name": "Grok Imagine Video 1.5",
+        "description": "Video model for image-to-video generation, editing, and extension workflows",
+        "family": "grok",
+        "release_date": "2026-05-30",
+        "last_updated": "2026-05-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1024,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-flash",
@@ -16301,17 +13747,7 @@
             "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-omni",
@@ -16351,17 +13787,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-pro",
@@ -16397,17 +13823,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-5",
@@ -16451,17 +13867,7 @@
             "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-5-pro",
@@ -16502,17 +13908,7 @@
             "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-xiaomi-mimo-v2-5-pro-ultraspeed",
@@ -16553,17 +13949,7 @@
             "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro-FP4-DFlash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-5",
@@ -16604,17 +13990,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-5-air",
@@ -16655,17 +14031,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.5-Air"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-5-flash",
@@ -16701,17 +14067,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-5v",
@@ -16754,17 +14110,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.5V"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-6",
@@ -16805,17 +14151,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.6"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-6v",
@@ -16858,17 +14194,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.6V"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-6v-flash",
@@ -16911,17 +14237,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-7",
@@ -16962,17 +14278,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.7"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-7-flash",
@@ -17013,17 +14319,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.7-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-4-7-flashx",
@@ -17064,17 +14360,7 @@
             "url": "https://huggingface.co/zai-org/GLM-4.7-Flash"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5",
@@ -17115,17 +14401,7 @@
             "url": "https://huggingface.co/zai-org/GLM-5"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5-turbo",
@@ -17161,17 +14437,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5-1",
@@ -17212,17 +14478,7 @@
             "url": "https://huggingface.co/zai-org/GLM-5.1"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5-2",
@@ -17263,17 +14519,7 @@
             "url": "https://huggingface.co/zai-org/GLM-5.2"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5-3",
@@ -17309,17 +14555,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5-3-flash",
@@ -17358,17 +14594,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     },
     {
       "id": "model-zhipuai-glm-5v-turbo",
@@ -17407,17 +14633,7 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
+      }
     }
   ]
 }

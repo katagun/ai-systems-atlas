@@ -1,6 +1,6 @@
 # Models
 
-Use this document for provider-independent language-model releases, models.dev ingestion, and the `model_access` score profile. The canonical reviewed collection is `directory/models.json`; the automated queue is `directory/model-candidates.json` and is never published.
+Use this document for provider-independent model discovery, reviewed language-model releases, models.dev ingestion, and the `model_access` score profile. The complete automated source snapshot is `directory/models-dev.json`, the canonical reviewed collection is `directory/models.json`, and the workflow queue is `directory/model-candidates.json` and is never published.
 
 ## Record boundary
 
@@ -12,11 +12,15 @@ A model record represents one identifiable model release independently of where 
 - an assistant, agent, or memory product built on the model;
 - a downstream quantization, repackaging, fine-tune, or hosted endpoint unless that artifact has its own reviewed release boundary.
 
-Models therefore do not receive `system_family`, `primary_role`, or a system-family score. Reviewed releases participate in the mixed Directory for common discovery with numeric scores hidden; Models remains a sibling specialist view whose records share one dedicated profile for filtering and comparison.
+Models therefore do not receive `system_family`, `primary_role`, or a system-family score. Every commit-pinned models.dev source record participates in the mixed Directory for common discovery, visibly labeled as imported until Atlas review is complete. Models remains a sibling specialist view; only reviewed releases carry the dedicated profile used for scoring, filtering, and comparison.
+
+A models.dev source record is not an Atlas editorial conclusion. It carries only source-attributed identity, modality, capability, limit, date, license-label, open-weight, and link fields. It has no Atlas model type, distribution conclusion, source-model classification, license evidence, score, or `verified_at`. When a reviewed record has the same `source_id`, the UI overlays that reviewed record on the source row instead of showing a duplicate.
 
 ## Eligibility
 
-A release is eligible when authoritative sources establish its identity and it generates text as an output modality. Text-only and multimodal language models qualify. Image-, audio-, or video-only generators do not yet qualify because this collection's comparison vocabulary is about language-model access and deployment.
+The automated source snapshot preserves every record under models.dev's provider-independent `models/**/*.toml` tree, regardless of modality. This makes source coverage complete and lets readers discover image-, audio-, and video-output records without implying that Atlas has reviewed them.
+
+A release is eligible for the review queue and the scored Atlas collection when authoritative sources establish its identity and it generates text as an output modality. Text-only and multimodal language models qualify for review. Image-, audio-, or video-only generators remain source records but do not enter the language-model review queue because the comparison vocabulary is about language-model access and deployment.
 
 License, public weights, parameter count, benchmark performance, popularity, and first-party API availability never decide inclusion. A proprietary API-only model can qualify just as an open-weight release can. Those facts affect classification and the access score after the identity and evidence gates pass.
 
@@ -30,9 +34,9 @@ models.dev is discovery metadata, not Atlas editorial authority. Run:
 uv run python scripts/import_models_dev.py
 ```
 
-The importer resolves the `anomalyco/models.dev` `dev` ref to a full Git SHA, downloads that commit's immutable repository archive, and reads only `models/**/*.toml`. It deliberately ignores provider-specific files under `providers/`, provider pricing, benchmarks, and endpoint inventories. Each queue run records the commit, archive URL, archive SHA-256, source count, and eligible count.
+The importer resolves the `anomalyco/models.dev` `dev` ref to a full Git SHA, downloads that commit's immutable repository archive, and reads only `models/**/*.toml`. It deliberately ignores provider-specific files under `providers/`, provider pricing, benchmarks, and endpoint inventories. Each run writes the complete source snapshot to `models-dev.json` and the text-output review queue to `model-candidates.json`; both record the commit, archive URL, archive SHA-256, and source count, while the queue also records its eligible count.
 
-The import is transactional and fail-closed. It rejects an unexpected host, archive over 8 MiB, malformed paths or TOML, duplicate or colliding stable IDs, invalid field types, unsupported modalities, fewer than 100 or more than 20,000 source records, and an eligible-count drop greater than 20% from the previous successful snapshot. A failed run leaves the existing queue unchanged.
+The import is fail-closed. It rejects an unexpected host, archive over 8 MiB, malformed paths or TOML, duplicate or colliding stable IDs, invalid field types, unsupported modalities, fewer than 100 or more than 20,000 source records, and an eligible-count drop greater than 20% from the previous successful snapshot. Parsing and normalization complete before either output is replaced.
 
 Imported `source_metadata` preserves only these provider-independent facts:
 
@@ -45,7 +49,7 @@ Imported `source_metadata` preserves only these provider-independent facts:
 
 Benchmarks and prices are not copied. A models.dev license string is a review lead only; it never becomes an Atlas `licenses` or `source_model` conclusion automatically.
 
-Published `source_id` values are removed from the queue, but the importer never creates, edits, or deletes a published model. It cannot change descriptions, boundaries, licenses, evidence, scores, `verified_at`, or any other human-owned field.
+Every source record is published in `models-dev.json`. Reviewed `source_id` values are removed from the queue, but the importer never creates, edits, or deletes a reviewed model. It cannot change descriptions, boundaries, licenses, evidence, scores, `verified_at`, or any other human-owned field. The web projection combines the complete source snapshot with reviewed records by `source_id`; imported rows remain unscored and explicitly unreviewed.
 
 ## Review workflow
 
@@ -88,6 +92,6 @@ The score asks how clearly a model can be obtained, governed, deployed, and trac
 
 ## Attribution
 
-The imported provider-independent metadata is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`.
+The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`.
 
-See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the boundary decision and `DATA_MODEL.md` for the exact JSON shape.
+See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes.

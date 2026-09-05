@@ -15,7 +15,7 @@ Provide a comparison workflow for two to four records, with eligibility determin
 - systems can be selected only after one system family is chosen, and every selected system must use that family's score profile;
 - inference services can be selected together under the dedicated inference-service score profile;
 - local runtimes can be selected together under the dedicated local-runtime score profile;
-- models can be selected together under the dedicated `model_access` score profile in the Models view;
+- Atlas-reviewed models can be selected together under the dedicated `model_access` score profile in the Models view; imported models.dev source rows expose no comparison control;
 - mixed Directory results, cross-family system results, and specifications do not expose comparison selection;
 - changing to an incompatible Directory scope or system family clears the current selection; and
 - comparison state is encoded in the URL and restored only when every referenced record exists and belongs to one compatible profile.

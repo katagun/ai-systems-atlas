@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Import provider-independent models.dev metadata into an unpublished queue.
+"""Import provider-independent models.dev metadata into a source snapshot and queue.
 
-The importer owns discovery facts only. It never creates or edits the Atlas's
+The importer owns discovery facts only. It publishes the complete attributed
+source snapshot separately from the Atlas's reviewed model collection and
+maintains the unpublished review queue. It never creates or edits the Atlas's
 model classification, licence conclusion, score, prose, evidence, or editorial
 verification date. Published model records are removed from the candidate view
 but otherwise untouched.
@@ -28,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 CANDIDATES_PATH = DIRECTORY / "model-candidates.json"
 MODELS_PATH = DIRECTORY / "models.json"
+SOURCE_MODELS_PATH = DIRECTORY / "models-dev.json"
 
 UPSTREAM_REPO = "anomalyco/models.dev"
 UPSTREAM_REF = "dev"
@@ -278,6 +281,65 @@ def normalize_catalog(
     return candidates, eligible
 
 
+def normalize_source_catalog(
+    catalog: object,
+    *,
+    minimum_records: int = MIN_SOURCE_RECORDS,
+) -> list[dict[str, Any]]:
+    """Preserve every provider-independent source record without editorial fields."""
+    if not isinstance(catalog, dict):
+        raise ValueError("models.dev catalog must be an object keyed by source id")
+    if not minimum_records <= len(catalog) <= MAX_SOURCE_RECORDS:
+        raise ValueError("models.dev source record count is outside the fail-closed bounds")
+    records: list[dict[str, Any]] = []
+    ids: dict[str, str] = {}
+    for source_id, record in catalog.items():
+        if not isinstance(source_id, str) or not SOURCE_ID.fullmatch(source_id) or not isinstance(record, dict):
+            raise ValueError("models.dev records require path-style ids and object values")
+        record_id = stable_model_id(source_id)
+        if record_id in ids and ids[record_id] != source_id:
+            raise ValueError(f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}")
+        ids[record_id] = source_id
+        records.append({
+            "id": record_id,
+            "source_id": source_id,
+            "source_metadata": source_metadata(source_id, record),
+        })
+    records.sort(key=lambda item: item["source_id"])
+    return records
+
+
+def source_descriptor(source_bytes: bytes, commit: str) -> dict[str, str]:
+    return {
+        "repo": UPSTREAM_REPO,
+        "ref": UPSTREAM_REF,
+        "commit": commit,
+        "url": f"https://github.com/{UPSTREAM_REPO}",
+        "immutable_url": f"https://codeload.github.com/{UPSTREAM_REPO}/tar.gz/{commit}",
+        "path": "models/**/*.toml",
+        "license": UPSTREAM_LICENSE,
+        "sha256": hashlib.sha256(source_bytes).hexdigest(),
+    }
+
+
+def build_source_document(
+    catalog: object,
+    source_bytes: bytes,
+    commit: str,
+    *,
+    observed_at: str,
+    minimum_records: int = MIN_SOURCE_RECORDS,
+) -> dict[str, Any]:
+    records = normalize_source_catalog(catalog, minimum_records=minimum_records)
+    return {
+        "version": "1.0",
+        "updated_at": observed_at,
+        "source_record_count": len(records),
+        "source": source_descriptor(source_bytes, commit),
+        "models": records,
+    }
+
+
 def build_document(
     catalog: object,
     source_bytes: bytes,
@@ -303,16 +365,7 @@ def build_document(
         "updated_at": observed_at,
         "source_record_count": len(catalog) if isinstance(catalog, dict) else 0,
         "eligible_record_count": eligible,
-        "source": {
-            "repo": UPSTREAM_REPO,
-            "ref": UPSTREAM_REF,
-            "commit": commit,
-            "url": f"https://github.com/{UPSTREAM_REPO}",
-            "immutable_url": f"https://codeload.github.com/{UPSTREAM_REPO}/tar.gz/{commit}",
-            "path": "models/**/*.toml",
-            "license": UPSTREAM_LICENSE,
-            "sha256": hashlib.sha256(source_bytes).hexdigest(),
-        },
+        "source": source_descriptor(source_bytes, commit),
         "candidates": candidates,
     }
 
@@ -323,6 +376,7 @@ def run(
     *,
     observed_at: str | None = None,
 ) -> dict[str, Any]:
+    snapshot_date = observed_at or today()
     token = os.environ.get("GITHUB_TOKEN")
     commit_document, _ = getter(
         f"https://api.github.com/repos/{UPSTREAM_REPO}/commits/{UPSTREAM_REF}", token
@@ -343,10 +397,17 @@ def run(
         catalog,
         source_bytes,
         commit,
-        observed_at=observed_at or today(),
+        observed_at=snapshot_date,
         existing=existing,
         published_source_ids=published_source_ids,
     )
+    source_document = build_source_document(
+        catalog,
+        source_bytes,
+        commit,
+        observed_at=snapshot_date,
+    )
+    write_json(SOURCE_MODELS_PATH, source_document)
     write_json(CANDIDATES_PATH, document)
     return document
 
