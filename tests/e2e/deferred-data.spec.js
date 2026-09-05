@@ -161,17 +161,15 @@ test("a record dialog prints an em dash under a heading whose detail never arriv
 const blankBodies = content => content.evaluate(root => {
   const blanks = [];
   const text = element => (element.textContent || "").trim();
-  for (const section of root.querySelectorAll(".detail-block")) {
-    const body = [...section.children].filter(child => child.tagName !== "H3");
-    if (!body.map(text).join("")) blanks.push(`empty section: ${text(section.querySelector("h3"))}`);
+  // Every element that can render nothing, `td` included: the inference and
+  // runtime score tables label their rows from the taxonomy profile and read
+  // the value off the record, so a missing detail file leaves a table full of
+  // labels whose cells are blank while no block, list or paragraph is empty.
+  for (const element of root.querySelectorAll("p, ul, ol, li, td, .detail-block")) {
+    if (!text(element)) blanks.push(`empty <${element.tagName.toLowerCase()}>: ${text(element.previousElementSibling)}`);
   }
-  for (const list of root.querySelectorAll("ul")) {
-    if (!list.querySelector("li")) blanks.push(`empty list: ${text(list.previousElementSibling)}`);
-  }
-  for (const paragraph of root.querySelectorAll("p")) {
-    if (!text(paragraph)) blanks.push(`empty paragraph: ${text(paragraph.previousElementSibling)}`);
-    const strong = paragraph.querySelector("strong");
-    if (strong && text(paragraph) === text(strong)) blanks.push(`dangling label: ${text(strong)}`);
+  for (const strong of root.querySelectorAll("p > strong")) {
+    if (text(strong.parentElement) === text(strong)) blanks.push(`dangling label: ${text(strong)}`);
   }
   return blanks;
 });
@@ -203,4 +201,20 @@ test("a strengths list prints one em dash when detail never arrives", async ({ p
 
   const strengths = page.locator("#dialog-content .detail-block").filter({ hasText: "Strengths" });
   await expect(strengths.locator("li")).toHaveText(["—"]);
+});
+
+// The systems dialog builds its score rows from the record's own score object,
+// so a boot record carrying only `overall` yields no rows at all. The inference
+// and runtime dialogs build theirs from the taxonomy profile, which is always
+// loaded, so every row renders and only the value is missing — a different
+// failure that only a check on the cells can see.
+test("a score table built from the profile prints a dash in every cell detail would fill", async ({ page }) => {
+  await page.route("**/app/detail/**", route => route.abort());
+  await page.goto("/?record=inference:openai-api");
+
+  const table = page.locator("#inference-dialog-content .score-table");
+  await expect(table.locator("tr")).not.toHaveCount(1);
+  const dimensions = table.locator("tr").filter({ hasNotText: "Overall" });
+  await expect(dimensions.locator("td").nth(1)).toHaveText("—");
+  expect(await dimensions.locator("td:nth-child(2)").allInnerTexts()).not.toContain("");
 });
