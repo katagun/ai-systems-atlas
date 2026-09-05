@@ -51,7 +51,7 @@ class WebPayloadTests(unittest.TestCase):
     def test_boot_carries_the_dates_the_page_prints(self) -> None:
         """bootstrap() derives the 'Data updated' line from these envelope keys."""
         self.assertIn("generated_at", json.loads(self.payloads["app/systems.json"]))
-        for collection in ("inference", "runtimes", "specifications"):
+        for collection in ("inference", "runtimes", "specifications", "models"):
             self.assertIn("verified_at", json.loads(self.payloads[f"app/{collection}.json"]))
 
     def test_search_index_covers_every_record(self) -> None:
@@ -89,6 +89,7 @@ class WebPayloadTests(unittest.TestCase):
                 ("inference-services.json", "services"),
                 ("local-runtimes.json", "runtimes"),
                 ("specifications.json", "specifications"),
+                ("models.json", "models"),
             )
         )
         self.assertEqual(records, len(detail))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the web application's data payloads from the published catalog.
 
-The seven files under web/ are a published API with a compatibility promise.
+The eight files under web/ are a published API with a compatibility promise.
 These payloads are a projection of them shaped for how the page loads: a small
 boot payload per collection, a lazily fetched search index, and one detail file
 per record. See docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
@@ -21,6 +21,7 @@ COLLECTIONS = (
     ("inference", "inference-services.json", "services", "inference"),
     ("runtimes", "local-runtimes.json", "runtimes", "runtime"),
     ("specifications", "specifications.json", "specifications", "spec"),
+    ("models", "models.json", "models", "model"),
 )
 
 # What a card, a filter, a sort, and the finder read before anything is clicked.
@@ -44,6 +45,16 @@ BOOT_FIELDS = {
         "id", "name", "short_name", "specification_type", "scope", "status", "current_version",
         "repo", "url", "licenses", "description", "stewards", "related_specifications",
     ),
+    # source_metadata is a nested block rather than a card field, and it is here
+    # for the same reason the flat ones are: the card prints the family and the
+    # modality route out of it, and the modality facet filters on
+    # source_metadata.modalities. It costs about 1.1 KB gzipped across the
+    # collection, which is cheaper than a card that cannot paint until detail
+    # lands.
+    "models": (
+        "id", "name", "model_type", "developer", "description", "source_id", "source_model",
+        "licenses", "distribution_modes", "score_profile", "source_metadata",
+    ),
 }
 
 # Exactly the fields each filter in web/app-core.js searches today.
@@ -60,6 +71,10 @@ SEARCH_FIELDS = {
     "specifications": (
         "id", "name", "short_name", "description", "standardizes", "does_not_standardize",
         "repo", "stewards",
+    ),
+    "models": (
+        "id", "source_id", "name", "developer", "description", "access_boundary",
+        "strengths", "tradeoffs",
     ),
 }
 
