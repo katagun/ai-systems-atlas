@@ -140,8 +140,10 @@ test("search falls back to card text before the index arrives", () => {
 });
 
 test("indexed search keeps infix matching, which is why the index is raw text", () => {
-  const records = [{ id: "ollama", name: "Ollama", description: "Runner.", score: { overall: 1 } }];
-  const searchIndex = { ollama: "ollama runner. runs gguf models locally." };
+  // "llama" appears only in the index text, never in the record's own id,
+  // name, or description — so this fails if recordHaystack ignores the index.
+  const records = [{ id: "ol", name: "Ol", description: "Runner.", score: { overall: 1 } }];
+  const searchIndex = { ol: "ollama runner. runs gguf models locally." };
   assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
 });
 
@@ -194,6 +196,15 @@ test("vendor instruction search finds Copilot, Gemini, and Cline conventions", (
   }
 });
 
+test("indexed search reaches filterSpecifications through filters.searchIndex", () => {
+  // "prompts" lives only in the index text, not in the record's own fields —
+  // so this fails if filterSpecifications ignores filters.searchIndex.
+  const records = [{ id: "proto", name: "Proto", short_name: "Proto", description: "A protocol.", specification_type: "protocol", scope: "tool_data_integration", status: "published", licenses: ["Apache-2.0"], score: { overall: 1 } }];
+  const searchIndex = { proto: "a protocol. defines resources, tools, and prompts for hosts." };
+  assert.equal(filterSpecifications(records, { term: "prompts", searchIndex }).length, 1);
+  assert.equal(filterSpecifications(records, { term: "prompts" }).length, 0);
+});
+
 const inferenceServices = [
   { id: "openai-api", name: "OpenAI API", operator: "OpenAI", description: "First-party multimodal API.", service_boundary: "API, not ChatGPT.", service_type: "direct_model_api", delivery_modes: ["on_demand", "batch"], model_sources: ["first_party"], api_styles: ["openai_native"], regional_controls: "Regional projects.", retention_controls: "Endpoint-specific controls.", routing: "One provider.", customization: "Fine-tuning.", strengths: ["Broad modalities"], tradeoffs: ["First-party catalog"], score: { overall: 8.4 }, evidence: [{ url: "https://hidden.example/models" }] },
   { id: "amazon-bedrock", name: "Amazon Bedrock", operator: "Amazon Web Services", description: "Cloud model platform.", service_boundary: "Bedrock, not SageMaker.", service_type: "cloud_model_platform", delivery_modes: ["on_demand", "batch", "reserved_capacity"], model_sources: ["first_party", "third_party_proprietary", "open_weight", "customer_supplied"], api_styles: ["aws_native", "openai_compatible"], regional_controls: "Regional inference profiles.", retention_controls: "Model-specific terms.", routing: "Cross-region.", customization: "Custom models.", strengths: ["AWS governance"], tradeoffs: ["Regional variation"], score: { overall: 8.9 }, evidence: [] },
@@ -223,6 +234,15 @@ test("inference services can sort by their dedicated score", () => {
     filterInferenceServices(inferenceServices, { sort: "score" }).map(item => item.name),
     ["Amazon Bedrock", "OpenAI API", "OpenRouter"],
   );
+});
+
+test("indexed search reaches filterInferenceServices through filters.searchIndex", () => {
+  // "quotas" lives only in the index text, not in the record's own fields —
+  // so this fails if filterInferenceServices ignores filters.searchIndex.
+  const records = [{ id: "svc", name: "Svc", operator: "Op", description: "A service.", service_boundary: "Boundary.", service_type: "direct_model_api", delivery_modes: ["on_demand"], model_sources: ["first_party"], api_styles: ["openai_native"], score: { overall: 1 }, evidence: [] }];
+  const searchIndex = { svc: "a service. supports fine-grained retention quotas." };
+  assert.equal(filterInferenceServices(records, { term: "quotas", searchIndex }).length, 1);
+  assert.equal(filterInferenceServices(records, { term: "quotas" }).length, 0);
 });
 
 test("the unified directory discovers both collections without indexing hidden provider metadata", () => {
@@ -283,6 +303,15 @@ test("local runtimes sort by name by default and by their dedicated score on req
   );
 });
 
+test("indexed search reaches filterLocalRuntimes through filters.searchIndex", () => {
+  // "quantization" lives only in the index text, not in the record's own
+  // fields — so this fails if filterLocalRuntimes ignores filters.searchIndex.
+  const records = [{ id: "rt", name: "Rt", maintainer: "Maintainer", description: "A runtime.", runtime_boundary: "Boundary.", runtime_type: "desktop_runner", accelerators: ["cpu"], model_formats: ["gguf"], api_styles: ["openai_compatible"], score: { overall: 1 }, evidence: [] }];
+  const searchIndex = { rt: "a runtime. ships with quantization presets." };
+  assert.equal(filterLocalRuntimes(records, { term: "quantization", searchIndex }).length, 1);
+  assert.equal(filterLocalRuntimes(records, { term: "quantization" }).length, 0);
+});
+
 test("scored collection filtering treats scalar and list facets alike", () => {
   const options = {
     searchFields: ["name", "strengths"],
@@ -319,6 +348,37 @@ test("mixed directory browsing includes local runtimes alongside the other colle
   assert.deepEqual(
     filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, { term: "MLX" }).map(item => item.record.name),
     ["MLX LM"],
+  );
+});
+
+test("indexed search reaches filterDirectoryEntries through all three index keys", () => {
+  // Each term lives only in one collection's own index entry, never in any
+  // record's own fields — so this fails if filterDirectoryEntries wires a
+  // wrong key (e.g. filters.serviceIndex instead of filters.serviceSearchIndex)
+  // or ignores an index outright.
+  const dirProjects = [{ ...projects[3], id: "proj", name: "Proj", description: "A system.", score: { overall: 1 } }];
+  const dirServices = [{ id: "svc", name: "Svc", operator: "Op", description: "A service.", service_boundary: "Boundary.", service_type: "direct_model_api", delivery_modes: ["on_demand"], model_sources: ["first_party"], api_styles: ["openai_native"], score: { overall: 1 }, evidence: [] }];
+  const dirRuntimes = [{ id: "rt", name: "Rt", maintainer: "Maintainer", description: "A runtime.", runtime_boundary: "Boundary.", runtime_type: "desktop_runner", accelerators: ["cpu"], model_formats: ["gguf"], api_styles: ["openai_compatible"], score: { overall: 1 }, evidence: [] }];
+
+  const searchIndex = { proj: "a system. handles episodic recall for agents." };
+  const serviceSearchIndex = { svc: "a service. offers regional failover routing." };
+  const runtimeSearchIndex = { rt: "a runtime. ships with quantization presets." };
+  const filters = { searchIndex, serviceSearchIndex, runtimeSearchIndex };
+
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "episodic" })
+      .map(item => [item.kind, item.record.name]),
+    [["system", "Proj"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "failover" })
+      .map(item => [item.kind, item.record.name]),
+    [["inference", "Svc"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(dirProjects, dirServices, dirRuntimes, { ...filters, term: "quantization" })
+      .map(item => [item.kind, item.record.name]),
+    [["runtime", "Rt"]],
   );
 });
 
