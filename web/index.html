@@ -267,6 +267,7 @@
           <h2>What is not published</h2>
           <p>The candidate and license-review queues stay in the repository. They hold unreviewed entries a script classified automatically, and serving them would blur the line between a machine's guess and a reviewed record.</p>
           <p><code>logos.json</code> is served because this page needs it, but it holds vendored product marks rather than catalog data. Those marks identify their owners' products and are not covered by the catalog license.</p>
+          <p>The files under <code>/app/</code> are this page's own payload: the same records, split into what a card needs and what a record dialog needs, so the directory renders without downloading every review first. They are regenerated from the files above and carry no compatibility promise. Build against the endpoints on this page, not against those.</p>
         </article>
         <article>
           <h2>Reading the fields</h2>
