@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="peacefulcoexistance is an AI systems directory: reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
+  <meta name="description" content="peacefulcoexistance is an AI systems directory: reviewed AI systems, models, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
   <meta name="theme-color" content="#f7f9fc">
   <script>
     // Stamp a stored theme choice before first paint so the page never flashes
@@ -17,13 +17,13 @@
   </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="peacefulcoexistance — AI systems directory">
-  <meta property="og:description" content="Reviewed AI systems, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
+  <meta property="og:description" content="Reviewed AI systems, models, inference services, local runtimes, specifications, and protocols with explicit terms and evidence.">
   <meta property="og:url" content="https://peacefulcoexistance.com/">
   <title>peacefulcoexistance — AI systems directory</title>
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=5e6eb95e3a35">
+  <link rel="stylesheet" href="styles.css?v=6887dd616e11">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -38,6 +38,7 @@
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="finder">Finder</button>
+      <button class="tab" data-tab="models">Models</button>
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
       <button class="tab" data-tab="api">API</button>
@@ -168,6 +169,27 @@
       </section>
     </section>
 
+    <section id="models" class="view" aria-labelledby="models-title">
+      <div class="section-heading specifications-heading">
+        <p class="eyebrow" id="models-kicker">Reviewed model releases</p>
+        <h1 id="models-title">The model artifacts beneath the stack.</h1>
+        <p>Provider-independent language-model releases sourced from models.dev, then reviewed for identity, distribution terms, evidence, and deployability. Quality and benchmark rankings are deliberately out of scope.</p>
+      </div>
+      <section class="control-panel inference-controls" aria-label="Model filters">
+        <label class="search-field"><span>Search</span><input id="model-search" type="search" placeholder="Search models, developers, and boundaries" autocomplete="off"></label>
+        <label><span>Type</span><select id="model-type-filter"><option value="">All types</option></select></label>
+        <label><span>Distribution</span><select id="model-distribution-filter"><option value="">All distribution modes</option></select></label>
+        <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
+        <label><span>Source model</span><select id="model-source-filter"><option value="">All source models</option></select></label>
+        <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
+        <label><span>Sort</span><select id="model-sort-filter"><option value="score" selected>Access score</option><option value="name">Name</option></select></label>
+        <p class="filter-guidance">Scores compare access and deployability only. They exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
+      </section>
+      <div class="result-row"><p id="model-result-count" aria-live="polite"></p><button id="reset-model-filters" class="ghost-button">Clear filters</button></div>
+      <section id="model-grid" class="project-grid inference-grid" aria-label="Reviewed model releases"></section>
+      <nav id="model-pager" class="pager" aria-label="Models pagination"></nav>
+    </section>
+
     <section id="specifications" class="view" aria-labelledby="specifications-title">
       <div class="section-heading specifications-heading">
         <p class="eyebrow" id="specifications-kicker">Interoperability artifacts</p>
@@ -199,6 +221,7 @@
         <article><h2>Agent-system score</h2><p>Rates reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity. It is not comparable to the memory-system score.</p></article>
         <article><h2>Assistant-system score</h2><p>Rates product-level reliability, context continuity, tools and integrations, human control, data governance, interoperability, usability, and maturity. It does not rank underlying models.</p></article>
         <article><h2>Inference-service score</h2><p>Rates operational maturity, governance, regional control, serving flexibility, interoperability, traffic resilience, customization, and documentation. It excludes model quality, current price, and transient performance.</p></article>
+        <article><h2>Model-access score</h2><p>Rates license clarity, artifact availability, deployment portability, serving reach, lifecycle transparency, and documentation provenance. It excludes output quality, benchmarks, parameter count, price, latency, and throughput.</p></article>
         <article><h2>Vector-based</h2><p>Not a product category. It means embeddings are stored and searched by semantic similarity. PKM tools, RAG apps, memory services, and agents can all use vectors while remaining fundamentally different products.</p></article>
       </section>
     </section>
@@ -207,7 +230,7 @@
       <div class="section-heading">
         <p class="eyebrow">Published data</p>
         <h1 id="api-title">Every record here is a JSON file.</h1>
-        <p>This directory is built from seven static files served straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent. They are the same files this page loads.</p>
+        <p>This directory is built from eight static files served straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent. They are the same files this page loads.</p>
       </div>
 
       <div class="api-facts">
@@ -247,6 +270,11 @@
           <p class="endpoint-shape"><code>runtimes[]</code> · <code>verified_at</code> · <code>version</code></p>
         </article>
         <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/models.json">models.json</a></h2>
+          <p>Reviewed provider-independent model releases, with models.dev discovery metadata, human-reviewed distribution terms, and a dedicated access-and-deployability score.</p>
+          <p class="endpoint-shape"><code>models[]</code> · <code>source</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/specifications.json">specifications.json</a></h2>
           <p>Protocols, instruction conventions, metadata schemas, and package formats. These carry no score: they are contracts between systems rather than products to rank.</p>
           <p class="endpoint-shape"><code>specifications[]</code> · <code>verified_at</code> · <code>version</code></p>
@@ -266,7 +294,7 @@
       <section class="api-notes">
         <article>
           <h2>What is not published</h2>
-          <p>The candidate and license-review queues stay in the repository. They hold unreviewed entries a script classified automatically, and serving them would blur the line between a machine's guess and a reviewed record.</p>
+          <p>The system candidate, model candidate, and license-review queues stay in the repository. They hold unreviewed entries or imported discovery facts, and serving them would blur the line between machine-managed metadata and a reviewed record.</p>
           <p><code>logos.json</code> is served because this page needs it, but it holds vendored product marks rather than catalog data. Those marks identify their owners' products and are not covered by the catalog license.</p>
           <p>The files under <code>/app/</code> are this page's own payload: the same records, split into what a card needs and what a record dialog needs, so the directory renders without downloading every review first. They are regenerated from the files above and carry no compatibility promise. Build against the endpoints on this page, not against those.</p>
         </article>
@@ -299,6 +327,11 @@
     <div id="runtime-dialog-content"></div>
   </dialog>
 
+  <dialog id="model-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="model-dialog-content"></div>
+  </dialog>
+
   <aside id="comparison-tray" class="comparison-tray" aria-label="Comparison selection" hidden>
     <div class="comparison-tray-copy">
       <p class="eyebrow">Scoped comparison</p>
@@ -317,9 +350,9 @@
     <div id="comparison-dialog-content"></div>
   </dialog>
 
-  <footer><span>Systems scored within families. Inference services and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; the site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"5f254ce4b007","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","logos.json":"34ac4a7c29b1","app/systems.json":"d6a99395e80c","app/inference.json":"28aa03393916","app/runtimes.json":"5d5c7d7cd08c","app/specifications.json":"b510514cd03f","app/search/systems.json":"fd823a822e7a","app/search/inference.json":"e22f4d078444","app/search/runtimes.json":"38154eb28017","app/search/specifications.json":"077a4b537e9e","app/detail":"42c3b1d663c2"}</script>
-  <script src="app-core.js?v=e9a57fcf5bec" defer></script>
-  <script src="app.js?v=bc8934249a91" defer></script>
+  <footer><span>Systems score within families. Models, inference services, and local runtimes each use a separate score. Specifications remain unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; the site software is Apache-2.0.</span><span id="data-date"></span></footer>
+  <script type="application/json" id="data-versions">{"projects.json":"14cef6de8286","taxonomy.json":"013602d5c0dd","license-evidence.json":"3fc32bdf4b86","specifications.json":"8a3ba1bb7986","inference-services.json":"fcd2d5833170","local-runtimes.json":"f3978b6a3065","models.json":"825f5bd67563","logos.json":"34ac4a7c29b1"}</script>
+  <script src="app-core.js?v=dcd46c9a5323" defer></script>
+  <script src="app.js?v=de42b5b4d7a7" defer></script>
 </body>
 </html>

@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -266,6 +266,24 @@ const localRuntimes = [
   { id: "mlx-lm", name: "MLX LM", maintainer: "Apple machine learning research", description: "Apple silicon package.", runtime_boundary: "Package, not the MLX framework.", model_management: "Hugging Face Hub.", hardware_requirements: "Apple silicon only.", operational_controls: "Per-command parameters.", runtime_type: "embedded_library", accelerators: ["metal"], model_formats: ["mlx"], serving_modes: ["single_stream"], api_styles: ["openai_compatible"], deployment_surfaces: ["library"], strengths: ["First-party Apple path"], tradeoffs: ["Server not for production"], score: { overall: 4.43 }, evidence: [] },
 ];
 
+const models = [
+  { id: "model-qwen", source_id: "alibaba/qwen", name: "Qwen", developer: "Alibaba", description: "Open-weight language model.", access_boundary: "Model release, not an API.", model_type: "language_model", distribution_modes: ["downloadable_weights", "third_party_hosting"], source_model: "open_source", licenses: ["Apache-2.0"], source_metadata: { family: "qwen", modalities: { input: ["text"], output: ["text"] } }, strengths: ["Portable weights"], tradeoffs: ["Runtime required"], score: { overall: 8.0 } },
+  { id: "model-vision", source_id: "acme/vision", name: "Vision Model", developer: "Acme", description: "Hosted multimodal model.", access_boundary: "Model release, not the host.", model_type: "multimodal_language_model", distribution_modes: ["developer_api"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], source_metadata: { family: null, modalities: { input: ["text", "image"], output: ["text"] } }, strengths: ["Image input"], tradeoffs: ["No weights"], score: { overall: 6.0 } },
+];
+
+test("model filters combine provider-independent facets and modalities", () => {
+  assert.deepEqual(
+    filterModels(models, { type: "language_model", distribution: "downloadable_weights", sourceModel: "open_source", license: "Apache-2.0", modality: "text" }).map(item => item.name),
+    ["Qwen"],
+  );
+  assert.deepEqual(filterModels(models, { modality: "image" }).map(item => item.name), ["Vision Model"]);
+});
+
+test("model search indexes editorial boundary prose but not nested source metadata", () => {
+  assert.deepEqual(filterModels(models, { term: "not an API" }).map(item => item.name), ["Qwen"]);
+  assert.deepEqual(filterModels(models, { term: "qwen", sort: "score" }).map(item => item.name), ["Qwen"]);
+});
+
 test("local runtime search covers visible boundary prose but not evidence URLs", () => {
   assert.deepEqual(
     filterLocalRuntimes(localRuntimes, { term: "Ollama Cloud" }).map(item => item.name),
@@ -466,6 +484,7 @@ test("every logo mapping points at a published record and a vendored plain mark"
     ...readJSON("projects.json").projects.map(record => record.id),
     ...readJSON("inference-services.json").services.map(record => record.id),
     ...readJSON("local-runtimes.json").runtimes.map(record => record.id),
+    ...readJSON("models.json").models.map(record => record.id),
   ]);
 
   assert.ok(Object.keys(logos.records).length > 0);
@@ -486,6 +505,7 @@ test("record references parse only a known kind and a plain id", () => {
   assert.deepEqual(parseRecordReference("spec:mcp"), { kind: "spec", id: "mcp" });
   assert.deepEqual(parseRecordReference("inference:openai-api"), { kind: "inference", id: "openai-api" });
   assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
+  assert.deepEqual(parseRecordReference("model:model-alibaba-qwen2-5-coder-0-5b"), { kind: "model", id: "model-alibaba-qwen2-5-coder-0-5b" });
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
@@ -496,6 +516,7 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("spec", "mcp"), "records/specifications/mcp/");
   assert.equal(shareRecordPath("inference", "openai-api"), "records/inference-services/openai-api/");
   assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
+  assert.equal(shareRecordPath("model", "model-alibaba-qwen2-5-coder-0-5b"), "records/models/model-alibaba-qwen2-5-coder-0-5b/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
 });
 

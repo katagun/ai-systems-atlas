@@ -2,7 +2,7 @@
 
 ## Scope
 
-The scored catalog covers reviewed operational memory, agent, and assistant systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md).
+The scored catalog covers reviewed operational memory, agent, and assistant systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md). Provider-independent language-model releases belong in the separate Models collection described in [`MODELS.md`](MODELS.md); they never receive a system family or role.
 
 ## Inclusion gate
 
@@ -31,6 +31,8 @@ A provider-native SDK or harness qualifies only when agent execution—not model
 A system whose claimed outcome is scientific discovery qualifies on the operational outcome it owns, not on the significance of the findings it claims. Sourced investigation is a research agent whether the sources are papers or executed analyses; the mechanism belongs in capabilities and execution boundaries. A published paper's reference code is a non-operational research input when no release, package, or maintained run path makes it adoptable, regardless of where the paper appeared. And a discovery reported only by the system's own vendor is evidence about the vendor's claim, not about the system's reliability: record it in `weaknesses` and in `research_confidence` rather than scoring it. See [ADR 023](adr/023-autonomous-science-systems-are-not-a-role.md).
 
 Assistants qualify when a maintained end-user product owns a broad conversational workspace, durable context, connected information, model choice, or governed work assistance. Score the documented product boundary, not an underlying model benchmark or its most agentic optional feature. Keep branded products separate when their operational outcomes differ: an assistant, coding agent, SDK, and provider API from one vendor are not duplicate records. Split consumer and enterprise assistants when their governing terms, tenant data, administration, or integration boundaries materially differ. Thin prompt wrappers and raw API playgrounds remain outside the scored catalog.
+
+An identifiable language-model release can qualify for Models independently of its source model or distribution mode. Its record represents the model artifact, not its developer as a company, managed API, inference host, local runtime, downstream fine-tune, quantization, or application. models.dev metadata supplies candidates and attributed discovery facts only; authoritative first-party evidence and human review own the published boundary, licenses, source-model conclusion, prose, and score. See [`MODELS.md`](MODELS.md) and [ADR 025](adr/025-model-releases-are-independent-curated-records.md).
 
 ## Classification
 
@@ -85,7 +87,7 @@ Scores run from 0 to 10. The overall is the profile's weighted sum rounded to tw
 - usability and access: 8%;
 - maturity: 10%.
 
-The three profiles are not comparable. Do not produce a cross-family leaderboard or reuse a project's old score when moving it between families. Stars, forks, activity, and archival status are live signals; they never overwrite editorial scores.
+The three system-family profiles are not comparable. Dedicated inference-service, local-runtime, and model-access profiles are also incomparable with them and with each other. Do not produce a cross-profile leaderboard or reuse a project's old score when moving it between families. Stars, forks, activity, and archival status are live signals; they never overwrite editorial scores.
 
 ## Human and automated fields
 
@@ -106,6 +108,6 @@ A candidate's `triage` block is likewise evidence, not a conclusion: accepting a
 7. Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py`.
 8. Run validation and tests with `uv`, then exercise the static UI.
 
-Automated discovery writes durable candidates with proposed family and role only. Candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.
+Automated system discovery writes durable candidates with proposed family and role only. Automated model ingestion writes provider-independent source metadata to its own queue without a proposed Atlas license, source model, boundary, or score. Candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.
 
 See `docs/OPERATIONS.md` for candidate promotion and license-review resolution runbooks. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md) for the inclusion decision.

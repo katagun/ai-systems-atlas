@@ -26,6 +26,10 @@ class SharePageTests(unittest.TestCase):
         self.assertEqual("records/specifications/mcp/index.html", share_page_path("spec", "mcp"))
         self.assertEqual("records/inference-services/openai-api/index.html", share_page_path("inference", "openai-api"))
         self.assertEqual("records/local-runtimes/ollama/index.html", share_page_path("runtime", "ollama"))
+        self.assertEqual(
+            "records/models/model-alibaba-qwen2-5-coder-0-5b/index.html",
+            share_page_path("model", "model-alibaba-qwen2-5-coder-0-5b"),
+        )
         with self.assertRaises(ValueError):
             share_page_path("constructor", "ollama")
         with self.assertRaises(ValueError):
@@ -40,7 +44,7 @@ class SharePageTests(unittest.TestCase):
         self.assertNotIn("wor…", capped)
 
     def test_every_record_gets_a_page_plus_sitemap_and_robots(self) -> None:
-        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes"))
+        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes", "models"))
         self.assertEqual(records + 2, len(self.pages))
         self.assertIn("sitemap.xml", self.pages)
         self.assertIn("robots.txt", self.pages)
@@ -69,9 +73,13 @@ class SharePageTests(unittest.TestCase):
         self.assertIn('href="../../../?record=spec:mcp"', self.pages["records/specifications/mcp/index.html"])
         self.assertIn('href="../../../?record=inference:openai-api"', self.pages["records/inference-services/openai-api/index.html"])
         self.assertIn('href="../../../?record=runtime:ollama"', self.pages["records/local-runtimes/ollama/index.html"])
+        self.assertIn(
+            'href="../../../?record=model:model-alibaba-qwen2-5-coder-0-5b"',
+            self.pages["records/models/model-alibaba-qwen2-5-coder-0-5b/index.html"],
+        )
 
     def test_pages_escape_record_text_everywhere(self) -> None:
-        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes")}
+        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes", "models")}
         catalog["taxonomy"] = self.catalog["taxonomy"]
         catalog["runtimes"] = [{
             **self.catalog["runtimes"][0],

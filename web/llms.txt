@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-> A reviewed directory of agent, memory, and assistant systems, plus interoperability specifications, managed inference services, and self-operated local runtimes. Every record carries reviewed license evidence and a verified_at date rather than automated scraping or self-reported claims. Relevance and operational capability determine inclusion; license or source model never does.
+> A reviewed directory of agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes. Published records carry reviewed evidence and a verified_at date; imported discovery metadata remains distinct from human conclusions.
 
 ## Data
 
@@ -15,6 +15,7 @@ reuse it, including commercially, with credit to AI Systems Atlas
 - [specifications.json](https://peacefulcoexistance.com/specifications.json): unscored interoperability protocols, metadata schemas, instruction conventions, and package formats
 - [inference-services.json](https://peacefulcoexistance.com/inference-services.json): managed inference services with a dedicated operational-service score
 - [local-runtimes.json](https://peacefulcoexistance.com/local-runtimes.json): self-operated inference runtimes with a dedicated runtime score
+- [models.json](https://peacefulcoexistance.com/models.json): reviewed provider-independent model releases with a dedicated access-and-deployability score and models.dev source metadata
 
 ## Reference
 

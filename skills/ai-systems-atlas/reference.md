@@ -8,6 +8,7 @@ Loaded on demand from [SKILL.md](SKILL.md) when a query needs a field the summar
 - `specifications.json`: `{version, verified_at, specifications: [...]}`
 - `inference-services.json`: `{version, verified_at, services: [...], generated_at}`
 - `local-runtimes.json`: `{version, verified_at, runtimes: [...]}`
+- `models.json`: `{version, verified_at, source: {...}, models: [...]}`
 - `taxonomy.json`: `{version, principle, <enum and score-profile groups, listed below>}`
 - `exclusions.json`: `{generated_at, entries: [...]}`
 
@@ -35,8 +36,14 @@ Never scored. `specification_type` is one of `protocol`, `metadata_schema`, `ins
 
 `score_profile` is always `local_runtime`; its eight dimensions are defined in [docs/LOCAL_RUNTIMES.md](../../docs/LOCAL_RUNTIMES.md). The profile never scores throughput, latency, or hardware cost.
 
+## `models.json` record fields
+
+`id, source_id, name, developer, url, description, model_type, distribution_modes, source_metadata, licenses, source_model, license_review_status, license_note, license_evidence, access_boundary, strengths, tradeoffs, score_profile, score, evidence, metadata_verified_at, verified_at`
+
+`source_metadata` preserves provider-independent discovery facts imported from the pinned models.dev snapshot. The surrounding fields are human-reviewed Atlas conclusions. `score_profile` is always `model_access`; see [docs/MODELS.md](../../docs/MODELS.md). The profile never scores output quality, benchmarks, parameter count, current price, latency, or throughput.
+
 ## `taxonomy.json` top-level groups
 
-`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, inference_service_score_profile, local_runtime_score_profile, specification_types, specification_scopes, specification_statuses, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
+`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, model_types, model_modalities, model_distribution_modes, inference_service_score_profile, local_runtime_score_profile, model_score_profile, specification_types, specification_scopes, specification_statuses, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
 
-Each group is a list of enum entries (or a scoring-profile object for the two `*_score_profile` keys). Fetch `taxonomy.json` before filtering by any enum field to confirm current valid values — enums are added and renamed over time, and this reference is not re-verified on every taxonomy change.
+Each group is a list of enum entries (or a scoring-profile object for the three `*_score_profile` keys). Fetch `taxonomy.json` before filtering by any enum field to confirm current valid values — enums are added and renamed over time, and this reference is not re-verified on every taxonomy change.

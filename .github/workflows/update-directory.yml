@@ -43,6 +43,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run python scripts/update_directory.py
+      - name: Refresh models.dev candidate metadata
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run python scripts/import_models_dev.py
       - name: Regenerate app payloads
         run: uv run python scripts/build_web_payload.py
       - name: Regenerate share pages

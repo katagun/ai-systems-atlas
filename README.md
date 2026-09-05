@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-AI Systems Atlas is a curated directory of operational AI systems, the specifications that connect them, the managed services that run model inference, and the runtimes you host yourself. One Directory surface discovers systems, inference services, and local runtimes while preserving their separate schemas and score profiles; specifications remain classified and unscored. Terms, licensing, and reviewed evidence stay explicit throughout.
+AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases, the specifications that connect systems, managed inference services, and runtimes you host yourself. One Directory surface discovers systems, inference services, and local runtimes while preserving their separate schemas and score profiles; Models and Specifications remain sibling views. Terms, licensing, source attribution, and reviewed evidence stay explicit throughout.
 
 Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/). Every reviewed record is also published as JSON with no key and no rate limit — the [API page](https://peacefulcoexistance.com/?view=api) lists each file, and [llms.txt](https://peacefulcoexistance.com/llms.txt) says the same thing for an agent.
 

@@ -1,0 +1,318 @@
+{
+  "version": "1.0",
+  "verified_at": "2026-09-04",
+  "source": {
+    "id": "models-dev",
+    "name": "models.dev",
+    "repo": "anomalyco/models.dev",
+    "commit": "ef71a4865a5821d8cd24f171a0100156a02e808e",
+    "url": "https://github.com/anomalyco/models.dev",
+    "license": "MIT"
+  },
+  "models": [
+    {
+      "id": "model-alibaba-qwen2-5-coder-0-5b",
+      "source_id": "alibaba/qwen2.5-coder-0.5b",
+      "name": "Qwen2.5-Coder-0.5B",
+      "developer": "Qwen",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B",
+      "description": "A compact code-focused Qwen release with developer-published Safetensors weights and an Apache-2.0 distribution boundary.",
+      "model_type": "language_model",
+      "distribution_modes": ["downloadable_weights"],
+      "source_metadata": {
+        "name": "Qwen2.5-Coder-0.5B",
+        "description": "Tiny open Qwen code model for lightweight completion and on-device coding",
+        "family": "qwen",
+        "release_date": "2024-11-12",
+        "last_updated": "2024-11-12",
+        "knowledge_cutoff": null,
+        "modalities": {"input": ["text"], "output": ["text"]},
+        "capabilities": {"attachment": false, "reasoning": false, "tool_call": false, "structured_output": null, "temperature": true},
+        "limits": {"context": 32768, "input": null, "output": 8192},
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [{"label": "Hugging Face", "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B"}]
+      },
+      "licenses": ["Apache-2.0"],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model repository applies Apache-2.0 to the published model files and weights. The classification describes distribution terms, not model quality or training-data provenance.",
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Official Qwen2.5-Coder-0.5B model repository, weights, tokenizer, and accompanying files", "kind": "web_terms", "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B/blob/main/LICENSE", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the provider-independent Qwen2.5-Coder-0.5B model release. Hosted copies, quantized repackagings, inference providers, and applications built on the model are separate boundaries.",
+      "strengths": ["Small developer-published artifact with a permissive, familiar license", "Official model card documents direct Transformers loading and Safetensors distribution"],
+      "tradeoffs": ["The source record establishes model capabilities and limits but does not establish every downstream runtime or quantization", "A compact specialist release should not be treated as representative of the larger Qwen family"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 9, "artifact_availability": 8, "deployment_portability": 8, "serving_reach": 7, "lifecycle_transparency": 7, "documentation_provenance": 8, "overall": 7.96},
+      "evidence": [
+        {"kind": "web", "label": "Official model card and weight repository", "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/alibaba/qwen2.5-coder-0.5b.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-anthropic-claude-sonnet-4-6",
+      "source_id": "anthropic/claude-sonnet-4-6",
+      "name": "Claude Sonnet 4.6",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-4-6/overview",
+      "description": "A pinned multimodal Claude release available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": ["developer_api", "third_party_hosting"],
+      "source_metadata": {
+        "name": "Claude Sonnet 4.6",
+        "description": "Claude workhorse for coding agents, careful analysis, and production cost control",
+        "family": "claude-sonnet",
+        "release_date": "2026-02-17",
+        "last_updated": "2026-03-13",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {"input": ["text", "image", "pdf"], "output": ["text"]},
+        "capabilities": {"attachment": true, "reasoning": true, "tool_call": true, "structured_output": null, "temperature": true},
+        "limits": {"context": 1000000, "input": null, "output": 64000},
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": ["LicenseRef-Anthropic-Commercial-Terms"],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides Claude Sonnet 4.6 as a managed service under its Commercial Terms of Service and incorporated policies. The terms permit customer applications but do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {"license_id": "LicenseRef-Anthropic-Commercial-Terms", "scope": "Commercial access to Claude Sonnet 4.6 through Anthropic API keys and related Anthropic services, including incorporated usage restrictions", "kind": "web_terms", "url": "https://www.anthropic.com/legal/commercial-terms", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the fixed Claude Sonnet 4.6 model release identified by claude-sonnet-4-6. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude applications, and later Sonnet releases remain separate service or product boundaries.",
+      "strengths": ["Anthropic documents a fixed release ID, lifecycle status, release date, and retirement commitment", "The official model page identifies first-party API access and three independent cloud-platform paths"],
+      "tradeoffs": ["No developer-published weights are available for self-operation", "Access and continued availability depend on managed-service terms, regional eligibility, and provider lifecycle decisions"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 4, "artifact_availability": 1, "deployment_portability": 2, "serving_reach": 9, "lifecycle_transparency": 9, "documentation_provenance": 9, "overall": 5.06},
+      "evidence": [
+        {"kind": "web", "label": "Official Claude Sonnet 4.6 model and platform documentation", "url": "https://platform.claude.com/docs/en/models/sonnet-4-6/overview", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Official Claude model ID and versioning policy", "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/anthropic/claude-sonnet-4-6.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-cohere-c4ai-aya-expanse-8b",
+      "source_id": "cohere/c4ai-aya-expanse-8b",
+      "name": "Aya Expanse 8B",
+      "developer": "Cohere Labs",
+      "url": "https://huggingface.co/CohereLabs/aya-expanse-8b",
+      "description": "A multilingual research model distributed as downloadable Safetensors weights under noncommercial terms plus Cohere Labs' acceptable-use policy.",
+      "model_type": "language_model",
+      "distribution_modes": ["downloadable_weights"],
+      "source_metadata": {
+        "name": "Aya Expanse 8B",
+        "description": "Compact open multilingual model optimized for generation across 23 languages",
+        "family": null,
+        "release_date": "2024-10-24",
+        "last_updated": "2024-10-24",
+        "knowledge_cutoff": null,
+        "modalities": {"input": ["text"], "output": ["text"]},
+        "capabilities": {"attachment": false, "reasoning": false, "tool_call": false, "structured_output": null, "temperature": true},
+        "limits": {"context": 8000, "input": null, "output": 4000},
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [{"label": "Hugging Face", "url": "https://huggingface.co/CohereLabs/aya-expanse-8b"}]
+      },
+      "licenses": ["CC-BY-NC-4.0", "LicenseRef-Cohere-Labs-AUP"],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card limits the release to noncommercial use and requires compliance with the Cohere Labs Acceptable Use Policy. Public weights therefore do not make this an open-source model distribution.",
+      "license_evidence": [
+        {"license_id": "CC-BY-NC-4.0", "scope": "Aya Expanse 8B weights and model release under Cohere Labs' CC-BY-NC terms", "kind": "web_terms", "url": "https://cohere.com/cohere-labs-cc-by-nc-license", "verified_at": "2026-09-04"},
+        {"license_id": "LicenseRef-Cohere-Labs-AUP", "scope": "Mandatory acceptable-use restrictions referenced by the official Aya Expanse model card", "kind": "web_terms", "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the Aya Expanse 8B research release. Cohere's managed API, downstream fine-tunes, inference hosts, and larger Aya variants are separate records or service boundaries.",
+      "strengths": ["Developer-published multilingual weights with a detailed first-party model card", "The governing noncommercial and acceptable-use restrictions are explicit"],
+      "tradeoffs": ["The noncommercial boundary prevents general production reuse without separate permission", "The source metadata does not establish broad runtime or serving coverage"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 5, "artifact_availability": 8, "deployment_portability": 7, "serving_reach": 6, "lifecycle_transparency": 6, "documentation_provenance": 8, "overall": 6.62},
+      "evidence": [
+        {"kind": "web", "label": "Official model card and weight repository", "url": "https://huggingface.co/CohereLabs/aya-expanse-8b", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/cohere/c4ai-aya-expanse-8b.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-deepseek-deepseek-v3",
+      "source_id": "deepseek/deepseek-v3",
+      "name": "DeepSeek-V3",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3",
+      "description": "A developer-published mixture-of-experts language-model release whose downloadable weights are governed by the DeepSeek Model License rather than an OSI-approved software license.",
+      "model_type": "language_model",
+      "distribution_modes": ["downloadable_weights"],
+      "source_metadata": {
+        "name": "DeepSeek-V3",
+        "description": "Open DeepSeek MoE chat model for coding, math, and general reasoning",
+        "family": "deepseek",
+        "release_date": "2024-12-26",
+        "last_updated": "2024-12-26",
+        "knowledge_cutoff": null,
+        "modalities": {"input": ["text"], "output": ["text"]},
+        "capabilities": {"attachment": false, "reasoning": false, "tool_call": true, "structured_output": null, "temperature": true},
+        "limits": {"context": 131072, "input": null, "output": 8192},
+        "reported_open_weights": true,
+        "reported_license": "DeepSeek Model License",
+        "links": [],
+        "weights": [{"label": "Hugging Face", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3"}]
+      },
+      "licenses": ["LicenseRef-DeepSeek-Model-1.0"],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The downloadable model weights use DeepSeek Model License 1.0, which grants broad reuse and commercial permissions while imposing use-based restrictions and downstream notice obligations.",
+      "license_evidence": [
+        {"license_id": "LicenseRef-DeepSeek-Model-1.0", "scope": "DeepSeek-V3 Base and Chat model weights and derivatives", "kind": "web_terms", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3/blob/108e1e0b85635f3dd01561649ef21ad2be63749b/LICENSE-MODEL", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the DeepSeek-V3 provider-independent model release. The DeepSeek API, downstream quantizations and fine-tunes, and later V3 revisions remain separate boundaries.",
+      "strengths": ["Developer-published weight artifacts and model-specific governing terms", "The model card distinguishes the model license from the repository code license"],
+      "tradeoffs": ["Use-based restrictions make the release source-available rather than open source", "The very large artifact narrows practical self-operation even though weights are downloadable"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 7, "artifact_availability": 8, "deployment_portability": 6, "serving_reach": 7, "lifecycle_transparency": 7, "documentation_provenance": 8, "overall": 7.12},
+      "evidence": [
+        {"kind": "web", "label": "Official model card and weight repository", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/deepseek/deepseek-v3.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-meta-llama-3-2-11b-vision-instruct",
+      "source_id": "meta/llama-3.2-11b-vision-instruct",
+      "name": "Llama 3.2 11B Vision Instruct",
+      "developer": "Meta",
+      "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct",
+      "description": "A downloadable image-and-text instruction model governed by the Llama 3.2 Community License and its incorporated acceptable-use and regional restrictions.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": ["downloadable_weights", "third_party_hosting"],
+      "source_metadata": {
+        "name": "Llama-3.2-11B-Vision-Instruct",
+        "description": "Open multimodal Llama model for image understanding, captioning, and visual QA",
+        "family": "llama",
+        "release_date": "2024-09-25",
+        "last_updated": "2024-09-25",
+        "knowledge_cutoff": "2023-12",
+        "modalities": {"input": ["text", "image"], "output": ["text"]},
+        "capabilities": {"attachment": true, "reasoning": false, "tool_call": true, "structured_output": null, "temperature": true},
+        "limits": {"context": 128000, "input": null, "output": 4096},
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [{"label": "Hugging Face", "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct"}]
+      },
+      "licenses": ["LicenseRef-Llama-3.2-Community", "LicenseRef-Llama-3.2-AUP"],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Meta publishes the model weights under the custom Llama 3.2 Community License, which carries attribution and redistribution duties, a large-platform commercial threshold, and an incorporated acceptable-use policy. The multimodal grant also excludes organizations established in the European Union, so public weights do not make this an open-source distribution.",
+      "license_evidence": [
+        {"license_id": "LicenseRef-Llama-3.2-Community", "scope": "Llama 3.2 11B Vision Instruct weights, tokenizer, model code, and related Llama materials", "kind": "web_terms", "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct/blob/9eb2daaa8597bf192a8b0e73f848f3a102794df5/LICENSE.txt", "verified_at": "2026-09-04"},
+        {"license_id": "LicenseRef-Llama-3.2-AUP", "scope": "Acceptable-use and multimodal regional restrictions incorporated into the Llama 3.2 Community License", "kind": "web_terms", "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct/blob/9eb2daaa8597bf192a8b0e73f848f3a102794df5/USE_POLICY.md", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the Llama 3.2 11B Vision Instruct release. The 11B base model, 90B variants, quantizations, fine-tunes, Meta-hosted products, and independent serving providers are separate model or service boundaries.",
+      "strengths": ["Meta publishes both Transformers-compatible and original checkpoint artifacts", "The official model card documents several self-operated runtimes and hosted deployment paths"],
+      "tradeoffs": ["Artifact access is gated and the custom license carries use, attribution, scale, and multimodal regional restrictions", "Runtime and hosted-provider coverage can change independently of this fixed model release"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 5, "artifact_availability": 7, "deployment_portability": 8, "serving_reach": 8, "lifecycle_transparency": 7, "documentation_provenance": 8, "overall": 7.04},
+      "evidence": [
+        {"kind": "web", "label": "Official model card, checkpoints, and deployment guidance", "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/meta/llama-3.2-11b-vision-instruct.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-mistral-pixtral-12b",
+      "source_id": "mistral/pixtral-12b",
+      "name": "Pixtral 12B",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Pixtral-12B-2409",
+      "description": "A downloadable image-and-text instruction model published by Mistral AI with a Safetensors checkpoint and an Apache-2.0 distribution boundary.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": ["downloadable_weights"],
+      "source_metadata": {
+        "name": "Pixtral 12B",
+        "description": "Mistral vision-language model for image understanding and multimodal chat",
+        "family": "pixtral",
+        "release_date": "2024-09-01",
+        "last_updated": "2024-09-01",
+        "knowledge_cutoff": "2024-09",
+        "modalities": {"input": ["text", "image"], "output": ["text"]},
+        "capabilities": {"attachment": true, "reasoning": false, "tool_call": true, "structured_output": null, "temperature": true},
+        "limits": {"context": 128000, "input": null, "output": 128000},
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [{"label": "Hugging Face", "url": "https://huggingface.co/mistralai/Pixtral-12B-2409"}]
+      },
+      "licenses": ["Apache-2.0"],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official Mistral AI model card identifies Apache-2.0 as the license for the published Pixtral 12B repository and checkpoint. The repository exposes the license identifier in its pinned model card rather than a separate license file.",
+      "license_evidence": [
+        {"license_id": "Apache-2.0", "scope": "Official Pixtral-12B-2409 model repository, consolidated Safetensors checkpoint, tokenizer, and parameters", "kind": "web_terms", "url": "https://huggingface.co/mistralai/Pixtral-12B-2409/blob/a5ca2b7a9421a35ea24411c46e970758b8d3c6a7/README.md", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the Pixtral-12B-2409 instruction release. The base model, hosted Mistral services, downstream quantizations and fine-tunes, and later Pixtral releases remain separate boundaries.",
+      "strengths": ["Mistral AI publishes a directly downloadable consolidated checkpoint and tokenizer artifacts", "The official model card documents a self-operated vLLM path and names the distribution license"],
+      "tradeoffs": ["The license statement is carried in model-card metadata instead of a repository license file", "The model card recommends a particular serving stack, so portability beyond documented paths needs independent runtime review"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 8, "artifact_availability": 8, "deployment_portability": 8, "serving_reach": 6, "lifecycle_transparency": 7, "documentation_provenance": 8, "overall": 7.6},
+      "evidence": [
+        {"kind": "web", "label": "Official model card, checkpoint, and vLLM deployment guidance", "url": "https://huggingface.co/mistralai/Pixtral-12B-2409", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/mistral/pixtral-12b.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-openai-gpt-4-1",
+      "source_id": "openai/gpt-4.1",
+      "name": "GPT-4.1",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4.1",
+      "description": "A text-and-image model release exposed as a stable dated snapshot and alias through OpenAI's managed developer API, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": ["developer_api"],
+      "source_metadata": {
+        "name": "GPT-4.1",
+        "description": "Long-lived GPT workhorse for coding, instruction following, and production apps",
+        "family": "gpt",
+        "release_date": "2025-04-14",
+        "last_updated": "2025-04-14",
+        "knowledge_cutoff": "2024-04",
+        "modalities": {"input": ["text", "image", "pdf"], "output": ["text"]},
+        "capabilities": {"attachment": true, "reasoning": false, "tool_call": true, "structured_output": true, "temperature": true},
+        "limits": {"context": 1047576, "input": null, "output": 32768},
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": ["LicenseRef-OpenAI-Services-Agreement"],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-4.1 as an API service governed by the OpenAI Services Agreement and incorporated service-specific policies. Those terms govern managed access and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {"license_id": "LicenseRef-OpenAI-Services-Agreement", "scope": "Business and developer access to the GPT-4.1 model through OpenAI API Services and incorporated service-specific terms", "kind": "web_terms", "url": "https://openai.com/policies/services-agreement/", "verified_at": "2026-09-04"}
+      ],
+      "access_boundary": "This record represents the GPT-4.1 release whose API page identifies gpt-4.1-2025-04-14 as the fixed snapshot behind the gpt-4.1 alias. The OpenAI API platform, ChatGPT, fine-tuned derivatives, and later GPT releases are separate service, application, or model boundaries.",
+      "strengths": ["OpenAI documents a dated snapshot that applications can pin instead of relying only on an alias", "The first-party model page records supported modalities, endpoints, features, and limits in one release-specific source"],
+      "tradeoffs": ["No developer-published weights are available for self-operation or independent deployment", "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"],
+      "score_profile": "model_access",
+      "score": {"license_clarity": 4, "artifact_availability": 1, "deployment_portability": 2, "serving_reach": 7, "lifecycle_transparency": 8, "documentation_provenance": 9, "overall": 4.66},
+      "evidence": [
+        {"kind": "web", "label": "Official GPT-4.1 model, snapshot, modality, and endpoint documentation", "url": "https://developers.openai.com/api/docs/models/gpt-4.1", "verified_at": "2026-09-04"},
+        {"kind": "web", "label": "Pinned models.dev source metadata", "url": "https://github.com/anomalyco/models.dev/blob/ef71a4865a5821d8cd24f171a0100156a02e808e/models/openai/gpt-4.1.toml", "verified_at": "2026-09-04"}
+      ],
+      "metadata_verified_at": "2026-09-04",
+      "verified_at": "2026-09-04"
+    }
+  ]
+}

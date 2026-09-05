@@ -44,6 +44,14 @@ Transport failures preserve existing project metadata. `404` and `410` are concl
 
 The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md).
 
+models.dev discovery is a separate fail-closed import:
+
+```bash
+GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
+```
+
+It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and replaces `directory/model-candidates.json` only after all source, count, schema, and collision checks pass. The token is optional locally. The importer removes already reviewed `source_id` values from the queue but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md).
+
 ## Review a candidate
 
 For one record in `directory/candidates.json`:
@@ -129,6 +137,14 @@ Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or 
 
 Do not copy prices, rate limits, model leaderboards, or exhaustive model inventories into the editorial record. A model offered by several services remains one model behind several operational and contractual boundaries; it does not merge those service records.
 
+## Review a model candidate
+
+Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not a lab, model family, hosted endpoint, or repackaging—as the review unit. Verify the official identity, boundary, every governing distribution term, source model, distribution modes, evidence, and `model_access` score. Treat every models.dev field as attributed discovery metadata until first-party evidence supports the Atlas conclusion. Remove the candidate only in the same change that publishes or otherwise disposes of it, then synchronize, regenerate share pages, verify, and exercise Models search, filters, comparison, URL restoration, and details.
+
+For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md).
+
+Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
+
 ## Resolve a license review
 
 Inspect the authoritative license or terms sources again; GitHub's detected SPDX value is only the trigger.
@@ -142,7 +158,7 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes metadata, regenerates share pages, verifies the result, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, and the CI result before merging.
+`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes system/runtime metadata and both candidate queues, regenerates share pages, verifies the result, then opens or updates `automation/directory-refresh`; it never commits directly to the default branch. Review license incidents, candidates, model candidates, and the CI result before merging.
 
 Verification is reported, not fatal. Every check runs even after an earlier one fails, so a single broken record cannot hide the rest, and the branch is pushed either way. A refresh that fails verification opens its pull request as a **draft** titled `(verification failed)`, carrying the per-check results and a link to the run. Repair the branch and push; the next run promotes it out of draft once the catalog verifies. The job itself still fails, so the run stays red.
 
