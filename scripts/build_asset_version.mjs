@@ -8,7 +8,7 @@
 // recomputes in memory and fails when the committed page differs.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -29,7 +29,11 @@ const DATA_FILES = [
 
 // 271 detail files would put 8-10 KB of hashes in index.html to save it, so they
 // share one stamp over the whole tree. A change to any record busts them all,
-// which is the right trade for files fetched on demand and rarely.
+// which is the right trade for files fetched on demand and rarely. The name each
+// file is hashed under is its slash-separated path *relative to the detail root*,
+// so two records swapping contents still move the stamp while a second checkout —
+// a CI runner, a worktree whose path carries the branch name — reproduces it byte
+// for byte. Hashing the absolute path made `--check` fail everywhere but here.
 const DETAIL_VERSION_KEY = "app/detail";
 const DATA_VERSIONS = /(<script type="application\/json" id="data-versions">)[^<]*(<\/script>)/;
 
@@ -37,7 +41,7 @@ export function assetVersion(contents) {
   return createHash("sha256").update(contents).digest("hex").slice(0, 12);
 }
 
-export function stampAssetVersions(html, readAsset, readDetailTree) {
+export function stampAssetVersions(html, readAsset, readDetailTree = () => []) {
   const stamped = html.replace(
     REFERENCE,
     (_, open, file, close) => `${open}${file}?v=${assetVersion(readAsset(file))}${close}`,
@@ -47,7 +51,7 @@ export function stampAssetVersions(html, readAsset, readDetailTree) {
   );
   const detailFiles = readDetailTree();
   versions[DETAIL_VERSION_KEY] = assetVersion(
-    Buffer.concat(detailFiles.flatMap(([path, contents]) => [Buffer.from(path), contents])),
+    Buffer.concat(detailFiles.flatMap(([name, contents]) => [Buffer.from(name), contents])),
   );
   return stamped.replace(DATA_VERSIONS, (_, open, close) => `${open}${JSON.stringify(versions)}${close}`);
 }
@@ -58,10 +62,10 @@ const readDetailTree = () => {
   const detailRoot = join(root, "web", "app", "detail");
   if (!existsSync(detailRoot)) return [];
   return readdirSync(detailRoot, { recursive: true })
-    .map(name => join(detailRoot, name))
-    .filter(path => statSync(path).isFile())
+    .filter(name => statSync(join(detailRoot, name)).isFile())
+    .map(name => name.split(sep).join("/"))
     .sort()
-    .map(path => [path, readFileSync(path)]);
+    .map(name => [name, readFileSync(join(detailRoot, name))]);
 };
 
 const committed = readFileSync(indexPath, "utf8");

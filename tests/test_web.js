@@ -564,6 +564,30 @@ test("every catalog file app.js fetches is stamped with its content hash so the 
   }
 });
 
+// The loop above exempts app/detail because it stamps a tree rather than a
+// file. Nothing else checked its value, so a builder whose hashing changed —
+// or one whose stamp depended on where the checkout lived — was invisible
+// here. This recomputes it independently: over the whole tree, in sorted order,
+// under each file's slash-separated path relative to the detail root.
+test("the shared app/detail stamp hashes every detail file's content under a checkout-independent name", () => {
+  const detailRoot = path.join(__dirname, "..", "web", "app", "detail");
+  const names = fs.readdirSync(detailRoot, { recursive: true })
+    .filter(name => fs.statSync(path.join(detailRoot, name)).isFile())
+    .map(name => name.split(path.sep).join("/"))
+    .sort();
+  assert.ok(names.length > 200, `only ${names.length} detail files walked; the tree should hold one per record`);
+  assert.ok(names.every(name => !path.isAbsolute(name)), "a stamp over absolute paths differs between checkouts");
+  const hash = crypto.createHash("sha256");
+  for (const name of names) {
+    hash.update(Buffer.from(name));
+    hash.update(fs.readFileSync(path.join(detailRoot, name)));
+  }
+  const digest = hash.digest("hex").slice(0, 12);
+  const versions = JSON.parse(indexHTML().match(/id="data-versions">([^<]*)</)[1]);
+  assert.equal(versions["app/detail"], digest,
+    `index.html stamps app/detail ${versions["app/detail"]} but the tree hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+});
+
 test("every app payload class is versioned, with one shared stamp for detail", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
   const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
