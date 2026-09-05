@@ -16,6 +16,22 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await expect(resultNames.filter({ hasText: /^GStack$/ })).toHaveCount(1);
 });
 
+test("common Directory search discovers model releases without exposing their score", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#all-directory-search").fill("GPT-4.1");
+  const card = page.locator("#all-directory-grid .model-card").filter({ hasText: "GPT-4.1" });
+  await expect(card).toHaveCount(1);
+  await expect(card.locator(".family-label")).toContainText("Model release · Multimodal language model");
+  await expect(card.locator(".score-ring")).toHaveCount(0);
+  await expect(card.locator(".compare-toggle")).toHaveCount(0);
+
+  await card.locator('[data-model="model-openai-gpt-4-1"]').click();
+  await expect(page.locator("#model-dialog")).toBeVisible();
+  await expect(page.locator("#model-dialog-content h1")).toHaveText("GPT-4.1");
+  await expect(page.locator("#model-dialog-content")).toContainText("Model boundary");
+});
+
 test("canonical and repository links use the AI Systems Atlas slug", async ({ page }) => {
   await page.goto("/");
 

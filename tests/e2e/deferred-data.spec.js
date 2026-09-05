@@ -83,6 +83,21 @@ test("focusing search loads the index and widens the results", async ({ page }) 
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
 });
 
+test("focusing common Directory search loads all four collection indexes", async ({ page }) => {
+  const requested = dataRequests(page);
+  await page.goto("/");
+  await page.locator("#all-directory-search").focus();
+
+  for (const collection of ["systems", "inference", "runtimes", "models"]) {
+    await expect.poll(() => requested.filter(path => path.endsWith(`/app/search/${collection}.json`)).length).toBe(1);
+  }
+
+  // "retirement" is detail-only reviewed prose and reaches the mixed view
+  // solely through the model search index.
+  await page.locator("#all-directory-search").fill("retirement");
+  await expect(page.locator('#all-directory-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
+});
+
 test("a restored comparison renders every score row", async ({ page }) => {
   await page.goto("/?collection=systems&compare=system:kilo-code,cline");
   await expect(page.locator(".comparison-table")).toBeVisible();
