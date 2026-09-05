@@ -581,6 +581,12 @@ test("the app does not disable the HTTP cache it just earned a content hash for"
   assert.ok(!/cache:\s*"no-store"/.test(app), "app.js re-disables caching; the ?v= stamp already guarantees freshness");
 });
 
+test("the header links to the blog, so writing about the catalog is reachable from it", () => {
+  const html = indexHTML();
+  assert.match(html, /<a class="suggest-link" href="blog\/">Writing<\/a>/,
+    "index.html should link to blog/ from the header tools");
+});
+
 test("the GitHub link is an icon with an accessible name rather than visible text", () => {
   const link = indexHTML().match(/<a class="github-link"[^>]*>([\s\S]*?)<\/a>/);
   assert.ok(link, "no .github-link anchor in index.html");
@@ -635,9 +641,9 @@ test("llms.txt only links to files that actually exist", () => {
   const text = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
   const links = [...text.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)].map(match => match[1]);
   assert.ok(links.length > 0, "llms.txt has no links");
-  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "page_shell.py"), "utf8");
   const siteUrlMatch = builder.match(/SITE_URL = "([^"]+)"/);
-  assert.ok(siteUrlMatch, "could not find SITE_URL in scripts/build_share_pages.py");
+  assert.ok(siteUrlMatch, "could not find SITE_URL in scripts/page_shell.py");
   const siteRoot = siteUrlMatch[1];
   const repoBlobRoot = "https://github.com/katagun/ai-systems-atlas/blob/main/";
   for (const link of links) {
@@ -655,9 +661,9 @@ test("llms.txt only links to files that actually exist", () => {
 
 test("llms.txt's site links use the same origin as the share-page builder", () => {
   const llms = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
-  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "page_shell.py"), "utf8");
   const match = builder.match(/SITE_URL = "([^"]+)"/);
-  assert.ok(match, "could not find SITE_URL in scripts/build_share_pages.py");
+  assert.ok(match, "could not find SITE_URL in scripts/page_shell.py");
   const [, siteUrl] = match;
   const siteLinks = [...llms.matchAll(/\]\((https:\/\/[^)]+)\)/g)].map(m => m[1]).filter(link => !link.startsWith("https://github.com/"));
   assert.ok(siteLinks.length > 0, "llms.txt has no site-origin links to check");
@@ -687,9 +693,9 @@ test("the API view lists exactly the published catalog files", () => {
 
 test("the API view's endpoint links use the same origin as the share-page builder", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
-  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "build_share_pages.py"), "utf8");
+  const builder = fs.readFileSync(path.join(__dirname, "..", "scripts", "page_shell.py"), "utf8");
   const match = builder.match(/SITE_URL = "([^"]+)"/);
-  assert.ok(match, "could not find SITE_URL in scripts/build_share_pages.py");
+  assert.ok(match, "could not find SITE_URL in scripts/page_shell.py");
   const [, siteUrl] = match;
   const links = [...html.matchAll(/class="endpoint-link" href="([^"]+)"/g)].map(m => m[1]);
   assert.ok(links.length > 0, "the API view has no endpoint links to check");

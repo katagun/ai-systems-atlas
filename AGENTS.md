@@ -26,6 +26,7 @@ Read only the documents required by the change:
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` for the boundary, `docs/adr/017-local-runtime-eligibility-ignores-modality.md` for eligibility and the vocabulary obligation, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | agent-facing discovery docs, llms.txt, or the Atlas skill | `docs/AGENT_DOCS.md` |
+| blog posts, the markdown subset, or the writing surface | `docs/BLOG.md` |
 | direction and sequencing | `ROADMAP.md` |
 | priorities or follow-up work | `BACKLOG.md` |
 
@@ -40,10 +41,12 @@ uv sync --locked
 uv run python scripts/sync_web_data.py
 uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
+uv run python scripts/build_blog.py
 node scripts/build_logos.mjs --check
 node scripts/build_fonts.mjs --check
 node scripts/build_asset_version.mjs --check
 uv run python scripts/build_share_pages.py --check
+uv run python scripts/build_blog.py --check
 uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v

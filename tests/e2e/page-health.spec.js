@@ -51,3 +51,29 @@ test("the page loads without third-party runtime requests", async ({ page, baseU
 
   expect(external).toEqual([]);
 });
+
+test("the blog index and its posts are reachable and self-contained", async ({ page, baseURL }) => {
+  const external = [];
+  page.on("request", request => {
+    if (!request.url().startsWith(baseURL)) external.push(request.url());
+  });
+
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  await expect(page.locator("h1")).toHaveText("Writing");
+
+  const first = page.locator(".detail-grid h2 a").first();
+  await expect(first).toBeVisible();
+  await first.click();
+
+  // A post is a static page: no application script, no catalog fetch, nothing third-party.
+  await expect(page.locator("h1")).not.toHaveText("Writing");
+  await expect(page.locator(".eyebrow")).toContainText("not a catalog record");
+  expect(await page.locator("script").count()).toBe(0);
+  expect(external).toEqual([]);
+});
+
+test("the directory header links to the blog", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.getByRole("link", { name: "Writing" }).click();
+  await expect(page).toHaveURL(/\/blog\/$/);
+});
