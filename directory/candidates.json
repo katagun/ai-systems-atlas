@@ -1974,7 +1974,7 @@
         "verdict": "held",
         "held_by": "robotics scope decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, but the only terms document linked from the product page is a generic website Terms of Use governing use of bostondynamics.com itself, not a purchase agreement, EULA, or licence for the product. Pricing and purchase both route through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
+        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, and that documentation site is itself the only stably citable first-party page found: every page on bostondynamics.com proper -- the product page, '/terms/', and '/spot-sales/' alike -- embeds a live WordPress cache-metrics comment whose hit/miss counters differ on every request, confirmed by fetching each of them twice in a row and finding the bytes differ both times, so none of them can be pinned for stable re-verification. Read live (not pinned), '/terms/' is a generic website Terms of Use governing use of bostondynamics.com itself -- content ownership, site access -- not a purchase agreement, EULA, or licence for the product, and '/spot-sales/' routes pricing and purchase through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
         "evidence": [
           {
             "label": "Spot SDK documentation",
@@ -2055,13 +2055,13 @@
         "verdict": "held",
         "held_by": "robotics scope decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Figure's own website carries only a generic website Terms and Conditions document, last updated February 2023, governing use of figure.ai itself -- account access, electronic communications, linked sites -- with no mention of the robot as a product, its sale, its licensing, or its onboard software. No product page publishes a price, a purchase path, or any product-specific terms; the site describes the robot only through narrative and video demonstrations. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page. (Every live figure.ai page, including this one, embeds a random per-request SVG gradient identifier in its markup, so a fixed capture of the page is cited instead of the live URL to keep the citation byte-stable.)",
+        "finding": "Every content-bearing page on figure.ai -- the homepage, terms-and-conditions, privacy-policy, and accessibility-statement pages alike -- returns different bytes on every fetch, because a shared page component embeds a randomly regenerated identifier on each server render; only structural files with no substantive content (robots.txt, sitemap.xml) are byte-stable. This was confirmed by repeated fetches minutes apart, not assumed. The terms-and-conditions page was read live: it is a generic website Terms and Conditions, dated February 2023 in its own body text, governing use of figure.ai itself (account access, electronic communications, linked sites) with no mention of the robot as a product, its sale, its licensing, or its onboard software, and no product page publishes a price or purchase path. That reading is a first-party observation, not an independently re-verifiable citation, because the page itself cannot be pinned; the site's own sitemap is cited instead to establish, from a stable first-party source, that the page exists and when Figure's content system last touched it. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page, and no page on the domain can be hashed for a stable, checkable citation in the first place.",
         "evidence": [
           {
-            "label": "Terms and Conditions (fixed capture; the live page is not byte-stable)",
-            "url": "https://web.archive.org/web/20260905035946if_/https://www.figure.ai/terms-and-conditions",
+            "label": "Sitemap (the only figure.ai resource found to be byte-stable across repeated fetches; it confirms the terms-and-conditions URL exists but carries no terms content itself)",
+            "url": "https://www.figure.ai/sitemap.xml",
             "kind": "web",
-            "content_sha256": "b1d2346195940d51c28680e84aec8a50e3538b28d5d6808dca1db88c9622fb02",
+            "content_sha256": "c273455d32f39ea7efb06c58e4194b3f09721fe4bbc007e88354b31af02498b6",
             "fetched_at": "2026-09-04"
           }
         ],
