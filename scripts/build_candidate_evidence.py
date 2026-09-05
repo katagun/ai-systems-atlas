@@ -13,6 +13,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.request
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -116,6 +117,13 @@ def content_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def fetch_web_text(url: str) -> str:
+    """Fetch a cited web document. Text only; the hash is over the decoded body."""
+    request = urllib.request.Request(url, headers={"User-Agent": "agent-systems-atlas-evidence"})
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return response.read().decode("utf-8", "replace")
+
+
 def _decode(payload: dict[str, Any]) -> str:
     if payload.get("encoding") == "base64":
         return base64.b64decode(payload.get("content") or "").decode("utf-8", "replace")
@@ -198,6 +206,24 @@ def recheck_candidates(
             continue
         for item in evidence:
             label = item.get("label")
+            if item.get("kind") == "web":
+                # Re-fetching the cited URL itself is what makes a fabricated citation
+                # fail: there is no label-derived path to fall back on, so a URL that
+                # does not serve the recorded bytes cannot pass.
+                try:
+                    actual = content_hash(fetch_web_text(item.get("url") or ""))
+                except Exception as exc:
+                    problems.append(
+                        f"{candidate_key(candidate)}: {label} could not be re-fetched: "
+                        f"{type(exc).__name__}: {exc}"
+                    )
+                    continue
+                if actual != item.get("content_sha256"):
+                    problems.append(
+                        f"{candidate_key(candidate)}: {label} content_sha256 recorded "
+                        f"{item.get('content_sha256')} but re-fetched {actual}"
+                    )
+                continue
             if label == "LICENSE":
                 path = f"/repos/{repo}/license"
             elif label == "README":

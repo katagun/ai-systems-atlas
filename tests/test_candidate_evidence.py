@@ -231,6 +231,42 @@ class RecheckTests(unittest.TestCase):
         self.assertTrue(any("evidence must be a list" in problem for problem in problems), problems)
 
 
+def candidate_with(evidence: list[dict]) -> dict:
+    return {
+        "repo": None,
+        "url": "https://example.invalid/product",
+        "triage": {"verdict": "held", "held_by": "robotics scope decision", "evidence": evidence},
+    }
+
+
+class WebCitationRecheckTests(unittest.TestCase):
+    def test_a_web_citation_that_still_matches_reports_no_problem(self) -> None:
+        body = "terms of service, version 3"
+        item = {
+            "label": "Product terms",
+            "url": "https://example.invalid/terms",
+            "kind": "web",
+            "content_sha256": harness.content_hash(body),
+            "fetched_at": "2026-09-04",
+        }
+        with mock.patch("scripts.build_candidate_evidence.fetch_web_text", return_value=body):
+            problems = harness.recheck_candidates([candidate_with([item])], lambda *a, **k: {}, None, [])
+        self.assertEqual([], problems)
+
+    def test_a_web_citation_that_drifted_is_reported(self) -> None:
+        item = {
+            "label": "Product terms",
+            "url": "https://example.invalid/terms",
+            "kind": "web",
+            "content_sha256": harness.content_hash("original"),
+            "fetched_at": "2026-09-04",
+        }
+        with mock.patch("scripts.build_candidate_evidence.fetch_web_text", return_value="rewritten"):
+            problems = harness.recheck_candidates([candidate_with([item])], lambda *a, **k: {}, None, [])
+        self.assertEqual(1, len(problems), problems)
+        self.assertIn("Product terms", problems[0])
+
+
 class TokenTests(unittest.TestCase):
     """Unauthenticated GitHub allows 60 requests an hour; a default run issues 80."""
 
