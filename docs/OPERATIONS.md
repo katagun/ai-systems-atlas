@@ -52,6 +52,44 @@ GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
 
 It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
+## Evidence links and terms drift
+
+The weekly workflow checks the authoritative record URL, every reviewed evidence URL,
+every immutable evidence URL, and every license or governing-terms URL across systems,
+specifications, inference services, local runtimes, and reviewed models:
+
+```bash
+GITHUB_TOKEN=... uv run python scripts/check_evidence_links.py
+```
+
+The token is optional, but avoids the low anonymous limit on GitHub API blob URLs. The
+checker deduplicates shared URLs, uses eight bounded workers, uses `HEAD` with a bounded
+`GET` fallback for ordinary links, retries transient responses and explicit rate limits,
+and keeps conditional-request validators in the ignored `.evidence-link-cache.json`. The
+scheduled workflow preserves
+that file with the GitHub Actions cache. A successful result less than twenty hours old is
+reused, so re-running a workflow does not immediately crawl all reviewed sources again.
+
+Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
+shells, scripts, styles, navigation, and whitespace are removed before hashing; GitHub and
+Hugging Face blob pages are fetched through their stable raw-content routes. The first
+successful observation establishes an automation-owned baseline. A later content change
+fails the weekly verification and therefore opens or updates the durable
+`automation-failure` issue; it never edits the record, its evidence, its source model, its
+licenses, or its human-owned dates. `404` and `410` responses fail as broken reviewed
+links. Other transport failures are warnings unless fewer than 80% of the current targets
+were checked or served from a recent cache.
+
+To resolve terms drift, inspect the authoritative page, update every affected conclusion
+and scoped evidence item as needed, and advance every affected human-owned `verified_at`.
+On the next scheduled check, a review date newer than the cached baseline accepts the new
+hash; use `--max-age-hours 0` to verify that acceptance immediately. If the terms did not
+change materially, advancing the evidence date still records that a human reviewed the
+new page before the automation accepts it. Repair or replace a
+broken URL in the same review. Do not delete the cache merely to make a drift signal pass;
+a missing cache establishes new baselines and cannot prove that the reviewed terms stayed
+the same.
+
 ## Review a candidate
 
 For one record in `directory/candidates.json`:
@@ -158,7 +196,7 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes system/runtime metadata, the complete public models.dev source snapshot, and both candidate queues; synchronizes the public data again after the model import, regenerates payloads and share pages, verifies the result, then opens or updates `automation/directory-refresh`. It never commits directly to the default branch. Review license incidents, candidates, model candidates, and the CI result before merging.
+`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes system/runtime metadata, the complete public models.dev source snapshot, and both candidate queues; synchronizes the public data again after the model import, regenerates payloads and share pages, checks reviewed links and mutable terms, verifies the result, then opens or updates `automation/directory-refresh`. It never commits directly to the default branch. Review license incidents, evidence-link or terms-drift signals, candidates, model candidates, and the CI result before merging.
 
 Verification is reported, not fatal. Every check runs even after an earlier one fails, so a single broken record cannot hide the rest, and the branch is pushed either way. A refresh that fails verification opens its pull request as a **draft** titled `(verification failed)`, carrying the per-check results and a link to the run. Repair the branch and push; the next run promotes it out of draft once the catalog verifies. The job itself still fails, so the run stays red.
 

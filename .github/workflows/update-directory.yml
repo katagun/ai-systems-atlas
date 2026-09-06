@@ -37,6 +37,13 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
+      - name: Restore evidence-link cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .evidence-link-cache.json
+          key: evidence-links-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            evidence-links-${{ runner.os }}-
       - name: Install icon packages
         run: npm ci --ignore-scripts
       - name: Refresh GitHub metadata and discover candidates
@@ -64,11 +71,14 @@ jobs:
         # to the refresh branch: the failure is repaired on that branch instead
         # of discarding a full crawl and waiting a week for the next schedule.
         continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -uo pipefail
           status=0
           results="${RUNNER_TEMP}/verification.md"
           logos="${RUNNER_TEMP}/logo-coverage.txt"
+          evidence_links="${RUNNER_TEMP}/evidence-links.txt"
           : > "${results}"
 
           check() {
@@ -89,6 +99,11 @@ jobs:
             return "${PIPESTATUS[0]}"
           }
 
+          evidence_link_check() {
+            uv run python scripts/check_evidence_links.py 2>&1 | tee "${evidence_links}"
+            return "${PIPESTATUS[0]}"
+          }
+
           stage_and_check_whitespace() {
             git add -A directory web && git diff --cached --check
           }
@@ -96,6 +111,7 @@ jobs:
           check "validate_directory" uv run python scripts/validate_directory.py
           check "unittest" uv run python -m unittest discover -s tests -v
           check "compileall" uv run python -m compileall scripts tests
+          check "evidence links and terms drift" evidence_link_check
           check "share page freshness" uv run python scripts/build_share_pages.py --check
           check "app payload freshness" uv run python scripts/build_web_payload.py --check
           check "asset versions" node scripts/build_asset_version.mjs --check
@@ -114,6 +130,14 @@ jobs:
             echo
             echo '```'
             cat "${logos}" 2>/dev/null || echo "the logo check did not produce a report"
+            echo '```'
+            echo
+            echo "</details>"
+            echo
+            echo "<details><summary>Evidence links and terms drift</summary>"
+            echo
+            echo '```'
+            cat "${evidence_links}" 2>/dev/null || echo "the evidence-link check did not produce a report"
             echo '```'
             echo
             echo "</details>"
@@ -182,6 +206,12 @@ jobs:
               gh pr ready "${number}" --undo
             fi
           fi
+      - name: Save evidence-link cache
+        if: always()
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .evidence-link-cache.json
+          key: evidence-links-${{ runner.os }}-${{ github.run_id }}
       - name: Fail when the refreshed catalog did not verify
         if: steps.verify.outcome == 'failure'
         run: |
