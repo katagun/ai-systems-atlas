@@ -85,6 +85,11 @@ Candidate records contain discovery facts and proposed classification only. They
 
 A candidate may optionally carry a `triage` block: gathered evidence and a routing proposal, never an editorial conclusion. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md). Its fields are `verdict` (`out_of_scope`, `held`, or `review_ready`), `rule`, `finding`, non-empty `evidence`, `proposed_at`, and `proposer`; `held_by` is optional and present if and only if `verdict` is `held`. Validation rejects a `finding` that names a `system_family` or `primary_role` taxonomy id. Each evidence entry carries `label`, `url`, `kind` (`git_blob` or `web`), `content_sha256`, and `fetched_at`; `git_blob` evidence additionally carries `blob_sha` and a matching `immutable_url`. `proposed_system_family` and `proposed_primary_role` may be null only when the candidate's `triage.held_by` is set — a record can wait for a collection that does not exist yet, but only while a human-named decision holds it.
 
+The unattended candidate-triage routine is narrower than the stored schema: it emits and
+rechecks only one GitHub LICENSE and one README `git_blob` evidence item per candidate.
+`web` remains available for human-authored triage of non-GitHub records and is rechecked
+only through the bounded, public-HTTPS manual path.
+
 Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Reviewed model `source_id` values must be absent from this queue. Every candidate must match the same source row in `models-dev.json`, but the source snapshot is not itself workflow state.
 
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.

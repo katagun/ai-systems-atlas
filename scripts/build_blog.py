@@ -16,11 +16,13 @@ else in this repository.
 from __future__ import annotations
 
 import html
+import ipaddress
 import re
 import sys
 from datetime import date
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 try:
     from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
@@ -41,6 +43,8 @@ INLINE_CODE = re.compile(r"`([^`]+)`")
 LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 BOLD = re.compile(r"\*\*([^*]+)\*\*")
 ITALIC = re.compile(r"(?<!\*)\*([^*]+)\*(?!\*)")
+HOST_LABEL = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", re.IGNORECASE)
+LEGACY_NUMBER_LABEL = re.compile(r"(?:[0-9]+|0x[0-9a-f]+)", re.IGNORECASE)
 
 # Constructs this renderer does not implement. Each would otherwise be emitted as
 # literal text, which reads as a bug in the post rather than a gap in the tool.
@@ -54,6 +58,33 @@ UNSUPPORTED = (
 
 class PostError(Exception):
     """A post the renderer refuses to guess at."""
+
+
+def _well_formed_hostname(hostname: str) -> bool:
+    """Accept ASCII DNS names, valid punycode, and canonical IP literals."""
+    if not hostname.isascii() or "%" in hostname or hostname.endswith("."):
+        return False
+    try:
+        ipaddress.ip_address(hostname)
+    except ValueError:
+        labels = hostname.split(".")
+        if all(LEGACY_NUMBER_LABEL.fullmatch(label) for label in labels):
+            # Browsers reinterpret several non-canonical integer, octal, and hex
+            # forms as IPv4. Accept only the canonical form parsed above.
+            return False
+        if len(hostname) > 253 or not all(HOST_LABEL.fullmatch(label) for label in labels):
+            return False
+        for label in labels:
+            if not label.lower().startswith("xn--"):
+                continue
+            try:
+                decoded = label.encode("ascii").decode("idna")
+                if decoded.encode("idna").decode("ascii").lower() != label.lower():
+                    return False
+            except UnicodeError:
+                return False
+        return True
+    return True
 
 
 def slug_for(filename: str) -> str:
@@ -99,7 +130,48 @@ def parse_frontmatter(text: str, name: str) -> tuple[dict[str, str], str, int]:
     return meta, "\n".join(lines[end + 1:]), end + 2
 
 
-def _inline(text: str) -> str:
+def _validate_link_destination(escaped_destination: str, name: str) -> None:
+    """Allow links that cannot turn post prose into active browser content."""
+    # ``_inline`` receives HTML-escaped text. One unescape produces the exact
+    # attribute value the HTML parser will expose to the browser's URL parser.
+    destination = html.unescape(escaped_destination)
+    if any(ord(character) < 0x20 or ord(character) == 0x7F for character in destination):
+        raise PostError(f"{name}: a link destination cannot contain control characters")
+    if "\\" in destination or destination.startswith("//"):
+        raise PostError(f"{name}: a link destination must not be protocol-relative")
+
+    try:
+        parsed = urlsplit(destination)
+        hostname = parsed.hostname
+        _ = parsed.port  # Validate malformed and out-of-range ports too.
+    except ValueError as error:
+        raise PostError(f"{name}: invalid link destination {destination!r}: {error}") from None
+
+    if not parsed.scheme:
+        if parsed.netloc:
+            raise PostError(f"{name}: a relative link cannot name another host")
+        return
+    if (
+        parsed.scheme != "https"
+        or not parsed.netloc
+        or not hostname
+        or not _well_formed_hostname(hostname)
+    ):
+        raise PostError(
+            f"{name}: a link must be an absolute HTTPS URL or a same-site relative URL"
+        )
+    if parsed.username is not None or parsed.password is not None:
+        raise PostError(f"{name}: an HTTPS link cannot contain credentials")
+    if "[" in parsed.netloc or "]" in parsed.netloc:
+        try:
+            ipaddress.IPv6Address(hostname)
+        except ValueError:
+            raise PostError(
+                f"{name}: a bracketed HTTPS host must be an IPv6 address"
+            ) from None
+
+
+def _inline(text: str, name: str) -> str:
     """Apply inline markup to text that is ALREADY html-escaped."""
     placeholders: list[str] = []
 
@@ -107,8 +179,13 @@ def _inline(text: str) -> str:
         placeholders.append(f"<code>{match.group(1)}</code>")
         return f"\x00{len(placeholders) - 1}\x00"
 
+    def link(match: re.Match[str]) -> str:
+        destination = match.group(2)
+        _validate_link_destination(destination, name)
+        return f'<a href="{destination}" rel="noreferrer">{match.group(1)}</a>'
+
     text = INLINE_CODE.sub(stash, text)
-    text = LINK.sub(lambda m: f'<a href="{m.group(2)}" rel="noreferrer">{m.group(1)}</a>', text)
+    text = LINK.sub(link, text)
     text = BOLD.sub(r"<strong>\1</strong>", text)
     text = ITALIC.sub(r"<em>\1</em>", text)
     return re.sub(r"\x00(\d+)\x00", lambda m: placeholders[int(m.group(1))], text)
@@ -126,14 +203,14 @@ def render_markdown(body: str, name: str, first_line: int = 1) -> str:
     def flush() -> None:
         nonlocal paragraph, quote, items
         if paragraph:
-            out.append(f"<p>{_inline(' '.join(paragraph))}</p>")
+            out.append(f"<p>{_inline(' '.join(paragraph), name)}</p>")
             paragraph = []
         if items:
-            rendered = "".join(f"<li>{_inline(item)}</li>" for item in items)
+            rendered = "".join(f"<li>{_inline(item, name)}</li>" for item in items)
             out.append(f"<ul>{rendered}</ul>")
             items = []
         if quote:
-            out.append(f"<blockquote><p>{_inline(' '.join(quote))}</p></blockquote>")
+            out.append(f"<blockquote><p>{_inline(' '.join(quote), name)}</p></blockquote>")
             quote = []
 
     for offset, line in enumerate(lines):
@@ -166,7 +243,7 @@ def render_markdown(body: str, name: str, first_line: int = 1) -> str:
             if not 1 <= level <= 6 or not stripped[level:].startswith(" "):
                 raise PostError(f"{name} line {number}: a heading is 1-6 # then a space")
             flush()
-            out.append(f"<h{level}>{_inline(stripped[level + 1:].strip())}</h{level}>")
+            out.append(f"<h{level}>{_inline(stripped[level + 1:].strip(), name)}</h{level}>")
         elif stripped.startswith("&gt; "):  # `> ` survives escaping as `&gt; `
             quote.append(stripped[5:])
         elif stripped.startswith("- "):

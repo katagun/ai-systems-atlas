@@ -16,6 +16,8 @@ Two rules keep that safe rather than reckless.
 
 Post text is HTML-escaped before any markup is emitted, the same order `scripts/build_share_pages.py` uses. Prose stays prose: a post cannot introduce an element, and a `<script>` tag in a draft renders as visible text.
 
+Link destinations are allowlisted. A post may link to an absolute HTTPS URL or use a same-site relative path, query, or fragment. Other schemes, protocol-relative or backslash forms, control characters, credentials, and malformed HTTPS URLs stop the build rather than becoming active browser content.
+
 Anything the renderer does not implement stops the build, naming the file and line, rather than being passed through or silently mangled. Tables, images, ordered lists, and reference-style links are rejected today. If a post needs one, add it to the renderer with a test — do not loosen the escaping.
 
 ## Attribution

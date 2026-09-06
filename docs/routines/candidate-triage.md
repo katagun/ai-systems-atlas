@@ -28,10 +28,13 @@ block is gathered evidence and a routing proposal, never an editorial conclusion
 human decides what your evidence means.
 
 NEVER FETCH ANYTHING. You have no need to: `prepare` already fetched and hashed every
-document, and recorded the blob SHA for each licence. `finish` re-fetches every citation you add or change
-and compares its `url`, its `content_sha256`, and its `blob_sha` against what the document
-actually is, so a citation you did not copy verbatim out of the bundle fails the run. Cite
-the bundle and nothing else.
+document, and recorded its Git blob SHA. The unattended bundle contains only `git_blob`
+evidence for GitHub LICENSE and README documents; a GitHub response without a valid blob
+SHA fails `prepare`. `finish` rejects `web` evidence before network I/O, then re-fetches
+every GitHub citation you add or change and compares its `url`, its `content_sha256`, and
+its `blob_sha` against what the document actually is. It permits each of the `LICENSE` and
+`README` labels at most once, so duplicate citations cannot amplify requests. Cite the
+bundle and nothing else, and copy every citation field unchanged.
 
 THE SHAPE OF A BLOCK. Validation rejects any field set but this one, exactly. See
 `docs/DATA_MODEL.md` for the canonical definition.
@@ -40,9 +43,10 @@ A `triage` block has `verdict`, `rule`, `finding`, `evidence`, `proposed_at`, an
 `proposer` — plus `held_by`, which is present if and only if `verdict` is `held`, and
 forbidden otherwise. Set `proposed_at` to today and `proposer` to `candidate-triage`.
 
-An `evidence` entry has `label`, `url`, `kind`, `content_sha256`, and `fetched_at`. When
-`kind` is `git_blob` it also has `blob_sha` and `immutable_url`; when `kind` is `web` it
-has neither. Copy every one of those values from the bundle document unchanged.
+An `evidence` entry has `label`, `url`, `kind`, `content_sha256`, `fetched_at`, `blob_sha`,
+and `immutable_url`. Its `kind` is `git_blob`. Copy every one of those values from the
+bundle document unchanged. The wider candidate schema permits human-reviewed `web`
+evidence for non-GitHub records, but this unattended routine does not.
 
 The bundle's documents also carry a `content` field. That is the document's text, given to
 you so you can quote it in `finding`. It is not a citation field: an evidence entry

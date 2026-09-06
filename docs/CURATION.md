@@ -95,6 +95,12 @@ Human review owns classification, traits, editorial prose, scores, confidence, l
 
 A GitHub-detected license mismatch is a review trigger, not a new license conclusion. Automation marks `license_review_status` as `review_required` and opens a durable incident without hiding the project or changing its reviewed licenses or source model. A human resolves the evidence and classification.
 
+The evidence-link checker likewise treats a changed mutable terms page as a review trigger,
+not as a new license or product-terms conclusion. Its operational cache may record HTTP
+validators and normalized content hashes, but it never changes evidence, editorial fields,
+or `verified_at`. A human reviews the changed page and advances every affected evidence
+date; only newer dates for all records sharing the URL authorize a new cached baseline.
+
 A candidate's `triage` block is likewise evidence, not a conclusion: accepting a proposed verdict remains a human act. See [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md).
 
 ## Review workflow

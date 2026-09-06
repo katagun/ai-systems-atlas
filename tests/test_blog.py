@@ -82,6 +82,66 @@ class RenderTests(PostFixture):
         self.assertNotIn('"onmouseover=x"', html)
         self.assertIn("rel=", html)
 
+    def test_links_allow_https_and_same_site_relative_destinations(self) -> None:
+        cases = (
+            ("absolute HTTPS", "https://example.com/docs", "https://example.com/docs"),
+            ("mixed-case HTTPS", "HTTPS://example.com/docs", "HTTPS://example.com/docs"),
+            ("punycode HTTPS", "https://xn--bcher-kva.example/", "https://xn--bcher-kva.example/"),
+            ("IPv6 HTTPS", "https://[2001:db8::1]/", "https://[2001:db8::1]/"),
+            ("root-relative", "/docs/page", "/docs/page"),
+            ("path-relative", "../page", "../page"),
+            ("query-relative", "?view=all", "?view=all"),
+            ("fragment-relative", "#details", "#details"),
+        )
+        for label, destination, rendered in cases:
+            with self.subTest(label):
+                html = self.render(f"[safe]({destination})")
+                self.assertIn(f'href="{rendered}"', html)
+
+    def test_link_destinations_preserve_html_escaping(self) -> None:
+        html = self.render("[safe](https://example.com/search?one=1&two=2)")
+        self.assertIn('href="https://example.com/search?one=1&amp;two=2"', html)
+
+    def test_active_and_cross_site_relative_link_forms_are_rejected(self) -> None:
+        destinations = (
+            "javascript:document.body.textContent=owned",
+            "JaVaScRiPt:document.body.textContent=owned",
+            "data:text/html,owned",
+            "file:///etc/passwd",
+            "http://example.com/",
+            "mailto:editor@example.com",
+            "//example.com/path",
+            r"\\example.com\path",
+            r"https:\\example.com\path",
+            "\x01javascript:document.body.textContent=owned",
+            "\x7fjavascript:document.body.textContent=owned",
+        )
+        for destination in destinations:
+            with self.subTest(destination=repr(destination)), self.assertRaises(
+                build_blog.PostError
+            ):
+                self.render(f"[unsafe]({destination})")
+
+    def test_malformed_or_credential_bearing_https_links_are_rejected(self) -> None:
+        destinations = (
+            "https:///missing-host",
+            "https://%zz/",
+            "https://bad_host.example/",
+            "https://1.2.3.999/",
+            "https://4294967296/",
+            "https://0x7f000001/",
+            "https://0177.0.0.1/",
+            "https://xn--a/",
+            "https://xn--0/",
+            "https://[v1.foo]/",
+            "https://a\u200cb.example/",
+            "https://user:password@example.com/path",
+            "https://example.com:not-a-port/path",
+        )
+        for destination in destinations:
+            with self.subTest(destination=destination), self.assertRaises(build_blog.PostError):
+                self.render(f"[unsafe]({destination})")
+
     def test_the_supported_subset_renders(self) -> None:
         html = self.render(
             "## Heading\n\nA **bold** and *italic* and `code` word.\n\n"

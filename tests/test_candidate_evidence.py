@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import json
 import os
+import socket
 import subprocess
 import tempfile
 import unittest
@@ -130,6 +131,19 @@ class FetchTests(unittest.TestCase):
         self.assertTrue(bundle["errors"])
         self.assertFalse([d for d in bundle["documents"] if d["label"] == "LICENSE"])
 
+    def test_a_github_document_without_a_blob_sha_is_never_downgraded_to_web(self) -> None:
+        payload = {
+            "html_url": "https://github.com/a/one/blob/main/README.md",
+            "content": base64.b64encode(b"read me").decode(),
+            "encoding": "base64",
+        }
+        bundle = harness.fetch_candidate_evidence(
+            candidate("a/one"), self.responses(payload, payload), None, "2026-09-04"
+        )
+        self.assertEqual([], bundle["documents"])
+        self.assertEqual(2, len(bundle["errors"]))
+        self.assertTrue(all("blob SHA" in problem for problem in bundle["errors"]))
+
     def test_content_hash_is_stable(self) -> None:
         self.assertEqual(harness.content_hash("MIT"), harness.content_hash("MIT"))
         self.assertEqual(64, len(harness.content_hash("MIT")))
@@ -216,6 +230,41 @@ class RecheckTests(unittest.TestCase):
         problems = harness.recheck_candidates(queue, unexpected, None, "2026-09-04")
         self.assertTrue(any("unknown evidence label" in problem for problem in problems), problems)
 
+    def test_an_unknown_evidence_kind_is_rejected_before_any_fetch(self) -> None:
+        queue = self.triaged(harness.content_hash("MIT"))
+        queue[0]["triage"]["evidence"][0]["kind"] = "file"
+        getter = mock.Mock()
+        problems = harness.recheck_candidates(queue, getter, None, [])
+        getter.assert_not_called()
+        self.assertTrue(any("unknown evidence kind" in problem for problem in problems), problems)
+
+    def test_unattended_duplicate_evidence_is_rejected_before_any_fetch(self) -> None:
+        queue = self.triaged(harness.content_hash("MIT"))
+        item = queue[0]["triage"]["evidence"][0]
+        queue[0]["triage"]["evidence"] = [item, dict(item), dict(item)]
+        getter = mock.Mock()
+        problems = harness.recheck_candidates(
+            queue, getter, None, [], unattended=True
+        )
+        getter.assert_not_called()
+        self.assertTrue(any("one or two" in problem for problem in problems), problems)
+        self.assertTrue(any("duplicate LICENSE" in problem for problem in problems), problems)
+
+    def test_unattended_preflights_every_candidate_before_any_fetch(self) -> None:
+        first = self.triaged(harness.content_hash("MIT"))[0]
+        second = json.loads(json.dumps(first))
+        second["repo"] = "b/two"
+        item = second["triage"]["evidence"][0]
+        second["triage"]["evidence"] = [item, dict(item)]
+        getter = mock.Mock()
+
+        problems = harness.recheck_candidates(
+            [first, second], getter, None, [], unattended=True
+        )
+
+        getter.assert_not_called()
+        self.assertTrue(any("duplicate LICENSE" in problem for problem in problems), problems)
+
     def test_a_fabricated_url_is_reported_even_when_the_hash_matches(self) -> None:
         """A hash proves a document reads this way, never that the citation points at it."""
         queue = self.triaged(harness.content_hash("MIT"))
@@ -265,6 +314,255 @@ class WebCitationRecheckTests(unittest.TestCase):
             problems = harness.recheck_candidates([candidate_with([item])], lambda *a, **k: {}, None, [])
         self.assertEqual(1, len(problems), problems)
         self.assertIn("Product terms", problems[0])
+
+    def test_unattended_triage_rejects_web_evidence_before_fetching(self) -> None:
+        item = {
+            "label": "Product terms",
+            "url": "https://example.invalid/terms",
+            "kind": "web",
+            "content_sha256": harness.content_hash("original"),
+            "fetched_at": "2026-09-04",
+        }
+        record = candidate("a/one", triage={
+            "verdict": "held",
+            "held_by": "a decision",
+            "proposer": "candidate-triage",
+            "evidence": [item],
+        })
+        with mock.patch("scripts.build_candidate_evidence.fetch_web_text") as fetch:
+            problems = harness.recheck_candidates(
+                [record], lambda *a, **k: {}, None, [], unattended=True
+            )
+        fetch.assert_not_called()
+        self.assertTrue(any("only GitHub blob" in problem for problem in problems), problems)
+
+    def test_unattended_triage_requires_the_routine_proposer_before_fetching(self) -> None:
+        record = candidate("a/one", triage={
+            "verdict": "review_ready",
+            "proposer": "something else",
+            "evidence": [{"kind": "git_blob", "label": "README"}],
+        })
+        getter = mock.Mock()
+        problems = harness.recheck_candidates(
+            [record], getter, None, [], unattended=True
+        )
+        getter.assert_not_called()
+        self.assertTrue(any("requires proposer" in problem for problem in problems), problems)
+
+
+def public_resolver(host: str, port: int, **_kwargs):
+    return [(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", ("93.184.216.34", port))]
+
+
+class FakeWebResponse:
+    def __init__(self, status: int, url: str, body: bytes = b"", headers=None) -> None:
+        self.status = status
+        self.url = url
+        self.body = body
+        self.headers = headers or {}
+        self.read_amounts: list[int | None] = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args) -> None:
+        return None
+
+    def getcode(self) -> int:
+        return self.status
+
+    def geturl(self) -> str:
+        return self.url
+
+    def read(self, amount: int | None = None) -> bytes:
+        self.read_amounts.append(amount)
+        return self.body if amount is None else self.body[:amount]
+
+
+class FakeWebOpener:
+    def __init__(self, *responses: FakeWebResponse) -> None:
+        self.responses = list(responses)
+        self.urls: list[str] = []
+
+    def open(self, request, timeout: int):
+        self.urls.append(request.full_url)
+        if timeout != 30:
+            raise AssertionError(f"unexpected timeout {timeout}")
+        return self.responses.pop(0)
+
+
+class WebFetchBoundaryTests(unittest.TestCase):
+    def test_the_default_fetch_pins_the_validated_address(self) -> None:
+        response = FakeWebResponse(200, "https://example.com/terms", body=b"terms")
+        pinned_open = mock.Mock(return_value=response)
+        self.assertEqual(
+            "terms",
+            harness.fetch_web_text(
+                "https://example.com/terms",
+                resolver=public_resolver,
+                pinned_open=pinned_open,
+            ),
+        )
+        pinned_open.assert_called_once_with(
+            "https://example.com/terms",
+            "example.com",
+            ("93.184.216.34",),
+            timeout=30,
+        )
+
+    def test_the_pinned_connection_uses_the_ip_but_keeps_tls_hostname_verification(self) -> None:
+        context = mock.Mock()
+        wrapped = mock.Mock()
+        context.wrap_socket.return_value = wrapped
+        connection = harness._PinnedHTTPSConnection(
+            "example.com", "93.184.216.34", port=443, timeout=30, context=context
+        )
+        raw_socket = mock.Mock()
+        connection._create_connection = mock.Mock(return_value=raw_socket)
+
+        connection.connect()
+
+        connection._create_connection.assert_called_once_with(
+            ("93.184.216.34", 443), 30, None
+        )
+        context.wrap_socket.assert_called_once_with(
+            raw_socket, server_hostname="example.com"
+        )
+        self.assertIs(wrapped, connection.sock)
+
+    def test_non_https_credentials_ports_and_non_dns_hosts_fail_before_open(self) -> None:
+        unsafe = (
+            "http://example.com/terms",
+            "file:///etc/hosts",
+            "data:text/plain,hello",
+            "ftp://example.com/terms",
+            "https://user:password@example.com/terms",
+            "https://example.com:444/terms",
+            "https://localhost/terms",
+            "https://127.0.0.1/terms",
+            "https://example.com/\x01terms",
+        )
+        opener = mock.Mock()
+        for url in unsafe:
+            with self.subTest(url=url), self.assertRaises(ValueError):
+                harness.fetch_web_text(url, resolver=public_resolver, opener=opener)
+        opener.open.assert_not_called()
+
+    def test_a_host_resolving_to_any_non_public_address_fails_before_open(self) -> None:
+        def mixed_resolver(_host: str, port: int, **_kwargs):
+            return [
+                (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("93.184.216.34", port)),
+                (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("127.0.0.1", port)),
+            ]
+
+        opener = mock.Mock()
+        with self.assertRaisesRegex(ValueError, "non-public"):
+            harness.fetch_web_text(
+                "https://example.com/terms", resolver=mixed_resolver, opener=opener
+            )
+        opener.open.assert_not_called()
+
+    def test_non_unicast_and_site_local_addresses_fail_before_open(self) -> None:
+        for family, address in (
+            (socket.AF_INET, "224.0.0.1"),
+            (socket.AF_INET6, "ff02::1"),
+            (socket.AF_INET6, "fec0::1"),
+        ):
+            with self.subTest(address=address):
+                def resolver(
+                    _host, port, *, _family=family, _address=address, **_kwargs
+                ):
+                    return [
+                        (_family, socket.SOCK_STREAM, 6, "", (_address, port))
+                    ]
+
+                pinned_open = mock.Mock()
+                with self.assertRaisesRegex(ValueError, "non-public-unicast"):
+                    harness.fetch_web_text(
+                        "https://example.com/terms",
+                        resolver=resolver,
+                        pinned_open=pinned_open,
+                    )
+                pinned_open.assert_not_called()
+
+    def test_too_many_resolved_addresses_fail_before_open(self) -> None:
+        def resolver(_host: str, port: int, **_kwargs):
+            return [
+                (socket.AF_INET, socket.SOCK_STREAM, 6, "", (f"8.8.8.{index}", port))
+                for index in range(1, harness.MAX_WEB_ADDRESSES + 2)
+            ]
+
+        pinned_open = mock.Mock()
+        with self.assertRaisesRegex(ValueError, "more than"):
+            harness.fetch_web_text(
+                "https://example.com/terms",
+                resolver=resolver,
+                pinned_open=pinned_open,
+            )
+        pinned_open.assert_not_called()
+
+    def test_a_cross_host_redirect_is_rejected_without_reading_its_body(self) -> None:
+        redirect = FakeWebResponse(
+            302,
+            "https://example.com/terms",
+            body=b"must not be consumed",
+            headers={"Location": "https://other.example/terms"},
+        )
+        opener = FakeWebOpener(redirect)
+        with self.assertRaisesRegex(ValueError, "changed host"):
+            harness.fetch_web_text(
+                "https://example.com/terms", resolver=public_resolver, opener=opener
+            )
+        self.assertEqual([], redirect.read_amounts)
+        self.assertEqual(["https://example.com/terms"], opener.urls)
+
+    def test_a_same_host_redirect_is_followed_without_reading_redirect_body(self) -> None:
+        redirect = FakeWebResponse(
+            302,
+            "https://example.com/old",
+            body=b"must not be consumed",
+            headers={"Location": "/current"},
+        )
+        final = FakeWebResponse(200, "https://example.com/current", body=b"current terms")
+        opener = FakeWebOpener(redirect, final)
+        text = harness.fetch_web_text(
+            "https://example.com/old", resolver=public_resolver, opener=opener
+        )
+        self.assertEqual("current terms", text)
+        self.assertEqual([], redirect.read_amounts)
+        self.assertEqual([harness.MAX_WEB_EVIDENCE_BYTES + 1], final.read_amounts)
+
+    def test_an_oversized_response_is_rejected_after_one_bounded_read(self) -> None:
+        response = FakeWebResponse(
+            200,
+            "https://example.com/terms",
+            body=b"x" * (harness.MAX_WEB_EVIDENCE_BYTES + 1),
+        )
+        with self.assertRaisesRegex(ValueError, "exceeds"):
+            harness.fetch_web_text(
+                "https://example.com/terms",
+                resolver=public_resolver,
+                opener=FakeWebOpener(response),
+            )
+        self.assertEqual([harness.MAX_WEB_EVIDENCE_BYTES + 1], response.read_amounts)
+
+    def test_too_many_redirects_fail_without_reading_any_redirect_body(self) -> None:
+        redirects = [
+            FakeWebResponse(
+                302,
+                f"https://example.com/{index}",
+                body=b"must not be consumed",
+                headers={"Location": f"/{index + 1}"},
+            )
+            for index in range(harness.MAX_WEB_REDIRECTS + 1)
+        ]
+        with self.assertRaisesRegex(ValueError, "redirect limit"):
+            harness.fetch_web_text(
+                "https://example.com/0",
+                resolver=public_resolver,
+                opener=FakeWebOpener(*redirects),
+            )
+        self.assertTrue(all(not response.read_amounts for response in redirects))
 
 
 class TokenTests(unittest.TestCase):
@@ -601,6 +899,14 @@ class FinishTests(unittest.TestCase):
         calls: list[list[str]] = []
         self.assertEqual(0, runner.finish(run=self.responder(calls), read=self.reader()))
         self.assertIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_finish_validates_before_the_unattended_network_recheck(self) -> None:
+        calls: list[list[str]] = []
+        self.assertEqual(0, runner.finish(run=self.responder(calls), read=self.reader()))
+        checks = [call for call in calls if call and call[0] == "uv"]
+        self.assertTrue(any("validate_directory.py" in part for part in checks[0]))
+        self.assertTrue(any("build_candidate_evidence.py" in part for part in checks[1]))
+        self.assertIn("--unattended", checks[1])
 
     def test_finish_reports_no_proposals_when_the_run_left_nothing_behind(self) -> None:
         """Nothing to do means a clean tree AND a HEAD that never moved off origin/main."""
