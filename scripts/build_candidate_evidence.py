@@ -9,18 +9,26 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import http.client
+import ipaddress
 import json
 import os
+import re
+import socket
+import ssl
 import subprocess
 import sys
+import urllib.parse
 import urllib.request
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 try:
+    from .discovery_sources import https_url_host
     from .update_directory import GitHubGetter, github_get
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from discovery_sources import https_url_host
     from update_directory import GitHubGetter, github_get
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +42,11 @@ COLLECTION_KEYS = {
     "specifications.json": "specifications", "inference-services.json": "services",
     "local-runtimes.json": "runtimes",
 }
+GIT_BLOB_SHA = re.compile(r"[0-9a-f]{40}")
+MAX_WEB_EVIDENCE_BYTES = 2 * 1024 * 1024
+MAX_WEB_REDIRECTS = 5
+MAX_WEB_ADDRESSES = 8
+WEB_REDIRECT_CODES = {301, 302, 303, 307, 308}
 
 
 def candidate_key(candidate: dict[str, Any]) -> str:
@@ -117,11 +130,176 @@ def content_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def fetch_web_text(url: str) -> str:
-    """Fetch a cited web document. Text only; the hash is over the decoded body."""
-    request = urllib.request.Request(url, headers={"User-Agent": "agent-systems-atlas-evidence"})
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", "replace")
+def _validated_web_endpoint(
+    url: str, resolver=socket.getaddrinfo
+) -> tuple[str, tuple[str, ...]]:
+    """Return an HTTPS host and every public-unicast address it may connect to."""
+    if any(ord(character) < 0x20 or ord(character) == 0x7F for character in url):
+        raise ValueError("web evidence URL contains a control character")
+    host = https_url_host(url)
+    if host is None:
+        raise ValueError("web evidence URL must be absolute HTTPS on a public DNS host")
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.port not in (None, 443):
+        raise ValueError("web evidence URL must use the default HTTPS port")
+    try:
+        answers = resolver(host, 443, type=socket.SOCK_STREAM)
+    except OSError as exc:
+        raise ValueError(f"web evidence host could not be resolved: {exc}") from exc
+    addresses: set[str] = set()
+    for answer in answers:
+        try:
+            addresses.add(str(answer[4][0]).split("%", 1)[0])
+        except (IndexError, TypeError):
+            raise ValueError("web evidence host returned an invalid address") from None
+    if not addresses:
+        raise ValueError("web evidence host returned no addresses")
+    if len(addresses) > MAX_WEB_ADDRESSES:
+        raise ValueError(
+            f"web evidence host returned more than {MAX_WEB_ADDRESSES} addresses"
+        )
+    for address in addresses:
+        try:
+            parsed_address = ipaddress.ip_address(address)
+        except ValueError:
+            raise ValueError(f"web evidence host returned an invalid address: {address}") from None
+        if (
+            not parsed_address.is_global
+            or parsed_address.is_multicast
+            or parsed_address.is_reserved
+            or getattr(parsed_address, "is_site_local", False)
+        ):
+            raise ValueError(
+                f"web evidence host resolved to a non-public-unicast address: {address}"
+            )
+    return host, tuple(sorted(addresses))
+
+
+class _PinnedHTTPSConnection(http.client.HTTPSConnection):
+    """Connect to a validated address while retaining the DNS name for TLS."""
+
+    def __init__(self, host: str, address: str, **kwargs) -> None:
+        super().__init__(host, **kwargs)
+        self._validated_address = address
+
+    def connect(self) -> None:
+        # Deliberately do not call HTTPConnection.connect(): it would resolve
+        # ``self.host`` again and reopen the DNS-rebinding gap this class closes.
+        self.sock = self._create_connection(
+            (self._validated_address, self.port), self.timeout, self.source_address
+        )
+        self.sock = self._context.wrap_socket(self.sock, server_hostname=self.host)
+
+
+class _PinnedWebResponse:
+    """Give an ``HTTPResponse`` the small context-managed interface used below."""
+
+    def __init__(self, response, connection, url: str) -> None:
+        self._response = response
+        self._connection = connection
+        self._url = url
+        self.headers = response.headers
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args) -> None:
+        try:
+            self._response.close()
+        finally:
+            self._connection.close()
+
+    def getcode(self) -> int:
+        return self._response.status
+
+    def geturl(self) -> str:
+        return self._url
+
+    def read(self, amount: int | None = None) -> bytes:
+        return self._response.read(amount)
+
+
+def _open_pinned_https(
+    url: str,
+    host: str,
+    addresses: tuple[str, ...],
+    *,
+    timeout: int,
+):
+    """Open one direct TLS connection to an address already approved by policy."""
+    parsed = urllib.parse.urlsplit(url)
+    target = urllib.parse.urlunsplit(("", "", parsed.path or "/", parsed.query, ""))
+    context = ssl.create_default_context()
+    failures: list[str] = []
+    for address in addresses:
+        connection = _PinnedHTTPSConnection(
+            host, address, port=443, timeout=timeout, context=context
+        )
+        try:
+            connection.request(
+                "GET",
+                target,
+                headers={
+                    "Accept-Encoding": "identity",
+                    "Connection": "close",
+                    "User-Agent": "agent-systems-atlas-evidence",
+                },
+            )
+            return _PinnedWebResponse(connection.getresponse(), connection, url)
+        except (OSError, http.client.HTTPException) as exc:
+            connection.close()
+            failures.append(f"{address}: {type(exc).__name__}: {exc}")
+    raise OSError("every validated address failed: " + "; ".join(failures))
+
+
+def fetch_web_text(
+    url: str, *, resolver=socket.getaddrinfo, opener=None, pinned_open=None
+) -> str:
+    """Fetch bounded HTTPS through a TLS connection pinned to a validated address."""
+    allowed_host, _ = _validated_web_endpoint(url, resolver)
+    pinned_open = pinned_open or _open_pinned_https
+    current_url = url
+    for redirect_count in range(MAX_WEB_REDIRECTS + 1):
+        current_host, current_addresses = _validated_web_endpoint(current_url, resolver)
+        if current_host != allowed_host:
+            raise ValueError("web evidence redirect changed host")
+        request = urllib.request.Request(
+            current_url, headers={"User-Agent": "agent-systems-atlas-evidence"}
+        )
+        response_context = (
+            opener.open(request, timeout=30)
+            if opener is not None
+            else pinned_open(
+                current_url, current_host, current_addresses, timeout=30
+            )
+        )
+        with response_context as response:
+            status = response.getcode()
+            if status in WEB_REDIRECT_CODES:
+                if redirect_count == MAX_WEB_REDIRECTS:
+                    raise ValueError("web evidence exceeded its redirect limit")
+                location = response.headers.get("Location")
+                if not location:
+                    raise ValueError("web evidence redirect has no Location")
+                redirected = urllib.parse.urljoin(current_url, location)
+                redirected_host, _ = _validated_web_endpoint(redirected, resolver)
+                if redirected_host != allowed_host:
+                    raise ValueError("web evidence redirect changed host")
+                current_url = redirected
+                continue
+            if not isinstance(status, int) or not 200 <= status < 300:
+                raise ValueError(f"web evidence returned HTTP {status}")
+            final_url = response.geturl()
+            final_host, _ = _validated_web_endpoint(final_url, resolver)
+            if final_host != allowed_host:
+                raise ValueError("web evidence response changed host")
+            body = response.read(MAX_WEB_EVIDENCE_BYTES + 1)
+            if len(body) > MAX_WEB_EVIDENCE_BYTES:
+                raise ValueError(
+                    f"web evidence response exceeds {MAX_WEB_EVIDENCE_BYTES} bytes"
+                )
+            return body.decode("utf-8", "replace")
+    raise AssertionError("redirect loop ended without returning or raising")
 
 
 def _decode(payload: dict[str, Any]) -> str:
@@ -147,17 +325,19 @@ def fetch_candidate_evidence(
             continue
         text = _decode(payload)
         blob_sha = payload.get("sha")
+        if not isinstance(blob_sha, str) or not GIT_BLOB_SHA.fullmatch(blob_sha):
+            bundle["errors"].append(f"{label}: GitHub did not return a valid blob SHA")
+            continue
         document = {
             "label": label,
             "url": payload.get("html_url") or f"https://github.com/{repo}",
-            "kind": "git_blob" if blob_sha else "web",
+            "kind": "git_blob",
             "content": text,
             "content_sha256": content_hash(text),
             "fetched_at": today,
         }
-        if blob_sha:
-            document["blob_sha"] = blob_sha
-            document["immutable_url"] = f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+        document["blob_sha"] = blob_sha
+        document["immutable_url"] = f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
         bundle["documents"].append(document)
     return bundle
 
@@ -181,11 +361,55 @@ def blocks_to_recheck(
     ]
 
 
+def _unattended_evidence_problems(candidate: dict[str, Any]) -> list[str]:
+    """Check the complete unattended evidence shape without performing any I/O."""
+    key = candidate_key(candidate)
+    triage = candidate["triage"]
+    problems: list[str] = []
+    if triage.get("proposer") != "candidate-triage":
+        problems.append(
+            f"{key}: unattended triage requires proposer 'candidate-triage'"
+        )
+    evidence = triage.get("evidence") or []
+    if not isinstance(evidence, list):
+        return [
+            *problems,
+            f"{key}: evidence must be a list, got {type(evidence).__name__}",
+        ]
+    if not 1 <= len(evidence) <= 2:
+        problems.append(
+            f"{key}: unattended triage requires one or two GitHub citations"
+        )
+    labels: list[str] = []
+    for item in evidence:
+        if not isinstance(item, dict):
+            problems.append(f"{key}: every evidence item must be an object")
+            continue
+        if item.get("kind") != "git_blob":
+            problems.append(
+                f"{key}: unattended triage accepts only GitHub blob evidence"
+            )
+        label = item.get("label")
+        if label not in {"LICENSE", "README"}:
+            problems.append(
+                f"{key}: unattended triage accepts only LICENSE and README labels"
+            )
+        elif label in labels:
+            problems.append(
+                f"{key}: unattended triage rejects duplicate {label} evidence"
+            )
+        else:
+            labels.append(label)
+    return problems
+
+
 def recheck_candidates(
     candidates: list[dict[str, Any]],
     getter: GitHubGetter,
     token: str | None,
     baseline: list[dict[str, Any]],
+    *,
+    unattended: bool = False,
 ) -> list[str]:
     """Re-fetch this run's cited documents and confirm they still hash to what was recorded.
 
@@ -194,7 +418,13 @@ def recheck_candidates(
     upstream drift — a README edited afterwards — into a guard failure no run can clear.
     """
     problems: list[str] = []
-    for candidate in blocks_to_recheck(candidates, baseline):
+    scoped = blocks_to_recheck(candidates, baseline)
+    if unattended:
+        for candidate in scoped:
+            problems.extend(_unattended_evidence_problems(candidate))
+        if problems:
+            return problems
+    for candidate in scoped:
         triage = candidate["triage"]
         repo = candidate.get("repo")
         evidence = triage.get("evidence") or []
@@ -205,8 +435,19 @@ def recheck_candidates(
             )
             continue
         for item in evidence:
+            if not isinstance(item, dict):
+                problems.append(
+                    f"{candidate_key(candidate)}: every evidence item must be an object"
+                )
+                continue
             label = item.get("label")
             if item.get("kind") == "web":
+                if unattended:
+                    problems.append(
+                        f"{candidate_key(candidate)}: unattended triage accepts only "
+                        "GitHub blob evidence"
+                    )
+                    continue
                 # Re-fetching the cited URL itself is what makes a fabricated citation
                 # fail: there is no label-derived path to fall back on, so a URL that
                 # does not serve the recorded bytes cannot pass.
@@ -223,6 +464,17 @@ def recheck_candidates(
                         f"{candidate_key(candidate)}: {label} content_sha256 recorded "
                         f"{item.get('content_sha256')} but re-fetched {actual}"
                     )
+                continue
+            if item.get("kind") != "git_blob":
+                problems.append(
+                    f"{candidate_key(candidate)}: unknown evidence kind "
+                    f"{item.get('kind')!r}"
+                )
+                continue
+            if not isinstance(repo, str):
+                problems.append(
+                    f"{candidate_key(candidate)}: GitHub blob evidence requires a repository"
+                )
                 continue
             if label == "LICENSE":
                 path = f"/repos/{repo}/license"
@@ -361,9 +613,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int, default=40)
     parser.add_argument("--recheck", action="store_true")
+    parser.add_argument(
+        "--unattended", action="store_true",
+        help="reject generic web evidence in the unattended candidate-triage routine",
+    )
     parser.add_argument("--previous-branch", default="")
     parser.add_argument("--baseline-ref", default="origin/main")
     args = parser.parse_args(argv)
+    if args.unattended and not args.recheck:
+        parser.error("--unattended requires --recheck")
     directory = ROOT / "directory"
     candidates_path = directory / "candidates.json"
     candidates = json.loads(candidates_path.read_text(encoding="utf-8"))["candidates"]
@@ -372,7 +630,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.recheck:
         baseline = previous_candidates(args.baseline_ref)
         scoped = blocks_to_recheck(candidates, baseline)
-        problems = recheck_candidates(candidates, github_get, token, baseline)
+        problems = recheck_candidates(
+            candidates, github_get, token, baseline, unattended=args.unattended
+        )
         for problem in problems:
             print(f"error: {problem}", file=sys.stderr)
         cited = sum(len(item["triage"].get("evidence") or []) for item in scoped)

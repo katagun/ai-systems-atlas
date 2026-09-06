@@ -26,8 +26,11 @@ NULLABLE_WHEN_HELD = ("proposed_system_family", "proposed_primary_role")
 MISSING = object()
 
 CHECKS = (
-    ["uv", "run", "python", "scripts/build_candidate_evidence.py", "--recheck"],
     ["uv", "run", "python", "scripts/validate_directory.py"],
+    [
+        "uv", "run", "python", "scripts/build_candidate_evidence.py",
+        "--recheck", "--unattended",
+    ],
     ["uv", "run", "python", "-m", "unittest", "discover", "-s", "tests"],
     ["uv", "run", "ruff", "check", "scripts", "tests"],
 )

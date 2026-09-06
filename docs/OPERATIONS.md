@@ -132,6 +132,16 @@ or `origin`. To review a run:
    `immutable_url`, which addresses a blob SHA and cannot change under it.
    Pass `--baseline-ref` to compare against something other than `origin/main`.
 
+The unattended `finish` path validates the queue before any re-fetch and invokes the
+rechecker with `--unattended`. That mode accepts only GitHub LICENSE and README blobs
+whose request paths are derived from the unchanged candidate repository; it rejects
+generic `web` evidence before network I/O. Direct human rechecks retain support for
+existing non-GitHub evidence, but require public DNS-backed HTTPS on port 443, keep every
+redirect on the original host, reject non-public or multicast resolved addresses, pin the
+TLS connection to a validated numeric address while retaining hostname verification, and
+cap bodies at 2 MiB. The unattended path also permits each LICENSE and README label at
+most once before making any request.
+
 Then, per candidate:
 
 - **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion and remove the
