@@ -139,8 +139,8 @@
         }
       ],
       "verified_at": "2026-08-30",
-      "stars": 8343,
-      "stars_verified_at": "2026-08-31"
+      "stars": 8354,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "llama-cpp",
@@ -241,8 +241,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 126545,
-      "stars_verified_at": "2026-08-31"
+      "stars": 127362,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "lm-studio",
@@ -438,8 +438,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 48799,
-      "stars_verified_at": "2026-08-31"
+      "stars": 48954,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "mlc-llm",
@@ -570,8 +570,8 @@
         }
       ],
       "verified_at": "2026-09-03",
-      "stars": 23130,
-      "stars_verified_at": "2026-09-03"
+      "stars": 23140,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "mlx-lm",
@@ -657,8 +657,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 6846,
-      "stars_verified_at": "2026-08-31"
+      "stars": 6915,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "ollama",
@@ -762,8 +762,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 179850,
-      "stars_verified_at": "2026-08-31"
+      "stars": 180378,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "onnxruntime-genai",
@@ -892,8 +892,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 1112,
-      "stars_verified_at": "2026-08-31"
+      "stars": 1118,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "openvino-model-server",
@@ -1020,8 +1020,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 922,
-      "stars_verified_at": "2026-08-31"
+      "stars": 926,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "sglang",
@@ -1117,8 +1117,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 32999,
-      "stars_verified_at": "2026-08-31"
+      "stars": 35586,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "tensorflow-serving",
@@ -1263,7 +1263,7 @@
       ],
       "verified_at": "2026-08-30",
       "stars": 6360,
-      "stars_verified_at": "2026-08-31"
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "tensorrt-llm",
@@ -1424,8 +1424,8 @@
         }
       ],
       "verified_at": "2026-08-30",
-      "stars": 14516,
-      "stars_verified_at": "2026-08-31"
+      "stars": 14562,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "text-embeddings-inference",
@@ -1520,8 +1520,8 @@
         }
       ],
       "verified_at": "2026-09-02",
-      "stars": 5036,
-      "stars_verified_at": "2026-09-02"
+      "stars": 5043,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "vllm",
@@ -1619,8 +1619,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 90626,
-      "stars_verified_at": "2026-08-31"
+      "stars": 91159,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "web-llm",
@@ -1722,8 +1722,8 @@
         }
       ],
       "verified_at": "2026-09-03",
-      "stars": 18942,
-      "stars_verified_at": "2026-09-03"
+      "stars": 19017,
+      "stars_verified_at": "2026-09-07"
     },
     {
       "id": "xinference",
@@ -1867,8 +1867,8 @@
         }
       ],
       "verified_at": "2026-08-29",
-      "stars": 9533,
-      "stars_verified_at": "2026-08-31"
+      "stars": 9550,
+      "stars_verified_at": "2026-09-07"
     }
   ]
 }

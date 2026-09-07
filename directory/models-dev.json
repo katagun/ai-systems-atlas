@@ -1,16 +1,16 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-05",
+  "updated_at": "2026-09-07",
   "source_record_count": 370,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "f57a900926160a597e96b62dab5de44732e95e35",
+    "commit": "c12e91757aa9a652a506c3ed73d4462a810b5b67",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/f57a900926160a597e96b62dab5de44732e95e35",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/c12e91757aa9a652a506c3ed73d4462a810b5b67",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "16d86cec9bead8e3f424c1a60f1c8ad2fedb8fb88ef4e0b92f14898bce318533"
+    "sha256": "91e92da1935ed2fb2ab90d4968eba96320da77d806a091265b553fcf4301efeb"
   },
   "models": [
     {
@@ -5569,7 +5569,7 @@
       "id": "model-google-gemini-3-pro-image-preview",
       "source_id": "google/gemini-3-pro-image-preview",
       "source_metadata": {
-        "name": "Nano Banana Pro",
+        "name": "Nano Banana Pro Preview",
         "description": "Nano Banana Pro for higher-fidelity image generation and design-heavy edits",
         "family": "gemini-pro",
         "release_date": "2025-11-20",
@@ -5687,7 +5687,7 @@
       "id": "model-google-gemini-3-1-flash-image-preview",
       "source_id": "google/gemini-3.1-flash-image-preview",
       "source_metadata": {
-        "name": "Nano Banana 2",
+        "name": "Nano Banana 2 Preview",
         "description": "Image model for prompt-driven generation, editing, and visual design workflows",
         "family": "gemini-flash",
         "release_date": "2026-02-26",
@@ -11472,7 +11472,7 @@
         "family": "gpt-astra",
         "release_date": "2026-09-04",
         "last_updated": "2026-09-04",
-        "knowledge_cutoff": null,
+        "knowledge_cutoff": "2026-04-30",
         "modalities": {
           "input": [
             "text",
