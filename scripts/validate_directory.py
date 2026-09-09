@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
 
@@ -37,6 +37,13 @@ REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
 CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
 STORY_ID_PATTERN = re.compile(r"[0-9]+")
+# C0 and C1 control characters. urlsplit strips tabs and newlines before parsing, so a
+# URL carrying them can validate as a clean host and still inject a line into any log
+# or annotation stream that later prints it.
+CONTROL_CHARACTER_PATTERN = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+# Everything but letters, digits and whitespace: the separators a taxonomy id could be
+# rewritten with. Whitespace is excluded deliberately — see taxonomy_ids_named.
+IDENTIFIER_SEPARATORS = re.compile(r"[^0-9a-z\s]")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
 EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
@@ -185,6 +192,35 @@ def valid_date(value: object) -> bool:
         return date.fromisoformat(value).isoformat() == value
     except ValueError:
         return False
+
+
+def valid_timestamp(value: object) -> bool:
+    """An ISO 8601 instant, as the sweep and the attention source both write them.
+
+    Decision 13 of the attention-source design requires ISO dates; a non-empty-string
+    check accepts "yesterday" and "N/A" as provenance.
+    """
+    if not isinstance(value, str) or not value.strip():
+        return False
+    try:
+        datetime.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
+def taxonomy_ids_named(text: str, classifying: set[str]) -> list[str]:
+    """Taxonomy ids written into free text, seeing through punctuation but not prose.
+
+    `coding-agent` is `coding_agent` with its separator swapped, and a substring match
+    over the raw text misses it, so punctuation is normalised to `_` first. Whitespace
+    deliberately is not: `docs/routines/candidate-triage.md` states that quoting page
+    prose resembling a role or family is fine and only writing the identifier is not, so
+    "describes a coding agent" must keep passing. Collapsing its spaces would reject the
+    sentence the routine is told to write.
+    """
+    haystack = IDENTIFIER_SEPARATORS.sub("_", text.lower())
+    return sorted(name for name in classifying if name in haystack)
 
 
 def valid_partial_date(value: object) -> bool:
@@ -1417,8 +1453,7 @@ def validate_triage(
         errors.append(f"candidate {prefix}: triage requires a finding")
     else:
         classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
-        finding_lower = finding.lower()
-        leaked = sorted(name for name in classifying if name in finding_lower)
+        leaked = taxonomy_ids_named(finding, classifying)
         if leaked:
             errors.append(
                 f"candidate {prefix}: finding must not classify; it names taxonomy ids {leaked}"
@@ -1497,6 +1532,8 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
             errors.append(f"signal {prefix}: page_status must name a fetch outcome")
         if https_url_host(signal["url"]) is None:
             errors.append(f"signal {prefix}: url must be an HTTPS URL on a public DNS host")
+        elif CONTROL_CHARACTER_PATTERN.search(signal["url"]):
+            errors.append(f"signal {prefix}: url must not contain control characters")
         readable = signal["page_status"] == "readable"
         digest = signal["content_sha256"]
         if readable and not (isinstance(digest, str) and CONTENT_SHA_PATTERN.fullmatch(digest)):
@@ -1519,6 +1556,8 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
         for field in ("submitted_at", "fetched_at"):
             if not isinstance(signal[field], str) or not signal[field].strip():
                 errors.append(f"signal {prefix}: {field} must be a non-empty string")
+            elif not valid_timestamp(signal[field]):
+                errors.append(f"signal {prefix}: {field} must be an ISO 8601 timestamp")
 
         assessment = signal.get("assessment")
         if assessment is None:
@@ -1537,14 +1576,14 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
         if not isinstance(finding, str) or not finding.strip():
             errors.append(f"signal {prefix}: assessment requires a finding")
         else:
-            leaked = sorted(name for name in classifying if name in finding.lower())
+            leaked = taxonomy_ids_named(finding, classifying)
             if leaked:
                 errors.append(
                     f"signal {prefix}: finding must not classify; it names taxonomy ids {leaked}"
                 )
         rule = assessment["rule"]
         if isinstance(rule, str):
-            leaked_rule = sorted(name for name in classifying if name in rule.lower())
+            leaked_rule = taxonomy_ids_named(rule, classifying)
             if leaked_rule:
                 errors.append(
                     f"signal {prefix}: rule must not classify; it names taxonomy ids {leaked_rule}"
@@ -1563,6 +1602,13 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                     errors.append(f"signal {prefix}: evidence kind must be web")
                 if not isinstance(item["label"], str) or not item["label"].strip():
                     errors.append(f"signal {prefix}: evidence requires a label")
+                else:
+                    leaked_label = taxonomy_ids_named(item["label"], classifying)
+                    if leaked_label:
+                        errors.append(
+                            f"signal {prefix}: evidence label must not classify; "
+                            f"it names taxonomy ids {leaked_label}"
+                        )
                 if https_url_host(item["url"]) is None:
                     errors.append(
                         f"signal {prefix}: evidence requires an HTTPS URL on a public DNS host"

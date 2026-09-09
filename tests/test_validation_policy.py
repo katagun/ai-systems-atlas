@@ -844,7 +844,15 @@ class ValidationPolicyTests(unittest.TestCase):
         }
         (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
         errors = validate(root)
-        self.assertTrue(any("must not classify" in error for error in errors), errors)
+        # Scoped: the candidate-triage validator emits "must not classify" too, so a bare
+        # substring match passes on an error from an entirely different queue.
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "finding must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_an_unreadable_page_may_only_carry_the_unreadable_verdict(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1039,6 +1047,115 @@ class ValidationPolicyTests(unittest.TestCase):
             any("assessment proposer must be hn-signals or human" in error for error in errors),
             errors,
         )
+
+    def signals_with_assessment(self, root: Path, **fields) -> list[str]:
+        """Validate a catalog whose one signal carries an assessment built from `fields`."""
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        signal["assessment"].update(fields)
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        return validate(root)
+
+    def test_a_kebab_case_taxonomy_id_does_not_evade_the_finding_check(self) -> None:
+        """`coding-agent` is the identifier with its separator swapped, not prose."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = self.signals_with_assessment(
+            root, finding="The page positions this as a coding-agent for large repositories."
+        )
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "finding must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_prose_that_merely_resembles_a_role_still_passes(self) -> None:
+        """docs/routines/candidate-triage.md: quoting prose that resembles a role is
+        fine; writing the identifier is not. The separator normalisation must not
+        collapse whitespace, or this documented case would be rejected."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = self.signals_with_assessment(
+            root, finding="The page describes a coding agent that edits files in a repository."
+        )
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_an_evidence_label_may_not_name_a_taxonomy_id(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "coding_agent launch page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "evidence label must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_a_triage_finding_may_not_evade_the_check_with_kebab_case(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "candidates.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        candidate = next(item for item in document["candidates"] if "triage" in item)
+        candidate["triage"]["finding"] = "The README calls it a coding-agent for teams."
+        path.write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
+    def test_a_signal_url_carrying_a_control_character_is_rejected(self) -> None:
+        """urlsplit strips tabs and newlines, so the host still parses clean."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(url="https://vendor.example/launch\n::error::spoofed")
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "must not contain control characters" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_timestamps_must_be_iso_8601(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(submitted_at="yesterday", fetched_at="2026-13-45T99:00Z")
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        joined = "\n".join(errors)
+        self.assertIn("signal 49616354: submitted_at must be an ISO 8601 timestamp", joined)
+        self.assertIn("signal 49616354: fetched_at must be an ISO 8601 timestamp", joined)
 
     def test_worth_review_verdict_requires_at_least_one_evidence_item(self) -> None:
         temporary, root = self.temporary_catalog()
