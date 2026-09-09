@@ -42,6 +42,15 @@ class DocumentationTests(unittest.TestCase):
         ):
             self.assertIn(required, prompt, required)
 
+    def test_the_signal_routine_prompt_states_its_boundary(self) -> None:
+        """Mirrors test_the_routine_prompt_states_its_boundary for the attention-source routine."""
+        text = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        for needle in (
+            "directory/hn-signals.json", "run_hn_signals.py prepare",
+            "run_hn_signals.py finish", "NEVER FETCH", "028",
+        ):
+            self.assertIn(needle, text)
+
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
             "ROADMAP.md",
