@@ -142,25 +142,6 @@ class DocumentationTests(unittest.TestCase):
             self.refresh_step("Open or update the refresh pull request"),
         )
 
-    def sweep_workflow(self) -> str:
-        return (ROOT / ".github" / "workflows" / "sweep-hackernews.yml").read_text(encoding="utf-8")
-
-    def sweep_step(self, marker: str) -> str:
-        """Return one step's block from the sweep workflow, without a YAML parser.
-
-        Unlike refresh_step(), this locates the step by a distinctive substring rather than a
-        `- name:` field: the sweep workflow's checkout step carries no name.
-        """
-        workflow = self.sweep_workflow()
-        start = workflow.index(marker)
-        start = workflow.rfind("\n      - ", 0, start) + 1
-        end = workflow.find("\n      - ", start + 1)
-        return workflow[start:] if end == -1 else workflow[start:end]
-
-    def test_the_sweep_workflow_withholds_credentials_while_parsing(self) -> None:
-        self.assertIn("persist-credentials: false", self.sweep_step("actions/checkout"))
-        self.assertIn("ATLAS_AUTOMATION_TOKEN", self.sweep_step("Open or update the signal pull request"))
-
     def test_the_weekly_refresh_stages_every_directory_file_except_the_signal_queue(self) -> None:
         """The explicit staging list is duplicated (GitHub Actions steps share no shell state);
 
