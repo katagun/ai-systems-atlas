@@ -88,6 +88,41 @@ class VerifierTests(unittest.TestCase):
         problems = verify_signal_pages.verify(refresh=False, fetcher=lambda url: original, signals_path=path)
         self.assertEqual(problems, [])
 
+    def test_the_verifier_hashes_a_page_exactly_as_the_sweep_did(self) -> None:
+        """The sweep pins the digest; the verifier reproduces it. Two extractors that
+        disagreed by one character would report drift on every page, every day."""
+        from scripts import sweep_hackernews, verify_signal_pages
+
+        page = (
+            "<html><head><style>.a{color:red}</style></head><body>"
+            + "<p>A launch announcement with plenty of prose. </p>" * 20
+            + "<script>var buildId = 'changes-every-deploy';</script></body></html>"
+        )
+        document = sweep_hackernews.build_document(
+            [{
+                "objectID": "1", "title": "A launch", "url": "https://vendor.example/launch",
+                "points": 50, "num_comments": 4, "created_at": "2026-09-08T00:00:00Z",
+            }],
+            window_start="2026-09-07T00:00:00Z",
+            window_end="2026-09-08T00:00:00Z",
+            points_floor=10,
+            story_count=1,
+            qualifying_count=1,
+            discovered_at="2026-09-09",
+            fetcher=lambda url: page,
+        )
+        self.assertEqual(document["signals"][0]["page_status"], "readable")
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: page, signals_path=path
+        )
+
+        self.assertEqual(problems, [])
+
 
 if __name__ == "__main__":
     unittest.main()

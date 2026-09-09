@@ -14,6 +14,7 @@ import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +30,9 @@ SIGNALS_PATH = ROOT / "directory" / "hn-signals.json"
 ENDPOINT = "https://hn.algolia.com/api/v1/search_by_date"
 USER_AGENT = "ai-systems-atlas-sweep/0.1"
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
+# Measured on extracted visible text, never on the raw body: ai.meta.com/muse/ is a
+# client-rendered shell that yielded 55 characters of text on 2026-09-09 while its
+# markup ran to kilobytes.
 MIN_READABLE_CHARS = 400
 DEFAULT_POINTS_FLOOR = 10
 MAX_SIGNALS = 60
@@ -115,7 +119,59 @@ def eligible_stories(
     return kept
 
 
+class _VisibleText(HTMLParser):
+    """Collect the text a reader would see, dropping script and style bodies.
+
+    stdlib only, by design: this repository has zero dependencies, and an HTML
+    tokenizer is exactly what `html.parser` is. It is deliberately lenient — a vendor
+    page is arbitrary third-party markup, and a strict parse that raised would turn a
+    malformed page into a failed run rather than an unreadable one.
+    """
+
+    SKIPPED = frozenset({"script", "style", "template", "noscript"})
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._depth = 0
+        self._chunks: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in self.SKIPPED:
+            self._depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in self.SKIPPED and self._depth:
+            self._depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if not self._depth:
+            self._chunks.append(data)
+
+    def collected(self) -> str:
+        return " ".join("".join(self._chunks).split())
+
+
+def extract_visible_text(body: str) -> str:
+    """Return the visible text of an HTTP response body, whitespace-collapsed.
+
+    `fetch_web_text` returns the raw body, so both the readability threshold and the
+    committed digest must be taken from this, never from the markup. A client-rendered
+    page is kilobytes of HTML around an empty div: measured on the raw body it reads as
+    a long, readable document, and the `unreadable` guarantee in ADR 028 and Decision 12
+    of the design would never fire for the case it was written for.
+    """
+    parser = _VisibleText()
+    parser.feed(body)
+    parser.close()
+    return parser.collected()
+
+
 def content_hash(text: str) -> str:
+    """Hash extracted page text. Callers must pass `extract_visible_text` output.
+
+    `scripts/verify_signal_pages.py` re-fetches and re-hashes the same way; if the two
+    ever extracted differently, every re-check would report drift that never happened.
+    """
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
@@ -148,12 +204,16 @@ def build_document(
         page_status = "readable"
         digest: str | None = None
         try:
-            text = fetcher(url)
+            body = fetcher(url)
         except (OSError, ValueError) as error:
             page_status = "failed"
-            print(f"warning: {url}: {error}", file=sys.stderr)
+            # The URL is attacker-supplied and this line lands in a GitHub Actions log,
+            # where ::error:: and ::add-mask:: annotations are injectable. !r keeps a
+            # newline a newline.
+            print(f"warning: {url!r}: {error}", file=sys.stderr)
         else:
-            if len(text.strip()) < MIN_READABLE_CHARS:
+            text = extract_visible_text(body)
+            if len(text) < MIN_READABLE_CHARS:
                 page_status = "unreadable"
             else:
                 digest = content_hash(text)

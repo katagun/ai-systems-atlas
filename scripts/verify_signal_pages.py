@@ -13,10 +13,10 @@ from pathlib import Path
 
 try:
     from .build_candidate_evidence import fetch_web_text
-    from .sweep_hackernews import content_hash
+    from .sweep_hackernews import content_hash, extract_visible_text
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_candidate_evidence import fetch_web_text
-    from sweep_hackernews import content_hash
+    from sweep_hackernews import content_hash, extract_visible_text
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNALS_PATH = ROOT / "directory" / "hn-signals.json"
@@ -36,10 +36,14 @@ def verify(*, refresh: bool, fetcher=fetch_web_text, signals_path: Path = SIGNAL
         if signal["page_status"] != "readable":
             continue
         try:
-            text = fetcher(signal["url"])
+            body = fetcher(signal["url"])
         except (OSError, ValueError) as error:
             problems.append(f"signal {signal['story_id']}: re-fetch failed: {error}")
             continue
+        # The same extraction the sweep hashed. Importing it rather than repeating it is
+        # load-bearing: two extractors that disagree by one space report drift on every
+        # page, every day, and a real change would be indistinguishable from the noise.
+        text = extract_visible_text(body)
         digest = content_hash(text)
         if digest != signal["content_sha256"]:
             problems.append(

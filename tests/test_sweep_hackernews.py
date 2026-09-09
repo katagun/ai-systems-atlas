@@ -11,6 +11,38 @@ from scripts import sweep_hackernews
 # any legitimate field, so its absence actually tests that page text is never stored.
 SENTINEL_PAGE_TEXT = "SENTINEL_PAGE_BODY_TEXT and more prose... " * 12
 
+# A client-rendered vendor page: kilobytes of markup, a mount point, and almost no text.
+# ai.meta.com/muse/ yielded 55 characters of extracted text on 2026-09-09 while its
+# markup ran far past MIN_READABLE_CHARS, so a threshold applied to the raw body calls
+# this page readable and the "unreadable" guarantee in ADR 028 never fires for it.
+SPA_SHELL = """<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.example" crossorigin />
+    <link rel="modulepreload" href="/assets/vendor.4c1b9f2e.js" />
+    <link rel="stylesheet" href="/assets/index.7a3d0b11.css" />
+    <style>
+      :root { --brand: #101828; --radius: 12px; --shadow: 0 1px 2px rgba(16,24,40,.05); }
+      #root { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+      .skeleton { animation: pulse 1.5s ease-in-out infinite; background: #eaecf0; }
+    </style>
+    <script>
+      window.__APP_CONFIG__ = {
+        apiBase: "https://api.vendor.example/v1",
+        flags: { newOnboarding: true, telemetry: true, betaAgents: false },
+        buildId: "2026.09.08-a41f0c9", region: "us-east-1", locale: "en-US"
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="module" src="/assets/index.9f2c1a04.js"></script>
+  </body>
+</html>"""
+
 
 def hit(title: str, url: str | None, points: int) -> dict:
     return {
@@ -100,6 +132,23 @@ class DenylistedHostTests(unittest.TestCase):
         self.assertFalse(sweep_hackernews.denylisted_host("fakemedium.com", sweep_hackernews.MEDIA_DENYLIST))
 
 
+class ExtractVisibleTextTests(unittest.TestCase):
+    def test_script_and_style_bodies_are_not_text(self) -> None:
+        body = "<style>.a{color:red}</style><script>var x = 1;</script><p>Hello</p>"
+        self.assertEqual(sweep_hackernews.extract_visible_text(body), "Hello")
+
+    def test_entities_and_whitespace_are_normalised(self) -> None:
+        body = "<p>Mercury\n\n  2.5 &amp;   friends</p>"
+        self.assertEqual(sweep_hackernews.extract_visible_text(body), "Mercury 2.5 & friends")
+
+    def test_a_body_with_no_markup_is_returned_as_written(self) -> None:
+        self.assertEqual(sweep_hackernews.extract_visible_text("plain text"), "plain text")
+
+    def test_malformed_markup_does_not_raise(self) -> None:
+        body = "<div><p>half a tag <span class=unquoted>text</div><script>oops"
+        self.assertIn("half a tag", sweep_hackernews.extract_visible_text(body))
+
+
 class DocumentTests(unittest.TestCase):
     def build(self, fetcher, qualifying_count: int | None = None) -> dict:
         stories = [{
@@ -127,11 +176,30 @@ class DocumentTests(unittest.TestCase):
         self.assertNotIn("SENTINEL_PAGE_BODY_TEXT", json.dumps(document))
 
     def test_a_client_rendered_page_is_recorded_as_unreadable(self) -> None:
-        """ai.meta.com/muse/ yielded 55 characters on 2026-09-09."""
-        document = self.build(lambda url: "   ")
+        """ai.meta.com/muse/ yielded 55 characters of extracted text on 2026-09-09.
+
+        The markup is the point: this shell is well past MIN_READABLE_CHARS as a raw
+        body, so the test fails against a threshold that measures HTML source.
+        """
+        self.assertGreater(len(SPA_SHELL), sweep_hackernews.MIN_READABLE_CHARS)
+        self.assertLess(
+            len(sweep_hackernews.extract_visible_text(SPA_SHELL)),
+            sweep_hackernews.MIN_READABLE_CHARS,
+        )
+        document = self.build(lambda url: SPA_SHELL)
         signal = document["signals"][0]
         self.assertEqual(signal["page_status"], "unreadable")
         self.assertIsNone(signal["content_sha256"])
+
+    def test_a_readable_page_is_hashed_on_its_text_not_its_markup(self) -> None:
+        """Two pages with the same words in different markup pin the same digest."""
+        plain = self.build(lambda url: SENTINEL_PAGE_TEXT)["signals"][0]
+        wrapped = self.build(
+            lambda url: f"<html><body><p>{SENTINEL_PAGE_TEXT}</p>"
+            f"<script>var tracking = {{id: 'abc'}};</script></body></html>"
+        )["signals"][0]
+        self.assertEqual(wrapped["page_status"], "readable")
+        self.assertEqual(wrapped["content_sha256"], plain["content_sha256"])
 
     def test_a_failed_fetch_is_recorded_and_does_not_abort_the_run(self) -> None:
         def boom(url: str) -> str:
