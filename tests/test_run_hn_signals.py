@@ -5,6 +5,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
+from unittest import mock
 
 from scripts import run_hn_signals
 
@@ -122,6 +124,75 @@ class VerifierTests(unittest.TestCase):
         )
 
         self.assertEqual(problems, [])
+
+
+class BundleDriftTests(unittest.TestCase):
+    """One vendor edit must not discard the rest of the day's batch."""
+
+    SIGNALS: ClassVar[list[dict]] = [
+        {"story_id": "1", "page_status": "readable"},
+        {"story_id": "2", "page_status": "readable"},
+        {"story_id": "3", "page_status": "failed"},
+        {"story_id": "4", "page_status": "readable", "assessment": {"verdict": "unreadable"}},
+    ]
+
+    def test_a_readable_page_missing_from_the_bundle_is_drift(self) -> None:
+        self.assertEqual(
+            run_hn_signals.drifted_story_ids(self.SIGNALS, {"1", "4"}), ["2"]
+        )
+
+    def test_an_unfetchable_page_is_not_drift(self) -> None:
+        """`failed` carries no digest to re-check; it is dispositioned `unreadable`."""
+        self.assertNotIn("3", run_hn_signals.drifted_story_ids(self.SIGNALS, {"1", "2", "4"}))
+
+    def test_pending_excludes_a_drifted_page_but_keeps_an_unfetchable_one(self) -> None:
+        pending = run_hn_signals.pending_story_ids(self.SIGNALS, ["2"], 40)
+        self.assertEqual(pending, ["1", "3"])
+
+    def test_pending_honours_the_limit(self) -> None:
+        self.assertEqual(run_hn_signals.pending_story_ids(self.SIGNALS, [], 2), ["1", "2"])
+
+    def test_a_missing_bundle_verifies_nothing(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(run_hn_signals.bundled_story_ids(Path(directory)), set())
+
+
+class PrepareDriftTests(unittest.TestCase):
+    def prepared_worktree(self, bundle: dict[str, str]) -> Path:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        worktree = Path(directory.name)
+        (worktree / "directory").mkdir()
+        (worktree / run_hn_signals.QUEUE).write_text(
+            json.dumps({"signals": [
+                {"story_id": "1", "page_status": "readable"},
+                {"story_id": "2", "page_status": "readable"},
+            ]}),
+            encoding="utf-8",
+        )
+        (worktree / ".hn-signal-bundle").mkdir()
+        (worktree / run_hn_signals.BUNDLE).write_text(json.dumps(bundle), encoding="utf-8")
+        installed = worktree / "SKILL.md"
+        installed.write_text(
+            run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+        self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
+        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        return worktree
+
+    @staticmethod
+    def drifting_run(command: list[str], _cwd=None) -> tuple[int, str]:
+        if "verify_signal_pages.py" in " ".join(command):
+            return 1, "error: signal 2: page changed since the sweep recorded it"
+        return 0, ""
+
+    def test_one_drifted_page_does_not_discard_the_pages_that_verified(self) -> None:
+        self.prepared_worktree({"1": "the page text"})
+        self.assertEqual(0, run_hn_signals.prepare(limit=40, run=self.drifting_run))
+
+    def test_a_run_where_nothing_verified_fails(self) -> None:
+        self.prepared_worktree({})
+        self.assertEqual(1, run_hn_signals.prepare(limit=40, run=self.drifting_run))
 
 
 if __name__ == "__main__":

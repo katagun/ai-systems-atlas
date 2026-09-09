@@ -19,6 +19,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 
 QUEUE = "directory/hn-signals.json"
+BUNDLE = ".hn-signal-bundle/bundle.json"
 ALLOWED_CHANGES = {QUEUE}
 WORKTREE = ROOT.parent / "atlas-hn-signals"
 PROMPT = ROOT / "docs" / "routines" / "hn-signals.md"
@@ -135,6 +136,47 @@ def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     return None
 
 
+def bundled_story_ids(worktree: Path) -> set[str]:
+    """The story ids whose page actually verified and reached the bundle.
+
+    `verify_signal_pages --refresh` writes only the pages whose re-fetch matched the
+    committed digest, so the bundle's keys are the run's verified set. A missing or
+    unreadable bundle means nothing verified.
+    """
+    try:
+        bundle = json.loads((worktree / BUNDLE).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return set(bundle) if isinstance(bundle, dict) else set()
+
+
+def drifted_story_ids(signals: list[dict[str, Any]], bundled: set[str]) -> list[str]:
+    """Readable signals whose page did not survive re-fetch, so no text was bundled.
+
+    A signal that the sweep could not read is not drift: it carries no digest to
+    re-check, and the routine dispositions it `unreadable` from the queue alone.
+    """
+    return sorted(
+        str(signal.get("story_id"))
+        for signal in signals
+        if signal.get("page_status") == "readable" and str(signal.get("story_id")) not in bundled
+    )
+
+
+def pending_story_ids(signals: list[dict[str, Any]], drifted: list[str], limit: int) -> list[str]:
+    """Signals awaiting an assessment, minus the ones nothing can be said about.
+
+    A drifted page is both unreadable to the routine and barred from the `unreadable`
+    verdict, whose rule turns on `page_status`. Listing it as pending would ask for an
+    assessment no valid block could express.
+    """
+    return [
+        str(signal.get("story_id"))
+        for signal in signals
+        if "assessment" not in signal and str(signal.get("story_id")) not in set(drifted)
+    ][:limit]
+
+
 def prepare(*, limit: int = 40, run=shell) -> int:
     """Refresh an isolated worktree from origin/main and build the signal-page bundle."""
     installed = INSTALLED_PROMPT.read_text(encoding="utf-8") if INSTALLED_PROMPT.exists() else None
@@ -157,18 +199,32 @@ def prepare(*, limit: int = 40, run=shell) -> int:
         ["uv", "run", "python", "scripts/verify_signal_pages.py", "--refresh"], WORKTREE
     )
     print(output)
-    if code != 0:
-        return code
     try:
         document = json.loads((WORKTREE / QUEUE).read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
         print(f"error: could not read {QUEUE} from the worktree: {error}", file=sys.stderr)
         return 1
-    pending = [
-        signal.get("story_id")
-        for signal in document.get("signals", [])
-        if isinstance(signal, dict) and "assessment" not in signal
-    ][:limit]
+    signals = [signal for signal in document.get("signals", []) if isinstance(signal, dict)]
+    bundled = bundled_story_ids(WORKTREE)
+    drifted = drifted_story_ids(signals, bundled)
+    # A day's batch is not all-or-nothing. `verify_signal_pages` exits non-zero when any
+    # one page drifted, and propagating that discarded every other page in the run — a
+    # single vendor edit costing the whole day. The drifted page is already absent from
+    # the bundle, so the routine cannot read it; that is the whole remedy needed here.
+    # `finish --recheck` stays strict: nothing is committed while a pin is unverified.
+    if code != 0 and not bundled:
+        print(
+            "error: no signal page verified against its recorded digest; nothing to assess",
+            file=sys.stderr,
+        )
+        return code
+    if drifted:
+        print(
+            f"warning: {len(drifted)} page(s) changed since the sweep and were omitted "
+            f"from the bundle: {drifted}",
+            file=sys.stderr,
+        )
+    pending = pending_story_ids(signals, drifted, limit)
     print(f"worktree ready: {WORKTREE}")
     print(f"pending signals ({len(pending)} of up to {limit}): {pending}")
     return 0
