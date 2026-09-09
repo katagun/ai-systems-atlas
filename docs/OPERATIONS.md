@@ -238,6 +238,15 @@ belong to the sweep alone; a run that touches one aborts, naming the signal and 
 Reviewing a batch therefore means judging verdicts and evidence, not auditing the diff for
 overreach.
 
+To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
+`~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
+local time, after the daily sweep at 06:23 UTC. `prepare` compares the two files and
+refuses to run — `error: the routine prompt is not installed` — when the installed copy is
+absent or differs, so the first run fails until it is installed and every later change to
+the repository prompt has to be re-synced before a run proceeds. Scheduled tasks only run
+while the desktop app is open; a missed run catches up the next time the app launches, so
+a run is not guaranteed at the exact scheduled time.
+
 ## Review an inference service
 
 Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.
