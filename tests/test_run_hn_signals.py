@@ -4,6 +4,7 @@ import contextlib
 import hashlib
 import io
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -247,6 +248,33 @@ class IsRemoteTrackingRefTests(unittest.TestCase):
             run_hn_signals.is_remote_tracking_ref("origin/main", lambda *_a, **_k: (1, "error"))
         )
 
+    @staticmethod
+    def canonical_run(command: list[str], _cwd=None) -> tuple[int, str]:
+        if command == ["git", "remote"]:
+            return 0, "origin\n"
+        if command[:3] == ["git", "rev-parse", "--symbolic-full-name"]:
+            return 0, "refs/remotes/origin/main\n"
+        return 1, ""
+
+    def test_a_canonically_spelled_remote_ref_is_treated_as_remote_tracking(self) -> None:
+        """"refs/remotes/origin/main" is "origin/main" spelled canonically. Splitting the
+        literal string on "/" yields the prefix "refs", which matches no remote — the bug
+        this guards: that spelling must classify the same as the shorthand, not tolerate
+        a fetch failure the shorthand would treat as fatal."""
+        self.assertTrue(
+            run_hn_signals.is_remote_tracking_ref("refs/remotes/origin/main", self.canonical_run)
+        )
+
+    def test_a_ref_resolving_to_a_local_branch_is_not_remote_tracking(self) -> None:
+        def run(command: list[str], _cwd=None) -> tuple[int, str]:
+            if command == ["git", "remote"]:
+                return 0, "origin\n"
+            if command[:3] == ["git", "rev-parse", "--symbolic-full-name"]:
+                return 0, "refs/heads/my-local-sweep-branch\n"
+            return 1, ""
+
+        self.assertFalse(run_hn_signals.is_remote_tracking_ref("my-local-sweep-branch", run))
+
 
 class PrepareFromRefTests(unittest.TestCase):
     """`prepare` with no --from-ref must behave exactly as it always has: fetch failure
@@ -266,14 +294,24 @@ class PrepareFromRefTests(unittest.TestCase):
         )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
         self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        # ROOT is where BASE_REF is written now — never WORKTREE, the model's own
+        # directory. Pointed at a scratch dir so the test never touches this repo's own
+        # (git-ignored) .hn-signal-bundle/.
+        root = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
         return worktree
 
     @staticmethod
-    def fake_run(calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "a" * 40):
+    def fake_run(
+        calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "a" * 40,
+        remotes: str = "origin\n",
+    ):
         def run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
             if command == ["git", "remote"]:
-                return 0, "origin\n"
+                return 0, remotes
+            if command[:3] == ["git", "rev-parse", "--symbolic-full-name"]:
+                return 0, ""
             if command[:3] == ["git", "fetch", "--quiet"]:
                 return fetch_code, "" if fetch_code == 0 else "network unreachable"
             if command[:3] == ["git", "rev-parse", "--verify"]:
@@ -318,15 +356,35 @@ class PrepareFromRefTests(unittest.TestCase):
             ["git", "worktree", "add", "--quiet", "--detach", str(worktree), sha], calls
         )
 
-    def test_prepare_records_the_resolved_sha_in_the_bundle_directory(self) -> None:
+    def test_prepare_records_the_resolved_sha_under_root_not_the_worktree(self) -> None:
+        """The record `finish` trusts must land outside WORKTREE — the model's own
+        directory — or the model could simply overwrite it."""
         worktree = self.prepared_worktree()
         calls: list[list[str]] = []
         sha = "c" * 40
         code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls, resolved_sha=sha))
         self.assertEqual(0, code)
-        recorded = json.loads((worktree / run_hn_signals.BASE_REF).read_text(encoding="utf-8"))
+        recorded = json.loads(
+            (run_hn_signals.ROOT / run_hn_signals.BASE_REF).read_text(encoding="utf-8")
+        )
         self.assertEqual(sha, recorded["sha"])
         self.assertEqual("origin/main", recorded["from_ref"])
+        self.assertFalse((worktree / run_hn_signals.BASE_REF).exists())
+
+    def test_a_from_ref_naming_a_remote_other_than_origin_is_rejected(self) -> None:
+        """`prepare` only ever fetches `origin`. A ref naming another remote (here
+        "fork") would be classified remote-tracking, so a fetch failure would be fatal —
+        but the fetch that runs never touches that remote, so the freshness check would
+        pass while the baseline is arbitrarily stale. Rejecting it is the chosen fix."""
+        self.prepared_worktree()
+        calls: list[list[str]] = []
+        code = run_hn_signals.prepare(
+            limit=5,
+            run=self.fake_run(calls, remotes="origin\nfork\n"),
+            from_ref="fork/main",
+        )
+        self.assertEqual(1, code)
+        self.assertNotIn(["git", "fetch", "--quiet", "origin"], calls)
 
 
 class PreparedBaseRefTests(unittest.TestCase):
@@ -349,6 +407,19 @@ class PreparedBaseRefTests(unittest.TestCase):
 
     def test_a_malformed_bundle_falls_back_to_origin_main(self) -> None:
         self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(lambda _p: "not json"))
+
+    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(self) -> None:
+        """A recorded "sha" reaches `git` argv unchecked everywhere below — as a
+        base ref in `git rev-parse`/`git diff`/`git show`. Without this check, a forged
+        value like an option flag becomes an arbitrary-argv-injection primitive rather
+        than a rejected record."""
+        def forged(_path: str) -> str:
+            return json.dumps({"sha": "--output=/tmp/pwn_probe"})
+
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(forged))
+
+    def test_reads_from_root_by_default_not_the_worktree(self) -> None:
+        self.assertEqual(run_hn_signals.root_text, run_hn_signals.prepared_base_ref.__defaults__[0])
 
 
 class FinishUsesRecordedBaseTests(unittest.TestCase):
@@ -385,10 +456,18 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
             return 0, ""
         return fake_run
 
-    def read(self, base_sha: str):
+    def base_read(self, base_sha: str):
+        """Stands in for `root_text`: must be consulted for BASE_REF only, never QUEUE —
+        `finish` must never read the security decision out of the worktree."""
         def _read(path: str) -> str:
-            if path == run_hn_signals.BASE_REF:
-                return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+        return _read
+
+    def queue_read(self):
+        """Stands in for `worktree_text`: must be consulted for QUEUE only."""
+        def _read(path: str) -> str:
+            self.assertEqual(run_hn_signals.QUEUE, path)
             return self.QUEUE_DOC
         return _read
 
@@ -396,7 +475,9 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
         base_sha = "e" * 40
         calls: list[list[str]] = []
         code = run_hn_signals.finish(
-            run=self.responder(calls, base_sha=base_sha), read=self.read(base_sha)
+            run=self.responder(calls, base_sha=base_sha),
+            read=self.queue_read(),
+            base_read=self.base_read(base_sha),
         )
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", base_sha], calls)
@@ -416,12 +497,13 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
                 return 0, self.QUEUE_DOC
             return 0, ""
 
-        def read_without_a_recorded_base(path: str) -> str:
-            if path == run_hn_signals.BASE_REF:
-                raise OSError("no bundle")
-            return self.QUEUE_DOC
+        def base_read_without_a_recorded_base(path: str) -> str:
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            raise OSError("no bundle")
 
-        code = run_hn_signals.finish(run=fake_run, read=read_without_a_recorded_base)
+        code = run_hn_signals.finish(
+            run=fake_run, read=self.queue_read(), base_read=base_read_without_a_recorded_base
+        )
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", "origin/main"], calls)
 
@@ -447,17 +529,61 @@ class GuardFiresAgainstALocalBaseTests(unittest.TestCase):
                 return 0, self.BEFORE
             return 0, ""
 
+        def fake_base_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+
         def fake_read(path: str) -> str:
-            if path == run_hn_signals.BASE_REF:
-                return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+            self.assertEqual(run_hn_signals.QUEUE, path)
             return document()
 
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
-            code = run_hn_signals.finish(run=fake_run, read=fake_read)
+            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
         self.assertEqual(1, code)
         self.assertIn("only the sweep adds", stderr.getvalue())
         self.assertNotIn(["git", "commit", "-m"], [call[:2] for call in calls])
+
+
+class FinishLabelsBaseSideProblemsWithTheRecordedShaTests(unittest.TestCase):
+    """Mutation coverage: dropping `base_label=base_ref` at the `finish` call site
+    reverts the diagnostic label to the literal default "origin/main" while every other
+    assertion elsewhere in the suite stays green, because they check exit codes and argv,
+    not this message text."""
+
+    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(self) -> None:
+        base_sha = "7" * 40
+        malformed_base = json.dumps(
+            {"version": "1.0", "updated_at": "x", "source": None, "signals": "not-a-list"}
+        )
+        after = document()
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/hn-signals.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "diff"]:
+                return 0, run_hn_signals.QUEUE
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"{base_sha}:{run_hn_signals.QUEUE}", command[2])
+                return 0, malformed_base
+            return 0, ""
+
+        def fake_base_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+
+        def fake_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.QUEUE, path)
+            return after
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
+        self.assertEqual(1, code)
+        self.assertIn(base_sha, stderr.getvalue())
+        self.assertNotIn("origin/main", stderr.getvalue())
 
 
 class CLIFromRefWiringTests(unittest.TestCase):
@@ -473,6 +599,102 @@ class CLIFromRefWiringTests(unittest.TestCase):
         with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
             run_hn_signals.main(["prepare"])
         prepare_mock.assert_called_once_with(limit=40, from_ref="origin/main")
+
+
+class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
+    """The only test in this suite that drives real git end to end. Every other test
+    mocks `run` and `read`/`base_read`, so nothing else exercises the actual `prepare` ->
+    `finish` handoff through a real worktree and a real ROOT-relative BASE_REF file — the
+    writer/reader contract held only because independent tests agreed on the "sha" key,
+    not because anything ran the round trip for real. `uv run ...` quality checks are
+    stubbed out: this is about the security boundary (does a legitimate edit commit, does
+    a forbidden one get rejected), not about this throwaway temp repo's own lint/tests."""
+
+    def setUp(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        root = scratch / "root"
+        root.mkdir()
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        (root / "directory").mkdir()
+        (root / run_hn_signals.QUEUE).write_text(
+            json.dumps({
+                "version": "1.0", "updated_at": "x", "source": None,
+                "signals": [{
+                    "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
+                    "title": "t", "url": "https://vendor.example/x", "points": 10,
+                    "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
+                    # unreadable, not readable: sidesteps the page-drift bundle check,
+                    # which is orthogonal to what this test drives.
+                    "page_status": "unreadable", "content_sha256": "a" * 64,
+                    "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
+                    "discovered_at": "2026-09-09",
+                }],
+            }),
+            encoding="utf-8",
+        )
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        subprocess.run(["git", "-C", str(root), "branch", "-M", "local-sweep-branch"], check=True)
+
+        worktree = scratch / "worktree"
+        installed = scratch / "SKILL.md"
+        installed.write_text(run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8")
+
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+        self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
+        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.root = root
+        self.worktree = worktree
+
+    @staticmethod
+    def hybrid_run(command: list[str], cwd=None) -> tuple[int, str]:
+        if command and command[0] == "git":
+            return run_hn_signals.shell(command, cwd)
+        return 0, ""  # every "uv run ..." quality check, stubbed to succeed
+
+    def test_an_assessment_only_edit_commits(self) -> None:
+        code = run_hn_signals.prepare(limit=5, run=self.hybrid_run, from_ref="local-sweep-branch")
+        self.assertEqual(0, code)
+
+        queue_path = self.worktree / run_hn_signals.QUEUE
+        queue = json.loads(queue_path.read_text(encoding="utf-8"))
+        queue["signals"][0]["assessment"] = {"verdict": "worth_review"}
+        queue_path.write_text(json.dumps(queue), encoding="utf-8")
+
+        code = run_hn_signals.finish(run=self.hybrid_run)
+        self.assertEqual(0, code)
+
+        branch_code, branch_sha = run_hn_signals.shell(
+            ["git", "rev-parse", "hn-signals/pending"], self.worktree
+        )
+        self.assertEqual(0, branch_code)
+        diff_code, changed = run_hn_signals.shell(
+            ["git", "diff", "--name-only", "local-sweep-branch", branch_sha.strip()], self.root
+        )
+        self.assertEqual(0, diff_code)
+        self.assertEqual(run_hn_signals.QUEUE, changed.strip())
+
+    def test_a_forbidden_edit_is_rejected(self) -> None:
+        code = run_hn_signals.prepare(limit=5, run=self.hybrid_run, from_ref="local-sweep-branch")
+        self.assertEqual(0, code)
+        _, head_before = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+
+        (self.worktree / "other.txt").write_text("not the queue", encoding="utf-8")
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(run=self.hybrid_run)
+        self.assertEqual(1, code)
+        self.assertIn("other.txt", stderr.getvalue())
+
+        _, head_after = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        self.assertEqual(head_before, head_after)
+        branch_code, _ = run_hn_signals.shell(
+            ["git", "rev-parse", "--verify", "hn-signals/pending"], self.worktree
+        )
+        self.assertNotEqual(0, branch_code)
 
 
 if __name__ == "__main__":

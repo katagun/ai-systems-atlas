@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -26,10 +27,16 @@ QUEUE = "directory/hn-signals.json"
 BUNDLE = ".hn-signal-bundle/bundle.json"
 # Where `prepare` records the exact commit it built the worktree from, so `finish` can
 # compare against that same tree rather than whatever `origin/main` has since become.
-# Lives inside the already-git-ignored bundle directory, so it travels with the evidence
-# handed to the model and is never a candidate for a commit.
+# Deliberately NOT under WORKTREE: that directory is handed to the unattended model, and
+# a guard that reads its single point of trust out of the model's own working directory
+# is a guard the model can rewrite. This path is relative to ROOT — the primary
+# checkout, still git-ignored, but outside the tree the model runs in — so `prepare`
+# writes it there and `finish` reads it with `root_text`, never `worktree_text`.
 BASE_REF = ".hn-signal-bundle/base-ref.json"
 DEFAULT_FROM_REF = "origin/main"
+# A recorded base sha must look like a commit sha before anything shells out with it;
+# see `prepared_base_ref`.
+SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 ALLOWED_CHANGES = {QUEUE}
 WORKTREE = ROOT.parent / "atlas-hn-signals"
 PROMPT = ROOT / "docs" / "routines" / "hn-signals.md"
@@ -125,6 +132,16 @@ def worktree_text(path: str) -> str:
     return routine_guards.worktree_text(path, WORKTREE)
 
 
+def root_text(path: str) -> str:
+    """Read a file out of ROOT — the primary checkout, not the worktree the model runs in.
+
+    Used only for BASE_REF: the sha every guard compares against must come from a
+    location the model being reviewed cannot write to, and WORKTREE is exactly that
+    model's own working directory.
+    """
+    return routine_guards.worktree_text(path, ROOT)
+
+
 shell = routine_guards.shell
 
 
@@ -174,21 +191,40 @@ def pending_story_ids(signals: list[dict[str, Any]], drifted: list[str], limit: 
     ][:limit]
 
 
-def is_remote_tracking_ref(ref: str, run=shell) -> bool:
-    """Whether `ref` names a branch of a configured remote (e.g. "origin/main").
+def remote_for_ref(ref: str, run=shell) -> str | None:
+    """The configured remote `ref` names, or None if `ref` is purely local.
 
     A purely local ref (a local branch, a tag, a SHA) has no remote to be stale against,
     so a user working offline from one should not have a routine run aborted by a fetch
     that was never going to change anything it reads. A remote-tracking ref is the
     opposite: it is a local pointer to work that lives elsewhere, so a fetch failure
     there means the ref may be stale and the run must not proceed on stale evidence.
+
+    Classifying by the ref's literal spelling is not enough: "refs/remotes/origin/main"
+    is the same ref as "origin/main" but splits to the prefix "refs", which matches no
+    remote, so the canonical spelling would silently skip the freshness check the
+    shorthand enforces. Resolving with `git rev-parse --symbolic-full-name` first closes
+    that gap; the plain prefix check stays as a cheap path for the common shorthand and
+    for a ref (like a bare "origin") that resolution alone would not classify.
     """
     code, remotes = run(["git", "remote"], ROOT)
-    if code != 0:
-        return False
-    names = {line.strip() for line in remotes.splitlines() if line.strip()}
+    names = {line.strip() for line in remotes.splitlines() if line.strip()} if code == 0 else set()
     prefix = ref.split("/", 1)[0]
-    return prefix in names
+    if prefix in names:
+        return prefix
+    symbolic_code, symbolic = run(["git", "rev-parse", "--symbolic-full-name", ref], ROOT)
+    if symbolic_code != 0:
+        return None
+    full = symbolic.strip()
+    if not full.startswith("refs/remotes/"):
+        return None
+    remote = full[len("refs/remotes/"):].split("/", 1)[0]
+    return remote if remote in names else None
+
+
+def is_remote_tracking_ref(ref: str, run=shell) -> bool:
+    """Whether `ref` names a branch of a configured remote (e.g. "origin/main")."""
+    return remote_for_ref(ref, run) is not None
 
 
 def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> int:
@@ -200,7 +236,19 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
         return 1
     # Only a remote-tracking ref can be stale against its remote, so only that case makes
     # a fetch failure fatal; a purely local ref is exactly as current as it will ever be.
-    fetch_is_fatal = is_remote_tracking_ref(from_ref, run)
+    remote = remote_for_ref(from_ref, run)
+    # The freshness check below only ever fetches `origin`. A ref naming a different
+    # remote (e.g. "fork/main") would still be classified remote-tracking — so a fetch
+    # failure would be fatal — but the fetch that runs never touches that remote, and the
+    # check would pass while the baseline is arbitrarily stale. Reject it outright rather
+    # than silently fetching the wrong remote or the right one under the wrong name.
+    if remote is not None and remote != "origin":
+        print(
+            f"error: --from-ref {from_ref!r} names remote {remote!r}; only origin is fetched",
+            file=sys.stderr,
+        )
+        return 1
+    fetch_is_fatal = remote is not None
     fetch_code, fetch_output = run(["git", "fetch", "--quiet", "origin"], ROOT)
     if fetch_code != 0 and fetch_is_fatal:
         print(f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr)
@@ -224,7 +272,9 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
     # guards against the tree the model was actually handed rather than whatever
     # `origin/main` has since become. A SHA, not `from_ref` itself, because a ref can
     # move between `prepare` and `finish` and the guards must pin the tree, not the name.
-    base_ref_path = WORKTREE / BASE_REF
+    # Written under ROOT, not WORKTREE: WORKTREE is the model's own working directory,
+    # and a security decision that the model can overwrite is no guard at all.
+    base_ref_path = ROOT / BASE_REF
     base_ref_path.parent.mkdir(parents=True, exist_ok=True)
     base_ref_path.write_text(json.dumps({"sha": base_sha, "from_ref": from_ref}), encoding="utf-8")
     code, output = run(
@@ -267,23 +317,27 @@ def unexpected_committed_changes(name_only: str) -> list[str]:
     return routine_guards.unexpected_committed_changes(name_only, ALLOWED_CHANGES)
 
 
-def prepared_base_ref(read=worktree_text) -> str:
+def prepared_base_ref(read=root_text) -> str:
     """The commit `prepare` actually built the worktree from.
 
-    Read from the bundle directory `prepare` wrote it to, so every guard below compares
-    against the exact tree the model was handed rather than whatever `origin/main` has
-    become since. When nothing was recorded — an older worktree, or one built by hand —
-    fall back to `origin/main` exactly as the routine always has.
+    Read from ROOT, where `prepare` wrote it — not WORKTREE, the model's own working
+    directory — so every guard below compares against the exact tree the model was
+    handed rather than whatever `origin/main` has become since, and so the model cannot
+    forge the comparison by writing its own value into the file. When nothing was
+    recorded — an older run, or a worktree built by hand — fall back to `origin/main`
+    exactly as the routine always has. The recorded value must also look like a commit
+    sha: it reaches `git` argv unchecked everywhere below, so anything else (an option
+    flag, an empty string) falls back the same as if nothing were recorded at all.
     """
     try:
         recorded = json.loads(read(BASE_REF))
     except (OSError, json.JSONDecodeError):
         return DEFAULT_FROM_REF
     sha = recorded.get("sha") if isinstance(recorded, dict) else None
-    return sha if isinstance(sha, str) and sha else DEFAULT_FROM_REF
+    return sha if isinstance(sha, str) and SHA_RE.match(sha) else DEFAULT_FROM_REF
 
 
-def finish(*, run=shell, read=worktree_text) -> int:
+def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
     status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
     if status_code != 0:
@@ -297,8 +351,10 @@ def finish(*, run=shell, read=worktree_text) -> int:
     # `origin/main` otherwise. Every guard below must compare against this same tree:
     # `prepare` may have built the worktree from a ref other than `origin/main`, and
     # comparing against the wrong tree would make the blast-radius, committed-diff, and
-    # field-level guards below meaningless.
-    base_ref = prepared_base_ref(read)
+    # field-level guards below meaningless. Read with `base_read` (ROOT), never `read`
+    # (WORKTREE): the model being guarded against runs inside WORKTREE, so the record of
+    # what it may be compared to must come from outside it.
+    base_ref = prepared_base_ref(base_read)
     # A clean tree is not the same as an idle run: an agent that stages and commits its
     # own work leaves nothing in `git status` while its commit sits on the branch. The
     # guards must run against anything HEAD carries beyond the base, however it got there.
@@ -375,9 +431,9 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_FROM_REF,
         help=(
             "ref `prepare` builds its worktree from (default: origin/main). `prepare` "
-            "resolves this to a commit SHA and records it in the bundle directory; "
-            "`finish` always uses that recorded SHA for its guards, so the two commands "
-            "can never compare against different trees."
+            "resolves this to a commit SHA and records it outside the worktree, under "
+            "the primary checkout; `finish` always uses that recorded SHA for its "
+            "guards, so the two commands can never compare against different trees."
         ),
     )
     args = parser.parse_args(argv)
