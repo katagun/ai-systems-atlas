@@ -236,7 +236,10 @@ allowed to do: adding an `assessment` to a signal that had none. Every provenanc
 sweep wrote — `story_id` through `discovered_at` — and the membership of the queue itself
 belong to the sweep alone; a run that touches one aborts, naming the signal and the field.
 Reviewing a batch therefore means judging verdicts and evidence, not auditing the diff for
-overreach.
+overreach. These guards compare against `origin/main` by default; see "Running the loop
+locally" under "Attention-source sweep" below for the `--from-ref` option that lets
+`prepare` build from a local branch instead, and how `finish` still checks the right base
+when it does.
 
 To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
 `~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
@@ -334,8 +337,45 @@ The agent runs only while you are logged in, and launchd fires a missed run once
 login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
 moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
 The sweep leaves `directory/hn-signals.json` modified in the working tree; commit it on a
-branch of your choosing before running the routine, which expects the queue to be clean at
-`origin/main`.
+branch before running the routine.
+
+### Running the loop locally
+
+By default `run_hn_signals.py prepare` builds its worktree from `origin/main`, which is
+protected (`required_pr: true`, `required_checks: ["verify"]`, `enforce_admins: true`), so
+a swept queue that has not yet cleared a pull request cannot reach the routine. Pass
+`--from-ref` to point `prepare` at a local branch instead, and the whole sweep-assess-
+iterate loop runs without touching `origin/main` at all:
+
+```bash
+uv run python scripts/sweep_hackernews.py
+git checkout -b hn-signals/local-sweep
+git add directory/hn-signals.json
+git commit -m "Sweep signals for $(date +%F)"
+uv run python scripts/run_hn_signals.py prepare --from-ref hn-signals/local-sweep
+```
+
+`prepare` resolves `--from-ref` to a commit SHA and records it in
+`.hn-signal-bundle/base-ref.json` inside the worktree — already covered by
+`.gitignore`, so it never reaches a commit. `finish` reads that file and uses the pinned
+SHA everywhere it would otherwise compare against `origin/main`: the head-moved check, the
+committed-diff blast-radius check, and the `git show <base>:directory/hn-signals.json`
+field-guard baseline all run against the exact tree `prepare` handed the model, not
+whatever `origin/main` has become since. A SHA rather than the ref name, because a branch
+can move between `prepare` and `finish`; pinning the commit means the guards always check
+the tree the model actually saw. When no SHA was recorded — an older worktree, or one
+built without `--from-ref` — `finish` falls back to `origin/main` exactly as it always has.
+
+`prepare`'s first step is `git fetch --quiet origin`; a failure there is fatal only when
+`--from-ref` names a remote-tracking ref (its prefix matches a configured remote, as
+`origin/main` does). A purely local ref cannot be stale against a remote, so a fetch
+failure is tolerated and the run proceeds offline — the same rule `git worktree add`
+implicitly follows for any commit-ish it is given directly.
+
+Iterate locally as long as you like — re-run `prepare --from-ref` after every sweep or
+edit, since it always resolves the ref fresh — and push only once there is something on
+the queue worth a human review pass. Nothing about the default `origin/main` path changes:
+omitting `--from-ref` behaves exactly as before.
 
 The points floor (`--points-floor`, default 25) is the sweep's only tuning knob: the
 minimum score a story needs to be swept at all. Its right value is not settled; watch what

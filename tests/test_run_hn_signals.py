@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import contextlib
 import hashlib
+import io
 import json
 import tempfile
 import unittest
@@ -220,6 +222,257 @@ class BoundGuardTests(unittest.TestCase):
         self.assertIn("docs/routines/hn-signals.md", str(drift))
         self.assertIsNotNone(run_hn_signals.prompt_drift("body", None))
         self.assertIsNone(run_hn_signals.prompt_drift("body\n", "  body  "))
+
+
+class IsRemoteTrackingRefTests(unittest.TestCase):
+    @staticmethod
+    def remotes_run(_command: list[str], _cwd=None) -> tuple[int, str]:
+        return 0, "origin\n"
+
+    def test_a_remote_tracking_ref_is_detected(self) -> None:
+        self.assertTrue(run_hn_signals.is_remote_tracking_ref("origin/main", self.remotes_run))
+
+    def test_a_local_ref_is_not_remote_tracking(self) -> None:
+        self.assertFalse(
+            run_hn_signals.is_remote_tracking_ref("my-local-sweep-branch", self.remotes_run)
+        )
+
+    def test_a_ref_named_exactly_like_a_remote_is_treated_as_remote_tracking(self) -> None:
+        """`origin` alone (no branch) is an edge case, not one --from-ref needs to support
+        well — the important property is that an unrelated local branch name isn't caught."""
+        self.assertTrue(run_hn_signals.is_remote_tracking_ref("origin", self.remotes_run))
+
+    def test_git_remote_failing_is_treated_as_not_remote_tracking(self) -> None:
+        self.assertFalse(
+            run_hn_signals.is_remote_tracking_ref("origin/main", lambda *_a, **_k: (1, "error"))
+        )
+
+
+class PrepareFromRefTests(unittest.TestCase):
+    """`prepare` with no --from-ref must behave exactly as it always has: fetch failure
+    fatal, worktree built from origin/main. A local --from-ref changes both."""
+
+    def prepared_worktree(self) -> Path:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        worktree = Path(directory.name)
+        (worktree / "directory").mkdir()
+        (worktree / run_hn_signals.QUEUE).write_text(
+            json.dumps({"signals": []}), encoding="utf-8"
+        )
+        installed = worktree / "SKILL.md"
+        installed.write_text(
+            run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+        self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
+        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        return worktree
+
+    @staticmethod
+    def fake_run(calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "a" * 40):
+        def run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command == ["git", "remote"]:
+                return 0, "origin\n"
+            if command[:3] == ["git", "fetch", "--quiet"]:
+                return fetch_code, "" if fetch_code == 0 else "network unreachable"
+            if command[:3] == ["git", "rev-parse", "--verify"]:
+                return 0, resolved_sha + "\n"
+            if command[:2] == ["git", "worktree"]:
+                return 0, ""
+            return 0, ""  # verify_signal_pages.py --refresh
+        return run
+
+    def test_default_from_ref_resolves_origin_main(self) -> None:
+        self.prepared_worktree()
+        calls: list[list[str]] = []
+        code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls))
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", "--verify", "origin/main"], calls)
+
+    def test_a_fetch_failure_on_the_default_ref_is_fatal(self) -> None:
+        self.prepared_worktree()
+        calls: list[list[str]] = []
+        code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls, fetch_code=1))
+        self.assertEqual(1, code)
+        self.assertNotIn(["git", "worktree", "remove", "--force", str(run_hn_signals.WORKTREE)], calls)
+
+    def test_a_fetch_failure_on_a_local_ref_is_tolerated(self) -> None:
+        self.prepared_worktree()
+        calls: list[list[str]] = []
+        code = run_hn_signals.prepare(
+            limit=5, run=self.fake_run(calls, fetch_code=1), from_ref="local-sweep-branch"
+        )
+        self.assertEqual(0, code)
+
+    def test_prepare_builds_the_worktree_from_the_given_ref(self) -> None:
+        worktree = self.prepared_worktree()
+        calls: list[list[str]] = []
+        sha = "b" * 40
+        code = run_hn_signals.prepare(
+            limit=5, run=self.fake_run(calls, resolved_sha=sha), from_ref="local-sweep-branch"
+        )
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", "--verify", "local-sweep-branch"], calls)
+        self.assertIn(
+            ["git", "worktree", "add", "--quiet", "--detach", str(worktree), sha], calls
+        )
+
+    def test_prepare_records_the_resolved_sha_in_the_bundle_directory(self) -> None:
+        worktree = self.prepared_worktree()
+        calls: list[list[str]] = []
+        sha = "c" * 40
+        code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls, resolved_sha=sha))
+        self.assertEqual(0, code)
+        recorded = json.loads((worktree / run_hn_signals.BASE_REF).read_text(encoding="utf-8"))
+        self.assertEqual(sha, recorded["sha"])
+        self.assertEqual("origin/main", recorded["from_ref"])
+
+
+class PreparedBaseRefTests(unittest.TestCase):
+    """The SHA `prepare` records is the one `finish` uses."""
+
+    def test_finish_reads_the_sha_prepare_recorded(self) -> None:
+        sha = "d" * 40
+
+        def read(path: str) -> str:
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            return json.dumps({"sha": sha, "from_ref": "local-sweep-branch"})
+
+        self.assertEqual(sha, run_hn_signals.prepared_base_ref(read))
+
+    def test_no_recorded_sha_falls_back_to_origin_main(self) -> None:
+        def missing(_path: str) -> str:
+            raise OSError("no such file")
+
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(missing))
+
+    def test_a_malformed_bundle_falls_back_to_origin_main(self) -> None:
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(lambda _p: "not json"))
+
+
+class FinishUsesRecordedBaseTests(unittest.TestCase):
+    """`finish` must compare against the exact commit `prepare` recorded, in every place
+    it otherwise falls back to origin/main: the head-moved comparison, the committed-diff
+    blast-radius check, and the `git show <base>:<queue>` field-guard baseline."""
+
+    QUEUE_DOC: ClassVar[str] = json.dumps({
+        "version": "1.0", "updated_at": "x", "source": None,
+        "signals": [{
+            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "t", "url": "https://vendor.example/x", "points": 10,
+            "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable", "content_sha256": "a" * 64,
+            "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
+            "discovered_at": "2026-09-09",
+        }],
+    })
+
+    def responder(self, calls: list[list[str]], *, base_sha: str, head: str = "1111"):
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/hn-signals.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, (head if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"{base_sha}:{run_hn_signals.QUEUE}", command[2])
+                return 0, self.QUEUE_DOC
+            if command[:2] == ["git", "diff"]:
+                self.assertIn(base_sha, command)
+                self.assertNotIn("origin/main", command)
+                return 0, run_hn_signals.QUEUE
+            return 0, ""
+        return fake_run
+
+    def read(self, base_sha: str):
+        def _read(path: str) -> str:
+            if path == run_hn_signals.BASE_REF:
+                return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+            return self.QUEUE_DOC
+        return _read
+
+    def test_finish_uses_the_recorded_sha_in_place_of_origin_main(self) -> None:
+        base_sha = "e" * 40
+        calls: list[list[str]] = []
+        code = run_hn_signals.finish(
+            run=self.responder(calls, base_sha=base_sha), read=self.read(base_sha)
+        )
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", base_sha], calls)
+        self.assertNotIn(["git", "rev-parse", "origin/main"], calls)
+
+    def test_finish_falls_back_to_origin_main_when_nothing_was_recorded(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/hn-signals.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else "origin/main") + "\n"
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"origin/main:{run_hn_signals.QUEUE}", command[2])
+                return 0, self.QUEUE_DOC
+            return 0, ""
+
+        def read_without_a_recorded_base(path: str) -> str:
+            if path == run_hn_signals.BASE_REF:
+                raise OSError("no bundle")
+            return self.QUEUE_DOC
+
+        code = run_hn_signals.finish(run=fake_run, read=read_without_a_recorded_base)
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", "origin/main"], calls)
+
+
+class GuardFiresAgainstALocalBaseTests(unittest.TestCase):
+    """`unexpected_field_changes` must reject a run that adds a signal exactly the same
+    way whether the base it compares against is origin/main or a local ref's commit."""
+
+    BEFORE = json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []})
+
+    def test_an_added_signal_is_rejected_when_the_base_is_a_local_commit(self) -> None:
+        base_sha = "f" * 40
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/hn-signals.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"{base_sha}:{run_hn_signals.QUEUE}", command[2])
+                return 0, self.BEFORE
+            return 0, ""
+
+        def fake_read(path: str) -> str:
+            if path == run_hn_signals.BASE_REF:
+                return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+            return document()
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(run=fake_run, read=fake_read)
+        self.assertEqual(1, code)
+        self.assertIn("only the sweep adds", stderr.getvalue())
+        self.assertNotIn(["git", "commit", "-m"], [call[:2] for call in calls])
+
+
+class CLIFromRefWiringTests(unittest.TestCase):
+    def test_main_passes_from_ref_through_to_prepare(self) -> None:
+        with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
+            code = run_hn_signals.main(
+                ["prepare", "--from-ref", "local-sweep-branch", "--limit", "7"]
+            )
+        self.assertEqual(0, code)
+        prepare_mock.assert_called_once_with(limit=7, from_ref="local-sweep-branch")
+
+    def test_main_defaults_from_ref_to_origin_main(self) -> None:
+        with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
+            run_hn_signals.main(["prepare"])
+        prepare_mock.assert_called_once_with(limit=40, from_ref="origin/main")
 
 
 if __name__ == "__main__":
