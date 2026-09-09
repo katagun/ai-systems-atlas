@@ -74,7 +74,7 @@ Hard bounds mirror `scripts/import_models_dev.py`: a maximum signal count per ru
 
 ### 7. Fetching reuses the hardened path that already exists
 
-Following submitter-chosen links is the one place this design knowingly reverses a documented guarantee — `docs/OPERATIONS.md:43` and `docs/DATA_MODEL.md:103` both state that discovery never fetches linked article pages. Both sentences are scoped to the official-feed updater rather than deleted, and ADR 028 records the reversal for attention sources.
+Following submitter-chosen links is the one place this design knowingly reverses a documented guarantee — `docs/OPERATIONS.md`'s "Metadata refresh" section and `docs/DATA_MODEL.md`'s "Discovery source registry" section both state that discovery never fetches linked article pages. Both sentences are scoped to the official-feed updater rather than deleted, and ADR 028 records the reversal for attention sources.
 
 The reversal is safe only because the guards already exist for arbitrary hosts in `scripts/build_candidate_evidence.py`: `_validated_web_endpoint` (lines 133–175) rejects control characters, requires HTTPS on a public DNS name, pins the port to 443, resolves the host and requires every address be public unicast, and caps the address count; `_PinnedHTTPSConnection` (178–191) connects to the validated numeric address while retaining the TLS server name, closing DNS rebinding. `MAX_WEB_EVIDENCE_BYTES` and `MAX_WEB_REDIRECTS` bound the response. This design reuses those functions rather than writing new ones.
 
@@ -90,7 +90,7 @@ Promotion into `directory/candidates.json` follows the existing curation workflo
 
 ### 10. A daily workflow, isolated from the weekly refresh
 
-`.github/workflows/sweep-hackernews.yml` runs the deterministic sweep daily on its own branch, its own concurrency group, and its own failure issue title. It mirrors the weekly workflow's safety properties: pinned action SHAs, `persist-credentials: false` while untrusted input is parsed, `continue-on-error` verification with a step summary, and `secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN` — the fallback matters because `docs/OPERATIONS.md:223` records that a pull request opened with `GITHUB_TOKEN` never triggers the required `verify` check.
+`.github/workflows/sweep-hackernews.yml` runs the deterministic sweep daily on its own branch, its own concurrency group, and its own failure issue title. It mirrors the weekly workflow's safety properties: pinned action SHAs, `persist-credentials: false` while untrusted input is parsed, `continue-on-error` verification with a step summary, and `secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN` — the fallback matters because `docs/OPERATIONS.md`'s "Tokens" section records that a pull request opened with `GITHUB_TOKEN` never triggers the required `verify` check.
 
 One edit to the weekly workflow is required: `git add -A directory web` at `.github/workflows/update-directory.yml:162` is unqualified and would sweep the daily job's queue file into the weekly refresh branch. It becomes an explicit path list.
 
@@ -166,7 +166,7 @@ The routine prompt lives at `docs/routines/hn-signals.md` and states its boundar
 ## Implementation phases
 
 1. The exclusions `url` field and `known_urls` fix, with tests. Independent of everything below.
-2. ADR 028; scoping the claims at `docs/OPERATIONS.md:43` and `docs/DATA_MODEL.md:103`; routing rows in `AGENTS.md`; `README.md` repo map. `tests/test_documentation.py` fails until the ADR is registered in its manifest.
+2. ADR 028; scoping the never-fetches claims in `docs/OPERATIONS.md`'s "Metadata refresh" and `docs/DATA_MODEL.md`'s "Discovery source registry" sections; routing rows in `AGENTS.md`; `README.md` repo map. `tests/test_documentation.py` fails until the ADR is registered in its manifest.
 3. `directory/hn-signals.json` schema, `validate_hn_signals`, unpublished guard, and validation tests — before anything writes the file.
 4. `scripts/sweep_hackernews.py`: query, gates, fetch via the reused hardened path, hashing, fail-closed bounds.
 5. `.github/workflows/sweep-hackernews.yml`, plus the `git add` fix in the weekly workflow.
