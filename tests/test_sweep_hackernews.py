@@ -101,7 +101,7 @@ class DenylistedHostTests(unittest.TestCase):
 
 
 class DocumentTests(unittest.TestCase):
-    def build(self, fetcher) -> dict:
+    def build(self, fetcher, qualifying_count: int | None = None) -> dict:
         stories = [{
             "objectID": "49616354", "title": "Mercury 2.5",
             "url": "https://vendor.example/launch", "points": 231,
@@ -113,6 +113,7 @@ class DocumentTests(unittest.TestCase):
             window_end="2026-09-08T00:00:00Z",
             points_floor=10,
             story_count=1042,
+            qualifying_count=len(stories) if qualifying_count is None else qualifying_count,
             discovered_at="2026-09-09",
             fetcher=fetcher,
         )
@@ -146,3 +147,29 @@ class DocumentTests(unittest.TestCase):
             self.assertNotIn("proposed_system_family", signal)
             self.assertNotIn("proposed_primary_role", signal)
             self.assertNotIn("classification_confidence", signal)
+
+    def test_truncated_is_false_when_nothing_was_dropped(self) -> None:
+        document = self.build(lambda url: SENTINEL_PAGE_TEXT)
+        self.assertIs(document["source"]["truncated"], False)
+
+    def test_truncated_is_true_when_the_pre_cap_count_exceeds_the_kept_count(self) -> None:
+        document = self.build(lambda url: SENTINEL_PAGE_TEXT, qualifying_count=5)
+        self.assertIs(document["source"]["truncated"], True)
+
+
+class EligibleStoriesWithTotalTests(unittest.TestCase):
+    def test_qualifying_count_exceeds_kept_when_the_cap_binds(self) -> None:
+        payload = {"hits": [hit(f"Launch {n}", f"https://v{n}.example/x", 99) for n in range(200)]}
+        kept, qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
+        self.assertEqual(len(kept), sweep_hackernews.MAX_SIGNALS)
+        self.assertEqual(qualifying, 200)
+
+    def test_qualifying_count_equals_kept_when_the_cap_does_not_bind(self) -> None:
+        payload = {"hits": [hit("Mercury 2.5", "https://vendor.example/m", 231)]}
+        kept, qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
+        self.assertEqual(qualifying, len(kept))
+
+    def test_eligible_stories_is_the_kept_half_of_the_pair(self) -> None:
+        payload = {"hits": [hit(f"Launch {n}", f"https://v{n}.example/x", 99) for n in range(200)]}
+        kept, _qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
+        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), kept)

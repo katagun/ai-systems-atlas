@@ -801,6 +801,7 @@ class ValidationPolicyTests(unittest.TestCase):
                 "points_floor": 10,
                 "story_count": 1042,
                 "eligible_count": 1,
+                "truncated": False,
             },
             "signals": [signal],
         }
@@ -1028,6 +1029,51 @@ class ValidationPolicyTests(unittest.TestCase):
             ),
             errors,
         )
+
+    def test_the_seeded_empty_hn_signals_envelope_still_validates(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
+
+    def test_signal_envelope_missing_truncated_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        del document["source"]["truncated"]
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope does not match the sweep schema" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_truncated_rejects_an_int(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["truncated"] = 1
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope truncated must be a boolean" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_truncated_accepts_a_real_bool(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["truncated"] = True
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
 
 
 if __name__ == "__main__":

@@ -64,19 +64,25 @@ def denylisted_host(host: str, denylist: frozenset[str]) -> bool:
     return host in denylist or any(host.endswith("." + entry) for entry in denylist)
 
 
-def eligible_stories(
+def eligible_stories_with_total(
     payload: dict[str, Any],
     *,
     points_floor: int = DEFAULT_POINTS_FLOOR,
     denylist: frozenset[str] = MEDIA_DENYLIST,
-) -> list[dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], int]:
     """Keep stories that point off-site, cleared the floor, and are not media.
 
     There is deliberately no keyword gate. Measured on 2026-09-09, a title keyword
     filter drops "Mercury 2.5" and "Muse", two real system announcements, because
     Hacker News titles carry no announcement vocabulary.
+
+    `search_by_date` returns stories newest-first within the window, so once the
+    MAX_SIGNALS cap binds, it systematically drops the oldest eligible stories, not a
+    random sample. Callers that need to surface that (see `build_document`) compare
+    the returned pre-cap qualifying count against the length of the kept list.
     """
     kept: list[dict[str, Any]] = []
+    qualifying = 0
     for story in payload.get("hits", []):
         if not isinstance(story, dict):
             continue
@@ -87,9 +93,25 @@ def eligible_stories(
             continue
         if not isinstance(story.get("title"), str) or not story["title"].strip():
             continue
-        kept.append(story)
-        if len(kept) >= MAX_SIGNALS:
-            break
+        qualifying += 1
+        if len(kept) < MAX_SIGNALS:
+            kept.append(story)
+    return kept, qualifying
+
+
+def eligible_stories(
+    payload: dict[str, Any],
+    *,
+    points_floor: int = DEFAULT_POINTS_FLOOR,
+    denylist: frozenset[str] = MEDIA_DENYLIST,
+) -> list[dict[str, Any]]:
+    """Keep stories that point off-site, cleared the floor, and are not media.
+
+    See `eligible_stories_with_total` for the same gate plus the pre-cap count.
+    """
+    kept, _qualifying = eligible_stories_with_total(
+        payload, points_floor=points_floor, denylist=denylist
+    )
     return kept
 
 
@@ -104,6 +126,7 @@ def build_document(
     window_end: str,
     points_floor: int,
     story_count: int,
+    qualifying_count: int,
     discovered_at: str,
     fetcher: Callable[[str], str],
 ) -> dict[str, Any]:
@@ -111,6 +134,13 @@ def build_document(
 
     Third-party page content in git history is permanent and unremovable, so only the
     digest is committed; the local routine re-fetches and verifies against it.
+
+    `qualifying_count` is the number of stories that passed the gate before the
+    MAX_SIGNALS cap in `eligible_stories_with_total` truncated the list; `stories` is
+    what the cap actually kept. The envelope's `truncated` flag is true exactly when
+    those two differ, so an operator can tell "60 of 1008" (the cap bound, oldest
+    stories in the window were dropped) apart from "60 of 1008" that organically
+    qualified.
     """
     signals: list[dict[str, Any]] = []
     for story in stories:
@@ -152,6 +182,7 @@ def build_document(
             "points_floor": points_floor,
             "story_count": story_count,
             "eligible_count": len(signals),
+            "truncated": qualifying_count > len(signals),
         },
         "signals": signals,
     }
@@ -200,13 +231,16 @@ def main(argv: list[str] | None = None) -> int:
         payload = search_stories(
             int(window_start.timestamp()), int(window_end.timestamp()), get_json
         )
-        stories = eligible_stories(payload, points_floor=args.points_floor)
+        stories, qualifying_count = eligible_stories_with_total(
+            payload, points_floor=args.points_floor
+        )
         document = build_document(
             stories,
             window_start=window_start.strftime("%Y-%m-%dT%H:%M:%SZ"),
             window_end=window_end.strftime("%Y-%m-%dT%H:%M:%SZ"),
             points_floor=args.points_floor,
             story_count=payload.get("nbHits", 0),
+            qualifying_count=qualifying_count,
             discovered_at=now.date().isoformat(),
             fetcher=fetch_web_text,
         )
@@ -215,7 +249,17 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: attention-source sweep failed: {error}", file=sys.stderr)
         return 1
     SIGNALS_PATH.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
-    print(f"signals: {len(document['signals'])} of {payload.get('nbHits', 0)} stories")
+    kept = len(document["signals"])
+    if document["source"]["truncated"]:
+        # The cap is a deliberate cost guard (search_by_date returns newest-first, so
+        # it always drops the oldest eligible stories in the window, never a random
+        # sample) — surface it so an operator can respond by raising the floor.
+        print(
+            f"warning: kept {kept} of {qualifying_count} qualifying stories; the cap "
+            "dropped the oldest in the window. Raise --points-floor to keep a full day.",
+            file=sys.stderr,
+        )
+    print(f"signals: {kept} of {payload.get('nbHits', 0)} stories")
     return 0
 
 
