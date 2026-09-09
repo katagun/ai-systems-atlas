@@ -913,6 +913,85 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    def test_signal_evidence_may_not_cite_a_page_the_signal_never_pinned(self) -> None:
+        """The routine reads one page. A citation to any other is unreproducible.
+
+        Shape checks alone pass an invented HTTPS URL beside an invented 64-hex digest,
+        and nothing else in the pipeline inspects an assessment: verify_signal_pages
+        walks the sweep's signals, never the model's citations.
+        """
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://totally-unrelated.example/nope",
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error
+                and "evidence must cite the signal's own pinned page" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_evidence_carrying_the_signals_own_digest_validates(self) -> None:
+        """The other half of the rule: the one citation the routine may write passes."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_signal_evidence_digest_must_match_even_when_the_url_matches(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("evidence must cite the signal's own pinned page" in error for error in errors),
+            errors,
+        )
+
     def test_worth_review_verdict_requires_at_least_one_evidence_item(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

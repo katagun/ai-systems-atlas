@@ -195,8 +195,11 @@ up the next time the app launches, so a run is not guaranteed at the exact sched
    `uv run python scripts/verify_signal_pages.py --recheck`. It re-fetches every signal
    whose `page_status` is `readable` and fails, naming it, when the page's current
    content no longer hashes to the recorded `content_sha256` — that catches a vendor page
-   that changed underneath the assessment, and it catches a finding resting on evidence
-   nobody can reproduce.
+   that changed underneath the assessment. It walks the sweep's signals and never reads an
+   `assessment`, so it is not what stops a fabricated citation. Validation is: an
+   assessment may cite only its own signal's pinned page, and an `evidence` entry whose
+   `url` or `content_sha256` differs from the signal's is rejected. Together they mean the
+   digest this command re-fetches is the digest every citation on that signal carries.
 
 Then, per signal:
 

@@ -1570,6 +1570,14 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                     errors.append(f"signal {prefix}: evidence requires a content_sha256")
                 if not isinstance(item["fetched_at"], str) or not item["fetched_at"].strip():
                     errors.append(f"signal {prefix}: evidence requires fetched_at")
+                # The routine is handed exactly one page — the one this signal pins — so
+                # a citation to anything else is a citation nobody fetched. Shape alone
+                # (HTTPS, 64 hex) accepts an invented URL beside an invented digest;
+                # only this comparison ties the assessment to the bytes that were read.
+                if item["url"] != signal["url"] or item["content_sha256"] != digest:
+                    errors.append(
+                        f"signal {prefix}: evidence must cite the signal's own pinned page"
+                    )
         if not valid_date(assessment["proposed_at"]):
             errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
         if assessment["proposer"] != "hn-signals":
