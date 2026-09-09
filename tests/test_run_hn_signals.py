@@ -195,5 +195,32 @@ class PrepareDriftTests(unittest.TestCase):
         self.assertEqual(1, run_hn_signals.prepare(limit=40, run=self.drifting_run))
 
 
+class BoundGuardTests(unittest.TestCase):
+    """The blast-radius and prompt-drift guards are shared with candidate triage; what
+    is not shared is which queue and which prompt this routine is bound to."""
+
+    def test_the_signal_queue_is_the_only_file_the_run_may_touch(self) -> None:
+        self.assertEqual([], run_hn_signals.unexpected_changes(" M directory/hn-signals.json\n"))
+        self.assertEqual(
+            ["directory/candidates.json"],
+            run_hn_signals.unexpected_changes(" M directory/candidates.json\n"),
+        )
+
+    def test_a_committed_edit_outside_the_signal_queue_is_reported(self) -> None:
+        self.assertEqual(
+            ["directory/projects.json"],
+            run_hn_signals.unexpected_committed_changes(
+                "directory/hn-signals.json\ndirectory/projects.json\n"
+            ),
+        )
+
+    def test_drift_is_reported_against_this_routines_prompt_not_the_other_one(self) -> None:
+        """Verifying the triage prompt here would pass while checking the wrong file."""
+        drift = run_hn_signals.prompt_drift("body", "different body")
+        self.assertIn("docs/routines/hn-signals.md", str(drift))
+        self.assertIsNotNone(run_hn_signals.prompt_drift("body", None))
+        self.assertIsNone(run_hn_signals.prompt_drift("body\n", "  body  "))
+
+
 if __name__ == "__main__":
     unittest.main()
