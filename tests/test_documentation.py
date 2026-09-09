@@ -133,6 +133,15 @@ class DocumentationTests(unittest.TestCase):
             self.refresh_step("Open or update the refresh pull request"),
         )
 
+    def test_the_sweep_workflow_withholds_credentials_while_parsing(self) -> None:
+        text = (ROOT / ".github" / "workflows" / "sweep-hackernews.yml").read_text(encoding="utf-8")
+        self.assertIn("persist-credentials: false", text)
+        self.assertIn("ATLAS_AUTOMATION_TOKEN", text)
+
+    def test_the_weekly_refresh_does_not_stage_the_signal_queue(self) -> None:
+        text = (ROOT / ".github" / "workflows" / "update-directory.yml").read_text(encoding="utf-8")
+        self.assertNotIn("git add -A directory web", text)
+
     def test_refresh_failures_reach_a_maintainer(self) -> None:
         """A red scheduled run nobody watches is not a signal."""
         workflow = self.refresh_workflow()
