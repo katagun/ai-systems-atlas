@@ -34,7 +34,7 @@ MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 # client-rendered shell that yielded 55 characters of text on 2026-09-09 while its
 # markup ran to kilobytes.
 MIN_READABLE_CHARS = 400
-DEFAULT_POINTS_FLOOR = 10
+DEFAULT_POINTS_FLOOR = 25
 MAX_SIGNALS = 60
 MAX_STORY_PAGES = 5
 

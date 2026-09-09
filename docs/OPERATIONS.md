@@ -240,7 +240,7 @@ overreach.
 
 To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
 `~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
-local time, after the daily sweep at 06:23 UTC. `prepare` compares the two files and
+local time, after the local sweep has run. `prepare` compares the two files and
 refuses to run — `error: the routine prompt is not installed` — when the installed copy is
 absent or differs, so the first run fails until it is installed and every later change to
 the repository prompt has to be re-synced before a run proceeds. Scheduled tasks only run
@@ -292,30 +292,70 @@ A pull request opened with `GITHUB_TOKEN` does not trigger workflows, so `verify
 
 ## Attention-source sweep
 
-`.github/workflows/sweep-hackernews.yml` runs daily, separate from the weekly refresh
-above, and stays on its own `automation/hn-signals` branch — mixing the two would sweep
-the fast-moving signal queue into a week-old refresh pull request. It runs
-`scripts/sweep_hackernews.py` against a one-day-lagged window (Hacker News points accrue
-for roughly a day, so a shorter lag would gate on half-formed counts), validates the
-result, and opens or updates the pull request. It never commits directly to the default
-branch.
+The sweep runs locally, not in GitHub Actions. `scripts/sweep_hackernews.py` needs no
+credential of any kind — it reads a public search API and public vendor pages — and
+`scripts/run_hn_signals.py` commits to a local branch and never pushes, so the whole
+pipeline works on a checkout with no tokens configured. A workflow ran it in CI briefly;
+it was retired because a pull request opened with `GITHUB_TOKEN` never triggers the
+required `verify` check, so its output could not reach a mergeable state without adding a
+credential the pipeline does not otherwise need.
 
-The points floor (`--points-floor`, default 10) is the sweep's only tuning knob: the
-minimum score a story needs to be swept at all. Its right value is not settled; watch
-what the current floor lets through and adjust it. `directory/hn-signals.json`'s
+Run a sweep by hand at any time:
+
+```bash
+uv run python scripts/sweep_hackernews.py
+```
+
+To run it daily without being asked, schedule it with launchd. Write
+`~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting the checkout path, then
+load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.atlas.hn-sweep</string>
+  <key>WorkingDirectory</key><string>/path/to/ai-systems-atlas</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string><string>-lc</string>
+    <string>uv run python scripts/sweep_hackernews.py</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>23</integer></dict>
+  <key>StandardOutPath</key><string>/tmp/atlas-hn-sweep.log</string>
+  <key>StandardErrorPath</key><string>/tmp/atlas-hn-sweep.log</string>
+</dict>
+</plist>
+```
+
+The agent runs only while you are logged in, and launchd fires a missed run once at next
+login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
+moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
+The sweep leaves `directory/hn-signals.json` modified in the working tree; commit it on a
+branch of your choosing before running the routine, which expects the queue to be clean at
+`origin/main`.
+
+The points floor (`--points-floor`, default 25) is the sweep's only tuning knob: the
+minimum score a story needs to be swept at all. Its right value is not settled; watch what
+the current floor lets through and adjust it. `directory/hn-signals.json`'s
 `source.eligible_count` is capped at 60 signals per run. When the cap binds,
 `source.truncated` is `true` and the sweep prints a warning naming how many qualifying
 stories it dropped — because the attention source returns stories newest-first, a bound
 cap always drops the oldest stories in the swept window, never a random sample. A
 `truncated: true` envelope is a signal to raise `--points-floor`, not to ignore: the
-response is a narrower query that the cap can carry in full, not silence about the
-stories the run never kept.
+response is a narrower query that the cap can carry in full, not silence about the stories
+the run never kept. The first run at a floor of 10 reported `truncated: true` against 1,142
+stories, which is why the default is 25.
 
-The workflow needs the same `ATLAS_AUTOMATION_TOKEN` repository secret described in
-"Tokens" above. Without it, its pull requests are opened with `GITHUB_TOKEN`, which — as
-recorded above — never triggers the required `verify` check, so those pull requests
-cannot reach a mergeable state either. This is a setup step a human must perform once, in
-**Settings → Secrets and variables → Actions**.
+Not every page can be read. A first live run failed to fetch 11 of 60 pages: seven
+returned HTTP 403 to the fetcher, including `openai.com`; three resolved to more than the
+eight addresses `_validated_web_endpoint` permits; one redirected across hosts. Those
+signals are recorded `page_status: "failed"` and carry no digest, so the routine may only
+give them the `unreadable` verdict and a human opens the link directly. A vendor that
+blocks the fetcher is not a defect to route around by weakening the fetch guards.
+
 
 ## App payloads
 
