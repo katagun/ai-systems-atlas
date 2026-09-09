@@ -48,6 +48,9 @@ SIGNAL_REQUIRED = {
 SIGNAL_OPTIONAL = {"assessment"}
 ASSESSMENT_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
 ASSESSMENT_VERDICTS = {"worth_review", "out_of_scope", "unreadable"}
+# A reviewer who disagrees with a verdict edits the block in place rather than
+# deleting it, so the queue must be able to say whose disposition a block records.
+ASSESSMENT_PROPOSERS = {"hn-signals", "human"}
 PAGE_STATUSES = {"readable", "unreadable", "failed"}
 SIGNAL_ENVELOPE_REQUIRED = {
     "endpoint", "window_start", "window_end", "points_floor", "story_count", "eligible_count",
@@ -1580,8 +1583,10 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                     )
         if not valid_date(assessment["proposed_at"]):
             errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
-        if assessment["proposer"] != "hn-signals":
-            errors.append(f"signal {prefix}: assessment proposer must be hn-signals")
+        if assessment["proposer"] not in ASSESSMENT_PROPOSERS:
+            errors.append(
+                f"signal {prefix}: assessment proposer must be hn-signals or human"
+            )
 
 
 def validate_candidates(

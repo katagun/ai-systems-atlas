@@ -115,7 +115,11 @@ A signal may optionally carry one `assessment` block, added by the local
 `docs/routines/hn-signals.md` routine: `verdict` (`worth_review`, `out_of_scope`, or
 `unreadable`), `rule`, `finding`, non-empty `evidence`, `proposed_at`, and `proposer`. Each
 evidence entry carries `label`, `url`, `kind` (always `web`), `content_sha256`, and
-`fetched_at`. A signal whose `page_status` is not `readable` may carry only the
+`fetched_at`, and every entry must cite the signal's own pinned page: validation rejects
+an evidence `url` or `content_sha256` that differs from the signal's, because the routine
+is handed exactly one page and a citation to any other is one nobody fetched. `proposer`
+is `hn-signals` for a block the routine wrote or `human` for one a reviewer edited in
+place — a human's disposition is never recorded as an unattended proposal. A signal whose `page_status` is not `readable` may carry only the
 `unreadable` verdict — validation rejects any other verdict on a page nobody could read —
 and validation rejects a `finding` or `rule` that names a `system_family` or `primary_role`
 taxonomy id, because proposing a classification stays the human's alone. An `assessment` is

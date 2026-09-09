@@ -992,6 +992,54 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    def test_a_reviewer_may_record_their_own_disposition_as_the_proposer(self) -> None:
+        """A human overriding a verdict edits the block in place; recording that edit as
+        `hn-signals` would make a human's disposition indistinguishable from an
+        unattended proposal, in the one queue whose purpose is holding that line."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "out_of_scope",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Reviewed by hand: the page is a hiring post, not a launch.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "human",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_an_unknown_proposer_is_still_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "out_of_scope",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "The page is a hiring post, not a launch.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "some-other-routine",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("assessment proposer must be hn-signals or human" in error for error in errors),
+            errors,
+        )
+
     def test_worth_review_verdict_requires_at_least_one_evidence_item(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

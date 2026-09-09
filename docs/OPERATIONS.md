@@ -223,9 +223,13 @@ Then, per signal:
   already exists. Delete the block and the field goes back to missing, and the next
   routine run reads that as a signal nobody has looked at yet: it proposes a fresh
   `assessment` from scratch, silently discarding your disagreement. Change the `verdict`,
-  `finding`, `rule`, or `evidence` in place instead, keeping `proposer` as `"hn-signals"`,
-  `proposed_at` a valid date, and the block otherwise schema-valid — a later run then finds
-  a signal that already carries an assessment and leaves it alone.
+  `finding`, `rule`, or `evidence` in place instead, and set `proposer` to `"human"` —
+  this is the one queue whose purpose is holding the line between an unattended proposal
+  and a human decision, and a disposition left as `"hn-signals"` is indistinguishable from
+  one nobody reviewed. Keep `proposed_at` a valid date and the block otherwise
+  schema-valid, including its `evidence`, which may cite only the signal's own pinned page
+  — a later run then finds a signal that already carries an assessment and leaves it
+  alone.
 
 `finish` refuses to commit a run that changed anything but the one thing the routine is
 allowed to do: adding an `assessment` to a signal that had none. Every provenance field the
