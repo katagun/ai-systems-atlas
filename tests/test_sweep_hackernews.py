@@ -152,6 +152,16 @@ class ExtractVisibleTextTests(unittest.TestCase):
     def test_a_body_with_no_markup_is_returned_as_written(self) -> None:
         self.assertEqual(sweep_hackernews.extract_visible_text("plain text"), "plain text")
 
+    def test_a_noscript_fallback_is_text_because_this_fetcher_runs_no_javascript(self) -> None:
+        body = "<script>render()</script><noscript>Enable JavaScript to continue.</noscript>"
+        self.assertEqual(
+            sweep_hackernews.extract_visible_text(body), "Enable JavaScript to continue."
+        )
+
+    def test_template_content_is_not_text(self) -> None:
+        body = "<template><p>never rendered</p></template><p>rendered</p>"
+        self.assertEqual(sweep_hackernews.extract_visible_text(body), "rendered")
+
     def test_malformed_markup_does_not_raise(self) -> None:
         body = "<div><p>half a tag <span class=unquoted>text</div><script>oops"
         self.assertIn("half a tag", sweep_hackernews.extract_visible_text(body))

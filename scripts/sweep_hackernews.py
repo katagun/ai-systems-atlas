@@ -112,7 +112,10 @@ class _VisibleText(HTMLParser):
     malformed page into a failed run rather than an unreadable one.
     """
 
-    SKIPPED = frozenset({"script", "style", "template", "noscript"})
+    # `noscript` is deliberately absent: this fetcher runs no JavaScript, so a page's
+    # noscript fallback is exactly the text it shows the reader we are. `template`
+    # content is inert markup and is skipped with the two code containers.
+    SKIPPED = frozenset({"script", "style", "template"})
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
