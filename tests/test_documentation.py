@@ -8,7 +8,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
-GENERATED_DIRECTORIES = {".git", ".venv", "node_modules", "playwright-report", "test-results"}
+GENERATED_DIRECTORIES = {".git", ".superpowers", ".venv", "node_modules", "playwright-report", "test-results"}
 
 
 class DocumentationTests(unittest.TestCase):
