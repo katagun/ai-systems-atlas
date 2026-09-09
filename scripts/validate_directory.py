@@ -36,6 +36,7 @@ ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
 CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
+STORY_ID_PATTERN = re.compile(r"[0-9]+")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
 EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
@@ -1474,9 +1475,13 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
         ):
             errors.append(f"signal {prefix}: fields do not match signal schema")
             continue
-        if signal["story_id"] in seen:
-            errors.append(f"signal {prefix}: duplicate signal identity")
-        seen.add(signal["story_id"])
+        story_id = signal["story_id"]
+        if not isinstance(story_id, str) or not STORY_ID_PATTERN.fullmatch(story_id):
+            errors.append(f"signal {prefix}: story_id must be a numeric string")
+        else:
+            if story_id in seen:
+                errors.append(f"signal {prefix}: duplicate signal identity")
+            seen.add(story_id)
         if signal["status"] != "provisional":
             errors.append(f"signal {prefix}: status must be provisional")
         if signal["page_status"] not in PAGE_STATUSES:
@@ -1491,6 +1496,20 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
             errors.append(f"signal {prefix}: only a readable page carries a content_sha256")
         if not valid_date(signal["discovered_at"]):
             errors.append(f"signal {prefix}: discovered_at must be an ISO date")
+        points = signal["points"]
+        if not isinstance(points, int) or isinstance(points, bool) or points < 0:
+            errors.append(f"signal {prefix}: points must be a non-negative integer")
+        num_comments = signal["num_comments"]
+        if not isinstance(num_comments, int) or isinstance(num_comments, bool) or num_comments < 0:
+            errors.append(f"signal {prefix}: num_comments must be a non-negative integer")
+        title = signal["title"]
+        if not isinstance(title, str) or not title.strip():
+            errors.append(f"signal {prefix}: title must be a non-empty string")
+        if https_url_host(signal["story_url"]) is None:
+            errors.append(f"signal {prefix}: story_url must be an HTTPS URL on a public DNS host")
+        for field in ("submitted_at", "fetched_at"):
+            if not isinstance(signal[field], str) or not signal[field].strip():
+                errors.append(f"signal {prefix}: {field} must be a non-empty string")
 
         assessment = signal.get("assessment")
         if assessment is None:
@@ -1514,6 +1533,37 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                 errors.append(
                     f"signal {prefix}: finding must not classify; it names taxonomy ids {leaked}"
                 )
+        rule = assessment["rule"]
+        if isinstance(rule, str):
+            leaked_rule = sorted(name for name in classifying if name in rule.lower())
+            if leaked_rule:
+                errors.append(
+                    f"signal {prefix}: rule must not classify; it names taxonomy ids {leaked_rule}"
+                )
+        evidence = assessment["evidence"]
+        if not isinstance(evidence, list):
+            errors.append(f"signal {prefix}: assessment evidence must be a list")
+        else:
+            if assessment["verdict"] != "unreadable" and not evidence:
+                errors.append(f"signal {prefix}: assessment evidence must cite at least one source")
+            for item in evidence:
+                if not isinstance(item, dict) or set(item) != EVIDENCE_REQUIRED:
+                    errors.append(f"signal {prefix}: evidence fields differ from schema")
+                    continue
+                if item["kind"] != "web":
+                    errors.append(f"signal {prefix}: evidence kind must be web")
+                if not isinstance(item["label"], str) or not item["label"].strip():
+                    errors.append(f"signal {prefix}: evidence requires a label")
+                if https_url_host(item["url"]) is None:
+                    errors.append(
+                        f"signal {prefix}: evidence requires an HTTPS URL on a public DNS host"
+                    )
+                if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
+                    item["content_sha256"]
+                ):
+                    errors.append(f"signal {prefix}: evidence requires a content_sha256")
+                if not isinstance(item["fetched_at"], str) or not item["fetched_at"].strip():
+                    errors.append(f"signal {prefix}: evidence requires fetched_at")
         if not valid_date(assessment["proposed_at"]):
             errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
         if assessment["proposer"] != "hn-signals":
