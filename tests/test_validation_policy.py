@@ -775,6 +775,96 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertEqual([error for error in errors if "exclusion" in error], [])
 
+    def signals_document(self, **extra: str) -> dict:
+        signal = {
+            "story_id": "49616354",
+            "story_url": "https://news.ycombinator.com/item?id=49616354",
+            "title": "Mercury 2.5",
+            "url": "https://vendor.example/launch",
+            "points": 231,
+            "num_comments": 88,
+            "submitted_at": "2026-09-08T20:14:52Z",
+            "page_status": "readable",
+            "content_sha256": "b" * 64,
+            "fetched_at": "2026-09-09T08:00:00Z",
+            "status": "provisional",
+            "discovered_at": "2026-09-09",
+        }
+        signal.update(extra)
+        return {
+            "version": "1.0",
+            "updated_at": "2026-09-09T08:00:00Z",
+            "source": {
+                "endpoint": "https://hn.algolia.com/api/v1/search_by_date",
+                "window_start": "2026-09-07T00:00:00Z",
+                "window_end": "2026-09-08T00:00:00Z",
+                "points_floor": 10,
+                "story_count": 1042,
+                "eligible_count": 1,
+            },
+            "signals": [signal],
+        }
+
+    def test_hn_signals_must_not_be_published(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        (root / "web" / "hn-signals.json").write_text("{}", encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("hn-signals.json" in error and "must not be published" in error for error in errors),
+            errors,
+        )
+
+    def test_a_signal_rejects_a_field_outside_the_schema(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "hn-signals.json"
+        path.write_text(json.dumps(self.signals_document(extra="value")), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("fields do not match signal schema" in error for error in errors), errors
+        )
+
+    def test_a_signal_finding_may_not_name_a_taxonomy_id(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "The page describes a coding_agent for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://vendor.example/launch",
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(any("must not classify" in error for error in errors), errors)
+
+    def test_an_unreadable_page_may_only_carry_the_unreadable_verdict(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["page_status"] = "unreadable"
+        document["signals"][0]["content_sha256"] = None
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Looks interesting from the title.",
+            "evidence": [],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("unreadable page" in error for error in errors), errors
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

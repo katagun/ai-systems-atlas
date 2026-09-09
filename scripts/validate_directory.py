@@ -30,7 +30,7 @@ PUBLISHED_DATA = (
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "license-review.json",
-    "discovery-sources.json",
+    "discovery-sources.json", "hn-signals.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -40,6 +40,17 @@ EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
 EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
 EXCLUSION_OPTIONAL = {"url"}
+SIGNAL_REQUIRED = {
+    "story_id", "story_url", "title", "url", "points", "num_comments", "submitted_at",
+    "page_status", "content_sha256", "fetched_at", "status", "discovered_at",
+}
+SIGNAL_OPTIONAL = {"assessment"}
+ASSESSMENT_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
+ASSESSMENT_VERDICTS = {"worth_review", "out_of_scope", "unreadable"}
+PAGE_STATUSES = {"readable", "unreadable", "failed"}
+SIGNAL_ENVELOPE_REQUIRED = {
+    "endpoint", "window_start", "window_end", "points_floor", "story_count", "eligible_count",
+}
 
 TAXONOMY_GROUPS = (
     "system_families",
@@ -1441,6 +1452,74 @@ def validate_triage(
             errors.append(f"candidate {prefix}: unknown evidence kind {item['kind']!r}")
 
 
+def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[str]) -> None:
+    """Attention-source signals carry provenance and never a classification. See ADR 028."""
+    if document.get("version") != "1.0":
+        errors.append("hn-signals.json: unsupported version")
+    signals = document.get("signals")
+    if not isinstance(signals, list):
+        errors.append("hn-signals.json: signals must be a list")
+        return
+
+    source = document.get("source")
+    if signals and (not isinstance(source, dict) or set(source) != SIGNAL_ENVELOPE_REQUIRED):
+        errors.append("hn-signals.json: source envelope does not match the sweep schema")
+
+    seen: set[str] = set()
+    classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
+    for signal in signals:
+        prefix = (signal.get("story_id") or "unknown") if isinstance(signal, dict) else "unknown"
+        if not isinstance(signal, dict) or (
+            SIGNAL_REQUIRED - set(signal) or set(signal) - SIGNAL_REQUIRED - SIGNAL_OPTIONAL
+        ):
+            errors.append(f"signal {prefix}: fields do not match signal schema")
+            continue
+        if signal["story_id"] in seen:
+            errors.append(f"signal {prefix}: duplicate signal identity")
+        seen.add(signal["story_id"])
+        if signal["status"] != "provisional":
+            errors.append(f"signal {prefix}: status must be provisional")
+        if signal["page_status"] not in PAGE_STATUSES:
+            errors.append(f"signal {prefix}: page_status must name a fetch outcome")
+        if https_url_host(signal["url"]) is None:
+            errors.append(f"signal {prefix}: url must be an HTTPS URL on a public DNS host")
+        readable = signal["page_status"] == "readable"
+        digest = signal["content_sha256"]
+        if readable and not (isinstance(digest, str) and CONTENT_SHA_PATTERN.fullmatch(digest)):
+            errors.append(f"signal {prefix}: a readable page requires a content_sha256")
+        if not readable and digest is not None:
+            errors.append(f"signal {prefix}: only a readable page carries a content_sha256")
+        if not valid_date(signal["discovered_at"]):
+            errors.append(f"signal {prefix}: discovered_at must be an ISO date")
+
+        assessment = signal.get("assessment")
+        if assessment is None:
+            continue
+        if not isinstance(assessment, dict) or set(assessment) != ASSESSMENT_REQUIRED:
+            errors.append(f"signal {prefix}: assessment fields do not match the schema")
+            continue
+        if assessment["verdict"] not in ASSESSMENT_VERDICTS:
+            errors.append(f"signal {prefix}: assessment verdict is not one of the three")
+        # A page nobody could read cannot be dispositioned from its title. ADR 028.
+        if not readable and assessment["verdict"] != "unreadable":
+            errors.append(
+                f"signal {prefix}: an unreadable page may only carry the unreadable verdict"
+            )
+        finding = assessment["finding"]
+        if not isinstance(finding, str) or not finding.strip():
+            errors.append(f"signal {prefix}: assessment requires a finding")
+        else:
+            leaked = sorted(name for name in classifying if name in finding.lower())
+            if leaked:
+                errors.append(
+                    f"signal {prefix}: finding must not classify; it names taxonomy ids {leaked}"
+                )
+        if not valid_date(assessment["proposed_at"]):
+            errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
+        if assessment["proposer"] != "hn-signals":
+            errors.append(f"signal {prefix}: assessment proposer must be hn-signals")
+
+
 def validate_candidates(
     candidates_data: dict[str, Any], tax: Taxonomy, index: ProjectIndex, errors: list[str]
 ) -> set[str]:
@@ -1605,6 +1684,8 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("discovery-sources.json: operational discovery sources must not be published")
     if (root / "web" / "model-candidates.json").exists():
         errors.append("model-candidates.json: provisional model candidates must not be published")
+    if (root / "web" / "hn-signals.json").exists():
+        errors.append("hn-signals.json: attention-source signals must not be published")
 
     tax = validate_taxonomy(catalog["taxonomy.json"], errors)
 
@@ -1633,6 +1714,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
+    validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     validate_model_candidates(
         catalog["model-candidates.json"], models_value, source_models_value, tax, errors,
     )
