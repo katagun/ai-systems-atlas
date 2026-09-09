@@ -574,5 +574,31 @@ class UpdateDirectoryTests(unittest.TestCase):
         synchronize.assert_not_called()
 
 
+class KnownUrlTests(unittest.TestCase):
+    def test_an_excluded_url_joins_the_known_set(self) -> None:
+        """An exclusion is a durable rejection; without its URL the refresh re-adds it."""
+        known = update_directory.known_urls_from(
+            [{"url": "https://project.example/a"}],
+            {"entries": [
+                {"name": "Rejected", "repo": None, "reason": "r", "useful_lesson": "l",
+                 "url": "https://vendor.example/launch"},
+            ]},
+        )
+        self.assertIn("https://vendor.example/launch", known)
+        self.assertIn("https://project.example/a", known)
+
+    def test_an_exclusion_without_a_url_is_skipped(self) -> None:
+        """All 70 existing entries lack a url; the helper must tolerate that."""
+        known = update_directory.known_urls_from(
+            [{"url": "https://project.example/a"}],
+            {"entries": [{"name": "Old", "repo": "a/b", "reason": "r", "useful_lesson": "l"}]},
+        )
+        self.assertEqual(known, {"https://project.example/a"})
+
+    def test_a_malformed_exclusion_entry_does_not_crash(self) -> None:
+        known = update_directory.known_urls_from([], {"entries": ["not-an-object", None]})
+        self.assertEqual(known, set())
+
+
 if __name__ == "__main__":
     unittest.main()

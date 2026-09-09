@@ -615,6 +615,24 @@ def discover_official_candidates(
     return sorted(candidates.values(), key=candidate_key), new_count, successful_sources, failures
 
 
+def known_urls_from(
+    projects: list[dict[str, Any]], exclusions: dict[str, Any]
+) -> set[str]:
+    """Return every URL discovery should treat as already decided.
+
+    An exclusion is a durable human rejection. Without its URL the weekly refresh
+    re-adds the same non-GitHub page forever; 10 of the 70 entries have no repo at
+    all, so `repo` alone cannot carry the rejection.
+    """
+    known = {project["url"] for project in projects if isinstance(project.get("url"), str)}
+    known.update(
+        item["url"]
+        for item in exclusions.get("entries", [])
+        if isinstance(item, dict) and isinstance(item.get("url"), str)
+    )
+    return known
+
+
 def main() -> int:
     token = os.environ.get("GITHUB_TOKEN")
     refreshed_at = now_date()
@@ -672,7 +690,7 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
-    known_urls = {project["url"] for project in projects}
+    known_urls = known_urls_from(projects, exclusions)
     candidates, new_official_candidates, successful_sources, official_failures = discover_official_candidates(
         candidates,
         known_urls,

@@ -9,9 +9,17 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
-    from .discovery_sources import canonical_url_key, validate_discovery_sources
+    from .discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from discovery_sources import canonical_url_key, validate_discovery_sources
+    from discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
@@ -30,6 +38,8 @@ SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
 CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
+EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
+EXCLUSION_OPTIONAL = {"url"}
 
 TAXONOMY_GROUPS = (
     "system_families",
@@ -1542,6 +1552,16 @@ def validate_exclusions(
     exclusions_data: dict[str, Any], repos: set[str], candidate_repos: set[str], errors: list[str]
 ) -> None:
     """A repository is curated, a candidate, or excluded - never two of those."""
+    for item in exclusions_data.get("entries", []):
+        prefix = (item.get("name") or "unknown") if isinstance(item, dict) else "unknown"
+        if not isinstance(item, dict) or (
+            EXCLUSION_REQUIRED - set(item)
+            or set(item) - EXCLUSION_REQUIRED - EXCLUSION_OPTIONAL
+        ):
+            errors.append(f"exclusion {prefix}: fields do not match exclusion schema")
+            continue
+        if "url" in item and https_url_host(item["url"]) is None:
+            errors.append(f"exclusion {prefix}: url must be an HTTPS URL on a public DNS host")
     excluded_repos = {
         item["repo"].lower()
         for item in exclusions_data.get("entries", [])

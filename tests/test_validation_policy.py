@@ -747,6 +747,34 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertTrue(any("terms require verified_at" in error for error in errors), errors)
         self.assertTrue(any("evidence must be a non-empty list" in error for error in errors), errors)
 
+    def test_an_exclusion_rejects_a_field_outside_the_schema(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["unexpected"] = "value"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any("fields do not match exclusion schema" in error for error in errors), errors
+        )
+
+    def test_an_exclusion_accepts_an_optional_https_url(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["url"] = "https://vendor.example/launch"
+        serialized = json.dumps(document)
+        path.write_text(serialized, encoding="utf-8")
+        (root / "web" / "exclusions.json").write_text(serialized, encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertEqual([error for error in errors if "exclusion" in error], [])
+
 
 if __name__ == "__main__":
     unittest.main()
