@@ -116,4 +116,6 @@ A candidate's `triage` block is likewise evidence, not a conclusion: accepting a
 
 Automated system discovery writes durable candidates with proposed family and role only. Automated model ingestion writes provider-independent metadata to the public `models-dev.json` source snapshot and the separate review queue without a proposed Atlas license, source model, boundary, or score. Source rows and candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.
 
+Automated attention-source discovery writes durable signals with provenance only — never a proposed family, role, or confidence — and a signal is never a candidate; promotion follows the review workflow above. See [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md).
+
 See `docs/OPERATIONS.md` for candidate promotion and license-review resolution runbooks. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md) for the inclusion decision.

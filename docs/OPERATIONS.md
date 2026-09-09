@@ -179,6 +179,48 @@ To install the routine as a scheduled task, sync `docs/routines/candidate-triage
 local time. Scheduled tasks only run while the desktop app is open; a missed run catches
 up the next time the app launches, so a run is not guaranteed at the exact scheduled time.
 
+## Review a signal batch
+
+`scripts/run_hn_signals.py finish` commits proposed `assessment` blocks to the
+`hn-signals/pending` branch in an isolated worktree; it never pushes and never touches
+`main` or `origin`. To review a run:
+
+1. See what it proposed: `git log --oneline main..hn-signals/pending` and
+   `git diff main..hn-signals/pending -- directory/hn-signals.json`.
+2. Treat every assessment as evidence, never a conclusion. Check the sources an
+   `assessment` block cites — the pinned `evidence` items and the quoted `finding` — not
+   the `verdict` it reached. See
+   [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md).
+3. Re-verify a signal's digest by hand with
+   `uv run python scripts/verify_signal_pages.py --recheck`. It re-fetches every signal
+   whose `page_status` is `readable` and fails, naming it, when the page's current
+   content no longer hashes to the recorded `content_sha256` — that catches a vendor page
+   that changed underneath the assessment, and it catches a finding resting on evidence
+   nobody can reproduce.
+
+Then, per signal:
+
+- **Accepting `worth_review`:** the assessment is a dossier, not a classification. A
+  signal is not a candidate — nothing in this pipeline writes `directory/candidates.json`.
+  Follow `CURATION.md`'s review workflow yourself to decide whether the linked page
+  describes a system the Atlas should carry, and, if so, create the candidate and carry it
+  through review like any other discovery.
+- **Accepting `out_of_scope`:** the verdict proposes an exclusion; it is not one. Write the
+  exclusion in `directory/exclusions.json` following `CURATION.md`. When the rejected page
+  has no GitHub repository — the ordinary case for an attention source — set the
+  exclusion's optional `url` to the signal's `url`. The weekly discovery refresh folds
+  every exclusion `url` into its known-URL set; without it, the same page can reappear as
+  a new candidate the next time an official feed reports it.
+- **Accepting `unreadable`:** no page text was ever read, so there is nothing to promote or
+  exclude. Confirm `page_status` really is not `readable` and leave the signal as is.
+
+`finish` refuses to commit a run that changed anything but the one thing the routine is
+allowed to do: adding an `assessment` to a signal that had none. Every provenance field the
+sweep wrote — `story_id` through `discovered_at` — and the membership of the queue itself
+belong to the sweep alone; a run that touches one aborts, naming the signal and the field.
+Reviewing a batch therefore means judging verdicts and evidence, not auditing the diff for
+overreach.
+
 ## Review an inference service
 
 Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.
@@ -221,6 +263,33 @@ The refresh checks out with `persist-credentials: false` and only configures git
 The job runs with `GITHUB_TOKEN` scoped to `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR.
 
 A pull request opened with `GITHUB_TOKEN` does not trigger workflows, so `verify` — the required check — never runs on it and the pull request cannot reach a mergeable state. Add a repository secret named `ATLAS_AUTOMATION_TOKEN` holding a fine-grained personal access token or GitHub App installation token for this repository with **Contents: read and write** and **Pull requests: read and write**. The workflow prefers it and falls back to `GITHUB_TOKEN`, so the refresh still runs without the secret; it just produces a pull request whose required check has to be started by hand.
+
+## Attention-source sweep
+
+`.github/workflows/sweep-hackernews.yml` runs daily, separate from the weekly refresh
+above, and stays on its own `automation/hn-signals` branch — mixing the two would sweep
+the fast-moving signal queue into a week-old refresh pull request. It runs
+`scripts/sweep_hackernews.py` against a one-day-lagged window (Hacker News points accrue
+for roughly a day, so a shorter lag would gate on half-formed counts), validates the
+result, and opens or updates the pull request. It never commits directly to the default
+branch.
+
+The points floor (`--points-floor`, default 10) is the sweep's only tuning knob: the
+minimum score a story needs to be swept at all. Its right value is not settled; watch
+what the current floor lets through and adjust it. `directory/hn-signals.json`'s
+`source.eligible_count` is capped at 60 signals per run. When the cap binds,
+`source.truncated` is `true` and the sweep prints a warning naming how many qualifying
+stories it dropped — because the attention source returns stories newest-first, a bound
+cap always drops the oldest stories in the swept window, never a random sample. A
+`truncated: true` envelope is a signal to raise `--points-floor`, not to ignore: the
+response is a narrower query that the cap can carry in full, not silence about the
+stories the run never kept.
+
+The workflow needs the same `ATLAS_AUTOMATION_TOKEN` repository secret described in
+"Tokens" above. Without it, its pull requests are opened with `GITHUB_TOKEN`, which — as
+recorded above — never triggers the required `verify` check, so those pull requests
+cannot reach a mergeable state either. This is a setup step a human must perform once, in
+**Settings → Secrets and variables → Actions**.
 
 ## App payloads
 
