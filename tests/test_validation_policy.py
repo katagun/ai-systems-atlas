@@ -747,6 +747,578 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertTrue(any("terms require verified_at" in error for error in errors), errors)
         self.assertTrue(any("evidence must be a non-empty list" in error for error in errors), errors)
 
+    def test_an_exclusion_rejects_a_field_outside_the_schema(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["unexpected"] = "value"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any("fields do not match exclusion schema" in error for error in errors), errors
+        )
+
+    def test_an_exclusion_accepts_an_optional_https_url(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["url"] = "https://vendor.example/launch"
+        serialized = json.dumps(document)
+        path.write_text(serialized, encoding="utf-8")
+        (root / "web" / "exclusions.json").write_text(serialized, encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertEqual([error for error in errors if "exclusion" in error], [])
+
+    def signals_document(self, **extra: str) -> dict:
+        signal = {
+            "story_id": "49616354",
+            "story_url": "https://news.ycombinator.com/item?id=49616354",
+            "title": "Mercury 2.5",
+            "url": "https://vendor.example/launch",
+            "points": 231,
+            "num_comments": 88,
+            "submitted_at": "2026-09-08T20:14:52Z",
+            "page_status": "readable",
+            "content_sha256": "b" * 64,
+            "fetched_at": "2026-09-09T08:00:00Z",
+            "status": "provisional",
+            "discovered_at": "2026-09-09",
+        }
+        signal.update(extra)
+        return {
+            "version": "1.0",
+            "updated_at": "2026-09-09T08:00:00Z",
+            "source": {
+                "endpoint": "https://hn.algolia.com/api/v1/search_by_date",
+                "window_start": "2026-09-07T00:00:00Z",
+                "window_end": "2026-09-08T00:00:00Z",
+                "points_floor": 10,
+                "story_count": 1042,
+                "eligible_count": 1,
+                "truncated": False,
+            },
+            "signals": [signal],
+        }
+
+    def test_hn_signals_must_not_be_published(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        (root / "web" / "hn-signals.json").write_text("{}", encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("hn-signals.json" in error and "must not be published" in error for error in errors),
+            errors,
+        )
+
+    def test_a_signal_rejects_a_field_outside_the_schema(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "hn-signals.json"
+        path.write_text(json.dumps(self.signals_document(extra="value")), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("fields do not match signal schema" in error for error in errors), errors
+        )
+
+    def test_a_signal_finding_may_not_name_a_taxonomy_id(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "The page describes a coding_agent for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://vendor.example/launch",
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        # Scoped: the candidate-triage validator emits "must not classify" too, so a bare
+        # substring match passes on an error from an entirely different queue.
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "finding must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_an_unreadable_page_may_only_carry_the_unreadable_verdict(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["page_status"] = "unreadable"
+        document["signals"][0]["content_sha256"] = None
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Looks interesting from the title.",
+            "evidence": [],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("unreadable page" in error for error in errors), errors
+        )
+
+    def test_signal_assessment_evidence_must_be_a_list(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": "https://vendor.example/launch",
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "assessment evidence must be a list" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_evidence_item_missing_content_sha256_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://vendor.example/launch",
+                "kind": "web", "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "evidence fields differ from schema" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_evidence_may_not_cite_a_page_the_signal_never_pinned(self) -> None:
+        """The routine reads one page. A citation to any other is unreproducible.
+
+        Shape checks alone pass an invented HTTPS URL beside an invented 64-hex digest,
+        and nothing else in the pipeline inspects an assessment: verify_signal_pages
+        walks the sweep's signals, never the model's citations.
+        """
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://totally-unrelated.example/nope",
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error
+                and "evidence must cite the signal's own pinned page" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_evidence_carrying_the_signals_own_digest_validates(self) -> None:
+        """The other half of the rule: the one citation the routine may write passes."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_signal_evidence_digest_must_match_even_when_the_url_matches(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("evidence must cite the signal's own pinned page" in error for error in errors),
+            errors,
+        )
+
+    def test_a_reviewer_may_record_their_own_disposition_as_the_proposer(self) -> None:
+        """A human overriding a verdict edits the block in place; recording that edit as
+        `hn-signals` would make a human's disposition indistinguishable from an
+        unattended proposal, in the one queue whose purpose is holding that line."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "out_of_scope",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Reviewed by hand: the page is a hiring post, not a launch.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "human",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_an_unknown_proposer_is_still_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "out_of_scope",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "The page is a hiring post, not a launch.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "some-other-routine",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any("assessment proposer must be hn-signals or human" in error for error in errors),
+            errors,
+        )
+
+    def signals_with_assessment(self, root: Path, **fields) -> list[str]:
+        """Validate a catalog whose one signal carries an assessment built from `fields`."""
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        signal["assessment"].update(fields)
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        return validate(root)
+
+    def test_a_kebab_case_taxonomy_id_does_not_evade_the_finding_check(self) -> None:
+        """`coding-agent` is the identifier with its separator swapped, not prose."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = self.signals_with_assessment(
+            root, finding="The page positions this as a coding-agent for large repositories."
+        )
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "finding must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_prose_that_merely_resembles_a_role_still_passes(self) -> None:
+        """docs/routines/candidate-triage.md: quoting prose that resembles a role is
+        fine; writing the identifier is not. The separator normalisation must not
+        collapse whitespace, or this documented case would be rejected."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = self.signals_with_assessment(
+            root, finding="The page describes a coding agent that edits files in a repository."
+        )
+        self.assertEqual([error for error in errors if "signal 49616354" in error], [])
+
+    def test_an_evidence_label_may_not_name_a_taxonomy_id(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        signal = document["signals"][0]
+        signal["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "coding_agent launch page", "url": signal["url"],
+                "kind": "web", "content_sha256": signal["content_sha256"],
+                "fetched_at": signal["fetched_at"],
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "evidence label must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_a_triage_finding_may_not_evade_the_check_with_kebab_case(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "candidates.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        candidate = next(item for item in document["candidates"] if "triage" in item)
+        candidate["triage"]["finding"] = "The README calls it a coding-agent for teams."
+        path.write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+
+    def test_a_signal_url_carrying_a_control_character_is_rejected(self) -> None:
+        """urlsplit strips tabs and newlines, so the host still parses clean."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(url="https://vendor.example/launch\n::error::spoofed")
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "must not contain control characters" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_timestamps_must_be_iso_8601(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(submitted_at="yesterday", fetched_at="2026-13-45T99:00Z")
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        joined = "\n".join(errors)
+        self.assertIn("signal 49616354: submitted_at must be an ISO 8601 timestamp", joined)
+        self.assertIn("signal 49616354: fetched_at must be an ISO 8601 timestamp", joined)
+
+    def test_worth_review_verdict_requires_at_least_one_evidence_item(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "evidence must cite at least one source" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_story_id_must_be_a_string_not_an_int(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["story_id"] = 49616354
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "story_id must be a numeric string" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_duplicate_story_id_across_signals_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        duplicate = json.loads(json.dumps(document["signals"][0]))
+        duplicate["url"] = "https://vendor.example/other"
+        document["signals"].append(duplicate)
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "duplicate signal identity" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_provenance_fields_reject_invalid_types(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(
+            points="not-a-number",
+            num_comments=-50,
+            title=12345,
+            story_url="javascript:alert(1)",
+            submitted_at="",
+            fetched_at="",
+        )
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        joined = "\n".join(errors)
+        self.assertIn("signal 49616354: points must be a non-negative integer", joined)
+        self.assertIn("signal 49616354: num_comments must be a non-negative integer", joined)
+        self.assertIn("signal 49616354: title must be a non-empty string", joined)
+        self.assertIn(
+            "signal 49616354: story_url must be an HTTPS URL on a public DNS host", joined
+        )
+        self.assertIn("signal 49616354: submitted_at must be a non-empty string", joined)
+        self.assertIn("signal 49616354: fetched_at must be a non-empty string", joined)
+
+    def test_signal_points_rejects_boolean_value(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document(points=True)
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "points must be a non-negative integer" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_rule_may_not_name_a_taxonomy_id(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["signals"][0]["assessment"] = {
+            "verdict": "worth_review",
+            "rule": "docs/CURATION.md coding_agent inclusion gate",
+            "finding": "Ships a new assistant with agentic workflows for developers.",
+            "evidence": [{
+                "label": "vendor page", "url": "https://vendor.example/launch",
+                "kind": "web", "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-09T08:00:00Z",
+            }],
+            "proposed_at": "2026-09-09",
+            "proposer": "hn-signals",
+        }
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "signal 49616354" in error and "rule must not classify" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_the_seeded_empty_hn_signals_envelope_still_validates(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
+
+    def test_signal_envelope_missing_truncated_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        del document["source"]["truncated"]
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope does not match the sweep schema" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_truncated_rejects_an_int(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["truncated"] = 1
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope truncated must be a boolean" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_truncated_accepts_a_real_bool(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["truncated"] = True
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,112 @@
+name: Sweep the attention source
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hn-signal-sweep
+  cancel-in-progress: false
+
+env:
+  SIGNAL_BRANCH: automation/hn-signals
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # The credential is withheld while untrusted third-party pages are parsed.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+          python-version: "3.12"
+      - run: uv sync --locked
+      - name: Sweep the attention source
+        run: uv run python scripts/sweep_hackernews.py
+      - name: Verify the signal queue
+        id: verify
+        continue-on-error: true
+        run: |
+          # No -e: the summary must be written even when validation fails, which is the
+          # run an operator most needs to read without opening the job log.
+          set +e
+          results="$(mktemp)"
+          uv run python scripts/validate_directory.py > "${results}" 2>&1
+          status=$?
+          cat "${results}"
+          {
+            echo "## Attention-source sweep verification"
+            echo
+            echo '```'
+            cat "${results}"
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+          exit "${status}"
+      - name: Open or update the signal pull request
+        if: always()
+        env:
+          # A pull request opened with GITHUB_TOKEN never triggers the required
+          # verify check. See "Tokens" under "Scheduled workflow" in docs/OPERATIONS.md.
+          GH_TOKEN: ${{ secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git
+          git add directory/hn-signals.json
+          if git diff --cached --quiet; then
+            echo "No new signals"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sweep attention-source signals for $(date -u +%Y-%m-%d)"
+          remote_sha="$(git ls-remote --heads origin "$SIGNAL_BRANCH" | cut -f1)"
+          if [ -n "$remote_sha" ]; then
+            git push --force-with-lease="refs/heads/${SIGNAL_BRANCH}:${remote_sha}" \
+              origin "HEAD:refs/heads/${SIGNAL_BRANCH}"
+          else
+            git push origin "HEAD:refs/heads/${SIGNAL_BRANCH}"
+          fi
+          default_branch="$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)"
+          if [ -z "$(gh pr list --head "$SIGNAL_BRANCH" --state open --json number -q '.[].number')" ]; then
+            gh pr create --base "$default_branch" --head "$SIGNAL_BRANCH" \
+              --title "Daily attention-source signals" \
+              --body "Automated attention-source sweep. Signals are pointers, not candidates; promotion is a human act. See docs/adr/028-attention-sources-are-pointers-not-claims.md."
+          fi
+      - name: Fail when the signal queue did not verify
+        if: steps.verify.outcome == 'failure'
+        run: |
+          echo "::error::the swept signal queue did not verify"
+          exit 1
+
+  report-failure:
+    needs: sweep
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          title="Daily attention-source sweep is failing"
+          gh label create automation-failure --description "Automation needs a maintainer" --color B60205 || true
+          number="$(gh issue list --state open --label automation-failure --search "$title in:title" --json number -q '.[0].number')"
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "Another failing run: ${run_url}"
+          else
+            gh issue create --title "$title" --label automation-failure --body "The daily attention-source sweep failed: ${run_url}"
+          fi

@@ -8,7 +8,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
-GENERATED_DIRECTORIES = {".git", ".venv", "node_modules", "playwright-report", "test-results"}
+GENERATED_DIRECTORIES = {".git", ".superpowers", ".venv", "node_modules", "playwright-report", "test-results"}
 
 
 class DocumentationTests(unittest.TestCase):
@@ -41,6 +41,15 @@ class DocumentationTests(unittest.TestCase):
             "024",
         ):
             self.assertIn(required, prompt, required)
+
+    def test_the_signal_routine_prompt_states_its_boundary(self) -> None:
+        """Mirrors test_the_routine_prompt_states_its_boundary for the attention-source routine."""
+        text = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        for needle in (
+            "directory/hn-signals.json", "run_hn_signals.py prepare",
+            "run_hn_signals.py finish", "NEVER FETCH", "028",
+        ):
+            self.assertIn(needle, text)
 
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
@@ -80,6 +89,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
             "docs/adr/025-model-releases-are-independent-curated-records.md",
             "docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md",
+            "docs/adr/028-attention-sources-are-pointers-not-claims.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
@@ -131,6 +141,46 @@ class DocumentationTests(unittest.TestCase):
             "${{ secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}",
             self.refresh_step("Open or update the refresh pull request"),
         )
+
+    def sweep_workflow(self) -> str:
+        return (ROOT / ".github" / "workflows" / "sweep-hackernews.yml").read_text(encoding="utf-8")
+
+    def sweep_step(self, marker: str) -> str:
+        """Return one step's block from the sweep workflow, without a YAML parser.
+
+        Unlike refresh_step(), this locates the step by a distinctive substring rather than a
+        `- name:` field: the sweep workflow's checkout step carries no name.
+        """
+        workflow = self.sweep_workflow()
+        start = workflow.index(marker)
+        start = workflow.rfind("\n      - ", 0, start) + 1
+        end = workflow.find("\n      - ", start + 1)
+        return workflow[start:] if end == -1 else workflow[start:end]
+
+    def test_the_sweep_workflow_withholds_credentials_while_parsing(self) -> None:
+        self.assertIn("persist-credentials: false", self.sweep_step("actions/checkout"))
+        self.assertIn("ATLAS_AUTOMATION_TOKEN", self.sweep_step("Open or update the signal pull request"))
+
+    def test_the_weekly_refresh_stages_every_directory_file_except_the_signal_queue(self) -> None:
+        """The explicit staging list is duplicated (GitHub Actions steps share no shell state);
+
+        a drifted or stale copy would silently stop committing a directory file, which is the
+        failure this task exists to prevent. Parse both copies from the file text (no YAML
+        dependency: the stdlib has no YAML parser, and this project has zero dependencies),
+        require them to match each other, and require the match to equal the directory's real
+        contents minus the daily sweep's own queue file.
+        """
+        text = self.refresh_workflow()
+        self.assertNotIn("hn-signals.json", text)
+
+        blocks = re.findall(r"git add directory/(?:[^\n]*\\\n)*[^\n]*", text)
+        self.assertEqual(2, len(blocks), "expected exactly two explicit `git add directory/...` staging lists")
+
+        staged_sets = [set(re.findall(r"directory/([\w.-]+\.json)", block)) for block in blocks]
+        self.assertEqual(staged_sets[0], staged_sets[1], "the two staging lists have drifted apart")
+
+        on_disk = {p.name for p in (ROOT / "directory").glob("*.json")} - {"hn-signals.json"}
+        self.assertEqual(on_disk, staged_sets[0])
 
     def test_refresh_failures_reach_a_maintainer(self) -> None:
         """A red scheduled run nobody watches is not a signal."""

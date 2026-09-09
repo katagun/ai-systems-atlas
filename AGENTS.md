@@ -26,6 +26,7 @@ Read only the documents required by the change:
 | inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` for the boundary, `docs/adr/017-local-runtime-eligibility-ignores-modality.md` for eligibility and the vocabulary obligation, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
 | language models, model releases, model access scores, or models.dev ingestion | `docs/MODELS.md`, then `docs/adr/025-model-releases-are-independent-curated-records.md` for the model boundary and `docs/adr/027-complete-models-dev-source-catalog-is-published.md` for the source/review split |
+| attention sources, Hacker News signals, or the signal-sweep routine | `docs/adr/028-attention-sources-are-pointers-not-claims.md`, then `docs/routines/hn-signals.md` |
 | agent-facing discovery docs, llms.txt, or the Atlas skill | `docs/AGENT_DOCS.md` |
 | blog posts, the markdown subset, or the writing surface | `docs/BLOG.md` |
 | direction and sequencing | `ROADMAP.md` |

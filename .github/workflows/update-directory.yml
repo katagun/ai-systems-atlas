@@ -105,7 +105,16 @@ jobs:
           }
 
           stage_and_check_whitespace() {
-            git add -A directory web && git diff --cached --check
+            # Explicit paths: an unqualified `git add -A directory` swept the daily
+            # attention-source queue into this weekly branch and mixed two cadences.
+            git add -A web
+            git add directory/projects.json directory/candidates.json directory/exclusions.json \
+                    directory/discovery-sources.json \
+                    directory/license-evidence.json directory/license-review.json \
+                    directory/models.json directory/models-dev.json directory/model-candidates.json \
+                    directory/inference-services.json directory/local-runtimes.json \
+                    directory/specifications.json directory/taxonomy.json
+            git diff --cached --check
           }
 
           check "validate_directory" uv run python scripts/validate_directory.py
@@ -159,7 +168,15 @@ jobs:
 
           gh auth setup-git
 
-          git add -A directory web
+          # Explicit paths: an unqualified `git add -A directory` swept the daily
+          # attention-source queue into this weekly branch and mixed two cadences.
+          git add -A web
+          git add directory/projects.json directory/candidates.json directory/exclusions.json \
+                  directory/discovery-sources.json \
+                  directory/license-evidence.json directory/license-review.json \
+                  directory/models.json directory/models-dev.json directory/model-candidates.json \
+                  directory/inference-services.json directory/local-runtimes.json \
+                  directory/specifications.json directory/taxonomy.json
           if git diff --cached --quiet; then
             echo "No directory changes"
             exit 0

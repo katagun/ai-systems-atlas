@@ -6,13 +6,16 @@ described in docs/routines/candidate-triage.md. Everything here is mechanical.
 """
 from __future__ import annotations
 
-import argparse
 import json
-import subprocess
 import sys
 from datetime import date
 from pathlib import Path
 from typing import Any
+
+try:
+    from . import routine_guards
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    import routine_guards
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,20 +44,8 @@ INSTALLED_PROMPT = Path.home() / ".claude" / "scheduled-tasks" / "candidate-tria
 
 
 def unexpected_changes(porcelain: str) -> list[str]:
-    """Return every path in `git status --porcelain` output the routine may not touch."""
-    changed: list[str] = []
-    for line in porcelain.splitlines():
-        if not line.strip():
-            continue
-        path = line[3:].strip()
-        if " -> " in path:  # a rename reports "old -> new"; both ends are a change
-            for side in path.split(" -> ", 1):
-                if side.strip() not in ALLOWED_CHANGES:
-                    changed.append(side.strip())
-            continue
-        if path not in ALLOWED_CHANGES:
-            changed.append(path)
-    return changed
+    """Every path in `git status --porcelain` output the routine may not touch."""
+    return routine_guards.unexpected_changes(porcelain, ALLOWED_CHANGES)
 
 
 def candidate_key(candidate: dict[str, Any]) -> str:
@@ -139,21 +130,15 @@ def unexpected_field_changes(before: str, after: str) -> list[str]:
 
 def worktree_text(path: str) -> str:
     """Read a file out of the run's worktree. Injected in tests, which have no worktree."""
-    return (WORKTREE / path).read_text(encoding="utf-8")
+    return routine_guards.worktree_text(path, WORKTREE)
 
 
-def shell(command: list[str], cwd: Path | None = None) -> tuple[int, str]:
-    finished = subprocess.run(command, capture_output=True, text=True, cwd=cwd)
-    return finished.returncode, finished.stdout + finished.stderr
+shell = routine_guards.shell
 
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
-    if installed_prompt is None:
-        return "the routine prompt is not installed"
-    if installed_prompt.strip() != repo_prompt.strip():
-        return "the installed routine prompt differs from docs/routines/candidate-triage.md"
-    return None
+    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/candidate-triage.md")
 
 
 def prepare(*, limit: int, run=shell) -> int:
@@ -185,15 +170,8 @@ def prepare(*, limit: int, run=shell) -> int:
 
 
 def unexpected_committed_changes(name_only: str) -> list[str]:
-    """Paths a commit already on the branch touched that the routine may not write.
-
-    A clean working tree proves nothing on its own: an agent that commits its own edit
-    leaves `git status` empty while the change rides on the branch the reviewer merges.
-    """
-    return [
-        line.strip() for line in name_only.splitlines()
-        if line.strip() and line.strip() not in ALLOWED_CHANGES
-    ]
+    """Paths a commit already on the branch touched that the routine may not write."""
+    return routine_guards.unexpected_committed_changes(name_only, ALLOWED_CHANGES)
 
 
 def finish(*, run=shell, read=worktree_text) -> int:
@@ -271,13 +249,9 @@ def finish(*, run=shell, read=worktree_text) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("prepare", "finish"))
-    parser.add_argument("--limit", type=int, default=40)
-    args = parser.parse_args(argv)
-    if args.command == "prepare":
-        return prepare(limit=args.limit)
-    return finish()
+    return routine_guards.main(
+        argv, description=__doc__, prepare=prepare, finish=finish
+    )
 
 
 if __name__ == "__main__":

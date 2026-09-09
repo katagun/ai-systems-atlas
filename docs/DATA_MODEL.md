@@ -21,6 +21,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
+| `hn-signals.json` | Attention-source signal queue: pointers plus optional review assessment | No |
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
@@ -96,11 +97,40 @@ License-review records correspond one-to-one with projects whose `license_review
 
 See `OPERATIONS.md` for promotion and resolution procedures.
 
+`directory/hn-signals.json` is the attention-source signal queue, populated only by the
+daily sweep in `scripts/sweep_hackernews.py`; see
+[ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Its envelope is
+`{"version": "1.0", "updated_at": <ISO datetime>, "source": {...}, "signals": [...]}`. When
+the queue holds any signals, `source` records the query `endpoint`, the swept
+`window_start` and `window_end`, the `points_floor` applied, the pre-cap `story_count`, the
+kept `eligible_count`, and a `truncated` boolean that is true exactly when the run's cap
+dropped qualifying stories that cleared the floor.
+
+Each signal carries provenance only, never a classification: `story_id`, `story_url`,
+`title`, `url`, `points`, `num_comments`, `submitted_at`, `page_status` (`readable`,
+`unreadable`, or `failed`), `content_sha256` (present only when `page_status` is
+`readable`), `fetched_at`, `status` (always `provisional`), and `discovered_at`.
+
+A signal may optionally carry one `assessment` block, added by the local
+`docs/routines/hn-signals.md` routine: `verdict` (`worth_review`, `out_of_scope`, or
+`unreadable`), `rule`, `finding`, non-empty `evidence`, `proposed_at`, and `proposer`. Each
+evidence entry carries `label`, `url`, `kind` (always `web`), `content_sha256`, and
+`fetched_at`, and every entry must cite the signal's own pinned page: validation rejects
+an evidence `url` or `content_sha256` that differs from the signal's, because the routine
+is handed exactly one page and a citation to any other is one nobody fetched. `proposer`
+is `hn-signals` for a block the routine wrote or `human` for one a reviewer edited in
+place — a human's disposition is never recorded as an unattended proposal. A signal whose `page_status` is not `readable` may carry only the
+`unreadable` verdict — validation rejects any other verdict on a page nobody could read —
+and validation rejects a `finding` or `rule` that names a `system_family` or `primary_role`
+taxonomy id, because proposing a classification stays the human's alone. An `assessment` is
+itself a proposal, never an accepted conclusion: promotion into `directory/candidates.json`
+follows the same human review workflow as any other discovery.
+
 ## Discovery source registry
 
 `discovery-sources.json` is operational configuration, not a catalog or evidence source. Each sorted entry identifies one authoritative HTTPS hub and feed plus the exact lowercase public DNS hosts allowed for the configured URLs, redirects, and feed item links. It contains no proposed family, role, license, source model, provider trait, score, or editorial conclusion.
 
-The updater reads recent official announcements, applies conservative launch and relevance gates, and emits ordinary provisional candidate records. It never fetches linked article pages or treats registry inclusion as product eligibility. Feed observations receive the same complete human-review requirements as GitHub discoveries.
+The updater reads recent official announcements, applies conservative launch and relevance gates, and emits ordinary provisional candidate records. The official-feed updater never fetches linked article pages or treats registry inclusion as product eligibility. Feed observations receive the same complete human-review requirements as GitHub discoveries.
 
 ## Specification record
 

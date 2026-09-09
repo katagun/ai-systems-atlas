@@ -12,3 +12,4 @@ test-results/
 agent_workspace/
 .candidate-evidence/
 .evidence-link-cache.json
+.hn-signal-bundle/

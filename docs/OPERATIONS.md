@@ -40,7 +40,7 @@ The refresh is transactional at the repository level:
 7. write canonical JSON and synchronize published web copies;
 8. validate and test in CI before committing.
 
-Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages. Automated refreshes never edit editorial fields.
+Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
 The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md).
 
@@ -179,6 +179,74 @@ To install the routine as a scheduled task, sync `docs/routines/candidate-triage
 local time. Scheduled tasks only run while the desktop app is open; a missed run catches
 up the next time the app launches, so a run is not guaranteed at the exact scheduled time.
 
+## Review a signal batch
+
+`scripts/run_hn_signals.py finish` commits proposed `assessment` blocks to the
+`hn-signals/pending` branch in an isolated worktree; it never pushes and never touches
+`main` or `origin`. To review a run:
+
+1. See what it proposed: `git log --oneline main..hn-signals/pending` and
+   `git diff main..hn-signals/pending -- directory/hn-signals.json`.
+2. Treat every assessment as evidence, never a conclusion. Check the sources an
+   `assessment` block cites — the pinned `evidence` items and the quoted `finding` — not
+   the `verdict` it reached. See
+   [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md).
+3. Re-verify a signal's digest by hand with
+   `uv run python scripts/verify_signal_pages.py --recheck`. It re-fetches every signal
+   whose `page_status` is `readable` and fails, naming it, when the page's current
+   content no longer hashes to the recorded `content_sha256` — that catches a vendor page
+   that changed underneath the assessment. It walks the sweep's signals and never reads an
+   `assessment`, so it is not what stops a fabricated citation. Validation is: an
+   assessment may cite only its own signal's pinned page, and an `evidence` entry whose
+   `url` or `content_sha256` differs from the signal's is rejected. Together they mean the
+   digest this command re-fetches is the digest every citation on that signal carries.
+
+Then, per signal:
+
+- **Accepting `worth_review`:** the assessment is a dossier, not a classification. A
+  signal is not a candidate — nothing in this pipeline writes `directory/candidates.json`.
+  Follow `CURATION.md`'s review workflow yourself to decide whether the linked page
+  describes a system the Atlas should carry, and, if so, create the candidate and carry it
+  through review like any other discovery.
+- **Accepting `out_of_scope`:** the verdict proposes an exclusion; it is not one. Write the
+  exclusion in `directory/exclusions.json` following `CURATION.md`. When the rejected page
+  has no GitHub repository — the ordinary case for an attention source — set the
+  exclusion's optional `url` to the signal's `url`. The weekly discovery refresh folds
+  every exclusion `url` into its known-URL set; without it, the same page can reappear as
+  a new candidate the next time an official feed reports it.
+- **Accepting `unreadable`:** no page text was ever read, so there is nothing to promote or
+  exclude. Confirm `page_status` really is not `readable` and leave the signal as is.
+- **Disagreeing with a verdict:** *edit* the signal's `assessment` block in
+  `directory/hn-signals.json` to record your disposition — do not delete it.
+  `signal_field_changes` in `scripts/run_hn_signals.py` permits a run to add an
+  `assessment` only where a signal had none; it rejects any run that changes one that
+  already exists. Delete the block and the field goes back to missing, and the next
+  routine run reads that as a signal nobody has looked at yet: it proposes a fresh
+  `assessment` from scratch, silently discarding your disagreement. Change the `verdict`,
+  `finding`, `rule`, or `evidence` in place instead, and set `proposer` to `"human"` —
+  this is the one queue whose purpose is holding the line between an unattended proposal
+  and a human decision, and a disposition left as `"hn-signals"` is indistinguishable from
+  one nobody reviewed. Keep `proposed_at` a valid date and the block otherwise
+  schema-valid, including its `evidence`, which may cite only the signal's own pinned page
+  — a later run then finds a signal that already carries an assessment and leaves it
+  alone.
+
+`finish` refuses to commit a run that changed anything but the one thing the routine is
+allowed to do: adding an `assessment` to a signal that had none. Every provenance field the
+sweep wrote — `story_id` through `discovered_at` — and the membership of the queue itself
+belong to the sweep alone; a run that touches one aborts, naming the signal and the field.
+Reviewing a batch therefore means judging verdicts and evidence, not auditing the diff for
+overreach.
+
+To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
+`~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
+local time, after the daily sweep at 06:23 UTC. `prepare` compares the two files and
+refuses to run — `error: the routine prompt is not installed` — when the installed copy is
+absent or differs, so the first run fails until it is installed and every later change to
+the repository prompt has to be re-synced before a run proceeds. Scheduled tasks only run
+while the desktop app is open; a missed run catches up the next time the app launches, so
+a run is not guaranteed at the exact scheduled time.
+
 ## Review an inference service
 
 Follow `INFERENCE_SERVICES.md` and treat the named service—not its company or models—as the review unit. Review product documentation, data controls, and governing terms together. Keep endpoint-, model-, region-, feature-, and contract-specific exceptions in prose. Synchronize and verify the complete catalog, then exercise inference-service search, filters, and details in the browser.
@@ -221,6 +289,33 @@ The refresh checks out with `persist-credentials: false` and only configures git
 The job runs with `GITHUB_TOKEN` scoped to `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR.
 
 A pull request opened with `GITHUB_TOKEN` does not trigger workflows, so `verify` — the required check — never runs on it and the pull request cannot reach a mergeable state. Add a repository secret named `ATLAS_AUTOMATION_TOKEN` holding a fine-grained personal access token or GitHub App installation token for this repository with **Contents: read and write** and **Pull requests: read and write**. The workflow prefers it and falls back to `GITHUB_TOKEN`, so the refresh still runs without the secret; it just produces a pull request whose required check has to be started by hand.
+
+## Attention-source sweep
+
+`.github/workflows/sweep-hackernews.yml` runs daily, separate from the weekly refresh
+above, and stays on its own `automation/hn-signals` branch — mixing the two would sweep
+the fast-moving signal queue into a week-old refresh pull request. It runs
+`scripts/sweep_hackernews.py` against a one-day-lagged window (Hacker News points accrue
+for roughly a day, so a shorter lag would gate on half-formed counts), validates the
+result, and opens or updates the pull request. It never commits directly to the default
+branch.
+
+The points floor (`--points-floor`, default 10) is the sweep's only tuning knob: the
+minimum score a story needs to be swept at all. Its right value is not settled; watch
+what the current floor lets through and adjust it. `directory/hn-signals.json`'s
+`source.eligible_count` is capped at 60 signals per run. When the cap binds,
+`source.truncated` is `true` and the sweep prints a warning naming how many qualifying
+stories it dropped — because the attention source returns stories newest-first, a bound
+cap always drops the oldest stories in the swept window, never a random sample. A
+`truncated: true` envelope is a signal to raise `--points-floor`, not to ignore: the
+response is a narrower query that the cap can carry in full, not silence about the
+stories the run never kept.
+
+The workflow needs the same `ATLAS_AUTOMATION_TOKEN` repository secret described in
+"Tokens" above. Without it, its pull requests are opened with `GITHUB_TOKEN`, which — as
+recorded above — never triggers the required `verify` check, so those pull requests
+cannot reach a mergeable state either. This is a setup step a human must perform once, in
+**Settings → Secrets and variables → Actions**.
 
 ## App payloads
 

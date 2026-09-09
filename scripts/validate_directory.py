@@ -4,14 +4,22 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
-    from .discovery_sources import canonical_url_key, validate_discovery_sources
+    from .discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from discovery_sources import canonical_url_key, validate_discovery_sources
+    from discovery_sources import (
+        canonical_url_key,
+        https_url_host,
+        validate_discovery_sources,
+    )
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
@@ -22,14 +30,39 @@ PUBLISHED_DATA = (
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "license-review.json",
-    "discovery-sources.json",
+    "discovery-sources.json", "hn-signals.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
 CONTENT_SHA_PATTERN = re.compile(r"[0-9a-f]{64}")
+STORY_ID_PATTERN = re.compile(r"[0-9]+")
+# C0 and C1 control characters. urlsplit strips tabs and newlines before parsing, so a
+# URL carrying them can validate as a clean host and still inject a line into any log
+# or annotation stream that later prints it.
+CONTROL_CHARACTER_PATTERN = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+# Everything but letters, digits and whitespace: the separators a taxonomy id could be
+# rewritten with. Whitespace is excluded deliberately — see taxonomy_ids_named.
+IDENTIFIER_SEPARATORS = re.compile(r"[^0-9a-z\s]")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
+EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
+EXCLUSION_OPTIONAL = {"url"}
+SIGNAL_REQUIRED = {
+    "story_id", "story_url", "title", "url", "points", "num_comments", "submitted_at",
+    "page_status", "content_sha256", "fetched_at", "status", "discovered_at",
+}
+SIGNAL_OPTIONAL = {"assessment"}
+ASSESSMENT_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
+ASSESSMENT_VERDICTS = {"worth_review", "out_of_scope", "unreadable"}
+# A reviewer who disagrees with a verdict edits the block in place rather than
+# deleting it, so the queue must be able to say whose disposition a block records.
+ASSESSMENT_PROPOSERS = {"hn-signals", "human"}
+PAGE_STATUSES = {"readable", "unreadable", "failed"}
+SIGNAL_ENVELOPE_REQUIRED = {
+    "endpoint", "window_start", "window_end", "points_floor", "story_count", "eligible_count",
+    "truncated",
+}
 
 TAXONOMY_GROUPS = (
     "system_families",
@@ -159,6 +192,35 @@ def valid_date(value: object) -> bool:
         return date.fromisoformat(value).isoformat() == value
     except ValueError:
         return False
+
+
+def valid_timestamp(value: object) -> bool:
+    """An ISO 8601 instant, as the sweep and the attention source both write them.
+
+    Decision 13 of the attention-source design requires ISO dates; a non-empty-string
+    check accepts "yesterday" and "N/A" as provenance.
+    """
+    if not isinstance(value, str) or not value.strip():
+        return False
+    try:
+        datetime.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
+def taxonomy_ids_named(text: str, classifying: set[str]) -> list[str]:
+    """Taxonomy ids written into free text, seeing through punctuation but not prose.
+
+    `coding-agent` is `coding_agent` with its separator swapped, and a substring match
+    over the raw text misses it, so punctuation is normalised to `_` first. Whitespace
+    deliberately is not: `docs/routines/candidate-triage.md` states that quoting page
+    prose resembling a role or family is fine and only writing the identifier is not, so
+    "describes a coding agent" must keep passing. Collapsing its spaces would reject the
+    sentence the routine is told to write.
+    """
+    haystack = IDENTIFIER_SEPARATORS.sub("_", text.lower())
+    return sorted(name for name in classifying if name in haystack)
 
 
 def valid_partial_date(value: object) -> bool:
@@ -1391,8 +1453,7 @@ def validate_triage(
         errors.append(f"candidate {prefix}: triage requires a finding")
     else:
         classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
-        finding_lower = finding.lower()
-        leaked = sorted(name for name in classifying if name in finding_lower)
+        leaked = taxonomy_ids_named(finding, classifying)
         if leaked:
             errors.append(
                 f"candidate {prefix}: finding must not classify; it names taxonomy ids {leaked}"
@@ -1429,6 +1490,149 @@ def validate_triage(
                 errors.append(f"candidate {prefix}: immutable evidence URL must address the blob SHA")
         elif item["kind"] != "web":
             errors.append(f"candidate {prefix}: unknown evidence kind {item['kind']!r}")
+
+
+def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[str]) -> None:
+    """Attention-source signals carry provenance and never a classification. See ADR 028."""
+    if document.get("version") != "1.0":
+        errors.append("hn-signals.json: unsupported version")
+    signals = document.get("signals")
+    if not isinstance(signals, list):
+        errors.append("hn-signals.json: signals must be a list")
+        return
+
+    source = document.get("source")
+    if signals:
+        if not isinstance(source, dict) or set(source) != SIGNAL_ENVELOPE_REQUIRED:
+            errors.append("hn-signals.json: source envelope does not match the sweep schema")
+        # bool is a subclass of int, so an explicit isinstance(..., bool) is required
+        # here or `truncated: 1` would pass as truthy.
+        elif not isinstance(source["truncated"], bool):
+            errors.append("hn-signals.json: source envelope truncated must be a boolean")
+
+    seen: set[str] = set()
+    classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
+    for signal in signals:
+        prefix = (signal.get("story_id") or "unknown") if isinstance(signal, dict) else "unknown"
+        if not isinstance(signal, dict) or (
+            SIGNAL_REQUIRED - set(signal) or set(signal) - SIGNAL_REQUIRED - SIGNAL_OPTIONAL
+        ):
+            errors.append(f"signal {prefix}: fields do not match signal schema")
+            continue
+        story_id = signal["story_id"]
+        if not isinstance(story_id, str) or not STORY_ID_PATTERN.fullmatch(story_id):
+            errors.append(f"signal {prefix}: story_id must be a numeric string")
+        else:
+            if story_id in seen:
+                errors.append(f"signal {prefix}: duplicate signal identity")
+            seen.add(story_id)
+        if signal["status"] != "provisional":
+            errors.append(f"signal {prefix}: status must be provisional")
+        if signal["page_status"] not in PAGE_STATUSES:
+            errors.append(f"signal {prefix}: page_status must name a fetch outcome")
+        if https_url_host(signal["url"]) is None:
+            errors.append(f"signal {prefix}: url must be an HTTPS URL on a public DNS host")
+        elif CONTROL_CHARACTER_PATTERN.search(signal["url"]):
+            errors.append(f"signal {prefix}: url must not contain control characters")
+        readable = signal["page_status"] == "readable"
+        digest = signal["content_sha256"]
+        if readable and not (isinstance(digest, str) and CONTENT_SHA_PATTERN.fullmatch(digest)):
+            errors.append(f"signal {prefix}: a readable page requires a content_sha256")
+        if not readable and digest is not None:
+            errors.append(f"signal {prefix}: only a readable page carries a content_sha256")
+        if not valid_date(signal["discovered_at"]):
+            errors.append(f"signal {prefix}: discovered_at must be an ISO date")
+        points = signal["points"]
+        if not isinstance(points, int) or isinstance(points, bool) or points < 0:
+            errors.append(f"signal {prefix}: points must be a non-negative integer")
+        num_comments = signal["num_comments"]
+        if not isinstance(num_comments, int) or isinstance(num_comments, bool) or num_comments < 0:
+            errors.append(f"signal {prefix}: num_comments must be a non-negative integer")
+        title = signal["title"]
+        if not isinstance(title, str) or not title.strip():
+            errors.append(f"signal {prefix}: title must be a non-empty string")
+        if https_url_host(signal["story_url"]) is None:
+            errors.append(f"signal {prefix}: story_url must be an HTTPS URL on a public DNS host")
+        for field in ("submitted_at", "fetched_at"):
+            if not isinstance(signal[field], str) or not signal[field].strip():
+                errors.append(f"signal {prefix}: {field} must be a non-empty string")
+            elif not valid_timestamp(signal[field]):
+                errors.append(f"signal {prefix}: {field} must be an ISO 8601 timestamp")
+
+        assessment = signal.get("assessment")
+        if assessment is None:
+            continue
+        if not isinstance(assessment, dict) or set(assessment) != ASSESSMENT_REQUIRED:
+            errors.append(f"signal {prefix}: assessment fields do not match the schema")
+            continue
+        if assessment["verdict"] not in ASSESSMENT_VERDICTS:
+            errors.append(f"signal {prefix}: assessment verdict is not one of the three")
+        # A page nobody could read cannot be dispositioned from its title. ADR 028.
+        if not readable and assessment["verdict"] != "unreadable":
+            errors.append(
+                f"signal {prefix}: an unreadable page may only carry the unreadable verdict"
+            )
+        finding = assessment["finding"]
+        if not isinstance(finding, str) or not finding.strip():
+            errors.append(f"signal {prefix}: assessment requires a finding")
+        else:
+            leaked = taxonomy_ids_named(finding, classifying)
+            if leaked:
+                errors.append(
+                    f"signal {prefix}: finding must not classify; it names taxonomy ids {leaked}"
+                )
+        rule = assessment["rule"]
+        if isinstance(rule, str):
+            leaked_rule = taxonomy_ids_named(rule, classifying)
+            if leaked_rule:
+                errors.append(
+                    f"signal {prefix}: rule must not classify; it names taxonomy ids {leaked_rule}"
+                )
+        evidence = assessment["evidence"]
+        if not isinstance(evidence, list):
+            errors.append(f"signal {prefix}: assessment evidence must be a list")
+        else:
+            if assessment["verdict"] != "unreadable" and not evidence:
+                errors.append(f"signal {prefix}: assessment evidence must cite at least one source")
+            for item in evidence:
+                if not isinstance(item, dict) or set(item) != EVIDENCE_REQUIRED:
+                    errors.append(f"signal {prefix}: evidence fields differ from schema")
+                    continue
+                if item["kind"] != "web":
+                    errors.append(f"signal {prefix}: evidence kind must be web")
+                if not isinstance(item["label"], str) or not item["label"].strip():
+                    errors.append(f"signal {prefix}: evidence requires a label")
+                else:
+                    leaked_label = taxonomy_ids_named(item["label"], classifying)
+                    if leaked_label:
+                        errors.append(
+                            f"signal {prefix}: evidence label must not classify; "
+                            f"it names taxonomy ids {leaked_label}"
+                        )
+                if https_url_host(item["url"]) is None:
+                    errors.append(
+                        f"signal {prefix}: evidence requires an HTTPS URL on a public DNS host"
+                    )
+                if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
+                    item["content_sha256"]
+                ):
+                    errors.append(f"signal {prefix}: evidence requires a content_sha256")
+                if not isinstance(item["fetched_at"], str) or not item["fetched_at"].strip():
+                    errors.append(f"signal {prefix}: evidence requires fetched_at")
+                # The routine is handed exactly one page — the one this signal pins — so
+                # a citation to anything else is a citation nobody fetched. Shape alone
+                # (HTTPS, 64 hex) accepts an invented URL beside an invented digest;
+                # only this comparison ties the assessment to the bytes that were read.
+                if item["url"] != signal["url"] or item["content_sha256"] != digest:
+                    errors.append(
+                        f"signal {prefix}: evidence must cite the signal's own pinned page"
+                    )
+        if not valid_date(assessment["proposed_at"]):
+            errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
+        if assessment["proposer"] not in ASSESSMENT_PROPOSERS:
+            errors.append(
+                f"signal {prefix}: assessment proposer must be hn-signals or human"
+            )
 
 
 def validate_candidates(
@@ -1542,6 +1746,16 @@ def validate_exclusions(
     exclusions_data: dict[str, Any], repos: set[str], candidate_repos: set[str], errors: list[str]
 ) -> None:
     """A repository is curated, a candidate, or excluded - never two of those."""
+    for item in exclusions_data.get("entries", []):
+        prefix = (item.get("name") or "unknown") if isinstance(item, dict) else "unknown"
+        if not isinstance(item, dict) or (
+            EXCLUSION_REQUIRED - set(item)
+            or set(item) - EXCLUSION_REQUIRED - EXCLUSION_OPTIONAL
+        ):
+            errors.append(f"exclusion {prefix}: fields do not match exclusion schema")
+            continue
+        if "url" in item and https_url_host(item["url"]) is None:
+            errors.append(f"exclusion {prefix}: url must be an HTTPS URL on a public DNS host")
     excluded_repos = {
         item["repo"].lower()
         for item in exclusions_data.get("entries", [])
@@ -1585,6 +1799,8 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("discovery-sources.json: operational discovery sources must not be published")
     if (root / "web" / "model-candidates.json").exists():
         errors.append("model-candidates.json: provisional model candidates must not be published")
+    if (root / "web" / "hn-signals.json").exists():
+        errors.append("hn-signals.json: attention-source signals must not be published")
 
     tax = validate_taxonomy(catalog["taxonomy.json"], errors)
 
@@ -1613,6 +1829,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
+    validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     validate_model_candidates(
         catalog["model-candidates.json"], models_value, source_models_value, tax, errors,
     )
