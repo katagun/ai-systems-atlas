@@ -103,22 +103,6 @@ def eligible_stories_with_total(
     return kept, qualifying
 
 
-def eligible_stories(
-    payload: dict[str, Any],
-    *,
-    points_floor: int = DEFAULT_POINTS_FLOOR,
-    denylist: frozenset[str] = MEDIA_DENYLIST,
-) -> list[dict[str, Any]]:
-    """Keep stories that point off-site, cleared the floor, and are not media.
-
-    See `eligible_stories_with_total` for the same gate plus the pre-cap count.
-    """
-    kept, _qualifying = eligible_stories_with_total(
-        payload, points_floor=points_floor, denylist=denylist
-    )
-    return kept
-
-
 class _VisibleText(HTMLParser):
     """Collect the text a reader would see, dropping script and style bodies.
 

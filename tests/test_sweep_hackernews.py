@@ -44,6 +44,14 @@ SPA_SHELL = """<!doctype html>
 </html>"""
 
 
+def kept_stories(payload: dict, points_floor: int) -> list[dict]:
+    """The kept half of the gate's pair. `main` calls `eligible_stories_with_total`."""
+    kept, _qualifying = sweep_hackernews.eligible_stories_with_total(
+        payload, points_floor=points_floor
+    )
+    return kept
+
+
 def hit(title: str, url: str | None, points: int) -> dict:
     return {
         "objectID": str(abs(hash(title)) % 10**8),
@@ -58,48 +66,48 @@ def hit(title: str, url: str | None, points: int) -> dict:
 class GateTests(unittest.TestCase):
     def test_a_story_without_an_outbound_link_is_dropped(self) -> None:
         payload = {"hits": [hit("Ask HN: anything?", None, 90)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_a_story_below_the_points_floor_is_dropped(self) -> None:
         payload = {"hits": [hit("Mercury 2.5", "https://vendor.example/m", 3)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_a_media_host_is_dropped(self) -> None:
         payload = {"hits": [hit("AI is coming", "https://www.wired.com/story", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_a_title_with_no_ai_keyword_still_survives(self) -> None:
         """Measured 2026-09-09: a keyword gate drops "Mercury 2.5", a real model release."""
         payload = {"hits": [hit("Mercury 2.5", "https://vendor.example/m", 231)]}
-        kept = sweep_hackernews.eligible_stories(payload, points_floor=10)
+        kept = kept_stories(payload, points_floor=10)
         self.assertEqual([item["title"] for item in kept], ["Mercury 2.5"])
 
     def test_a_non_https_link_is_dropped(self) -> None:
         payload = {"hits": [hit("Thing", "http://vendor.example/m", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_the_signal_count_is_bounded(self) -> None:
         payload = {"hits": [hit(f"Launch {n}", f"https://v{n}.example/x", 99) for n in range(200)]}
-        kept = sweep_hackernews.eligible_stories(payload, points_floor=10)
+        kept = kept_stories(payload, points_floor=10)
         self.assertLessEqual(len(kept), sweep_hackernews.MAX_SIGNALS)
 
     def test_a_medium_author_subdomain_is_dropped(self) -> None:
         payload = {"hits": [hit("A post", "https://someauthor.medium.com/my-post", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_a_substack_newsletter_subdomain_is_dropped(self) -> None:
         payload = {"hits": [hit("A post", "https://newsletter.substack.com/p/my-post", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_a_wired_blog_subdomain_is_dropped(self) -> None:
         payload = {"hits": [hit("A post", "https://blog.wired.com/x", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+        self.assertEqual(kept_stories(payload, points_floor=10), [])
 
     def test_wired_with_and_without_www_is_still_dropped(self) -> None:
         with_www = {"hits": [hit("A post", "https://www.wired.com/x", 400)]}
         bare = {"hits": [hit("A post", "https://wired.com/x", 400)]}
-        self.assertEqual(sweep_hackernews.eligible_stories(with_www, points_floor=10), [])
-        self.assertEqual(sweep_hackernews.eligible_stories(bare, points_floor=10), [])
+        self.assertEqual(kept_stories(with_www, points_floor=10), [])
+        self.assertEqual(kept_stories(bare, points_floor=10), [])
 
     def test_a_host_that_merely_shares_a_suffix_is_kept(self) -> None:
         """notwired.com ends with "wired.com" but is not a subdomain of it, and must
@@ -110,7 +118,7 @@ class GateTests(unittest.TestCase):
                 hit("Fake medium", "https://fakemedium.com/x", 400),
             ]
         }
-        kept = sweep_hackernews.eligible_stories(payload, points_floor=10)
+        kept = kept_stories(payload, points_floor=10)
         self.assertEqual([item["title"] for item in kept], ["Not wired", "Fake medium"])
 
 
@@ -236,8 +244,3 @@ class EligibleStoriesWithTotalTests(unittest.TestCase):
         payload = {"hits": [hit("Mercury 2.5", "https://vendor.example/m", 231)]}
         kept, qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
         self.assertEqual(qualifying, len(kept))
-
-    def test_eligible_stories_is_the_kept_half_of_the_pair(self) -> None:
-        payload = {"hits": [hit(f"Launch {n}", f"https://v{n}.example/x", 99) for n in range(200)]}
-        kept, _qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
-        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), kept)
