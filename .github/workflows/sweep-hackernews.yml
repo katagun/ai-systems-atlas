@@ -42,7 +42,7 @@ jobs:
         if: always()
         env:
           # A pull request opened with GITHUB_TOKEN never triggers the required
-          # verify check. See docs/OPERATIONS.md:223.
+          # verify check. See "Tokens" under "Scheduled workflow" in docs/OPERATIONS.md.
           GH_TOKEN: ${{ secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail

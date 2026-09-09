@@ -213,6 +213,16 @@ Then, per signal:
   a new candidate the next time an official feed reports it.
 - **Accepting `unreadable`:** no page text was ever read, so there is nothing to promote or
   exclude. Confirm `page_status` really is not `readable` and leave the signal as is.
+- **Disagreeing with a verdict:** *edit* the signal's `assessment` block in
+  `directory/hn-signals.json` to record your disposition — do not delete it.
+  `signal_field_changes` in `scripts/run_hn_signals.py` permits a run to add an
+  `assessment` only where a signal had none; it rejects any run that changes one that
+  already exists. Delete the block and the field goes back to missing, and the next
+  routine run reads that as a signal nobody has looked at yet: it proposes a fresh
+  `assessment` from scratch, silently discarding your disagreement. Change the `verdict`,
+  `finding`, `rule`, or `evidence` in place instead, keeping `proposer` as `"hn-signals"`,
+  `proposed_at` a valid date, and the block otherwise schema-valid — a later run then finds
+  a signal that already carries an assessment and leaves it alone.
 
 `finish` refuses to commit a run that changed anything but the one thing the routine is
 allowed to do: adding an `assessment` to a signal that had none. Every provenance field the
