@@ -31,6 +31,18 @@ def registrable_host(url: object) -> str:
     return "" if host is None else host.removeprefix("www.")
 
 
+def denylisted_host(host: str, denylist: frozenset[str]) -> bool:
+    """A host is denylisted if it equals a denylist entry or is one of its subdomains.
+
+    A subdomain of a denylisted platform is that platform: medium.com is denylisted
+    to drop someauthor.medium.com, substack.com to drop newsletter.substack.com, and
+    wired.com to drop blog.wired.com. This must not match a host that merely ends
+    with the same characters (notwired.com, fakemedium.com), so the subdomain check
+    requires the "." separator, not a bare endswith.
+    """
+    return host in denylist or any(host.endswith("." + entry) for entry in denylist)
+
+
 def eligible_stories(
     payload: dict[str, Any],
     *,
@@ -48,7 +60,7 @@ def eligible_stories(
         if not isinstance(story, dict):
             continue
         host = registrable_host(story.get("url"))
-        if not host or host in denylist:
+        if not host or denylisted_host(host, denylist):
             continue
         if not isinstance(story.get("points"), int) or story["points"] < points_floor:
             continue

@@ -43,3 +43,51 @@ class GateTests(unittest.TestCase):
         payload = {"hits": [hit(f"Launch {n}", f"https://v{n}.example/x", 99) for n in range(200)]}
         kept = sweep_hackernews.eligible_stories(payload, points_floor=10)
         self.assertLessEqual(len(kept), sweep_hackernews.MAX_SIGNALS)
+
+    def test_a_medium_author_subdomain_is_dropped(self) -> None:
+        payload = {"hits": [hit("A post", "https://someauthor.medium.com/my-post", 400)]}
+        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+
+    def test_a_substack_newsletter_subdomain_is_dropped(self) -> None:
+        payload = {"hits": [hit("A post", "https://newsletter.substack.com/p/my-post", 400)]}
+        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+
+    def test_a_wired_blog_subdomain_is_dropped(self) -> None:
+        payload = {"hits": [hit("A post", "https://blog.wired.com/x", 400)]}
+        self.assertEqual(sweep_hackernews.eligible_stories(payload, points_floor=10), [])
+
+    def test_wired_with_and_without_www_is_still_dropped(self) -> None:
+        with_www = {"hits": [hit("A post", "https://www.wired.com/x", 400)]}
+        bare = {"hits": [hit("A post", "https://wired.com/x", 400)]}
+        self.assertEqual(sweep_hackernews.eligible_stories(with_www, points_floor=10), [])
+        self.assertEqual(sweep_hackernews.eligible_stories(bare, points_floor=10), [])
+
+    def test_a_host_that_merely_shares_a_suffix_is_kept(self) -> None:
+        """notwired.com ends with "wired.com" but is not a subdomain of it, and must
+        not be dropped by a naive endswith(entry) that forgets the "." separator."""
+        payload = {
+            "hits": [
+                hit("Not wired", "https://notwired.com/x", 400),
+                hit("Fake medium", "https://fakemedium.com/x", 400),
+            ]
+        }
+        kept = sweep_hackernews.eligible_stories(payload, points_floor=10)
+        self.assertEqual([item["title"] for item in kept], ["Not wired", "Fake medium"])
+
+
+class DenylistedHostTests(unittest.TestCase):
+    def test_exact_match_is_denylisted(self) -> None:
+        self.assertTrue(sweep_hackernews.denylisted_host("wired.com", sweep_hackernews.MEDIA_DENYLIST))
+
+    def test_subdomain_is_denylisted(self) -> None:
+        self.assertTrue(sweep_hackernews.denylisted_host("blog.wired.com", sweep_hackernews.MEDIA_DENYLIST))
+        self.assertTrue(
+            sweep_hackernews.denylisted_host("someauthor.medium.com", sweep_hackernews.MEDIA_DENYLIST)
+        )
+        self.assertTrue(
+            sweep_hackernews.denylisted_host("newsletter.substack.com", sweep_hackernews.MEDIA_DENYLIST)
+        )
+
+    def test_suffix_lookalike_is_not_denylisted(self) -> None:
+        self.assertFalse(sweep_hackernews.denylisted_host("notwired.com", sweep_hackernews.MEDIA_DENYLIST))
+        self.assertFalse(sweep_hackernews.denylisted_host("fakemedium.com", sweep_hackernews.MEDIA_DENYLIST))
