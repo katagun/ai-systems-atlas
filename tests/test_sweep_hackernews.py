@@ -1,8 +1,15 @@
 from __future__ import annotations
 
+import json
 import unittest
 
 from scripts import sweep_hackernews
+
+# A distinctive sentinel that appears in no signal field. Padded well past
+# MIN_READABLE_CHARS (400) so the fake fetch counts as a readable page. Unlike the
+# fixture's title ("Mercury 2.5"), this string cannot leak into the document through
+# any legitimate field, so its absence actually tests that page text is never stored.
+SENTINEL_PAGE_TEXT = "SENTINEL_PAGE_BODY_TEXT and more prose... " * 12
 
 
 def hit(title: str, url: str | None, points: int) -> dict:
@@ -91,3 +98,51 @@ class DenylistedHostTests(unittest.TestCase):
     def test_suffix_lookalike_is_not_denylisted(self) -> None:
         self.assertFalse(sweep_hackernews.denylisted_host("notwired.com", sweep_hackernews.MEDIA_DENYLIST))
         self.assertFalse(sweep_hackernews.denylisted_host("fakemedium.com", sweep_hackernews.MEDIA_DENYLIST))
+
+
+class DocumentTests(unittest.TestCase):
+    def build(self, fetcher) -> dict:
+        stories = [{
+            "objectID": "49616354", "title": "Mercury 2.5",
+            "url": "https://vendor.example/launch", "points": 231,
+            "num_comments": 88, "created_at": "2026-09-08T20:14:52Z",
+        }]
+        return sweep_hackernews.build_document(
+            stories,
+            window_start="2026-09-07T00:00:00Z",
+            window_end="2026-09-08T00:00:00Z",
+            points_floor=10,
+            story_count=1042,
+            discovered_at="2026-09-09",
+            fetcher=fetcher,
+        )
+
+    def test_a_readable_page_is_hashed_but_never_stored(self) -> None:
+        document = self.build(lambda url: SENTINEL_PAGE_TEXT)
+        signal = document["signals"][0]
+        self.assertEqual(signal["page_status"], "readable")
+        self.assertRegex(signal["content_sha256"], r"\A[0-9a-f]{64}\Z")
+        self.assertNotIn("content", signal)
+        self.assertNotIn("SENTINEL_PAGE_BODY_TEXT", json.dumps(document))
+
+    def test_a_client_rendered_page_is_recorded_as_unreadable(self) -> None:
+        """ai.meta.com/muse/ yielded 55 characters on 2026-09-09."""
+        document = self.build(lambda url: "   ")
+        signal = document["signals"][0]
+        self.assertEqual(signal["page_status"], "unreadable")
+        self.assertIsNone(signal["content_sha256"])
+
+    def test_a_failed_fetch_is_recorded_and_does_not_abort_the_run(self) -> None:
+        def boom(url: str) -> str:
+            raise ValueError("web evidence redirect changed host")
+
+        document = self.build(boom)
+        self.assertEqual(document["signals"][0]["page_status"], "failed")
+        self.assertIsNone(document["signals"][0]["content_sha256"])
+
+    def test_no_signal_carries_a_classification_field(self) -> None:
+        document = self.build(lambda url: "text")
+        for signal in document["signals"]:
+            self.assertNotIn("proposed_system_family", signal)
+            self.assertNotIn("proposed_primary_role", signal)
+            self.assertNotIn("classification_confidence", signal)
