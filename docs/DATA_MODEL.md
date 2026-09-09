@@ -100,7 +100,7 @@ See `OPERATIONS.md` for promotion and resolution procedures.
 
 `discovery-sources.json` is operational configuration, not a catalog or evidence source. Each sorted entry identifies one authoritative HTTPS hub and feed plus the exact lowercase public DNS hosts allowed for the configured URLs, redirects, and feed item links. It contains no proposed family, role, license, source model, provider trait, score, or editorial conclusion.
 
-The updater reads recent official announcements, applies conservative launch and relevance gates, and emits ordinary provisional candidate records. It never fetches linked article pages or treats registry inclusion as product eligibility. Feed observations receive the same complete human-review requirements as GitHub discoveries.
+The updater reads recent official announcements, applies conservative launch and relevance gates, and emits ordinary provisional candidate records. The official-feed updater never fetches linked article pages or treats registry inclusion as product eligibility. Feed observations receive the same complete human-review requirements as GitHub discoveries.
 
 ## Specification record
 

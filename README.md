@@ -63,6 +63,7 @@ directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
 directory/discovery-sources.json allowlisted official discovery feeds
+directory/hn-signals.json       unpublished Hacker News attention-source signal queue
 scripts/                        refresh, synchronization, and validation
 tests/                          Python invariants, web logic tests, and browser E2E tests
 web/                            static directory UI and published data copies

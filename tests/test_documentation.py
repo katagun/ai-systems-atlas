@@ -80,6 +80,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md",
             "docs/adr/025-model-releases-are-independent-curated-records.md",
             "docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md",
+            "docs/adr/028-attention-sources-are-pointers-not-claims.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
