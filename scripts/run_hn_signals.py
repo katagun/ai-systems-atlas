@@ -50,12 +50,22 @@ INSTALLED_PROMPT = Path.home() / ".claude" / "scheduled-tasks" / "hn-signals" / 
 
 MISSING = object()
 
-CHECKS = (
-    ["uv", "run", "python", "scripts/validate_directory.py"],
-    ["uv", "run", "python", "scripts/verify_signal_pages.py", "--recheck"],
-    ["uv", "run", "python", "-m", "unittest", "discover", "-s", "tests"],
-    ["uv", "run", "ruff", "check", "scripts", "tests"],
-)
+
+def checks(base_ref: str) -> tuple[list[str], ...]:
+    """The quality gates `finish` runs before committing, in order.
+
+    `verify_signal_pages.py --recheck` needs `base_ref` — the same commit `finish`
+    already resolved everything else against — so it can scope its recheck to only the
+    signals whose `assessment` this run added or changed, rather than every readable
+    signal in the queue. A function, not a module-level constant, because `base_ref` is
+    only known once `finish` has read `BASE_REF`.
+    """
+    return (
+        ["uv", "run", "python", "scripts/validate_directory.py"],
+        ["uv", "run", "python", "scripts/verify_signal_pages.py", "--recheck", "--base-ref", base_ref],
+        ["uv", "run", "python", "-m", "unittest", "discover", "-s", "tests"],
+        ["uv", "run", "ruff", "check", "scripts", "tests"],
+    )
 
 
 def unexpected_changes(porcelain: str) -> list[str]:
@@ -419,7 +429,7 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         for problem in overreach:
             print(f"  {problem}", file=sys.stderr)
         return 1
-    for command in CHECKS:
+    for command in checks(base_ref):
         code, output = run(list(command), WORKTREE)
         if code != 0:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
