@@ -11,6 +11,123 @@
   },
   "models": [
     {
+      "id": "model-alibaba-qwen3-8-max",
+      "source_id": "alibaba/qwen3.8-max",
+      "name": "Qwen3.8 Max",
+      "developer": "Alibaba",
+      "url": "https://www.qwencloud.com/models/qwen3.8-max",
+      "description": "Alibaba's 2.4-trillion-parameter MoE flagship for coding, professional work, and long-horizon agentic workflows, served as the multimodal qwen3.8-max API model with 1M context and published as text-only open weights under a custom license.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.8 Max",
+        "description": "2.4-trillion-parameter MoE flagship for coding, professional work, multimodal understanding, and long-horizon agentic workflows",
+        "family": "qwen",
+        "release_date": "2026-08-03",
+        "last_updated": "2026-08-03",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Qwen3.8-Max"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The downloadable weights carry the custom Qwen3.8-Max License, which grants use, modification, distribution, hosting, and fine-tuning but requires attribution above 100 million monthly active users or 20 million US dollars in monthly revenue and a separate license for model-as-a-service or AI-work-assistant businesses above 50 million US dollars in trailing revenue. Hosted qwen3.8-max API use is governed separately by QwenCloud and Alibaba Cloud Model Studio service terms, not by the weights license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Qwen3.8-Max",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.8-2.4T-A95B Hugging Face repository; does not cover the hosted qwen3.8-max API service",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/LICENSE",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the qwen3.8-max API release of August 3, 2026 together with its open-weights checkpoint Qwen/Qwen3.8-2.4T-A95B and the official FP8 sibling. The downloaded checkpoint is narrower than the API namesake (text-only, thinking-required, 262K native context versus the API's vision input and 1M default context). The qwen3.8-max-0902 upgraded snapshot, the qwen3.8-max-preview API preview, the Apache-2.0 Qwen3.8-27B sibling, earlier Qwen generations, QwenCloud product packaging, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "The first Max-class Qwen with downloadable weights (2.4T total, 95B active MoE) plus documented vLLM, SGLang, and TokenSpeed recipes and an official FP8 variant",
+        "First-party QwenCloud and Alibaba Cloud Model Studio serving with 1M context plus a documented NVIDIA NIM third-party path for the exact checkpoint"
+      ],
+      "tradeoffs": [
+        "The custom weights license gates commercial model-as-a-service use above a revenue threshold behind a separate license, unlike earlier Apache-2.0 Qwen generations",
+        "The 4.89 TB BF16 checkpoint needs multi-node serving, putting self-operation out of reach for most operators"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 4,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 6.56
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "QwenCloud qwen3.8-max model page",
+          "url": "https://www.qwencloud.com/models/qwen3.8-max",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Alibaba Cloud Model Studio qwen3.8-max documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Qwen3.8-2.4T-A95B weights repository and model card",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM guide for the Qwen3.8-2.4T-A95B checkpoint",
+          "url": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-qwen3.8.html",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/alibaba/qwen3.8-max.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
       "id": "model-anthropic-claude-haiku-4-5",
       "source_id": "anthropic/claude-haiku-4-5",
       "name": "Claude Haiku 4.5",
@@ -210,6 +327,133 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/anthropic/claude-opus-4-8.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-anthropic-claude-opus-5",
+      "source_id": "anthropic/claude-opus-5",
+      "name": "Claude Opus 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-5/overview",
+      "description": "A pinned multimodal Claude Opus release available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 5",
+        "description": "Strongest Claude Opus model for coding, agents, and professional work",
+        "family": "claude-opus",
+        "release_date": "2026-07-24",
+        "last_updated": "2026-07-24",
+        "knowledge_cutoff": "2026-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides Claude Opus 5 as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "Commercial access to Claude Opus 5 through Anthropic API keys and related Anthropic services, including incorporated usage restrictions",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the fixed Claude Opus 5 release identified by the dateless pinned ID claude-opus-5, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Claude releases including Opus 4.8 remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, active lifecycle status, a July 24, 2026 release date, and a retirement commitment of not sooner than July 24, 2027",
+        "The official model page identifies first-party API access and three independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access and continued availability depend on managed-service terms, regional eligibility, and provider lifecycle decisions"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-5/overview",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Anthropic Commercial Terms of Service",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "AWS Bedrock model card showing Claude Opus 5 availability",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-opus-5.html",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Google Cloud model card showing Claude Opus 5 availability",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/opus-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Microsoft Foundry model catalog showing claude-opus-5 availability",
+          "url": "https://ai.azure.com/catalog/models/claude-opus-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/anthropic/claude-opus-5.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -421,6 +665,133 @@
       ],
       "metadata_verified_at": "2026-09-04",
       "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-anthropic-claude-sonnet-5",
+      "source_id": "anthropic/claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5/overview",
+      "description": "A pinned multimodal Claude Sonnet release available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Sonnet 5",
+        "description": "Everyday Claude agent model for coding, planning, browsing, and general work",
+        "family": "claude-sonnet",
+        "release_date": "2026-06-30",
+        "last_updated": "2026-06-30",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides Claude Sonnet 5 as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "Commercial access to Claude Sonnet 5 through Anthropic API keys and related Anthropic services, including incorporated usage restrictions",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the fixed Claude Sonnet 5 release identified by the dateless pinned ID claude-sonnet-5, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Claude releases including Sonnet 4.6 and Opus 5 remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, active lifecycle status, a June 30, 2026 release date, and a retirement commitment of not sooner than June 30, 2027",
+        "The official model page identifies first-party API access and three independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access and continued availability depend on managed-service terms, regional eligibility, and provider lifecycle decisions"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Sonnet 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/sonnet-5/overview",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Anthropic Commercial Terms of Service",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "AWS Bedrock model card showing Claude Sonnet 5 availability",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-sonnet-5.html",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Google Cloud model card showing Claude Sonnet 5 availability",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/sonnet-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Microsoft Foundry model catalog showing claude-sonnet-5 availability",
+          "url": "https://ai.azure.com/catalog/models/claude-sonnet-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/anthropic/claude-sonnet-5.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
     },
     {
       "id": "model-cohere-command-a-03-2025",
@@ -743,6 +1114,125 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/deepseek/deepseek-v3.2.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-deepseek-deepseek-v4-pro",
+      "source_id": "deepseek/deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+      "description": "DeepSeek's 1.6-trillion-parameter open MoE flagship with 1M-token context for coding and long agent runs, published under the MIT License with weights on Hugging Face and served via the DeepSeek API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "DeepSeek V4 Pro",
+        "description": "Open MoE flagship with million-token context for coding and long agent runs",
+        "family": "deepseek-thinking",
+        "release_date": "2026-04-24",
+        "last_updated": "2026-04-24",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 384000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the verbatim MIT License, and the model card states that the repository and the model weights are licensed under it, with no additional model-license gates. API consumption is governed separately by the DeepSeek Open Platform terms, which do not alter the weights license. Unlike DeepSeek-V3, this release does not use the DeepSeek Model License 1.0.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository and model weights in deepseek-ai/DeepSeek-V4-Pro; API consumption governed separately by DeepSeek Open Platform terms",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/LICENSE",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the DeepSeek-V4-Pro preview instruct checkpoint (deepseek-ai/DeepSeek-V4-Pro, 1.6T total, 49B active, 1M context) and its deepseek-v4-pro API model ID. The DeepSeek-V4-Pro-Base sibling, the V4 Flash siblings, the dated 0423 and 0813 snapshots, the V4.1 successor line that the API ID routes to from September 14, 2026, and community quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "MIT-licensed 1.6T open weights with Base and instruct checkpoints plus mirrors and standard Transformers, vLLM, SGLang, and NIM paths",
+        "First-party DeepSeek API with OpenAI- and Anthropic-compatible endpoints, 1M context, and 384K maximum output plus documented NVIDIA NIM hosting"
+      ],
+      "tradeoffs": [
+        "Checkpoint scale keeps single-node self-hosting heavy despite efficient hybrid attention",
+        "Lifecycle churn at verification time: the 0813 official release supersedes this preview and the API ID is slated for routing to V4.1 Flash"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 10,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.44
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official DeepSeek-V4-Pro weights repository and model card",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "DeepSeek API documentation for the deepseek-v4-pro model",
+          "url": "https://api-docs.deepseek.com/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "DeepSeek V4 preview release notice",
+          "url": "https://api-docs.deepseek.com/news/news260424/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM reference for deepseek-ai/deepseek-v4-pro",
+          "url": "https://docs.api.nvidia.com/nim/reference/deepseek-ai-deepseek-v4-pro",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/deepseek/deepseek-v4-pro.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -1155,6 +1645,244 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/google/gemini-2.5-pro.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-google-gemini-3-flash-preview",
+      "source_id": "google/gemini-3-flash-preview",
+      "name": "Gemini 3 Flash Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-flash-preview",
+      "description": "A preview multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; the preview remains available while Google steers new production use toward stable successors.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3 Flash Preview",
+        "description": "New Gemini flash lane bringing frontier-style multimodal reasoning to cheaper runs",
+        "family": "gemini-flash",
+        "release_date": "2025-12-17",
+        "last_updated": "2025-12-17",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides Gemini 3 Flash Preview as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit reverse engineering, extracting, or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "scope": "Access to Gemini 3 Flash Preview through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy; no weight license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the preview release identified by the undated model code gemini-3-flash-preview (latest update December 2025; knowledge cutoff January 2025; inputs text, image, video, audio, PDF; output text). There is no dated snapshot behind the ID and no shutdown date announced; Google recommends gemini-3.5-flash or gemini-3.6-flash for new production use. The stable successors, Gemini 3 Pro previews, image-generation and audio variants, the Gemini consumer app, and the Vertex AI and AI Studio platforms themselves are separate service, application, or model boundaries.",
+      "strengths": [
+        "Google documents a distinct model code, full modality matrix including computer use, token limits, update date, and knowledge cutoff",
+        "The release is corroborated across the API changelog, the deprecations table, Vertex AI release notes, and a DeepMind model-cards entry"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The undated preview ID carries only a two-week deprecation guarantee with no committed shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3 Flash Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-flash-preview",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations table",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API Additional Terms of Service",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement",
+          "url": "https://blog.google/products/gemini/gemini-3-flash",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/google/gemini-3-flash-preview.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-google-gemini-3-pro-preview",
+      "source_id": "google/gemini-3-pro-preview",
+      "name": "Gemini 3 Pro Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-pro-preview",
+      "description": "A preview multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; Google shut the preview endpoint down on March 9, 2026 and directs users to Gemini 3.1 Pro Preview.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3 Pro Preview",
+        "description": "Preview Gemini flagship for complex reasoning, coding, and rich multimodal prompts",
+        "family": "gemini-pro",
+        "release_date": "2025-11-18",
+        "last_updated": "2025-11-18",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides Gemini 3 Pro Preview as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit reverse engineering, extracting, or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "scope": "Access to Gemini 3 Pro Preview through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy; no weight license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the preview release identified by the undated model code gemini-3-pro-preview (latest update November 2025; knowledge cutoff January 2025; inputs text, image, video, audio, PDF; output text). Google shut the preview endpoint down on March 9, 2026 and names gemini-3.1-pro-preview as the replacement; there is no dated snapshot behind the ID. The successor preview, Gemini 3 Flash Preview, the image-generation releases, the Gemini consumer app, and the Vertex AI and AI Studio platforms themselves are separate service, application, or model boundaries.",
+      "strengths": [
+        "Google documents a distinct model code, full modality matrix, token limits, release date, and an explicit shutdown with a named replacement",
+        "A DeepMind Gemini 3 Pro model card corroborates identity, multimodal scope, knowledge cutoff, and prohibited-use applicability"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The preview endpoint is shut down after a four-month service life, so the record documents a retired release and its replacement"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3 Pro Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-pro-preview",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations table",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Vertex AI Gemini 3 Pro page",
+          "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-pro",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API Additional Terms of Service",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement",
+          "url": "https://blog.google/products/gemini/gemini-3/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/google/gemini-3-pro-preview.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -1599,6 +2327,126 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/meta/llama-4-maverick-17b-instruct.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-meta-llama-4-scout-17b-instruct",
+      "source_id": "meta/llama-4-scout-17b-instruct",
+      "name": "Llama 4 Scout 17B Instruct",
+      "developer": "Meta",
+      "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "description": "A gated downloadable image-and-text instruction model governed by the Llama 4 Community License and an incorporated acceptable-use policy that withholds the multimodal grant from European Union entities.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Llama 4 Scout 17B Instruct",
+        "description": "Open Llama with long-context vision for efficient multimodal agents",
+        "family": "llama",
+        "release_date": "2025-04-05",
+        "last_updated": "2025-04-05",
+        "knowledge_cutoff": "2024-08",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 3500000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Llama-4-Community",
+        "LicenseRef-Llama-4-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Meta publishes the weights under the custom Llama 4 Community License, which carries attribution and redistribution duties, a 700 million monthly-active-user commercial threshold, and an incorporated acceptable-use policy. The policy states that the rights for multimodal Llama 4 models are not granted to individuals domiciled in or companies based in the European Union, so public weights do not make this an open-source distribution. Identical terms to the reviewed Maverick record.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Llama-4-Community",
+          "scope": "Llama 4 Scout 17B 16E Instruct weights, tokenizer, processor configuration, and related Llama materials",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct/blob/92f3b1597a195b523d8d9e5700e57e4fbb8f20d3/LICENSE",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "license_id": "LicenseRef-Llama-4-AUP",
+          "scope": "Acceptable-use policy and European Union multimodal exclusion incorporated by reference into the Llama 4 Community License",
+          "kind": "web_terms",
+          "url": "https://developer.meta.com/ai/llama4/use-policy/",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the meta-llama/Llama-4-Scout-17B-16E-Instruct BF16 release dated April 5, 2025 (17B active, 109B total MoE, 10M context). The Scout base model, Llama 4 Maverick, the FP8 Maverick checkpoint, quantizations, fine-tunes, Meta-hosted products, and independent serving providers are separate model or service boundaries.",
+      "strengths": [
+        "Meta publishes Transformers-compatible Safetensors shards with tokenizer, processor, and chat-template files in one pinned repository",
+        "The model card names the governing license, the base model, the release date, and distinguishes the Scout BF16 release from the Maverick and FP8 variants"
+      ],
+      "tradeoffs": [
+        "Artifact access is gated behind identity disclosure and the incorporated policy withholds the multimodal grant from European Union entities",
+        "The model card documents a single Transformers path and no hosted serving paths"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 6,
+        "deployment_portability": 6,
+        "serving_reach": 4,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 5.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoints, and Transformers guidance",
+          "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Llama 4 Community License Agreement page",
+          "url": "https://developer.meta.com/ai/llama4/license/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Llama 4 acceptable-use policy",
+          "url": "https://developer.meta.com/ai/llama4/use-policy/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/meta/llama-4-scout-17b-instruct.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -2142,6 +2990,240 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-mistral-mistral-medium-2604",
+      "source_id": "mistral/mistral-medium-2604",
+      "name": "Mistral Medium 3.5",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B",
+      "description": "A downloadable image-and-text flagship model published by Mistral AI with consolidated and sharded Safetensors checkpoints under a repository Modified MIT License carrying a monthly-revenue restriction, and served through Mistral's developer API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Mistral Medium 3.5",
+        "description": "Balanced Mistral model for enterprise assistants, multilingual work, and tools",
+        "family": "mistral-medium",
+        "release_date": "2026-04-29",
+        "last_updated": "2026-04-29",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Mistral-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository carries its own license file stating a Modified MIT License with a 2026 Mistral AI attribution notice. The MIT grant is conditioned on the licensee's global consolidated monthly revenue not exceeding 20 million US dollars for the preceding month, with a commercial-license contact offered as the alternative. That revenue restriction is not part of the OSI-approved MIT text, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mistral-Modified-MIT",
+          "scope": "Official Mistral-Medium-3.5-128B model repository, consolidated and sharded Safetensors checkpoints, tokenizer, parameters, and derivatives",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B/blob/22b2b868a15677cfa6061277ed2f653d1349a9ab/LICENSE",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Mistral-Medium-3.5-128B release (Mistral Medium 3.5, April 2026; dense 128B, 256k context). The EAGLE speculative-decoding sibling repository, the Magistral and Devstral lines, the mistral-medium-3-5 API product and Le Chat deployments, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Mistral AI publishes ungated consolidated and Transformers-style Safetensors checkpoints with tokenizer, system prompt, and an in-repository license file",
+        "The model card documents vLLM, SGLang, Transformers, llama.cpp, and Ollama paths, and Mistral serves the release as a GA priced API model that also ships as an NVIDIA NIM"
+      ],
+      "tradeoffs": [
+        "The Modified MIT License bars exercise of rights above a 20M US dollar monthly-revenue threshold, so the release is source-available rather than open source",
+        "The 128B dense footprint needs multi-GPU tensor parallelism per the serving guide"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoints, and deployment guidance",
+          "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral AI model page with release date and license badge",
+          "url": "https://docs.mistral.ai/models/mistral-medium-3-5-26-04",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NGC catalog entry for the NIM container of the exact release",
+          "url": "https://catalog.ngc.nvidia.com/orgs/nim/mistralai/containers/mistral-medium-3.5-128b/-",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/mistral/mistral-medium-2604.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-mistral-mistral-small-2603",
+      "source_id": "mistral/mistral-small-2603",
+      "name": "Mistral Small 4",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603",
+      "description": "A downloadable image-and-text hybrid instruction-and-reasoning model published by Mistral AI with consolidated and sharded Safetensors checkpoints under an Apache-2.0 license stated in the model card, and served through Mistral's developer API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Mistral Small 4",
+        "description": "Fast Mistral production model for chat, extraction, and cost-sensitive agents",
+        "family": "mistral-small",
+        "release_date": "2026-03-16",
+        "last_updated": "2026-03-16",
+        "knowledge_cutoff": "2025-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card states Apache 2.0 as the license for the Mistral-Small-4-119B-2603 repository and checkpoints, both in its metadata and in prose. The repository carries no separate license file, so the pinned model card is the governing artifact; no use restrictions are attached. Mistral's first-party docs page independently badges the release Apache 2.0.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Official Mistral-Small-4-119B-2603 model repository, consolidated and sharded Safetensors checkpoints, tokenizer, and parameters",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603/blob/a11f36bebf709121056b1dbcc943d1c6afbe494d/README.md",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Mistral-Small-4-119B-2603 release (Mistral Small 4, March 16, 2026; 119B MoE, 256k context). Mistral Small 3.2-24B-Instruct-2506, the Magistral line, the eagle speculative-decoding head and NVFP4 sibling repositories, Mistral Medium 3.5, the mistral-small-2603 API product, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Mistral AI publishes ungated consolidated and Transformers-style Safetensors checkpoints with tokenizer, system prompt, and efficiency sibling repositories",
+        "The model card documents vLLM, Transformers, SGLang, llama.cpp, and LM Studio paths, and Mistral serves the release as a GA priced API model"
+      ],
+      "tradeoffs": [
+        "The license is carried in model-card metadata and prose rather than a repository license file",
+        "The 119B MoE footprint needs multi-GPU serving, so local use depends on the documented runtimes or hosted paths"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoints, and deployment guidance",
+          "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral AI model page with release date and Apache 2.0 badge",
+          "url": "https://docs.mistral.ai/models/mistral-small-4-0-26-03",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral AI launch announcement",
+          "url": "https://mistral.ai/news/mistral-small-4/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM reference documentation for the exact release",
+          "url": "https://docs.api.nvidia.com/nim/reference/mistralai-mistral-small-4-119b-2603",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/mistral/mistral-small-2603.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
       "id": "model-mistral-pixtral-12b",
       "source_id": "mistral/pixtral-12b",
       "name": "Pixtral 12B",
@@ -2340,6 +3422,122 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/moonshotai/kimi-k2-thinking.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-moonshotai-kimi-k3",
+      "source_id": "moonshotai/kimi-k3",
+      "name": "Kimi K3",
+      "developer": "Moonshot AI",
+      "url": "https://huggingface.co/moonshotai/Kimi-K3",
+      "description": "A developer-published native-multimodal agentic model release with downloadable MXFP4 weights under the bespoke Kimi K3 License, which gates model-as-a-service commercial use on revenue and adds an attribution clause.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Kimi K3",
+        "description": "Multimodal Kimi model with 1M context and toggleable max-effort thinking for long-horizon agent work",
+        "family": "kimi-k3",
+        "release_date": "2026-07-16",
+        "last_updated": "2026-07-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Kimi-K3-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Both the code repository and the model weights are released under the Kimi K3 License, an in-repository license file reproducing an MIT-style grant expanded to weights, parameters, configs, and inference and training code. It requires operators of a model-as-a-service business above 20 million US dollars in aggregate affiliate revenue over any consecutive twelve months to sign a separate agreement before any commercial use, and requires prominent Kimi K3 attribution above 100 million monthly active users or 20 million US dollars in monthly revenue. Those commercial gates go beyond the Kimi K2 Modified MIT text, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Kimi-K3-License",
+          "scope": "moonshotai/Kimi-K3 repository code, model weights, parameters, configuration files, inference and training code, and documentation, including derivative works",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/moonshotai/Kimi-K3/blob/f831ab66814297da540d832a5235f8e904f29d06/LICENSE",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the moonshotai/Kimi-K3 repository release with native MXFP4 weights. The Kimi K2 family, Kimi K2.5, K2.6, and K2.7-Code, the Kimi API and platform products, and downstream requantizations remain separate boundaries.",
+      "strengths": [
+        "Developer-published full weights with modeling and processor code and an in-repository license file, plus vLLM, SGLang, and TokenSpeed deployment recipes",
+        "The first-party platform quickstart documents kimi-k3 API access with vision, reasoning-effort, and tool-calling guides, and Together AI documents independent serverless hosting"
+      ],
+      "tradeoffs": [
+        "The Kimi K3 License adds a model-as-a-service revenue gate requiring a separate agreement before any commercial use, so the weights are source-available rather than open source",
+        "Practical self-operation targets supernode-class hardware and requires trusted remote code"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and deployment guidance",
+          "url": "https://huggingface.co/moonshotai/Kimi-K3",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Kimi K3 release blog",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Kimi API quickstart for the kimi-k3 model",
+          "url": "https://platform.kimi.ai/docs/guide/kimi-k3-quickstart",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Together AI quickstart documenting third-party hosting",
+          "url": "https://docs.together.ai/docs/kimi-k3-quickstart",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/moonshotai/kimi-k3.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -2740,6 +3938,248 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/openai/gpt-5.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-openai-gpt-5-5",
+      "source_id": "openai/gpt-5.5",
+      "name": "GPT-5.5",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.5",
+      "description": "A text-and-image model release exposed as a dated snapshot and alias through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.5",
+        "description": "Default frontier GPT for coding, computer use, research, and knowledge work",
+        "family": "gpt",
+        "release_date": "2026-04-23",
+        "last_updated": "2026-04-23",
+        "knowledge_cutoff": "2025-12-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.5 as an API service governed by the OpenAI Services Agreement and incorporated service-specific policies. Those terms govern managed access and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.5 model through OpenAI API Services and incorporated service-specific terms",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.5 release whose API page identifies gpt-5.5-2026-04-23 as the fixed default snapshot behind the gpt-5.5 alias. The OpenAI API platform, Azure Foundry hosting of the same snapshot, ChatGPT, GPT-5.5 Thinking, the separate gpt-5.5-pro and gpt-5.5-instant variants, fine-tuned derivatives, and later GPT releases are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot (gpt-5.5-2026-04-23) that applications can pin instead of relying only on an alias",
+        "The first-party model page plus the Azure Foundry listing establish two independent managed serving paths with documented modalities, endpoints, and limits"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Access, quotas, and lifecycle remain controlled by the managed APIs rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.5 model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.5 launch announcement",
+          "url": "https://openai.com/index/introducing-gpt-5-5/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry models listing showing gpt-5.5 availability",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-5.5 retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/openai/gpt-5.5.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-openai-gpt-6-astra",
+      "source_id": "openai/gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "description": "A text-and-image model release exposed under a moving alias through OpenAI's managed developer API with documented Azure Foundry hosting, without a fixed dated snapshot or downloadable weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-6 Astra",
+        "description": "GPT-6 Astra is OpenAI's most capable model for complex reasoning, coding, computer use, research, and document creation.",
+        "family": "gpt-astra",
+        "release_date": "2026-09-04",
+        "last_updated": "2026-09-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-6 Astra as an API service governed by the OpenAI Services Agreement and incorporated service-specific policies. Those terms govern managed access and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-6 Astra model through OpenAI API Services and incorporated service-specific terms",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-6 Astra release as exposed under the gpt-6-astra alias: the official model page lists both the default snapshot and the snapshot inventory as gpt-6-astra with no documented fixed dated snapshot, so applications cannot pin a dated revision. The OpenAI API platform, Azure Foundry hosting of the same alias, ChatGPT, the separate gpt-6-astra-fast variant, fine-tuned derivatives, and later GPT releases are separate service, application, or model boundaries.",
+      "strengths": [
+        "The first-party model page, launch announcement, and safety overview document modalities, endpoints, and safeguards from the developer",
+        "The OpenAI announcement plus the Azure Foundry listing establish managed serving beyond the first-party API"
+      ],
+      "tradeoffs": [
+        "No documented fixed dated snapshot exists, so the record cannot pin behavior the way dated-snapshot records can",
+        "No developer-published weights are available for self-operation, and availability was still rolling out at verification time"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 4.68
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-6 Astra model, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-6 Astra launch announcement",
+          "url": "https://openai.com/index/gpt-6-astra/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry models listing showing gpt-6-astra availability",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-6-astra retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/openai/gpt-6-astra.toml",
           "verified_at": "2026-09-11"
         }
       ],
@@ -3265,6 +4705,125 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/zhipuai/glm-4.5.toml",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "metadata_verified_at": "2026-09-11",
+      "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-zhipuai-glm-5",
+      "source_id": "zhipuai/glm-5",
+      "name": "GLM-5",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-5",
+      "description": "A developer-published agentic-engineering language-model release with downloadable BF16 weights under an MIT declaration in the model-card metadata, served through the Z.ai API and documented third-party hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GLM-5",
+        "description": "General GLM flagship for coding, analysis, and tool-heavy engineering workflows",
+        "family": "glm",
+        "release_date": "2026-02-12",
+        "last_updated": "2026-02-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-5"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The zai-org/GLM-5 repository contains no license file; its model-card frontmatter declares MIT and the rendered page shows that declaration, matching the reviewed GLM-4.5 posture. The companion code repository is separately Apache-2.0 and governs code, not weights. The Z.ai API is governed separately by the platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "zai-org/GLM-5 model weights, tokenizer, and chat template as declared by the pinned model-card frontmatter; no repository license file",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-5/blob/c183ef8c61faee82855eca1ed9bb3a9a7ce3b0b2/README.md",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-5 BF16 instruction release. The GLM-5-FP8 repository, GLM-5.1, GLM-5.2, GLM-5.3 and their variants, the Turbo records, the GLM-4.x family, the Z.ai API and chat products, and downstream quantizations remain separate boundaries.",
+      "strengths": [
+        "Developer-published BF16 Safetensors checkpoint with tokenizer and chat template plus documented vLLM, SGLang, KTransformers, Transformers, and xLLM serving paths",
+        "First-party Z.ai API documentation names glm-5 as a served model, and Novita AI documents a third-party serverless path for the release"
+      ],
+      "tradeoffs": [
+        "The MIT declaration lives only in card frontmatter metadata with no license file and no grant prose in the card body",
+        "Neither the model card nor the API documentation states a versioning policy or deprecation posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and deployment guidance",
+          "url": "https://huggingface.co/zai-org/GLM-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai release blog for GLM-5",
+          "url": "https://z.ai/blog/glm-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai API documentation for the glm-5 model",
+          "url": "https://docs.z.ai/guides/llm/glm-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Novita AI model page documenting third-party serverless hosting",
+          "url": "https://novita.ai/models/model-detail/zai-org-glm-5",
+          "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/zhipuai/glm-5.toml",
           "verified_at": "2026-09-11"
         }
       ],

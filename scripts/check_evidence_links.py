@@ -5,6 +5,10 @@ The cache is operational state, not reviewed evidence. It records HTTP validator
 and a normalized content hash for mutable terms so repeat runs can use
 conditional requests and a changed page can raise a review signal. The checker
 never edits catalog records, evidence, scores, classifications, or review dates.
+
+Pages that refuse the checker's bot user agent with 403 but serve an ordinary
+browser (observed bot walls) get one retry with browser headers; a success is
+recorded as reachable with a bot-wall warning rather than as a broken link.
 """
 from __future__ import annotations
 
@@ -37,6 +41,12 @@ MIN_SUCCESS_RATIO = 0.80
 MAX_TERMS_BYTES = 8 * 1024 * 1024
 TRANSIENT_HTTP_CODES = {408, 425, 429, 500, 502, 503, 504}
 HEAD_FALLBACK_CODES = {401, 403, 404, 405, 410, 501}
+BOT_USER_AGENT = "ai-systems-atlas-evidence-checker/0.1"
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/126.0.0.0 Safari/537.36"
+)
 
 
 @dataclass
@@ -64,6 +74,7 @@ class FetchResult:
     headers: dict[str, str]
     body: bytes | None
     not_modified: bool = False
+    via_browser_fallback: bool = False
 
 
 class FetchFailure(Exception):
@@ -395,6 +406,56 @@ def _rate_limit_delay(headers: Mapping[str, str], attempt: int) -> float:
     return float(2**attempt)
 
 
+def _browser_headers() -> dict[str, str]:
+    """Headers mimicking an ordinary browser for bot-walled terms pages.
+
+    Some developer terms pages (observed on xAI and OpenAI hosts) refuse the
+    checker's bot user agent with 403 while serving browsers normally. A
+    one-shot retry with these headers distinguishes a bot wall from a broken
+    link; it never replaces the recorded evidence URL or review date.
+    """
+    return {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "User-Agent": BROWSER_USER_AGENT,
+    }
+
+
+def _browser_fallback_fetch(
+    opener: Any,
+    fetch_url: str,
+    *,
+    monitor_terms: bool,
+) -> FetchResult | None:
+    """Retry one GET with browser headers; None when the wall holds."""
+    headers = _browser_headers()
+    if not monitor_terms:
+        headers["Range"] = "bytes=0-0"
+    request = urllib.request.Request(fetch_url, headers=headers, method="GET")
+    try:
+        with opener.open(request, timeout=30) as response:
+            final_url = response.geturl()
+            if urllib.parse.urlsplit(final_url).scheme.lower() != "https":
+                return None
+            response_headers = _headers(response.headers)
+            body = None
+            if monitor_terms:
+                body = response.read(MAX_TERMS_BYTES + 1)
+                if len(body) > MAX_TERMS_BYTES:
+                    return None
+            else:
+                response.read(1)
+            return FetchResult(
+                status=response.getcode(),
+                final_url=final_url,
+                headers=response_headers,
+                body=body,
+                via_browser_fallback=True,
+            )
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError):
+        return None
+
+
 def fetch_target(
     target: LinkTarget,
     cached: Mapping[str, Any],
@@ -417,7 +478,7 @@ def fetch_target(
         for attempt in range(attempts):
             headers = {
                 "Accept": "*/*",
-                "User-Agent": "ai-systems-atlas-evidence-checker/0.1",
+                "User-Agent": BOT_USER_AGENT,
             }
             if method == "GET" and not target.monitor_terms:
                 headers["Range"] = "bytes=0-0"
@@ -466,6 +527,12 @@ def fetch_target(
                 if method == "HEAD" and exc.code in HEAD_FALLBACK_CODES and not rate_limited:
                     last_failure = FetchFailure(f"HTTP {exc.code}", status=exc.code)
                     break
+                if method == "GET" and exc.code == 403 and not rate_limited:
+                    browser_result = _browser_fallback_fetch(
+                        opener, fetch_url, monitor_terms=target.monitor_terms
+                    )
+                    if browser_result is not None:
+                        return browser_result
                 raise FetchFailure(f"HTTP {exc.code}", status=exc.code) from exc
             except FetchFailure:
                 raise
@@ -626,6 +693,12 @@ def check_targets(
             entry["etag"] = response.headers["etag"]
         if response.headers.get("last-modified"):
             entry["last_modified"] = response.headers["last-modified"]
+        if response.via_browser_fallback:
+            entry["via_browser_fallback"] = True
+            summary.warnings.append(
+                f"bot-walled reviewed link (browser headers succeeded): "
+                f"{target.url} ({_reference_label(target)})"
+            )
 
         if target.monitor_terms:
             current_hash: str | None

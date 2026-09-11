@@ -26,6 +26,48 @@ function projectsInFamily(family) {
   return projects.filter(project => project.system_family === family).length;
 }
 
+// Reviewed-model card names filtered the way web/app-core.js filterModels
+// matches facets, in grid order — score descending, then name, which is the
+// Models view default sort — so filter expectations follow the data instead
+// of a pinned list.
+function reviewedModelNames(predicate) {
+  return reviewedModels
+    .filter(predicate)
+    .sort(
+      (a, b) =>
+        (b.score?.overall ?? -1) - (a.score?.overall ?? -1) ||
+        a.name.localeCompare(b.name)
+    )
+    .map(model => model.name);
+}
+
+function reviewedModelsWithSourceModel(sourceModel) {
+  return reviewedModelNames(model => model.source_model === sourceModel);
+}
+
+function reviewedModelsWithModality(modality) {
+  return reviewedModelNames(model =>
+    [
+      ...(model.source_metadata?.modalities?.input || []),
+      ...(model.source_metadata?.modalities?.output || []),
+    ].includes(modality)
+  );
+}
+
+function reviewedModelsWithDistribution(mode) {
+  return reviewedModelNames(model => (model.distribution_modes || []).includes(mode));
+}
+
+function reviewedModelsWithLicense(license) {
+  return reviewedModelNames(model => (model.licenses || []).includes(license));
+}
+
+// Highest-scoring reviewed model in grid order: imports are unscored, so the
+// first card is always the top reviewed record by score, then name.
+function topReviewedModelName() {
+  return reviewedModelNames(() => true)[0];
+}
+
 module.exports = {
   projects: projects.length,
   inferenceServices: inferenceServices.length,
@@ -34,4 +76,9 @@ module.exports = {
   reviewedModels: reviewedModels.length,
   allDirectoryEntries,
   projectsInFamily,
+  reviewedModelsWithSourceModel,
+  reviewedModelsWithModality,
+  reviewedModelsWithDistribution,
+  reviewedModelsWithLicense,
+  topReviewedModelName,
 };
