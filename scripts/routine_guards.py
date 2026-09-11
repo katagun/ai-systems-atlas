@@ -16,9 +16,12 @@ the other's queue.
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 from collections.abc import Callable, Container
 from pathlib import Path
+
+ShellFn = Callable[..., tuple[int, str]]
 
 
 def unexpected_changes(porcelain: str, allowed: Container[str]) -> list[str]:
@@ -51,12 +54,68 @@ def unexpected_committed_changes(name_only: str, allowed: Container[str]) -> lis
 
 
 def worktree_text(path: str, worktree: Path) -> str:
-    """Read a file out of the run's worktree. Injected in tests, which have no worktree."""
-    return (worktree / path).read_text(encoding="utf-8")
+    """Read a file out of the run's worktree. Injected in tests, which have no worktree.
+
+    Refuses a symlink at `path` rather than following it: every caller uses this to read
+    content it is about to trust — the queue a guard diffs, or (for
+    `run_hn_signals.py`'s `root_text`) the base-record file naming what a guard compares
+    against — and a symlink there can point that read at content the routine never wrote,
+    including back into the model's own worktree. Raising `OSError` here reaches every
+    caller's existing "could not read" handling; `run_hn_signals.prepared_base_ref`
+    specifically treats it the same as a missing record and falls back to `origin/main`.
+
+    Checks every directory between `worktree` and `path` as well as `path` itself: making
+    a directory the file lives under — `.hn-signal-bundle`, say — a symlink to somewhere
+    outside the worktree leaves the file's own `is_symlink()` false while still redirecting
+    the read, so `path` alone is not enough.
+    """
+    target = worktree / path
+    node = target
+    while node != worktree:
+        if node.is_symlink():
+            raise OSError(f"{path} is a symlink; refusing to read it as trusted content")
+        node = node.parent
+    return target.read_text(encoding="utf-8")
+
+
+def replace_refs_problem(run: ShellFn, cwd: Path) -> str | None:
+    """None when `refs/replace` is empty; otherwise, why a guard run must refuse.
+
+    `refs/replace/*` lives in the git dir every worktree of a repository shares, not in
+    any one worktree, so `git replace -f <pinned-sha> <forged-sha>` run from inside the
+    model's own worktree reaches every other worktree of this repository, this one
+    included. `git diff` and `git show` — what every field-level guard here is built
+    from — honor a replace ref transparently: the object named by the pinned SHA is
+    silently swapped for the replacement's, so a truthful two-file diff can become empty
+    output. Neither routine's own workflow ever creates a replace ref, so finding one
+    populated during a run has no legitimate explanation.
+    """
+    code, output = run(["git", "for-each-ref", "refs/replace"], cwd)
+    if code != 0:
+        # Fails open, deliberately: a non-zero `for-each-ref` skips this explicit,
+        # name-the-ref refusal, but it does not reopen the bypass. `shell()` sets
+        # `GIT_NO_REPLACE_OBJECTS=1` for every git command a caller runs afterward —
+        # including the `git diff` and `git show` calls the field-level guards are built
+        # from — so those already see the real objects a pinned SHA names regardless of
+        # whether this check ran. This function only makes that outcome loud (name the
+        # ref, refuse outright) instead of silent; losing it here falls back to the env
+        # var doing the actual work, not to trusting a substituted object.
+        return None
+    refs = [line.split()[-1] for line in output.splitlines() if line.strip()]
+    if not refs:
+        return None
+    return f"refs/replace is not empty ({refs}); refusing to trust any git diff or git show"
 
 
 def shell(command: list[str], cwd: Path | None = None) -> tuple[int, str]:
-    finished = subprocess.run(command, capture_output=True, text=True, cwd=cwd)
+    # GIT_NO_REPLACE_OBJECTS=1 makes every git command below treat refs/replace as if it
+    # were empty, so the diff- and show-based guards see the real objects a pinned SHA
+    # names even when a replace ref exists. This closes the cheapest way to blind those
+    # guards; it does not by itself bound a model with shell access to this checkout — see
+    # "Guard threat model" in docs/OPERATIONS.md. Harmless for the non-git commands this
+    # helper also runs (the `uv run` / `ruff` quality checks): they never look at it.
+    env = {**os.environ, "GIT_NO_REPLACE_OBJECTS": "1"}
+    finished = subprocess.run(command, capture_output=True, text=True, cwd=cwd, env=env)
     return finished.returncode, finished.stdout + finished.stderr
 
 

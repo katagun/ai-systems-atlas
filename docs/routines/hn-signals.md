@@ -10,12 +10,13 @@ Work from the root of the Atlas checkout — the directory holding
 
     uv run python scripts/run_hn_signals.py prepare
 
-`prepare` refreshes an isolated worktree from `origin/main`, re-fetches every readable
-signal's vendor page, and prints the worktree's path. Do all of your work in that
-worktree. It also writes `.hn-signal-bundle/bundle.json` there: every page's text you
-are allowed to read is in that file, keyed by `story_id`. A page that changed since the
-sweep pinned it is left out of the bundle and out of the pending list `prepare` prints;
-leave those signals alone.
+`prepare` refreshes an isolated worktree from `origin/main` — pass `--from-ref` to build it
+from a different ref instead, which enables the local loop described in "Attention-source
+sweep" in `docs/OPERATIONS.md` — re-fetches every readable signal's vendor page, and
+prints the worktree's path. Do all of your work in that worktree. It also writes
+`.hn-signal-bundle/bundle.json` there: every page's text you are allowed to read is in
+that file, keyed by `story_id`. A page that changed since the sweep pinned it is left out
+of the bundle and out of the pending list `prepare` prints; leave those signals alone.
 
 Then, for each signal in the bundle that has no `assessment` yet, add one to that signal
 in `directory/hn-signals.json` — and change nothing else, in no other file.
