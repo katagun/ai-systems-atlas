@@ -18,6 +18,11 @@ prints the worktree's path. Do all of your work in that worktree. It also writes
 that file, keyed by `story_id`. A page that changed since the sweep pinned it is left out
 of the bundle and out of the pending list `prepare` prints; leave those signals alone.
 
+The bundle carries at most the first 8,000 characters of each page. A page longer than
+that ends with a `[truncated: the full page is at <url>]` marker — that marker means the
+rest of the page was never included, not that the page ended there. Do not write a
+finding that asserts something about a page past that marker; you have not read it.
+
 Then, for each signal in the bundle that has no `assessment` yet, add one to that signal
 in `directory/hn-signals.json` — and change nothing else, in no other file.
 

@@ -313,6 +313,17 @@ Run a sweep by hand at any time:
 uv run python scripts/sweep_hackernews.py
 ```
 
+`scripts/verify_signal_pages.py --refresh` (invoked by `run_hn_signals.py prepare`) caps
+each page at `MAX_BUNDLE_CHARS` (8,000 characters) when it writes `bundle.json` for the
+routine's model to read. A real 39-page bundle ran 568,518 characters uncapped (~142,000
+tokens); 8,000 chars/page cut that to ~63,000 tokens (~2.3x cheaper) while retaining 40 of
+56 distinct AI-relevant terms present uncapped, against 19/56 and 25/56 at 2,000- and
+4,000-char caps respectively. The cap applies only to what is written into the bundle,
+never to what is hashed: `verify()` hashes each page's full extracted text and compares
+that against the signal's recorded `content_sha256` before truncating anything, so drift
+detection sees the whole page regardless of the cap. A truncated page gets a trailing
+marker naming its `url` so the model knows the rest was cut, not that the page ended.
+
 To run it daily without being asked, schedule it with launchd. Write
 `~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting the checkout path, then
 load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
