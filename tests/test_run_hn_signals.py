@@ -56,6 +56,11 @@ class VerifierTests(unittest.TestCase):
     """Hermetic: a fake fetcher and an injected signals path, never the network or the
     real (empty) directory/hn-signals.json. Ruling 3 replaces the brief's vacuous,
     network-dependent assertion with one that checks both directions of the drift check.
+
+    Every signal here carries an `assessment` and passes `baseline=[]`: `refresh=False`
+    now scopes to signals `assessed_story_ids` finds new against the baseline (see
+    `RecheckScopeTests`), so a signal with no assessment would never reach the fetcher
+    these tests are exercising.
     """
 
     def signals_document(self, page_text: str) -> tuple[Path, str]:
@@ -69,6 +74,7 @@ class VerifierTests(unittest.TestCase):
             "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
             "content_sha256": digest, "fetched_at": "2026-09-09T00:00:00Z",
             "status": "provisional", "discovered_at": "2026-09-09",
+            "assessment": {"verdict": "worth_review"},
         }
         path.write_text(
             json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}),
@@ -81,7 +87,8 @@ class VerifierTests(unittest.TestCase):
 
         path, _digest = self.signals_document("the original vendor page text")
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: "the page changed since the sweep", signals_path=path
+            refresh=False, fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path, baseline=[],
         )
         self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
 
@@ -90,7 +97,9 @@ class VerifierTests(unittest.TestCase):
 
         original = "the original vendor page text"
         path, _digest = self.signals_document(original)
-        problems = verify_signal_pages.verify(refresh=False, fetcher=lambda url: original, signals_path=path)
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: original, signals_path=path, baseline=[]
+        )
         self.assertEqual(problems, [])
 
     def test_the_verifier_hashes_a_page_exactly_as_the_sweep_did(self) -> None:
@@ -117,13 +126,16 @@ class VerifierTests(unittest.TestCase):
             fetcher=lambda url: page,
         )
         self.assertEqual(document["signals"][0]["page_status"], "readable")
+        # The sweep itself never writes an assessment; add one so this signal falls
+        # inside the scope `refresh=False` now checks (see class docstring).
+        document["signals"][0]["assessment"] = {"verdict": "worth_review"}
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         path = Path(directory.name) / "hn-signals.json"
         path.write_text(json.dumps(document), encoding="utf-8")
 
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: page, signals_path=path
+            refresh=False, fetcher=lambda url: page, signals_path=path, baseline=[]
         )
 
         self.assertEqual(problems, [])
@@ -146,6 +158,10 @@ class BundleCapTests(unittest.TestCase):
             "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
             "content_sha256": digest, "fetched_at": "2026-09-09T00:00:00Z",
             "status": "provisional", "discovered_at": "2026-09-09",
+            # A `refresh=False` call below now scopes to signals with an assessment new
+            # against the (empty) baseline it passes; harmless for `refreshed_bundle`'s
+            # `refresh=True` calls, which check every readable signal regardless.
+            "assessment": {"verdict": "worth_review"},
         }
         path.write_text(
             json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}),
@@ -200,7 +216,7 @@ class BundleCapTests(unittest.TestCase):
         self.assertNotEqual(full_digest, truncated_digest)
 
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: page, signals_path=path
+            refresh=False, fetcher=lambda url: page, signals_path=path, baseline=[]
         )
 
         self.assertEqual(problems, [])
@@ -216,10 +232,180 @@ class BundleCapTests(unittest.TestCase):
         self.assertEqual(changed[: verify_signal_pages.MAX_BUNDLE_CHARS], original[: verify_signal_pages.MAX_BUNDLE_CHARS])
 
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: changed, signals_path=path
+            refresh=False, fetcher=lambda url: changed, signals_path=path, baseline=[]
         )
 
         self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+
+
+class RecheckScopeTests(unittest.TestCase):
+    """`--recheck` (refresh=False) must verify only the signals THIS RUN's assessments
+    actually cite, judged against a baseline queue — never a drifted page nobody
+    assessed. Mirrors `blocks_to_recheck` in build_candidate_evidence.py, including its
+    refusal to scope on `proposed_at` or `proposer`, both written by the run being
+    policed."""
+
+    def signal(self, **overrides) -> dict:
+        signal = {
+            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "A launch", "url": "https://vendor.example/launch", "points": 50,
+            "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
+            "content_sha256": "a" * 64, "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional", "discovered_at": "2026-09-09",
+        }
+        signal.update(overrides)
+        return signal
+
+    def queue_path(self, signals: list[dict]) -> Path:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        path.write_text(
+            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": signals}),
+            encoding="utf-8",
+        )
+        return path
+
+    def test_a_drifted_page_with_no_assessment_does_not_fail_recheck(self) -> None:
+        """The exact blocker: 13 signals drifted, 0 carried an assessment, and the old
+        unscoped --recheck discarded 31 verifiable assessments over it."""
+        from scripts import verify_signal_pages
+
+        def unexpected_fetch(_url: str) -> str:
+            raise AssertionError("a signal with no assessment must not be re-fetched")
+
+        path = self.queue_path([self.signal(story_id="1")])
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=unexpected_fetch, signals_path=path, baseline=[]
+        )
+        self.assertEqual(problems, [])
+
+    def test_a_drifted_page_with_a_new_assessment_fails_recheck(self) -> None:
+        from scripts import verify_signal_pages
+
+        path = self.queue_path(
+            [self.signal(story_id="1", assessment={"verdict": "worth_review"})]
+        )
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path, baseline=[],
+        )
+        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+
+    def test_an_assessment_already_in_the_baseline_does_not_refail_on_later_drift(self) -> None:
+        """An assessment on the baseline was verified when it was introduced; a run that
+        merely inherits it — and did not cite it — must not be failed by drift since."""
+        from scripts import verify_signal_pages
+
+        assessment = {"verdict": "worth_review"}
+        path = self.queue_path([self.signal(story_id="1", assessment=dict(assessment))])
+        baseline = [self.signal(story_id="1", assessment=dict(assessment))]
+
+        def unexpected_fetch(_url: str) -> str:
+            raise AssertionError("an assessment already on the baseline must not be re-fetched")
+
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=unexpected_fetch, signals_path=path, baseline=baseline
+        )
+        self.assertEqual(problems, [])
+
+    def test_back_dating_proposed_at_does_not_exempt_a_new_assessment(self) -> None:
+        """proposed_at is written by the agent being policed, so it can never decide
+        what gets verified — mirrors test_a_back_dated_block_is_still_refetched for the
+        triage routine's identical guard."""
+        from scripts import verify_signal_pages
+
+        path = self.queue_path([self.signal(story_id="1", assessment={
+            "verdict": "worth_review", "proposed_at": "2020-01-01", "proposer": "human",
+        })])
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path, baseline=[],
+        )
+        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+
+    def test_assessed_story_ids_ignores_proposed_at_and_proposer_directly(self) -> None:
+        from scripts import verify_signal_pages
+
+        baseline = [{"story_id": "1"}]
+        signals = [{
+            "story_id": "1",
+            "assessment": {"verdict": "worth_review", "proposed_at": "2020-01-01", "proposer": "human"},
+        }]
+        self.assertEqual({"1"}, verify_signal_pages.assessed_story_ids(signals, baseline))
+
+    def test_assessed_story_ids_excludes_an_unchanged_baselined_assessment(self) -> None:
+        from scripts import verify_signal_pages
+
+        assessment = {"verdict": "worth_review", "proposed_at": "2026-09-01", "proposer": "hn-signals"}
+        baseline = [{"story_id": "1", "assessment": dict(assessment)}]
+        signals = [{"story_id": "1", "assessment": dict(assessment)}]
+        self.assertEqual(set(), verify_signal_pages.assessed_story_ids(signals, baseline))
+
+    def test_refresh_still_checks_every_readable_signal_regardless_of_assessment(self) -> None:
+        """`--refresh` behaviour is unchanged: `prepare` must keep checking broadly, not
+        just the signals an assessment happens to cite (there are none yet — `prepare`
+        runs before the model writes any)."""
+        from scripts import verify_signal_pages
+
+        bundle_dir = Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
+        self.enterContext(mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir))
+        path = self.queue_path([self.signal(story_id="1")])  # no assessment at all
+        problems = verify_signal_pages.verify(
+            refresh=True, fetcher=lambda url: "the page changed since the sweep", signals_path=path
+        )
+        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+
+
+class BaselineQueueSignalsTests(unittest.TestCase):
+    """`baseline_queue_signals` mirrors `previous_candidates` in
+    build_candidate_evidence.py: an unreadable or malformed baseline must widen scope
+    (return `[]`, so every current assessment counts as new) rather than raise or narrow
+    it."""
+
+    def test_a_failed_git_show_returns_an_empty_baseline(self) -> None:
+        from scripts import verify_signal_pages
+
+        def failing_run(command, **_kwargs):
+            return subprocess.CompletedProcess(command, 1, stdout="", stderr="fatal: bad revision")
+
+        self.assertEqual(
+            [], verify_signal_pages.baseline_queue_signals("no-such-ref", run=failing_run)
+        )
+
+    def test_a_resolvable_ref_returns_its_signals(self) -> None:
+        from scripts import verify_signal_pages
+
+        document = json.dumps({"signals": [{"story_id": "1"}]})
+
+        def fake_run(command, **_kwargs):
+            self.assertEqual(["git", "show", "abc123:directory/hn-signals.json"], command)
+            return subprocess.CompletedProcess(command, 0, stdout=document, stderr="")
+
+        self.assertEqual(
+            [{"story_id": "1"}],
+            verify_signal_pages.baseline_queue_signals("abc123", run=fake_run),
+        )
+
+    def test_malformed_json_returns_an_empty_baseline(self) -> None:
+        from scripts import verify_signal_pages
+
+        def fake_run(command, **_kwargs):
+            return subprocess.CompletedProcess(command, 0, stdout="not json", stderr="")
+
+        self.assertEqual(
+            [], verify_signal_pages.baseline_queue_signals("abc123", run=fake_run)
+        )
+
+    def test_a_non_list_signals_field_returns_an_empty_baseline(self) -> None:
+        from scripts import verify_signal_pages
+
+        def fake_run(command, **_kwargs):
+            return subprocess.CompletedProcess(command, 0, stdout='{"signals": "not-a-list"}', stderr="")
+
+        self.assertEqual(
+            [], verify_signal_pages.baseline_queue_signals("abc123", run=fake_run)
+        )
 
 
 class BundleDriftTests(unittest.TestCase):
