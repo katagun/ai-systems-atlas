@@ -77,6 +77,14 @@ uv run python scripts/build_share_pages.py
 
 `check` is read-only. Both `check` and `apply` refuse changed imported metadata, duplicate source IDs, cross-collection ID collisions, an unverified license review, missing authoritative-model or pinned-source evidence, stale or future review dates, invalid taxonomy values, and incomplete or incorrectly calculated scores. `apply` preflights the complete proposed model collection and remaining queue before writing either canonical file; it removes only the reviewed candidate and does not change the queue's import-snapshot timestamp. It never fetches evidence or makes an editorial conclusion. Commit the completed review draft only if it is useful review history; it is not a catalog input after promotion.
 
+### Distribution-mode conventions
+
+Apply these consistently so batches score the same way:
+
+- A publisher's own serving surface is `developer_api` reach, never `third_party_hosting`. Google's Vertex AI, AI Studio, and Model Garden serving Google's own models, and NVIDIA's build.nvidia.com trial endpoint serving NVIDIA's own models, are first-party developer-API evidence.
+- Another operator's managed hosting of the exact model is `third_party_hosting`: Anthropic Claude on Vertex AI or Bedrock, any publisher's model on Azure Foundry, or a non-NVIDIA model behind an NVIDIA NIM endpoint. Each claim needs first-party host documentation naming the exact model; aggregator listings without host documentation are insufficient.
+- A models.dev ID is reviewable when the publisher documents it as a fixed release identity: a dated snapshot, or a dateless ID the publisher defines as a pinned snapshot rather than a moving alias. A name that moves between snapshots without its own fixed identity is not a record; the full alias discriminator is still open (see `BACKLOG.md`).
+
 ## Model-access score
 
 Every model uses `score_profile: model_access`. The weighted dimensions in `directory/taxonomy.json` are:

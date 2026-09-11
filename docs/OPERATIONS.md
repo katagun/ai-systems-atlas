@@ -69,6 +69,10 @@ and keeps conditional-request validators in the ignored `.evidence-link-cache.js
 scheduled workflow preserves
 that file with the GitHub Actions cache. A successful result less than twenty hours old is
 reused, so re-running a workflow does not immediately crawl all reviewed sources again.
+A `GET` that returns `403` without rate-limit headers gets one retry with ordinary
+browser headers: pages behind a bot wall (observed on xAI and OpenAI terms hosts) then
+count as reachable but raise a visible `bot-walled reviewed link` warning, while a page
+that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
 shells, scripts, styles, navigation, and whitespace are removed before hashing; GitHub and
@@ -236,7 +240,10 @@ allowed to do: adding an `assessment` to a signal that had none. Every provenanc
 sweep wrote — `story_id` through `discovered_at` — and the membership of the queue itself
 belong to the sweep alone; a run that touches one aborts, naming the signal and the field.
 Reviewing a batch therefore means judging verdicts and evidence, not auditing the diff for
-overreach.
+overreach. These guards compare against `origin/main` by default; see "Running the loop
+locally" under "Attention-source sweep" below for the `--from-ref` option that lets
+`prepare` build from a local branch instead, and how `finish` still checks the right base
+when it does.
 
 To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
 `~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
@@ -334,8 +341,119 @@ The agent runs only while you are logged in, and launchd fires a missed run once
 login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
 moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
 The sweep leaves `directory/hn-signals.json` modified in the working tree; commit it on a
-branch of your choosing before running the routine, which expects the queue to be clean at
-`origin/main`.
+branch before running the routine.
+
+### Running the loop locally
+
+By default `run_hn_signals.py prepare` builds its worktree from `origin/main`, which is
+protected (`required_pr: true`, `required_checks: ["verify"]`, `enforce_admins: true`), so
+a swept queue that has not yet cleared a pull request cannot reach the routine. Pass
+`--from-ref` to point `prepare` at a local branch instead, and the whole sweep-assess-
+iterate loop runs without touching `origin/main` at all:
+
+```bash
+uv run python scripts/sweep_hackernews.py
+git checkout -b hn-signals/local-sweep
+git add directory/hn-signals.json
+git commit -m "Sweep signals for $(date +%F)"
+uv run python scripts/run_hn_signals.py prepare --from-ref hn-signals/local-sweep
+```
+
+`prepare` resolves `--from-ref` to a commit SHA and records it in
+`.hn-signal-bundle/base-ref.json` under the primary checkout (`ROOT`), not the worktree —
+still covered by `.gitignore`, so it never reaches a commit. That location matters: the
+worktree is where the unattended model works, so a record `finish` trusts had to live
+somewhere an ordinary file edit there cannot reach. `finish` reads that file and uses the
+pinned SHA everywhere it would otherwise compare against `origin/main`: the head-moved
+check, the committed-diff blast-radius check, and the `git show
+<base>:directory/hn-signals.json` field-guard baseline all run against the exact tree
+`prepare` handed the model, not whatever `origin/main` has become since. A SHA rather than
+the ref name, because a branch can move between `prepare` and `finish`; pinning the commit
+means the guards always check the tree the model actually saw. When no SHA was recorded —
+an older worktree, one built without `--from-ref`, or a record that failed the checks
+below — `finish` falls back to `origin/main` exactly as it always has. A recorded value
+that is not exactly a 40-hex commit SHA, or that lives behind a symlink instead of a plain
+file, is treated the same as no record at all rather than trusted.
+
+`prepare`'s first step is `git fetch --quiet origin`; a failure there is fatal only when
+`--from-ref` names a remote-tracking ref (its prefix matches a configured remote, as
+`origin/main` does). A purely local ref cannot be stale against a remote, so a fetch
+failure is tolerated and the run proceeds offline — the same rule `git worktree add`
+implicitly follows for any commit-ish it is given directly. `--from-ref` naming a
+remote-tracking ref of a remote other than `origin` (`fork/main`, say) is rejected outright
+— `prepare` only ever fetches `origin`, so checking freshness against a different remote's
+ref under that fetch would pass while the baseline was arbitrarily stale.
+
+Iterate locally as long as you like — re-run `prepare --from-ref` after every sweep or
+edit, since it always resolves the ref fresh — and push only once there is something on
+the queue worth a human review pass. Nothing about the default `origin/main` path changes:
+omitting `--from-ref` behaves exactly as before.
+
+### Guard threat model
+
+`scripts/run_candidate_triage.py` and `scripts/run_hn_signals.py` share their mechanical
+guards through `scripts/routine_guards.py`, and this threat model applies identically to
+both. It was sharpened by an adversarial review that found the base-record file could be
+relocated out of the worktree but still bypassed — read on for what closed and what did
+not.
+
+The guards are built to bound an honest-but-misled model: one that misreads what
+`docs/routines/hn-signals.md` or `docs/routines/candidate-triage.md` asked of it, or one
+steered by prompt injection carried in a fetched vendor page or README. That is the
+failure this pipeline actually runs into — an unattended model reading attacker-influenced
+text and drawing the wrong conclusion from it — and the blast-radius, committed-diff, and
+field-level checks catch a real, broad class of mistakes: an edit outside the one file the
+routine may touch, a rewritten provenance field, an added or removed queue entry, a
+second commit riding along with the legitimate one.
+
+The guards do not bound a hostile model with shell access to this checkout, and the
+reason is not that it shares a ref store and object database with the repository — that
+explains one bypass, not the general case. The general case is simpler: `finish` executes
+worktree-controlled code between its last read of the queue and the commit that stages
+it, and a `git status`-based blast-radius guard can be made to describe a tree that is no
+longer the one it checked. Concretely: `git update-index --assume-unchanged <a tracked
+script CHECKS runs>`, then poison that script. `git status --porcelain` stops reporting
+the modification, so the blast-radius guard sees only the one file the routine is allowed
+to touch; every guard up to that point passes. `finish` then runs `CHECKS`, which executes
+the now-poisoned script, which rewrites the queue after the field guard already read it;
+`finish` stages and commits the rewritten file. Demonstrated against both routines: on
+`run_hn_signals.py` it committed `points: 9999`; on `run_candidate_triage.py` it flipped
+`confidence` to `high` and added the candidate `acme/injected` — the two writes ADR 024's
+review step exists to catch. `finish` re-reads the queue immediately before `git add` and
+refuses if it differs from what the field guard read, which closes this deterministic
+form of the route — a CHECKS command that rewrites the queue itself is now caught — but a
+hostile model with shell access has other channels no file-comparison guard reads, so the
+class stays open.
+
+A related but distinct route runs through the shared git dir rather than the working
+tree: every worktree of a repository shares one ref store and object database, so `git
+replace -f <pinned> <forged>` — one command, run from inside the worktree — makes `git
+diff` and `git show`, which every field-level guard is built from, silently substitute a
+different object for the one a pinned SHA names; a truthful two-file diff can become
+empty output. `finish` runs its git commands with `GIT_NO_REPLACE_OBJECTS=1` and refuses
+outright when `refs/replace` is non-empty, which closes the cheapest route to that
+bypass — it does not close the class either. A model with shell access can act on the
+repository through channels no file-comparison guard reads.
+
+The actual containment is that nothing either routine writes is ever accepted
+automatically: `finish` commits only to an isolated local branch (`hn-signals/pending` or
+`triage/pending`) that is never pushed, and a human reviews every proposal — reading
+cited evidence, not trusting a verdict — before anything reaches `directory/*.json` on
+`main`. [ADR 024](adr/024-candidate-triage-proposals-are-unaccepted-evidence.md) already
+reserves that review step for candidate triage; the same reservation is what actually
+stands between an unattended run and the published catalog for both routines, guards or
+no guards.
+
+One route the guards still do not close, documented rather than fixed: `finish` falls
+back to comparing against `origin/main` whenever no base record is found — including when
+one was deleted. A model with shell access could delete
+`.hn-signal-bundle/base-ref.json` and then `git update-ref refs/remotes/origin/main
+<forged>` to make that fallback compare against a forged tree instead of the real one.
+The `refs/replace` refusal and `GIT_NO_REPLACE_OBJECTS=1` do not touch this path — it
+never goes through `git replace` — and closing it would mean either hard-erroring on a
+missing record (a real behavior change to the always-worked default path) or trusting a
+second location no more defensible than the first. Left open, same as the human-review
+containment above already assumes it must be.
 
 The points floor (`--points-floor`, default 25) is the sweep's only tuning knob: the
 minimum score a story needs to be swept at all. Its right value is not settled; watch what

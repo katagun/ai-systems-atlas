@@ -2,9 +2,9 @@
 
 This roadmap describes outcomes and sequencing. [`BACKLOG.md`](BACKLOG.md) is the source of truth for executable work; policy and architectural decisions live in `docs/`.
 
-## Current: comprehensive coverage and evidence that stays true
+## Current: trustworthy coverage and resilient delivery
 
-Make the Atlas broad enough to represent important memory, agent, and assistant-system choices without hiding systems because of their source model. Coverage build-out has reached the point where adding records is no longer the binding constraint, so a second outcome now runs alongside it: keeping the reviewed claim true as the catalog ages, and keeping the decisions that gate the queue moving.
+Make the Atlas broad enough to represent important memory, agent, and assistant-system choices without hiding systems because of their source model. Coverage build-out has reached the point where adding records is no longer the binding constraint. The current work is to keep reviewed claims true as the catalog ages, bound failure paths in the application and publishing pipeline, and keep the decisions that gate the queue moving.
 
 - Separate relevance from licensing: include by operational role and expose source model, licenses, and evidence as filters and labels.
 - Compare memory, agent, and assistant products only within their outcome-specific family and score profile.
@@ -20,11 +20,12 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Support side-by-side shortlists only within one score profile, preserving collection-specific decision context and shareable URL state.
 - Detect evidence decay rather than relying on maintainer memory: link and terms-drift checks must reach every collection, not only the records whose license the repository host can detect.
 - Keep editorial age distinguishable from live-metadata age, so a stale review is a visible fact about the record rather than a gap in someone's recollection.
+- Bound delivery failures: a missing detail or collection payload must degrade locally, multi-file updates must not expose mixed generations, malformed URLs must fail validation before they reach the browser, and no unverified revision may reach Pages.
 - Make decision debt legible in the data: a queued candidate should name the open question that holds it instead of leaving the held set to be re-derived from prose.
 - Settle the treatment of agent skill packs before the class grows further, separating the authoring convention from a skills runtime from a collection of skill documents; only the middle case can own an operational outcome, and adoption does not settle any of them.
 - Give every record one review of its own; a shared boilerplate review across several products is a coverage claim the catalog cannot support.
 
-Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, users can filter by source model, license, and provider constraints without confusing those traits with capability, and no published record's evidence can go stale without raising a signal.
+Exit signal: every supported role has several meaningful reviewed alternatives where the ecosystem provides them, important vendor ecosystems have no unexplained gaps, priority candidate batches have an evidence-backed disposition, users can filter by source model, license, and provider constraints without confusing those traits with capability, no published record's evidence can go stale without raising a signal, and the open Medium findings in the 2026-09-05 codebase review have regression-tested resolutions.
 
 ## Next: efficient curation
 

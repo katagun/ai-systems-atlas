@@ -1030,6 +1030,66 @@ class FinishTests(unittest.TestCase):
         self.assertEqual(1, runner.finish(run=fake_run, read=self.reader()))
 
 
+class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
+    """The re-read-before-add guard: closes the deterministic form of the CHECKS-window
+    bypass, where a command CHECKS runs (or something it shells out to) rewrites QUEUE
+    after the field guard already read it and before `git add` stages it. See "Guard
+    threat model" in docs/OPERATIONS.md."""
+
+    BASE_QUEUE = json.dumps({
+        "version": 1,
+        "candidates": [{
+            "repo": "a/one", "url": "https://github.com/a/one",
+            "proposed_system_family": "memory_system",
+            "proposed_primary_role": "agent_memory_service",
+            "classification_confidence": 0.8, "status": "provisional",
+        }],
+    })
+    BLOCK: ClassVar[dict] = {
+        "verdict": "review_ready", "rule": "r", "finding": "f",
+        "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage"}
+
+    def triaged(self, **overrides) -> str:
+        document = json.loads(self.BASE_QUEUE)
+        document["candidates"][0]["triage"] = self.BLOCK
+        document["candidates"][0].update(overrides)
+        return json.dumps(document)
+
+    def test_a_queue_rewritten_during_checks_is_refused(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, "1111\n"
+            if command[:2] == ["git", "show"]:
+                return 0, self.BASE_QUEUE
+            return 0, ""  # every CHECKS command, stubbed to succeed
+
+        # The field guard reads a legitimately triaged queue; by the time `finish` would
+        # stage it, the file on disk has drifted — standing in for a CHECKS command that
+        # rewrote it in between.
+        reads = iter([self.triaged(), self.triaged(classification_confidence=0.99)])
+
+        def fake_read(path: str) -> str:
+            self.assertEqual(runner.QUEUE, path)
+            return next(reads)
+
+        import contextlib
+        import io
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(run=fake_run, read=fake_read)
+        self.assertEqual(1, code)
+        self.assertIn("changed after the field guard read it", stderr.getvalue())
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+
+
 class PrepareTests(unittest.TestCase):
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory()
@@ -1117,6 +1177,56 @@ class PromptDriftTests(unittest.TestCase):
 
     def test_an_identical_prompt_is_not_drift(self) -> None:
         self.assertIsNone(runner.prompt_drift("body\n", "  body  "))
+
+
+class ReplaceRefGuardTests(unittest.TestCase):
+    """`routine_guards.replace_refs_problem` and the `GIT_NO_REPLACE_OBJECTS=1` env var
+    on `routine_guards.shell` are shared with `run_hn_signals.py`, which has thorough
+    coverage of the mechanism itself (see `tests/test_run_hn_signals.py`,
+    `ReplaceRefGuardTests`). This class only proves `run_candidate_triage.py`'s `finish`
+    actually wires the refusal in, using a real repository and a real `git replace`."""
+
+    def setUp(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        root = scratch / "root"
+        root.mkdir()
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        (root / "directory").mkdir()
+        (root / "directory" / "candidates.json").write_text(
+            json.dumps({"version": 1, "candidates": []}), encoding="utf-8"
+        )
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        (root / "other.txt").write_text("second commit\n", encoding="utf-8")
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True)
+
+        worktree = scratch / "worktree"
+        subprocess.run(
+            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach", str(worktree), "HEAD"],
+            check=True,
+        )
+        self.enterContext(mock.patch.object(runner, "WORKTREE", worktree))
+        self.worktree = worktree
+
+    def test_a_populated_replace_ref_is_refused(self) -> None:
+        import contextlib
+        import io
+
+        _, head = runner.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, parent = runner.shell(["git", "rev-parse", "HEAD~1"], self.worktree)
+        code, output = runner.shell(
+            ["git", "replace", "-f", head.strip(), parent.strip()], self.worktree
+        )
+        self.assertEqual(0, code, output)
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(run=runner.shell)
+        self.assertEqual(1, code)
+        self.assertIn("refs/replace", stderr.getvalue())
 
 
 if __name__ == "__main__":
