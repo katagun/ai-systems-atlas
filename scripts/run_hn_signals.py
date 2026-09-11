@@ -424,6 +424,24 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         if code != 0:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
             return 1
+    if dirty:
+        # CHECKS above runs worktree-controlled code — the routine's own quality gates —
+        # after `after` was read for the field guard and before anything is staged. A
+        # command CHECKS runs (or something it shells out to) could rewrite QUEUE in that
+        # window, and every guard above already ran against the version it read, not this
+        # one. Re-reading right before `git add` and refusing on any difference closes that
+        # window deterministically; see "Guard threat model" in docs/OPERATIONS.md.
+        try:
+            just_before_add = read(QUEUE)
+        except OSError as exc:
+            print(f"error: could not re-read {QUEUE} before staging: {exc}", file=sys.stderr)
+            return 1
+        if just_before_add != after:
+            print(
+                f"error: {QUEUE} changed after the field guard read it; refusing to commit",
+                file=sys.stderr,
+            )
+            return 1
     commands = [["git", "checkout", "-B", "hn-signals/pending"]]
     if dirty:
         commands = [

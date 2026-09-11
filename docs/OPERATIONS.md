@@ -402,15 +402,34 @@ field-level checks catch a real, broad class of mistakes: an edit outside the on
 routine may touch, a rewritten provenance field, an added or removed queue entry, a
 second commit riding along with the legitimate one.
 
-The guards do not bound a hostile model with shell access to this checkout. Such a model
-shares a ref store and object database with the repository, and `git replace -f <pinned>
-<forged>` — one command, run from inside the worktree — makes `git diff` and `git show`,
-which every field-level guard is built from, silently substitute a different object for
-the one a pinned SHA names; a truthful two-file diff can become empty output. `finish`
-runs its git commands with `GIT_NO_REPLACE_OBJECTS=1` and refuses outright when
-`refs/replace` is non-empty, which closes the cheapest route to that bypass — it does not
-close the class. A model with shell access can act on the repository through channels no
-file-comparison guard reads.
+The guards do not bound a hostile model with shell access to this checkout, and the
+reason is not that it shares a ref store and object database with the repository — that
+explains one bypass, not the general case. The general case is simpler: `finish` executes
+worktree-controlled code between its last read of the queue and the commit that stages
+it, and a `git status`-based blast-radius guard can be made to describe a tree that is no
+longer the one it checked. Concretely: `git update-index --assume-unchanged <a tracked
+script CHECKS runs>`, then poison that script. `git status --porcelain` stops reporting
+the modification, so the blast-radius guard sees only the one file the routine is allowed
+to touch; every guard up to that point passes. `finish` then runs `CHECKS`, which executes
+the now-poisoned script, which rewrites the queue after the field guard already read it;
+`finish` stages and commits the rewritten file. Demonstrated against both routines: on
+`run_hn_signals.py` it committed `points: 9999`; on `run_candidate_triage.py` it flipped
+`confidence` to `high` and added the candidate `acme/injected` — the two writes ADR 024's
+review step exists to catch. `finish` re-reads the queue immediately before `git add` and
+refuses if it differs from what the field guard read, which closes this deterministic
+form of the route — a CHECKS command that rewrites the queue itself is now caught — but a
+hostile model with shell access has other channels no file-comparison guard reads, so the
+class stays open.
+
+A related but distinct route runs through the shared git dir rather than the working
+tree: every worktree of a repository shares one ref store and object database, so `git
+replace -f <pinned> <forged>` — one command, run from inside the worktree — makes `git
+diff` and `git show`, which every field-level guard is built from, silently substitute a
+different object for the one a pinned SHA names; a truthful two-file diff can become
+empty output. `finish` runs its git commands with `GIT_NO_REPLACE_OBJECTS=1` and refuses
+outright when `refs/replace` is non-empty, which closes the cheapest route to that
+bypass — it does not close the class either. A model with shell access can act on the
+repository through channels no file-comparison guard reads.
 
 The actual containment is that nothing either routine writes is ever accepted
 automatically: `finish` commits only to an isolated local branch (`hn-signals/pending` or

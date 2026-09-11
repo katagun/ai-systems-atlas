@@ -63,10 +63,18 @@ def worktree_text(path: str, worktree: Path) -> str:
     including back into the model's own worktree. Raising `OSError` here reaches every
     caller's existing "could not read" handling; `run_hn_signals.prepared_base_ref`
     specifically treats it the same as a missing record and falls back to `origin/main`.
+
+    Checks every directory between `worktree` and `path` as well as `path` itself: making
+    a directory the file lives under — `.hn-signal-bundle`, say — a symlink to somewhere
+    outside the worktree leaves the file's own `is_symlink()` false while still redirecting
+    the read, so `path` alone is not enough.
     """
     target = worktree / path
-    if target.is_symlink():
-        raise OSError(f"{path} is a symlink; refusing to read it as trusted content")
+    node = target
+    while node != worktree:
+        if node.is_symlink():
+            raise OSError(f"{path} is a symlink; refusing to read it as trusted content")
+        node = node.parent
     return target.read_text(encoding="utf-8")
 
 
@@ -84,6 +92,14 @@ def replace_refs_problem(run: ShellFn, cwd: Path) -> str | None:
     """
     code, output = run(["git", "for-each-ref", "refs/replace"], cwd)
     if code != 0:
+        # Fails open, deliberately: a non-zero `for-each-ref` skips this explicit,
+        # name-the-ref refusal, but it does not reopen the bypass. `shell()` sets
+        # `GIT_NO_REPLACE_OBJECTS=1` for every git command a caller runs afterward —
+        # including the `git diff` and `git show` calls the field-level guards are built
+        # from — so those already see the real objects a pinned SHA names regardless of
+        # whether this check ran. This function only makes that outcome loud (name the
+        # ref, refuse outright) instead of silent; losing it here falls back to the env
+        # var doing the actual work, not to trusting a substituted object.
         return None
     refs = [line.split()[-1] for line in output.splitlines() if line.strip()]
     if not refs:

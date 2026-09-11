@@ -1030,6 +1030,66 @@ class FinishTests(unittest.TestCase):
         self.assertEqual(1, runner.finish(run=fake_run, read=self.reader()))
 
 
+class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
+    """The re-read-before-add guard: closes the deterministic form of the CHECKS-window
+    bypass, where a command CHECKS runs (or something it shells out to) rewrites QUEUE
+    after the field guard already read it and before `git add` stages it. See "Guard
+    threat model" in docs/OPERATIONS.md."""
+
+    BASE_QUEUE = json.dumps({
+        "version": 1,
+        "candidates": [{
+            "repo": "a/one", "url": "https://github.com/a/one",
+            "proposed_system_family": "memory_system",
+            "proposed_primary_role": "agent_memory_service",
+            "classification_confidence": 0.8, "status": "provisional",
+        }],
+    })
+    BLOCK: ClassVar[dict] = {
+        "verdict": "review_ready", "rule": "r", "finding": "f",
+        "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage"}
+
+    def triaged(self, **overrides) -> str:
+        document = json.loads(self.BASE_QUEUE)
+        document["candidates"][0]["triage"] = self.BLOCK
+        document["candidates"][0].update(overrides)
+        return json.dumps(document)
+
+    def test_a_queue_rewritten_during_checks_is_refused(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, "1111\n"
+            if command[:2] == ["git", "show"]:
+                return 0, self.BASE_QUEUE
+            return 0, ""  # every CHECKS command, stubbed to succeed
+
+        # The field guard reads a legitimately triaged queue; by the time `finish` would
+        # stage it, the file on disk has drifted — standing in for a CHECKS command that
+        # rewrote it in between.
+        reads = iter([self.triaged(), self.triaged(classification_confidence=0.99)])
+
+        def fake_read(path: str) -> str:
+            self.assertEqual(runner.QUEUE, path)
+            return next(reads)
+
+        import contextlib
+        import io
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(run=fake_run, read=fake_read)
+        self.assertEqual(1, code)
+        self.assertIn("changed after the field guard read it", stderr.getvalue())
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+
+
 class PrepareTests(unittest.TestCase):
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory()

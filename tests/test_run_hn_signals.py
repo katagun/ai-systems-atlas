@@ -603,6 +603,46 @@ class FinishLabelsBaseSideProblemsWithTheRecordedShaTests(unittest.TestCase):
         self.assertNotIn("origin/main", stderr.getvalue())
 
 
+class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
+    """The re-read-before-add guard: closes the deterministic form of the CHECKS-window
+    bypass, where a command CHECKS runs (or something it shells out to) rewrites QUEUE
+    after the field guard already read it and before `git add` stages it. See "Guard
+    threat model" in docs/OPERATIONS.md."""
+
+    def test_a_queue_rewritten_during_checks_is_refused(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/hn-signals.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, "1111\n"
+            if command[:2] == ["git", "show"]:
+                return 0, document()
+            return 0, ""  # every CHECKS command, stubbed to succeed
+
+        # The field guard reads a legitimately assessed queue; by the time `finish` would
+        # stage it, the file on disk has drifted — standing in for a CHECKS command that
+        # rewrote it in between.
+        reads = iter([document(), document(points=9999)])
+
+        def fake_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.QUEUE, path)
+            return next(reads)
+
+        def fake_base_read(path: str) -> str:
+            raise OSError("no bundle")
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
+        self.assertEqual(1, code)
+        self.assertIn("changed after the field guard read it", stderr.getvalue())
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+        self.assertNotIn(["git", "add"], [call[:2] for call in calls])
+
+
 class CLIFromRefWiringTests(unittest.TestCase):
     def test_main_passes_from_ref_through_to_prepare(self) -> None:
         with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
@@ -823,6 +863,10 @@ class SymlinkedBaseRecordTests(unittest.TestCase):
         forged = root / "forged.json"
         forged.write_text(json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8")
         (root / run_hn_signals.BASE_REF).symlink_to(forged)
+        # Without this, `root_text` reads ROOT as still pointed at the real checkout, so
+        # the assertion below passes whether or not the symlink refusal fires — the same
+        # forgot-to-patch-ROOT defect PrepareDriftTests had.
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
 
         self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text))
 
@@ -838,6 +882,24 @@ class SymlinkedBaseRecordTests(unittest.TestCase):
 
         with self.assertRaises(OSError):
             run_hn_signals.root_text("linked.txt")
+
+    def test_a_symlinked_base_directory_is_refused(self) -> None:
+        """A narrower bypass than the file-level one above: `base-ref.json` itself stays a
+        plain file, but `.hn-signal-bundle` — the directory it lives under — is a symlink
+        to somewhere outside ROOT. `Path.is_symlink()` on the file alone would pass."""
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        elsewhere = tempfile.TemporaryDirectory()
+        self.addCleanup(elsewhere.cleanup)
+        forged_dir = Path(elsewhere.name)
+        (forged_dir / "base-ref.json").write_text(
+            json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8"
+        )
+        (root / ".hn-signal-bundle").symlink_to(forged_dir)
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text))
 
 
 class NoStrayBundleInTheRealCheckoutTests(unittest.TestCase):
