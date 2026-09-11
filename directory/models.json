@@ -114,7 +114,7 @@
         {
           "kind": "web",
           "label": "NVIDIA NIM guide for the Qwen3.8-2.4T-A95B checkpoint",
-          "url": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-qwen3.8.html",
+          "url": "https://docs.nvidia.com/nim/large-language-models/2.0.10/get-started/advanced/get-started-qwen3.8.html",
           "verified_at": "2026-09-11"
         },
         {

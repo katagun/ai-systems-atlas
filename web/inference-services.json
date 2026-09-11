@@ -1795,8 +1795,8 @@
       "terms": {
         "kind": "web_terms",
         "label": "NVIDIA API Trial Terms",
-        "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-api-trial-terms-of-use/",
-        "verified_at": "2026-08-28"
+        "url": "https://assets.ngc.nvidia.com/products/api-catalog/legal/NVIDIA%20API%20Trial%20Terms%20of%20Service.pdf",
+        "verified_at": "2026-09-11"
       },
       "evidence": [
         {
@@ -3789,7 +3789,7 @@
       "name": "StepFun Open Platform (mainland China)",
       "operator": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
       "service_type": "direct_model_api",
-      "url": "https://platform.stepfun.com/docs/zh/guides/quickstart",
+      "url": "https://platform.stepfun.com/docs/zh/quickstart/overview",
       "description": "The Chinese platform where StepFun sells API access to its own text, audio, vision, and image models.",
       "service_boundary": "Represents the mainland platform operated by a Chinese entity, not the separately incorporated international platform served from other infrastructure, and not the model weights themselves.",
       "delivery_modes": [
@@ -3862,7 +3862,7 @@
       "name": "StepFun Open Platform (international)",
       "operator": "StepFun Technology (HK) Limited",
       "service_type": "direct_model_api",
-      "url": "https://platform.stepfun.ai/docs/en/guides/quickstart",
+      "url": "https://platform.stepfun.ai/docs/en/quickstart/overview",
       "description": "StepFun's Hong Kong-incorporated platform for the same first-party model APIs, served from United States infrastructure.",
       "service_boundary": "Represents the international platform operated by a Hong Kong entity, not the separately operated mainland platform whose catalogue and documentation are broader.",
       "delivery_modes": [
@@ -3906,14 +3906,14 @@
         "kind": "web_terms",
         "label": "StepFun Terms of Services",
         "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-11"
       },
       "evidence": [
         {
           "kind": "web",
           "label": "Platform documentation",
-          "url": "https://platform.stepfun.ai/docs/en/guides/quickstart",
-          "verified_at": "2026-08-31"
+          "url": "https://platform.stepfun.ai/docs/en/quickstart/overview",
+          "verified_at": "2026-09-11"
         },
         {
           "kind": "web",
