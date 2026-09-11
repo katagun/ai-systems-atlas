@@ -39,6 +39,7 @@ Read only what your task needs:
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
 | Run refreshes or review candidate/license incidents | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
 | Change or verify the browser UI | [`docs/WEB.md`](docs/WEB.md) |
+| Review current engineering risks | [`docs/CODEBASE_REVIEW_2026-09-05.md`](docs/CODEBASE_REVIEW_2026-09-05.md) |
 | Report a vulnerability | [`SECURITY.md`](SECURITY.md) |
 | Contribute a system, specification, or code change | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Understand expected behavior or report a conduct concern | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
