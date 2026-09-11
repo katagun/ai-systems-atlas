@@ -10013,15 +10013,15 @@
         "One configured backend is shared across every host, so what one agent's sessions taught it, another retrieves"
       ],
       "weaknesses": [
-        "The licence file is a non-canonical rewrite that no identifier matches, and the package metadata declares no licence at all",
+        "The package metadata declares no licence field even though the root text file carries the Apache-2.0 grant",
         "No local embedding option is documented, so even the private deployment sends memory content to a third-party interface",
         "Retrieval is cosine similarity alone, with no lexical fallback, reranking, recency, or temporal filtering"
       ],
       "why_it_matters": "Shows how far a memory service gets by storing plain markdown and delegating every judgement to the calling agent, at the cost of any built-in memory reasoning.",
       "licenses": [
-        "LicenseRef-Unclear"
+        "Apache-2.0"
       ],
-      "source_model": "unclear"
+      "source_model": "open_source"
     },
     {
       "system_family": "memory_system",
@@ -10029,7 +10029,7 @@
       "secondary_roles": [],
       "status": "active",
       "license_review_status": "verified",
-      "verified_at": "2026-08-31",
+      "verified_at": "2026-09-11",
       "human_editable": true,
       "provenance": "strong",
       "stars_verified_at": "2026-08-31",

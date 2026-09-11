@@ -6,7 +6,6 @@ This is the ordered source of truth for actionable repository work. Policy and f
 
 Keep this section to five independently verifiable outcomes that can start without an unresolved product or taxonomy decision.
 
-- [ ] Repair the twenty-four conclusive failures from the first evidence-link report. The 2026-09-05 bootstrap checked 1,013 deduplicated reviewed URLs and reached 977 (96.4%); twenty-one system license-evidence links on GitHub, both StepFun documentation URLs, and the NVIDIA API Catalog terms URL returned `404`. Review each source on its own authority. Keep the twelve `401`, `403`, or `429` responses as non-conclusive warnings.
 - [ ] Make model comparison degrade safely when detail payloads fail (`CR-03` in [`docs/CODEBASE_REVIEW_2026-09-05.md`](docs/CODEBASE_REVIEW_2026-09-05.md)). Reuse the null-safe comparison helpers and add a model-specific outage test that proves the dialog opens without page errors, `undefined` content, or unbounded retries.
 - [ ] Require complete verification for every manually triggered Pages deployment (`CR-04`). Prefer removing `workflow_dispatch`; otherwise require the complete verification workflow for the exact SHA before deployment.
 - [ ] Add a stale-review report that distinguishes editorial `verified_at` age from live-metadata age without changing either date.
