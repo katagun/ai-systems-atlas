@@ -181,6 +181,11 @@ class PrepareDriftTests(unittest.TestCase):
         )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
         self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        # ROOT is where `prepare` writes BASE_REF. Left unpatched, `prepare` here would
+        # plant `.hn-signal-bundle/base-ref.json` in this repository's own live checkout —
+        # exactly the failure this routine exists to prevent developers from causing.
+        root = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
         return worktree
 
     @staticmethod
@@ -421,6 +426,18 @@ class PreparedBaseRefTests(unittest.TestCase):
     def test_reads_from_root_by_default_not_the_worktree(self) -> None:
         self.assertEqual(run_hn_signals.root_text, run_hn_signals.prepared_base_ref.__defaults__[0])
 
+    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(self) -> None:
+        """`$` in Python's `re` matches immediately before a trailing "\\n", so a `match`
+        against a `$`-anchored pattern would accept `"<40 hex>\\n"` and pass a value
+        carrying a newline straight to `git` argv. `fullmatch` against an unanchored
+        pattern rejects it outright, same as any other malformed record."""
+        sha = "a" * 40
+
+        def read(_path: str) -> str:
+            return json.dumps({"sha": sha + "\n"})
+
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(read))
+
 
 class FinishUsesRecordedBaseTests(unittest.TestCase):
     """`finish` must compare against the exact commit `prepare` recorded, in every place
@@ -618,6 +635,14 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
         subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
         (root / "directory").mkdir()
+        # Matches this repository's own `.gitignore`: `.hn-signal-bundle/` (where
+        # `verify_signal_pages.py --refresh` writes its bundle, in a real run) is ignored
+        # in production, so it never shows up in `git status --porcelain` for the blast-
+        # radius guard to see. Without this file, that guard would pass here for a
+        # different reason than it does for real — nothing in this fixture ever creates
+        # the directory, since the `uv run ...` step that would is stubbed below — rather
+        # than because the directory is actually ignored.
+        (root / ".gitignore").write_text(".hn-signal-bundle/\n", encoding="utf-8")
         (root / run_hn_signals.QUEUE).write_text(
             json.dumps({
                 "version": "1.0", "updated_at": "x", "source": None,
@@ -695,6 +720,135 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
             ["git", "rev-parse", "--verify", "hn-signals/pending"], self.worktree
         )
         self.assertNotEqual(0, branch_code)
+
+
+class ReplaceRefGuardTests(unittest.TestCase):
+    """The reviewer's decisive bypass: `git replace -f <pinned-sha> <forged-sha>`, run
+    from inside the worktree, makes `git diff`/`git show` silently substitute a different
+    object for the one a 40-hex SHA names — no filesystem access outside the worktree
+    needed, because `refs/replace/*` lives in the git dir every worktree shares."""
+
+    def setUp(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        root = scratch / "root"
+        root.mkdir()
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        (root / "directory").mkdir()
+        (root / ".gitignore").write_text(".hn-signal-bundle/\n", encoding="utf-8")
+        (root / run_hn_signals.QUEUE).write_text(
+            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []}),
+            encoding="utf-8",
+        )
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        # A second commit gives `git replace` a distinct object to swap the first one for.
+        (root / "other.txt").write_text("second commit\n", encoding="utf-8")
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True)
+
+        worktree = scratch / "worktree"
+        subprocess.run(
+            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach", str(worktree), "HEAD"],
+            check=True,
+        )
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+        self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
+        self.root = root
+        self.worktree = worktree
+
+    def plant_replace_ref(self) -> None:
+        _, head = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, parent = run_hn_signals.shell(["git", "rev-parse", "HEAD~1"], self.worktree)
+        code, output = run_hn_signals.shell(
+            ["git", "replace", "-f", head.strip(), parent.strip()], self.worktree
+        )
+        self.assertEqual(0, code, output)
+
+    def test_a_populated_replace_ref_is_refused(self) -> None:
+        self.plant_replace_ref()
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(run=run_hn_signals.shell)
+        self.assertEqual(1, code)
+        self.assertIn("refs/replace", stderr.getvalue())
+
+    def test_git_diff_is_blinded_by_a_replace_ref_without_the_env_var(self) -> None:
+        """Proves the exploit is real and that `routine_guards.shell` actually closes it:
+        a diff that should show `other.txt` goes empty once HEAD is replaced by its own
+        parent, using plain `subprocess.run` with no `GIT_NO_REPLACE_OBJECTS`. The same
+        diff run through `run_hn_signals.shell` (which sets that variable) still shows the
+        real change."""
+        self.plant_replace_ref()
+        _, head = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, parent = run_hn_signals.shell(["git", "rev-parse", "HEAD~1"], self.worktree)
+
+        blinded = subprocess.run(
+            ["git", "diff", "--name-only", parent.strip(), head.strip()],
+            capture_output=True, text=True, cwd=self.worktree,
+        )
+        self.assertEqual("", blinded.stdout.strip())
+
+        immune_code, immune_output = run_hn_signals.shell(
+            ["git", "diff", "--name-only", parent.strip(), head.strip()], self.worktree
+        )
+        self.assertEqual(0, immune_code)
+        self.assertIn("other.txt", immune_output)
+
+    def test_shell_sets_git_no_replace_objects_in_the_subprocess_environment(self) -> None:
+        """Direct environment assertion, independent of observed git behavior above."""
+        captured: dict[str, dict] = {}
+        real_run = subprocess.run
+
+        def spying_run(*args, **kwargs):
+            captured["env"] = kwargs.get("env")
+            return real_run(*args, **kwargs)
+
+        with mock.patch("subprocess.run", spying_run):
+            run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        self.assertEqual("1", captured["env"]["GIT_NO_REPLACE_OBJECTS"])
+
+
+class SymlinkedBaseRecordTests(unittest.TestCase):
+    """The reviewer's other bypass: replace ROOT's base-record file with a symlink into
+    the worktree, so a value the model fully controls is read as the trusted base."""
+
+    def test_a_symlinked_base_record_is_refused(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        (root / ".hn-signal-bundle").mkdir()
+        forged = root / "forged.json"
+        forged.write_text(json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8")
+        (root / run_hn_signals.BASE_REF).symlink_to(forged)
+
+        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text))
+
+    def test_root_text_raises_rather_than_follows_a_symlink(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        target = root / "elsewhere.txt"
+        target.write_text("attacker-controlled", encoding="utf-8")
+        link = root / "linked.txt"
+        link.symlink_to(target)
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+
+        with self.assertRaises(OSError):
+            run_hn_signals.root_text("linked.txt")
+
+
+class NoStrayBundleInTheRealCheckoutTests(unittest.TestCase):
+    """Regression guard for the bug this suite itself used to have: a test class that
+    forgot to patch ROOT could plant `.hn-signal-bundle/base-ref.json` in this
+    repository's own live checkout. Every test above now patches ROOT to a temp
+    directory, so nothing in this run should have touched the real one."""
+
+    def test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout(self) -> None:
+        real_root = Path(__file__).resolve().parents[1]
+        self.assertFalse((real_root / run_hn_signals.BASE_REF).exists())
 
 
 if __name__ == "__main__":

@@ -176,6 +176,12 @@ def unexpected_committed_changes(name_only: str) -> list[str]:
 
 def finish(*, run=shell, read=worktree_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
+    # Checked before any guard below reads a diff or a blob: a populated refs/replace
+    # would let those reads be silently redirected. See routine_guards.replace_refs_problem.
+    replace_problem = routine_guards.replace_refs_problem(run, WORKTREE)
+    if replace_problem:
+        print(f"error: {replace_problem}", file=sys.stderr)
+        return 1
     status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
     if status_code != 0:
         print("error: could not read git status", file=sys.stderr)

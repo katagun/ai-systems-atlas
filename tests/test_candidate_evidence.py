@@ -1119,5 +1119,55 @@ class PromptDriftTests(unittest.TestCase):
         self.assertIsNone(runner.prompt_drift("body\n", "  body  "))
 
 
+class ReplaceRefGuardTests(unittest.TestCase):
+    """`routine_guards.replace_refs_problem` and the `GIT_NO_REPLACE_OBJECTS=1` env var
+    on `routine_guards.shell` are shared with `run_hn_signals.py`, which has thorough
+    coverage of the mechanism itself (see `tests/test_run_hn_signals.py`,
+    `ReplaceRefGuardTests`). This class only proves `run_candidate_triage.py`'s `finish`
+    actually wires the refusal in, using a real repository and a real `git replace`."""
+
+    def setUp(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        root = scratch / "root"
+        root.mkdir()
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        (root / "directory").mkdir()
+        (root / "directory" / "candidates.json").write_text(
+            json.dumps({"version": 1, "candidates": []}), encoding="utf-8"
+        )
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        (root / "other.txt").write_text("second commit\n", encoding="utf-8")
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True)
+
+        worktree = scratch / "worktree"
+        subprocess.run(
+            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach", str(worktree), "HEAD"],
+            check=True,
+        )
+        self.enterContext(mock.patch.object(runner, "WORKTREE", worktree))
+        self.worktree = worktree
+
+    def test_a_populated_replace_ref_is_refused(self) -> None:
+        import contextlib
+        import io
+
+        _, head = runner.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, parent = runner.shell(["git", "rev-parse", "HEAD~1"], self.worktree)
+        code, output = runner.shell(
+            ["git", "replace", "-f", head.strip(), parent.strip()], self.worktree
+        )
+        self.assertEqual(0, code, output)
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(run=runner.shell)
+        self.assertEqual(1, code)
+        self.assertIn("refs/replace", stderr.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

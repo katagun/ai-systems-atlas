@@ -27,16 +27,22 @@ QUEUE = "directory/hn-signals.json"
 BUNDLE = ".hn-signal-bundle/bundle.json"
 # Where `prepare` records the exact commit it built the worktree from, so `finish` can
 # compare against that same tree rather than whatever `origin/main` has since become.
-# Deliberately NOT under WORKTREE: that directory is handed to the unattended model, and
-# a guard that reads its single point of trust out of the model's own working directory
-# is a guard the model can rewrite. This path is relative to ROOT — the primary
-# checkout, still git-ignored, but outside the tree the model runs in — so `prepare`
-# writes it there and `finish` reads it with `root_text`, never `worktree_text`.
+# Deliberately NOT under WORKTREE: that directory is handed to the unattended model, so a
+# guard that read its single point of trust out of WORKTREE could be rewritten by an
+# ordinary file edit there. Keeping the record under ROOT — the primary checkout, still
+# git-ignored — closes that one route; it does not make the record unreachable by a model
+# with shell access to this checkout, which is a materially different and stronger
+# adversary. See "Guard threat model" in docs/OPERATIONS.md for what these guards do and
+# do not bound; `prepare` writes this file and `finish` reads it with `root_text`, never
+# `worktree_text`.
 BASE_REF = ".hn-signal-bundle/base-ref.json"
 DEFAULT_FROM_REF = "origin/main"
-# A recorded base sha must look like a commit sha before anything shells out with it;
-# see `prepared_base_ref`.
-SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+# A recorded base sha must look like a commit sha, and nothing more, before anything
+# shells out with it; see `prepared_base_ref`. `fullmatch`, not `match` against a
+# `$`-anchored pattern: `$` in Python matches immediately before a trailing "\n", so
+# `match` would accept a 40-hex value with a trailing newline appended and pass it to
+# `git` argv unchecked.
+SHA_RE = re.compile(r"[0-9a-f]{40}")
 ALLOWED_CHANGES = {QUEUE}
 WORKTREE = ROOT.parent / "atlas-hn-signals"
 PROMPT = ROOT / "docs" / "routines" / "hn-signals.md"
@@ -135,9 +141,12 @@ def worktree_text(path: str) -> str:
 def root_text(path: str) -> str:
     """Read a file out of ROOT — the primary checkout, not the worktree the model runs in.
 
-    Used only for BASE_REF: the sha every guard compares against must come from a
-    location the model being reviewed cannot write to, and WORKTREE is exactly that
-    model's own working directory.
+    Used only for BASE_REF: reading it from ROOT rather than WORKTREE means an ordinary
+    edit inside the model's own workspace cannot change what this file says. It does not
+    mean the record is unreachable by a model with shell access to this checkout — see
+    "Guard threat model" in docs/OPERATIONS.md. `routine_guards.worktree_text` also
+    refuses a symlink at `path` here, rather than following it into content this routine
+    never wrote.
     """
     return routine_guards.worktree_text(path, ROOT)
 
@@ -272,8 +281,10 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
     # guards against the tree the model was actually handed rather than whatever
     # `origin/main` has since become. A SHA, not `from_ref` itself, because a ref can
     # move between `prepare` and `finish` and the guards must pin the tree, not the name.
-    # Written under ROOT, not WORKTREE: WORKTREE is the model's own working directory,
-    # and a security decision that the model can overwrite is no guard at all.
+    # Written under ROOT, not WORKTREE: WORKTREE is the model's own working directory, so
+    # writing the record there would let an ordinary file edit change it. That is the
+    # bound this closes — not shell access to the checkout; see "Guard threat model" in
+    # docs/OPERATIONS.md.
     base_ref_path = ROOT / BASE_REF
     base_ref_path.parent.mkdir(parents=True, exist_ok=True)
     base_ref_path.write_text(json.dumps({"sha": base_sha, "from_ref": from_ref}), encoding="utf-8")
@@ -322,23 +333,33 @@ def prepared_base_ref(read=root_text) -> str:
 
     Read from ROOT, where `prepare` wrote it — not WORKTREE, the model's own working
     directory — so every guard below compares against the exact tree the model was
-    handed rather than whatever `origin/main` has become since, and so the model cannot
-    forge the comparison by writing its own value into the file. When nothing was
-    recorded — an older run, or a worktree built by hand — fall back to `origin/main`
-    exactly as the routine always has. The recorded value must also look like a commit
-    sha: it reaches `git` argv unchecked everywhere below, so anything else (an option
-    flag, an empty string) falls back the same as if nothing were recorded at all.
+    handed rather than whatever `origin/main` has become since, and so an ordinary edit
+    inside the model's own workspace cannot change what this function returns. That does
+    not extend to a model with shell access to this checkout, which can reach ROOT the
+    same way it reaches everything else the repository's git process can reach; see
+    "Guard threat model" in docs/OPERATIONS.md. When nothing was recorded — an older run,
+    or a worktree built by hand — fall back to `origin/main` exactly as the routine always
+    has. The recorded value must also look like exactly a commit sha and nothing more: it
+    reaches `git` argv unchecked everywhere below, so anything else (an option flag, an
+    empty string, a symlink `read` refused to follow) falls back the same as if nothing
+    were recorded at all.
     """
     try:
         recorded = json.loads(read(BASE_REF))
     except (OSError, json.JSONDecodeError):
         return DEFAULT_FROM_REF
     sha = recorded.get("sha") if isinstance(recorded, dict) else None
-    return sha if isinstance(sha, str) and SHA_RE.match(sha) else DEFAULT_FROM_REF
+    return sha if isinstance(sha, str) and SHA_RE.fullmatch(sha) else DEFAULT_FROM_REF
 
 
 def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
+    # Checked before any guard below reads a diff or a blob: a populated refs/replace
+    # would let those reads be silently redirected. See routine_guards.replace_refs_problem.
+    replace_problem = routine_guards.replace_refs_problem(run, WORKTREE)
+    if replace_problem:
+        print(f"error: {replace_problem}", file=sys.stderr)
+        return 1
     status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
     if status_code != 0:
         print("error: could not read git status", file=sys.stderr)
