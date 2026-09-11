@@ -86,6 +86,10 @@ Items with no action available here. Either the record is complete and the next 
 - [ ] Re-check the Khoj record's status and links. The desktop download on khoj.dev returns 404 and the homepage now leads with a different product, which is a status question rather than a deployment one.
 - [ ] Decide whether Perplexity Personal Computer is a separate record from Perplexity Computer. It has its own product page and installs on the user's machine with access to local files and applications, so its execution boundary differs from the cloud product this record reviews.
 
+## Completed on 2026-09-11
+
+- [x] Curate the first models.dev queue batch beyond the seed. Twenty-four releases across OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek, Qwen, Z.ai, Moonshot, MiniMax, NVIDIA, IBM, Microsoft, Cohere, and xAI now carry the model-access score, the taxonomy gains ten licence identifiers for the Llama 3.3 and 4 terms, the NVIDIA Nemotron licence, the two modified-MIT model licences, and the Gemini and xAI API terms, and two retired or undocumented releases are held rather than published. `docs/COVERAGE.md` batch 42 records the licence and lifecycle findings.
+
 ## Completed on 2026-09-05
 
 - [x] Add rate-limit-aware checking for record, license and terms, evidence, and immutable-evidence URLs across every reviewed collection. `scripts/check_evidence_links.py` deduplicates targets, uses conditional requests and bounded retries, normalizes and hashes mutable terms, and makes the weekly refresh surface broken links or unreviewed terms drift without editing human conclusions or dates. A newer human evidence review accepts the changed baseline. The cache is operational, ignored, and preserved between scheduled runs rather than published as evidence.

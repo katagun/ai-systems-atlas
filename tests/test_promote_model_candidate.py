@@ -164,9 +164,11 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
     def test_wrong_pinned_models_dev_evidence_is_rejected(self) -> None:
         record = deepcopy(self.record)
-        record["evidence"][1]["url"] = record["evidence"][1]["url"].replace(
-            self.queue["source"]["commit"], "0" * 40,
-        )
+        for evidence in record["evidence"]:
+            if "github.com/anomalyco/models.dev/blob/" in evidence["url"]:
+                evidence["url"] = evidence["url"].replace(
+                    self.queue["source"]["commit"], "0" * 40,
+                )
 
         with self.assertRaisesRegex(PromotionError, "exact pinned models.dev source URL"):
             preflight_promotion(self.root, record)
