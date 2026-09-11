@@ -129,6 +129,99 @@ class VerifierTests(unittest.TestCase):
         self.assertEqual(problems, [])
 
 
+class BundleCapTests(unittest.TestCase):
+    """MAX_BUNDLE_CHARS caps only what verify() writes into bundle.json for the
+    routine's model to read. The drift check must keep hashing the FULL extracted
+    text, before any truncation — a bug that hashed the truncated prefix instead would
+    report every long page as drifted (or worse, miss a real change past the cap)."""
+
+    def signals_document(self, page_text: str) -> tuple[Path, str]:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        digest = hashlib.sha256(page_text.encode("utf-8")).hexdigest()
+        signal = {
+            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "A launch", "url": "https://vendor.example/launch", "points": 50,
+            "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
+            "content_sha256": digest, "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional", "discovered_at": "2026-09-09",
+        }
+        path.write_text(
+            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}),
+            encoding="utf-8",
+        )
+        return path, digest
+
+    def refreshed_bundle(self, page_text: str) -> dict:
+        """Run verify(refresh=True) against a fake single-signal queue and return the
+        bundle it wrote — with BUNDLE_DIR patched to a temp dir, never the real
+        checkout's `.hn-signal-bundle/` (see NoStrayBundleInTheRealCheckoutTests)."""
+        from scripts import verify_signal_pages
+
+        path, _digest = self.signals_document(page_text)
+        bundle_dir = Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
+        self.enterContext(mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir))
+        problems = verify_signal_pages.verify(
+            refresh=True, fetcher=lambda url: page_text, signals_path=path
+        )
+        self.assertEqual(problems, [])
+        return json.loads((bundle_dir / "bundle.json").read_text(encoding="utf-8"))
+
+    def test_a_page_longer_than_the_cap_is_truncated_and_carries_the_marker(self) -> None:
+        from scripts import verify_signal_pages
+
+        page = "x" * (verify_signal_pages.MAX_BUNDLE_CHARS + 500)
+        bundled = self.refreshed_bundle(page)["1"]
+        self.assertTrue(bundled.startswith("x" * verify_signal_pages.MAX_BUNDLE_CHARS))
+        self.assertLess(len(bundled), len(page))
+        self.assertIn("truncated", bundled)
+        self.assertIn("https://vendor.example/launch", bundled)
+
+    def test_a_page_shorter_than_the_cap_is_untouched_and_carries_no_marker(self) -> None:
+        page = "a short vendor page, well under the cap"
+        bundled = self.refreshed_bundle(page)["1"]
+        self.assertEqual(bundled, page)
+        self.assertNotIn("truncated", bundled)
+
+    def test_the_hash_is_computed_over_the_full_text_not_the_truncated_text(self) -> None:
+        """The digest that gates drift detection must be taken over the page BEFORE
+        MAX_BUNDLE_CHARS ever applies. A page far longer than the cap still verifies
+        clean against a digest recorded over its full text, even though only the first
+        MAX_BUNDLE_CHARS of it are ever written to the bundle."""
+        from scripts import verify_signal_pages
+
+        page = "x" * (verify_signal_pages.MAX_BUNDLE_CHARS + 5000)
+        self.assertGreater(len(page), verify_signal_pages.MAX_BUNDLE_CHARS)
+        path, full_digest = self.signals_document(page)
+        truncated_digest = hashlib.sha256(
+            page[: verify_signal_pages.MAX_BUNDLE_CHARS].encode("utf-8")
+        ).hexdigest()
+        self.assertNotEqual(full_digest, truncated_digest)
+
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: page, signals_path=path
+        )
+
+        self.assertEqual(problems, [])
+
+    def test_a_change_past_the_cap_is_still_reported_as_drift(self) -> None:
+        """Existing drift behaviour is unchanged: the comparison covers the whole page,
+        not just the prefix that would end up in the bundle."""
+        from scripts import verify_signal_pages
+
+        original = "x" * (verify_signal_pages.MAX_BUNDLE_CHARS + 5000)
+        path, _digest = self.signals_document(original)
+        changed = original[:-1] + "y"  # differs only at the very end, past the cap
+        self.assertEqual(changed[: verify_signal_pages.MAX_BUNDLE_CHARS], original[: verify_signal_pages.MAX_BUNDLE_CHARS])
+
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=lambda url: changed, signals_path=path
+        )
+
+        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+
+
 class BundleDriftTests(unittest.TestCase):
     """One vendor edit must not discard the rest of the day's batch."""
 
