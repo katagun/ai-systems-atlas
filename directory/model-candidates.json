@@ -2156,55 +2156,6 @@
       ]
     },
     {
-      "id": "model-alibaba-qwen3-8-max",
-      "source_id": "alibaba/qwen3.8-max",
-      "source_metadata": {
-        "name": "Qwen3.8 Max",
-        "description": "2.4-trillion-parameter MoE flagship for coding, professional work, multimodal understanding, and long-horizon agentic workflows",
-        "family": "qwen",
-        "release_date": "2026-08-03",
-        "last_updated": "2026-08-03",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 131072
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-alibaba-qwen3-8-max-0902",
       "source_id": "alibaba/qwen3.8-max-0902",
       "source_metadata": {
@@ -3167,54 +3118,6 @@
       ]
     },
     {
-      "id": "model-anthropic-claude-opus-5",
-      "source_id": "anthropic/claude-opus-5",
-      "source_metadata": {
-        "name": "Claude Opus 5",
-        "description": "Strongest Claude Opus model for coding, agents, and professional work",
-        "family": "claude-opus",
-        "release_date": "2026-07-24",
-        "last_updated": "2026-07-24",
-        "knowledge_cutoff": "2026-05",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 128000
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-anthropic-claude-sonnet-4-0",
       "source_id": "anthropic/claude-sonnet-4-0",
       "source_metadata": {
@@ -3341,54 +3244,6 @@
           "context": 200000,
           "input": null,
           "output": 64000
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-anthropic-claude-sonnet-5",
-      "source_id": "anthropic/claude-sonnet-5",
-      "source_metadata": {
-        "name": "Claude Sonnet 5",
-        "description": "Everyday Claude agent model for coding, planning, browsing, and general work",
-        "family": "claude-sonnet",
-        "release_date": "2026-06-30",
-        "last_updated": "2026-06-30",
-        "knowledge_cutoff": "2026-01-31",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 128000
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -5613,57 +5468,6 @@
       ]
     },
     {
-      "id": "model-deepseek-deepseek-v4-pro",
-      "source_id": "deepseek/deepseek-v4-pro",
-      "source_metadata": {
-        "name": "DeepSeek V4 Pro",
-        "description": "Open MoE flagship with million-token context for coding and long agent runs",
-        "family": "deepseek-thinking",
-        "release_date": "2026-04-24",
-        "last_updated": "2026-04-24",
-        "knowledge_cutoff": "2025-05",
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 384000
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-deepseek-deepseek-v4-pro-0423",
       "source_id": "deepseek/deepseek-v4-pro-0423",
       "source_metadata": {
@@ -6108,56 +5912,6 @@
       ]
     },
     {
-      "id": "model-google-gemini-3-flash-preview",
-      "source_id": "google/gemini-3-flash-preview",
-      "source_metadata": {
-        "name": "Gemini 3 Flash Preview",
-        "description": "New Gemini flash lane bringing frontier-style multimodal reasoning to cheaper runs",
-        "family": "gemini-flash",
-        "release_date": "2025-12-17",
-        "last_updated": "2025-12-17",
-        "knowledge_cutoff": "2025-01",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "video",
-            "audio",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1048576,
-          "input": null,
-          "output": 65536
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-google-gemini-3-pro-image",
       "source_id": "google/gemini-3-pro-image",
       "source_metadata": {
@@ -6236,56 +5990,6 @@
           "context": 65536,
           "input": null,
           "output": 32768
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-google-gemini-3-pro-preview",
-      "source_id": "google/gemini-3-pro-preview",
-      "source_metadata": {
-        "name": "Gemini 3 Pro Preview",
-        "description": "Preview Gemini flagship for complex reasoning, coding, and rich multimodal prompts",
-        "family": "gemini-pro",
-        "release_date": "2025-11-18",
-        "last_updated": "2025-11-18",
-        "knowledge_cutoff": "2025-01",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "video",
-            "audio",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1048576,
-          "input": null,
-          "output": 65536
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -7839,58 +7543,6 @@
       ]
     },
     {
-      "id": "model-meta-llama-4-scout-17b-instruct",
-      "source_id": "meta/llama-4-scout-17b-instruct",
-      "source_metadata": {
-        "name": "Llama 4 Scout 17B Instruct",
-        "description": "Open Llama with long-context vision for efficient multimodal agents",
-        "family": "llama",
-        "release_date": "2025-04-05",
-        "last_updated": "2025-04-05",
-        "knowledge_cutoff": "2024-08",
-        "modalities": {
-          "input": [
-            "text",
-            "image"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": false,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": true
-        },
-        "limits": {
-          "context": 3500000,
-          "input": null,
-          "output": 16384
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-meta-llama-guard-3-8b",
       "source_id": "meta/llama-guard-3-8b",
       "source_metadata": {
@@ -9172,58 +8824,6 @@
       ]
     },
     {
-      "id": "model-mistral-mistral-medium-2604",
-      "source_id": "mistral/mistral-medium-2604",
-      "source_metadata": {
-        "name": "Mistral Medium 3.5",
-        "description": "Balanced Mistral model for enterprise assistants, multilingual work, and tools",
-        "family": "mistral-medium",
-        "release_date": "2026-04-29",
-        "last_updated": "2026-04-29",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text",
-            "image"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 262144,
-          "input": null,
-          "output": 262144
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-mistral-mistral-medium-latest",
       "source_id": "mistral/mistral-medium-latest",
       "source_metadata": {
@@ -9364,58 +8964,6 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-mistral-mistral-small-2603",
-      "source_id": "mistral/mistral-small-2603",
-      "source_metadata": {
-        "name": "Mistral Small 4",
-        "description": "Fast Mistral production model for chat, extraction, and cost-sensitive agents",
-        "family": "mistral-small",
-        "release_date": "2026-03-16",
-        "last_updated": "2026-03-16",
-        "knowledge_cutoff": "2025-06",
-        "modalities": {
-          "input": [
-            "text",
-            "image"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": true
-        },
-        "limits": {
-          "context": 256000,
-          "input": null,
-          "output": 256000
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603"
           }
         ]
       },
@@ -9884,54 +9432,6 @@
             "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code"
           }
         ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-moonshotai-kimi-k3",
-      "source_id": "moonshotai/kimi-k3",
-      "source_metadata": {
-        "name": "Kimi K3",
-        "description": "Multimodal Kimi model with 1M context and toggleable max-effort thinking for long-horizon agent work",
-        "family": "kimi-k3",
-        "release_date": "2026-07-16",
-        "last_updated": "2026-07-16",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "video"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1048576,
-          "input": null,
-          "output": 131072
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": []
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
@@ -12288,54 +11788,6 @@
       ]
     },
     {
-      "id": "model-openai-gpt-5-5",
-      "source_id": "openai/gpt-5.5",
-      "source_metadata": {
-        "name": "GPT-5.5",
-        "description": "Default frontier GPT for coding, computer use, research, and knowledge work",
-        "family": "gpt",
-        "release_date": "2026-04-23",
-        "last_updated": "2026-04-23",
-        "knowledge_cutoff": "2025-12-01",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1050000,
-          "input": 922000,
-          "output": 128000
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-openai-gpt-5-5-instant",
       "source_id": "openai/gpt-5.5-instant",
       "source_metadata": {
@@ -12537,54 +11989,6 @@
         "release_date": "2026-07-09",
         "last_updated": "2026-07-09",
         "knowledge_cutoff": "2026-02-16",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1050000,
-          "input": 922000,
-          "output": 128000
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-openai-gpt-6-astra",
-      "source_id": "openai/gpt-6-astra",
-      "source_metadata": {
-        "name": "GPT-6 Astra",
-        "description": "GPT-6 Astra is OpenAI's most capable model for complex reasoning, coding, computer use, research, and document creation.",
-        "family": "gpt-astra",
-        "release_date": "2026-09-04",
-        "last_updated": "2026-09-04",
-        "knowledge_cutoff": null,
         "modalities": {
           "input": [
             "text",
@@ -15862,57 +15266,6 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/zai-org/GLM-4.7-Flash"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-zhipuai-glm-5",
-      "source_id": "zhipuai/glm-5",
-      "source_metadata": {
-        "name": "GLM-5",
-        "description": "General GLM flagship for coding, analysis, and tool-heavy engineering workflows",
-        "family": "glm",
-        "release_date": "2026-02-12",
-        "last_updated": "2026-02-12",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": true
-        },
-        "limits": {
-          "context": 204800,
-          "input": null,
-          "output": 131072
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/zai-org/GLM-5"
           }
         ]
       },

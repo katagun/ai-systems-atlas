@@ -11,56 +11,33 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
   await expect(page.locator("#model-result-count")).toHaveText(
     `${catalogCounts.models} models · ${catalogCounts.reviewedModels} Atlas reviewed; source imports are unscored`,
   );
-  await expect(page.locator("#model-grid .project-card h2").first()).toHaveText("gpt-oss-120b");
+  await expect(page.locator("#model-grid .project-card h2").first()).toHaveText(
+    catalogCounts.topReviewedModelName(),
+  );
+
+  // Filtered expectations name every match, so page past the default 24.
+  await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
 
   await page.locator("#model-source-filter").selectOption("source_available");
-  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText([
-    "DeepSeek-V3",
-    "Llama 3.2 11B Vision Instruct",
-    "MiniMax-M2",
-    "Nemotron 3 Nano 30B A3B",
-    "Command A",
-    "Llama-3.3-70B-Instruct",
-    "Aya Expanse 8B",
-    "Kimi K2 Thinking",
-    "Llama 4 Maverick 17B Instruct",
-  ]);
+  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+    catalogCounts.reviewedModelsWithSourceModel("source_available"),
+  );
   await page.locator("#model-license-filter").selectOption("CC-BY-NC-4.0");
-  await expect(page.locator("#model-grid .project-card h2")).toHaveText(["Command A", "Aya Expanse 8B"]);
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(
+    catalogCounts.reviewedModelsWithLicense("CC-BY-NC-4.0"),
+  );
 
   await page.locator("#reset-model-filters").click();
   await page.locator("#model-modality-filter").selectOption("image");
-  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText([
-    "Gemma 4 31B IT",
-    "Pixtral 12B",
-    "Llama 3.2 11B Vision Instruct",
-    "Llama 4 Maverick 17B Instruct",
-    "Claude Haiku 4.5",
-    "Claude Opus 4.8",
-    "Claude Sonnet 4.5",
-    "Claude Sonnet 4.6",
-    "GPT-4.1",
-    "GPT-4o",
-    "GPT-5",
-    "Gemini 2.5 Flash",
-    "Gemini 2.5 Pro",
-    "Grok 4.6",
-  ]);
+  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+    catalogCounts.reviewedModelsWithModality("image"),
+  );
 
+  await page.locator("#reset-model-filters").click();
   await page.locator("#model-distribution-filter").selectOption("developer_api");
-  await expect(page.locator("#model-grid .project-card h2")).toHaveText([
-    "Gemma 4 31B IT",
-    "Claude Haiku 4.5",
-    "Claude Opus 4.8",
-    "Claude Sonnet 4.5",
-    "Claude Sonnet 4.6",
-    "GPT-4.1",
-    "GPT-4o",
-    "GPT-5",
-    "Gemini 2.5 Flash",
-    "Gemini 2.5 Pro",
-    "Grok 4.6",
-  ]);
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(
+    catalogCounts.reviewedModelsWithDistribution("developer_api"),
+  );
 
   await page.locator("#reset-model-filters").click();
   await page.locator(`#model-grid [data-model="${QWEN}"]`).click();

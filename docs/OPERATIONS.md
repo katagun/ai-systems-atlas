@@ -69,6 +69,10 @@ and keeps conditional-request validators in the ignored `.evidence-link-cache.js
 scheduled workflow preserves
 that file with the GitHub Actions cache. A successful result less than twenty hours old is
 reused, so re-running a workflow does not immediately crawl all reviewed sources again.
+A `GET` that returns `403` without rate-limit headers gets one retry with ordinary
+browser headers: pages behind a bot wall (observed on xAI and OpenAI terms hosts) then
+count as reachable but raise a visible `bot-walled reviewed link` warning, while a page
+that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
 shells, scripts, styles, navigation, and whitespace are removed before hashing; GitHub and
