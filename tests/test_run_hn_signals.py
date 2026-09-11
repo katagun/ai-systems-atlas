@@ -4,6 +4,7 @@ import contextlib
 import hashlib
 import io
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -1104,9 +1105,15 @@ class ReplaceRefGuardTests(unittest.TestCase):
         _, head = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
         _, parent = run_hn_signals.shell(["git", "rev-parse", "HEAD~1"], self.worktree)
 
+        # The negative control must run with GIT_NO_REPLACE_OBJECTS genuinely unset.
+        # `finish` invokes this suite through `routine_guards.shell`, which sets that
+        # variable, so a bare `subprocess.run` here inherits it from the parent and the
+        # diff is never blinded -- the assertion below then fails whenever the suite runs
+        # as part of a real routine run, which is the only time it matters.
+        plain_env = {k: v for k, v in os.environ.items() if k != "GIT_NO_REPLACE_OBJECTS"}
         blinded = subprocess.run(
             ["git", "diff", "--name-only", parent.strip(), head.strip()],
-            capture_output=True, text=True, cwd=self.worktree,
+            capture_output=True, text=True, cwd=self.worktree, env=plain_env,
         )
         self.assertEqual("", blinded.stdout.strip())
 
