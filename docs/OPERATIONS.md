@@ -81,9 +81,11 @@ links. Other transport failures are warnings unless fewer than 80% of the curren
 were checked or served from a recent cache.
 
 Trust-record URLs — every property source, finding source, operator response, and
-resolution — are checked as links and never drift-hashed: the Atlas cannot accept a change
-to a page it does not steward, and a finding's pinned `content_sha256` is a review-time
-record compared to nothing here. See
+resolution — are checked as links and receive no terms baseline of their own; a URL shared
+with a `web_terms` entry stays hashed under that entry, and the trust review date joins that
+entry's acceptance gate. The rest holds: the Atlas cannot accept a change to a page it does
+not steward, and a finding's pinned `content_sha256` is a review-time record compared to
+nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
 To resolve terms drift, inspect the authoritative page, update every affected conclusion
