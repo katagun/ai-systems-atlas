@@ -94,9 +94,11 @@ A models.dev ID names a reviewable release only when it has a fixed identity of 
 
 These never become records, no matter how prominent the name:
 
-- moving aliases that resolve to different snapshots over time (`-latest` IDs, `chat-latest` IDs, pre-4.6 dateless IDs that float across dated snapshots);
+- moving aliases that resolve to different snapshots over time (`-latest` IDs, `chat-latest` IDs, pre-4.6 floaters);
 - API route names that are not releases (the discontinued `deepseek-chat` and `deepseek-reasoner` names);
 - retired snapshots of a line already reviewed at its current identity, and snapshots that duplicate a reviewed record outright (the `20250514` first-generation Claude snapshots, the dated `gpt-4o` snapshots named inside that record). Model records follow release lines at their current fixed identity; unlike systems under ADR 016, retired snapshots are excluded with a pointer rather than kept as records, because a line can accumulate dozens of them.
+
+A launch-dated release served only through a rotating alias is still reviewable: the release itself (announcement date, dated deployments) is the fixed identity even when no pinnable snapshot exists, as with GPT-6 Astra and GPT-5.5 Instant. The exclusion targets names with no release identity of their own, not releases whose serving alias moves. Record the rotation as a lifecycle deduction.
 
 ### Holds and exclusions
 

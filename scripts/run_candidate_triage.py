@@ -20,6 +20,16 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 ROOT = Path(__file__).resolve().parents[1]
 
 QUEUE = "directory/candidates.json"
+# Where `prepare` records the exact commit it built the worktree from, so `finish` can
+# compare against that same tree rather than whatever `origin/main` has since become —
+# main moves several times a day in this repository, and re-resolving `origin/main` at
+# `finish` time made every intervening commit look like something this run touched.
+# Shared machinery with run_hn_signals.py; see `routine_guards.record_prepared_base` and
+# `routine_guards.prepared_base_ref` for the ROOT-vs-WORKTREE reasoning and the fallback
+# and validation rules. Deliberately under `.candidate-evidence/`, already git-ignored
+# and already this routine's own bundle directory, not under WORKTREE.
+BASE_REF = ".candidate-evidence/base-ref.json"
+DEFAULT_FROM_REF = routine_guards.DEFAULT_BASE_REF
 ALLOWED_CHANGES = {QUEUE}
 
 # The only fields the routine may write. Everything else in a candidate record —
@@ -92,7 +102,7 @@ def candidate_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) 
     return problems
 
 
-def unexpected_field_changes(before: str, after: str) -> list[str]:
+def unexpected_field_changes(before: str, after: str, *, base_label: str = "origin/main") -> list[str]:
     """Report every change to the queue beyond the two the routine is permitted to make.
 
     Permitted: adding a `triage` block to a candidate that has none, and nulling
@@ -100,6 +110,10 @@ def unexpected_field_changes(before: str, after: str) -> list[str]:
     names the decision holding it. Everything else — a rewritten classification, a nudged
     confidence, a changed status, an added or deleted candidate — is a human's, and the
     blast-radius check cannot see it because it all lands in the one permitted file.
+
+    `base_label` names the revision `before` was read from, for diagnostics only. It
+    defaults to "origin/main" so every existing call and test is unaffected; `finish`
+    passes the actual base ref it compared against, which may be a pinned commit SHA.
     """
     try:
         old_document, new_document = json.loads(before), json.loads(after)
@@ -112,7 +126,7 @@ def unexpected_field_changes(before: str, after: str) -> list[str]:
         for key in sorted(set(old_document) | set(new_document))
         if key != "candidates" and old_document.get(key, MISSING) != new_document.get(key, MISSING)
     ]
-    old, old_problems = index_candidates(old_document.get("candidates"), "origin/main")
+    old, old_problems = index_candidates(old_document.get("candidates"), base_label)
     new, new_problems = index_candidates(new_document.get("candidates"), "the run")
     problems.extend(old_problems + new_problems)
     problems.extend(
@@ -133,12 +147,32 @@ def worktree_text(path: str) -> str:
     return routine_guards.worktree_text(path, WORKTREE)
 
 
+def root_text(path: str) -> str:
+    """Read a file out of ROOT — the primary checkout, not the worktree the model runs in.
+
+    Used only for BASE_REF: reading it from ROOT rather than WORKTREE means an ordinary
+    edit inside the model's own workspace cannot change what this file says. See
+    `routine_guards.record_prepared_base` for the full reasoning, shared with
+    run_hn_signals.py.
+    """
+    return routine_guards.worktree_text(path, ROOT)
+
+
 shell = routine_guards.shell
 
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
     return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/candidate-triage.md")
+
+
+def prepared_base_ref(read=root_text) -> str:
+    """The commit `prepare` actually built the worktree from.
+
+    See `routine_guards.prepared_base_ref` (shared with run_hn_signals.py) for the
+    fallback and validation rules this applies.
+    """
+    return routine_guards.prepared_base_ref(BASE_REF, read, DEFAULT_FROM_REF)
 
 
 def prepare(*, limit: int, run=shell) -> int:
@@ -148,17 +182,29 @@ def prepare(*, limit: int, run=shell) -> int:
     if drift:
         print(f"error: {drift}", file=sys.stderr)
         return 1
+    fetch_code, fetch_output = run(["git", "fetch", "--quiet", "origin"], ROOT)
+    if fetch_code != 0:
+        print(f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr)
+        return 1
+    resolve_code, resolved = run(["git", "rev-parse", "--verify", "origin/main"], ROOT)
+    if resolve_code != 0:
+        print(f"error: could not resolve 'origin/main' to a commit\n{resolved}", file=sys.stderr)
+        return 1
+    base_sha = resolved.strip()
     steps = (
-        (["git", "fetch", "--quiet", "origin"], False),
         # Removing a worktree that does not exist is expected on a first run.
         (["git", "worktree", "remove", "--force", str(WORKTREE)], True),
-        (["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), "origin/main"], False),
+        (["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), base_sha], False),
     )
     for command, tolerate_failure in steps:
         code, output = run(command, ROOT)
         if code != 0 and not tolerate_failure:
             print(f"error: {' '.join(command)} failed\n{output}", file=sys.stderr)
             return 1
+    # Record the exact commit the worktree was built from, so `finish` compares its
+    # guards against this tree rather than whatever `origin/main` has since become — see
+    # `routine_guards.record_prepared_base`, shared with run_hn_signals.py.
+    routine_guards.record_prepared_base(ROOT / BASE_REF, base_sha, "origin/main")
     code, output = run([
         "uv", "run", "python", "scripts/build_candidate_evidence.py",
         "--limit", str(limit), "--previous-branch", "triage/pending",
@@ -174,7 +220,7 @@ def unexpected_committed_changes(name_only: str) -> list[str]:
     return routine_guards.unexpected_committed_changes(name_only, ALLOWED_CHANGES)
 
 
-def finish(*, run=shell, read=worktree_text) -> int:
+def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
     # Checked before any guard below reads a diff or a blob: a populated refs/replace
     # would let those reads be silently redirected. See routine_guards.replace_refs_problem.
@@ -190,13 +236,20 @@ def finish(*, run=shell, read=worktree_text) -> int:
     if forbidden:
         print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
         return 1
+    # The base `prepare` actually built from — a pinned SHA when it recorded one,
+    # `origin/main` otherwise. Every guard below must compare against this same tree:
+    # `origin/main` moves several times a day in this repository, and re-resolving it here
+    # would make every intervening commit look like something this run touched. Read with
+    # `base_read` (ROOT), never `read` (WORKTREE): the model being guarded against runs
+    # inside WORKTREE, so the record of what it may be compared to must come from outside it.
+    base_ref = prepared_base_ref(base_read)
     # A clean tree is not the same as an idle run: an agent that stages and commits its
     # own work leaves nothing in `git status` while its commit sits on the branch. The
-    # guards must run against anything HEAD carries beyond origin/main, however it got there.
+    # guards must run against anything HEAD carries beyond the base, however it got there.
     head_code, head = run(["git", "rev-parse", "HEAD"], WORKTREE)
-    base_code, base = run(["git", "rev-parse", "origin/main"], WORKTREE)
+    base_code, base = run(["git", "rev-parse", base_ref], WORKTREE)
     if head_code != 0 or base_code != 0:
-        print("error: could not compare HEAD against origin/main", file=sys.stderr)
+        print(f"error: could not compare HEAD against {base_ref}", file=sys.stderr)
         return 1
     dirty = bool(porcelain.strip())
     if not dirty and head.strip() == base.strip():
@@ -205,10 +258,10 @@ def finish(*, run=shell, read=worktree_text) -> int:
     # --no-renames so a rename shows as a delete and an add, putting both paths in front
     # of the guard rather than only the destination.
     diff_code, committed = run(
-        ["git", "diff", "--name-only", "--no-renames", "origin/main", "HEAD"], WORKTREE
+        ["git", "diff", "--name-only", "--no-renames", base_ref, "HEAD"], WORKTREE
     )
     if diff_code != 0:
-        print("error: could not diff HEAD against origin/main", file=sys.stderr)
+        print(f"error: could not diff HEAD against {base_ref}", file=sys.stderr)
         return 1
     forbidden_commits = unexpected_committed_changes(committed)
     if forbidden_commits:
@@ -218,16 +271,16 @@ def finish(*, run=shell, read=worktree_text) -> int:
             file=sys.stderr,
         )
         return 1
-    show_code, before = run(["git", "show", f"origin/main:{QUEUE}"], WORKTREE)
+    show_code, before = run(["git", "show", f"{base_ref}:{QUEUE}"], WORKTREE)
     if show_code != 0:
-        print(f"error: could not read {QUEUE} from origin/main\n{before}", file=sys.stderr)
+        print(f"error: could not read {QUEUE} from {base_ref}\n{before}", file=sys.stderr)
         return 1
     try:
         after = read(QUEUE)
     except OSError as exc:
         print(f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr)
         return 1
-    overreach = unexpected_field_changes(before, after)
+    overreach = unexpected_field_changes(before, after, base_label=base_ref)
     if overreach:
         print("error: the run wrote outside the fields it may write:", file=sys.stderr)
         for problem in overreach:
