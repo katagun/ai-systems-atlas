@@ -51,7 +51,8 @@ async function serveTrust(page, id, trust) {
 async function serveWithoutTrust(page, id) {
   await page.route(`**/app/detail/inference/${id}.json*`, async route => {
     const response = await route.fetch();
-    const { trust, ...detail } = await response.json();
+    const detail = await response.json();
+    delete detail.trust;
     await route.fulfill({ response, json: detail });
   });
 }
