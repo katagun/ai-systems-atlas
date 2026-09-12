@@ -668,7 +668,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://console.groq.com/docs/api-reference",
+            "scope": "GroqCloud API reference, for GroqCloud",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The customer data-processing addendum states the operator processes the content: \"Groq will Process Personal Data only: (a) to provide, maintain, and support the Cloud Services and fulfill its obligations to Customer under the Agreement; (b) on Customer's behalf in compliance with Customer's documented instructions.\" The public trust centre carries a subprocessor list.",
+            "url": "https://console.groq.com/docs/legal/customer-data-processing-addendum",
+            "scope": "GroqCloud customer data-processing addendum, for GroqCloud",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the quickstart says \"Configure your API key as an environment variable\" for the Groq-issued key, and every documented request uses it.",
+            "url": "https://console.groq.com/docs/quickstart",
+            "scope": "GroqCloud quickstart, for GroqCloud",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching page states: \"All cached data exists only in volatile memory and automatically expires within a few hours. No prompt or response content is ever stored in persistent storage or shared between organizations.\"",
+            "url": "https://console.groq.com/docs/prompt-caching",
+            "scope": "GroqCloud prompt-caching page, for GroqCloud",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@groq.com\").",
+            "url": "https://groq.com/.well-known/security.txt",
+            "scope": "Groq security.txt, for GroqCloud",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The public trust centre announces that the company \"successfully maintained our SOC 2 Type II compliance, with our latest report now available as of 2025\" and lists a \"Groq, Inc. SOC2 Type II Report\" behind a request-access control; nothing names GroqCloud, so it is recorded as undocumented for the named service.",
+            "url": "https://trust.groq.com/",
+            "scope": "Groq trust centre, read for GroqCloud",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "google-gemini-api",
@@ -2519,7 +2567,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.api.nvidia.com/nim/re/docs/introduction",
+            "scope": "NVIDIA API Catalog documentation, for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The API trial terms state what the operator collects and shares: \"NVIDIA will collect the following data, without identifying specific users, to operate and improve the API Services and other products and services: ... (iv) User Content and Generated Content to improve NVIDIA products and services, including AI models. Your use of the API Services will be logged for security, fraud or abuse monitoring and shared with third party service providers for this purpose.\" Those third parties are not named.",
+            "url": "https://assets.ngc.nvidia.com/products/api-catalog/legal/NVIDIA%20API%20Trial%20Terms%20of%20Service.pdf",
+            "scope": "NVIDIA API trial terms of service, for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"The NIM API uses keys to authenticate requests to the NVIDIA GPU Cloud (NGC). Follow the steps below to generate a personal API key to authenticate API requests.\"",
+            "url": "https://docs.api.nvidia.com/nim/docs/authentication",
+            "scope": "NVIDIA API Catalog authentication page, for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt or prefix caching scope is documented for the hosted catalogue endpoints; the only cache-reuse documentation found concerns self-hosted NIM containers.",
+            "url": "https://docs.api.nvidia.com/nim/re/docs/introduction",
+            "scope": "NVIDIA API Catalog documentation, for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "NVIDIA publishes a company-wide vulnerability reporting page (\"If you need to report a security issue, please use the appropriate contact points outlined below\") with a disclosure programme and the NVIDIA PSIRT mailbox; it does not name the API Catalog.",
+            "url": "https://www.nvidia.com/en-us/security/report-vulnerability/",
+            "scope": "NVIDIA report-a-vulnerability page, for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The AI trust centre says only that \"NVIDIA is committed to external validation of its security posture. Learn more about our compliance offerings.\" and its compliance list does not name the API Catalog, so it is recorded as undocumented for the named service.",
+            "url": "https://www.nvidia.com/en-us/ai-trust-center/security-compliance/",
+            "scope": "NVIDIA AI trust centre compliance page, read for the NVIDIA API Catalog",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "hugging-face-inference-providers",
@@ -2705,7 +2801,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://huggingface.co/docs/inference-endpoints/security",
+            "scope": "Hugging Face Inference Endpoints security page, for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The security page states how the operator handles content: \"Hugging Face does not store any customer data in terms of payloads or tokens that are passed to the Inference Endpoint.\" The operator runs the dedicated deployment; no subprocessor is named on that page.",
+            "url": "https://huggingface.co/docs/inference-endpoints/security",
+            "scope": "Hugging Face Inference Endpoints security page, for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The service offers no customer-supplied upstream-key path: an endpoint is called with a Hugging Face token (\"Private (default): Accessible only to you, or members of your Hugging Face organization, using a personal HF access token.\") and serves a model the customer deploys.",
+            "url": "https://huggingface.co/docs/inference-endpoints/guides/configuration",
+            "scope": "Hugging Face Inference Endpoints configuration guide, for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "Each endpoint is a dedicated deployment, but no page states how a prefix cache is scoped; the serving engine's documentation says only that with several replicas \"the cache will not be present, meaning no speed benefit.\"",
+            "url": "https://huggingface.co/docs/text-generation-inference/en/conceptual/chunking",
+            "scope": "Text Generation Inference chunking documentation, read for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: security@huggingface.co\").",
+            "url": "https://huggingface.co/.well-known/security.txt",
+            "scope": "Hugging Face security.txt, for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The security page names the service: \"The Hugging Face Hub, and Inference Endpoints, is SOC2 Type 2 certified.\"",
+            "url": "https://huggingface.co/docs/inference-endpoints/security",
+            "scope": "Hugging Face Inference Endpoints security page, for Hugging Face Inference Endpoints",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "together-ai",
@@ -2768,7 +2912,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://www.together.ai/terms-of-service",
+            "scope": "Together AI terms of service, read for Together AI",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The terms state the operator's role: \"You grant Company a limited license to access, host, use, copy, and otherwise operate Your Content and Output solely as necessary to provide the Services.\" The trust centre's subprocessor list renders only by script and could not be read.",
+            "url": "https://www.together.ai/terms-of-service",
+            "scope": "Together AI terms of service, for Together AI",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Together AI uses API keys to authenticate requests. Keys are scoped to projects, meaning a key only has access to the resources within its project.\"",
+            "url": "https://docs.together.ai/docs/api-keys-authentication",
+            "scope": "Together AI API-key documentation, for Together AI",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The serverless overview states: \"The serverless cache is shared across the fleet and entries are evicted as traffic shifts, so cache hits aren't guaranteed and there's no configurable retention window. For predictable cache behavior, use a dedicated endpoint, where prompt caching is enabled by default and scoped to your own replicas.\" It does not say whether serverless entries are keyed to the requesting account.",
+            "url": "https://docs.together.ai/docs/serverless/overview",
+            "scope": "Together AI serverless overview, for Together AI",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a disclosure programme (\"Contact: https://hackerone.com/together_ai\").",
+            "url": "https://www.together.ai/.well-known/security.txt",
+            "scope": "Together AI security.txt, for Together AI",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The certification announcement names the platform: \"The ISO 27001:2022 certification is scoped to the ISMS supporting Together AI's global platform, including the systems, processes, and controls that protect customer data and platform operations.\" The trust centre's SOC 2 material renders only by script.",
+            "url": "https://www.together.ai/blog/iso-27001-2022-certification",
+            "scope": "Together AI ISO 27001 announcement, for Together AI",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "fireworks-ai",
@@ -2831,7 +3023,73 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.fireworks.ai/guides/security_compliance/data_security",
+            "scope": "Fireworks data-security guide, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre names the third party that receives content for select models, in an update published 2026-03-23: \"Fireworks AI uses Anthropic PBC as a Sub-processor to power select AI services. We have entered into a zero data retention agreement with Anthropic, under which no User Content or Output is retained by Anthropic following the completion of a request.\" The data-security guide states Fireworks does not log or store prompts for open models without opt-in.",
+            "url": "https://trust.fireworks.ai/",
+            "scope": "Fireworks trust centre subprocessor updates, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: keys are created by the Fireworks API-key endpoint, whose reference even records whether \"the plaintext value of the API key is unknown to Fireworks\", and every documented request uses a Fireworks key.",
+            "url": "https://docs.fireworks.ai/api-reference/create-api-key",
+            "scope": "Fireworks create-API-key reference, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching guide states: \"Serverless deployments maintain separate caches for each Fireworks account to prevent data leakage and timing attacks.\" The same guide describes on-demand deployments as a customer's own capacity.",
+            "url": "https://docs.fireworks.ai/guides/prompt-caching",
+            "scope": "Fireworks prompt-caching guide, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre publishes a security contact, security@fireworks.ai, and a vulnerability disclosure portal; the data-security guide itself names no contact.",
+            "url": "https://trust.fireworks.ai/",
+            "scope": "Fireworks trust centre, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The platform's own security-and-compliance guide states \"SOC 2 Type II (certified)\" and lists ISO 27001 as achieved; the public trust centre lists SOC 2 Type 2, ISO 27001:2022, ISO 27701, and ISO/IEC 42001 with reports behind a request-access control. The guide names no product scope beyond the platform it documents.",
+            "url": "https://docs.fireworks.ai/guides/security_compliance/data_security",
+            "scope": "Fireworks data-security guide, for Fireworks AI",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "In 7 of these providers, we detected global cache sharing. The audit table records caching detected at the global level for Fireworks AI's Llama 3.1 8B Instruct endpoint; the audits were conducted in September and early October 2024 and disclosed to each provider in October 2024.",
+            "published_at": "2025-07-13",
+            "source": {
+              "label": "Auditing Prompt Caching in Language Model APIs, arXiv 2502.07776v2",
+              "url": "https://arxiv.org/abs/2502.07776v2",
+              "kind": "third_party",
+              "content_sha256": "2d15ac6cd0431b885187028fef6cdb2f15feb328ba891b4e04e933d76fa3f624",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": null,
+            "resolved": {
+              "url": "https://docs.fireworks.ai/guides/prompt-caching",
+              "verified_at": "2026-09-12",
+              "summary": "The current prompt-caching guide states that serverless deployments maintain separate caches for each Fireworks account; the paper does not name Fireworks among the providers that confirmed a change."
+            }
+          }
+        ]
+      }
     },
     {
       "id": "cerebras-inference",
@@ -2899,7 +3157,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://inference-docs.cerebras.ai/",
+            "scope": "Cerebras inference documentation, for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The terms of service state the operator's role over prompts and outputs: \"We reserve the right to use Service Content to provide the Service to you, comply with applicable law and enforce these Terms\", and that this \"does not grant Cerebras the right to use Service Content for the purpose of training or fine-tuning models\". No subprocessor is named; the trust centre's list is behind a request-access control.",
+            "url": "https://www.cerebras.ai/terms-of-service",
+            "scope": "Cerebras terms of service, for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"API keys are static secrets you generate in the Cloud Console and include in every request for authentication.\"",
+            "url": "https://inference-docs.cerebras.ai/console/api-keys",
+            "scope": "Cerebras Cloud Console API-keys page, for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching guide states: \"Prompt caches are never shared between organizations. Only members of your organization can benefit from caches created by identical prompts within your team.\"",
+            "url": "https://inference-docs.cerebras.ai/capabilities/prompt-caching",
+            "scope": "Cerebras prompt-caching guide, for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A responsible-disclosure policy is published: \"We welcome reports from the security community to help us identify and remediate vulnerabilities in a responsible manner.\"",
+            "url": "https://www.cerebras.ai/cerebras-responsible-disclosure-policy",
+            "scope": "Cerebras responsible-disclosure policy, for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The public trust centre shows company-level SOC 2 Type 2 material behind a request-access control (\"Use this Trust Center to learn about our security posture and request access to our security documentation.\") and nothing names the inference service, so it is recorded as undocumented for the named service.",
+            "url": "https://trust.cerebras.ai",
+            "scope": "Cerebras trust centre, read for Cerebras Inference",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "sambanova-cloud",
@@ -2957,7 +3263,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the documentation or on the public trust centre.",
+            "url": "https://trust.sambanova.ai/",
+            "scope": "SambaNova trust centre, read for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "undocumented",
+            "note": "A company blog post states \"SambaCloud never sees or collects any of your data or user prompts ensuring full data privacy.\", which is a marketing claim rather than a description of who processes API content; the privacy policy does not address API inputs, and no data-processing addendum or subprocessor list describing the inference path was readable. The public trust centre carries a subprocessor list behind a request-access control.",
+            "url": "https://sambanova.ai/blog/unlock-enterprise-grade-security-with-lattice-ai-and-sambanova",
+            "scope": "SambaNova security blog post, read for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"To generate an API key, go to the API section of the SambaCloud portal.\" and every documented request uses that key.",
+            "url": "https://docs.sambanova.ai/docs/en/get-started/api-keys-urls",
+            "scope": "SambaNova Cloud API-keys page, for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching announcement describes the feature and its pricing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://sambanova.ai/blog/prompt-caching-on-sambacloud-faster-cheaper-inference",
+            "scope": "SambaNova prompt-caching blog post, for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre publishes a security contact, security@sambanovasystems.com.",
+            "url": "https://trust.sambanova.ai/",
+            "scope": "SambaNova trust centre, for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The operator's security blog post names the service: \"SambaCloud is also SOC 2 Type 2 compliant and certified.\" The public trust centre states the company holds SOC 2 Type 2 and ISO 27001 certifications, with reports behind a request-access control.",
+            "url": "https://sambanova.ai/blog/unlock-enterprise-grade-security-with-lattice-ai-and-sambanova",
+            "scope": "SambaNova security blog post, for SambaNova Cloud",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "deepinfra",
@@ -3017,7 +3371,73 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://deepinfra.com/docs",
+            "scope": "DeepInfra documentation, for DeepInfra",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The data-privacy page names the third parties that receive content for partner models: \"If you opt to use a Google model, Google will store the output as outlined in their Privacy Notice. ... If you opt to use an Anthropic model, Anthropic will store the output as outlined in their Trust Center.\" The operator serves the open-weight catalogue itself.",
+            "url": "https://docs.deepinfra.com/account/data-privacy",
+            "scope": "DeepInfra data-privacy page, for DeepInfra",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"DeepInfra supports two authentication methods: API keys — full-access tokens for your own use Scoped JWTs — short-lived, scope-limited tokens you can issue to third parties\".",
+            "url": "https://docs.deepinfra.com/account/authentication",
+            "scope": "DeepInfra authentication page, for DeepInfra",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching page states: \"Caches are per-model and per-account\".",
+            "url": "https://docs.deepinfra.com/chat/prompt-caching",
+            "scope": "DeepInfra prompt-caching page, for DeepInfra",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the terms or the documentation, no security.txt is served, and the trust portal refuses automated fetches.",
+            "url": "https://deepinfra.com/terms",
+            "scope": "DeepInfra terms of service, for DeepInfra",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The operator's funding announcement names the service: \"150+ open-source models through OpenAI-compatible APIs, zero data retention, SOC 2 and ISO 27001 certified — production-grade from day one.\" The trust portal holding the reports refuses automated fetches.",
+            "url": "https://deepinfra.com/blog/deepinfra-series-b",
+            "scope": "DeepInfra Series B announcement, for DeepInfra",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "In 7 of these providers, we detected global cache sharing. The audit table records caching detected at the global level for Deep Infra's Llama 3.1 8B Instruct endpoint; the audits were conducted in September and early October 2024 and disclosed to each provider in October 2024.",
+            "published_at": "2025-07-13",
+            "source": {
+              "label": "Auditing Prompt Caching in Language Model APIs, arXiv 2502.07776v2",
+              "url": "https://arxiv.org/abs/2502.07776v2",
+              "kind": "third_party",
+              "content_sha256": "2d15ac6cd0431b885187028fef6cdb2f15feb328ba891b4e04e933d76fa3f624",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": null,
+            "resolved": {
+              "url": "https://docs.deepinfra.com/chat/prompt-caching",
+              "verified_at": "2026-09-12",
+              "summary": "The current prompt-caching page states caches are per-model and per-account; the paper does not name DeepInfra among the providers that confirmed a change."
+            }
+          }
+        ]
+      }
     },
     {
       "id": "replicate",
@@ -3083,7 +3503,77 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "documented_yes",
+            "note": "Scoped to webhook delivery only. The webhook guide states: \"Replicate uses an HMAC with SHA-256 to sign its webhooks.\" so a client can verify a delivered prediction payload came from Replicate unaltered; the synchronous response path carries no signature.",
+            "url": "https://replicate.com/docs/topics/webhooks/verify-webhook",
+            "scope": "Replicate webhook verification guide, for Replicate",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The subprocessor page \"identifies subprocessors authorized to subprocess customer or personal data on behalf of Replicate to provide our services\" and names them; the operator is the party that runs the models.",
+            "url": "https://replicate.com/docs/topics/site-policy/subprocessors",
+            "scope": "Replicate subprocessor list, for Replicate",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"These tokens are secrets, and should be treated like passwords. They are 40-character strings that always start with r8_ and are required when making API requests.\"",
+            "url": "https://replicate.com/docs/topics/security/api-tokens",
+            "scope": "Replicate API-token security page, for Replicate",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt or prefix caching feature is documented; the data-retention page describes prediction retention, not caching.",
+            "url": "https://replicate.com/docs/topics/predictions/data-retention",
+            "scope": "Replicate prediction data-retention page, for Replicate",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the site policy or documentation, and no security.txt is served.",
+            "url": "https://replicate.com/docs/topics/site-policy",
+            "scope": "Replicate site policy, for Replicate",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the site policy or documentation.",
+            "url": "https://replicate.com/docs/topics/site-policy",
+            "scope": "Replicate site policy, for Replicate",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "Shared network vulnerability disclosure: \"A carefully constructed model container could eavesdrop on the traffic between director and the rest of Replicate.\" Reported by Wiz; the operator states it \"deployed a full mitigation within 24 hours of speaking with Wiz\" and found no evidence of exploitation.",
+            "published_at": "2024-02-20",
+            "source": {
+              "label": "Replicate: Shared network vulnerability disclosure",
+              "url": "https://replicate.com/blog/shared-network-vulnerability-disclosure",
+              "kind": "third_party",
+              "content_sha256": "47114384941c11a67a98864848d40cf18408ce314d71fa81d0c04105b0bff8b5",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": {
+              "url": "https://replicate.com/blog/shared-network-vulnerability-disclosure",
+              "verified_at": "2026-09-12",
+              "summary": "The operator published the disclosure itself, crediting Wiz."
+            },
+            "resolved": {
+              "url": "https://replicate.com/blog/shared-network-vulnerability-disclosure",
+              "verified_at": "2026-09-12",
+              "summary": "Privileged network capabilities were dropped from model containers on 2024-02-02 and all internal traffic from model pods has been encrypted since 2024-02-20, per the post."
+            }
+          }
+        ]
+      }
     },
     {
       "id": "venice-api",
@@ -3396,7 +3886,55 @@
           "verified_at": "2026-08-29"
         }
       ],
-      "verified_at": "2026-08-29"
+      "verified_at": "2026-08-29",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.ollama.com/api/introduction",
+            "scope": "Ollama API documentation, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The pricing FAQ names the class of third parties that run the models: \"Ollama collaborates with NVIDIA Cloud Providers (NCPs) to host open models. When Ollama partners with providers, we require no logging, no training, and zero data retention policies in place.\" The individual providers are not named.",
+            "url": "https://ollama.com/pricing",
+            "scope": "Ollama pricing FAQ, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The service offers no customer-supplied-key path: \"For direct access to ollama.com's API, first create an API key. Then, set the OLLAMA_API_KEY environment variable to your API key.\"",
+            "url": "https://docs.ollama.com/cloud",
+            "scope": "Ollama cloud documentation, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The API usage page exposes a cache-hit field but no page states whether a cache is scoped to the account that created it.",
+            "url": "https://docs.ollama.com/api/usage",
+            "scope": "Ollama API usage page, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The operator's security policy, published in its own repository, states: \"If you discover a security vulnerability, please do not open a public issue. Instead, please report it by emailing hello@ollama.com.\" No security.txt is served on ollama.com.",
+            "url": "https://github.com/ollama/ollama/security",
+            "scope": "Ollama security policy in the operator's repository, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named on the pricing page or anywhere in the documentation, and no trust page exists.",
+            "url": "https://ollama.com/pricing",
+            "scope": "Ollama pricing page, for Ollama Cloud",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "nebius-token-factory",
@@ -3475,7 +4013,55 @@
           "verified_at": "2026-08-29"
         }
       ],
-      "verified_at": "2026-08-29"
+      "verified_at": "2026-08-29",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/overview",
+            "scope": "Nebius Token Factory inference overview, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The legal quick guide states the operator's role: \"for the content you submit to our model inference and fine-tuning endpoints via the API or web interface (prompts, datasets, etc.) and the output you receive, we act as the Data Processor under our DPA.\"",
+            "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
+            "scope": "Nebius Token Factory legal quick guide, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the quickstart's only credential step is \"Get API key\" from the Token Factory console, and every documented request uses it.",
+            "url": "https://docs.tokenfactory.nebius.com/quickstart",
+            "scope": "Nebius Token Factory quickstart, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt or prefix caching scope is documented in the inference overview or elsewhere in the documentation.",
+            "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/overview",
+            "scope": "Nebius Token Factory inference overview, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@nebius.com\").",
+            "url": "https://nebius.com/.well-known/security.txt",
+            "scope": "Nebius security.txt, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The Token Factory legal quick guide states: \"We are a certified company holding ISO 27001, ISO 27701 and SOC 2 Type II certifications.\" The statement is company-wide but sits in the service's own documentation; the reports are behind a request-access control.",
+            "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
+            "scope": "Nebius Token Factory legal quick guide, for Nebius Token Factory",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "baseten",
@@ -3544,7 +4130,55 @@
           "verified_at": "2026-08-29"
         }
       ],
-      "verified_at": "2026-08-29"
+      "verified_at": "2026-08-29",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.baseten.co/development/model-apis/overview",
+            "scope": "Baseten Model APIs overview, for Baseten",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "undocumented",
+            "note": "The terms state only that the hosting party \"will, at its own expense, provide for the hosting of the applicable Baseten Products & Services\"; the privacy policy does not address model inputs or outputs, and the trust centre's subprocessor list renders only by script.",
+            "url": "https://www.baseten.co/terms-and-conditions/",
+            "scope": "Baseten terms and conditions, read for Baseten",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_yes",
+            "note": "Customer secrets used by deployed models are stored in a documented store: \"store a Hugging Face access token as a secret named hf_access_token in Baseten's secret manager\". Whether the store encrypts at rest is not stated.",
+            "url": "https://docs.baseten.co/truss/examples/09-private-huggingface",
+            "scope": "Baseten private Hugging Face model guide, for Baseten",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The runtime-caching page (\"Cache is shared across every replica within a single deployment.\") concerns model weights and build artefacts, not prompt caching; no page states how a prompt or prefix cache is scoped.",
+            "url": "https://docs.baseten.co/development/model/runtime-caching",
+            "scope": "Baseten runtime-caching page, read for Baseten",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre publishes a disclosure route: \"If you believe you've discovered a security vulnerability in our services, please report it to security@baseten.co with details of your findings.\"",
+            "url": "https://trust.baseten.co/",
+            "scope": "Baseten trust centre, for Baseten",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The operator's announcement states: \"Baseten has completed a rigorous audit by Sensiba San Filippo LLP, a leading CPA firm, to achieve System and Organization Controls (SOC) 2 Type II certification.\" The public trust centre lists a Baseten Labs, Inc. SOC 2 Type 2 report behind a request-access control.",
+            "url": "https://www.baseten.co/blog/soc-2-type-2/",
+            "scope": "Baseten SOC 2 announcement, for Baseten",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "meta-model-api",
@@ -4558,7 +5192,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "The security-architecture page documents a validator-side check (\"cllmv (Chutes Large Language Model Verification): This component integrates with the SGLang inference engine to provide per-token verification hashes.\") that binds the model name and revision to output proofs, but it does not state that a client receives or can verify those proofs, so no client-verifiable mechanism is documented.",
+            "url": "https://chutes.ai/docs/core-concepts/security-architecture",
+            "scope": "Chutes security-architecture page, for Chutes",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The terms state what the operator's servers see: \"In standard API mode, our servers may transiently read your request in memory to process it (e.g., extracting the model name for routing, or fetching images for vision models), but this data is never written to any database, log, or persistent storage.\" The security-architecture page states the compute is provided by anonymous, permissionless miners inside trusted execution environments.",
+            "url": "https://chutes.ai/terms",
+            "scope": "Chutes terms of service, for Chutes",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the authentication page documents Chutes-issued keys (\"Use the key as a bearer token.\") and OAuth sign-in only.",
+            "url": "https://chutes.ai/docs/getting-started/authentication",
+            "scope": "Chutes authentication page, for Chutes",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt or prefix caching scope is documented on the security-architecture page or elsewhere in the documentation.",
+            "url": "https://chutes.ai/docs/core-concepts/security-architecture",
+            "scope": "Chutes security-architecture page, for Chutes",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The contact page publishes a security route: \"Security Report vulnerabilities or security concerns. support@chutes.ai\".",
+            "url": "https://chutes.ai/contact",
+            "scope": "Chutes contact page, for Chutes",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named on the security-architecture page or elsewhere.",
+            "url": "https://chutes.ai/docs/core-concepts/security-architecture",
+            "scope": "Chutes security-architecture page, for Chutes",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "trustedrouter",
@@ -4967,7 +5649,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.siliconflow.cn/docs/userguide/introduction",
+            "scope": "SiliconFlow user guide, for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator's role: \"针对大模型 API 加速推理服务，我们仅作为底层算力与技术提供方。对于您通过 API 传输的业务数据（包括输入指令及生成的输出内容），我们仅在提供当次推理计算的必要且短暂的时间内进行处理。\" (for the accelerated inference API we act only as the underlying compute and technology provider, and process the business data you send, inputs and outputs, only for the brief time the inference requires). No subprocessor is named.",
+            "url": "https://docs.siliconflow.cn/docs/legals/privacy-policy",
+            "scope": "SiliconFlow privacy policy, for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"在“API 密钥”页面，点击“新建 API 密钥”，创建您的 API Key。\" (create your API key on the API keys page) and every documented request uses that key.",
+            "url": "https://docs.siliconflow.cn/docs/userguide/quickstart",
+            "scope": "SiliconFlow quickstart, for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The chat-completions reference exposes cache fields but no page states whether a cache is scoped to the account that created it.",
+            "url": "https://docs.siliconflow.cn/cn/api-reference/chat-completions/chat-completions",
+            "scope": "SiliconFlow chat-completions reference, for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the privacy policy, the terms, or the documentation, and no security.txt is served; the privacy policy's breach-notification clause is not a reporting route.",
+            "url": "https://docs.siliconflow.cn/docs/legals/privacy-policy",
+            "scope": "SiliconFlow privacy policy, for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The company page lists certifications by name (\"权威认证 信息安全管理体系 系统信息安全等级保护（三级） 质量管理体系认证 信息技术服务管理体系认证\": an information-security management system, MLPS level 3, quality management, and IT service management) without naming the inference service or a scope, so it is recorded as undocumented for the named service.",
+            "url": "https://siliconflow.cn/about",
+            "scope": "SiliconFlow company page, read for SiliconFlow (mainland China)",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "siliconflow-international",
@@ -5038,7 +5768,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.siliconflow.com/en/userguide/introduction",
+            "scope": "SiliconFlow user guide, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator processes interaction data: \"In case the Interaction Data contains Personal Data, as a neutral technology service provider, we will only process your Interaction Data strictly in accordance with your instructions.\" No subprocessor is named.",
+            "url": "https://docs.siliconflow.com/en/legals/privacy-policy",
+            "scope": "SiliconFlow privacy policy, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Go to the API Keys page, click “Create API Key,” and generate your API key.\" and every documented request uses that key.",
+            "url": "https://docs.siliconflow.com/en/userguide/quickstart",
+            "scope": "SiliconFlow quickstart, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching announcement describes the feature and its pricing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://www.siliconflow.com/blog/siliconflow-prompt-caching-api-costs",
+            "scope": "SiliconFlow prompt-caching blog post, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the terms of service, the privacy policy, or the documentation, and no security.txt is served.",
+            "url": "https://docs.siliconflow.com/en/legals/terms-of-service",
+            "scope": "SiliconFlow terms of service, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the privacy policy, the terms, or the documentation.",
+            "url": "https://docs.siliconflow.com/en/legals/privacy-policy",
+            "scope": "SiliconFlow privacy policy, for SiliconFlow (international)",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "qiniu-ai-inference",
