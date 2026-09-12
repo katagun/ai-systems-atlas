@@ -196,14 +196,28 @@ up the next time the app launches, so a run is not guaranteed at the exact sched
    the `verdict` it reached. See
    [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md).
 3. Re-verify a signal's digest by hand with
-   `uv run python scripts/verify_signal_pages.py --recheck`. It re-fetches every signal
-   whose `page_status` is `readable` and fails, naming it, when the page's current
-   content no longer hashes to the recorded `content_sha256` — that catches a vendor page
-   that changed underneath the assessment. It walks the sweep's signals and never reads an
-   `assessment`, so it is not what stops a fabricated citation. Validation is: an
+   `uv run python scripts/verify_signal_pages.py --recheck`. It re-fetches only the
+   signals whose `assessment` this run introduced or changed — found by diffing the
+   queue against a baseline, `origin/main` by default — and fails, naming it, when a
+   cited page's current content no longer hashes to the recorded `content_sha256`. That
+   catches a vendor page that changed underneath the very assessment citing it. A signal
+   that already carried its assessment on the baseline, or one that carries no
+   assessment at all, is not re-fetched: an already-baselined citation was verified when
+   it was introduced, and an unassessed signal stakes no citation this run needs the page
+   to still support. Vendor pages drift constantly — timestamps, view counts, rotating
+   content — so re-checking every readable signal on every run meant a handful of
+   unrelated drifting pages could discard a whole day's worth of otherwise-verifiable
+   assessments. Scoping is deliberately not based on `proposed_at` or `proposer`: both
+   are written by the agent being checked, so either could let a back-dated or
+   relabelled assessment exempt itself from verification. Pass `--base-ref` to compare
+   against something other than `origin/main` — `finish` always passes the exact SHA
+   `prepare` recorded (see "Running the loop locally" below), so a manual recheck
+   against a checkout built with `--from-ref` should do the same. Validation is what
+   stops a fabricated citation from pointing anywhere but the signal's own page: an
    assessment may cite only its own signal's pinned page, and an `evidence` entry whose
-   `url` or `content_sha256` differs from the signal's is rejected. Together they mean the
-   digest this command re-fetches is the digest every citation on that signal carries.
+   `url` or `content_sha256` differs from the signal's is rejected. Together they mean
+   the digest this command re-fetches, for a signal it examines, is the digest every
+   citation on that signal carries.
 
 Then, per signal:
 

@@ -44,6 +44,31 @@
       ]
     },
     {
+      "repo": "algorithmicsuperintelligence/openevolve",
+      "name": "OpenEvolve",
+      "url": "https://github.com/algorithmicsuperintelligence/openevolve",
+      "description": "Apache-2.0 open implementation of AlphaEvolve that mutates candidate programs with an LLM ensemble, executes and scores them through caller-supplied evaluators with cascade stages, timeouts, and retries, and keeps survivors in a MAP-Elites archive across migrating islands.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 7319,
+      "topics": [
+        "alphaevolve",
+        "coding-agent",
+        "evolutionary-algorithms",
+        "llm-ensemble"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "alirezarezvani/claude-code-tresor",
       "name": "claude-code-tresor",
       "url": "https://github.com/alirezarezvani/claude-code-tresor",
@@ -199,6 +224,31 @@
       ]
     },
     {
+      "repo": "ClickHouse/nerve",
+      "name": "Nerve",
+      "url": "https://github.com/ClickHouse/nerve",
+      "description": "Self-hosted AI agent runtime built around the Claude Agent SDK, with persistent memory, scheduled execution, task and plan management, evolving skills, approval gates, source synchronization, and web and Telegram channels.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.98,
+      "github_detected_license": "Apache-2.0",
+      "stars": 78,
+      "topics": [
+        "ai-agents",
+        "autonomous-agents",
+        "claude",
+        "self-hosted"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "coleam00/mcp-mem0",
       "name": "mcp-mem0",
       "url": "https://github.com/coleam00/mcp-mem0",
@@ -237,6 +287,60 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "dora-rs/dora",
+      "name": "Dora",
+      "url": "https://github.com/dora-rs/dora",
+      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3922,
+      "topics": [
+        "dataflow",
+        "embodied-ai",
+        "low-latency",
+        "robotics",
+        "rust"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/dora-rs/dora/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ae5e06d263ca95043cedfd1d14c4eb3474389fb6570dd0d0abc6060c9273e268",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "9700c27ca56309d5458bc986482823b51459669b",
+            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/9700c27ca56309d5458bc986482823b51459669b"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/dora-rs/dora/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "7b515bc646ca4e20427bc6a72b8ca5149a0e9b38a77e9a7d0ba5463af5a6cfbc",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "fe9751aa01eb9c7d359209185eb26c8e31f1a15f",
+            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/fe9751aa01eb9c7d359209185eb26c8e31f1a15f"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "eugeniughelbur/obsidian-second-brain",
@@ -280,6 +384,106 @@
       ]
     },
     {
+      "repo": "getnao/sylph",
+      "name": "Sylph",
+      "url": "https://github.com/getnao/sylph",
+      "description": "Git-based company brain of human-owned context, skills, agents, schedules, and self-improving rules designed to work across Claude Code, Codex, Cursor, and other repository-aware agents.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "memory_bridge",
+      "classification_confidence": 0.92,
+      "github_detected_license": null,
+      "stars": 187,
+      "topics": [
+        "agent-skills",
+        "company-brain",
+        "git",
+        "memory",
+        "multi-agent"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-28",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "google-antigravity/antigravity-sdk-python",
+      "name": "Antigravity SDK",
+      "url": "https://github.com/google-antigravity/antigravity-sdk-python",
+      "description": "Apache-2.0 Python framework for building custom agents on Google's Antigravity runtime; its Agent class discovers and drives the closed Antigravity binary rather than shipping an agent loop of its own.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.75,
+      "github_detected_license": "Apache-2.0",
+      "stars": 3279,
+      "topics": [
+        "agent-framework",
+        "sdk"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "google-deepmind/gemini-robotics-sdk",
+      "name": "Safari SDK",
+      "url": "https://github.com/google-deepmind/gemini-robotics-sdk",
+      "description": "Safari SDK provides full lifecycle tooling for Google DeepMind's Gemini Robotics models, including checkpoint access, serving, evaluation, and fine-tuning.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 606,
+      "topics": [
+        "gemini",
+        "robotics"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
       "repo": "henrydaum/second-brain",
       "name": "second-brain",
       "url": "https://github.com/henrydaum/second-brain",
@@ -319,6 +523,118 @@
     },
     {
       "repo": null,
+      "name": "Aera Browser",
+      "url": "https://aerabrowser.com/",
+      "description": "Downloadable agentic browser with autonomous browsing, scheduled tasks, parallel agents and subagents, MCP integrations, local-model support, and releases for macOS, Windows, and Linux.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.97,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agentic-browser",
+        "browser-automation",
+        "official-product",
+        "scheduled-tasks"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Asana AI Teammates",
+      "url": "https://asana.com/product/ai/ai-teammates",
+      "description": "Collaborative AI agents for coordination-heavy team work inside Asana, using Work Graph context, shared memory, configurable roles and permissions, connected applications, and no-code authoring through AI Studio.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.86,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "enterprise",
+        "general-work-agent",
+        "official-product",
+        "project-management"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Spot",
+      "url": "https://bostondynamics.com/products/spot/",
+      "description": "Spot is Boston Dynamics' commercially sold agile mobile robot for autonomous site inspection and remote operation.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, and that documentation site is itself the only stably citable first-party page found: every page on bostondynamics.com proper -- the product page, '/terms/', and '/spot-sales/' alike -- embeds a live WordPress cache-metrics comment whose hit/miss counters differ on every request, confirmed by fetching each of them twice in a row and finding the bytes differ both times, so none of them can be pinned for stable re-verification. Read live (not pinned), '/terms/' is a generic website Terms of Use governing use of bostondynamics.com itself -- content ownership, site access -- not a purchase agreement, EULA, or licence for the product, and '/spot-sales/' routes pricing and purchase through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
+        "evidence": [
+          {
+            "label": "Spot SDK documentation",
+            "url": "https://dev.bostondynamics.com/",
+            "kind": "web",
+            "content_sha256": "1616be0909be7c97f12e5d248748778a76f46634833f4ae8fd7ed9e6fcd10611",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": null,
+      "name": "GroqChat",
+      "url": "https://chat.groq.com/",
+      "description": "Groq-hosted end-user chat interface for interacting with supported models through Groq's inference platform.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "multi_model_chat_client",
+      "classification_confidence": 0.76,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "assistant",
+        "chat",
+        "groq",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-26",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Amazon Q Developer",
       "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
       "description": "AWS coding agent that understands workspaces, plans changes, edits files, suggests or runs shell commands, generates tests, and performs software upgrades.",
@@ -334,6 +650,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "AlphaEvolve",
+      "url": "https://docs.cloud.google.com/gemini/enterprise/docs/alphaevolve/developer-guide/overview",
+      "description": "Google Cloud's managed evolutionary coding agent, generally available since 2026-07-09 under Gemini Enterprise; it iterates generations of candidate programs against caller-supplied evaluation metrics to discover optimised algorithms, driven through a documented API and a first-party client library.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "evolutionary-search",
+        "gemini-enterprise",
+        "managed"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-03",
       "review_required": [
         "licensing",
         "classification",
@@ -359,6 +700,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Fellou",
+      "url": "https://fellou.ai/",
+      "description": "Downloadable agentic browser that plans and executes cross-application web workflows, conducts multi-source research, automates logged-in browser actions, and can operate local applications and files with visible plans and intervention controls.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.98,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agentic-browser",
+        "browser-automation",
+        "computer-use",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
       "review_required": [
         "licensing",
         "classification",
@@ -439,6 +805,56 @@
     },
     {
       "repo": null,
+      "name": "Manus",
+      "url": "https://manus.im/",
+      "description": "Cloud general-purpose agent that autonomously plans and executes multi-step tasks spanning research, data processing, code, websites, documents, slides, media, connected tools, and scheduled workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.96,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "cloud-agent",
+        "general-work-agent",
+        "official-product",
+        "workspace"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "NotebookLM",
+      "url": "https://notebooklm.google.com/",
+      "description": "Google knowledge workspace for durable source collections, grounded answers with citations, and generated research and learning artifacts.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ai_knowledge_app",
+      "classification_confidence": 0.97,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "knowledge-app",
+        "notebook",
+        "rag",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-26",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Obsidian",
       "url": "https://obsidian.md/",
       "description": "Local-first personal knowledge workspace built around plain Markdown files, links, and plugins.",
@@ -490,6 +906,137 @@
     },
     {
       "repo": null,
+      "name": "1X NEO",
+      "url": "https://www.1x.tech/neo",
+      "description": "NEO is 1X's humanoid home robot, sold to perform household chores and provide personalized in-home assistance.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "1X publishes public pricing and reservation plans for NEO on its own order page ($499/mo subscription or $20,000 ownership, a refundable $200 deposit), but the Terms and Conditions page linked from both the product and order pages returns HTTP 404 -- the document does not exist at review time, even though the sibling Privacy Policy page resolves. No reachable first-party page therefore establishes a reviewed source model or complete licence list covering the hardware, its built-in large language model, or its Redwood AI vision-language model; the order page's own feature list describes capability through marketing prose rather than a governing agreement.",
+        "evidence": [
+          {
+            "label": "NEO product page",
+            "url": "https://www.1x.tech/neo",
+            "kind": "web",
+            "content_sha256": "7b5e2e66b705abc689605b8adaf34e0f7e9ad3425d56a3798241ea180701d44a",
+            "fetched_at": "2026-09-04"
+          },
+          {
+            "label": "NEO order page",
+            "url": "https://www.1x.tech/order",
+            "kind": "web",
+            "content_sha256": "ccc7a569b67b78d79829efdc73697bc1a0bf3b336c19b6592aa788db744f80fc",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Figure",
+      "url": "https://www.figure.ai/",
+      "description": "Figure is an AI robotics company building a general-purpose humanoid robot for commercial deployment.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "figure.ai is served through a Vercel CDN edge cache: repeated fetches within a single verification session return identical bytes with a constant ETag and a climbing 'age' header (observed on the terms-and-conditions, privacy-policy, accessibility-statement, and home pages alike), so the site reads as stable while any one review is underway. But a shared footer icon component embeds a randomly generated SVG gradient identifier that is baked in at origin render time; that value changes only when the edge cache invalidates and Vercel re-renders from origin on its own stale-while-revalidate cadence, not on every request. That makes a hash pinned to any figure.ai page unsafe to rely on indefinitely -- it can hold for an entire review session and still not survive to a later recheck once the cache regenerates, which is exactly the failure this review hit once already when a Wayback capture of this same page was hashed moments after being triggered and had not yet settled. The terms-and-conditions page was read live: it is a generic website Terms and Conditions, dated February 2023 in its own body text, governing use of figure.ai itself (account access, electronic communications, linked sites) with no mention of the robot as a product, its sale, its licensing, or its onboard software, and no product page publishes a price or purchase path. That reading is a first-party observation, not a durably re-verifiable citation, for the CDN-cache reason above; the site's own sitemap is cited instead because, as a static file with no templated component, it does not carry the same regeneration risk, and it establishes from a stable first-party source that the terms page exists and when Figure's content system last touched it. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page, and no page on the domain carrying that content can be durably pinned for a checkable citation in the first place.",
+        "evidence": [
+          {
+            "label": "Sitemap (the only figure.ai resource found to be byte-stable across repeated fetches; it confirms the terms-and-conditions URL exists but carries no terms content itself)",
+            "url": "https://www.figure.ai/sitemap.xml",
+            "kind": "web",
+            "content_sha256": "c273455d32f39ea7efb06c58e4194b3f09721fe4bbc007e88354b31af02498b6",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Genspark AI Workspace",
+      "url": "https://www.genspark.ai/",
+      "description": "All-in-one AI workspace whose Super Agent plans and acts across research, content creation, data analysis, calls, email, documents, spreadsheets, coding, and other workflows by coordinating specialized agents and connected tools.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.94,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "general-work-agent",
+        "official-product",
+        "user-submitted",
+        "workspace"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Gumloop",
+      "url": "https://www.gumloop.com/",
+      "description": "No-code platform for building and operating AI agents that use connected company knowledge, recurring and event triggers, hundreds of application connectors, skills, code execution, and organization-wide audit controls.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.91,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agent-builder",
+        "enterprise",
+        "no-code",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Limitless (formerly Rewind)",
       "url": "https://www.limitless.ai/",
       "description": "Historical ambient-memory product whose Rewind capture apps are sunsetting after acquisition; existing Pendant support continues through 2026.",
@@ -506,6 +1053,174 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Lindy",
+      "url": "https://www.lindy.ai/",
+      "description": "AI teammate for cross-application work through Slack, Gmail, Google Drive, Calendar, Notion, computer use, MCP servers, and a large integration catalog, with persistent meeting and workspace context.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.88,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "general-work-agent",
+        "integrations",
+        "official-product",
+        "work-automation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Notion Agents",
+      "url": "https://www.notion.com/product/agents",
+      "description": "Personal and scheduled custom agents that perform multi-step knowledge work across Notion pages, databases, Slack, mail, calendars, MCP integrations, and other connected tools with permissions, audit logs, and reversible changes.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "general_work_agent",
+      "classification_confidence": 0.9,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "enterprise",
+        "general-work-agent",
+        "knowledge-work",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Pletor",
+      "url": "https://www.pletor.ai/",
+      "description": "No-code creative-production platform for building reusable AI agents and pipelines over multiple text, image, video, and audio models, brand context, APIs, and MCP.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.84,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "creative-production",
+        "marketing",
+        "multi-model",
+        "no-code",
+        "workflow"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-28",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Unitree G1",
+      "url": "https://www.unitree.com/g1/",
+      "description": "The Unitree G1 is a commercially sold humanoid robot with force-position hybrid control and imitation- and reinforcement-learned manipulation skills.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "Unitree publishes a public price (from $13.5K) for the G1 on its own product page and a Terms & Policies page, but that page's only substantive content is an after-sales warranty policy for the physical hardware (repair eligibility, damage exclusions, shipping responsibility); it establishes no software licence, source-model classification, or complete licence list for the robot's onboard AI stack or control software. The site links an 'Official Open Source' page, but that page renders no first-party list of components or licences in its own markup. No authoritative first-party source establishes a reviewed source model and complete licence list for the product as sold.",
+        "evidence": [
+          {
+            "label": "G1 product page",
+            "url": "https://www.unitree.com/g1/",
+            "kind": "web",
+            "content_sha256": "942804cf597a33a6f994c859588af47ce9be97519608b302e578e069a2358700",
+            "fetched_at": "2026-09-04"
+          },
+          {
+            "label": "Terms & Policies",
+            "url": "https://www.unitree.com/terms",
+            "kind": "web",
+            "content_sha256": "852ed22ce2f0e277217ec2cf63c8310843dc860fda061c35c72c66021e63e8a9",
+            "fetched_at": "2026-09-04"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "huggingface/lerobot",
+      "name": "LeRobot",
+      "url": "https://github.com/huggingface/lerobot",
+      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "Apache-2.0",
+      "stars": 27219,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/huggingface/lerobot/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ba1a9487ce72d9018743997285a1ae29ba1f26c5656c2d97b038bc094b5ef9b2",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "50814df9295864e814a424c26461100f0fee631f",
+            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/50814df9295864e814a424c26461100f0fee631f"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "0583375a0ec642ec79c447781f34322b0cfa66baff31258214d040f1f6d86d7c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "a603343cdda0228e53d8d9cdeb355f342f1e8f2c",
+            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/a603343cdda0228e53d8d9cdeb355f342f1e8f2c"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      },
       "review_required": [
         "licensing",
         "classification",
@@ -630,6 +1345,33 @@
       ]
     },
     {
+      "repo": "matrixorigin/memoria",
+      "name": "Memoria",
+      "url": "https://github.com/matrixorigin/memoria",
+      "description": "Persistent memory layer for AI agents with versioned snapshots, branches, merges and rollback, hybrid semantic and full-text retrieval, provenance and audit trails, MCP access, and cloud or self-hosted deployment.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.98,
+      "github_detected_license": "Apache-2.0",
+      "stars": 593,
+      "topics": [
+        "agent",
+        "ai",
+        "database",
+        "llm",
+        "memory",
+        "storage"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "MaxFreedomPollard/Compartment",
       "name": "Compartment",
       "url": "https://github.com/MaxFreedomPollard/Compartment",
@@ -663,6 +1405,38 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "mindscale-noah/MindMemOS",
+      "name": "MindMemOS",
+      "url": "https://github.com/mindscale-noah/MindMemOS",
+      "description": "Portable memory service for agents with cloud and self-hosted deployment, HTTP and Python interfaces, plugins, schema-based extraction, consolidation and feedback loops, and experience-to-skill evolution.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.96,
+      "github_detected_license": null,
+      "stars": 978,
+      "topics": [
+        "agent",
+        "agent-memory",
+        "agent-skills",
+        "agentic",
+        "dsh-plugin",
+        "dsh-plugins",
+        "openclaw",
+        "openclaw-agent",
+        "openclaw-plugin",
+        "rag",
+        "skills"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-05",
       "review_required": [
         "licensing",
         "classification",
@@ -707,6 +1481,77 @@
       ]
     },
     {
+      "repo": "nanobrowser/nanobrowser",
+      "name": "nanobrowser",
+      "url": "https://github.com/nanobrowser/nanobrowser",
+      "description": "Open-Source Chrome extension for AI-powered web automation. Run multi-agent workflows using your own LLM API key. Alternative to OpenAI Operator.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.76,
+      "github_detected_license": "Apache-2.0",
+      "stars": 13705,
+      "topics": [
+        "high-adoption",
+        "discovery-sweep-2026-08-31"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-31",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "NVIDIA/Isaac-GR00T",
+      "name": "Isaac GR00T",
+      "url": "https://github.com/NVIDIA/Isaac-GR00T",
+      "description": "Isaac GR00T N1.7 is NVIDIA's open foundation model for generalist humanoid robots.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 8005,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Publishes pre-trained checkpoints under the NVIDIA Open Model License alongside Apache-2.0 code implementing a vision-language-action architecture whose action head is a diffusion transformer that denoises continuous actions. The README's own workflow overview ends with 'Connect `Gr00tPolicy` to your robot controller,' and its deployment section documents a server-client architecture where a policy server sends predicted actions to a client controlling real DROID hardware. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is continuous robot-control actions rather than text, image, audio, video, or PDF, and this is stated directly in the README's workflow-overview and deployment sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "62f6c55a356be039287416f97e03a3b5541052d038a3daec208ea9ff8045a067",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3",
+            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "93363510f62ce25ad1a47605b0b06ab335edd82f1a444531c58dd30b6e5a5a0c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "c6b51dc2713a75b943191f5767865b372a3cc80e",
+            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/c6b51dc2713a75b943191f5767865b372a3cc80e"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
       "repo": "NVIDIA/skills",
       "name": "skills",
       "url": "https://github.com/NVIDIA/skills",
@@ -740,6 +1585,172 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "NVlabs/alpamayo",
+      "name": "Alpamayo",
+      "url": "https://github.com/NVlabs/alpamayo",
+      "description": "Alpamayo is NVIDIA's open reasoning vision-language-action model that pairs autonomous-vehicle driving trajectories with chain-of-causation reasoning.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2015,
+      "topics": [
+        "alpamayo",
+        "autonomous-driving",
+        "autonomous-vehicles",
+        "chain-of-causation",
+        "computer-vision",
+        "end-to-end-driving",
+        "nvidia",
+        "physical-ai",
+        "reasoning",
+        "robotics",
+        "self-driving-car",
+        "trajectory-prediction",
+        "vision-language-action",
+        "vla",
+        "world-models"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Ships Apache-2.0 inference code plus a link to separately Hugging-Face-hosted weights under a distinct OpenMDW-1.1 licence, and its own disclaimer describes the release as provided solely for research, experimentation, and evaluation -- lacking real-world sensor access and required safety mechanisms, and explicitly 'not a fully fledged driving stack,' positioned as a building block rather than a deployed system. Its documented output is a predicted multi-second driving trajectory (waypoints) paired with a natural-language reasoning trace; the trajectory is numeric rather than text, image, audio, video, or PDF, and the reasoning trace is auxiliary to it rather than the release's primary output. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is a predicted trajectory.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/NVlabs/alpamayo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f1e4e490ac6d2628592db39e3154a41a919cad656120859bfa99d0a093348a47",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "7cd073a6e65a04026a64595cd9a23e5b0591b355",
+            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/7cd073a6e65a04026a64595cd9a23e5b0591b355"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/NVlabs/alpamayo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "062ed60a2a6568e04f07f3e2ae2b8cea94d1ce8813021f26a0758e2de5efd794",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "6ffaf0ddddd0c7761f592482ea0fa86ffb0af921",
+            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/6ffaf0ddddd0c7761f592482ea0fa86ffb0af921"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "OpenMind/OM1",
+      "name": "OM1",
+      "url": "https://github.com/OpenMind/OM1",
+      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.25,
+      "github_detected_license": "MIT",
+      "stars": 2904,
+      "topics": [
+        "llm",
+        "multiagent",
+        "robotics",
+        "ros2",
+        "zenoh"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/OpenMind/OM1/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "b9a9bb3a9cf647cbcb7727e456be2c69b9638b06b58794a7f86d50bda60c795b",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "50deb2fe3b68f0f239d8fc911201a72c57840764",
+            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/50deb2fe3b68f0f239d8fc911201a72c57840764"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "346d8a3f9ea734e02cbce9ebcc9969b18f28242badd1078360168a09e0e2f37c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
+            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "openvla/openvla",
+      "name": "OpenVLA",
+      "url": "https://github.com/openvla/openvla",
+      "description": "OpenVLA is an open-source vision-language-action model for robotic manipulation.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": "MIT",
+      "stars": 6955,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
+        "finding": "Publishes pre-trained checkpoints on Hugging Face that, per the README's own licensing note, inherit the Llama-2 Community License even though the repository's code is MIT-licensed. The README states the released checkpoints are trained 'to generate actions, and actions alone,' and its getting-started example predicts an action from a camera image and instruction and passes the result straight to 'robot.act(action, ...)'; a separate deployment script serves the model over a REST API for integration into existing robot control stacks. No model type or modality already in this catalog's vocabulary names a released policy whose sole documented output is a robot action rather than text, image, audio, video, or PDF, and this is stated directly in the README's getting-started example without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/openvla/openvla/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ba8e9a2884e38a8000dafc98af4116512e37b0e143dad2f940100482bfd6b75c",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "075feef94adfeb802d1d89856159a974bf5358f8",
+            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/075feef94adfeb802d1d89856159a974bf5358f8"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/openvla/openvla/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c4ee2ba5958af03d74b1d3dfa174e3749171d689fb4c23cc170749c05ae3eeb5",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "04f26a7d0bfdeb89ce54681c695a40df21aa6d96",
+            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/04f26a7d0bfdeb89ce54681c695a40df21aa6d96"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
     },
     {
       "repo": "Orchestra-Research/AI-Research-SKILLs",
@@ -798,6 +1809,78 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Physical-Intelligence/openpi",
+      "name": "openpi",
+      "url": "https://github.com/Physical-Intelligence/openpi",
+      "description": "openpi holds Physical Intelligence's open-source vision-language-action robot policy models (pi0, pi0-FAST, pi0.5) and the packages to run or fine-tune them.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.15,
+      "github_detected_license": "Apache-2.0",
+      "stars": 13639,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
+        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "567fc57766bd736664f50126cab8145af4071ca16cc5e238f2b11e369169c3b5",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "d16e43d4790c60d9e22e67c58a407594fa6fb772",
+            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/d16e43d4790c60d9e22e67c58a407594fa6fb772"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "f49a4e16e68b128803cc2dcea614603632b04eac",
+            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "pingdotgg/t3code",
+      "name": "T3 Code",
+      "url": "https://github.com/pingdotgg/t3code",
+      "description": "Open-source control plane for running coding agents in parallel branches and reviewing, committing, pushing, and opening pull requests.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.96,
+      "github_detected_license": "MIT",
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "workflow",
+        "multi-agent"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-26",
       "review_required": [
         "licensing",
         "classification",
@@ -879,6 +1962,54 @@
       ]
     },
     {
+      "repo": "ros/urdfdom",
+      "name": "urdfdom",
+      "url": "https://github.com/ros/urdfdom",
+      "description": "urdfdom is the reference parser library for URDF (Unified Robot Description Format), the XML format ROS uses to describe a robot's kinematic and visual structure.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.1,
+      "github_detected_license": null,
+      "stars": 136,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-04",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robotics scope decision",
+        "rule": "docs/SPECIFICATIONS.md inclusion boundary",
+        "finding": "Reviewable unit is a specification: URDF, a versioned XML vocabulary for a robot's kinematic and visual structure, whose reference parser this repo also ships. This repo's own README states plainly, 'For now, the details of the URDF specifications reside on http://ros.org/wiki/urdf' -- the parser repository disclaims being the format's authoritative documentation home. I followed that link (it redirects to https://wiki.ros.org/urdf) and read two things there: the page carries the ROS project's own end-of-life banner stating 'the ROS Wiki (this website) will also be EOL and transition to being an archive' and directing 'Maintainers: Please migrate any wiki content into your package's README.md file,' and its body already states 'The core URDF parser and data structures (urdfdom, urdfdom_headers) have been pushed upstream into stand alone (no ROS-dependencies) software packages' -- naming this repo by name as where that content now lives. That supports reading urdfdom's README, not the wiki, as the format's current documentation surface, consistent with the versioned 1.0/1.1/1.2 attribute table the README itself carries (exact required and optional attributes, numeric defaults, and forward/backward parsing compatibility for each geometry and joint-limit feature) -- real normative detail, satisfying docs/SPECIFICATIONS.md's normative-detail requirement without reading any source file. The wiki page was read but not pinned as evidence: it is an archive-bound third-party page -- EOL by its own banner, which directs its content into package READMEs -- rather than the format's maintained authoritative home. What this paragraph reports of that page's content is what I read there, not verified first-party evidence the way the pinned README and LICENSE are. URDF is not caught by the boundary's refusal sentence: it is not a general transport, a general serialization format, or an API description language -- it is a domain-specific vocabulary for one thing, a robot's structure, the same way an admitted metadata schema is a domain-specific vocabulary rather than a generic encoding. It also does not cleanly fit the admission sentence: the contract's boundary connects a physical robot's description to the software that consumes it (parsers, simulators, motion planners). The closest of the ten specification_scopes is tool_data_integration ('Connects model applications to tools, resources, prompts, and external data'), since a URDF file is exactly the kind of external data a downstream tool consumes, but it fails to name that the entity described is a physical robot -- hardware -- rather than a model application, tool, resource, or prompt in the software sense. None of the ten specification_scopes values, and none of the boundary parties docs/SPECIFICATIONS.md enumerates (agents, tools, clients, users, repositories, extension packages), name a robot or hardware description boundary; admitting this record would require a scope identifier that does not exist today, and ADR 017 ties that extension to the change that admits a record, not to this sweep. Identity caution for a future reviewer: this candidate's repo and url fields point at the parser (ros/urdfdom, github.com/ros/urdfdom), not at a specification home. If URDF is ever promoted to directory/specifications.json, resolve first where the format's own current authoritative documentation actually lives -- the README's cited wiki page is itself EOL and being archived, and I did not verify what, if anything, has replaced it as URDF's canonical home -- before assuming this repo's url is the right one to record, the way an admitted record points at a specification's own home rather than at one implementation of it.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/ros/urdfdom/blob/rolling/README.md",
+            "kind": "git_blob",
+            "content_sha256": "3c38aa3bcaa523e782e8b42c788d59ef7b370af34a80ce0da87a8949390bf190",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "f780413639cd5cd7faa09809a8cef63965246af9",
+            "immutable_url": "https://api.github.com/repos/ros/urdfdom/git/blobs/f780413639cd5cd7faa09809a8cef63965246af9"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ros/urdfdom/blob/rolling/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "691230016abaee7fc1f685d49632d762a45bb55c5c3d0f805ba950ec53fd189a",
+            "fetched_at": "2026-09-04",
+            "blob_sha": "810105d709587b41724d061dd306f071a9c69252",
+            "immutable_url": "https://api.github.com/repos/ros/urdfdom/git/blobs/810105d709587b41724d061dd306f071a9c69252"
+          }
+        ],
+        "proposed_at": "2026-09-04",
+        "proposer": "robotics scope screening"
+      }
+    },
+    {
       "repo": "Roznoshchik/Lurnby",
       "name": "Lurnby",
       "url": "https://github.com/Roznoshchik/Lurnby",
@@ -924,6 +2055,26 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "Seekr-Technologies/seekr-hatchery",
+      "name": "seekr-hatchery",
+      "url": "https://github.com/Seekr-Technologies/seekr-hatchery",
+      "description": "Task orchestration CLI that gives each coding-agent task its own git worktree, branch, task record, and Docker sandbox with a read-only repository mount.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.82,
+      "github_detected_license": null,
+      "stars": 12,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-02",
       "review_required": [
         "licensing",
         "classification",
@@ -1042,6 +2193,32 @@
       ]
     },
     {
+      "repo": "SylphAI-Inc/adal-cli",
+      "name": "AdaL",
+      "url": "https://github.com/SylphAI-Inc/adal-cli",
+      "description": "Commercial terminal, web IDE, and desktop coding agent from SylphAI that delegates to specialized worker agents for coding, review, deep research, and browser use, built on the open-source AdalFlow library.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.88,
+      "github_detected_license": null,
+      "stars": 100,
+      "topics": [
+        "ai-agent",
+        "cli",
+        "coding-agent",
+        "mcp",
+        "multi-model"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-08-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "withkynam/vibecode-pro-max-kit",
       "name": "vibecode-pro-max-kit",
       "url": "https://github.com/withkynam/vibecode-pro-max-kit",
@@ -1124,221 +2301,6 @@
       ]
     },
     {
-      "repo": "zhangfengcdt/memoir",
-      "name": "memoir",
-      "url": "https://github.com/zhangfengcdt/memoir",
-      "description": "Hierarchical Agent Memory with Git-Like Version Control",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 607,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "GroqChat",
-      "url": "https://chat.groq.com/",
-      "description": "Groq-hosted end-user chat interface for interacting with supported models through Groq's inference platform.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "multi_model_chat_client",
-      "classification_confidence": 0.76,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "assistant",
-        "chat",
-        "groq",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "pingdotgg/t3code",
-      "name": "T3 Code",
-      "url": "https://github.com/pingdotgg/t3code",
-      "description": "Open-source control plane for running coding agents in parallel branches and reviewing, committing, pushing, and opening pull requests.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.96,
-      "github_detected_license": "MIT",
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "workflow",
-        "multi-agent"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "NotebookLM",
-      "url": "https://notebooklm.google.com/",
-      "description": "Google knowledge workspace for durable source collections, grounded answers with citations, and generated research and learning artifacts.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "ai_knowledge_app",
-      "classification_confidence": 0.97,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "knowledge-app",
-        "notebook",
-        "rag",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Pletor",
-      "url": "https://www.pletor.ai/",
-      "description": "No-code creative-production platform for building reusable AI agents and pipelines over multiple text, image, video, and audio models, brand context, APIs, and MCP.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.84,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "creative-production",
-        "marketing",
-        "multi-model",
-        "no-code",
-        "workflow"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-28",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "getnao/sylph",
-      "name": "Sylph",
-      "url": "https://github.com/getnao/sylph",
-      "description": "Git-based company brain of human-owned context, skills, agents, schedules, and self-improving rules designed to work across Claude Code, Codex, Cursor, and other repository-aware agents.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "memory_bridge",
-      "classification_confidence": 0.92,
-      "github_detected_license": null,
-      "stars": 187,
-      "topics": [
-        "agent-skills",
-        "company-brain",
-        "git",
-        "memory",
-        "multi-agent"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-28",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "SylphAI-Inc/adal-cli",
-      "name": "AdaL",
-      "url": "https://github.com/SylphAI-Inc/adal-cli",
-      "description": "Commercial terminal, web IDE, and desktop coding agent from SylphAI that delegates to specialized worker agents for coding, review, deep research, and browser use, built on the open-source AdalFlow library.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.88,
-      "github_detected_license": null,
-      "stars": 100,
-      "topics": [
-        "ai-agent",
-        "cli",
-        "coding-agent",
-        "mcp",
-        "multi-model"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-29",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "nanobrowser/nanobrowser",
-      "name": "nanobrowser",
-      "url": "https://github.com/nanobrowser/nanobrowser",
-      "description": "Open-Source Chrome extension for AI-powered web automation. Run multi-agent workflows using your own LLM API key. Alternative to OpenAI Operator.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.76,
-      "github_detected_license": "Apache-2.0",
-      "stars": 13705,
-      "topics": [
-        "high-adoption",
-        "discovery-sweep-2026-08-31"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-31",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "Seekr-Technologies/seekr-hatchery",
-      "name": "seekr-hatchery",
-      "url": "https://github.com/Seekr-Technologies/seekr-hatchery",
-      "description": "Task orchestration CLI that gives each coding-agent task its own git worktree, branch, task record, and Docker sandbox with a read-only repository mount.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.82,
-      "github_detected_license": null,
-      "stars": 12,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-02",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "yoheinakajima/babyagi",
       "name": "BabyAGI (functionz)",
       "url": "https://github.com/yoheinakajima/babyagi",
@@ -1359,980 +2321,18 @@
       ]
     },
     {
-      "repo": "google-antigravity/antigravity-sdk-python",
-      "name": "Antigravity SDK",
-      "url": "https://github.com/google-antigravity/antigravity-sdk-python",
-      "description": "Apache-2.0 Python framework for building custom agents on Google's Antigravity runtime; its Agent class discovers and drives the closed Antigravity binary rather than shipping an agent loop of its own.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.75,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3279,
-      "topics": [
-        "agent-framework",
-        "sdk"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-03",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "AlphaEvolve",
-      "url": "https://docs.cloud.google.com/gemini/enterprise/docs/alphaevolve/developer-guide/overview",
-      "description": "Google Cloud's managed evolutionary coding agent, generally available since 2026-07-09 under Gemini Enterprise; it iterates generations of candidate programs against caller-supplied evaluation metrics to discover optimised algorithms, driven through a documented API and a first-party client library.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.6,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "evolutionary-search",
-        "gemini-enterprise",
-        "managed"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-03",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "algorithmicsuperintelligence/openevolve",
-      "name": "OpenEvolve",
-      "url": "https://github.com/algorithmicsuperintelligence/openevolve",
-      "description": "Apache-2.0 open implementation of AlphaEvolve that mutates candidate programs with an LLM ensemble, executes and scores them through caller-supplied evaluators with cascade stages, timeouts, and retries, and keeps survivors in a MAP-Elites archive across migrating islands.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.7,
-      "github_detected_license": "Apache-2.0",
-      "stars": 7319,
-      "topics": [
-        "alphaevolve",
-        "coding-agent",
-        "evolutionary-algorithms",
-        "llm-ensemble"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-03",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "dora-rs/dora",
-      "name": "Dora",
-      "url": "https://github.com/dora-rs/dora",
-      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3922,
-      "topics": [
-        "dataflow",
-        "embodied-ai",
-        "low-latency",
-        "robotics",
-        "rust"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/dora-rs/dora/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ae5e06d263ca95043cedfd1d14c4eb3474389fb6570dd0d0abc6060c9273e268",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "9700c27ca56309d5458bc986482823b51459669b",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/9700c27ca56309d5458bc986482823b51459669b"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dora-rs/dora/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7b515bc646ca4e20427bc6a72b8ca5149a0e9b38a77e9a7d0ba5463af5a6cfbc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "fe9751aa01eb9c7d359209185eb26c8e31f1a15f",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/fe9751aa01eb9c7d359209185eb26c8e31f1a15f"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "OpenMind/OM1",
-      "name": "OM1",
-      "url": "https://github.com/OpenMind/OM1",
-      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.25,
-      "github_detected_license": "MIT",
-      "stars": 2904,
-      "topics": [
-        "llm",
-        "multiagent",
-        "robotics",
-        "ros2",
-        "zenoh"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/OpenMind/OM1/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "b9a9bb3a9cf647cbcb7727e456be2c69b9638b06b58794a7f86d50bda60c795b",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50deb2fe3b68f0f239d8fc911201a72c57840764",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/50deb2fe3b68f0f239d8fc911201a72c57840764"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "346d8a3f9ea734e02cbce9ebcc9969b18f28242badd1078360168a09e0e2f37c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "Physical-Intelligence/openpi",
-      "name": "openpi",
-      "url": "https://github.com/Physical-Intelligence/openpi",
-      "description": "openpi holds Physical Intelligence's open-source vision-language-action robot policy models (pi0, pi0-FAST, pi0.5) and the packages to run or fine-tune them.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": "Apache-2.0",
-      "stars": 13639,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "567fc57766bd736664f50126cab8145af4071ca16cc5e238f2b11e369169c3b5",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "d16e43d4790c60d9e22e67c58a407594fa6fb772",
-            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/d16e43d4790c60d9e22e67c58a407594fa6fb772"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/Physical-Intelligence/openpi/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "f49a4e16e68b128803cc2dcea614603632b04eac",
-            "immutable_url": "https://api.github.com/repos/Physical-Intelligence/openpi/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "google-deepmind/gemini-robotics-sdk",
-      "name": "Safari SDK",
-      "url": "https://github.com/google-deepmind/gemini-robotics-sdk",
-      "description": "Safari SDK provides full lifecycle tooling for Google DeepMind's Gemini Robotics models, including checkpoint access, serving, evaluation, and fine-tuning.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 606,
-      "topics": [
-        "gemini",
-        "robotics"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
-            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
-            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "NVlabs/alpamayo",
-      "name": "Alpamayo",
-      "url": "https://github.com/NVlabs/alpamayo",
-      "description": "Alpamayo is NVIDIA's open reasoning vision-language-action model that pairs autonomous-vehicle driving trajectories with chain-of-causation reasoning.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2015,
-      "topics": [
-        "alpamayo",
-        "autonomous-driving",
-        "autonomous-vehicles",
-        "chain-of-causation",
-        "computer-vision",
-        "end-to-end-driving",
-        "nvidia",
-        "physical-ai",
-        "reasoning",
-        "robotics",
-        "self-driving-car",
-        "trajectory-prediction",
-        "vision-language-action",
-        "vla",
-        "world-models"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
-        "finding": "Ships Apache-2.0 inference code plus a link to separately Hugging-Face-hosted weights under a distinct OpenMDW-1.1 licence, and its own disclaimer describes the release as provided solely for research, experimentation, and evaluation -- lacking real-world sensor access and required safety mechanisms, and explicitly 'not a fully fledged driving stack,' positioned as a building block rather than a deployed system. Its documented output is a predicted multi-second driving trajectory (waypoints) paired with a natural-language reasoning trace; the trajectory is numeric rather than text, image, audio, video, or PDF, and the reasoning trace is auxiliary to it rather than the release's primary output. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is a predicted trajectory.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/NVlabs/alpamayo/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "f1e4e490ac6d2628592db39e3154a41a919cad656120859bfa99d0a093348a47",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "7cd073a6e65a04026a64595cd9a23e5b0591b355",
-            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/7cd073a6e65a04026a64595cd9a23e5b0591b355"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/NVlabs/alpamayo/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "062ed60a2a6568e04f07f3e2ae2b8cea94d1ce8813021f26a0758e2de5efd794",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "6ffaf0ddddd0c7761f592482ea0fa86ffb0af921",
-            "immutable_url": "https://api.github.com/repos/NVlabs/alpamayo/git/blobs/6ffaf0ddddd0c7761f592482ea0fa86ffb0af921"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "ros/urdfdom",
-      "name": "urdfdom",
-      "url": "https://github.com/ros/urdfdom",
-      "description": "urdfdom is the reference parser library for URDF (Unified Robot Description Format), the XML format ROS uses to describe a robot's kinematic and visual structure.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.1,
-      "github_detected_license": null,
-      "stars": 136,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/SPECIFICATIONS.md inclusion boundary",
-        "finding": "Reviewable unit is a specification: URDF, a versioned XML vocabulary for a robot's kinematic and visual structure, whose reference parser this repo also ships. This repo's own README states plainly, 'For now, the details of the URDF specifications reside on http://ros.org/wiki/urdf' -- the parser repository disclaims being the format's authoritative documentation home. I followed that link (it redirects to https://wiki.ros.org/urdf) and read two things there: the page carries the ROS project's own end-of-life banner stating 'the ROS Wiki (this website) will also be EOL and transition to being an archive' and directing 'Maintainers: Please migrate any wiki content into your package's README.md file,' and its body already states 'The core URDF parser and data structures (urdfdom, urdfdom_headers) have been pushed upstream into stand alone (no ROS-dependencies) software packages' -- naming this repo by name as where that content now lives. That supports reading urdfdom's README, not the wiki, as the format's current documentation surface, consistent with the versioned 1.0/1.1/1.2 attribute table the README itself carries (exact required and optional attributes, numeric defaults, and forward/backward parsing compatibility for each geometry and joint-limit feature) -- real normative detail, satisfying docs/SPECIFICATIONS.md's normative-detail requirement without reading any source file. The wiki page was read but not pinned as evidence: it is an archive-bound third-party page -- EOL by its own banner, which directs its content into package READMEs -- rather than the format's maintained authoritative home. What this paragraph reports of that page's content is what I read there, not verified first-party evidence the way the pinned README and LICENSE are. URDF is not caught by the boundary's refusal sentence: it is not a general transport, a general serialization format, or an API description language -- it is a domain-specific vocabulary for one thing, a robot's structure, the same way an admitted metadata schema is a domain-specific vocabulary rather than a generic encoding. It also does not cleanly fit the admission sentence: the contract's boundary connects a physical robot's description to the software that consumes it (parsers, simulators, motion planners). The closest of the ten specification_scopes is tool_data_integration ('Connects model applications to tools, resources, prompts, and external data'), since a URDF file is exactly the kind of external data a downstream tool consumes, but it fails to name that the entity described is a physical robot -- hardware -- rather than a model application, tool, resource, or prompt in the software sense. None of the ten specification_scopes values, and none of the boundary parties docs/SPECIFICATIONS.md enumerates (agents, tools, clients, users, repositories, extension packages), name a robot or hardware description boundary; admitting this record would require a scope identifier that does not exist today, and ADR 017 ties that extension to the change that admits a record, not to this sweep. Identity caution for a future reviewer: this candidate's repo and url fields point at the parser (ros/urdfdom, github.com/ros/urdfdom), not at a specification home. If URDF is ever promoted to directory/specifications.json, resolve first where the format's own current authoritative documentation actually lives -- the README's cited wiki page is itself EOL and being archived, and I did not verify what, if anything, has replaced it as URDF's canonical home -- before assuming this repo's url is the right one to record, the way an admitted record points at a specification's own home rather than at one implementation of it.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/ros/urdfdom/blob/rolling/README.md",
-            "kind": "git_blob",
-            "content_sha256": "3c38aa3bcaa523e782e8b42c788d59ef7b370af34a80ce0da87a8949390bf190",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "f780413639cd5cd7faa09809a8cef63965246af9",
-            "immutable_url": "https://api.github.com/repos/ros/urdfdom/git/blobs/f780413639cd5cd7faa09809a8cef63965246af9"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/ros/urdfdom/blob/rolling/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "691230016abaee7fc1f685d49632d762a45bb55c5c3d0f805ba950ec53fd189a",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "810105d709587b41724d061dd306f071a9c69252",
-            "immutable_url": "https://api.github.com/repos/ros/urdfdom/git/blobs/810105d709587b41724d061dd306f071a9c69252"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Spot",
-      "url": "https://bostondynamics.com/products/spot/",
-      "description": "Spot is Boston Dynamics' commercially sold agile mobile robot for autonomous site inspection and remote operation.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, and that documentation site is itself the only stably citable first-party page found: every page on bostondynamics.com proper -- the product page, '/terms/', and '/spot-sales/' alike -- embeds a live WordPress cache-metrics comment whose hit/miss counters differ on every request, confirmed by fetching each of them twice in a row and finding the bytes differ both times, so none of them can be pinned for stable re-verification. Read live (not pinned), '/terms/' is a generic website Terms of Use governing use of bostondynamics.com itself -- content ownership, site access -- not a purchase agreement, EULA, or licence for the product, and '/spot-sales/' routes pricing and purchase through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
-        "evidence": [
-          {
-            "label": "Spot SDK documentation",
-            "url": "https://dev.bostondynamics.com/",
-            "kind": "web",
-            "content_sha256": "1616be0909be7c97f12e5d248748778a76f46634833f4ae8fd7ed9e6fcd10611",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Unitree G1",
-      "url": "https://www.unitree.com/g1/",
-      "description": "The Unitree G1 is a commercially sold humanoid robot with force-position hybrid control and imitation- and reinforcement-learned manipulation skills.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Unitree publishes a public price (from $13.5K) for the G1 on its own product page and a Terms & Policies page, but that page's only substantive content is an after-sales warranty policy for the physical hardware (repair eligibility, damage exclusions, shipping responsibility); it establishes no software licence, source-model classification, or complete licence list for the robot's onboard AI stack or control software. The site links an 'Official Open Source' page, but that page renders no first-party list of components or licences in its own markup. No authoritative first-party source establishes a reviewed source model and complete licence list for the product as sold.",
-        "evidence": [
-          {
-            "label": "G1 product page",
-            "url": "https://www.unitree.com/g1/",
-            "kind": "web",
-            "content_sha256": "942804cf597a33a6f994c859588af47ce9be97519608b302e578e069a2358700",
-            "fetched_at": "2026-09-04"
-          },
-          {
-            "label": "Terms & Policies",
-            "url": "https://www.unitree.com/terms",
-            "kind": "web",
-            "content_sha256": "852ed22ce2f0e277217ec2cf63c8310843dc860fda061c35c72c66021e63e8a9",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Figure",
-      "url": "https://www.figure.ai/",
-      "description": "Figure is an AI robotics company building a general-purpose humanoid robot for commercial deployment.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "figure.ai is served through a Vercel CDN edge cache: repeated fetches within a single verification session return identical bytes with a constant ETag and a climbing 'age' header (observed on the terms-and-conditions, privacy-policy, accessibility-statement, and home pages alike), so the site reads as stable while any one review is underway. But a shared footer icon component embeds a randomly generated SVG gradient identifier that is baked in at origin render time; that value changes only when the edge cache invalidates and Vercel re-renders from origin on its own stale-while-revalidate cadence, not on every request. That makes a hash pinned to any figure.ai page unsafe to rely on indefinitely -- it can hold for an entire review session and still not survive to a later recheck once the cache regenerates, which is exactly the failure this review hit once already when a Wayback capture of this same page was hashed moments after being triggered and had not yet settled. The terms-and-conditions page was read live: it is a generic website Terms and Conditions, dated February 2023 in its own body text, governing use of figure.ai itself (account access, electronic communications, linked sites) with no mention of the robot as a product, its sale, its licensing, or its onboard software, and no product page publishes a price or purchase path. That reading is a first-party observation, not a durably re-verifiable citation, for the CDN-cache reason above; the site's own sitemap is cited instead because, as a static file with no templated component, it does not carry the same regeneration risk, and it establishes from a stable first-party source that the terms page exists and when Figure's content system last touched it. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page, and no page on the domain carrying that content can be durably pinned for a checkable citation in the first place.",
-        "evidence": [
-          {
-            "label": "Sitemap (the only figure.ai resource found to be byte-stable across repeated fetches; it confirms the terms-and-conditions URL exists but carries no terms content itself)",
-            "url": "https://www.figure.ai/sitemap.xml",
-            "kind": "web",
-            "content_sha256": "c273455d32f39ea7efb06c58e4194b3f09721fe4bbc007e88354b31af02498b6",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "1X NEO",
-      "url": "https://www.1x.tech/neo",
-      "description": "NEO is 1X's humanoid home robot, sold to perform household chores and provide personalized in-home assistance.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "1X publishes public pricing and reservation plans for NEO on its own order page ($499/mo subscription or $20,000 ownership, a refundable $200 deposit), but the Terms and Conditions page linked from both the product and order pages returns HTTP 404 -- the document does not exist at review time, even though the sibling Privacy Policy page resolves. No reachable first-party page therefore establishes a reviewed source model or complete licence list covering the hardware, its built-in large language model, or its Redwood AI vision-language model; the order page's own feature list describes capability through marketing prose rather than a governing agreement.",
-        "evidence": [
-          {
-            "label": "NEO product page",
-            "url": "https://www.1x.tech/neo",
-            "kind": "web",
-            "content_sha256": "7b5e2e66b705abc689605b8adaf34e0f7e9ad3425d56a3798241ea180701d44a",
-            "fetched_at": "2026-09-04"
-          },
-          {
-            "label": "NEO order page",
-            "url": "https://www.1x.tech/order",
-            "kind": "web",
-            "content_sha256": "ccc7a569b67b78d79829efdc73697bc1a0bf3b336c19b6592aa788db744f80fc",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "huggingface/lerobot",
-      "name": "LeRobot",
-      "url": "https://github.com/huggingface/lerobot",
-      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27219,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/huggingface/lerobot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ba1a9487ce72d9018743997285a1ae29ba1f26c5656c2d97b038bc094b5ef9b2",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50814df9295864e814a424c26461100f0fee631f",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/50814df9295864e814a424c26461100f0fee631f"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0583375a0ec642ec79c447781f34322b0cfa66baff31258214d040f1f6d86d7c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a603343cdda0228e53d8d9cdeb355f342f1e8f2c",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/a603343cdda0228e53d8d9cdeb355f342f1e8f2c"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      },
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "NVIDIA/Isaac-GR00T",
-      "name": "Isaac GR00T",
-      "url": "https://github.com/NVIDIA/Isaac-GR00T",
-      "description": "Isaac GR00T N1.7 is NVIDIA's open foundation model for generalist humanoid robots.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": "Apache-2.0",
-      "stars": 8005,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
-        "finding": "Publishes pre-trained checkpoints under the NVIDIA Open Model License alongside Apache-2.0 code implementing a vision-language-action architecture whose action head is a diffusion transformer that denoises continuous actions. The README's own workflow overview ends with 'Connect `Gr00tPolicy` to your robot controller,' and its deployment section documents a server-client architecture where a policy server sends predicted actions to a client controlling real DROID hardware. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is continuous robot-control actions rather than text, image, audio, video, or PDF, and this is stated directly in the README's workflow-overview and deployment sections without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "62f6c55a356be039287416f97e03a3b5541052d038a3daec208ea9ff8045a067",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3",
-            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/6d86ea8af1a7f303b8cb71e8e281606f71f7a0f3"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/NVIDIA/Isaac-GR00T/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "93363510f62ce25ad1a47605b0b06ab335edd82f1a444531c58dd30b6e5a5a0c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "c6b51dc2713a75b943191f5767865b372a3cc80e",
-            "immutable_url": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/blobs/c6b51dc2713a75b943191f5767865b372a3cc80e"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": "openvla/openvla",
-      "name": "OpenVLA",
-      "url": "https://github.com/openvla/openvla",
-      "description": "OpenVLA is an open-source vision-language-action model for robotic manipulation.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": "MIT",
-      "stars": 6955,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robotics scope decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
-        "finding": "Publishes pre-trained checkpoints on Hugging Face that, per the README's own licensing note, inherit the Llama-2 Community License even though the repository's code is MIT-licensed. The README states the released checkpoints are trained 'to generate actions, and actions alone,' and its getting-started example predicts an action from a camera image and instruction and passes the result straight to 'robot.act(action, ...)'; a separate deployment script serves the model over a REST API for integration into existing robot control stacks. No model type or modality already in this catalog's vocabulary names a released policy whose sole documented output is a robot action rather than text, image, audio, video, or PDF, and this is stated directly in the README's getting-started example without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/openvla/openvla/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ba8e9a2884e38a8000dafc98af4116512e37b0e143dad2f940100482bfd6b75c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "075feef94adfeb802d1d89856159a974bf5358f8",
-            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/075feef94adfeb802d1d89856159a974bf5358f8"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/openvla/openvla/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c4ee2ba5958af03d74b1d3dfa174e3749171d689fb4c23cc170749c05ae3eeb5",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "04f26a7d0bfdeb89ce54681c695a40df21aa6d96",
-            "immutable_url": "https://api.github.com/repos/openvla/openvla/git/blobs/04f26a7d0bfdeb89ce54681c695a40df21aa6d96"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Genspark AI Workspace",
-      "url": "https://www.genspark.ai/",
-      "description": "All-in-one AI workspace whose Super Agent plans and acts across research, content creation, data analysis, calls, email, documents, spreadsheets, coding, and other workflows by coordinating specialized agents and connected tools.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.94,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "general-work-agent",
-        "official-product",
-        "user-submitted",
-        "workspace"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Manus",
-      "url": "https://manus.im/",
-      "description": "Cloud general-purpose agent that autonomously plans and executes multi-step tasks spanning research, data processing, code, websites, documents, slides, media, connected tools, and scheduled workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.96,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "cloud-agent",
-        "general-work-agent",
-        "official-product",
-        "workspace"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Notion Agents",
-      "url": "https://www.notion.com/product/agents",
-      "description": "Personal and scheduled custom agents that perform multi-step knowledge work across Notion pages, databases, Slack, mail, calendars, MCP integrations, and other connected tools with permissions, audit logs, and reversible changes.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.9,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "enterprise",
-        "general-work-agent",
-        "knowledge-work",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Lindy",
-      "url": "https://www.lindy.ai/",
-      "description": "AI teammate for cross-application work through Slack, Gmail, Google Drive, Calendar, Notion, computer use, MCP servers, and a large integration catalog, with persistent meeting and workspace context.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.88,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "general-work-agent",
-        "integrations",
-        "official-product",
-        "work-automation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Gumloop",
-      "url": "https://www.gumloop.com/",
-      "description": "No-code platform for building and operating AI agents that use connected company knowledge, recurring and event triggers, hundreds of application connectors, skills, code execution, and organization-wide audit controls.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.91,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-builder",
-        "enterprise",
-        "no-code",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Fellou",
-      "url": "https://fellou.ai/",
-      "description": "Downloadable agentic browser that plans and executes cross-application web workflows, conducts multi-source research, automates logged-in browser actions, and can operate local applications and files with visible plans and intervention controls.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.98,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agentic-browser",
-        "browser-automation",
-        "computer-use",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Aera Browser",
-      "url": "https://aerabrowser.com/",
-      "description": "Downloadable agentic browser with autonomous browsing, scheduled tasks, parallel agents and subagents, MCP integrations, local-model support, and releases for macOS, Windows, and Linux.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.97,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agentic-browser",
-        "browser-automation",
-        "official-product",
-        "scheduled-tasks"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Asana AI Teammates",
-      "url": "https://asana.com/product/ai/ai-teammates",
-      "description": "Collaborative AI agents for coordination-heavy team work inside Asana, using Work Graph context, shared memory, configurable roles and permissions, connected applications, and no-code authoring through AI Studio.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "general_work_agent",
-      "classification_confidence": 0.86,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "enterprise",
-        "general-work-agent",
-        "official-product",
-        "project-management"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "ClickHouse/nerve",
-      "name": "Nerve",
-      "url": "https://github.com/ClickHouse/nerve",
-      "description": "Self-hosted AI agent runtime built around the Claude Agent SDK, with persistent memory, scheduled execution, task and plan management, evolving skills, approval gates, source synchronization, and web and Telegram channels.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.98,
-      "github_detected_license": "Apache-2.0",
-      "stars": 78,
-      "topics": [
-        "ai-agents",
-        "autonomous-agents",
-        "claude",
-        "self-hosted"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "mindscale-noah/MindMemOS",
-      "name": "MindMemOS",
-      "url": "https://github.com/mindscale-noah/MindMemOS",
-      "description": "Portable memory service for agents with cloud and self-hosted deployment, HTTP and Python interfaces, plugins, schema-based extraction, consolidation and feedback loops, and experience-to-skill evolution.",
+      "repo": "zhangfengcdt/memoir",
+      "name": "memoir",
+      "url": "https://github.com/zhangfengcdt/memoir",
+      "description": "Hierarchical Agent Memory with Git-Like Version Control",
       "proposed_system_family": "memory_system",
       "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.96,
-      "github_detected_license": null,
-      "stars": 978,
-      "topics": [
-        "agent",
-        "agent-memory",
-        "agent-skills",
-        "agentic",
-        "dsh-plugin",
-        "dsh-plugins",
-        "openclaw",
-        "openclaw-agent",
-        "openclaw-plugin",
-        "rag",
-        "skills"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-05",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "matrixorigin/memoria",
-      "name": "Memoria",
-      "url": "https://github.com/matrixorigin/memoria",
-      "description": "Persistent memory layer for AI agents with versioned snapshots, branches, merges and rollback, hybrid semantic and full-text retrieval, provenance and audit trails, MCP access, and cloud or self-hosted deployment.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.98,
+      "classification_confidence": 0.8,
       "github_detected_license": "Apache-2.0",
-      "stars": 593,
-      "topics": [
-        "agent",
-        "ai",
-        "database",
-        "llm",
-        "memory",
-        "storage"
-      ],
+      "stars": 607,
+      "topics": [],
       "status": "provisional",
-      "discovered_at": "2026-09-05",
+      "discovered_at": "2026-08-25",
       "review_required": [
         "licensing",
         "classification",
