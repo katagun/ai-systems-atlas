@@ -100,6 +100,10 @@ These never become records, no matter how prominent the name:
 
 A launch-dated release served only through a rotating alias is still reviewable: the release itself (announcement date, dated deployments) is the fixed identity even when no pinnable snapshot exists, as with GPT-6 Astra and GPT-5.5 Instant. The exclusion targets names with no release identity of their own, not releases whose serving alias moves. Record the rotation as a lifecycle deduction.
 
+### Line updates: re-review in place, never a second record
+
+When a reviewed line moves to a new snapshot, re-review the existing line record; do not mint a snapshot record beside it. Update the boundary to the new identity, re-verify the license text, distribution paths, and scores against the new snapshot, refresh the evidence list, and advance `verified_at`. Then exclude the snapshot source ID with a pointer to the line record, since its content is now folded in. A genuinely new line — a new release name from the developer, not a new snapshot of the reviewed line — gets its own record, and the old record keeps lifecycle notes. Git history preserves the superseded review, the way it preserves every completed backlog item.
+
 ### Holds and exclusions
 
 Retired or undocumented source IDs that the queue cannot resolve on its own are dispositioned in `directory/model-dispositions.json`, never in prose alone: `held` means not now but possibly later (the page is gone or was never published, as with Claude Opus 4.1 and Grok 4.1 Fast), `excluded` means never in this shape (aliases, duplicates, retired snapshots of reviewed lines). Each entry carries the `source_id`, the disposition, a reason, and `decided_at`. The importer filters dispositioned IDs out of `model-candidates.json` while keeping them in the eligible count, the promotion command refuses them until the disposition is lifted, and validation keeps the eligible count equal to queued plus reviewed plus dispositioned IDs. The file is unpublished review state, like the queue itself.
