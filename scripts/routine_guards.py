@@ -3,10 +3,11 @@
 `scripts/run_candidate_triage.py` and `scripts/run_hn_signals.py` both drive an
 unattended LLM prompt and both fence it the same way: a blast-radius check on the
 working tree, the same check on what the branch already committed, a prompt-drift check
-against the reviewed prompt, and one subprocess helper. Those five were verbatim forks
-of each other, so `tests/test_candidate_evidence.py` covered one copy thoroughly and
-nothing covered the other. They live here once, and each routine binds them to its own
-queue, worktree, and prompt.
+against the reviewed prompt, base-commit pinning, and one subprocess helper. Those were
+verbatim forks of each other, so `tests/test_candidate_evidence.py` covered one copy
+thoroughly and nothing covered the other — which is exactly how base pinning shipped for
+`run_hn_signals.py` and never reached `run_candidate_triage.py`. They live here once, and
+each routine binds them to its own queue, worktree, prompt, and base-ref record path.
 
 What is deliberately *not* here: `unexpected_field_changes` and its per-record helpers.
 Those encode what each queue's records mean — which field a routine may add, and which
@@ -16,12 +17,22 @@ the other's queue.
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import re
 import subprocess
 from collections.abc import Callable, Container
 from pathlib import Path
 
 ShellFn = Callable[..., tuple[int, str]]
+
+DEFAULT_BASE_REF = "origin/main"
+# A recorded base sha must look like a commit sha, and nothing more, before anything
+# shells out with it; see `prepared_base_ref`. `fullmatch`, not `match` against a
+# `$`-anchored pattern: `$` in Python matches immediately before a trailing "\n", so
+# `match` would accept a 40-hex value with a trailing newline appended and pass it to
+# `git` argv unchecked.
+BASE_REF_SHA_RE = re.compile(r"[0-9a-f]{40}")
 
 
 def unexpected_changes(porcelain: str, allowed: Container[str]) -> list[str]:
@@ -76,6 +87,51 @@ def worktree_text(path: str, worktree: Path) -> str:
             raise OSError(f"{path} is a symlink; refusing to read it as trusted content")
         node = node.parent
     return target.read_text(encoding="utf-8")
+
+
+def record_prepared_base(path: Path, sha: str, from_ref: str) -> None:
+    """Record the exact commit `prepare` built its worktree from, for `finish` to read.
+
+    `finish` must compare its guards against the tree the model was actually handed, not
+    whatever the ref it came from has since become — a ref can move between `prepare` and
+    `finish`, so pinning the commit rather than the ref name is what keeps the two
+    commands looking at the same tree. `path` is deliberately the caller's concern, not
+    fixed here: each routine writes this record under its own `ROOT` (the primary
+    checkout, never the worktree handed to the model — an ordinary file edit inside the
+    model's own workspace must not be able to change what `finish` trusts) and under its
+    own bundle directory, so the two routines' records never collide. That does not make
+    the record unreachable by a model with shell access to this checkout, which can reach
+    `ROOT` the same way it reaches everything else the repository's git process can
+    reach; see "Guard threat model" in docs/OPERATIONS.md.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"sha": sha, "from_ref": from_ref}), encoding="utf-8")
+
+
+def prepared_base_ref(
+    base_ref_path: str,
+    read: Callable[[str], str],
+    default_from_ref: str = DEFAULT_BASE_REF,
+) -> str:
+    """The commit `prepare` actually built the worktree from, read via `read`.
+
+    `read` is expected to resolve `base_ref_path` against `ROOT` — not the worktree the
+    model runs in — so an ordinary edit inside the model's own workspace cannot change
+    what this function returns; callers pass their own root-reading wrapper (which also
+    refuses a symlink at `base_ref_path` or at any parent directory, per
+    `worktree_text`). When nothing was recorded — an older run, a worktree built by hand,
+    or a record `read` refused as a symlink — fall back to `default_from_ref` exactly as
+    the routine always has before base pinning existed. The recorded value must also look
+    like exactly a commit sha and nothing more: it reaches `git` argv unchecked
+    everywhere a caller uses it, so anything else (an option flag, an empty string, a
+    value with a trailing newline) falls back the same as if nothing were recorded.
+    """
+    try:
+        recorded = json.loads(read(base_ref_path))
+    except (OSError, json.JSONDecodeError):
+        return default_from_ref
+    sha = recorded.get("sha") if isinstance(recorded, dict) else None
+    return sha if isinstance(sha, str) and BASE_REF_SHA_RE.fullmatch(sha) else default_from_ref
 
 
 def replace_refs_problem(run: ShellFn, cwd: Path) -> str | None:

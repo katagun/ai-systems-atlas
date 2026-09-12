@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import base64
+import contextlib
+import io
 import json
 import os
 import socket
@@ -12,6 +14,7 @@ from typing import ClassVar
 from unittest import mock
 
 from scripts import build_candidate_evidence as harness
+from scripts import routine_guards
 from scripts import run_candidate_triage as runner
 
 
@@ -1100,9 +1103,15 @@ class PrepareTests(unittest.TestCase):
         installed_path.write_text("routine body\n", encoding="utf-8")
         self.prompt_path = prompt_path
         self.installed_path = installed_path
+        # ROOT is where `prepare` now writes BASE_REF (see `record_prepared_base`). Left
+        # unpatched, `prepare` here would plant `.candidate-evidence/base-ref.json` in
+        # this repository's own live checkout — exactly the failure this routine exists
+        # to prevent developers from causing.
+        root = Path(self.enterContext(tempfile.TemporaryDirectory()))
         for patcher in (
             mock.patch.object(runner, "PROMPT", prompt_path),
             mock.patch.object(runner, "INSTALLED_PROMPT", installed_path),
+            mock.patch.object(runner, "ROOT", root),
         ):
             patcher.start()
             self.addCleanup(patcher.stop)
@@ -1227,6 +1236,507 @@ class ReplaceRefGuardTests(unittest.TestCase):
             code = runner.finish(run=runner.shell)
         self.assertEqual(1, code)
         self.assertIn("refs/replace", stderr.getvalue())
+
+
+class PreparedBaseRefTests(unittest.TestCase):
+    """The SHA `prepare` records is the one `finish` uses. Mirrors
+    tests/test_run_hn_signals.py's `PreparedBaseRefTests` for the shared
+    `routine_guards.prepared_base_ref` this routine now binds the same way."""
+
+    def test_finish_reads_the_sha_prepare_recorded(self) -> None:
+        sha = "d" * 40
+
+        def read(path: str) -> str:
+            self.assertEqual(runner.BASE_REF, path)
+            return json.dumps({"sha": sha, "from_ref": "origin/main"})
+
+        self.assertEqual(sha, runner.prepared_base_ref(read))
+
+    def test_no_recorded_sha_falls_back_to_origin_main(self) -> None:
+        def missing(_path: str) -> str:
+            raise OSError("no such file")
+
+        self.assertEqual("origin/main", runner.prepared_base_ref(missing))
+
+    def test_a_malformed_bundle_falls_back_to_origin_main(self) -> None:
+        self.assertEqual("origin/main", runner.prepared_base_ref(lambda _p: "not json"))
+
+    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(self) -> None:
+        """A recorded "sha" reaches `git` argv unchecked everywhere it is used — as a
+        base ref in `git rev-parse`/`git diff`/`git show`. Without this check, a forged
+        value like an option flag becomes an arbitrary-argv-injection primitive rather
+        than a rejected record."""
+
+        def forged(_path: str) -> str:
+            return json.dumps({"sha": "--output=/tmp/pwn_probe"})
+
+        self.assertEqual("origin/main", runner.prepared_base_ref(forged))
+
+    def test_reads_from_root_by_default_not_the_worktree(self) -> None:
+        self.assertEqual(runner.root_text, runner.prepared_base_ref.__defaults__[0])
+
+    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(self) -> None:
+        """`$` in Python's `re` matches immediately before a trailing "\\n", so a `match`
+        against a `$`-anchored pattern would accept `"<40 hex>\\n"` and pass a value
+        carrying a newline straight to `git` argv. `fullmatch` against an unanchored
+        pattern rejects it outright, same as any other malformed record."""
+        sha = "a" * 40
+
+        def read(_path: str) -> str:
+            return json.dumps({"sha": sha + "\n"})
+
+        self.assertEqual("origin/main", runner.prepared_base_ref(read))
+
+
+class SymlinkedBaseRecordTests(unittest.TestCase):
+    """The reviewer's other bypass, shared with run_hn_signals.py: replace ROOT's
+    base-record file — or the directory it lives under — with a symlink into the
+    worktree, so a value the model fully controls is read as the trusted base."""
+
+    def test_a_symlinked_base_record_is_refused(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        (root / ".candidate-evidence").mkdir()
+        forged = root / "forged.json"
+        forged.write_text(json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8")
+        (root / runner.BASE_REF).symlink_to(forged)
+        self.enterContext(mock.patch.object(runner, "ROOT", root))
+
+        self.assertEqual("origin/main", runner.prepared_base_ref(runner.root_text))
+
+    def test_root_text_raises_rather_than_follows_a_symlink(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        target = root / "elsewhere.txt"
+        target.write_text("attacker-controlled", encoding="utf-8")
+        link = root / "linked.txt"
+        link.symlink_to(target)
+        self.enterContext(mock.patch.object(runner, "ROOT", root))
+
+        with self.assertRaises(OSError):
+            runner.root_text("linked.txt")
+
+    def test_a_symlinked_base_directory_is_refused(self) -> None:
+        """A narrower bypass than the file-level one above: `base-ref.json` itself stays
+        a plain file, but `.candidate-evidence` — the directory it lives under — is a
+        symlink to somewhere outside ROOT. `Path.is_symlink()` on the file alone would
+        pass."""
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        elsewhere = tempfile.TemporaryDirectory()
+        self.addCleanup(elsewhere.cleanup)
+        forged_dir = Path(elsewhere.name)
+        (forged_dir / "base-ref.json").write_text(
+            json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8"
+        )
+        (root / ".candidate-evidence").symlink_to(forged_dir)
+        self.enterContext(mock.patch.object(runner, "ROOT", root))
+
+        self.assertEqual("origin/main", runner.prepared_base_ref(runner.root_text))
+
+
+class PrepareRecordsBaseRefTests(unittest.TestCase):
+    """`prepare` must resolve `origin/main` to a full commit SHA, build the worktree from
+    it, and record it under ROOT — never under WORKTREE, the model's own directory."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        prompt_path = Path(self.tmp.name) / "candidate-triage.md"
+        installed_path = Path(self.tmp.name) / "SKILL.md"
+        prompt_path.write_text("routine body\n", encoding="utf-8")
+        installed_path.write_text("routine body\n", encoding="utf-8")
+        root = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        worktree = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        for patcher in (
+            mock.patch.object(runner, "PROMPT", prompt_path),
+            mock.patch.object(runner, "INSTALLED_PROMPT", installed_path),
+            mock.patch.object(runner, "ROOT", root),
+            mock.patch.object(runner, "WORKTREE", worktree),
+        ):
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        self.root = root
+        self.worktree = worktree
+
+    @staticmethod
+    def fake_run(calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "c" * 40):
+        def run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "fetch", "--quiet"]:
+                return fetch_code, "" if fetch_code == 0 else "network unreachable"
+            if command[:3] == ["git", "rev-parse", "--verify"]:
+                return 0, resolved_sha + "\n"
+            return 0, ""
+        return run
+
+    def test_prepare_records_the_resolved_sha_under_root_not_the_worktree(self) -> None:
+        sha = "c" * 40
+        calls: list[list[str]] = []
+        code = runner.prepare(limit=5, run=self.fake_run(calls, resolved_sha=sha))
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", "--verify", "origin/main"], calls)
+        self.assertIn(["git", "worktree", "add", "--quiet", "--detach", str(self.worktree), sha], calls)
+        recorded = json.loads((self.root / runner.BASE_REF).read_text(encoding="utf-8"))
+        self.assertEqual(sha, recorded["sha"])
+        self.assertEqual("origin/main", recorded["from_ref"])
+        self.assertFalse((self.worktree / runner.BASE_REF).exists())
+
+    def test_a_fetch_failure_is_fatal(self) -> None:
+        calls: list[list[str]] = []
+        code = runner.prepare(limit=5, run=self.fake_run(calls, fetch_code=1))
+        self.assertEqual(1, code)
+        self.assertNotIn(["git", "worktree", "remove", "--force", str(self.worktree)], calls)
+        self.assertFalse((self.root / runner.BASE_REF).exists())
+
+    def test_an_unresolvable_origin_main_is_fatal(self) -> None:
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            if command[:3] == ["git", "rev-parse", "--verify"]:
+                return 128, "fatal: ambiguous argument 'origin/main'"
+            return 0, ""
+
+        self.assertEqual(1, runner.prepare(limit=5, run=fake_run))
+        self.assertFalse((self.root / runner.BASE_REF).exists())
+
+
+class FinishUsesRecordedBaseTests(unittest.TestCase):
+    """`finish` must compare against the exact commit `prepare` recorded, in every place
+    it otherwise falls back to origin/main: the head-moved comparison, the
+    committed-diff blast-radius check, the `git show <base>:<queue>` field-guard
+    baseline, and the diagnostic label `unexpected_field_changes` uses for the base
+    side. Mirrors tests/test_run_hn_signals.py's identical class."""
+
+    QUEUE_DOC: ClassVar[str] = json.dumps({
+        "version": 1,
+        "candidates": [{
+            "repo": "a/one", "url": "https://github.com/a/one",
+            "proposed_system_family": "memory_system",
+            "proposed_primary_role": "agent_memory_service",
+            "classification_confidence": 0.8, "status": "provisional",
+        }],
+    })
+
+    def responder(self, calls: list[list[str]], *, base_sha: str, head: str = "1111"):
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, (head if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"{base_sha}:{runner.QUEUE}", command[2])
+                return 0, self.QUEUE_DOC
+            if command[:2] == ["git", "diff"]:
+                self.assertIn(base_sha, command)
+                self.assertNotIn("origin/main", command)
+                return 0, runner.QUEUE
+            return 0, ""
+        return fake_run
+
+    def base_read(self, base_sha: str):
+        def _read(path: str) -> str:
+            self.assertEqual(runner.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "origin/main"})
+        return _read
+
+    def queue_read(self):
+        def _read(path: str) -> str:
+            self.assertEqual(runner.QUEUE, path)
+            return self.QUEUE_DOC
+        return _read
+
+    def test_finish_uses_the_recorded_sha_in_place_of_origin_main(self) -> None:
+        base_sha = "e" * 40
+        calls: list[list[str]] = []
+        code = runner.finish(
+            run=self.responder(calls, base_sha=base_sha),
+            read=self.queue_read(),
+            base_read=self.base_read(base_sha),
+        )
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", base_sha], calls)
+        self.assertNotIn(["git", "rev-parse", "origin/main"], calls)
+
+    def test_finish_falls_back_to_origin_main_when_nothing_was_recorded(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else "origin/main") + "\n"
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"origin/main:{runner.QUEUE}", command[2])
+                return 0, self.QUEUE_DOC
+            return 0, ""
+
+        def base_read_without_a_recorded_base(path: str) -> str:
+            self.assertEqual(runner.BASE_REF, path)
+            raise OSError("no bundle")
+
+        code = runner.finish(
+            run=fake_run, read=self.queue_read(), base_read=base_read_without_a_recorded_base
+        )
+        self.assertEqual(0, code)
+        self.assertIn(["git", "rev-parse", "origin/main"], calls)
+
+    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(self) -> None:
+        """Mutation coverage: dropping `base_label=base_ref` at the `finish` call site
+        reverts the diagnostic label to the literal default "origin/main"."""
+        base_sha = "7" * 40
+        malformed_base = json.dumps({"version": 1, "candidates": "not-a-list"})
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, " M directory/candidates.json\n"
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "diff"]:
+                return 0, runner.QUEUE
+            if command[:2] == ["git", "show"]:
+                self.assertEqual(f"{base_sha}:{runner.QUEUE}", command[2])
+                return 0, malformed_base
+            return 0, ""
+
+        def fake_base_read(path: str) -> str:
+            self.assertEqual(runner.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "origin/main"})
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(
+                run=fake_run, read=self.queue_read(), base_read=fake_base_read
+            )
+        self.assertEqual(1, code)
+        self.assertIn(base_sha, stderr.getvalue())
+        self.assertNotIn("origin/main", stderr.getvalue())
+
+
+class GuardFiresWithAPinnedBaseTests(unittest.TestCase):
+    """The blast-radius, added/removed-candidate, and overwritten-`triage`-block guards
+    must fire identically whether `finish` compares against `origin/main` or a pinned
+    commit SHA — pinning the base must never weaken a guard."""
+
+    BASE_QUEUE: ClassVar[str] = json.dumps({
+        "version": 1,
+        "candidates": [{
+            "repo": "a/one", "url": "https://github.com/a/one",
+            "proposed_system_family": "memory_system",
+            "proposed_primary_role": "agent_memory_service",
+            "classification_confidence": 0.8, "status": "provisional",
+            "triage": {
+                "verdict": "review_ready", "rule": "r", "finding": "f",
+                "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
+                "proposer": "candidate-triage",
+            },
+        }],
+    })
+
+    def fake_base_read(self, base_sha: str):
+        def _read(path: str) -> str:
+            self.assertEqual(runner.BASE_REF, path)
+            return json.dumps({"sha": base_sha, "from_ref": "origin/main"})
+        return _read
+
+    def responder(self, calls: list[list[str]], *, base_sha: str,
+                  porcelain: str = " M directory/candidates.json\n"):
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, porcelain
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, ("1111" if command[2] == "HEAD" else base_sha) + "\n"
+            if command[:2] == ["git", "show"]:
+                return 0, self.BASE_QUEUE
+            if command[:2] == ["git", "diff"]:
+                return 0, runner.QUEUE
+            return 0, ""
+        return fake_run
+
+    def test_a_file_outside_allowed_changes_is_rejected(self) -> None:
+        base_sha = "1" * 40
+        calls: list[list[str]] = []
+        code = runner.finish(
+            run=self.responder(calls, base_sha=base_sha, porcelain=" M directory/projects.json\n"),
+            read=lambda _p: self.BASE_QUEUE,
+            base_read=self.fake_base_read(base_sha),
+        )
+        self.assertEqual(1, code)
+        self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
+
+    def test_an_added_candidate_is_rejected(self) -> None:
+        base_sha = "2" * 40
+        document = json.loads(self.BASE_QUEUE)
+        document["candidates"].append({"repo": "b/two", "url": "https://github.com/b/two"})
+        after = json.dumps(document)
+        calls: list[list[str]] = []
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(
+                run=self.responder(calls, base_sha=base_sha),
+                read=lambda _p: after,
+                base_read=self.fake_base_read(base_sha),
+            )
+        self.assertEqual(1, code)
+        self.assertIn("only discovery adds", stderr.getvalue())
+
+    def test_a_removed_candidate_is_rejected(self) -> None:
+        base_sha = "3" * 40
+        after = json.dumps({"version": 1, "candidates": []})
+        calls: list[list[str]] = []
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(
+                run=self.responder(calls, base_sha=base_sha),
+                read=lambda _p: after,
+                base_read=self.fake_base_read(base_sha),
+            )
+        self.assertEqual(1, code)
+        self.assertIn("only a human resolves", stderr.getvalue())
+
+    def test_an_overwritten_triage_block_is_rejected(self) -> None:
+        base_sha = "4" * 40
+        document = json.loads(self.BASE_QUEUE)
+        document["candidates"][0]["triage"]["verdict"] = "out_of_scope"
+        after = json.dumps(document)
+        calls: list[list[str]] = []
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(
+                run=self.responder(calls, base_sha=base_sha),
+                read=lambda _p: after,
+                base_read=self.fake_base_read(base_sha),
+            )
+        self.assertEqual(1, code)
+        self.assertIn("human review's field", stderr.getvalue())
+
+
+class RealGitMovingMainTests(unittest.TestCase):
+    """The actual bug this branch fixes: `finish` re-resolved `origin/main` at finish
+    time, so any commit that landed on `main` between `prepare` and `finish` looked like
+    something this run had touched — in a repository where main moves several times a
+    day, that made the routine fail on ordinary unrelated activity. Builds a real
+    repository, replicates what `prepare` records (a pinned base SHA and a worktree built
+    from it), advances `refs/remotes/origin/main` with an unrelated commit exactly as a
+    `git fetch` would, and confirms `finish` does not report that commit's files as
+    overreach."""
+
+    def setUp(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        root = scratch / "root"
+        root.mkdir()
+        subprocess.run(["git", "init", "-q", str(root)], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        (root / "directory").mkdir()
+        (root / ".gitignore").write_text(".candidate-evidence/\n", encoding="utf-8")
+        (root / "directory" / "candidates.json").write_text(
+            json.dumps({
+                "version": 1,
+                "candidates": [{
+                    "repo": "a/one", "url": "https://github.com/a/one",
+                    "proposed_system_family": "memory_system",
+                    "proposed_primary_role": "agent_memory_service",
+                    "classification_confidence": 0.8, "status": "provisional",
+                }],
+            }),
+            encoding="utf-8",
+        )
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        base_code, base_sha = runner.shell(["git", "rev-parse", "HEAD"], root)
+        self.assertEqual(0, base_code)
+        self.base_sha = base_sha.strip()
+        # A real `git fetch origin` would create this ref; forging it directly means the
+        # test needs no actual network remote to exercise the guard's use of it.
+        subprocess.run(
+            ["git", "-C", str(root), "update-ref", "refs/remotes/origin/main", self.base_sha],
+            check=True,
+        )
+
+        worktree = scratch / "worktree"
+        subprocess.run(
+            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach",
+             str(worktree), self.base_sha],
+            check=True,
+        )
+
+        self.enterContext(mock.patch.object(runner, "ROOT", root))
+        self.enterContext(mock.patch.object(runner, "WORKTREE", worktree))
+        self.root = root
+        self.worktree = worktree
+
+        # What `prepare` records: the exact commit the worktree was built from.
+        routine_guards.record_prepared_base(root / runner.BASE_REF, self.base_sha, "origin/main")
+
+    @staticmethod
+    def hybrid_run(command: list[str], cwd=None) -> tuple[int, str]:
+        if command and command[0] == "git":
+            return runner.shell(command, cwd)
+        return 0, ""  # every "uv run ..." quality check, stubbed to succeed
+
+    def advance_origin_main(self, *paths: str) -> None:
+        """Simulate main moving between `prepare` and `finish`: commit unrelated files
+        directly in `root` — standing in for what a real `git fetch origin` would bring
+        down — and repoint `refs/remotes/origin/main` at the new commit."""
+        for relative in paths:
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("unrelated change\n", encoding="utf-8")
+        subprocess.run(["git", "-C", str(self.root), "add", "-A"], check=True)
+        subprocess.run(
+            ["git", "-C", str(self.root), "commit", "-q", "-m", "unrelated main commit"], check=True
+        )
+        _, new_sha = runner.shell(["git", "rev-parse", "HEAD"], self.root)
+        subprocess.run(
+            ["git", "-C", str(self.root), "update-ref", "refs/remotes/origin/main", new_sha.strip()],
+            check=True,
+        )
+
+    def test_an_unrelated_commit_on_origin_main_is_not_reported(self) -> None:
+        # The exact three files today's real failed run blamed on the routine.
+        self.advance_origin_main(
+            ".github/workflows/update-directory.yml", "BACKLOG.md",
+            "directory/model-candidates.json",
+        )
+
+        # The run's only permitted edit: add a `triage` block to the one candidate.
+        queue_path = self.worktree / runner.QUEUE
+        document = json.loads(queue_path.read_text(encoding="utf-8"))
+        document["candidates"][0]["triage"] = {
+            "verdict": "review_ready", "rule": "r", "finding": "f",
+            "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
+            "proposer": "candidate-triage",
+        }
+        queue_path.write_text(json.dumps(document), encoding="utf-8")
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(run=self.hybrid_run)
+        self.assertEqual(0, code, stderr.getvalue())
+        self.assertNotIn("update-directory.yml", stderr.getvalue())
+        self.assertNotIn("BACKLOG.md", stderr.getvalue())
+        self.assertNotIn("model-candidates.json", stderr.getvalue())
+
+        branch_code, _ = runner.shell(["git", "rev-parse", "--verify", "triage/pending"], self.worktree)
+        self.assertEqual(0, branch_code)
+
+    def test_without_pinning_the_same_unrelated_commit_would_have_been_blamed(self) -> None:
+        """Proves the scenario is real, not just that the new code happens to pass it: a
+        blast-radius check that re-resolved the literal `origin/main` ref — what `finish`
+        did before this branch — would see the unrelated commit as part of the diff."""
+        self.advance_origin_main("BACKLOG.md")
+
+        diff_code, diff_output = runner.shell(
+            ["git", "diff", "--name-only", "--no-renames", "origin/main", self.base_sha],
+            self.worktree,
+        )
+        self.assertEqual(0, diff_code)
+        self.assertIn("BACKLOG.md", diff_output)
 
 
 if __name__ == "__main__":
