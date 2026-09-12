@@ -137,7 +137,7 @@ class ValidationPolicyTests(unittest.TestCase):
         services["services"][0]["trust"] = trust
         # Pin the collection's own review date so this fixture can never drift against
         # whatever the live catalog's verified_at happens to be.
-        services["verified_at"] = "2026-09-03"
+        services["verified_at"] = max(services["verified_at"], "2026-09-03")
         self.write_json(path, services)
         self.write_json(root / "web" / "inference-services.json", services)
         return validate(root)

@@ -45,7 +45,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 ### Coverage batches
 
 - [ ] Work the sixty currently actionable system candidates in small evidence-backed batches; keep the thirteen robotics candidates held until their scope decision resolves.
-- [ ] Review trust records for the twelve routing aggregators once #128 lands, as the first batch under [ADR 029](docs/adr/029-trust-records-are-unscored-and-never-first-hand.md): answer each of the six properties from first-party pages with a scoped URL and a note quoting the deciding sentence, and record the one admissible finding, CacheProbe (arXiv 2605.30613v1) on OpenRouter cache isolation, with its hash taken at review. Task 8 of `docs/superpowers/plans/2026-09-11-service-trust-records.md` fixes the procedure. Measure the twelve before scheduling the remaining forty-seven by service type; no record carries the block until then, and the app says so.
+- [ ] Review trust records for the remaining forty-seven inference services by service type, now that the twelve routing aggregators carry them. The twelve took one working session with four parallel research passes, each URL re-fetched and each quote re-read by the integrator before it entered a record; budget the same per batch of twelve. Direct model APIs first, since cache isolation and upstream disclosure collapse to the operator alone there and the review is cheaper; then managed hosts, then cloud platforms.
 - [ ] Triage the first attention-source signal bundle. The sweep runs locally on a schedule and commits `directory/hn-signals.json` to a local branch that never pushes, so the published queue is empty by design and nothing from that source has reached `directory/candidates.json`; run `scripts/run_hn_signals.py prepare --from-ref local/hn-signals` from the sweep worktree, annotate the bundle, and judge from that run whether the twenty-five-signal floor and sixty-signal cap are right.
 - [ ] Review xerj as retrieval infrastructure, with maturity treated separately from eligibility and vendor-measured efficiency treated as marketing rather than evidence. Recheck `memory_service` before fixing its role.
 - [ ] Re-check LangGraph's source model and deployment traits against the restricted agent server that made Open SWE mixed-source.
@@ -102,6 +102,10 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Decide whether the Codex record is the terminal agent alone or also the IDE extension and desktop app distributed from the same repository.
 - [ ] Re-check Khoj's status and links; its desktop download is missing and the homepage now leads with a different product.
 - [ ] Decide whether Perplexity Personal Computer is operationally distinct from the cloud Perplexity Computer record.
+
+## Completed on 2026-09-12
+
+- [x] Review trust records for the twelve routing aggregators, the first batch under [ADR 029](docs/adr/029-trust-records-are-unscored-and-never-first-hand.md). Every property cites a first-party page read on the review date with the deciding sentence quoted; OpenRouter carries the two admissible findings, CacheProbe (arXiv 2605.30613v1) and KeyPooling (arXiv 2608.17485v1), both on cross-account prompt-cache reads for traffic on its shared upstream credentials, and its record gained a tradeoff and a fresh review date while its data-governance score stayed where the operator's own evidence puts it. No service documents a way to verify a response arrived unaltered from the upstream model outside enclave-scoped model tiers, which is the class-level fact the paper that prompted this work established.
 
 ## Completed on 2026-09-11
 
