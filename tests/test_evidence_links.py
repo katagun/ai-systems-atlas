@@ -118,6 +118,57 @@ class EvidenceLinkTests(unittest.TestCase):
         )
         self.assertIn("immutable_evidence", by_url["https://api.github.com/blob"].kinds)
 
+    def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:
+        """A third-party page is not the Atlas's to accept changes to: check the link, hash nothing."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            documents = {
+                "projects.json": {"projects": []},
+                "license-evidence.json": {"entries": []},
+                "specifications.json": {"specifications": []},
+                "local-runtimes.json": {"runtimes": []},
+                "models.json": {"models": []},
+                "inference-services.json": {"services": [{
+                    "id": "router", "url": "https://example.com/router", "verified_at": "2026-09-18",
+                    "terms": {"kind": "web_terms", "url": "https://example.com/terms", "verified_at": "2026-09-18"},
+                    "evidence": [],
+                    "trust": {
+                        "verified_at": "2026-09-18",
+                        "properties": {"cache_isolation": {
+                            "status": "undocumented", "note": "n", "scope": "s",
+                            "url": "https://example.com/privacy", "verified_at": "2026-09-17",
+                        }},
+                        "findings": [{
+                            "claim": "c", "published_at": "2026-05-28",
+                            "source": {
+                                "label": "l", "url": "https://arxiv.org/abs/2605.30613v1", "kind": "third_party",
+                                "content_sha256": "0" * 64, "fetched_at": "2026-09-16",
+                            },
+                            "operator_response": {"url": "https://example.com/response", "verified_at": "2026-09-17", "summary": "s"},
+                            "resolved": None,
+                        }],
+                    },
+                }]},
+            }
+            for filename, document in documents.items():
+                (directory / filename).write_text(json.dumps(document), encoding="utf-8")
+
+            targets = check_evidence_links.collect_targets(directory)
+
+        by_url = {item.url: item for item in targets}
+        self.assertEqual(5, len(targets))
+        finding = by_url["https://arxiv.org/abs/2605.30613v1"]
+        self.assertFalse(finding.monitor_terms)
+        self.assertIn("trust_finding", finding.kinds)
+        self.assertEqual((("inference-services:router:finding:0", "2026-09-16"),), finding.review_dates)
+        self.assertEqual(("inference-services:router:trust:cache_isolation",), by_url["https://example.com/privacy"].references)
+        self.assertFalse(by_url["https://example.com/privacy"].monitor_terms)
+        self.assertIn("trust_response", by_url["https://example.com/response"].kinds)
+        self.assertEqual(
+            ("inference-services:router:finding:0:operator_response",),
+            by_url["https://example.com/response"].references,
+        )
+
     def test_terms_drift_stays_open_until_a_newer_human_review(self) -> None:
         cache = {"version": "1.0", "updated_at": None, "entries": {}}
         first = check_evidence_links.check_targets(
