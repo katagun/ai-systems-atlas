@@ -815,12 +815,12 @@
       },
       "strengths": [
         "One agent core reaches the editor, a CLI, cloud VMs, mobile, and an SDK, and a session hands off between local and cloud without changing rules, hooks, or MCP configuration",
-        "Terminal commands run under OS-level sandboxing — macOS Seatbelt, Linux Landlock and seccomp — with network blocked by default behind a published package-manager allowlist",
+        "Terminal commands run under OS-level sandboxing \u2014 macOS Seatbelt, Linux Landlock and seccomp \u2014 with network blocked by default behind a published package-manager allowlist",
         "Self-hosted machines split the planes: Cursor runs the agent loop and inference while file edits and commands execute on infrastructure the customer operates"
       ],
       "weaknesses": [
         "Bringing your own key does not buy independence or zero retention: requests still traverse Anysphere's backend for prompt building, and the documentation states plainly that zero data retention does not apply to your own keys",
-        "The recommended autonomy default is documented as not being a security boundary — a small classifier judges plain-English policy and \"can allow a call you would have blocked\" — and blocking its two classifier models through enterprise model access control silently disables it",
+        "The recommended autonomy default is documented as not being a security boundary \u2014 a small classifier judges plain-English policy and \"can allow a call you would have blocked\" \u2014 and blocking its two classifier models through enterprise model access control silently disables it",
         "Run modes, allowlists, and deletion protections apply only to local agents; Cloud Agents, the surface built for long-running autonomous work, never ask for approval at all",
         "Third-party model requests carry a per-token surcharge on Teams and Enterprise from which the first-party Grok and Composer models are exempt, so provider neutrality is a documented cost",
         "The legal surface contradicts itself: the privacy policy predates cloud self-hosting, the git forge, and the SpaceX acquisition, and the official compliance page publishes two document URLs that both return 404"
@@ -1228,20 +1228,20 @@
         "overall": 7.21
       },
       "strengths": [
-        "An Agent Client Protocol host: any conforming third-party agent — Codex, Claude Agent, OpenCode, Junie, Gemini CLI — becomes a first-class session inside the editor",
+        "An Agent Client Protocol host: any conforming third-party agent \u2014 Codex, Claude Agent, OpenCode, Junie, Gemini CLI \u2014 becomes a first-class session inside the editor",
         "The default local agent carries a permission model with deny, ask, and allow rules over file reads, writes, command execution, HTTP fetches, and MCP tools, scoped at project, user, and organization level",
-        "The widest reviewed provider surface among proprietary editors, spanning nine model families alongside an in-house model line and a purpose-built retrieval model"
+        "The widest reviewed provider surface among proprietary editors, spanning nine model families alongside an in-house model line \u2014 most recently SWE-2, post-trained from Kimi K3 and served only inside Devin Desktop and the CLI with no published weights and no per-token API \u2014 and a purpose-built retrieval model"
       ],
       "weaknesses": [
         "Two local agents ship side by side with divergent controls, and the pages a reader lands on for memories, MCP, and command auto-execution are all scoped to the legacy one",
         "Durable memory does not survive adopting the default agent, which does not persist memories at all and offers a migration wizard instead",
         "The announced end of the legacy agent has passed without resolution: the vendor said it remained available through July, and it is still documented and still appearing in the August changelog",
         "Customer data may be used for model training by default, the opt-out is available only on paid plans and only to administrators on team plans, and remote indexing clones repositories to vendor servers",
-        "Third-party agents hosted over the protocol run outside the product's own governance — the vendor states its privacy policy and legal terms do not apply to them"
+        "Third-party agents hosted over the protocol run outside the product's own governance \u2014 the vendor states its privacy policy and legal terms do not apply to them"
       ],
       "why_it_matters": "The rename that consolidated the best-known independent agentic IDE into Cognition's line, and the reviewed catalog's clearest case of an editor that hosts other vendors' agents as peers rather than replacing them.",
       "research_confidence": "high",
-      "verified_at": "2026-09-03",
+      "verified_at": "2026-09-12",
       "licenses": [
         "LicenseRef-Proprietary"
       ],
@@ -3511,7 +3511,7 @@
       ],
       "weaknesses": [
         "The published package still declares alpha development status, which sits oddly beside three releases in three months and a coverage-gated pipeline",
-        "In the default path the model fills one slot — propose a mutation — inside a pipeline the caller configured, and only the headless mode puts a tool-using agent in that position",
+        "In the default path the model fills one slot \u2014 propose a mutation \u2014 inside a pipeline the caller configured, and only the headless mode puts a tool-using agent in that position",
         "The loop is long-running and unattended by design, and the primary controls are configuration files set before the run rather than intervention during it"
       ],
       "why_it_matters": "The only one of its lab's published agentic systems that is engineered as software rather than as a paper artifact, and a working example of coding agents used as the variation operator inside an outer search loop.",
@@ -4134,7 +4134,7 @@
         "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
         "Service-managed context and memory reduce data portability and local control"
       ],
-      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use\u2014not only text chat.",
       "research_confidence": "medium",
       "verified_at": "2026-08-26",
       "licenses": [
@@ -8253,7 +8253,7 @@
       },
       "strengths": [
         "Genuinely multi-language rather than a Python project with ports: maintained Python, .NET, and Java trees in one repository with published PyPI and NuGet packages and per-language API references",
-        "A wide substitutable integration surface — OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
+        "A wide substitutable integration surface \u2014 OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
         "Explicit developer control surfaces: typed kernel functions, OpenAPI and MCP plugins, function-choice behavior, filters, reliability policies, structured output through Pydantic models, and the Process Framework for modeling business workflows"
       ],
       "weaknesses": [
@@ -9404,7 +9404,7 @@
       "weaknesses": [
         "The runtime is vendor-operated inside a customer org with no self-hosted option, so execution and data both stay on the vendor's infrastructure",
         "Capability is bounded by the surrounding platform: the richest actions, knowledge sources, and escalation targets are all first-party",
-        "The brand covers prebuilt assistants and several separately sold products, so published material about “Agentforce” often describes something other than this platform"
+        "The brand covers prebuilt assistants and several separately sold products, so published material about \u201cAgentforce\u201d often describes something other than this platform"
       ],
       "why_it_matters": "The agent-building layer inside one of the largest enterprise data platforms, where the agent's reach is defined by records and permissions the organisation already maintains.",
       "licenses": [
@@ -10290,7 +10290,7 @@
         "overall": 7.92
       },
       "strengths": [
-        "Four interfaces — terminal, web, HTTP gateway, and an embedded client — share one config, checkpointer, memory, and sandbox stack",
+        "Four interfaces \u2014 terminal, web, HTTP gateway, and an embedded client \u2014 share one config, checkpointer, memory, and sandbox stack",
         "Memory writes pass a deterministic scope and authority gate that fails closed, and facts stay readable Markdown files",
         "Sandboxed execution spans host, Docker, Kubernetes, and remote VMs with capacity limits enforced across the deployment"
       ],
@@ -12414,7 +12414,7 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts — anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors — live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
+      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts \u2014 anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors \u2014 live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
       "score": {
         "task_reliability": 7.6,
         "tool_use": 8.0,
@@ -13569,7 +13569,7 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists — role management, single sign-on with provisioning, teams, and connectors — are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
+      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists \u2014 role management, single sign-on with provisioning, teams, and connectors \u2014 are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
       "score": {
         "second_brain_fit": 7.6,
         "data_sovereignty": 6.8,
@@ -13580,7 +13580,7 @@
         "overall": 7.48
       },
       "strengths": [
-        "The governance features a competitor sells as enterprise — role management, single sign-on with provisioning, and teams — are in the permissive tree and documented",
+        "The governance features a competitor sells as enterprise \u2014 role management, single sign-on with provisioning, and teams \u2014 are in the permissive tree and documented",
         "Agents are first-class integration surfaces: any compatible client or tool-server host can call a configured agent",
         "A real correctness gate, with thousands of tests run on every push and coverage reported"
       ],
@@ -15110,14 +15110,14 @@
         "overall": 5.27
       },
       "strengths": [
-        "Session, sandbox, credential, and audit/replay concerns are handled by dedicated, documented primitives — local, Docker, Kubernetes, and self-hosted worker sandboxes; a resumable Server-Sent Events stream for session replay; and a SQLite-backed credential vault — independent of which model or client drives reasoning",
+        "Session, sandbox, credential, and audit/replay concerns are handled by dedicated, documented primitives \u2014 local, Docker, Kubernetes, and self-hosted worker sandboxes; a resumable Server-Sent Events stream for session replay; and a SQLite-backed credential vault \u2014 independent of which model or client drives reasoning",
         "Speaks a Claude Managed-Agents-compatible /v1 API and a six-tool MCP bridge (list_agents, create_session, run_session, get_session, list_artifacts, stop_session), so unmodified clients such as Claude Code, GitHub Copilot, Cline, and DeepSeek Harness can drive it without a bespoke integration",
-        "Runs entirely on infrastructure the operator controls — local SQLite and filesystem storage with no required hosted control plane — and the user supplies their own OpenAI, Anthropic, DeepSeek, or OpenAI-compatible API keys"
+        "Runs entirely on infrastructure the operator controls \u2014 local SQLite and filesystem storage with no required hosted control plane \u2014 and the user supplies their own OpenAI, Anthropic, DeepSeek, or OpenAI-compatible API keys"
       ],
       "weaknesses": [
         "The runtime does not execute its own agent loop; all reasoning is delegated to an external client, so autonomy, planning quality, and task reliability are properties of whichever client connects rather than of this project",
         "The project is about two months old with four GitHub contributors and rapid, closely spaced point releases (v0.3.4 through v0.3.8 within ten days), so operational maturity and long-term stability are unproven",
-        "The maintainer has run an unusually large, single-account self-promotion campaign — dozens of near-identical submissions to external 'awesome list' and MCP-directory repositories, most still 'maintainer review pending' — which this review independently confirmed against two of the linked pull requests; that pattern weakens confidence in community-adoption signals like stars and forks without changing the reviewed technical claims, which were verified directly against the project's own license, README, and installation documentation"
+        "The maintainer has run an unusually large, single-account self-promotion campaign \u2014 dozens of near-identical submissions to external 'awesome list' and MCP-directory repositories, most still 'maintainer review pending' \u2014 which this review independently confirmed against two of the linked pull requests; that pattern weakens confidence in community-adoption signals like stars and forks without changing the reviewed technical claims, which were verified directly against the project's own license, README, and installation documentation"
       ],
       "why_it_matters": "One of the few open, client-agnostic runtimes that treats agent session state, sandbox isolation, credentials, and audit/replay as infrastructure separate from the reasoning loop, letting operators pair it with whichever coding or chat agent they already use.",
       "research_confidence": "low",

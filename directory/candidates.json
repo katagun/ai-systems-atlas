@@ -635,46 +635,6 @@
     },
     {
       "repo": null,
-      "name": "SWE-2",
-      "url": "https://cognition.com/blog/swe-2",
-      "description": "Cognition's coding model, post-trained from Kimi K3 and served only inside Devin Desktop and CLI. Awaiting editorial review.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.0,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "attention-source",
-        "hn-signals"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-11",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "rule": "docs/MODELS.md record boundary: a model release is curated independently of where it is served, and a proprietary API-only release can qualify; but directory/model-candidates.json requires every source_id to exist in the commit-pinned models.dev snapshot.",
-        "held_by": "No queue accepts a model release discovered outside models.dev. validate_model_candidates rejects any candidate 'missing from the complete models.dev source snapshot', and Cognition appears in none of its 370 source records. Settle whether a hand-discovered release may enter the model queue, or whether this stays a capability note on the existing Devin Desktop record.",
-        "finding": "Cognition's own post states \"Today we're introducing SWE-2, our most advanced coding model yet,\" post-trained from Kimi K3, and \"SWE-2 is available starting today in Devin Desktop and CLI\" with no published weights and no per-token API. Benchmark figures on the page are Cognition's own and are not independently verified. docs/MODELS.md holds that \"License, public weights, parameter count, benchmark performance, popularity, and first-party API availability never decide inclusion\", so hosted-only distribution does not by itself disqualify it; the record boundary does exclude \"an assistant, agent, or memory product built on the model\", and Devin Desktop is already published, so the open question is whether this release has its own reviewed release boundary or is a capability of that product.",
-        "evidence": [
-          {
-            "label": "Cognition blog: Introducing SWE-2",
-            "url": "https://cognition.com/blog/swe-2",
-            "kind": "web",
-            "content_sha256": "6b2d7b4d2e270eee8c902759eb19341294324aa2a7e0fb2d49e3f9ed39b8cf12",
-            "fetched_at": "2026-09-11"
-          }
-        ],
-        "proposed_at": "2026-09-11",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": null,
       "name": "Amazon Q Developer",
       "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
       "description": "AWS coding agent that understands workspaces, plans changes, edits files, suggests or runs shell commands, generates tests, and performs software upgrades.",
