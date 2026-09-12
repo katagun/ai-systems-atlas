@@ -10,12 +10,18 @@ Work from the root of the Atlas checkout — the directory holding
 
     uv run python scripts/run_hn_signals.py prepare
 
-`prepare` refreshes an isolated worktree from `origin/main`, re-fetches every readable
-signal's vendor page, and prints the worktree's path. Do all of your work in that
-worktree. It also writes `.hn-signal-bundle/bundle.json` there: every page's text you
-are allowed to read is in that file, keyed by `story_id`. A page that changed since the
-sweep pinned it is left out of the bundle and out of the pending list `prepare` prints;
-leave those signals alone.
+`prepare` refreshes an isolated worktree from `origin/main` — pass `--from-ref` to build it
+from a different ref instead, which enables the local loop described in "Attention-source
+sweep" in `docs/OPERATIONS.md` — re-fetches every readable signal's vendor page, and
+prints the worktree's path. Do all of your work in that worktree. It also writes
+`.hn-signal-bundle/bundle.json` there: every page's text you are allowed to read is in
+that file, keyed by `story_id`. A page that changed since the sweep pinned it is left out
+of the bundle and out of the pending list `prepare` prints; leave those signals alone.
+
+The bundle carries at most the first 8,000 characters of each page. A page longer than
+that ends with a `[truncated: the full page is at <url>]` marker — that marker means the
+rest of the page was never included, not that the page ended there. Do not write a
+finding that asserts something about a page past that marker; you have not read it.
 
 Then, for each signal in the bundle that has no `assessment` yet, add one to that signal
 in `directory/hn-signals.json` — and change nothing else, in no other file.
@@ -74,13 +80,28 @@ THE THREE VERDICTS.
   cover, and a human should look at it. Here `finding` is the dossier: what the page
   says the product does, quoted; anything about scope or licensing worth flagging; and
   the one boundary question the record turns on.
-- `out_of_scope` — the page is not a system announcement at all (a hiring post, a
-  fundraising note, a research paper with no shipped artifact, a rehash of something
-  already in the catalog). Quote the page in `finding` to show why.
-- `unreadable` — the page could not be fetched, or its content is too thin to assess. A
-  signal whose `page_status` is not `readable` may carry only this verdict; validation
-  rejects any other verdict on an unreadable page, and this routine must never guess at
-  a page it never actually read.
+- `out_of_scope` — the page is not a system worth a human review pass. This covers a
+  hiring post, a fundraising note, a research paper with no shipped artifact, and a
+  rehash of something already in the catalog — including a page announcing a new
+  feature, version, or write-up of a vendor's product the Atlas already carries a record
+  for, with nothing here that changes that record's boundary, license, or evidence
+  (`docs/CURATION.md` treats a duplicate the same as any other exclusion; freshness of an
+  already-published record is a different pipeline's job, not this one's). It also
+  covers a genuine shipped product that is simply outside the Atlas's three families —
+  hardware (a memory chip), infrastructure (a VPN, a sharded database), or a plain
+  utility (a file-copy CLI) — none of which preserve or organize knowledge, plan and act
+  through tools, or run a broad conversational workspace. Naming the family boundary the
+  page falls outside is fine — "this is a database product, not a memory, agent, or
+  assistant system" reads as prose, not a classification — as long as no `system_family`
+  or `primary_role` id appears; writing the identifier itself is the human's call, not
+  this routine's. Quote the page in `finding` to show why.
+- `unreadable` — the page could not be fetched, or it fetched fine but its content is too
+  thin to assess (a JS-walled shell carrying one sentence of boilerplate, say). The
+  second case is deliberate, not a loophole: validation enforces only the one direction
+  that matters mechanically — a signal whose `page_status` is not `readable` may carry no
+  verdict but `unreadable` — so do not read that one-directional guard as the whole rule.
+  A `readable` page whose actual content says nothing assessable is `unreadable` too, and
+  this routine must never guess at a page it never actually read.
 
 WHAT A FINDING MAY NOT SAY. It may not name a `system_family` or `primary_role` id, and
 neither may `rule` or an evidence `label`. Validation rejects an assessment containing

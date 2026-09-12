@@ -137,6 +137,21 @@ class PromoteModelCandidateTests(unittest.TestCase):
         self.assertEqual(0o644, stat.S_IMODE(models_path.stat().st_mode))
         self.assertEqual(0o644, stat.S_IMODE(candidates_path.stat().st_mode))
 
+    def test_dispositioned_candidate_is_rejected_until_lifted(self) -> None:
+        write_json(self.root / "directory" / "model-dispositions.json", {
+            "version": "1.0",
+            "updated_at": "2026-09-04",
+            "dispositions": [{
+                "source_id": self.record["source_id"],
+                "disposition": "held",
+                "reason": "Awaiting first-party documentation.",
+                "decided_at": "2026-09-04",
+            }],
+        })
+
+        with self.assertRaisesRegex(PromotionError, "lift the disposition"):
+            preflight_promotion(self.root, self.record)
+
     def test_changed_imported_metadata_is_rejected(self) -> None:
         record = deepcopy(self.record)
         record["source_metadata"]["limits"]["context"] += 1
@@ -164,9 +179,11 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
     def test_wrong_pinned_models_dev_evidence_is_rejected(self) -> None:
         record = deepcopy(self.record)
-        record["evidence"][1]["url"] = record["evidence"][1]["url"].replace(
-            self.queue["source"]["commit"], "0" * 40,
-        )
+        for evidence in record["evidence"]:
+            if "github.com/anomalyco/models.dev/blob/" in evidence["url"]:
+                evidence["url"] = evidence["url"].replace(
+                    self.queue["source"]["commit"], "0" * 40,
+                )
 
         with self.assertRaisesRegex(PromotionError, "exact pinned models.dev source URL"):
             preflight_promotion(self.root, record)

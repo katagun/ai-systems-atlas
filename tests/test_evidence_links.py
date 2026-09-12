@@ -413,6 +413,98 @@ class EvidenceLinkTests(unittest.TestCase):
                 "http://example.com/project",
             )
 
+    def test_bot_walled_get_falls_back_to_browser_headers(self) -> None:
+        bot_wall = urllib.error.HTTPError(
+            "https://example.com/project", 403, "Forbidden", {}, None
+        )
+        opener = _Opener([bot_wall, bot_wall, _Response()])
+
+        result = check_evidence_links.fetch_target(
+            target(),
+            {},
+            token=None,
+            opener=opener,
+            sleeper=lambda _delay: None,
+        )
+
+        self.assertEqual(200, result.status)
+        self.assertTrue(result.via_browser_fallback)
+        self.assertEqual(["HEAD", "GET", "GET"], [request.method for request in opener.requests])
+        user_agents = [request.get_header("User-agent") for request in opener.requests]
+        self.assertEqual(check_evidence_links.BOT_USER_AGENT, user_agents[0])
+        self.assertEqual(check_evidence_links.BOT_USER_AGENT, user_agents[1])
+        self.assertEqual(check_evidence_links.BROWSER_USER_AGENT, user_agents[2])
+
+    def test_browser_fallback_refusal_keeps_the_original_403(self) -> None:
+        bot_wall = urllib.error.HTTPError(
+            "https://example.com/project", 403, "Forbidden", {}, None
+        )
+        opener = _Opener([
+            urllib.error.HTTPError(
+                "https://example.com/project", 403, "Forbidden", {}, None
+            ),
+            bot_wall,
+            urllib.error.HTTPError(
+                "https://example.com/project", 403, "Forbidden", {}, None
+            ),
+        ])
+
+        with self.assertRaisesRegex(check_evidence_links.FetchFailure, "HTTP 403"):
+            check_evidence_links.fetch_target(
+                target(),
+                {},
+                token=None,
+                opener=opener,
+                sleeper=lambda _delay: None,
+            )
+
+    def test_rate_limit_403_retries_without_browser_headers(self) -> None:
+        limited = urllib.error.HTTPError(
+            "https://example.com/terms",
+            403,
+            "Forbidden",
+            {"x-ratelimit-remaining": "0", "x-ratelimit-reset": "0"},
+            None,
+        )
+        opener = _Opener([limited, _Response(b"terms")])
+
+        result = check_evidence_links.fetch_target(
+            target(terms=True),
+            {},
+            token=None,
+            opener=opener,
+            sleeper=lambda _delay: None,
+        )
+
+        self.assertEqual(200, result.status)
+        self.assertFalse(result.via_browser_fallback)
+        for request in opener.requests:
+            self.assertEqual(
+                check_evidence_links.BOT_USER_AGENT, request.get_header("User-agent")
+            )
+
+    def test_bot_wall_success_is_a_visible_warning(self) -> None:
+        cache = {"version": "1.0", "updated_at": None, "entries": {}}
+        summary = check_evidence_links.check_targets(
+            [target()],
+            cache,
+            lambda _target, _cached: check_evidence_links.FetchResult(
+                status=200,
+                final_url="https://example.com/project",
+                headers={},
+                body=None,
+                via_browser_fallback=True,
+            ),
+            now=datetime(2026, 9, 11, tzinfo=UTC),
+            max_age=timedelta(0),
+        )
+
+        self.assertEqual([], summary.errors)
+        self.assertTrue(
+            any("bot-walled reviewed link" in item for item in summary.warnings)
+        )
+        self.assertTrue(cache["entries"]["https://example.com/project"]["via_browser_fallback"])
+
 
 if __name__ == "__main__":
     unittest.main()

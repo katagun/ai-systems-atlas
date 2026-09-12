@@ -77,6 +77,31 @@ uv run python scripts/build_share_pages.py
 
 `check` is read-only. Both `check` and `apply` refuse changed imported metadata, duplicate source IDs, cross-collection ID collisions, an unverified license review, missing authoritative-model or pinned-source evidence, stale or future review dates, invalid taxonomy values, and incomplete or incorrectly calculated scores. `apply` preflights the complete proposed model collection and remaining queue before writing either canonical file; it removes only the reviewed candidate and does not change the queue's import-snapshot timestamp. It never fetches evidence or makes an editorial conclusion. Commit the completed review draft only if it is useful review history; it is not a catalog input after promotion.
 
+### Distribution-mode conventions
+
+Apply these consistently so batches score the same way:
+
+- A publisher's own serving surface is `developer_api` reach, never `third_party_hosting`. Google's Vertex AI, AI Studio, and Model Garden serving Google's own models, and NVIDIA's build.nvidia.com trial endpoint serving NVIDIA's own models, are first-party developer-API evidence.
+- Another operator's managed hosting of the exact model is `third_party_hosting`: Anthropic Claude on Vertex AI or Bedrock, any publisher's model on Azure Foundry, or a non-NVIDIA model behind an NVIDIA NIM endpoint. Each claim needs first-party host documentation naming the exact model; aggregator listings without host documentation are insufficient.
+- A models.dev ID is reviewable when the publisher documents it as a fixed release identity: a dated snapshot, or a dateless ID the publisher defines as a pinned snapshot rather than a moving alias. A name that moves between snapshots without its own fixed identity is not a record; the full alias discriminator is still open (see `BACKLOG.md`).
+
+### Release identity: fixed snapshots, not aliases
+
+A models.dev ID names a reviewable release only when it has a fixed identity of its own:
+
+- a dated snapshot (for example `claude-sonnet-4-5-20250929` or `gpt-5-2025-08-07`);
+- a dateless ID the publisher defines as a pinned snapshot rather than a moving alias (Anthropic documents post-4.6 dateless IDs this way).
+
+These never become records, no matter how prominent the name:
+
+- moving aliases that resolve to different snapshots over time (`-latest` IDs, `chat-latest` IDs, pre-4.6 dateless IDs that float across dated snapshots);
+- API route names that are not releases (the discontinued `deepseek-chat` and `deepseek-reasoner` names);
+- retired snapshots of a line already reviewed at its current identity, and snapshots that duplicate a reviewed record outright (the `20250514` first-generation Claude snapshots, the dated `gpt-4o` snapshots named inside that record). Model records follow release lines at their current fixed identity; unlike systems under ADR 016, retired snapshots are excluded with a pointer rather than kept as records, because a line can accumulate dozens of them.
+
+### Holds and exclusions
+
+Retired or undocumented source IDs that the queue cannot resolve on its own are dispositioned in `directory/model-dispositions.json`, never in prose alone: `held` means not now but possibly later (the page is gone or was never published, as with Claude Opus 4.1 and Grok 4.1 Fast), `excluded` means never in this shape (aliases, duplicates, retired snapshots of reviewed lines). Each entry carries the `source_id`, the disposition, a reason, and `decided_at`. The importer filters dispositioned IDs out of `model-candidates.json` while keeping them in the eligible count, the promotion command refuses them until the disposition is lifted, and validation keeps the eligible count equal to queued plus reviewed plus dispositioned IDs. The file is unpublished review state, like the queue itself.
+
 ## Model-access score
 
 Every model uses `score_profile: model_access`. The weighted dimensions in `directory/taxonomy.json` are:

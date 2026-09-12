@@ -19,6 +19,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
+| `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
 | `hn-signals.json` | Attention-source signal queue: pointers plus optional review assessment | No |
@@ -93,6 +94,8 @@ rechecks only one GitHub LICENSE and one README `git_blob` evidence item per can
 only through the bounded, public-HTTPS manual path.
 
 Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Reviewed model `source_id` values must be absent from this queue. Every candidate must match the same source row in `models-dev.json`, but the source snapshot is not itself workflow state.
+
+Model dispositions are the durable human record of what the queue must not carry. Unlike system candidates, model queue entries are regenerated wholesale by the importer and cannot hold per-record state, so holds and exclusions live in `model-dispositions.json` instead of on the queue entries. Each entry carries a models.dev `source_id`, a `disposition` of `held` (not now, may return) or `excluded` (never in this shape), a non-empty `reason`, and `decided_at`. The importer filters dispositioned IDs out of the queue while keeping them in the eligible count, promotion refuses them until the disposition is lifted, and validation requires the eligible count to equal queued plus reviewed plus dispositioned source IDs. A dispositioned ID must exist in the source snapshot and must not be reviewed; both conditions fail loudly so stale dispositions get pruned instead of lingering.
 
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 

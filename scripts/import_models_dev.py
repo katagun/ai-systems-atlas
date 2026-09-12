@@ -29,6 +29,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 CANDIDATES_PATH = DIRECTORY / "model-candidates.json"
+DISPOSITIONS_PATH = DIRECTORY / "model-dispositions.json"
 MODELS_PATH = DIRECTORY / "models.json"
 SOURCE_MODELS_PATH = DIRECTORY / "models-dev.json"
 
@@ -233,6 +234,7 @@ def normalize_catalog(
     observed_at: str,
     existing: dict[str, Any] | None = None,
     published_source_ids: set[str] | None = None,
+    dispositioned_source_ids: set[str] | None = None,
     minimum_records: int = MIN_SOURCE_RECORDS,
 ) -> tuple[list[dict[str, Any]], int]:
     if not isinstance(catalog, dict):
@@ -245,6 +247,7 @@ def normalize_catalog(
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     published_source_ids = published_source_ids or set()
+    dispositioned_source_ids = dispositioned_source_ids or set()
     candidates: list[dict[str, Any]] = []
     ids: dict[str, str] = {}
     eligible = 0
@@ -260,6 +263,8 @@ def normalize_catalog(
             raise ValueError(f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}")
         ids[record_id] = source_id
         if source_id in published_source_ids:
+            continue
+        if source_id in dispositioned_source_ids:
             continue
         prior = previous.get(source_id, {})
         candidates.append({
@@ -348,6 +353,7 @@ def build_document(
     observed_at: str,
     existing: dict[str, Any],
     published_source_ids: set[str],
+    dispositioned_source_ids: set[str] | None = None,
     minimum_records: int = MIN_SOURCE_RECORDS,
 ) -> dict[str, Any]:
     candidates, eligible = normalize_catalog(
@@ -355,6 +361,7 @@ def build_document(
         observed_at=observed_at,
         existing=existing,
         published_source_ids=published_source_ids,
+        dispositioned_source_ids=dispositioned_source_ids,
         minimum_records=minimum_records,
     )
     previous_count = existing.get("eligible_record_count")
@@ -393,6 +400,11 @@ def run(
         item.get("source_id") for item in published.get("models", [])
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
+    dispositions = load_json(DISPOSITIONS_PATH, {"dispositions": []})
+    dispositioned_source_ids = {
+        item.get("source_id") for item in dispositions.get("dispositions", [])
+        if isinstance(item, dict) and isinstance(item.get("source_id"), str)
+    }
     document = build_document(
         catalog,
         source_bytes,
@@ -400,6 +412,7 @@ def run(
         observed_at=snapshot_date,
         existing=existing,
         published_source_ids=published_source_ids,
+        dispositioned_source_ids=dispositioned_source_ids,
     )
     source_document = build_source_document(
         catalog,

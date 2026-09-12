@@ -355,6 +355,78 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(any("provisional model candidates must not be published" in error for error in errors), errors)
 
+    def test_model_dispositions_must_not_be_published(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        (root / "web" / "model-dispositions.json").write_text("{}\n", encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(any("model hold and exclusion decisions must not be published" in error for error in errors), errors)
+
+    def test_model_dispositions_reject_unknown_source_ids(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "model-dispositions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["dispositions"].append({
+            "source_id": "acme/ghost",
+            "disposition": "held",
+            "reason": "No such upstream record.",
+            "decided_at": "2026-09-11",
+        })
+        self.write_json(path, document)
+
+        errors = validate(root)
+
+        self.assertTrue(any("acme/ghost" in error and "missing from the complete models.dev source snapshot" in error for error in errors), errors)
+
+    def test_model_dispositions_reject_reviewed_source_ids(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "model-dispositions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["dispositions"].append({
+            "source_id": "openai/gpt-4.1",
+            "disposition": "held",
+            "reason": "Already reviewed; the disposition must be lifted, not duplicated.",
+            "decided_at": "2026-09-11",
+        })
+        self.write_json(path, document)
+
+        errors = validate(root)
+
+        self.assertTrue(any("openai/gpt-4.1" in error and "already exists in the reviewed collection" in error for error in errors), errors)
+
+    def test_model_queue_must_not_contain_dispositioned_ids(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "model-dispositions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["dispositions"].append({
+            "source_id": "alibaba/qwen-flash",
+            "disposition": "held",
+            "reason": "Still queued; the importer must filter it first.",
+            "decided_at": "2026-09-11",
+        })
+        self.write_json(path, document)
+
+        errors = validate(root)
+
+        self.assertTrue(any("alibaba/qwen-flash" in error and "must not remain queued" in error for error in errors), errors)
+
+    def test_model_eligible_count_covers_dispositioned_ids(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "model-dispositions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["dispositions"] = document["dispositions"][:-1]
+        self.write_json(path, document)
+
+        errors = validate(root)
+
+        self.assertTrue(any("eligible count must equal queued plus reviewed plus dispositioned" in error for error in errors), errors)
+
     def catalog_with_superseded(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose first project is marked superseded."""
         temporary, root = self.temporary_catalog()

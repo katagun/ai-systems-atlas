@@ -29,8 +29,8 @@ PUBLISHED_DATA = (
     "models-dev.json",
 )
 CATALOG_DOCUMENTS = (
-    *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "license-review.json",
-    "discovery-sources.json", "hn-signals.json",
+    *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "model-dispositions.json",
+    "license-review.json", "discovery-sources.json", "hn-signals.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -1437,9 +1437,10 @@ def validate_models_dev(
 
 def validate_model_candidates(
     candidates_data: dict[str, Any], published_models: list[Any], source_models: list[Any], tax: Taxonomy,
-    errors: list[str],
+    errors: list[str], dispositioned_ids: set[str] | None = None,
 ) -> None:
     """Validate the automated models.dev queue and keep it disjoint from reviewed records."""
+    dispositioned_ids = dispositioned_ids or set()
     if candidates_data.get("version") != "1.0":
         errors.append("model-candidates.json: unsupported version")
     if not valid_date(candidates_data.get("updated_at")):
@@ -1514,8 +1515,58 @@ def validate_model_candidates(
         elif source_record.get("source_metadata") != candidate.get("source_metadata"):
             errors.append(f"{prefix}: metadata differs from the complete models.dev source snapshot")
     eligible_count = candidates_data.get("eligible_record_count")
-    if isinstance(eligible_count, int) and eligible_count != len(candidates) + len(published_ids):
-        errors.append("model-candidates.json: eligible count must equal queued plus reviewed source ids")
+    if isinstance(eligible_count, int) and eligible_count != len(candidates) + len(published_ids) + len(dispositioned_ids):
+        errors.append("model-candidates.json: eligible count must equal queued plus reviewed plus dispositioned source ids")
+    for source_id in sorted(candidate_ids & dispositioned_ids):
+        errors.append(f"model candidate {source_id}: dispositioned source ids must not remain queued")
+
+
+def validate_model_dispositions(
+    dispositions_data: dict[str, Any],
+    published_models: list[Any],
+    source_models: list[Any],
+    errors: list[str],
+) -> set[str]:
+    """Validate the durable model hold/exclusion record the importer filters on."""
+    dispositioned: set[str] = set()
+    if dispositions_data.get("version") != "1.0":
+        errors.append("model-dispositions.json: unsupported version")
+    if not valid_date(dispositions_data.get("updated_at")):
+        errors.append("model-dispositions.json: updated_at must be an ISO date")
+    dispositions = dispositions_data.get("dispositions")
+    if not isinstance(dispositions, list):
+        errors.append("model-dispositions.json: dispositions must be a list")
+        return dispositioned
+    published_ids = {
+        item.get("source_id") for item in published_models
+        if isinstance(item, dict) and isinstance(item.get("source_id"), str)
+    }
+    source_ids = {
+        item.get("source_id") for item in source_models
+        if isinstance(item, dict) and isinstance(item.get("source_id"), str)
+    }
+    for entry in dispositions:
+        prefix = f"model disposition {entry.get('source_id', 'unknown') if isinstance(entry, dict) else 'unknown'}"
+        if not isinstance(entry, dict) or set(entry) != {"source_id", "disposition", "reason", "decided_at"}:
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        source_id = entry.get("source_id")
+        if not isinstance(source_id, str) or not source_id or source_id in dispositioned:
+            errors.append(f"{prefix}: source_id must be a unique non-empty string")
+            continue
+        dispositioned.add(source_id)
+        if entry.get("disposition") not in {"held", "excluded"}:
+            errors.append(f"{prefix}: disposition must be held or excluded")
+        reason = entry.get("reason")
+        if not isinstance(reason, str) or not reason.strip():
+            errors.append(f"{prefix}: reason must be a non-empty string")
+        if not valid_date(entry.get("decided_at")):
+            errors.append(f"{prefix}: decided_at must be an ISO date")
+        if source_id in published_ids:
+            errors.append(f"{prefix}: already exists in the reviewed collection; lift the disposition first")
+        if source_id not in source_ids:
+            errors.append(f"{prefix}: missing from the complete models.dev source snapshot; prune the stale disposition")
+    return dispositioned
 
 
 def validate_unique_record_ids(
@@ -1924,6 +1975,8 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("discovery-sources.json: operational discovery sources must not be published")
     if (root / "web" / "model-candidates.json").exists():
         errors.append("model-candidates.json: provisional model candidates must not be published")
+    if (root / "web" / "model-dispositions.json").exists():
+        errors.append("model-dispositions.json: model hold and exclusion decisions must not be published")
     if (root / "web" / "hn-signals.json").exists():
         errors.append("hn-signals.json: attention-source signals must not be published")
 
@@ -1955,8 +2008,12 @@ def validate(root: Path = ROOT) -> list[str]:
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
     validate_hn_signals(catalog["hn-signals.json"], tax, errors)
+    dispositioned_ids = validate_model_dispositions(
+        catalog["model-dispositions.json"], models_value, source_models_value, errors,
+    )
     validate_model_candidates(
         catalog["model-candidates.json"], models_value, source_models_value, tax, errors,
+        dispositioned_ids,
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(catalog["exclusions.json"], index.repos, candidate_repos, errors)

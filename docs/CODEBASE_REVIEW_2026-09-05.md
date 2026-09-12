@@ -160,7 +160,9 @@ The following checks passed against the reviewed working tree:
 
 The focused model-detail outage probe failed as described in CR-03; it was a deliberate reproduction of the uncovered defect, not part of the passing committed suite. Separate security regression runs cover 104 candidate-evidence tests and 23 blog tests. The blog finding was confirmed from the generated anchor and cross-checked against WHATWG URL parsing; an unsafe live click was not forced after the in-app browser rejected the data-URL test context.
 
-## Remediation order
+## Tracking and remediation order
+
+[`BACKLOG.md`](../BACKLOG.md) is the executable source of truth. Keep finding evidence and acceptance detail here; update status here when a finding is resolved, and remove the corresponding backlog item once its regression tests pass. Within the engineering work, use this order:
 
 1. CR-01 and CR-02 are resolved in the reviewed working tree.
 2. Fix CR-03 and add the missing model failure-path coverage.

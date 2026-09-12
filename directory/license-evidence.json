@@ -1602,10 +1602,10 @@
       "items": [
         {
           "license_id": "MIT",
-          "scope": "Agent Development Kit client, the open command-line and Python component, whose LICENSE blob is pinned at 5a2a5f2cc2e67203aaf546e6c40e0859eaeb4e2a",
+          "scope": "Agent Development Kit client, the open command-line and Python component, whose LICENSE blob is pinned at 128062277c49699748870471370fee5e487a8abf",
           "kind": "web_terms",
-          "url": "https://github.com/IBM/ibm-watsonx-orchestrate-adk/blob/5a2a5f2cc2e67203aaf546e6c40e0859eaeb4e2a/LICENSE",
-          "verified_at": "2026-08-30"
+          "url": "https://github.com/IBM/ibm-watsonx-orchestrate-adk/blob/128062277c49699748870471370fee5e487a8abf/LICENSE",
+          "verified_at": "2026-09-11"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -1639,7 +1639,7 @@
           "scope": "Whole repository under a modified Apache License 2.0 that forbids multi-tenant operation and frontend branding removal",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/langgenius/dify/blob/329ee302875f292fdd11e12e830562d0be9ade1c/LICENSE",
+          "url": "https://github.com/langgenius/dify/blob/085a79c748be47111d2e1c1b65b3f82200998d5c/LICENSE",
           "blob_sha": "329ee302875f292fdd11e12e830562d0be9ade1c",
           "immutable_url": "https://api.github.com/repos/langgenius/dify/git/blobs/329ee302875f292fdd11e12e830562d0be9ade1c"
         },
@@ -1661,7 +1661,7 @@
           "scope": "Whole repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/langflow-ai/langflow/blob/ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347/LICENSE",
+          "url": "https://github.com/langflow-ai/langflow/blob/595cd72a2b2021f2375fa31109af02d20bb17648/LICENSE",
           "blob_sha": "ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347",
           "immutable_url": "https://api.github.com/repos/langflow-ai/langflow/git/blobs/ee3d6be71bdd1b5e4cc5b85da4a4aabc7bfe3347"
         }
@@ -1676,7 +1676,7 @@
           "scope": "Repository contents outside the enterprise directory",
           "kind": "git_blob",
           "path": "LICENSE.md",
-          "url": "https://github.com/FlowiseAI/Flowise/blob/68314426eaf58acf21727cdada2d8047797058e7/LICENSE.md",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/9291856d1ea4a4ceea9f8fef8ce14f4f6c81e8eb/LICENSE.md",
           "blob_sha": "68314426eaf58acf21727cdada2d8047797058e7",
           "immutable_url": "https://api.github.com/repos/FlowiseAI/Flowise/git/blobs/68314426eaf58acf21727cdada2d8047797058e7"
         },
@@ -1685,7 +1685,7 @@
           "scope": "packages/server/src/enterprise and files carrying an explicit copyright notice, conditioned on a paid subscription",
           "kind": "git_blob",
           "path": "packages/server/src/enterprise/LICENSE.md",
-          "url": "https://github.com/FlowiseAI/Flowise/blob/462c48dc6de78a52abaafa1f89cda55291dadc0a/packages/server/src/enterprise/LICENSE.md",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/9291856d1ea4a4ceea9f8fef8ce14f4f6c81e8eb/packages/server/src/enterprise/LICENSE.md",
           "blob_sha": "462c48dc6de78a52abaafa1f89cda55291dadc0a",
           "immutable_url": "https://api.github.com/repos/FlowiseAI/Flowise/git/blobs/462c48dc6de78a52abaafa1f89cda55291dadc0a"
         }
@@ -1697,10 +1697,10 @@
       "items": [
         {
           "license_id": "MIT",
-          "scope": "Public integrations, command-line tool, SDK, and API client, whose LICENSE blob is pinned at da998345162b9f0c970947cad48899f6c5d52554",
+          "scope": "Public integrations, command-line tool, SDK, and API client, whose LICENSE blob is pinned at 7bf2906580ab86fe647d4fb109b8c3bdcaef9c57",
           "kind": "web_terms",
-          "url": "https://github.com/botpress/botpress/blob/da998345162b9f0c970947cad48899f6c5d52554/LICENSE",
-          "verified_at": "2026-08-31"
+          "url": "https://github.com/botpress/botpress/blob/7bf2906580ab86fe647d4fb109b8c3bdcaef9c57/LICENSE",
+          "verified_at": "2026-09-11"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -1773,7 +1773,7 @@
           "scope": "Whole repository under a sustainable-use licence limiting use to internal, personal, or non-commercial purposes",
           "kind": "git_blob",
           "path": "LICENSE.md",
-          "url": "https://github.com/code-yeongyu/oh-my-openagent/blob/5982a8720a1cb87c26a36bb31d5019f119841769/LICENSE.md",
+          "url": "https://github.com/code-yeongyu/oh-my-openagent/blob/dev/LICENSE.md",
           "blob_sha": "5982a8720a1cb87c26a36bb31d5019f119841769",
           "immutable_url": "https://api.github.com/repos/code-yeongyu/oh-my-openagent/git/blobs/5982a8720a1cb87c26a36bb31d5019f119841769"
         }
@@ -1788,7 +1788,7 @@
           "scope": "Whole repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/Yeachan-Heo/gajae-code/blob/16eb3fc020a9dbefb165d2fb1d4597d2203c44bd/LICENSE",
+          "url": "https://github.com/Yeachan-Heo/gajae-code/blob/f6b7c475d24fb81aefe9e6475a713c1f364f6e80/LICENSE",
           "blob_sha": "16eb3fc020a9dbefb165d2fb1d4597d2203c44bd",
           "immutable_url": "https://api.github.com/repos/Yeachan-Heo/gajae-code/git/blobs/16eb3fc020a9dbefb165d2fb1d4597d2203c44bd"
         }
@@ -1803,7 +1803,7 @@
           "scope": "Whole repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/ultraworkers/claw-code/blob/28e6960dd9a2be209c308b49bc9a8973dbf4d60d/LICENSE",
+          "url": "https://github.com/ultraworkers/claw-code/blob/08106b0c3771ef5b4a5aa176acccd460e88b7325/LICENSE",
           "blob_sha": "28e6960dd9a2be209c308b49bc9a8973dbf4d60d",
           "immutable_url": "https://api.github.com/repos/ultraworkers/claw-code/git/blobs/28e6960dd9a2be209c308b49bc9a8973dbf4d60d"
         }
@@ -1818,7 +1818,7 @@
           "scope": "Open core: engine, server, command line, packages, and tool interfaces",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/thedotmack/claude-mem/blob/d645695673349e3947e8e5ae42332d0ac3164cd7/LICENSE",
+          "url": "https://github.com/thedotmack/claude-mem/blob/ed57a511f5dbf84e75c9a785df818c43b66b5849/LICENSE",
           "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
           "immutable_url": "https://api.github.com/repos/thedotmack/claude-mem/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
         }
@@ -1833,7 +1833,7 @@
           "scope": "Whole repository",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/rohitg00/agentmemory/blob/cb13c72881997c8ad1662ec42c1484cc15859147/LICENSE",
+          "url": "https://github.com/rohitg00/agentmemory/blob/e04ba88819c365c9acf9d6661ea802143e728bd6/LICENSE",
           "blob_sha": "cb13c72881997c8ad1662ec42c1484cc15859147",
           "immutable_url": "https://api.github.com/repos/rohitg00/agentmemory/git/blobs/cb13c72881997c8ad1662ec42c1484cc15859147"
         }
@@ -1844,11 +1844,11 @@
       "repo": "NevaMind-AI/memU",
       "items": [
         {
-          "license_id": "LicenseRef-Unclear",
-          "scope": "Whole repository under a non-canonical licence text that no standard identifier matches",
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0",
           "kind": "git_blob",
           "path": "LICENSE.txt",
-          "url": "https://github.com/NevaMind-AI/memU/blob/037b3bceb0e1e3151caac1cacf9fec113cd50781/LICENSE.txt",
+          "url": "https://github.com/NevaMind-AI/memU/blob/08e1ed4cdf4c0cb1fe5387e4a532ea588a8cbe46/LICENSE.txt",
           "blob_sha": "037b3bceb0e1e3151caac1cacf9fec113cd50781",
           "immutable_url": "https://api.github.com/repos/NevaMind-AI/memU/git/blobs/037b3bceb0e1e3151caac1cacf9fec113cd50781"
         }
@@ -1863,7 +1863,7 @@
           "scope": "Whole repository, with the memory component under the same licence",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/tinyhumansai/openhuman/blob/6a366447b44a765b93414462d8d07982055ea96a/LICENSE",
+          "url": "https://github.com/tinyhumansai/openhuman/blob/8c35a1c9a2c3ee1b6bfbe66658209405f44ace21/LICENSE",
           "blob_sha": "6a366447b44a765b93414462d8d07982055ea96a",
           "immutable_url": "https://api.github.com/repos/tinyhumansai/openhuman/git/blobs/6a366447b44a765b93414462d8d07982055ea96a"
         }
@@ -2089,7 +2089,7 @@
           "scope": "Repository root under a modified MIT License whose preamble places the server and native packages under separate terms",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/toeverything/AFFiNE/blob/main/LICENSE",
+          "url": "https://github.com/toeverything/AFFiNE/blob/cfda4858d550c46ec1cd0b574801d7becdd6625b/LICENSE",
           "blob_sha": "ee4c98c5f018d7421d7a4a28d24f0710f1705269",
           "immutable_url": "https://api.github.com/repos/toeverything/AFFiNE/git/blobs/ee4c98c5f018d7421d7a4a28d24f0710f1705269"
         },
@@ -2098,7 +2098,7 @@
           "scope": "The entire server, holding synchronization, search indexing, all AI, authentication, and payment, under the AFFiNE Enterprise Edition license requiring a seat-based subscription for production use",
           "kind": "git_blob",
           "path": "packages/backend/server/LICENSE",
-          "url": "https://github.com/toeverything/AFFiNE/blob/main/packages/backend/server/LICENSE",
+          "url": "https://github.com/toeverything/AFFiNE/blob/cfda4858d550c46ec1cd0b574801d7becdd6625b/packages/backend/server/LICENSE",
           "blob_sha": "053ad06aa04a5c6676ca1d31cfcb53cf8ebc59d3",
           "immutable_url": "https://api.github.com/repos/toeverything/AFFiNE/git/blobs/053ad06aa04a5c6676ca1d31cfcb53cf8ebc59d3"
         }
@@ -2251,7 +2251,7 @@
           "scope": "Whole repository under the MIT License; it is the only licence file in the tree",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/ItzCrazyKns/Vane/blob/main/LICENSE",
+          "url": "https://github.com/ItzCrazyKns/Vane/blob/348feca3e378fb4157b217724ed508dc707f853f/LICENSE",
           "blob_sha": "f94c7b0dabce11a8f6c98749125b15a9ced41137",
           "immutable_url": "https://api.github.com/repos/ItzCrazyKns/Vane/git/blobs/f94c7b0dabce11a8f6c98749125b15a9ced41137"
         }
@@ -2318,7 +2318,7 @@
           "scope": "Whole repository under the MIT License, carrying the author's copyright without a title line",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/zhayujie/CowAgent/blob/main/LICENSE",
+          "url": "https://github.com/zhayujie/CowAgent/blob/8df1091253fa050fd73ea21e5e24172ad5d48bca/LICENSE",
           "blob_sha": "fd03f7c24a514e138467c303e3641a49811bc9c9",
           "immutable_url": "https://api.github.com/repos/zhayujie/CowAgent/git/blobs/fd03f7c24a514e138467c303e3641a49811bc9c9"
         }
@@ -2378,7 +2378,7 @@
           "scope": "Whole repository under the Apache License 2.0",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/camel-ai/camel/blob/main/LICENSE",
+          "url": "https://github.com/camel-ai/camel/blob/8c791b7b9cf7deab56cb5a92818c34499af9097f/LICENSE",
           "blob_sha": "c46213dce5875ed087fc9fe3ce329b69d98713ed",
           "immutable_url": "https://api.github.com/repos/camel-ai/camel/git/blobs/c46213dce5875ed087fc9fe3ce329b69d98713ed"
         }
@@ -2716,10 +2716,10 @@
       "items": [
         {
           "license_id": "Apache-2.0",
-          "scope": "nozomio-labs/nia-cli, the open command-line client for the hosted platform, whose LICENSE blob is pinned at 261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "scope": "nozomio-labs/nia-cli, the open command-line client for the hosted platform, whose LICENSE blob is pinned at 3ebf0b0bb62ff6a73d630232b2b03c8bde30fe86",
           "kind": "web_terms",
-          "url": "https://github.com/nozomio-labs/nia-cli/blob/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64/LICENSE",
-          "verified_at": "2026-09-02"
+          "url": "https://github.com/nozomio-labs/nia-cli/blob/3ebf0b0bb62ff6a73d630232b2b03c8bde30fe86/LICENSE",
+          "verified_at": "2026-09-11"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -2784,7 +2784,7 @@
           "scope": "Repository root under the Apache License 2.0; several packages declare no licence field and inherit it, and a notice file asserts all rights reserved beside it",
           "kind": "git_blob",
           "path": "LICENSE.md",
-          "url": "https://github.com/dendronhq/dendron/blob/main/LICENSE.md",
+          "url": "https://github.com/dendronhq/dendron/blob/4420715a421756518863c47005c8c49a38e37621/LICENSE.md",
           "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
           "immutable_url": "https://api.github.com/repos/dendronhq/dendron/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
         }
@@ -2943,7 +2943,7 @@
           "scope": "Whole A-MEM repository and the agentic-memory Python package declared by pyproject.toml",
           "kind": "git_blob",
           "path": "LICENSE",
-          "url": "https://github.com/agiresearch/A-mem/blob/12597231b2c37fef747a2e39df55cccba71c3ceb/LICENSE",
+          "url": "https://github.com/agiresearch/A-mem/blob/ceffb860f0712bbae97b184d440df62bc910ca8d/LICENSE",
           "blob_sha": "12597231b2c37fef747a2e39df55cccba71c3ceb",
           "immutable_url": "https://api.github.com/repos/agiresearch/A-mem/git/blobs/12597231b2c37fef747a2e39df55cccba71c3ceb"
         }
