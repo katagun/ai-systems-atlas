@@ -1680,10 +1680,26 @@ const scoreCell = value => value == null ? null : `${value} / 10`;
 // so a degraded table reads consistently rather than mixing blanks and dashes.
 const listCell = values => (values || []).join(" • ") || null;
 
+function trustComparisonCell(service, name) {
+  const item = service.trust?.properties?.[name];
+  if (!item) return "not examined";
+  return { text: trustStatusName(item.status), title: `${item.note} (${item.verified_at})` };
+}
+
+// A cell is a string, null (rendered "—"), or { text, title }: the trust rows put
+// the status word in the cell and the reviewer's note in the title, so a table of
+// six one-word statuses still carries every exception on hover.
+const comparisonCell = value => {
+  if (value && typeof value === "object") {
+    return `<td title="${escapeHTML(value.title)}">${escapeHTML(value.text)}</td>`;
+  }
+  return `<td>${escapeHTML(value ?? "—")}</td>`;
+};
+
 function comparisonTable(records, rows) {
   return `<div class="comparison-table-wrap"><table class="comparison-table">
     <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
-    <tbody>${rows.map(([name, values]) => `<tr><th scope="row">${escapeHTML(name)}</th>${values.map(value => `<td>${escapeHTML(value ?? "—")}</td>`).join("")}</tr>`).join("")}</tbody>
+    <tbody>${rows.map(([name, values]) => `<tr><th scope="row">${escapeHTML(name)}</th>${values.map(comparisonCell).join("")}</tr>`).join("")}</tbody>
   </table></div>`;
 }
 
@@ -1800,7 +1816,7 @@ function openComparison() {
   } else {
     profile = state.taxonomy.inference_service_score_profile;
     eyebrow = profile.name;
-    note = "This comparison covers operational service characteristics. It excludes model quality, current price, and transient latency or throughput.";
+    note = "This comparison covers operational service characteristics. It excludes model quality, current price, and transient latency or throughput. Trust rows record whether the operator documents a property; they are unscored and never ranked.";
     rows = [
       ["Operator", records.map(item => item.operator)],
       ["Service type", records.map(item => taxonomyName("inference_service_types", item.service_type))],
@@ -1816,6 +1832,10 @@ function openComparison() {
       ["Retention controls", records.map(item => item.retention_controls)],
       ["Routing", records.map(item => item.routing)],
       ["Customization", records.map(item => item.customization)],
+      ...TRUST_PROPERTY_ORDER.map(name => [
+        `${TRUST_PROPERTY_LABELS[name]} · trust record, unscored`,
+        records.map(item => trustComparisonCell(item, name)),
+      ]),
       ["Strengths", records.map(item => listCell(item.strengths))],
       ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
