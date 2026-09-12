@@ -193,6 +193,16 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_trust(mutate)
         self.assertTrue(any("operator_response must be null or have exactly" in error for error in errors), errors)
 
+    def test_trust_response_dates_cannot_postdate_the_review(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["findings"][0]["operator_response"] = {
+                "url": "https://example.com/statement",
+                "verified_at": "2026-09-04",
+                "summary": "s",
+            }
+        errors = self.catalog_with_trust(mutate)
+        self.assertTrue(any("operator_response verified_at must not be after the trust verified_at" in error for error in errors), errors)
+
     def test_trust_closure_carries_a_dated_first_party_source(self) -> None:
         def mutate(trust: dict) -> None:
             trust["findings"][0]["resolved"] = {"url": "https://example.com/fix", "verified_at": "2026-09-02", "summary": "Caches are now scoped per API key."}
