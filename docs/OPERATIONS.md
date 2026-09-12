@@ -352,6 +352,22 @@ Run a sweep by hand at any time:
 uv run python scripts/sweep_hackernews.py
 ```
 
+Before fetching any story's page, the sweep drops one whose outbound URL a human has
+already decided on — it appears with a `url` in `directory/exclusions.json` (a
+rejection), `directory/projects.json` (already a reviewed record), or
+`directory/candidates.json` (already queued for review) — so an already-decided page is
+never re-fetched and never re-costs a triage pass. The comparison uses
+`canonical_url_key` from `scripts/discovery_sources.py`, the same key
+`update_directory.py` uses for this: it is a conservative key, not a full normaliser, so
+it folds a trailing slash, a default port, and `utm_`/tracking query parameters, but it
+does not fold a `www.` host prefix — a page linked both with and without `www.` is not
+recognized as the same URL. The three catalog files are local JSON in the same checkout;
+if one cannot be read or parsed, the sweep aborts instead of silently suppressing
+nothing, since an empty suppression set would recreate the exact defect this guards
+against. The count of stories dropped this way is recorded as `suppressed` in the
+committed queue's `source` envelope, alongside `truncated`, and printed to stdout so it
+shows up in the launchd log.
+
 `scripts/verify_signal_pages.py --refresh` (invoked by `run_hn_signals.py prepare`) caps
 each page at `MAX_BUNDLE_CHARS` (8,000 characters) when it writes `bundle.json` for the
 routine's model to read. A real 39-page bundle ran 568,518 characters uncapped (~142,000
