@@ -70,7 +70,73 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model is documented; the content-provenance guide covers C2PA credentials on generated images, not API responses.",
+            "url": "https://developers.openai.com/api/docs/guides/content-provenance",
+            "scope": "OpenAI content-provenance guide, read for the OpenAI API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The enterprise-privacy page states the operator processes API content: \"Except for certain endpoints and features listed in our platform documentation, OpenAI may securely retain API inputs and outputs for up to 30 days to provide the services and to identify abuse.\" A subprocessor list is published on the platform, on a page automated readers cannot render.",
+            "url": "https://openai.com/enterprise-privacy/",
+            "scope": "OpenAI enterprise-privacy page, for the OpenAI API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Create credentials. Use a standard API key for application requests, an Admin API key for Administration endpoints, or workload identity federation for short-lived access tokens.\"",
+            "url": "https://developers.openai.com/api/docs/api-reference/authentication",
+            "scope": "OpenAI API authentication reference, for the OpenAI API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching guide states: \"Caches are not shared across organizations and cannot be reused across regional processing boundaries.\"",
+            "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+            "scope": "OpenAI prompt-caching guide, for the OpenAI API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A coordinated vulnerability disclosure policy is published: \"We invite you to report vulnerabilities, bugs, safety and abuse issues, or security flaws you discover in our systems.\"",
+            "url": "https://openai.com/policies/coordinated-vulnerability-disclosure-policy/",
+            "scope": "OpenAI coordinated vulnerability disclosure policy, for the OpenAI API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The enterprise-privacy page states: \"Our API Platform has been audited and certified for SOC 2 Type 2 compliance.\" The trust portal holding the report refuses automated fetches.",
+            "url": "https://openai.com/enterprise-privacy/",
+            "scope": "OpenAI enterprise-privacy page, for the OpenAI API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "We detect global cache sharing across users in seven API providers, including OpenAI, resulting in potential privacy leakage about users' prompts. The paper reports the OpenAI issue was patched after responsible disclosure before publication; its first version is dated 2025-02-11.",
+            "published_at": "2025-07-13",
+            "source": {
+              "label": "Auditing Prompt Caching in Language Model APIs, arXiv 2502.07776v2",
+              "url": "https://arxiv.org/abs/2502.07776v2",
+              "kind": "third_party",
+              "content_sha256": "2d15ac6cd0431b885187028fef6cdb2f15feb328ba891b4e04e933d76fa3f624",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": null,
+            "resolved": {
+              "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+              "verified_at": "2026-09-12",
+              "summary": "The current prompt-caching guide states that caches are not shared across organizations, and the paper reports the issue was patched after disclosure."
+            }
+          }
+        ]
+      }
     },
     {
       "id": "anthropic-api",
@@ -146,7 +212,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model is documented for the API; the confidential-inference research post describes trusted-VM work, not a client-verifiable response signature.",
+            "url": "https://www.anthropic.com/research/confidential-inference-trusted-vms",
+            "scope": "Anthropic confidential-inference research post, read for the Anthropic API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy centre states how the operator handles API content: \"For Anthropic API users, we automatically delete inputs and outputs on our backend within 30 days of receipt or generation\"; the operator is the party that receives plaintext.",
+            "url": "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+            "scope": "Anthropic privacy centre, organisation data retention article, for the Anthropic API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"API keys are static secrets that you generate in the Claude Console and send on every request as a bearer token in the Authorization header.\"",
+            "url": "https://platform.claude.com/docs/en/manage-claude/authentication",
+            "scope": "Claude platform authentication documentation, for the Anthropic API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The prompt-caching guide states: \"Caches are isolated between organizations. Different organizations never share caches, even if they use identical prompts.\"",
+            "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+            "scope": "Claude platform prompt-caching guide, for the Anthropic API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a disclosure policy (\"Policy: https://www.anthropic.com/responsible-disclosure-policy\").",
+            "url": "https://www.anthropic.com/.well-known/security.txt",
+            "scope": "Anthropic security.txt, for the Anthropic API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The public trust centre's scope table has a row for \"Claude via Anthropic's API\" marked for SOC 2 Type 2, ISO 27001, ISO 42001, CSA Star, HIPAA, and NIST 800-171; the reports themselves are behind a request-access control.",
+            "url": "https://trust.anthropic.com/",
+            "scope": "Anthropic trust centre, for the Anthropic API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "amazon-bedrock",
@@ -619,7 +733,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference; the thinking guide's \"thought signatures\" are opaque tokens for carrying reasoning state between turns, not a client-verifiable signature of the response.",
+            "url": "https://ai.google.dev/gemini-api/docs/thinking",
+            "scope": "Gemini API thinking guide, read for response verification, for the Gemini API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The logs policy states how Google handles API content, including that \"Human reviewers may read, annotate, and process the API inputs and outputs you share.\" on the unpaid tier; the operator is the party that receives plaintext.",
+            "url": "https://ai.google.dev/gemini-api/docs/logs-policy",
+            "scope": "Gemini API logs policy, for the Gemini API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Google AI Studio automatically creates a default Google Cloud project and API key after you accept the Terms of Service.\" and every documented request uses that key.",
+            "url": "https://ai.google.dev/gemini-api/docs/api-key",
+            "scope": "Gemini API key guide, for the Gemini API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The context-caching guide documents explicit and implicit caching, their pricing, and their lifetimes, but never states whether a cache is scoped to the project or key that created it or can be reached from another customer's requests.",
+            "url": "https://ai.google.dev/gemini-api/docs/caching",
+            "scope": "Gemini API context-caching guide, for the Gemini API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "Google publishes a company-wide security.txt with a disclosure route (\"Contact: https://g.co/vulnz\" and \"Contact: mailto:security@google.com\"), and its Bug Hunters site carries an AI vulnerability reward programme covering Google AI products; neither names the Gemini API specifically.",
+            "url": "https://www.google.com/.well-known/security.txt",
+            "scope": "Google security.txt, for the Gemini API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The Google Cloud SOC 2 page (\"Below are Google Cloud services that are in scope for SOC 2.\") lists the in-scope services and does not name the Gemini API or Google AI Studio, and no AI Studio compliance page was found; recorded as undocumented for the named service.",
+            "url": "https://cloud.google.com/security/compliance/soc-2",
+            "scope": "Google Cloud SOC 2 scope page, read for the Gemini API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "xai-api",
@@ -684,7 +846,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.x.ai/developers/faq/security",
+            "scope": "xAI API security FAQ, for the xAI API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The API security FAQ states the operator holds the content: \"all API requests and responses are stored on our servers (encrypted at rest) for 30 days for auditing purposes\". The marketing host's privacy and subprocessor pages refuse automated fetches, so no subprocessor is named here.",
+            "url": "https://docs.x.ai/developers/faq/security",
+            "scope": "xAI API security FAQ, for the xAI API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the quickstart says \"Create an API key via the API Keys page\" and documents only that key.",
+            "url": "https://docs.x.ai/developers/quickstart",
+            "scope": "xAI API quickstart, for the xAI API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching page documents automatic caching and its pricing but never states whether a cache is scoped to the account or key.",
+            "url": "https://docs.x.ai/developers/advanced-api-usage/prompt-caching",
+            "scope": "xAI API prompt-caching page, for the xAI API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:vulnerabilities@x.ai\").",
+            "url": "https://x.ai/.well-known/security.txt",
+            "scope": "xAI security.txt, for the xAI API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The API security FAQ states: \"We are SOC 2 Type 2 compliant.\" No report or auditor is linked.",
+            "url": "https://docs.x.ai/developers/faq/security",
+            "scope": "xAI API security FAQ, for the xAI API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "mistral-ai-studio",
@@ -751,7 +961,77 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.mistral.ai/api/",
+            "scope": "Mistral API reference, for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre's subprocessor list names the infrastructure parties per product, including \"Microsoft Inc. • Cloud Infrastructure Sweden, Norway Products: Vibe, Studio / AI\" and \"Google LLC • Cloud Infrastructure Netherlands, Belgium, United States (US API endpoint) Products: Vibe, Studio/API (US API)\", and the privacy policy covers Mistral AI Studio by name.",
+            "url": "https://trust.mistral.ai/",
+            "scope": "Mistral trust centre subprocessor list, for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the quickstart's first step is \"Navigate to API Keys in the left sidebar. Click Create new key.\" in the Studio console, and every documented request uses that key.",
+            "url": "https://docs.mistral.ai/getting-started/quickstarts/studio/activate-and-generate-api-key",
+            "scope": "Mistral AI Studio API-key quickstart, for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching page documents the feature and its billing but never states whether a cache is scoped to the organisation that created it.",
+            "url": "https://docs.mistral.ai/studio/conversations/advanced/prompt-caching",
+            "scope": "Mistral AI Studio prompt-caching page, for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@mistral.ai\") and a HackerOne submission policy.",
+            "url": "https://mistral.ai/.well-known/security.txt",
+            "scope": "Mistral security.txt, for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The public trust centre lists ISO 27001, ISO 27701, and SOC 2 Type II for the company, with certificates and a report behind a request-access control; nothing states that the attestations cover Mistral AI Studio or the API, so it is recorded as undocumented for the named service.",
+            "url": "https://trust.mistral.ai/",
+            "scope": "Mistral trust centre compliance section, read for Mistral AI Studio",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "Mistral AI Studio API files input filtering and access restriction: \"A lack of filtering on the API /api/files can let a malicious user access unattended resources.\" Affected: Mistral AI Studio and le-chat; remediation: \"Update to Mistral AI Studio 2026.1.3, 2026.2.0, or later.\"",
+            "published_at": "2026-03-16",
+            "source": {
+              "label": "Mistral security advisory MAI-2026-001",
+              "url": "https://docs.mistral.ai/resources/security-advisories/MAI-2026-001",
+              "kind": "third_party",
+              "content_sha256": "211b549b17fe260c39a453a146099d2c7c01cf95e8e188c37ae7bd8f8ab7b2ed",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": {
+              "url": "https://docs.mistral.ai/resources/security-advisories/MAI-2026-001",
+              "verified_at": "2026-09-12",
+              "summary": "The operator published the advisory itself, naming the affected products and the fixed releases."
+            },
+            "resolved": {
+              "url": "https://docs.mistral.ai/resources/security-advisories/MAI-2026-001",
+              "verified_at": "2026-09-12",
+              "summary": "Fixed in Mistral AI Studio 2026.1.3 and 2026.2.0 per the advisory."
+            }
+          }
+        ]
+      }
     },
     {
       "id": "cohere-api",
@@ -815,7 +1095,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "documented_yes",
+            "note": "Scoped to the Model Vault Encrypted tier only. Its confidential-computing page states: \"Verify before you trust: before any data is sent, the client verifies the deployment through remote attestation and refuses the connection if the environment is not genuine or is running unexpected code.\" The default API carries no signature or attestation.",
+            "url": "https://docs.cohere.com/docs/model-vault/encrypted/confidential-computing",
+            "scope": "Cohere Model Vault Encrypted confidential-computing page, for the Cohere API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator collects the content: \"we collect content you submit to the Cohere Products, and outputs generated by the Cohere Products\". No subprocessor is named on a page this review could read.",
+            "url": "https://cohere.com/privacy",
+            "scope": "Cohere privacy policy, for the Cohere API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"To make a request to any model, you must pass in the Authorization Header and the request must be made through a POST request. The content of Authorization should be in the shape of BEARER [API_KEY].\"",
+            "url": "https://docs.cohere.com/reference/about",
+            "scope": "Cohere API reference, for the Cohere API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt-caching feature or cache scope is documented in the chat reference.",
+            "url": "https://docs.cohere.com/reference/chat",
+            "scope": "Cohere chat API reference, for the Cohere API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The security page publishes a bug-bounty programme: \"The Cohere Bug Bounty program is designed to recognize the community's support in protecting our users' privacy and security.\"",
+            "url": "https://cohere.com/security",
+            "scope": "Cohere security page, for the Cohere API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The security page names the API: \"Our API platform is hosted on industry-leading cloud infrastructure and is SOC 2 Type II compliant\". The report is behind a request-access control.",
+            "url": "https://cohere.com/security",
+            "scope": "Cohere security page, for the Cohere API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "deepseek-api",
@@ -845,7 +1173,8 @@
       ],
       "tradeoffs": [
         "Public regional and retention controls are less explicit than major cloud platforms.",
-        "The direct service is limited to DeepSeek model families."
+        "The direct service is limited to DeepSeek model families.",
+        "A January 2025 researcher disclosure reported a publicly exposed DeepSeek database holding chat history and secret keys, secured after disclosure; the operator published no statement, and no security contact or attestation is documented."
       ],
       "score_profile": "inference_service",
       "score": {
@@ -879,7 +1208,69 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-09-12",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://api-docs.deepseek.com/api/deepseek-api/",
+            "scope": "DeepSeek API reference, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator collects the content: \"When you use our Services, we may collect your text input, voice input, prompt, uploaded files, photos, feedback, chat history, or other content that you provide to our model and Services\". No subprocessor is named.",
+            "url": "https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html",
+            "scope": "DeepSeek privacy policy, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"To use the DeepSeek API, please create an API key first\" and every documented request uses that key.",
+            "url": "https://api-docs.deepseek.com/api/deepseek-api/",
+            "scope": "DeepSeek API reference, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "documented_yes",
+            "note": "The chat-completion reference documents a per-request control: \"user_id can be used for KVCache isolation for privacy management.\" It does not state the cache scope when the field is omitted.",
+            "url": "https://api-docs.deepseek.com/api/create-chat-completion/",
+            "scope": "DeepSeek chat-completion reference, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the API documentation, the terms, or the privacy policy, and no security.txt is served on any DeepSeek host checked.",
+            "url": "https://api-docs.deepseek.com/",
+            "scope": "DeepSeek API documentation, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the API documentation, the terms, or the privacy policy.",
+            "url": "https://api-docs.deepseek.com/",
+            "scope": "DeepSeek API documentation, for the DeepSeek API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": [
+          {
+            "claim": "A publicly accessible ClickHouse database belonging to DeepSeek allowed full control over database operations, including the ability to access internal data. The exposure included over a million lines of log streams containing chat history, secret keys, backend details, and other highly sensitive information. Wiz reports it disclosed the issue to DeepSeek, which promptly secured the exposure.",
+            "published_at": "2025-01-29",
+            "source": {
+              "label": "Wiz Research Uncovers Exposed DeepSeek Database Leak",
+              "url": "https://www.wiz.io/blog/wiz-research-uncovers-exposed-deepseek-database-leak",
+              "kind": "third_party",
+              "content_sha256": "cfa90c12d4612e7e32ab2f725f551145e83e14819166145d84ae1f04b7530813",
+              "fetched_at": "2026-09-12"
+            },
+            "operator_response": null,
+            "resolved": null
+          }
+        ]
+      }
     },
     {
       "id": "moonshot-ai-open-platform",
@@ -942,7 +1333,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://platform.kimi.ai/docs/api/chat",
+            "scope": "Kimi API chat reference, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The platform privacy policy states the operator processes the content and names the categories of third-party providers it shares data with: \"These providers include hosting services, customer service vendors, cloud services, content delivery services, support and safety monitoring services, email communication software, web analytics services, payment and transaction processors, and other information technology providers.\" No provider is named individually.",
+            "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+            "scope": "Kimi platform privacy policy, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"The Authorization header expects a Bearer token. Use an MOONSHOT_API_KEY as the token.\"",
+            "url": "https://platform.kimi.ai/docs/api/chat",
+            "scope": "Kimi API chat reference, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The context-caching guide documents creating, using, and billing caches but never states whether a cache is scoped to the account that created it.",
+            "url": "https://platform.kimi.ai/docs/guide/use-context-caching-feature-of-kimi-api",
+            "scope": "Kimi API context-caching guide, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the privacy policy, the terms, or the platform documentation, and no security.txt is served on platform.kimi.ai.",
+            "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+            "scope": "Kimi platform privacy policy, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The platform home page claims \"Security and compliance assurance: SLA backed reliability with data compliance and privacy protections\" and names no attestation.",
+            "url": "https://platform.kimi.ai/",
+            "scope": "Kimi platform home page, for the Moonshot AI Open Platform",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "zai-model-api",
@@ -1006,7 +1445,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.z.ai/api-reference/introduction",
+            "scope": "Z.ai API reference, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator processes the content: \"This information is processed in real-time to provide you with the Service.\" No subprocessor is named.",
+            "url": "https://docs.z.ai/legal-agreement/privacy-policy",
+            "scope": "Z.ai privacy policy, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Create an API Key in the [API Keys] management page.\" and every documented request uses that key.",
+            "url": "https://docs.z.ai/guides/develop/http/introduction",
+            "scope": "Z.ai HTTP guide, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The cache guide documents the caching feature and its billing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://docs.z.ai/guides/capabilities/cache",
+            "scope": "Z.ai cache guide, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The terms of use publish a disclosure route without a named contact: \"If you discover any vulnerabilities or defects in the services provided by Z.ai, you are encouraged to report them through the feedback feature available within the interface or through the designated contact methods\". No security.txt is served.",
+            "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+            "scope": "Z.ai terms of use, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the API reference, the terms, or the privacy policy.",
+            "url": "https://docs.z.ai/api-reference/introduction",
+            "scope": "Z.ai API reference, for the Z.ai Model API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "ai21-studio",
@@ -1065,7 +1552,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.ai21.com/reference/jamba-1-6-api-ref",
+            "scope": "AI21 API reference, for AI21 Studio",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator collects the content: \"We collect Personal Data that you provide in the input to our Services, including your prompts and other content you upload, and data from connected services, depending on the features you use (“User Content”).\" The trust centre carries a subprocessor list.",
+            "url": "https://www.ai21.com/terms-policies/privacy-policy/",
+            "scope": "AI21 privacy policy, for AI21 Studio",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"All API requests must include an Authorization header with a Bearer token for authentication.\" issued by AI21 Studio.",
+            "url": "https://docs.ai21.com/reference/authentication",
+            "scope": "AI21 authentication reference, for AI21 Studio",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt-caching feature or cache scope is documented in the API reference.",
+            "url": "https://docs.ai21.com/reference/jamba-1-6-api-ref",
+            "scope": "AI21 API reference, for AI21 Studio",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre publishes a security contact (\"security@ai21.com\") beside its controls summary.",
+            "url": "https://trust.ai21.com/",
+            "scope": "AI21 trust centre, for AI21 Studio",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "The public trust centre lists SOC 2, ISO/IEC 42001, ISO 27001, ISO 27017, and ISO 27018 for the company, with an \"AI21 SOC 2 Type II - Final Report\" behind a request-access control; nothing names AI21 Studio, so it is recorded as undocumented for the named service.",
+            "url": "https://trust.ai21.com/",
+            "scope": "AI21 trust centre compliance section, read for AI21 Studio",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "minimax-open-platform",
@@ -1123,7 +1658,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://platform.minimax.io/docs/llms.txt",
+            "scope": "MiniMax platform documentation, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator processes the content: \"Services Input & Output: We process your Input (which may include text, voice, or other content) and Output and any other information you provide in connection with your use of the Service, including any Personal Information contained therein.\" No subprocessor is named.",
+            "url": "https://platform.minimax.io/protocol/privacy-policy",
+            "scope": "MiniMax platform privacy policy, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Visit API Keys > Create new secret key to get your API Key\" and every documented request uses that key.",
+            "url": "https://platform.minimax.io/docs/guides/quickstart-preparation",
+            "scope": "MiniMax platform quickstart, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching reference documents the feature and its billing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://platform.minimax.io/docs/api-reference/text-prompt-caching",
+            "scope": "MiniMax prompt-caching reference, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears on the contact page, in the terms, or in the privacy policy, and no security.txt is served.",
+            "url": "https://platform.minimax.io/docs/faq/contact-us",
+            "scope": "MiniMax platform contact page, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named on the company page or in the platform documentation.",
+            "url": "https://www.minimax.io/about",
+            "scope": "MiniMax company page, for the MiniMax Open Platform",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "perplexity-api",
@@ -1184,7 +1767,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.perplexity.ai/docs/getting-started/overview",
+            "scope": "Perplexity API overview, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The API FAQ states how the operator handles content: \"We do not retain any query data sent through the API and do not train on any of your data.\" No subprocessor is named on a page this review could read.",
+            "url": "https://docs.perplexity.ai/docs/resources/faq",
+            "scope": "Perplexity API FAQ, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Generate a new key on the API Keys page in the API Console.\"",
+            "url": "https://docs.perplexity.ai/docs/getting-started/quickstart",
+            "scope": "Perplexity API quickstart, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt-caching feature or cache scope is documented in the API or Agent API guides.",
+            "url": "https://docs.perplexity.ai/docs/agent-api/quickstart",
+            "scope": "Perplexity Agent API quickstart, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@perplexity.ai\").",
+            "url": "https://www.perplexity.ai/.well-known/security.txt",
+            "scope": "Perplexity security.txt, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The API FAQ states: \"Perplexity maintains a SOC 2 Type II report, a 2025 HIPAA gap assessment, and a CAIQlite cloud security assessment.\" The trust portal refuses automated fetches.",
+            "url": "https://docs.perplexity.ai/docs/resources/faq",
+            "scope": "Perplexity API FAQ, for the Perplexity API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "alibaba-cloud-model-studio",
@@ -2646,7 +3277,55 @@
           "verified_at": "2026-08-28"
         }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://platform.stability.ai/docs/api-reference",
+            "scope": "Stability AI API reference, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre names the operator's hosting subprocessor: \"Amazon Web Services (AWS) is housing a lot of our production environments as well as our HPC cluster which is used to train models and do research.\" and carries a subprocessor list.",
+            "url": "https://trust.stability.ai/",
+            "scope": "Stability AI trust centre, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"All APIs documented on this site use the same authentication mechanism: passing the API key in via the Authorization header.\"",
+            "url": "https://platform.stability.ai/docs",
+            "scope": "Stability AI platform documentation, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt-caching feature is documented in the API reference.",
+            "url": "https://platform.stability.ai/docs/api-reference",
+            "scope": "Stability AI API reference, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "The public trust centre publishes a vulnerability disclosure programme: \"For information on testing for or submitting to our VDP, please visit the following page.\"",
+            "url": "https://trust.stability.ai/",
+            "scope": "Stability AI trust centre, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The public trust centre lists a \"Stability AI Inc. SOC 2 Type 2 Report\" for the company, behind a request-access control; it does not name the Developer Platform, so the attestation is recorded as a company-level operator claim.",
+            "url": "https://trust.stability.ai/",
+            "scope": "Stability AI trust centre, for the Stability AI Developer Platform",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "ollama-cloud",
@@ -2961,7 +3640,55 @@
           "verified_at": "2026-08-30"
         }
       ],
-      "verified_at": "2026-08-30"
+      "verified_at": "2026-08-30",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://dev.meta.ai/docs/protocols",
+            "scope": "Meta Model API protocols page, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The terms of service state the operator processes the content as a processor and that \"You authorize Meta to engage subprocessors included in the list located here, as may be updated by Meta from time to time.\" The linked list is the named disclosure.",
+            "url": "https://dev.meta.ai/legal/terms-of-service",
+            "scope": "Meta Model API terms of service, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Log in and open the API keys tab. Click Create API key, give it a descriptive name, and click Create.\"",
+            "url": "https://dev.meta.ai/docs/authentication",
+            "scope": "Meta Model API authentication page, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-caching page documents an optional routing hint (\"Requests that share a key route together, so a request is more likely to land on a backend that already holds its prefix.\") but never states whether a cached prefix is scoped to the account that created it.",
+            "url": "https://dev.meta.ai/docs/prompt-caching",
+            "scope": "Meta Model API prompt-caching page, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "Meta's company-wide bug bounty scope covers its models: \"The bug bounty program is interested in reports that demonstrate integral privacy or security issues associated with Meta's large language models, including being able to leak or extract training data through tactics like model inversion or extraction attacks.\" It does not name the Model API.",
+            "url": "https://bugbounty.meta.com/scope/",
+            "scope": "Meta bug bounty scope, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the terms of service or the documentation.",
+            "url": "https://dev.meta.ai/legal/terms-of-service",
+            "scope": "Meta Model API terms of service, for the Meta Model API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "requesty",
@@ -4114,7 +4841,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.bigmodel.cn/cn/api/rate-limit",
+            "scope": "Zhipu open platform API documentation, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator receives and processes inputs: \"您可以自愿在大模型开放平台内试用我们的模型……您可以向我们提供文本对话信息、图片信息、音频信息、文档信息以及其他输入信息（以下称“输入信息”）\" (you may provide text, image, audio, document, and other input information, from which the platform generates content). No subprocessor is named.",
+            "url": "https://docs.bigmodel.cn/cn/terms/privacy-policy",
+            "scope": "Zhipu open platform privacy policy, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the quick-start says \"登录后，在个人中心页面，点击 API Keys，创建一个新的 API Key。\" (after logging in, create a new API key on the personal centre page) and every documented request uses that key.",
+            "url": "https://docs.bigmodel.cn/cn/guide/start/quick-start",
+            "scope": "Zhipu open platform quick-start, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The cache guide documents the feature and its billing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://docs.bigmodel.cn/cn/guide/capabilities/cache",
+            "scope": "Zhipu open platform cache guide, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy is published: the security-audit guide concerns content moderation, the security page and security.txt paths serve only an application shell, and the only contact found is a content-reporting channel.",
+            "url": "https://docs.bigmodel.cn/cn/guide/platform/securityaudit",
+            "scope": "Zhipu open platform security-audit guide, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the privacy policy, the terms, or the platform documentation.",
+            "url": "https://docs.bigmodel.cn/cn/terms/privacy-policy",
+            "scope": "Zhipu open platform privacy policy, for the Zhipu AI Open Platform",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "siliconflow-cn",
@@ -4459,7 +5234,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://platform.stepfun.com/docs/llms.txt",
+            "scope": "StepFun platform documentation, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The platform privacy policy states the operator collects inputs and outputs: \"我们会收集您主动输入的信息（包括文字、语音、图片、视频、文本、录音、链接等多种形式）以及服务的输出信息、您的任务指令信息、您设置的模型及参数信息以及您提供的反馈信息\" (we collect the information you actively input, in text, voice, image, video, recording, and link form, together with the service's outputs, your task instructions, model and parameter settings, and feedback). No subprocessor is named.",
+            "url": "https://platform.stepfun.com/docs/zh/agreement/userprivacy",
+            "scope": "StepFun platform privacy policy, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the API-key guide describes only organisation-issued keys (\"请妥善保管您的 API Key，不要写入代码仓库或分享给他人。任何获得该 Key 的人都能以您的身份调用模型，并消耗组织的 Credit。\", keep your API key safe; anyone holding it can call models as you and spend the organisation's credit).",
+            "url": "https://platform.stepfun.com/docs/zh/guides/organization/api-keys",
+            "scope": "StepFun platform API-key guide, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-cache guide documents the feature and its billing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://platform.stepfun.com/docs/zh/guides/developer/prompt-cache",
+            "scope": "StepFun prompt-cache guide, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the platform documentation, the terms, or the privacy policy, and no security.txt is served.",
+            "url": "https://platform.stepfun.com/docs/llms.txt",
+            "scope": "StepFun platform documentation, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the platform documentation, the terms, or the privacy policy.",
+            "url": "https://platform.stepfun.com/docs/llms.txt",
+            "scope": "StepFun platform documentation, for StepFun Open Platform (mainland China)",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "stepfun-open-platform-global",
@@ -4532,7 +5355,55 @@
           "verified_at": "2026-08-31"
         }
       ],
-      "verified_at": "2026-08-31"
+      "verified_at": "2026-08-31",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://platform.stepfun.ai/docs/en/quickstart/overview",
+            "scope": "StepFun platform quickstart, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The platform privacy policy states the operator receives API content: \"When a commercial customer participates in our StepFun Startup Program or other early access program-based project and accesses our internal models through an API Key, it may share API-related data with us, including Prompts, Outputs, API call logs, and other information submitted through or generated by the API.\" No subprocessor is named.",
+            "url": "https://platform.stepfun.ai/docs/en/agreement/userprivacy",
+            "scope": "StepFun platform privacy policy, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Go to the Account Management submenu on the console and open Interface Keys to create a key.\"",
+            "url": "https://platform.stepfun.ai/docs/en/quickstart/overview",
+            "scope": "StepFun platform quickstart, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The prompt-cache guide documents the feature and its billing but never states whether a cache is scoped to the account that created it.",
+            "url": "https://platform.stepfun.ai/docs/en/guides/developer/prompt-cache",
+            "scope": "StepFun prompt-cache guide, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "The terms offer only a general contact (\"Users with questions, complaints or claims with respect to the Services can be made by contacting us at platform@stepfun.com.\"); no security contact or disclosure policy is published and no security.txt is served.",
+            "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
+            "scope": "StepFun platform terms of service, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the platform documentation, the terms, or the privacy policy.",
+            "url": "https://platform.stepfun.ai/docs/en/quickstart/overview",
+            "scope": "StepFun platform quickstart, for StepFun Open Platform (international)",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "abliteration-ai",
@@ -4611,7 +5482,55 @@
           "verified_at": "2026-09-01"
         }
       ],
-      "verified_at": "2026-09-01"
+      "verified_at": "2026-09-01",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.abliteration.ai",
+            "scope": "abliteration.ai documentation, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The data-handling page states the operator processes the content: \"Prompts, completions, and images are processed in memory and never stored by default.\" No subprocessor is named.",
+            "url": "https://abliteration.ai/data-handling",
+            "scope": "abliteration.ai data-handling page, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: the authentication page says \"Generate keys in the console.\" and documents only bearer tokens issued there.",
+            "url": "https://docs.abliteration.ai/authentication",
+            "scope": "abliteration.ai authentication page, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The compatibility matrix lists \"Automatic prompt caching\" as a feature and no page states how a cache is scoped.",
+            "url": "https://docs.abliteration.ai/compatibility-matrix",
+            "scope": "abliteration.ai compatibility matrix, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "undocumented",
+            "note": "No security contact or disclosure policy appears in the terms of service or the documentation, and no security.txt is served.",
+            "url": "https://abliteration.ai/terms-of-service",
+            "scope": "abliteration.ai terms of service, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named; the terms say only that payments are handled by a PCI-compliant processor.",
+            "url": "https://abliteration.ai/terms-of-service",
+            "scope": "abliteration.ai terms of service, for the abliteration.ai API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "poolside-api",
@@ -4686,7 +5605,55 @@
           "verified_at": "2026-09-02"
         }
       ],
-      "verified_at": "2026-09-02"
+      "verified_at": "2026-09-02",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://docs.poolside.ai/api/overview",
+            "scope": "Poolside API overview, for the Poolside API",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator processes the content: \"If you include Personal Information in inputs to the Services, we may collect this information.\" The subprocessor list it points to sits in a trust portal that refuses automated fetches.",
+            "url": "https://poolside.ai/legal/privacy",
+            "scope": "Poolside privacy policy, for the Poolside API",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path on its own platform: \"Sign in to Poolside Platform, open the API Keys tab, and click New key.\" The overview also documents reaching the models through OpenRouter, which is that service's boundary, not a bring-your-own-key path here.",
+            "url": "https://docs.poolside.ai/api/overview",
+            "scope": "Poolside API overview, for the Poolside API",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "No prompt-caching feature is documented for the API.",
+            "url": "https://docs.poolside.ai/get-started/supported-models",
+            "scope": "Poolside supported-models page, for the Poolside API",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@poolside.ai\").",
+            "url": "https://poolside.ai/.well-known/security.txt",
+            "scope": "Poolside security.txt, for the Poolside API",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The data-processing addendum states: \"Data Importer maintains SOC II Type II certification.\" The trust portal holding the report refuses automated fetches.",
+            "url": "https://poolside.ai/legal/dpa",
+            "scope": "Poolside data-processing addendum, for the Poolside API",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     },
     {
       "id": "sakana-fugu",
@@ -4771,7 +5738,55 @@
           "verified_at": "2026-09-03"
         }
       ],
-      "verified_at": "2026-09-03"
+      "verified_at": "2026-09-03",
+      "trust": {
+        "verified_at": "2026-09-12",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
+            "url": "https://console.sakana.ai/terms-of-service",
+            "scope": "Sakana console terms of service, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy states the operator collects \"Service interaction data, such as prompts, uploaded content, outputs, feedback, feature usage, session data, timestamps, and request identifiers;\". No subprocessor is named.",
+            "url": "https://console.sakana.ai/privacy-policy",
+            "scope": "Sakana console privacy policy, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          },
+          "credential_handling": {
+            "status": "documented_no",
+            "note": "The API offers no customer-supplied-key path: \"Both are accessible with the same API key issued from the console, via OpenAI-compatible endpoints.\"",
+            "url": "https://console.sakana.ai/get-started",
+            "scope": "Sakana console getting-started page, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The pricing page bills cached tokens for every model tier, and no page states whether a cache is scoped to the account that created it.",
+            "url": "https://console.sakana.ai/pricing",
+            "scope": "Sakana console pricing page, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:infosec-central@sakana.ai\").",
+            "url": "https://sakana.ai/.well-known/security.txt",
+            "scope": "Sakana security.txt, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          },
+          "independent_audit": {
+            "status": "undocumented",
+            "note": "No SOC 2, ISO 27001, or equivalent attestation is named in the terms, the privacy policy, or the console documentation, and no trust or security page exists on either host.",
+            "url": "https://console.sakana.ai/terms-of-service",
+            "scope": "Sakana console terms of service, for Sakana Fugu",
+            "verified_at": "2026-09-12"
+          }
+        },
+        "findings": []
+      }
     }
   ],
   "generated_at": "2026-09-01"
