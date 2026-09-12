@@ -46,6 +46,16 @@ async function serveTrust(page, id, trust) {
   });
 }
 
+// The opposite fixture: a record served without any trust block, so the "not
+// examined" states stay testable after every published service has been reviewed.
+async function serveWithoutTrust(page, id) {
+  await page.route(`**/app/detail/inference/${id}.json*`, async route => {
+    const response = await route.fetch();
+    const { trust, ...detail } = await response.json();
+    await route.fulfill({ response, json: detail });
+  });
+}
+
 const collectPageErrors = page => {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -54,6 +64,7 @@ const collectPageErrors = page => {
 
 test("a service without a trust record says it has not been examined", async ({ page }) => {
   const errors = collectPageErrors(page);
+  await serveWithoutTrust(page, "openai-api");
   await page.goto("/?record=inference:openai-api");
   const block = page.locator('#inference-dialog-content [data-trust="absent"]');
   await expect(block).toContainText("Trust record · unscored");
@@ -114,6 +125,7 @@ test("a service whose detail has not loaded yet never reads as unexamined", asyn
 test("a comparison shows six unscored trust rows and marks unreviewed records as not examined", async ({ page }) => {
   const errors = collectPageErrors(page);
   await serveTrust(page, "openrouter", TRUST);
+  await serveWithoutTrust(page, "openai-api");
   await page.goto("/?collection=inference&compare=inference:openrouter,openai-api");
   const table = page.locator("#comparison-dialog-content .comparison-table");
   const row = table.locator("tr").filter({ hasText: "Cache isolation · trust record, unscored" });
