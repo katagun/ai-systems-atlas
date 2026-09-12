@@ -41,7 +41,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed (\"Permission is hereby granted, free of charge, to any person obtaining a copy of this software\"). The README describes it as \"a local-first knowledge system for Claude Code and compatible Agent Skills hosts\" that \"turns source material into linked, source-cited Obsidian pages,\" implemented as a Python CLI with content-addressed capture, source and claim ledgers, one recoverable transaction per write, and BM25/embedding retrieval with a deterministic fallback. That is a working engine of its own, not only prompt text for a host to interpret. The bundle reports no cross-collection hits. Boundary question: it distributes as a Claude Code plugin/skill bundle rather than a standalone application, and several sibling vault-template candidates in this same batch package themselves the same way but with far less engine behind them, so a reviewer should confirm this one clears the bar those others do not.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/AgriciDaniel/claude-obsidian/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "1c5915b8cde3e16949e40961353e483d44a65f90fae72405465dcff60118e57f",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "9dd2bae4a0c88077f40ba756c49b92213af82415",
+            "immutable_url": "https://api.github.com/repos/AgriciDaniel/claude-obsidian/git/blobs/9dd2bae4a0c88077f40ba756c49b92213af82415"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/AgriciDaniel/claude-obsidian/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9ce6461bbac0772819e42cd8c82ed8217b5a55af1c12e1f72d2bade353e0d15f",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "871bd8df895b23073e60d72ed6f8ba713d9b8741",
+            "immutable_url": "https://api.github.com/repos/AgriciDaniel/claude-obsidian/git/blobs/871bd8df895b23073e60d72ed6f8ba713d9b8741"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "algorithmicsuperintelligence/openevolve",
@@ -66,35 +93,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "alirezarezvani/claude-code-tresor",
-      "name": "claude-code-tresor",
-      "url": "https://github.com/alirezarezvani/claude-code-tresor",
-      "description": "A world-class collection of Claude Code utilities: autonomous skills, expert agents, slash commands, and prompts that supercharge your development workflow",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.86,
-      "github_detected_license": "MIT",
-      "stars": 766,
-      "topics": [
-        "agent-development-kit",
-        "agentic-ai",
-        "agentic-coding",
-        "agentic-workflow",
-        "agents",
-        "anthropic-claude",
-        "claude-code"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"the most advanced open-source evolutionary coding agent\" that turns \"LLMs into autonomous code optimizers that discover breakthrough algorithms,\" installable via `pip install openevolve`, with a documented example gallery (GPU kernel discovery, circle-packing, adaptive sorting, signal-processing filter design) and PyPI download tracking. It claims \"2-3x speedups on real hardware\" and \"state-of-the-art circle packing,\" each tied to a specific worked example rather than an unverifiable general claim. The bundle reports no cross-collection hits. Boundary question: whether the record's outcome is best framed as a coding agent or as an operational scientific-discovery system per the discovery-outcome scope guidance, since its examples emphasize novel algorithmic discovery rather than conventional software delivery.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/algorithmicsuperintelligence/openevolve/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/algorithmicsuperintelligence/openevolve/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/algorithmicsuperintelligence/openevolve/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "12636fe7fed91a393e5f40b0a877641d7e1fea691dbda4cf48474ca6769b93fc",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "785a1d5804960f7d0dd4254063a343e684eb3e7a",
+            "immutable_url": "https://api.github.com/repos/algorithmicsuperintelligence/openevolve/git/blobs/785a1d5804960f7d0dd4254063a343e684eb3e7a"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "anymorph-ai/Claudable",
@@ -126,7 +152,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as \"a powerful Next.js-based web app builder that combines Claude Code's... advanced AI agent capabilities with Lovable's simple and intuitive app building experience,\" generating code with a live preview, one-click Vercel deployment, Supabase database provisioning, GitHub integration, and a packaged Electron desktop build. It orchestrates external CLI coding tools (Claude Code, Codex CLI, Cursor CLI, Qwen Code, Z.AI GLM) rather than running its own model loop. The bundle reports no cross-collection hits. Boundary question: whether delegating all code-generation reasoning to external CLI tools still lets the product own the workflow it wraps (live preview, deploy, database provisioning), or whether that makes it a thin orchestration layer over other tools that may already be catalogued separately.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/anymorph-ai/Claudable/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "7a575732d713be25fae003aff2cda5424cf9a7911555d270f45b0eabb4180e58",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "bb4a9fdfcdf7a883ebff4a2523cc70d5ebd9a6a7",
+            "immutable_url": "https://api.github.com/repos/anymorph-ai/Claudable/git/blobs/bb4a9fdfcdf7a883ebff4a2523cc70d5ebd9a6a7"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/anymorph-ai/Claudable/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "edb326903fcf1bb2e20f7234669b2e13269f8c54fb04800303a80c6faf411f52",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "725f8b9a3547a143bc8aa6c72becc732c4058720",
+            "immutable_url": "https://api.github.com/repos/anymorph-ai/Claudable/git/blobs/725f8b9a3547a143bc8aa6c72becc732c4058720"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "AVIDS2/memorix",
@@ -167,35 +220,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "ballred/obsidian-claude-pkm",
-      "name": "obsidian-claude-pkm",
-      "url": "https://github.com/ballred/obsidian-claude-pkm",
-      "description": "A complete starter kit for an Obsidian + Claude Code personal knowledge management system.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": "MIT",
-      "stars": 1847,
-      "topics": [
-        "ai-agents",
-        "claude-code",
-        "goal-tracking",
-        "obsidian",
-        "pkm",
-        "productivity",
-        "second-brain"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"a local-first shared memory layer for AI coding agents\" that \"gives the AI coding agents you already use a shared, searchable project memory that survives new chats, IDE switches, terminal sessions, and handoffs,\" backed by SQLite/FTS5 and an optional local LanceDB semantic index, Git-derived facts, reviewed long-term memory with an approval lifecycle, and a bundled terminal coding agent (\"memcode\"). The bundle reports no cross-collection hits, though the README itself names comparable prior art (mcp-memory-service, MemCP, claude-mem, Mem0) a reviewer may want to check against the existing catalog. Boundary question: whether this routes primarily as a memory service usable by any agent, or whether the bundled memcode terminal agent pulls it toward a broader runtime classification.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/AVIDS2/memorix/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "d5aea037d51181acff99c93cf14b782f07970e7099dcdb4174b68913b66ff821",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "272c1c517e72f8f09765a4772deb94eb671f9789",
+            "immutable_url": "https://api.github.com/repos/AVIDS2/memorix/git/blobs/272c1c517e72f8f09765a4772deb94eb671f9789"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/AVIDS2/memorix/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "71b43179f9236a916e4603aa9a9e7288c667c9f39c4a8d51bf512d91b48f60e2",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "7eab97ebf7b122c757d3ac78d26646b93fbe93ee",
+            "immutable_url": "https://api.github.com/repos/AVIDS2/memorix/git/blobs/7eab97ebf7b122c757d3ac78d26646b93fbe93ee"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "churichard/notabase",
@@ -221,7 +273,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "AGPLv3 licensed (\"free for personal use... for commercial use, please contact me for a commercial license\"). The README describes it as \"a personal knowledge base for networked thinking\" with linked notes, page stacking, a graph view, block references, full-text search, and either a hosted or a self-hosted (Supabase-backed) deployment. It is a mature, conventional linked-notes application with no LLM or agent integration at all, distinct from the AI-native PKM candidates elsewhere in this batch. The bundle reports no cross-collection hits. Boundary question: none significant beyond confirming the product still meets the bar on its own terms given it carries no AI capability.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/churichard/notabase/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+            "immutable_url": "https://api.github.com/repos/churichard/notabase/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/churichard/notabase/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "46ef53c98bd8c28db2c2081d5307568163b07bc5b602c29347384a56fb84ac0b",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "64c2f688893831fc7e36db10dc8971436bd46437",
+            "immutable_url": "https://api.github.com/repos/churichard/notabase/git/blobs/64c2f688893831fc7e36db10dc8971436bd46437"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "ClickHouse/nerve",
@@ -246,27 +325,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "coleam00/mcp-mem0",
-      "name": "mcp-mem0",
-      "url": "https://github.com/coleam00/mcp-mem0",
-      "description": "MCP server for long term agent memory with Mem0. Also useful as a template to get you started building your own MCP server with Python!",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 681,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed (copyright held by ClickHouse, Inc.). The README describes it as \"a self-hosted runtime for AI agents, built around the Claude Agent SDK,\" giving agents \"persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through \u2014 web UI, Telegram, or autonomous cron jobs.\" It documents two shipped modes: a \"Personal\" assistant that \"develops a personality, remembers your preferences, and manages your inbox\" via workspace files (`SOUL.md`, `IDENTITY.md`, `USER.md`) and life-oriented memory categories, and a \"Worker\" mode for plan-driven, human-approved autonomous tasks such as monitoring CI and fixing flaky tests. It installs via a one-line shell installer that builds a web UI and launches an interactive setup wizard, and documents upgrade and Docker deployment paths. The bundle reports no cross-collection hits. Boundary question: given the breadth (persistent memory, scheduling, multi-channel delivery, two distinct product modes), a reviewer will need to decide whether the personal-assistant or worker-agent framing is the record's primary outcome.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ClickHouse/nerve/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "1e42a89ab5fbbf8a6ad63f1575f2634b4307b4f8d360f03db44187ea8fa69515",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "987352b31c41e4a50971fe3cf99561864cc9ac0c",
+            "immutable_url": "https://api.github.com/repos/ClickHouse/nerve/git/blobs/987352b31c41e4a50971fe3cf99561864cc9ac0c"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ClickHouse/nerve/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ff26950ecf307617888f90c1abec5d578d41e24fd7a43db090c01139e94e4086",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0b49bdef5e760bb90cd635e90cc1eb9129a9d528",
+            "immutable_url": "https://api.github.com/repos/ClickHouse/nerve/git/blobs/0b49bdef5e760bb90cd635e90cc1eb9129a9d528"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "disler/super-simple-software-factory",
@@ -286,7 +372,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes \"repeatable agents-plus-code workflows, packaged as one skill, stamped into any repo,\" where \"deterministic Python owns the graph. Coding agents are bounded nodes inside it.\" It ships typed JSON envelopes between phases, post-hoc verification gates, a SQLite event trace with a bundled trace-viewer UI, and twelve starter workflow scripts orchestrating planner, builder, scout, reviewer, and documenter subagents. The maintainer is explicit that \"this is a starting point, not a product. Nothing here is meant to survive contact with your codebase unchanged,\" and that the shipped tests, prompts, and model roster are placeholders to replace. The bundle reports no cross-collection hits. Boundary question: whether a self-described 'starting point, not a product' \u2014 despite a genuine, working orchestration engine behind it \u2014 clears the bar for an adoptable operational system, or reads closer to a reference architecture meant only to be forked.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/disler/super-simple-software-factory/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "492a7adf0e53a04b545d9e196948af25204e497055b2b92f81c607219f64bbdc",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0422639c47ac114a5d2822daf6688ccc49687d18",
+            "immutable_url": "https://api.github.com/repos/disler/super-simple-software-factory/git/blobs/0422639c47ac114a5d2822daf6688ccc49687d18"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/disler/super-simple-software-factory/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "671478e3b20e7d0e5ff15b64cdfbd87117d4972dc02537888c5852b2e793b169",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0e73560581ac9cb01f6e7f92417ad182aa31f8f8",
+            "immutable_url": "https://api.github.com/repos/disler/super-simple-software-factory/git/blobs/0e73560581ac9cb01f6e7f92417ad182aa31f8f8"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "dora-rs/dora",
@@ -381,7 +494,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README bills it as \"AI second brain for Obsidian - persistent memory for Claude Code and Grok Bot,\" a vault that \"rewrites itself\": existing pages are revised rather than only appended to, contradictions reconcile through a dedicated command, and four scheduled maintenance agents (morning, nightly, weekly, health) run without user action. It documents its own freshness and provenance policy (\"OKM - Open Knowledge Metabolism\") and ships eight parallel host builds (Claude Code, Codex, Gemini CLI, OpenCode, Antigravity, Hermes, Pi, Grok Bot), each checked by a published conformance report. The bundle reports no cross-collection hits. Boundary question: several other Karpathy-wiki-derived vault candidates appear in this same batch (claude-obsidian, henrydaum/second-brain); a reviewer should confirm this one's self-rewriting and reconciliation mechanism is distinct enough to stand as its own record rather than a duplicate of the same underlying pattern.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/eugeniughelbur/obsidian-second-brain/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "94b7323d498415382c2bb5c36f6a0d0d530d0ab3f4a096b2260d5dce5aeb1b50",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "1d2a42d3a6545c93df1093827dc5042d7a2e6f1a",
+            "immutable_url": "https://api.github.com/repos/eugeniughelbur/obsidian-second-brain/git/blobs/1d2a42d3a6545c93df1093827dc5042d7a2e6f1a"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/eugeniughelbur/obsidian-second-brain/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "6d096781f2f8fad4d7c8133c8fef66efb73433daedd6b7c2998a893aac6cb99c",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "cabecec423eb7edcb12cd45883c10857d8a80b8a",
+            "immutable_url": "https://api.github.com/repos/eugeniughelbur/obsidian-second-brain/git/blobs/cabecec423eb7edcb12cd45883c10857d8a80b8a"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "getnao/sylph",
@@ -407,7 +547,25 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "out_of_scope",
+        "rule": "`directory/exclusions.json` is reserved for systems that fail a family or role boundary, duplicates, and non-operational research inputs.",
+        "finding": "No LICENSE file could be fetched (HTTP 404); the bundle contains only a README, which itself states \"License: MIT - use it however you want,\" but no license text is available in this bundle to review. The README describes the repository as \"a repo to help you build your company brain,\" installed by forking the repository and personalizing pre-configured Claude-Code-style skills (invoked via slash commands like `/sylph-setup-skill`) and agent-definition markdown files organized by business domain (brand, sales, HR, legal, and so on). The README states outright: \"This repo contains no backend, no tracking, no telemetry, and no network calls. It's just markdown files that AI agents read.\" No independent engine, retrieval system, or persistence layer exists outside what a host coding agent already provides \u2014 this is a fork-and-personalize vault template plus a set of skill and agent-definition markdown files, not an operational product with its own claimed behavior.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/getnao/sylph/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9e019a8bc49638d4a28e000d4e3fff80397e838b7dce01fbe715f257ec6bfaaa",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "91ed75b6bddfcee69974941e28b358ee43fb1fcb",
+            "immutable_url": "https://api.github.com/repos/getnao/sylph/git/blobs/91ed75b6bddfcee69974941e28b358ee43fb1fcb"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "google-antigravity/antigravity-sdk-python",
@@ -430,7 +588,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"a Python SDK for building AI agents powered by Antigravity and Gemini,\" providing \"a secure, scalable, and stateful infrastructure layer that abstracts the agentic loop\" so a developer can focus on \"what your agent does rather than how it runs.\" The Agent class documented in the README \"manages the full lifecycle \u2014 binary discovery, tool wiring, hook registration, and policy defaults \u2014 behind a single async context manager,\" and the package ships a compiled runtime binary (distributed only through PyPI, not the bare repository) plus both an API-key \"Express Mode\" and a full Google Cloud/ADC \"Standard Mode\" for Gemini Enterprise Agent Platform. The bundle reports no cross-collection hits. Boundary question: this is a provider-native agent-execution SDK rather than a plain model API client \u2014 a reviewer should confirm the agentic-loop abstraction (not mere Gemini API access) is the primary documented outcome before scoring it as a framework/SDK record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/google-antigravity/antigravity-sdk-python/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "immutable_url": "https://api.github.com/repos/google-antigravity/antigravity-sdk-python/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/google-antigravity/antigravity-sdk-python/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f6a2ed06b3b9e7d9973ab0c5b3a5c63840db6d90497428f3a4e65a6de4a8236c",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "5eaa5cf72515489dc092e3d68f4e7e6ee3495757",
+            "immutable_url": "https://api.github.com/repos/google-antigravity/antigravity-sdk-python/git/blobs/5eaa5cf72515489dc092e3d68f4e7e6ee3495757"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "google-deepmind/gemini-robotics-sdk",
@@ -519,7 +704,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes a self-hosted personal agent (\"Second Brain runs on your own machine\") with attachment and file parsing, an LLM tool-use loop, both path-driven and event-driven scheduled tasks, an installable bundle system (a knowledge base, durable memory that \"maintains itself,\" Gmail), a Telegram frontend, and a separate React web UI repository. The maintainer publishes an independent benchmark claiming it \"performs higher than OpenClaw and Hermes on harness-bench.\" The bundle reports no cross-collection hits. Boundary question: the README's own framing straddles a broad end-user assistant (model-agnostic, connected data, durable memory) and a general delegated-task agent; a reviewer will need to pick the primary outcome.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/henrydaum/second-brain/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "ee1ea8269de98b1713a37b4ded7180cff4912e0ded44116ff145eb51744a79e7",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "cbe4ff1e8cf538bc6243f1ca7b6522746227c09a",
+            "immutable_url": "https://api.github.com/repos/henrydaum/second-brain/git/blobs/cbe4ff1e8cf538bc6243f1ca7b6522746227c09a"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/henrydaum/second-brain/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9126e5d63a589576288bc47080b93fdabcbf52ca762d6aff08e742f48e5393f3",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "7e46d71d14bd2b751fce92cbe4b6022a99ba2b5a",
+            "immutable_url": "https://api.github.com/repos/henrydaum/second-brain/git/blobs/7e46d71d14bd2b751fce92cbe4b6022a99ba2b5a"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": null,
@@ -1252,7 +1464,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as turning \"Claude Code into a deep research agent... A tier-adaptive 16-step pipeline takes one prompt and produces an adversarially-audited report with full source provenance,\" backed by a persistent SQLite-indexed markdown vault, an MCP server for use outside Claude Code, adversarial critic and citation-checking subagents, a retraction-aware source-quality ranking, and eight scholarly-source integrations (OpenAlex, Crossref, CORE, ClinicalTrials.gov, SEC EDGAR, FRED, and others). It reports an unverified internal benchmark claim (\"currently leads the DeepResearch-Bench RACE leaderboard (benchmarked internally)... Third party validation is pending\"). The bundle reports no cross-collection hits. Boundary question: none beyond a standard sourced-investigation review; the unverified benchmark belongs in weaknesses and research confidence rather than blocking review.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/jordan-gibbs/hyperresearch/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "4984af1c20d0cb81a6f5b081320a8c56dbde4bd3656d6aca2c671a15dfa6a3b6",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "5edb3e9e4946f2768e5be22a2731d0592f970d73",
+            "immutable_url": "https://api.github.com/repos/jordan-gibbs/hyperresearch/git/blobs/5edb3e9e4946f2768e5be22a2731d0592f970d73"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/jordan-gibbs/hyperresearch/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ba5f3cae1e9987b02a2053c8ced9208d1667e977788af5118745b779e5a0ac57",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "b67f69f408fc5a9f3b9f2518b895f7c1d02b1b1f",
+            "immutable_url": "https://api.github.com/repos/jordan-gibbs/hyperresearch/git/blobs/b67f69f408fc5a9f3b9f2518b895f7c1d02b1b1f"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "lavague-ai/LaVague",
@@ -1279,32 +1518,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "LeslieLeung/glean",
-      "name": "glean",
-      "url": "https://github.com/LeslieLeung/glean",
-      "description": "A self-hosted RSS reader and personal knowledge management tool.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 854,
-      "topics": [
-        "mcp",
-        "mcp-server",
-        "rss",
-        "rss-reader"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"an open-source framework designed for developers who want to create AI Web Agents to automate processes for their end users,\" composed of a World Model (planning from an objective and the current page) and an Action Engine that compiles instructions into Selenium, Playwright, or Chrome-extension actions, plus a downstream product, \"LaVague QA,\" that turns Gherkin specs into browser tests. The README also documents default-on telemetry covering page content, generated actions, and screenshot bounding boxes, opt-out only via an environment variable \u2014 worth flagging for a data-sovereignty review. The bundle reports no cross-collection hits. Boundary question: whether the base framework, the LaVague QA product built on it, or both together is the record worth reviewing.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/lavague-ai/LaVague/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/lavague-ai/LaVague/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/lavague-ai/LaVague/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "7e4d38b95657b604f5f390e25762d94c8d59164fbb2ae6c140c126bb128dbd4f",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "d15345a6b05ff3bf889dcf87521eaabb0ae5dcbd",
+            "immutable_url": "https://api.github.com/repos/lavague-ai/LaVague/git/blobs/d15345a6b05ff3bf889dcf87521eaabb0ae5dcbd"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "mateaix/mateclaw",
@@ -1342,7 +1583,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed (\"No asterisks\" per the README). The README describes a Spring Boot \"digital employee\" platform with a pluggable Agent Runtime contract, multi-vendor model failover with health tracking and cooldown, an \"LLM Wiki\" knowledge and citation layer with a documented memory lifecycle, agent teams collaborating on a shared kanban task board, workflow and trigger engines, RBAC with approval flows and an audit trail, and an admin runtime console. It directly positions itself in a comparison table against OpenClaw, Hermes Agent, Claude Code, and Cursor. The bundle reports no cross-collection hits. Boundary question: given the breadth here (memory, multi-agent coordination, workflow automation, enterprise administration), a reviewer will need to decide which single outcome the record's primary value rests on.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/mateaix/mateclaw/blob/dev/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "3efe2953b5edfe1e9d4f85b59d99a18a4c13314fc230f41c930f2653e2e403f5",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "1689f035449dd3992436602988a0d920fd04105d",
+            "immutable_url": "https://api.github.com/repos/mateaix/mateclaw/git/blobs/1689f035449dd3992436602988a0d920fd04105d"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/mateaix/mateclaw/blob/dev/README.md",
+            "kind": "git_blob",
+            "content_sha256": "461dc9903c790e37b0c607da301b39d0cd56abec2a1040c0756a2129e812ca08",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "06d9ea9f0230f9b5f7b4d09fe99bdc828dc12a5f",
+            "immutable_url": "https://api.github.com/repos/mateaix/mateclaw/git/blobs/06d9ea9f0230f9b5f7b4d09fe99bdc828dc12a5f"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "matrixorigin/memoria",
@@ -1369,7 +1637,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"the World's First Git for AI Agent Memory,\" a \"persistent memory layer for AI agents with Git-level version control\" where \"every memory change is tracked, auditable, and reversible \u2014 snapshots, branches, merges, and time-travel rollback,\" built on the maintainer's own MatrixOne \"Copy-on-Write engine.\" It documents hybrid vector-plus-full-text semantic search, self-governing behavior that \"auto-detects contradictions\" and \"quarantines low-confidence memories,\" a local-embedding option so \"no data leaves your machine,\" cross-conversation persistence, a full audit trail with a linked arXiv paper, and support declared for multiple named host agents. The bundle reports no cross-collection hits, though another candidate in this same batch (zhangfengcdt/memoir) uses the identical \"Git for AI Memory\" framing and near-identical branch/merge/rollback claims \u2014 a reviewer may want to compare the two directly. Boundary question: whether this record and memoir represent materially different implementations of the same pattern, and whether the maintainer's own MatrixOne database dependency belongs in weaknesses or data-sovereignty scoring.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/matrixorigin/memoria/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "a6e2f408924ad44acabe43da942d149060a4e8174a8f30240a089bda10279607",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "3487c010ca29b0dd7feeddbc38402f9eca51cb0d",
+            "immutable_url": "https://api.github.com/repos/matrixorigin/memoria/git/blobs/3487c010ca29b0dd7feeddbc38402f9eca51cb0d"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/matrixorigin/memoria/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "7de2777717dd756b8a8871cd6b608b0f0a32ccf55b9141c869380ce94e00dbd1",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "9f284c1873f35cd50336d11db032e34671c19170",
+            "immutable_url": "https://api.github.com/repos/matrixorigin/memoria/git/blobs/9f284c1873f35cd50336d11db032e34671c19170"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "MaxFreedomPollard/Compartment",
@@ -1410,7 +1705,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"Encrypted, fully offline memory for AI agents. One vault on your own computer, read and written by Claude Code, Claude Desktop, Hermes Agent, OpenClaw, Cursor, Codex and any other MCP client. No API key, no account, no network, no telemetry.\" It stores source-and-date-stamped claims with optional expiry, distinguishes facts from superseding opinions, runs a documented hybrid vector-plus-keyword ranking formula it publishes and justifies in the README itself, and encrypts everything at rest (XChaCha20-Poly1305, Argon2id key derivation) behind a companion menu-bar/tray desktop app and a local read-only dashboard. The bundle reports no cross-collection hits, though the README's own comparison doc names adjacent memory servers a reviewer may want to check against the existing catalog. Boundary question: none significant; this is a fairly clean, self-contained cross-agent memory record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/MaxFreedomPollard/Compartment/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c5939d1500ecbc972ff40dc39441e8fb14a1bf63864eb7d3c05e869beb3a9609",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "ee972b3b0890b0fb974dd9e877757071854742cb",
+            "immutable_url": "https://api.github.com/repos/MaxFreedomPollard/Compartment/git/blobs/ee972b3b0890b0fb974dd9e877757071854742cb"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/MaxFreedomPollard/Compartment/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "662e93c186c41f0d0a1153d6f369e063f79ba797a41f4c42cc6249eab1d12257",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "749f718b0988c6d6d165ddb04fb49d9391c25eed",
+            "immutable_url": "https://api.github.com/repos/MaxFreedomPollard/Compartment/git/blobs/749f718b0988c6d6d165ddb04fb49d9391c25eed"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "mindscale-noah/MindMemOS",
@@ -1442,7 +1764,25 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "No LICENSE file could be fetched (HTTP 404); the bundle contains only a README. The README displays an unlinked \"license-MIT\" shield badge, but no license text is available in this bundle to verify that claim, so it should be treated as an unreviewed assertion rather than confirmed evidence. The README itself describes the product as memory that will \"accurately remember user and task context and reuse it across agents; evolve memory through ongoing interactions, automatically distill Skills, and connect with file-based knowledge systems.\" It documents a published arXiv technical report (\"MindMemOS: A Portable and Self-Evolving Memory Operating Layer for AI Agents\"), a hosted API with published FastAPI docs, a PyPI SDK, an npm OpenClaw plugin, and a DeepSeek-Harness npm plugin, plus a third-party integration (LLM4AD_NEXT) using it for \"searchable long-term memory for algorithm design tasks.\" The bundle reports no cross-collection hits. Boundary question: no reviewable license evidence exists in this bundle \u2014 a reviewer must source and verify the license directly (the MIT badge is the only claim on record) before this record can be scored, and should also weigh the README's own incentive mechanic (\"Star us on GitHub to automatically upgrade to a Pro quota membership\") in data-sovereignty and maturity assessment.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/mindscale-noah/MindMemOS/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f6f1880e8fe97460030b17f26c760dcd5aa12605650deaabb0640b11bb32e002",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "9e51041573b1310272f6da73b233c0a4226923e7",
+            "immutable_url": "https://api.github.com/repos/mindscale-noah/MindMemOS/git/blobs/9e51041573b1310272f6da73b233c0a4226923e7"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "mindsdb/mindshub",
@@ -1478,7 +1818,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed (\"Bundled components are governed by their own licenses \u2014 see each submodule's repository for details\"). The README describes it as \"an agent workspace for completing knowledge work and developing software, with open-source agent harnesses and a choice of models,\" combining a connected-data vault (BigQuery, Postgres, Gmail, Drive, HubSpot, Notion, Linear), a model router across frontier and open providers, swappable open-source agent harnesses (Anton, Hermes), publishable artifacts, and cross-session memory with scheduled tasks. It is distributed as a superproject pulling together a desktop/web app, an agent backend, and a data engine from separate submodule repositories. The bundle reports no cross-collection hits. Boundary question: given the breadth (connected data, model routing, memory, scheduling, publishable artifacts), a reviewer will need to decide whether this reads primarily as a broad end-user workspace or as an agent-harness platform.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/mindsdb/mindshub/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "7526aa097cf2173a0b4e945c58d8a8853201032fe0ac00083bf8e53ad92b6aa9",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "3f97e1976677f98dac7d26234f2b3b5350362daa",
+            "immutable_url": "https://api.github.com/repos/mindsdb/mindshub/git/blobs/3f97e1976677f98dac7d26234f2b3b5350362daa"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/mindsdb/mindshub/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "e7994aca3f91ac9a600733c0846b1505493ab301d2d77fe04a0f076e817608f3",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "956f6c92b21a6510dab2084b2bd0677c78849f5c",
+            "immutable_url": "https://api.github.com/repos/mindsdb/mindshub/git/blobs/956f6c92b21a6510dab2084b2bd0677c78849f5c"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "nanobrowser/nanobrowser",
@@ -1501,7 +1868,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"an open-source AI web automation tool that runs in your browser,\" positioned as \"a free alternative to OpenAI Operator with flexible LLM options and multi-agent system,\" distributed as a Chrome extension with a Planner agent that \"self-correct[s] when encountering obstacles\" and dynamically instructs a Navigator agent, support for OpenAI, Anthropic, Gemini, Ollama, Groq, Cerebras, and Llama backends, and an explicit privacy claim that \"everything runs in your local browser\" with credentials \"never shared with any cloud service.\" The bundle reports no cross-collection hits. Boundary question: none significant; this is a clean browser/computer-use agent record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/nanobrowser/nanobrowser/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/nanobrowser/nanobrowser/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/nanobrowser/nanobrowser/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9dbbde1291c358073d63b988365d11fc2876c45ef2c677f2880769587c45820f",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "2a33c4cbb09b2775272b4e359d10ab12e3e28074",
+            "immutable_url": "https://api.github.com/repos/nanobrowser/nanobrowser/git/blobs/2a33c4cbb09b2775272b4e359d10ab12e3e28074"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "NVIDIA/Isaac-GR00T",
@@ -1550,41 +1944,6 @@
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
       }
-    },
-    {
-      "repo": "NVIDIA/skills",
-      "name": "skills",
-      "url": "https://github.com/NVIDIA/skills",
-      "description": "Agent Skills for NVIDIA products \u2014 install into Claude Code, Codex, and other coding agents to run Physical AI, robotics, simulation, CUDA, and RAG workflows end to end.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.86,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3097,
-      "topics": [
-        "agent-skills",
-        "agentic-ai",
-        "ai-agents",
-        "claude-code",
-        "codex",
-        "coding-agents",
-        "cuda",
-        "developer-tools",
-        "llm",
-        "omniverse",
-        "physical-ai",
-        "rag",
-        "robotics",
-        "simulation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
     },
     {
       "repo": "NVlabs/alpamayo",
@@ -1753,41 +2112,6 @@
       }
     },
     {
-      "repo": "Orchestra-Research/AI-Research-SKILLs",
-      "name": "AI-Research-SKILLs",
-      "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
-      "description": "Comprehensive open-source library of AI research and engineering skills for any AI model. Package the skills and your claude code/codex/gemini agent will be an AI research agent with full horsepower. Maintained by Orchestra Research.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "research_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 12035,
-      "topics": [
-        "ai",
-        "ai-research",
-        "claude",
-        "claude-code",
-        "claude-skills",
-        "codex",
-        "gemini",
-        "gpt-5",
-        "grpo",
-        "huggingface",
-        "machine-leanring",
-        "megatron",
-        "skills",
-        "vllm"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "PawanOsman/OpenCursor",
       "name": "OpenCursor",
       "url": "https://github.com/PawanOsman/OpenCursor",
@@ -1814,7 +2138,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as \"the open-source AI coding agent for VS Code \u2014 built local-first,\" with a chat agent that reads the workspace, edits files, runs commands, and searches the codebase semantically; 25 tools; per-hunk inline review; a configurable per-action approval policy with risk heuristics; MCP client support and lifecycle hooks; and either OAuth sign-in to an existing Claude Code/Codex/Antigravity subscription, a pasted API key, or a fully offline local-model path (llama.cpp, Ollama, on-device embeddings). The bundle reports no cross-collection hits. Boundary question: this closely resembles other IDE coding agent extensions; a reviewer should check the existing catalog directly for a prior record of the same product shape before treating this as a new entry.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/PawanOsman/OpenCursor/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "930c1f7ff5f76907c2ac91729105208f1ff635357fce626553928d4af610d9bb",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "91b44c52bad833cf5c1b18268c9bac5cac784dd0",
+            "immutable_url": "https://api.github.com/repos/PawanOsman/OpenCursor/git/blobs/91b44c52bad833cf5c1b18268c9bac5cac784dd0"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/PawanOsman/OpenCursor/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "a94e4246870826a97a92276e8faa11997e2d585d80a5d22c03f6e092bdc1ffe3",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "e713a9ccabaebf332828df9137f06810c0d49332",
+            "immutable_url": "https://api.github.com/repos/PawanOsman/OpenCursor/git/blobs/e713a9ccabaebf332828df9137f06810c0d49332"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "Physical-Intelligence/openpi",
@@ -1865,30 +2216,6 @@
       }
     },
     {
-      "repo": "pingdotgg/t3code",
-      "name": "T3 Code",
-      "url": "https://github.com/pingdotgg/t3code",
-      "description": "Open-source control plane for running coding agents in parallel branches and reviewing, committing, pushing, and opening pull requests.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.96,
-      "github_detected_license": "MIT",
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "workflow",
-        "multi-agent"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-26",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "plandex-ai/plandex",
       "name": "plandex",
       "url": "https://github.com/plandex-ai/plandex",
@@ -1923,7 +2250,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as \"an AI coding agent designed for large tasks and real world projects,\" a terminal tool that can \"plan and execute large coding tasks that span many steps and touch dozens of files,\" with a cumulative diff review sandbox that keeps generated changes separate from the project until accepted, configurable autonomy from full-auto to step-by-step review, automated debugging of terminal and browser output, multi-provider model support, and version control for the plan itself with branching. The README also discloses that \"Plandex Cloud\" is \"winding down as of 10/3/2025 and no longer accepting new users,\" leaving self-hosted/local mode as the only supported path going forward. The bundle reports no cross-collection hits. Boundary question: the hosted offering's wind-down is a live status fact a reviewer will want to reflect in the record (e.g. maturity, deployment), not a reason to exclude a still-maintained self-hosted product.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/plandex-ai/plandex/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "eda5a26207e5a30cbad304444ea650a588c54f7404368cbefdb7b9a3e206bcd0",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "4aa379f2105798e6d6a8a4f1020ba272f23995f4",
+            "immutable_url": "https://api.github.com/repos/plandex-ai/plandex/git/blobs/4aa379f2105798e6d6a8a4f1020ba272f23995f4"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/plandex-ai/plandex/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "e426b6aeaa618c24277f04f237f49f005ba6d4323cf3e420fa2c5818ecfd6620",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "be6a66a80e9a7330bf1b4299bde28311060ff8a7",
+            "immutable_url": "https://api.github.com/repos/plandex-ai/plandex/git/blobs/be6a66a80e9a7330bf1b4299bde28311060ff8a7"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "revezone/revezone",
@@ -1959,7 +2313,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "AGPL-3.0 licensed (a \"free, copyleft license... designed specifically to ensure that, in such cases, the modified source code becomes available to the community\"). The README describes it as \"A local-first lightweight graphic-centric productivity tool to build your second brain,\" combining an Excalidraw-based whiteboard, a newer Tldraw whiteboard, a \"Notion-like\" WYSIWYG note editor with '/' commands and Markdown, and folder-based file management with a flex layout for splitting screens; it ships both a browser version (data stored in-browser) and a downloadable desktop app (local data). No LLM or agent behavior appears anywhere in the README \u2014 it is a self-contained whiteboard-and-notes application, not an AI-native product. The bundle reports no cross-collection hits. Boundary question: the README states \"this repository only includes the basic functionality code of Revezone and does not completely correspond to the capabilities provided by revezone.com and the Revezone desktop application,\" so a reviewer should confirm which surface (repo, hosted site, or desktop build) the record represents, and, since it carries no AI capability at all, whether it clears the bar the way similar plain PKM apps elsewhere in this queue do.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/revezone/revezone/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+            "immutable_url": "https://api.github.com/repos/revezone/revezone/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/revezone/revezone/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "4d65261b69bb60b7c319299698b71c8676504829533d10dcf226c94d0f278121",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "38333913d04a61abfbc0a7b58615f366032a6c41",
+            "immutable_url": "https://api.github.com/repos/revezone/revezone/git/blobs/38333913d04a61abfbc0a7b58615f366032a6c41"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "ros/urdfdom",
@@ -2032,7 +2413,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "BSD-3-Clause licensed. The README describes it as \"a tool for building a personal knowledge practice\" that \"helps you read and remember more,\" working with web articles and EPUBs and letting a user \"highlight, categorize, and review your content with active recall and spaced repetition tools.\" It is a conventional full-stack web application (Flask/Postgres backend, Preact/Vite frontend) with its own component and services documentation, screenshots, and a codecov badge \u2014 a working, self-contained engine rather than a template or prompt wrapper. No LLM or agent behavior appears anywhere in the README. The bundle reports no cross-collection hits. Boundary question: it is a reading/highlighting/spaced-repetition tool rather than a linked-notes or graph app; a reviewer should confirm this narrower \"read and remember\" workflow still clears the human-knowledge-practice bar the way plainer PKM apps elsewhere in this queue do.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/Roznoshchik/Lurnby/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "91ee1f0355bf60fc02c9941693550387ef0d210f8e28a61b901c71dee501fac8",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "0b0b67212bb61467de665bda0caa86354a510691",
+            "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/0b0b67212bb61467de665bda0caa86354a510691"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/Roznoshchik/Lurnby/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "e57fe72c4bb8e0b72ce0ba42be470f28837554d6860ec412bba754982c60b3c5",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "7285ee4d891ca1be1018f4d6c26de730e97f2aa7",
+            "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/7285ee4d891ca1be1018f4d6c26de730e97f2aa7"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "s2b-dev/smart-second-brain",
@@ -2060,7 +2468,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as a \"free and open-source Obsidian plugin that makes your vault smarter: better search, an interactive knowledge graph, and an AI assistant that actually knows your notes,\" where \"search and the graph work right away with no AI provider\" and \"connecting one unlocks the full agent.\" It documents hybrid keyword-plus-meaning search, an automatically topic-grouped knowledge graph, and agents that \"read and write your notes, with skills, memory, MCP, and integrations with your other plugins,\" plus a stated privacy stance: \"out of the box, nothing leaves your machine... there is no telemetry.\" The bundle reports no cross-collection hits. Boundary question: none significant; the record cleanly spans both a non-AI PKM baseline and an optional AI layer, so a reviewer mainly needs to decide which single outcome is primary.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/s2b-dev/smart-second-brain/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "2a0967c33eee237aee958acbd32fe7e5e9a40fa5775ce3ff1e99e896f85a38bc",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "a7e4073e79695b01dad7616f957c102bf00f70c0",
+            "immutable_url": "https://api.github.com/repos/s2b-dev/smart-second-brain/git/blobs/a7e4073e79695b01dad7616f957c102bf00f70c0"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/s2b-dev/smart-second-brain/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "8e7591c55f9302a3cd65f526025b6f4cefc6bd795cab3e0092822621727c666d",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "ad23f81dfd6dfd93fa255cd7c98a68d11536481e",
+            "immutable_url": "https://api.github.com/repos/s2b-dev/smart-second-brain/git/blobs/ad23f81dfd6dfd93fa255cd7c98a68d11536481e"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "Seekr-Technologies/seekr-hatchery",
@@ -2080,35 +2515,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "softaworks/agent-toolkit",
-      "name": "agent-toolkit",
-      "url": "https://github.com/softaworks/agent-toolkit",
-      "description": "A curated collection of skills for AI coding agents. Skills are packaged instructions and scripts that extend agent capabilities across development, documentation, planning, and professional workflows.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.86,
-      "github_detected_license": "MIT",
-      "stars": 2388,
-      "topics": [
-        "agent-skills",
-        "ai",
-        "automation",
-        "claude",
-        "claude-code",
-        "coding-agent",
-        "development"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as a \"task orchestration CLI for AI coding agents\" where \"each task gets an isolated git worktree and its own agent session, sandboxed by default inside Docker\" with \"read-only repo, write-access only to its own worktree.\" It documents a plan-first workflow enforced by task files (\"plan \u2192 approval \u2192 implement \u2192 commit\"), resumable sessions that \"pick up exactly where they left off via preserved session state,\" and each completed task file becoming \"a permanent ADR in the repo.\" It installs as a real package (`uv tool install seekr-hatchery`) and currently drives OpenAI Codex as its agent backend. The bundle reports no cross-collection hits. Boundary question: none significant; this is a self-contained orchestration tool for coding agents, with its own claimed behavior.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/Seekr-Technologies/seekr-hatchery/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "edeb8d1ec4377ec933f1fa777834f82f0c377171ca9114a517101b8bbf15f509",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "bfa5ecef4293d2383db3d6a477ca4a4f823bcb50",
+            "immutable_url": "https://api.github.com/repos/Seekr-Technologies/seekr-hatchery/git/blobs/bfa5ecef4293d2383db3d6a477ca4a4f823bcb50"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/Seekr-Technologies/seekr-hatchery/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "dfd607e5616e538ddf3abe26de577ec3812338cb0eb59b515ee4ba1091971edd",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "a61056d08f2aa41fa90c04e29c1f5866fe9ec046",
+            "immutable_url": "https://api.github.com/repos/Seekr-Technologies/seekr-hatchery/git/blobs/a61056d08f2aa41fa90c04e29c1f5866fe9ec046"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "swarmclawai/swarmclaw",
@@ -2149,7 +2583,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as \"an open-source, self-hosted AI agent runtime and multi-agent framework\" for \"autonomous AI agents, agent swarms, and orchestrators with heartbeats, schedules, delegation, agent memory, runtime skills, and reviewed conversation-to-skill learning,\" working across \"Claude, GPT, Gemini, OpenRouter, Ollama, and 23+ other providers.\" It ships an org-chart UI for visualizing delegation and live agent activity, a persistent agent-chat interface with tool use and operator controls, CI and npm-release badges, and its own documentation site. The bundle reports no cross-collection hits. Boundary question: given the breadth (runtime, memory, scheduling, multi-provider support, multi-agent delegation), a reviewer will need to settle which single outcome \u2014 the runtime itself, or the orchestration layer on top of it \u2014 is the record's primary value.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/swarmclawai/swarmclaw/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "68b16b33aef66cb230a57d29537c1600ea8ec9db891c02dea919b194526070af",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "6971f3e005aa0164d67870a8f605b8593a27383b",
+            "immutable_url": "https://api.github.com/repos/swarmclawai/swarmclaw/git/blobs/6971f3e005aa0164d67870a8f605b8593a27383b"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/swarmclawai/swarmclaw/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f9ae7da331b91f90956c1900c6a1bf93855749a1428134f3378049b5aac8e45a",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "24ad850834a96973fe1f910ac5270b559641d29a",
+            "immutable_url": "https://api.github.com/repos/swarmclawai/swarmclaw/git/blobs/24ad850834a96973fe1f910ac5270b559641d29a"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "swarmclawai/swarmvault",
@@ -2190,7 +2651,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes it as \"the local-first LLM Wiki, knowledge graph builder, and RAG knowledge base for AI agents\" that \"turns docs, code, transcripts, notes, and URLs into a durable markdown wiki plus a local graph you can inspect, query, and hand to agents.\" It runs entirely from a single CLI (`swarmvault quickstart`/`scan`), documents a three-layer architecture (immutable raw sources, a generated wiki, and a machine-readable graph at `state/graph.json`) explicitly modeled on a pattern \"described by Andrej Karpathy,\" and states plainly that \"no API keys are required for the first run\" because \"the built-in heuristic provider runs locally and offline.\" The bundle reports no cross-collection hits. Boundary question: whether this routes as agent-facing retrieval infrastructure or as a human-facing PKM wiki, since the README markets it toward both audiences.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/swarmclawai/swarmvault/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "190c05a348b19f978c00bb54b83ed23a45b38e7d3e5c46f359e15975669c279d",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "e856c7bcdfbc2fcd42f26ac7d3ee76fc464b6647",
+            "immutable_url": "https://api.github.com/repos/swarmclawai/swarmvault/git/blobs/e856c7bcdfbc2fcd42f26ac7d3ee76fc464b6647"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/swarmclawai/swarmvault/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "b7085a208f7d62cbb044d5f7d38cc57205a4a13406957700759bc8646be50989",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "bc7fac7d0299dde373379fcb64a93e0cf7216b33",
+            "immutable_url": "https://api.github.com/repos/swarmclawai/swarmvault/git/blobs/bc7fac7d0299dde373379fcb64a93e0cf7216b33"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "SylphAI-Inc/adal-cli",
@@ -2216,7 +2704,25 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "No LICENSE file could be fetched (HTTP 404), and the README itself contains no license statement of any kind \u2014 the bundle offers no license evidence to review, only a README. That README describes AdaL as \"an AI coding agent that runs in your terminal,\" created by SylphAI and installed via a native platform installer (not merely copied markdown), with model switching across Claude, GPT, Gemini, GLM, Kimi, DeepSeek, and MiniMax, an \"agentic IDE\" for CLI-to-IDE handoff, browser use, deep research, headless/cron scripting modes, and reviewable tool calls, diffs, and plans before execution. Documentation, a blog, and a separate community skills marketplace back the product. The bundle reports no cross-collection hits. Boundary question: with no license evidence at all in hand, a reviewer will need to source licensing information directly from the repository or its packaging before this can be scored, and should confirm whether this repository (described as \"the community home for AdaL CLI\") or a separate distribution channel is the authoritative record.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/SylphAI-Inc/adal-cli/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "882f4589ba4d0e84d32199395ddcde67e2c07b612c770b5e6c083a9159ac6d3b",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "ff9af2d5aca3d6a59f41e3da68d40080bd6e8bac",
+            "immutable_url": "https://api.github.com/repos/SylphAI-Inc/adal-cli/git/blobs/ff9af2d5aca3d6a59f41e3da68d40080bd6e8bac"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "withkynam/vibecode-pro-max-kit",
@@ -2257,7 +2763,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "MIT licensed. The README describes a \"plan-first dev process\" dropped into any project via one curl command, built around a \"RIPER-5\" seven-gated-phase workflow (Research \u2192 Spec \u2192 Innovate \u2192 Plan \u2192 Validate \u2192 Execute \u2192 Update-Process), an autopilot mode with three risk-matched lanes, a \"run-until-done\" resumable token, self-healing plan-check-fix and test-check-fix loops \"up to 10 cycles each,\" a feasibility-probe stage that returns VIABLE/NOT-VIABLE verdicts before design work starts, and a stated inventory of \"15 agents \u00b7 33 skills \u00b7 10 hooks\" wired together with 36 mechanical validators guarding the kit's own structure. Unlike a loose skills catalog, this describes one coherent, versioned workflow engine (version 3.2.5 per its changelog, with its own CI validation workflow). The bundle reports no cross-collection hits. Boundary question: several other coding agent workflow kits appear elsewhere in the queue; a reviewer should confirm this one's specific mechanism (gated phases plus self-healing loops) is distinct enough to stand as its own record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/withkynam/vibecode-pro-max-kit/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "798fb9d76d03a319fb32c1575526402659678b7b079232050dd227a946ad791c",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "afbe07878b3d3aff2b3479808f6834221f2eecae",
+            "immutable_url": "https://api.github.com/repos/withkynam/vibecode-pro-max-kit/git/blobs/afbe07878b3d3aff2b3479808f6834221f2eecae"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/withkynam/vibecode-pro-max-kit/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "20556ba6b929988df281d6bfccf82a781345b28783981a51fac0563032398c88",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "fbdb42aa6b536559d9d3707a4664a24c5c09539d",
+            "immutable_url": "https://api.github.com/repos/withkynam/vibecode-pro-max-kit/git/blobs/fbdb42aa6b536559d9d3707a4664a24c5c09539d"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "xerj-org/xerj",
@@ -2298,7 +2831,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"a community-trusted local AI search that indexes any folder automatically, so your coding agent stops burning tokens reading files one by one and pulls the exact code it needs instead,\" with \"reference coding\" as its headline use case: pointing an agent at a task so it \"downloads the open-source repos closest to it, indexes them, and reuses how they solved the problem.\" It reports a controlled case study cutting a coding agent's output tokens \"2.7x at the same 16/16 solve rate,\" ships as a single static binary with hybrid BM25-plus-kNN search, a default offline lexical embedder, an opt-in neural embedder, native MCP support, and a documented `/memory` agent-memory recipe. The bundle reports no cross-collection hits. Boundary question: whether the record's primary value is retrieval infrastructure for agents in general, or specifically the \"reference coding\" workflow for coding agents the README leads with.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/xerj-org/xerj/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/xerj-org/xerj/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/xerj-org/xerj/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f9a7752212a1f641a4e7db7bfd38421d7ff35b5704feda95272b4c7d3a32a1e9",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "713878b4ee86c536fc5a2a5b760699d309e28bd3",
+            "immutable_url": "https://api.github.com/repos/xerj-org/xerj/git/blobs/713878b4ee86c536fc5a2a5b760699d309e28bd3"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "yoheinakajima/babyagi",
@@ -2318,7 +2878,25 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "No LICENSE file could be fetched (HTTP 404); the bundle contains only a README, which makes no license statement. The README states this \"newest BabyAGI\" superseded the original March-2023 project (now archived separately) and describes \"an experimental framework for a self-building autonomous agent,\" with a core \"functionz\" framework for registering, loading, and executing functions from a database, a dependency graph with automatic loading, a management dashboard, and two experimental self-building agents that generate and register new functions from natural-language task descriptions. The maintainer's own caution is explicit: \"This is a framework built by Yohei who has never held a job as a developer... Not meant for production use.\" It installs as a real PyPI package (`pip install babyagi`). The bundle reports no cross-collection hits. Boundary question: no license evidence exists in this bundle to review, and a reviewer will need to weigh the maintainer's own \"not meant for production use\" caution against the genuine working engine (dashboard, logging, triggers, self-building agents) documented here.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/yoheinakajima/babyagi/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "06e5fd3c01172ee9eb987456943ceed45f0c11ed6a95824d0da2309e078b2e1d",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "dc0f654caaf72d0b63d143552661bd19be140820",
+            "immutable_url": "https://api.github.com/repos/yoheinakajima/babyagi/git/blobs/dc0f654caaf72d0b63d143552661bd19be140820"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "zhangfengcdt/memoir",
@@ -2338,7 +2916,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "An entry belongs in `directory/projects.json` only when: (1) its operational product or implementation is identifiable from authoritative sources; (2) its family and role are materially relevant; (3) enough implementation or product evidence exists to assess its claimed behavior; (4) authoritative license or terms sources establish a reviewed `source_model` and complete `licenses` list; and (5) its record identifies evidence, research confidence, and verification date.",
+        "finding": "Apache-2.0 licensed. The README describes it as \"a high-performance semantic memory system for AI agents that brings Git-like version control to AI memory management,\" replacing \"opaque vector databases with transparent, versioned, cryptographically secure memory storage using hierarchical semantic paths,\" and lists branch/commit/merge/rollback operations (`memoir blame`, `memoir checkout`), semantic paths in place of UUID keys, O(log n) hierarchical lookups, and automatic consolidation of related memories. The project labels its own status \"Alpha.\" The bundle reports no cross-collection hits, though another candidate in this same batch (matrixorigin/memoria) markets itself with the identical \"Git for AI Memory\" framing and near-identical branch/merge/rollback claims \u2014 a reviewer may want to compare the two directly before treating both as distinct records. Boundary question: alpha maturity, and whether this record and memoria represent materially different implementations of the same pattern.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/zhangfengcdt/memoir/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/zhangfengcdt/memoir/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/zhangfengcdt/memoir/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "96d3f66d39757d7e233289c97eeabd0de5f5bb267d2617aaf9deeb03b04c2ce7",
+            "fetched_at": "2026-09-12",
+            "blob_sha": "7e35ab4175bd4531a2e9f0e828012036ab6abadd",
+            "immutable_url": "https://api.github.com/repos/zhangfengcdt/memoir/git/blobs/7e35ab4175bd4531a2e9f0e828012036ab6abadd"
+          }
+        ],
+        "proposed_at": "2026-09-12",
+        "proposer": "candidate-triage"
+      }
     }
   ],
   "generated_at": "2026-09-02"

@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_web_payload import (
+    BOOT_FIELDS,
     COLLECTIONS,
     SEARCH_FIELDS,
     build_payloads,
@@ -123,6 +124,11 @@ class WebPayloadTests(unittest.TestCase):
             )
         )
         self.assertEqual(records, len(detail))
+
+    def test_trust_records_are_detail_only_and_never_searched(self) -> None:
+        """A trust block is read behind a click; it never bloats boot and never makes a card match."""
+        self.assertNotIn("trust", BOOT_FIELDS["inference"])
+        self.assertNotIn("trust", SEARCH_FIELDS["inference"])
 
     def test_committed_output_matches_the_builder(self) -> None:
         """The same assertion --check makes, so a stale commit fails the suite too."""
