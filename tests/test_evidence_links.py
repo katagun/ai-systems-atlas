@@ -505,6 +505,51 @@ class EvidenceLinkTests(unittest.TestCase):
         )
         self.assertTrue(cache["entries"]["https://example.com/project"]["via_browser_fallback"])
 
+    def test_telemetry_nonce_does_not_change_the_terms_hash(self) -> None:
+        first = (
+            b"<html><body><main>Terms text</main>"
+            b"<script>telemetry();</script>"
+            b"   This is the Trace Id: d0901de7db6b7a296ea95c3a74ffd750 <script>more();</script>"
+            b"</body></html>"
+        )
+        second = first.replace(b"d0901de7db6b7a296ea95c3a74ffd750", b"5f95e477b07e9a394f28e8460cd28633")
+
+        self.assertEqual(
+            check_evidence_links.content_sha256(first, "text/html"),
+            check_evidence_links.content_sha256(second, "text/html"),
+        )
+
+    def test_changed_terms_text_still_changes_the_hash(self) -> None:
+        first = b"<html><body><main>Terms text version one</main></body></html>"
+        second = b"<html><body><main>Terms text version two</main></body></html>"
+
+        self.assertNotEqual(
+            check_evidence_links.content_sha256(first, "text/html"),
+            check_evidence_links.content_sha256(second, "text/html"),
+        )
+
+    def test_empty_terms_body_is_unavailable_not_a_baseline(self) -> None:
+        cache = {"version": "1.0", "updated_at": None, "entries": {}}
+        shell = b"<html><head></head><body><div id=root></div><script>app();</script></body></html>"
+
+        summary = check_evidence_links.check_targets(
+            [target(terms=True)],
+            cache,
+            lambda _target, _cached: response(shell),
+            now=datetime(2026, 9, 12, tzinfo=UTC),
+            max_age=timedelta(0),
+        )
+
+        self.assertFalse(
+            any("terms drift" in item for item in summary.errors)
+        )
+        self.assertTrue(
+            any("terms content unavailable" in item for item in summary.warnings)
+        )
+        entry = cache["entries"]["https://example.com/terms"]
+        self.assertNotIn("terms_sha256", entry)
+        self.assertNotIn("terms_drift_detected_at", entry)
+
 
 if __name__ == "__main__":
     unittest.main()
