@@ -101,3 +101,12 @@ test("a closed finding shows its resolution beside the claim", async ({ page }) 
   await expect(block).toContainText("Operator response: The operator states caches are keyed per API key.");
   await expect(block).toContainText("Closed: Per-key cache scoping is now documented.");
 });
+
+test("a service whose detail has not loaded yet never reads as unexamined", async ({ page }) => {
+  await page.route("**/app/detail/inference/openai-api.json*", route => route.abort());
+  await page.goto("/?record=inference:openai-api");
+  const pending = page.locator('#inference-dialog-content [data-trust="pending"]');
+  await expect(pending).toBeVisible();
+  await expect(pending).toContainText("Trust record · unscored");
+  await expect(page.locator('#inference-dialog-content [data-trust="absent"]')).toHaveCount(0);
+});
