@@ -20,13 +20,16 @@ from typing import Any
 
 try:
     from .build_candidate_evidence import fetch_web_text
-    from .discovery_sources import https_url_host
+    from .discovery_sources import canonical_url_key, https_url_host
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_candidate_evidence import fetch_web_text
-    from discovery_sources import https_url_host
+    from discovery_sources import canonical_url_key, https_url_host
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNALS_PATH = ROOT / "directory" / "hn-signals.json"
+PROJECTS_PATH = ROOT / "directory" / "projects.json"
+EXCLUSIONS_PATH = ROOT / "directory" / "exclusions.json"
+CANDIDATES_PATH = ROOT / "directory" / "candidates.json"
 ENDPOINT = "https://hn.algolia.com/api/v1/search_by_date"
 USER_AGENT = "ai-systems-atlas-sweep/0.1"
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
@@ -103,6 +106,65 @@ def eligible_stories_with_total(
     return kept, qualifying
 
 
+def decided_url_keys(
+    projects: dict[str, Any], exclusions: dict[str, Any], candidates: dict[str, Any]
+) -> set[str]:
+    """Return the canonical URL keys of pages a human has already decided on.
+
+    A project is already a reviewed record, an exclusion is a durable human
+    rejection, and a candidate is already queued for review; a story pointing at any
+    of them has already been decided and must not be re-queued. Mirrors the
+    null-handling in `update_directory.known_urls_from`: a record without a string
+    `url` (exclusions and candidates both carry those) contributes nothing rather
+    than raising, since not every record carries one.
+    """
+    raw_urls: list[Any] = [
+        *(project.get("url") for project in projects.get("projects", []) if isinstance(project, dict)),
+        *(entry.get("url") for entry in exclusions.get("entries", []) if isinstance(entry, dict)),
+        *(item.get("url") for item in candidates.get("candidates", []) if isinstance(item, dict)),
+    ]
+    return {canonical_url_key(url) for url in raw_urls if isinstance(url, str)}
+
+
+def load_decided_url_keys() -> set[str]:
+    """Load the catalog files and return the decided-URL keys, failing closed.
+
+    These are local JSON files in the same checkout as the sweep. If one cannot be
+    read or parsed, something is genuinely wrong and the caller must abort rather
+    than proceed with an empty suppression set — an empty set here would silently
+    re-queue everything the catalog has already decided on, which is exactly the
+    failure mode this exists to remove. `main` lets the resulting exception
+    propagate into its existing fail-closed handler.
+    """
+    projects = json.loads(PROJECTS_PATH.read_text(encoding="utf-8"))
+    exclusions = json.loads(EXCLUSIONS_PATH.read_text(encoding="utf-8"))
+    candidates = json.loads(CANDIDATES_PATH.read_text(encoding="utf-8"))
+    return decided_url_keys(projects, exclusions, candidates)
+
+
+def drop_decided_stories(
+    stories: list[dict[str, Any]], decided: set[str]
+) -> tuple[list[dict[str, Any]], int]:
+    """Remove stories whose outbound URL a human has already decided on.
+
+    Runs before any page is fetched, so an already-decided story never costs a fetch.
+    Comparison uses `canonical_url_key`, the same key `update_directory.py` uses for
+    this, so a trailing slash or an added tracking parameter does not requeue a page
+    that is already decided under a differently-punctuated URL. It is a conservative
+    key, not a full normaliser: see `scripts/discovery_sources.py::canonical_url_key`
+    for exactly what it does and does not treat as equivalent (for example, it does
+    not fold a `www.` host prefix).
+    """
+    kept: list[dict[str, Any]] = []
+    suppressed = 0
+    for story in stories:
+        if canonical_url_key(story.get("url")) in decided:
+            suppressed += 1
+        else:
+            kept.append(story)
+    return kept, suppressed
+
+
 class _VisibleText(HTMLParser):
     """Collect the text a reader would see, dropping script and style bodies.
 
@@ -170,6 +232,7 @@ def build_document(
     points_floor: int,
     story_count: int,
     qualifying_count: int,
+    suppressed: int,
     discovered_at: str,
     fetcher: Callable[[str], str],
 ) -> dict[str, Any]:
@@ -184,6 +247,12 @@ def build_document(
     those two differ, so an operator can tell "60 of 1008" (the cap bound, oldest
     stories in the window were dropped) apart from "60 of 1008" that organically
     qualified.
+
+    `suppressed` is the count `drop_decided_stories` already removed from `stories`
+    before this call, one per story whose URL a human already decided on (an
+    exclusion, a project, or a candidate). It is recorded in the envelope so an
+    operator reading the committed queue can see how much of the day's attention
+    volume was already-decided noise, the same way `truncated` surfaces the cap.
     """
     signals: list[dict[str, Any]] = []
     for story in stories:
@@ -230,6 +299,7 @@ def build_document(
             "story_count": story_count,
             "eligible_count": len(signals),
             "truncated": qualifying_count > len(signals),
+            "suppressed": suppressed,
         },
         "signals": signals,
     }
@@ -281,6 +351,17 @@ def main(argv: list[str] | None = None) -> int:
         stories, qualifying_count = eligible_stories_with_total(
             payload, points_floor=args.points_floor
         )
+        # Skip anything a human has already decided on before any page is fetched, so
+        # the fetch cost — not just the triage cost — is saved too. A read/parse
+        # failure on any catalog file raises here and is caught below: fail closed
+        # rather than silently suppressing nothing.
+        decided = load_decided_url_keys()
+        stories, suppressed = drop_decided_stories(stories, decided)
+        # A suppressed story was never dropped by the MAX_SIGNALS cap, so it must not
+        # count toward `truncated`: subtract it from the pre-cap qualifying total the
+        # same way it was subtracted from `stories`, or an all-suppressed batch would
+        # print the cap's "raise --points-floor" warning for a cap that never bound.
+        qualifying_count -= suppressed
         document = build_document(
             stories,
             window_start=window_start.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -288,6 +369,7 @@ def main(argv: list[str] | None = None) -> int:
             points_floor=args.points_floor,
             story_count=payload.get("nbHits", 0),
             qualifying_count=qualifying_count,
+            suppressed=suppressed,
             discovered_at=now.date().isoformat(),
             fetcher=fetch_web_text,
         )
@@ -307,6 +389,7 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
     print(f"signals: {kept} of {payload.get('nbHits', 0)} stories")
+    print(f"suppressed: {document['source']['suppressed']} already-decided stories")
     return 0
 
 

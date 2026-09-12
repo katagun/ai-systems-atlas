@@ -153,12 +153,12 @@
       "license_note": "The product documentation defines the convention, but no standalone reusable format license was identified during review.",
       "related_specifications": ["agents-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md", "claude-code-plugins"],
       "evidence": [
-        {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
+        {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-09-12"}
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-08-25"}
+        {"license_id": "LicenseRef-Unclear", "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-09-12"}
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-09-12"
     },
     {
       "id": "github-copilot-instructions",
@@ -419,14 +419,14 @@
       "related_specifications": ["agent-plugins", "agent-skills", "claude-md"],
       "evidence": [
         {"kind": "git_blob", "label": "Steward's published marketplace manifest", "path": ".claude-plugin/marketplace.json", "url": "https://github.com/anthropics/claude-code/blob/main/.claude-plugin/marketplace.json", "blob_sha": "30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f"},
-        {"kind": "web", "label": "Plugin manifest schema, component locations, and path expansion", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-03"},
+        {"kind": "web", "label": "Plugin manifest schema, component locations, and path expansion", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-12"},
         {"kind": "web", "label": "Marketplace schema, plugin entries, and plugin sources", "url": "https://code.claude.com/docs/en/plugin-marketplaces", "verified_at": "2026-09-03"}
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "The plugin and marketplace convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-03"},
+        {"license_id": "LicenseRef-Unclear", "scope": "The plugin and marketplace convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-12"},
         {"license_id": "LicenseRef-Proprietary", "scope": "anthropics/claude-code repository content supplying the reviewed marketplace manifest", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/anthropics/claude-code/blob/main/LICENSE.md", "blob_sha": "645a5d67c6d1e16437bec850dad5bd3b6c81f77c", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/645a5d67c6d1e16437bec850dad5bd3b6c81f77c"}
       ],
-      "verified_at": "2026-09-03"
+      "verified_at": "2026-09-12"
     },
     {
       "id": "webmcp",

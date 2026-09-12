@@ -123,6 +123,7 @@ class VerifierTests(unittest.TestCase):
             points_floor=10,
             story_count=1,
             qualifying_count=1,
+            suppressed=0,
             discovered_at="2026-09-09",
             fetcher=lambda url: page,
         )

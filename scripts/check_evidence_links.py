@@ -16,6 +16,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -384,7 +385,12 @@ def normalized_content(body: bytes, content_type: str) -> bytes:
     ):
         parser = _VisibleText()
         parser.feed(body.decode("utf-8", errors="replace"))
-        return " ".join(" ".join(parser.parts).split()).encode()
+        text = " ".join(" ".join(parser.parts).split())
+        # Microsoft hosts render a per-request telemetry nonce as visible text
+        # beside their scripts. It is never terms substance; without this the
+        # same page hashes differently on every fetch and can never clear drift.
+        text = re.sub(r"this is the trace id:\s*[0-9a-f]{32}", "", text, flags=re.IGNORECASE)
+        return " ".join(text.split()).encode()
     if media_type.startswith("text/") or media_type in {"application/xml", "text/xml"}:
         return " ".join(body.decode("utf-8", errors="replace").split()).encode()
     return body
@@ -750,9 +756,16 @@ def check_targets(
             if response.not_modified:
                 current_hash = entry.get("observed_terms_sha256") or entry.get("terms_sha256")
             elif response.body is not None:
-                current_hash = content_sha256(
+                normalized = normalized_content(
                     response.body,
                     response.headers.get("content-type", ""),
+                )
+                # An empty normalized body (usually a JavaScript shell with no
+                # readable terms) proves nothing about the terms. Hashing it
+                # would bootstrap or accept an empty baseline that every later
+                # real fetch then flags as drift, so treat it as unavailable.
+                current_hash = (
+                    hashlib.sha256(normalized).hexdigest() if normalized.strip() else None
                 )
             else:
                 current_hash = None

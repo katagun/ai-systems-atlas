@@ -988,6 +988,7 @@ class ValidationPolicyTests(unittest.TestCase):
                 "story_count": 1042,
                 "eligible_count": 1,
                 "truncated": False,
+                "suppressed": 0,
             },
             "signals": [signal],
         }
@@ -1501,6 +1502,61 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["truncated"] = True
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
+
+    def test_signal_envelope_missing_suppressed_is_rejected(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        del document["source"]["suppressed"]
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope does not match the sweep schema" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_suppressed_rejects_a_non_integer(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["suppressed"] = "0"
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope suppressed must be a non-negative integer" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_suppressed_rejects_a_bool(self) -> None:
+        """bool is a subclass of int; `suppressed: true` must not pass as 1."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["suppressed"] = True
+        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        errors = validate(root)
+        self.assertTrue(
+            any(
+                "hn-signals.json: source envelope suppressed must be a non-negative integer" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_signal_envelope_suppressed_accepts_a_non_negative_int(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = self.signals_document()
+        document["source"]["suppressed"] = 3
         (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
         errors = validate(root)
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])

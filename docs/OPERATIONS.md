@@ -75,7 +75,7 @@ count as reachable but raise a visible `bot-walled reviewed link` warning, while
 that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
-shells, scripts, styles, navigation, and whitespace are removed before hashing; GitHub and
+shells, scripts, styles, navigation, per-request telemetry nonces rendered as text, and whitespace are removed before hashing; GitHub and
 Hugging Face blob pages are fetched through their stable raw-content routes. The first
 successful observation establishes an automation-owned baseline. A later content change
 fails the weekly verification and therefore opens or updates the durable
@@ -351,6 +351,22 @@ Run a sweep by hand at any time:
 ```bash
 uv run python scripts/sweep_hackernews.py
 ```
+
+Before fetching any story's page, the sweep drops one whose outbound URL a human has
+already decided on — it appears with a `url` in `directory/exclusions.json` (a
+rejection), `directory/projects.json` (already a reviewed record), or
+`directory/candidates.json` (already queued for review) — so an already-decided page is
+never re-fetched and never re-costs a triage pass. The comparison uses
+`canonical_url_key` from `scripts/discovery_sources.py`, the same key
+`update_directory.py` uses for this: it is a conservative key, not a full normaliser, so
+it folds a trailing slash, a default port, and `utm_`/tracking query parameters, but it
+does not fold a `www.` host prefix — a page linked both with and without `www.` is not
+recognized as the same URL. The three catalog files are local JSON in the same checkout;
+if one cannot be read or parsed, the sweep aborts instead of silently suppressing
+nothing, since an empty suppression set would recreate the exact defect this guards
+against. The count of stories dropped this way is recorded as `suppressed` in the
+committed queue's `source` envelope, alongside `truncated`, and printed to stdout so it
+shows up in the launchd log.
 
 `scripts/verify_signal_pages.py --refresh` (invoked by `run_hn_signals.py prepare`) caps
 each page at `MAX_BUNDLE_CHARS` (8,000 characters) when it writes `bundle.json` for the
