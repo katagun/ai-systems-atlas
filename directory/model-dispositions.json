@@ -9,6 +9,12 @@
       "decided_at": "2026-09-12"
     },
     {
+      "source_id": "alibaba/qwen3.8-max-0902",
+      "disposition": "excluded",
+      "reason": "Folded into the reviewed qwen3.8-max line record on re-review 2026-09-12; the endpoint serves this snapshot by default.",
+      "decided_at": "2026-09-12"
+    },
+    {
       "source_id": "alibaba/qwen3.8-max-preview",
       "disposition": "excluded",
       "reason": "Retired API preview; the Max line is reviewed at the August 2026 release.",
@@ -84,6 +90,12 @@
       "source_id": "deepseek/deepseek-v3.1",
       "disposition": "excluded",
       "reason": "Superseded August 2025 snapshot; the V3 line is reviewed at V3.2 and the API now routes past it.",
+      "decided_at": "2026-09-12"
+    },
+    {
+      "source_id": "deepseek/deepseek-v4-pro-0813",
+      "disposition": "excluded",
+      "reason": "Folded into the reviewed deepseek-v4-pro line record on re-review 2026-09-12; the official release checkpoint.",
       "decided_at": "2026-09-12"
     },
     {
