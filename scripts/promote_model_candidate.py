@@ -219,6 +219,16 @@ def preflight_promotion(
     source_id = record.get("source_id")
     if not isinstance(source_id, str) or not source_id:
         raise PromotionError("review record requires a models.dev source_id")
+    dispositions_path = directory / "model-dispositions.json"
+    dispositions_data: dict[str, Any] = {"dispositions": []}
+    if dispositions_path.exists():
+        dispositions_data = load_json(dispositions_path)
+    for entry in dispositions_data.get("dispositions", []):
+        if isinstance(entry, dict) and entry.get("source_id") == source_id:
+            raise PromotionError(
+                f"model candidate is {entry.get('disposition', 'dispositioned')}: "
+                f"{source_id}; lift the disposition before promoting"
+            )
     candidate = candidate_for(candidates_data, source_id)
 
     errors = _promotion_specific_errors(
@@ -263,6 +273,8 @@ def preflight_promotion(
         source_models_data.get("models", []) if isinstance(source_models_data.get("models"), list) else [],
         taxonomy,
         errors,
+        {entry.get("source_id") for entry in dispositions_data.get("dispositions", [])
+         if isinstance(entry, dict) and isinstance(entry.get("source_id"), str)},
     )
     if errors:
         formatted = "\n".join(f"- {error}" for error in errors)

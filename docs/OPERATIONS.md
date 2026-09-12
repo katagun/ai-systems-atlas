@@ -50,7 +50,7 @@ models.dev discovery is a separate fail-closed import:
 GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
 ```
 
-It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
+It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue, and also filters the `source_id` values dispositioned in `directory/model-dispositions.json` while keeping them in the eligible count, but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Evidence links and terms drift
 

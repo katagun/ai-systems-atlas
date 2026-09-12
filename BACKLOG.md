@@ -17,6 +17,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 ### Reliability and maintenance
 
+- [ ] Work down the terms-drift review backlog in small batches: re-read each changed terms page on its own authority, update affected conclusions and scoped evidence, and advance the human-owned dates so the next scheduled check accepts the new baselines.
 - [ ] Make multi-file canonical updates and generated-tree rebuilds crash-consistent, with staged validation and fault-injection tests at each replacement boundary (`CR-05`).
 - [ ] Let the Directory boot with the collections that loaded, treating taxonomy as the only possible hard dependency and making unavailable collections retryable (`CR-06`). Add one failure-and-recovery browser test per boot payload.
 - [ ] Replace `https://` prefix checks with one shared absolute-HTTPS parser that requires a host, rejects credentials, and carries collection-specific policy explicitly (`CR-07`). Use the same policy at validation and network boundaries.
@@ -37,13 +38,12 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 - [ ] Add a browser-extension deployment value before publishing nanobrowser; do not misclassify it as `desktop`. Treat its dormancy since November 2025 as maturity evidence, not as the deployment decision.
 - [ ] Reopen the agent-to-physical-world role only after the three gaps in [`docs/COVERAGE.md`](docs/COVERAGE.md) batch 39 close: name an operational outcome rather than a mechanism, complete license/source-model review through promotion, and test the model-in-the-loop property against opaque commercial systems. Keep the thirteen robotics candidates held meanwhile.
 - [ ] Add a manual model-candidate path that preserves the pinned-source invariants, then review individual Liquid AI LFM releases under [ADR 025](docs/adr/025-model-releases-are-independent-curated-records.md). Do not publish a lab umbrella or score quality, benchmarks, or parameter counts.
-- [ ] Give the model queue a hold and exclusion mechanism for retired and undocumented releases. Claude Opus 4.1 (retired, model page gone) and Grok 4.1 Fast (no first-party model page) are held only in prose, and the importer regenerates the queue from models.dev, so they sit indefinitely alongside dozens of dated snapshot aliases with the same shape. [ADR 016](docs/adr/016-superseded-predecessors-keep-their-record.md) covers superseded systems, not models; decide the model equivalent before the next batch.
-- [ ] Settle the model alias boundary before it costs a review. models.dev lists API aliases as if they were releases (DeepSeek chat and reasoner names, Anthropic dateless IDs). Sonnet 4.5 and Opus 4.8 were reviewable because Anthropic documents them as fixed snapshots, and post-4.6 dateless IDs are pinned snapshots by policy; a name that moves between snapshots without its own fixed identity must not become a record. Write the discriminator into [`docs/MODELS.md`](docs/MODELS.md) and apply it to the remaining alias-shaped queue entries.
 - [ ] Decide whether the publishing party belongs among [ADR 020](docs/adr/020-derivative-records-turn-on-operational-boundary.md)'s operational-boundary fields. Brief a skeptic before drafting; do not fall back to repository lineage.
 - [ ] Decide whether SeekrFlow's named product boundary supports a separate inference-service record. A price-page component is insufficient unless first-party evidence establishes a service boundary distinct from the published agent runtime.
 
 ### Coverage batches
 
+- [ ] Review the third models.dev batch: Gemini 3.1/3.5/3.6 stables, GPT-5.5 Pro and Instant variants, GLM-5.x point releases, and the remaining Qwen3.8 and DeepSeek dated snapshots. Alias-shaped entries are already excluded under the discriminator in [`docs/MODELS.md`](docs/MODELS.md); do not review them.
 - [ ] Work the sixty currently actionable system candidates in small evidence-backed batches; keep the thirteen robotics candidates held until their scope decision resolves.
 - [ ] Review xerj as retrieval infrastructure, with maturity treated separately from eligibility and vendor-measured efficiency treated as marketing rather than evidence. Recheck `memory_service` before fixing its role.
 - [ ] Re-check LangGraph's source model and deployment traits against the restricted agent server that made Open SWE mixed-source.

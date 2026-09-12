@@ -101,6 +101,20 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertIsNone(candidates[0]["source_metadata"]["capabilities"]["reasoning"])
         self.assertIsNone(candidates[0]["source_metadata"]["limits"]["input"])
 
+    def test_dispositioned_source_ids_leave_the_queue_but_count_as_eligible(self) -> None:
+        catalog = {
+            "acme/chat": model_record("acme/chat"),
+            "acme/alias": model_record("acme/alias"),
+        }
+
+        candidates, eligible = normalize_catalog(
+            catalog, observed_at="2026-09-04", minimum_records=1,
+            dispositioned_source_ids={"acme/alias"},
+        )
+
+        self.assertEqual(2, eligible)
+        self.assertEqual(["acme/chat"], [item["source_id"] for item in candidates])
+
     def test_source_snapshot_keeps_every_model_regardless_of_output_modality(self) -> None:
         catalog = {
             "acme/chat": model_record("acme/chat"),
