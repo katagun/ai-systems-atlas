@@ -1276,6 +1276,60 @@ function specificationDialogMarkup(specification) {
     </div>`;
 }
 
+// A trust record is unscored and human-owned. Each status says whether the operator
+// publishes a statement about a property, never what the service does; the note
+// carries every exception. Nothing rendered here enters a score. See ADR 029.
+const TRUST_PROPERTY_LABELS = {
+  response_integrity: "Response integrity",
+  upstream_disclosure: "Upstream disclosure",
+  credential_handling: "Credential handling",
+  cache_isolation: "Cache isolation",
+  vulnerability_disclosure: "Vulnerability disclosure",
+  independent_audit: "Independent audit",
+};
+const TRUST_PROPERTY_ORDER = Object.keys(TRUST_PROPERTY_LABELS);
+
+function trustStatusName(status) {
+  return taxonomyName("trust_property_statuses", status);
+}
+
+function trustSourceLink(item, text) {
+  return `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">${escapeHTML(text)} ↗</a>`;
+}
+
+function trustResponseMarkup(label, response, absent) {
+  if (!response) return `<p><strong>${escapeHTML(label)}:</strong> ${escapeHTML(absent)}</p>`;
+  return `<p><strong>${escapeHTML(label)}:</strong> ${escapeHTML(response.summary)} ${trustSourceLink(response, "source")} <span class="evidence-date">${escapeHTML(response.verified_at)}</span></p>`;
+}
+
+function trustFindingMarkup(finding) {
+  const source = `<p>${trustSourceLink(finding.source, finding.source.label)} <span class="evidence-date">published ${escapeHTML(finding.published_at)} · read ${escapeHTML(finding.source.fetched_at)}</span></p>`;
+  return `<li><p>${escapeHTML(finding.claim)}</p>${source}${trustResponseMarkup("Operator response", finding.operator_response, "none recorded.")}${finding.resolved ? trustResponseMarkup("Closed", finding.resolved, "") : "<p><strong>Open.</strong></p>"}</li>`;
+}
+
+function trustBlockMarkup(service) {
+  const heading = "<h3>Trust record · unscored</h3>";
+  // The dialog paints from boot data and repaints when the detail file lands;
+  // retention_controls is detail-only, so its absence means "not loaded yet",
+  // which must not read as "not examined".
+  if (!("retention_controls" in service)) {
+    return `<section class="detail-block" data-trust="pending">${heading}<p>—</p></section>`;
+  }
+  const trust = service.trust;
+  if (!trust) {
+    return `<section class="detail-block" data-trust="absent">${heading}<p>Not yet examined for trust properties.</p></section>`;
+  }
+  const rows = TRUST_PROPERTY_ORDER.map(name => {
+    const item = trust.properties[name];
+    return `<tr><td>${escapeHTML(TRUST_PROPERTY_LABELS[name])}</td><td>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
+  }).join("");
+  const findings = trust.findings.length
+    ? `<ul>${trust.findings.map(trustFindingMarkup).join("")}</ul>`
+    : `<p>Reviewed on ${escapeHTML(trust.verified_at)}; no admissible third-party finding recorded. Absence of a finding is not evidence of safety.</p>`;
+  const state = trust.findings.length ? "findings" : "reviewed";
+  return `<section class="detail-block" data-trust="${state}">${heading}<table class="trust-table">${rows}</table><h4>Third-party findings</h4>${findings}<p class="unscored-note">Each status says whether the operator publishes a statement, never what the service does. Nothing here enters the score. Reviewed ${escapeHTML(trust.verified_at)}.</p></section>`;
+}
+
 function inferenceDialogMarkup(service) {
   const profile = state.taxonomy.inference_service_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(service.score[dimension.id])}</td></tr>`).join("");
@@ -1288,6 +1342,7 @@ function inferenceDialogMarkup(service) {
       <section class="detail-block"><h3>Regional controls</h3><p>${detailText(service.regional_controls)}</p></section>
       <section class="detail-block"><h3>Retention controls</h3><p>${detailText(service.retention_controls)}</p></section>
       <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${detailText(service.routing)}</p><p><strong>Customization:</strong> ${detailText(service.customization)}</p></section>
+      ${trustBlockMarkup(service)}
       <section class="detail-block"><h3>Strengths</h3>${detailList(service.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(service.tradeoffs)}</section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
