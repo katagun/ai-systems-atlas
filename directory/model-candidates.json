@@ -1999,55 +1999,6 @@
       ]
     },
     {
-      "id": "model-alibaba-qwen3-8-max-0902",
-      "source_id": "alibaba/qwen3.8-max-0902",
-      "source_metadata": {
-        "name": "Qwen3.8 Max 0902",
-        "description": "2026-09-02 upgraded snapshot of Qwen3.8 Max with stronger coding, collaborative agents, and multimodal document understanding",
-        "family": "qwen",
-        "release_date": "2026-09-02",
-        "last_updated": "2026-09-02",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 131072
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-alibaba-qwq-32b",
       "source_id": "alibaba/qwq-32b",
       "source_metadata": {
@@ -4656,57 +4607,6 @@
         "reported_license": null,
         "links": [],
         "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-05",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-deepseek-deepseek-v4-pro-0813",
-      "source_id": "deepseek/deepseek-v4-pro-0813",
-      "source_metadata": {
-        "name": "DeepSeek V4 Pro 0813",
-        "description": "DeepSeek V4 Pro snapshot with million-token context and support for thinking and non-thinking modes",
-        "family": "deepseek-thinking",
-        "release_date": "2026-08-12",
-        "last_updated": "2026-08-22",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 384000
-        },
-        "reported_open_weights": true,
-        "reported_license": "MIT",
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813"
-          }
-        ]
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",

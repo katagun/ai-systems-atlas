@@ -319,10 +319,10 @@
           "verified_at": "2026-09-11"
         }
       ],
-      "access_boundary": "This record represents the qwen3.8-max API release of August 3, 2026 together with its open-weights checkpoint Qwen/Qwen3.8-2.4T-A95B and the official FP8 sibling. The downloaded checkpoint is narrower than the API namesake (text-only, thinking-required, 262K native context versus the API's vision input and 1M default context). The qwen3.8-max-0902 upgraded snapshot, the qwen3.8-max-preview API preview, the Apache-2.0 Qwen3.8-27B sibling, earlier Qwen generations, QwenCloud product packaging, and community quantizations remain separate boundaries.",
+      "access_boundary": "This record represents the qwen3.8-max line, now serving the September 2, 2026 snapshot (qwen3.8-max-0902, alias qwen3.8-max-2026-09-02) by default since the September 5 upgrade, together with its open-weights checkpoint Qwen/Qwen3.8-2.4T-A95B and the official FP8 sibling. The downloaded checkpoint is the August weights release and is narrower than the API namesake (text-only, thinking-required, 262K native context versus the API's vision input and 1M default context). The qwen3.8-max-preview API preview, the Apache-2.0 Qwen3.8-27B sibling, earlier Qwen generations, QwenCloud product packaging, and community quantizations remain separate boundaries.",
       "strengths": [
         "The first Max-class Qwen with downloadable weights (2.4T total, 95B active MoE) plus documented vLLM, SGLang, and TokenSpeed recipes and an official FP8 variant",
-        "First-party QwenCloud and Alibaba Cloud Model Studio serving with 1M context plus a documented NVIDIA NIM third-party path for the exact checkpoint"
+        "First-party QwenCloud and Alibaba Cloud Model Studio serving with 1M context, both exposing the pinnable qwen3.8-max-0902 snapshot, plus a documented NVIDIA NIM third-party path for the exact checkpoint"
       ],
       "tradeoffs": [
         "The custom weights license gates commercial model-as-a-service use above a revenue threshold behind a separate license, unlike earlier Apache-2.0 Qwen generations",
@@ -334,9 +334,9 @@
         "artifact_availability": 8,
         "deployment_portability": 4,
         "serving_reach": 8,
-        "lifecycle_transparency": 7,
+        "lifecycle_transparency": 8,
         "documentation_provenance": 9,
-        "overall": 6.56
+        "overall": 6.68
       },
       "evidence": [
         {
@@ -368,10 +368,16 @@
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/alibaba/qwen3.8-max.toml",
           "verified_at": "2026-09-11"
+        },
+        {
+          "kind": "web",
+          "label": "QwenCloud qwen3.8-max-0902 snapshot page (default serving snapshot since September 5, 2026)",
+          "url": "https://www.qwencloud.com/models/qwen3.8-max-0902",
+          "verified_at": "2026-09-12"
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-12"
     },
     {
       "id": "model-anthropic-claude-haiku-4-5",
@@ -1483,8 +1489,8 @@
       "source_id": "deepseek/deepseek-v4-pro",
       "name": "DeepSeek V4 Pro",
       "developer": "DeepSeek",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
-      "description": "DeepSeek's 1.6-trillion-parameter open MoE flagship with 1M-token context for coding and long agent runs, published under the MIT License with weights on Hugging Face and served via the DeepSeek API.",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "description": "DeepSeek's 1.65-trillion-parameter open MoE flagship with 1M-token context for coding and long agent runs, published under the MIT License with weights on Hugging Face and served via the DeepSeek API.",
       "model_type": "language_model",
       "distribution_modes": [
         "downloadable_weights",
@@ -1537,20 +1543,20 @@
       "license_evidence": [
         {
           "license_id": "MIT",
-          "scope": "Repository and model weights in deepseek-ai/DeepSeek-V4-Pro; API consumption governed separately by DeepSeek Open Platform terms",
+          "scope": "Repository and model weights in deepseek-ai/DeepSeek-V4-Pro-0813; API consumption governed separately by DeepSeek Open Platform terms",
           "kind": "web_terms",
-          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/LICENSE",
-          "verified_at": "2026-09-11"
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
         }
       ],
-      "access_boundary": "This record represents the DeepSeek-V4-Pro preview instruct checkpoint (deepseek-ai/DeepSeek-V4-Pro, 1.6T total, 49B active, 1M context) and its deepseek-v4-pro API model ID. The DeepSeek-V4-Pro-Base sibling, the V4 Flash siblings, the dated 0423 and 0813 snapshots, the V4.1 successor line that the API ID routes to from September 14, 2026, and community quantizations and fine-tunes remain separate boundaries.",
+      "access_boundary": "This record represents the DeepSeek-V4-Pro-0813 official release checkpoint (deepseek-ai/DeepSeek-V4-Pro-0813, 1.65T total, 49B active, 1M context, speculative-decoding module attached) and its deepseek-v4-pro API model ID, which serves this release with no migration; DeepSeek reversed the planned September routing of the ID to V4.1 Flash and continues serving V4 Pro. The preview checkpoint repository, the Base sibling, the dated 0423 snapshot, the V4 Flash siblings, the V4.1 Flash successor line, and community quantizations and fine-tunes remain separate boundaries.",
       "strengths": [
-        "MIT-licensed 1.6T open weights with Base and instruct checkpoints plus mirrors and standard Transformers, vLLM, SGLang, and NIM paths",
-        "First-party DeepSeek API with OpenAI- and Anthropic-compatible endpoints, 1M context, and 384K maximum output plus documented NVIDIA NIM hosting"
+        "MIT-licensed 1.65T official-release weights with mirrors and standard Transformers, vLLM, SGLang, and NIM paths",
+        "First-party DeepSeek API with OpenAI- and Anthropic-compatible endpoints, 1M context, and 384K maximum output plus documented NVIDIA NIM hosting for the exact checkpoint"
       ],
       "tradeoffs": [
         "Checkpoint scale keeps single-node self-hosting heavy despite efficient hybrid attention",
-        "Lifecycle churn at verification time: the 0813 official release supersedes this preview and the API ID is slated for routing to V4.1 Flash"
+        "The preview-to-official transition replaced the weights checkpoint and dropped the Jinja chat template for encoding-folder scripts"
       ],
       "score_profile": "model_access",
       "score": {
@@ -1558,34 +1564,40 @@
         "artifact_availability": 9,
         "deployment_portability": 7,
         "serving_reach": 8,
-        "lifecycle_transparency": 7,
+        "lifecycle_transparency": 8,
         "documentation_provenance": 9,
-        "overall": 8.44
+        "overall": 8.56
       },
       "evidence": [
         {
           "kind": "web",
-          "label": "Official DeepSeek-V4-Pro weights repository and model card",
-          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
-          "verified_at": "2026-09-11"
+          "label": "Official DeepSeek-V4-Pro-0813 weights repository and model card",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+          "verified_at": "2026-09-12"
         },
         {
           "kind": "web",
-          "label": "DeepSeek API documentation for the deepseek-v4-pro model",
-          "url": "https://api-docs.deepseek.com/",
-          "verified_at": "2026-09-11"
+          "label": "MIT LICENSE blob for the 0813 release",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
         },
         {
           "kind": "web",
-          "label": "DeepSeek V4 preview release notice",
-          "url": "https://api-docs.deepseek.com/news/news260424/",
-          "verified_at": "2026-09-11"
+          "label": "DeepSeek API change log: official release and continued V4 Pro serving",
+          "url": "https://api-docs.deepseek.com/updates",
+          "verified_at": "2026-09-12"
         },
         {
           "kind": "web",
-          "label": "NVIDIA NIM reference for deepseek-ai/deepseek-v4-pro",
-          "url": "https://docs.api.nvidia.com/nim/reference/deepseek-ai-deepseek-v4-pro",
-          "verified_at": "2026-09-11"
+          "label": "DeepSeek API pricing showing the 0813 model version",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM reference for deepseek-ai/deepseek-v4-pro-0813",
+          "url": "https://docs.api.nvidia.com/nim/reference/deepseek-ai-deepseek-v4-pro-0813",
+          "verified_at": "2026-09-12"
         },
         {
           "kind": "web",
@@ -1595,7 +1607,7 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-12"
     },
     {
       "id": "model-deepseek-deepseek-r1",
