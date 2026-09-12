@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
 from scripts import sweep_hackernews
 
@@ -168,7 +171,7 @@ class ExtractVisibleTextTests(unittest.TestCase):
 
 
 class DocumentTests(unittest.TestCase):
-    def build(self, fetcher, qualifying_count: int | None = None) -> dict:
+    def build(self, fetcher, qualifying_count: int | None = None, suppressed: int = 0) -> dict:
         stories = [{
             "objectID": "49616354", "title": "Mercury 2.5",
             "url": "https://vendor.example/launch", "points": 231,
@@ -181,6 +184,7 @@ class DocumentTests(unittest.TestCase):
             points_floor=10,
             story_count=1042,
             qualifying_count=len(stories) if qualifying_count is None else qualifying_count,
+            suppressed=suppressed,
             discovered_at="2026-09-09",
             fetcher=fetcher,
         )
@@ -254,3 +258,151 @@ class EligibleStoriesWithTotalTests(unittest.TestCase):
         payload = {"hits": [hit("Mercury 2.5", "https://vendor.example/m", 231)]}
         kept, qualifying = sweep_hackernews.eligible_stories_with_total(payload, points_floor=10)
         self.assertEqual(qualifying, len(kept))
+
+
+# A real, previously-decided page: excluded on 2026-09-11 with its URL recorded so the
+# rejection sticks (see directory/exclusions.json). Used throughout as the concrete
+# case the defect this module fixes was verified against.
+SWE2_URL = "https://cognition.com/blog/swe-2"
+
+
+def catalog(
+    *, projects: list[dict] | None = None, exclusions: list[dict] | None = None,
+    candidates: list[dict] | None = None,
+) -> tuple[dict, dict, dict]:
+    """Build minimal (projects, exclusions, candidates) documents for decided_url_keys."""
+    return (
+        {"projects": projects or []},
+        {"entries": exclusions or []},
+        {"candidates": candidates or []},
+    )
+
+
+class DecidedUrlKeysTests(unittest.TestCase):
+    def test_a_project_url_is_decided(self) -> None:
+        projects, exclusions, candidates = catalog(projects=[{"id": "x", "url": SWE2_URL}])
+        keys = sweep_hackernews.decided_url_keys(projects, exclusions, candidates)
+        self.assertIn(sweep_hackernews.canonical_url_key(SWE2_URL), keys)
+
+    def test_an_exclusion_url_is_decided(self) -> None:
+        projects, exclusions, candidates = catalog(
+            exclusions=[{"name": "SWE-2", "repo": None, "url": SWE2_URL}]
+        )
+        keys = sweep_hackernews.decided_url_keys(projects, exclusions, candidates)
+        self.assertIn(sweep_hackernews.canonical_url_key(SWE2_URL), keys)
+
+    def test_a_candidate_url_is_decided(self) -> None:
+        projects, exclusions, candidates = catalog(candidates=[{"repo": "x/y", "url": SWE2_URL}])
+        keys = sweep_hackernews.decided_url_keys(projects, exclusions, candidates)
+        self.assertIn(sweep_hackernews.canonical_url_key(SWE2_URL), keys)
+
+    def test_records_without_a_string_url_do_not_crash_the_load(self) -> None:
+        projects, exclusions, candidates = catalog(
+            projects=[{"id": "no-url"}, {"id": "null-url", "url": None}, "not-a-dict"],
+            exclusions=[{"name": "no-url-exclusion", "repo": "a/b"}, {"url": 12345}],
+            candidates=[{"repo": "a/b"}, None],
+        )
+        keys = sweep_hackernews.decided_url_keys(projects, exclusions, candidates)
+        self.assertEqual(keys, set())
+
+    def test_an_empty_catalog_decides_nothing(self) -> None:
+        projects, exclusions, candidates = catalog()
+        self.assertEqual(sweep_hackernews.decided_url_keys(projects, exclusions, candidates), set())
+
+
+class DropDecidedStoriesTests(unittest.TestCase):
+    def decided(self, *urls: str) -> set[str]:
+        return {sweep_hackernews.canonical_url_key(url) for url in urls}
+
+    def test_a_story_matching_a_decided_url_is_dropped_and_never_fetched(self) -> None:
+        stories = [hit("SWE-2", SWE2_URL, 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, [])
+        self.assertEqual(suppressed, 1)
+
+        calls: list[str] = []
+
+        def spy_fetcher(url: str) -> str:
+            calls.append(url)
+            return SENTINEL_PAGE_TEXT
+
+        sweep_hackernews.build_document(
+            kept,
+            window_start="2026-09-11T00:00:00Z",
+            window_end="2026-09-12T00:00:00Z",
+            points_floor=10,
+            story_count=1,
+            qualifying_count=1,
+            suppressed=suppressed,
+            discovered_at="2026-09-12",
+            fetcher=spy_fetcher,
+        )
+        self.assertEqual(calls, [])
+
+    def test_a_story_surviving_none_of_the_catalogs_is_kept(self) -> None:
+        stories = [hit("A new launch", "https://vendor.example/new", 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, stories)
+        self.assertEqual(suppressed, 0)
+
+    def test_a_trailing_slash_still_matches(self) -> None:
+        stories = [hit("SWE-2", SWE2_URL + "/", 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, [])
+        self.assertEqual(suppressed, 1)
+
+    def test_an_added_utm_parameter_still_matches(self) -> None:
+        stories = [hit("SWE-2", SWE2_URL + "?utm_source=hn&utm_medium=social", 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, [])
+        self.assertEqual(suppressed, 1)
+
+    def test_a_www_difference_does_not_match(self) -> None:
+        """`canonical_url_key` is a conservative comparison key, not a full
+        normaliser: it strips the default port, a trailing slash, and utm_/tracking
+        query keys, but it does not fold a `www.` host prefix. A story linked as
+        www.cognition.com would NOT be suppressed against a catalog entry recorded as
+        bare cognition.com (or vice versa) -- this documents that real limit rather
+        than assuming the opposite."""
+        stories = [hit("SWE-2", "https://www.cognition.com/blog/swe-2", 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, stories)
+        self.assertEqual(suppressed, 0)
+
+    def test_a_null_url_story_is_not_suppressed_and_does_not_crash(self) -> None:
+        stories = [hit("Ask HN", None, 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, self.decided(SWE2_URL))
+        self.assertEqual(kept, stories)
+        self.assertEqual(suppressed, 0)
+
+
+class LoadDecidedUrlKeysTests(unittest.TestCase):
+    def test_an_unreadable_catalog_file_raises_rather_than_suppressing_nothing(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "does-not-exist.json"
+            with (
+                mock.patch.object(sweep_hackernews, "PROJECTS_PATH", missing),
+                self.assertRaises(OSError),
+            ):
+                sweep_hackernews.load_decided_url_keys()
+
+    def test_a_malformed_catalog_file_raises_rather_than_suppressing_nothing(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            malformed = Path(directory) / "exclusions.json"
+            malformed.write_text("{not valid json", encoding="utf-8")
+            with (
+                mock.patch.object(sweep_hackernews, "EXCLUSIONS_PATH", malformed),
+                self.assertRaises(json.JSONDecodeError),
+            ):
+                sweep_hackernews.load_decided_url_keys()
+
+    def test_the_real_checkout_catalog_suppresses_the_real_excluded_swe2_url(self) -> None:
+        """End-to-end against the actual committed catalog files, not a fixture:
+        SWE-2 was excluded with its URL recorded in directory/exclusions.json, and a
+        fresh sweep payload pointing at that same URL must be suppressed before any
+        fetch — proving the concrete defect this module fixes is closed."""
+        decided = sweep_hackernews.load_decided_url_keys()
+        stories = [hit("SWE-2 launch, again", SWE2_URL, 400)]
+        kept, suppressed = sweep_hackernews.drop_decided_stories(stories, decided)
+        self.assertEqual(kept, [])
+        self.assertEqual(suppressed, 1)

@@ -61,7 +61,7 @@ ASSESSMENT_PROPOSERS = {"hn-signals", "human"}
 PAGE_STATUSES = {"readable", "unreadable", "failed"}
 SIGNAL_ENVELOPE_REQUIRED = {
     "endpoint", "window_start", "window_end", "points_floor", "story_count", "eligible_count",
-    "truncated",
+    "truncated", "suppressed",
 }
 
 TAXONOMY_GROUPS = (
@@ -1681,10 +1681,14 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
     if signals:
         if not isinstance(source, dict) or set(source) != SIGNAL_ENVELOPE_REQUIRED:
             errors.append("hn-signals.json: source envelope does not match the sweep schema")
-        # bool is a subclass of int, so an explicit isinstance(..., bool) is required
-        # here or `truncated: 1` would pass as truthy.
-        elif not isinstance(source["truncated"], bool):
-            errors.append("hn-signals.json: source envelope truncated must be a boolean")
+        else:
+            # bool is a subclass of int, so an explicit isinstance(..., bool) is
+            # required here or `truncated: 1` would pass as truthy.
+            if not isinstance(source["truncated"], bool):
+                errors.append("hn-signals.json: source envelope truncated must be a boolean")
+            suppressed = source["suppressed"]
+            if not isinstance(suppressed, int) or isinstance(suppressed, bool) or suppressed < 0:
+                errors.append("hn-signals.json: source envelope suppressed must be a non-negative integer")
 
     seen: set[str] = set()
     classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
