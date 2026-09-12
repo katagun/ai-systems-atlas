@@ -32,6 +32,18 @@
       "useful_lesson": "A survey's taxonomy can read like a system's architecture, and the repository title will not say which it is. Count the source files before reading the readme."
     },
     {
+      "name": "agent-toolkit",
+      "repo": "softaworks/agent-toolkit",
+      "reason": "MIT licensed. The README describes \"opinionated skills shared by @leonardocouy for improving daily work efficiency with Claude Code,\" distributed as roughly forty independent, unrelated SKILL.md/README.md bundles spanning AI-tool wrappers (codex, gemini, perplexity), documentation helpers, frontend patterns, planning aids, professional-communication guides, and utilities, plus a handful of Claude Code sub-agents and slash commands \u2014 each installed separately (`/plugin install <skill>@agent-toolkit`) with no shared engine, runtime, or persistence layer tying them together. This is the same shape as other skills-catalog repositories: a mirrored or aggregated collection of independent instruction bundles, not one maintained operational product with its own claimed behavior.",
+      "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
+    },
+    {
+      "name": "AI-Research-SKILLs",
+      "repo": "Orchestra-Research/AI-Research-SKILLs",
+      "reason": "MIT licensed. The README describes \"the most comprehensive open-source skills library enabling AI agents to autonomously conduct AI research,\" but 97 of its 98 \"skills\" are reference-documentation bundles teaching a host agent how to use an existing third-party library or tool (vLLM, LangChain, FAISS, DeepSpeed, and so on) \u2014 each one is a `SKILL.md` quick reference plus \"300KB+ documentation from official sources.\" Only one skill (\"autoresearch\") is itself an orchestration layer; the repository as a whole is a curated documentation and reference library for a coding agent to read, not a maintained operational product with its own claimed behavior.",
+      "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
+    },
+    {
       "name": "Airbyte",
       "repo": "airbytehq/airbyte",
       "reason": "The reviewed repository is a data-movement platform, not a memory, agent, or assistant system. Its own readme states the product plainly: open-source data movement for ELT pipelines, moving data from APIs, databases, and files to warehouses, lakes, and AI applications. Its recent AI-facing surface does not cross the family boundary: a companion Agent SDK turns Airbyte connectors into typed tools for other frameworks (LangChain, pydantic-ai, the OpenAI Agents SDK) rather than owning a loop of its own; vector-database destinations and a PyAirbyte retrieval-augmented-generation quickstart move and embed data for a caller's retrieval system rather than serving as one; and a commercial context-layer product still describes itself as infrastructure AI agents call rather than an agent runtime. Every source frames Airbyte as what an agent uses, not what an agent is.",
@@ -128,6 +140,12 @@
       "useful_lesson": "Language bindings can differ in implementation visibility and license terms even when they expose one product boundary."
     },
     {
+      "name": "claude-code-tresor",
+      "repo": "alirezarezvani/claude-code-tresor",
+      "reason": "MIT licensed. The README calls it \"the ultimate collection of professional-grade utilities for Claude Code users\": 133 subagent definitions, prompt templates, and slash commands distributed as markdown and YAML that Claude Code's own engine reads and executes. The repository ships no independent runtime, retrieval system, or execution engine of its own beyond an install script that copies files into `~/.claude/`. It also cross-promotes two sibling repositories (\"Skill Factory,\" \"Skills Library\") that package the same kind of prompt and template content. This is a prompt and template collection, not an operational product with its own claimed behavior to assess.",
+      "useful_lesson": "A repository that ships only instruction files a host agent reads has no claimed behavior of its own to assess. The test is whether an engine, retrieval path, or persistence layer exists outside what the host agent already provides."
+    },
+    {
       "name": "claude-squad",
       "repo": "smtg-ai/claude-squad",
       "reason": "The system owns terminals rather than agents, on the same grounds as a previously excluded terminal workspace manager. It makes no model calls at all: its dependency manifest names no provider client and no HTTP client, and a search of its source for provider endpoints returns nothing. Its persisted model is a flat list of terminal sessions with no task, run, order, or message entity, and the agent state it displays is inferred by matching prompt strings in another product's screen output. The only occurrences of the word handoff in the tree are a help-screen heading for commands that hand work back to the human.",
@@ -162,6 +180,12 @@
       "repo": "facebookresearch/drzero",
       "reason": "A reinforcement-learning training recipe for search agents, distributed as shell scripts over a third-party training library and requiring multi-GPU training infrastructure and a self-hosted retrieval index. It has no continuous integration, no tests, no releases, and no published package, and its last commit predates this review by more than five months. Its self-evolution is a proposer-and-solver curriculum that runs during training, not a harness that modifies itself at run time.",
       "useful_lesson": "\"Self-evolving\" in a paper title can describe a training curriculum rather than runtime behavior; the two claims live at different layers and only one of them describes something a reader operates."
+    },
+    {
+      "name": "glean",
+      "repo": "LeslieLeung/glean",
+      "reason": "AGPLv3 licensed. The README describes it plainly as \"A self-hosted RSS reader and personal knowledge management tool.\" Every feature actually shipped (subscriptions with OPML import/export, read-later, folders and tags, bookmarks, background sync) is conventional feed reading and organizing with no AI or agent behavior anywhere in it. Every AI-adjacent capability \u2014 \"Smart Recommendations,\" \"AI Features,\" embedding-based preference learning \u2014 is listed explicitly under \"Planned Features (WIP),\" and the project's own roadmap table marks its AI phase \"Planned,\" not built. The README also warns, \"This project is still in development and is not ready for production use.\" No implementation evidence exists yet for any AI capability to assess.",
+      "useful_lesson": "Planned capability is not shipped capability. Where every AI feature sits under a roadmap heading, there is no implementation evidence to assess and the record waits rather than entering on intent."
     },
     {
       "name": "Google ADK for Go",
@@ -272,6 +296,12 @@
       "useful_lesson": "A format's own README volunteering the words 'logging library,' 'file format,' and 'serialization-agnostic ... container' for itself is the cheapest possible signal that the specification boundary's refusal of a general transport, serialization format, or API description language applies directly -- check that sentence before asking which agent-to-software scope might fit."
     },
     {
+      "name": "mcp-mem0",
+      "repo": "coleam00/mcp-mem0",
+      "reason": "MIT licensed. The README opens by calling itself \"A template implementation of the Model Context Protocol (MCP) server integrated with Mem0\" and instructs readers to \"Use this as a reference point to build your MCP servers yourself, or give this as an example to an AI coding assistant.\" It exposes three thin wrapper tools (save/get/search) over Mem0's own SDK, and its closing section, \"Building Your Own Server,\" confirms it is scaffolding meant to be copied and extended rather than a maintained, adoptable product in its own right. No operational product distinct from Mem0 itself is identifiable from this record.",
+      "useful_lesson": "A repository that names itself a template or reference implementation is telling the reviewer its own disposition. Scaffolding meant to be copied is not an adoptable product."
+    },
+    {
       "name": "MemoryOS",
       "repo": "BAI-LAB/MemoryOS",
       "reason": "The repository is a research release rather than an operational service. It has no tests: three files carry test-like names, one opens by asking the reader to paste an API key into a demo function, and the tree contains no test runner or assertion anywhere. It has no continuous-integration directory at all, which is weaker than the paper implementations already excluded, each of which at least ran a formatting check. Its last release is more than a year old, the package its readme tells users to install has one version from July 2025, and no package manifest exists in the tree, so there is no development-status classifier to read. A benchmark harness and its dataset sit in the tree, and the core package is copied three times rather than sharing a storage interface, so the pluggable architecture the readme advertises is implemented by duplication. The package name its documentation uses on the index belongs to a different project the Atlas already publishes.",
@@ -312,6 +342,12 @@
       "repo": "ros-navigation/navigation2",
       "reason": "Nav2 is a ROS 2 motion-planning and navigation stack -- costmaps, behavior trees, and path planners -- and its README describes no model-driven decision loop, language model, or generative component anywhere in the reviewed evidence; docs.nav2.org, a large separate documentation site, was not reviewed and this claim does not extend to it. Inclusion-gate condition 2 in docs/CURATION.md fails because a classical, non-model-driven robotics library is not materially relevant to any family in directory/taxonomy.json, all of which are built around planning, retrieval, or conversation carried out by a model.",
       "useful_lesson": "A robotics project that ships a mature, widely adopted package with clear licensing can still fail the family test outright when nothing in its documented behavior puts a model in the loop; maturity and adoption do not substitute for that."
+    },
+    {
+      "name": "obsidian-claude-pkm",
+      "repo": "ballred/obsidian-claude-pkm",
+      "reason": "MIT licensed. The README frames it as \"an execution system that connects your 3-year vision to what you do today,\" but the entire mechanism is Claude Code slash-command markdown files, four agent-definition markdown files, and PostToolUse/session hooks; the README states outright, \"Zero dependencies. Everything runs on bash and markdown.\" No independent engine, retrieval system, or persistence layer exists outside what Claude Code itself already provides \u2014 this is a vault template plus a set of prompt and command definitions, not an operational product with its own claimed behavior.",
+      "useful_lesson": "A repository that ships only instruction files a host agent reads has no claimed behavior of its own to assess. The test is whether an engine, retrieval path, or persistence layer exists outside what the host agent already provides."
     },
     {
       "name": "OpenFold",
@@ -362,6 +398,12 @@
       "useful_lesson": "A directory of second brains and a second brain answer to the same search terms. The tell is whether the repository owns any of the knowledge it points at."
     },
     {
+      "name": "skills",
+      "repo": "NVIDIA/skills",
+      "reason": "Apache-2.0 and CC-BY-4.0 licensed. The README describes the repository itself as a catalog: \"Skills are maintained in their respective product repos, and mirrored here daily via an automated sync pipeline,\" covering dozens of unrelated NVIDIA products (CUDA-Q, DOCA SDK, Jetson BSP, TAO Toolkit, PhysicsNeMo, Megatron-Core, and more), most of which are GPU libraries, robotics toolkits, or hardware SDKs with no agent, memory, or assistant behavior of their own. Distribution runs through a third-party `skills` CLI (`npx skills add nvidia/skills`) rather than any product the repository itself operates. This is a documentation and instruction-set catalog aggregated across many products, not an operational system in itself.",
+      "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
+    },
+    {
       "name": "SQL Chat",
       "repo": "sqlchat/sqlchat",
       "reason": "The reviewed implementation is a chat-based SQL client that generates and executes user-selected statements, but it does not own an iterative planning, validation, or repair loop required by the data-analysis agent role.",
@@ -391,6 +433,12 @@
       "reason": "SWE-2 is Cognition's in-house coding model, and its own launch post states it \"is available starting today in Devin Desktop and CLI\" with no published weights and no per-token API. docs/MODELS.md holds that \"first-party API availability never decide[s] inclusion\", so hosted-only distribution alone would not disqualify it; the record boundary is what does, excluding \"an assistant, agent, or memory product built on the model\" and admitting a hosted endpoint only where \"that artifact has its own reviewed release boundary\". Reachable solely through the already-published Devin Desktop record, it has no release boundary of its own, so it is recorded as a capability of that record rather than as a separate one. Benchmark figures on the launch page are the vendor's own and are not repeated in the catalog.",
       "useful_lesson": "A named, versioned model is not automatically a model release. The test is whether the artifact can be reached independently of one product, not whether the vendor gave it a name and a benchmark table.",
       "url": "https://cognition.com/blog/swe-2"
+    },
+    {
+      "name": "T3 Code",
+      "repo": "pingdotgg/t3code",
+      "reason": "MIT licensed. The README describes itself plainly as \"an 'agent harness control surface'\" that \"enables control of the agents on your machine\" through a mobile app, web app, and Electron desktop app, and states outright: \"Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.\" Installation requires the user to separately install and authenticate one of those third-party agents first (\"install Codex CLI and run `codex login`,\" etc.); T3 Code itself performs no planning or task execution \u2014 it is a remote session manager and dashboard layered on top of already-installed, separately-authenticated agent products, explicitly modeled on \"the Codex desktop app, Conductor, Claude Desktop and Cursor Glass.\" No claimed behavior in the README describes T3 Code itself taking actions through tools; every agentic capability belongs to the wrapped third-party CLI the user already runs. The operational product represented here is a control and session-management surface for other vendors' agents, not an agent system with a claimed behavior of its own.",
+      "useful_lesson": "Controlling another vendor's already-installed agent is not performing the work. Where installation requires the user to authenticate a third-party agent first, the agentic behavior belongs to that agent, not to the surface driving it."
     },
     {
       "name": "The AI Scientist",
