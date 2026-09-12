@@ -117,6 +117,8 @@ Never copy proposed classification into the catalog without human confirmation. 
 
 Provider traits are reviewed during the same workflow. Leave both fields absent when support evidence has not been checked; do not infer provider agnosticism from a plugin interface or community adapter.
 
+`scripts/promote_system_candidate.py` scaffolds and guards steps 4-6 above. `init <repo-or-url> --output <path>` writes an incomplete review draft, prefilling only identity and automation-owned GitHub facts plus a `license-evidence.json` item built from the candidate's pinned `LICENSE` git blob — never the proposed family or role. `check <draft>` runs the full preflight against the current catalog and reports without writing. `apply <draft>` re-runs that preflight, then atomically writes the completed project into `projects.json`, its evidence into `license-evidence.json`, and removes the one candidate from `candidates.json`, rolling every file back if any write fails.
+
 ## Review a triage batch
 
 `scripts/run_candidate_triage.py finish` commits proposed `triage` blocks to the
