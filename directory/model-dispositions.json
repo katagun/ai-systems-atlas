@@ -1,0 +1,174 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-09-11",
+  "dispositions": [
+    {
+      "source_id": "anthropic/claude-haiku-4-5-20251001",
+      "disposition": "excluded",
+      "reason": "The exact snapshot the reviewed Claude Haiku 4.5 record represents; a separate record would duplicate it.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-opus-4-0",
+      "disposition": "excluded",
+      "reason": "Pre-4.6 dateless ID: a moving alias over dated snapshots rather than a pinned release, so it has no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-opus-4-1",
+      "disposition": "held",
+      "reason": "Retired 2026-08-05 and the model page returns 404, so no authoritative identity or boundary can be established. Documented replacement Claude Opus 4.8 is reviewed. Held in case first-party documentation returns.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-opus-4-1-20250805",
+      "disposition": "held",
+      "reason": "Dated snapshot of the retired Opus 4.1 line; held with the line pending first-party documentation.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-opus-4-20250514",
+      "disposition": "excluded",
+      "reason": "Retired first-generation snapshot; the Opus line is reviewed at Opus 4.8.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-sonnet-4-0",
+      "disposition": "excluded",
+      "reason": "Pre-4.6 dateless ID: a moving alias over dated snapshots rather than a pinned release, so it has no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-sonnet-4-20250514",
+      "disposition": "excluded",
+      "reason": "Retired first-generation snapshot; the Sonnet line is reviewed at Sonnet 4.5.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "anthropic/claude-sonnet-4-5-20250929",
+      "disposition": "excluded",
+      "reason": "The exact snapshot the reviewed Claude Sonnet 4.5 record represents; a separate record would duplicate it.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "deepseek/deepseek-chat",
+      "disposition": "excluded",
+      "reason": "API route alias discontinued 2026-07-24, not a provider-independent release.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "deepseek/deepseek-reasoner",
+      "disposition": "excluded",
+      "reason": "API route alias discontinued 2026-07-24, not a provider-independent release.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "google/gemini-flash-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "google/gemini-flash-lite-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/codestral-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/devstral-medium-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/magistral-medium-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/mistral-large-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/mistral-medium-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/mistral-small-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/pixtral-large-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "mistral/voxtral-small-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-4o-2024-05-13",
+      "disposition": "excluded",
+      "reason": "Snapshot named inside the reviewed GPT-4o record and slated for shutdown 2026-10-23; a separate record would duplicate the line.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-4o-2024-08-06",
+      "disposition": "excluded",
+      "reason": "Snapshot named inside the reviewed GPT-4o record; a separate record would duplicate the line.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-4o-2024-11-20",
+      "disposition": "excluded",
+      "reason": "Snapshot named inside the reviewed GPT-4o record; a separate record would duplicate the line.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-5-chat-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-5.1-chat-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-5.2-chat-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "openai/gpt-5.3-chat-latest",
+      "disposition": "excluded",
+      "reason": "Auto-updating alias that resolves to different snapshots over time; no fixed identity to review.",
+      "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "xai/grok-4.1-fast",
+      "disposition": "held",
+      "reason": "No first-party model page in xAI's catalogue, so no authoritative identity or boundary can be established. Documented replacement Grok 4.6 is reviewed. Held in case first-party documentation appears.",
+      "decided_at": "2026-09-11"
+    }
+  ]
+}
