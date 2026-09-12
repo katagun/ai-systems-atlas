@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -36,13 +35,7 @@ BUNDLE = ".hn-signal-bundle/bundle.json"
 # do not bound; `prepare` writes this file and `finish` reads it with `root_text`, never
 # `worktree_text`.
 BASE_REF = ".hn-signal-bundle/base-ref.json"
-DEFAULT_FROM_REF = "origin/main"
-# A recorded base sha must look like a commit sha, and nothing more, before anything
-# shells out with it; see `prepared_base_ref`. `fullmatch`, not `match` against a
-# `$`-anchored pattern: `$` in Python matches immediately before a trailing "\n", so
-# `match` would accept a 40-hex value with a trailing newline appended and pass it to
-# `git` argv unchecked.
-SHA_RE = re.compile(r"[0-9a-f]{40}")
+DEFAULT_FROM_REF = routine_guards.DEFAULT_BASE_REF
 ALLOWED_CHANGES = {QUEUE}
 WORKTREE = ROOT.parent / "atlas-hn-signals"
 PROMPT = ROOT / "docs" / "routines" / "hn-signals.md"
@@ -289,15 +282,9 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
             return 1
     # Record the exact commit the worktree was built from, so `finish` compares its
     # guards against the tree the model was actually handed rather than whatever
-    # `origin/main` has since become. A SHA, not `from_ref` itself, because a ref can
-    # move between `prepare` and `finish` and the guards must pin the tree, not the name.
-    # Written under ROOT, not WORKTREE: WORKTREE is the model's own working directory, so
-    # writing the record there would let an ordinary file edit change it. That is the
-    # bound this closes — not shell access to the checkout; see "Guard threat model" in
-    # docs/OPERATIONS.md.
-    base_ref_path = ROOT / BASE_REF
-    base_ref_path.parent.mkdir(parents=True, exist_ok=True)
-    base_ref_path.write_text(json.dumps({"sha": base_sha, "from_ref": from_ref}), encoding="utf-8")
+    # `origin/main` has since become. Shared with run_candidate_triage.py; see
+    # `routine_guards.record_prepared_base` for why this lives under ROOT, not WORKTREE.
+    routine_guards.record_prepared_base(ROOT / BASE_REF, base_sha, from_ref)
     code, output = run(
         ["uv", "run", "python", "scripts/verify_signal_pages.py", "--refresh"], WORKTREE
     )
@@ -344,22 +331,11 @@ def prepared_base_ref(read=root_text) -> str:
     Read from ROOT, where `prepare` wrote it — not WORKTREE, the model's own working
     directory — so every guard below compares against the exact tree the model was
     handed rather than whatever `origin/main` has become since, and so an ordinary edit
-    inside the model's own workspace cannot change what this function returns. That does
-    not extend to a model with shell access to this checkout, which can reach ROOT the
-    same way it reaches everything else the repository's git process can reach; see
-    "Guard threat model" in docs/OPERATIONS.md. When nothing was recorded — an older run,
-    or a worktree built by hand — fall back to `origin/main` exactly as the routine always
-    has. The recorded value must also look like exactly a commit sha and nothing more: it
-    reaches `git` argv unchecked everywhere below, so anything else (an option flag, an
-    empty string, a symlink `read` refused to follow) falls back the same as if nothing
-    were recorded at all.
+    inside the model's own workspace cannot change what this function returns. See
+    `routine_guards.prepared_base_ref` (shared with run_candidate_triage.py) for the
+    fallback and validation rules this applies.
     """
-    try:
-        recorded = json.loads(read(BASE_REF))
-    except (OSError, json.JSONDecodeError):
-        return DEFAULT_FROM_REF
-    sha = recorded.get("sha") if isinstance(recorded, dict) else None
-    return sha if isinstance(sha, str) and SHA_RE.fullmatch(sha) else DEFAULT_FROM_REF
+    return routine_guards.prepared_base_ref(BASE_REF, read, DEFAULT_FROM_REF)
 
 
 def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:

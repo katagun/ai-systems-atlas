@@ -181,6 +181,23 @@ classification, a confidence, a status — and the membership of the queue itsel
 review's, and a run that touches one aborts naming the candidate and the field. Reviewing
 a batch therefore means judging verdicts and evidence, not auditing the diff for overreach.
 
+`prepare` resolves `origin/main` to a commit SHA when it builds the worktree and records
+it in `.candidate-evidence/base-ref.json` under the primary checkout (`ROOT`), not the
+worktree — still covered by `.gitignore`, so it never reaches a commit. `finish` reads
+that file and uses the pinned SHA everywhere it would otherwise compare against
+`origin/main`: the head-moved check, the committed-diff blast-radius check, and the `git
+show <base>:directory/candidates.json` field-guard baseline all run against the exact
+tree `prepare` handed the model, not whatever `origin/main` has become since. This matters
+because `main` moves several times a day in this repository; without pinning, any commit
+landing between `prepare` and `finish` made the blast-radius guard blame the run for files
+it never touched. When no SHA was recorded — an older worktree, or a record that failed
+the checks below — `finish` falls back to `origin/main` exactly as it always has. A
+recorded value that is not exactly a 40-hex commit SHA, or that lives behind a symlink
+instead of a plain file, is treated the same as no record at all rather than trusted. This
+machinery is shared with `run_hn_signals.py` through `scripts/routine_guards.py`; see
+"Running the loop locally" below for that routine's additional `--from-ref` option, which
+candidate triage has no equivalent need for and does not implement.
+
 The harness authenticates with `GITHUB_TOKEN` when it is set and otherwise falls back to
 `gh auth token`, so a scheduled run needs no secret stored anywhere. With neither, GitHub
 allows 60 anonymous requests an hour against the roughly 80 a default `--limit 40` run
@@ -480,8 +497,9 @@ no guards.
 One route the guards still do not close, documented rather than fixed: `finish` falls
 back to comparing against `origin/main` whenever no base record is found — including when
 one was deleted. A model with shell access could delete
-`.hn-signal-bundle/base-ref.json` and then `git update-ref refs/remotes/origin/main
-<forged>` to make that fallback compare against a forged tree instead of the real one.
+`.hn-signal-bundle/base-ref.json` (or, for candidate triage, `.candidate-evidence/base-ref.json`) and then `git
+update-ref refs/remotes/origin/main <forged>` to make that fallback compare against a
+forged tree instead of the real one.
 The `refs/replace` refusal and `GIT_NO_REPLACE_OBJECTS=1` do not touch this path — it
 never goes through `git replace` — and closing it would mean either hard-erroring on a
 missing record (a real behavior change to the always-worked default path) or trusting a
