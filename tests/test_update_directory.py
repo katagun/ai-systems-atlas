@@ -4,9 +4,12 @@ import copy
 import unittest
 import urllib.error
 import urllib.request
+from pathlib import Path
 from unittest import mock
 
 from scripts import update_directory
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def project_fixture(status: str = "active") -> dict:
@@ -60,6 +63,12 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("2025-01-15", project["verified_at"])
         self.assertEqual("2026-08-25", project["metadata_verified_at"])
         self.assertEqual("2026-08-25", project["stars_verified_at"])
+
+    def test_the_refresh_never_touches_inference_service_records(self) -> None:
+        """Trust records are human-owned; the refresh has no reason to open the collection at all."""
+        source = (ROOT / "scripts" / "update_directory.py").read_text(encoding="utf-8")
+        self.assertNotIn("inference-services", source)
+        self.assertNotIn("inference_services", source)
 
     def test_transport_failure_is_reported_without_destroying_existing_metadata(self) -> None:
         project = project_fixture()
