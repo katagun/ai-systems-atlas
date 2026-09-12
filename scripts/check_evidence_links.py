@@ -165,6 +165,49 @@ def _add_evidence_items(
         )
 
 
+def _add_trust_targets(
+    targets: dict[str, _TargetBuilder],
+    trust: Mapping[str, Any],
+    *,
+    record_id: str,
+) -> None:
+    """Trust URLs are checked as links and never drift-hashed.
+
+    A property URL is the operator's page; a finding URL is someone else's. The Atlas
+    cannot accept a change to a page it does not steward, so neither gets a terms
+    baseline. The pinned content_sha256 on a finding is a review-time record of what
+    the reviewer read, compared to nothing here. See ADR 029.
+    """
+    for name, item in trust.get("properties", {}).items():
+        _add_target(
+            targets,
+            item.get("url"),
+            kind="trust_property",
+            reference=f"inference-services:{record_id}:trust:{name}",
+            reviewed_at=item.get("verified_at"),
+        )
+    for index, finding in enumerate(trust.get("findings", [])):
+        reference = f"inference-services:{record_id}:finding:{index}"
+        source = finding.get("source") or {}
+        _add_target(
+            targets,
+            source.get("url"),
+            kind="trust_finding",
+            reference=reference,
+            reviewed_at=source.get("fetched_at"),
+        )
+        for field_name in ("operator_response", "resolved"):
+            response = finding.get(field_name)
+            if isinstance(response, dict):
+                _add_target(
+                    targets,
+                    response.get("url"),
+                    kind="trust_response",
+                    reference=f"{reference}:{field_name}",
+                    reviewed_at=response.get("verified_at"),
+                )
+
+
 def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
     """Collect and deduplicate the reviewed URLs the Atlas promises to maintain."""
     targets: dict[str, _TargetBuilder] = {}
@@ -247,6 +290,8 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
             group="evidence",
             record_reviewed_at=reviewed_at,
         )
+        if isinstance(record.get("trust"), dict):
+            _add_trust_targets(targets, record["trust"], record_id=record_id)
 
     for filename, key, collection in (
         ("local-runtimes.json", "runtimes", "local-runtimes"),

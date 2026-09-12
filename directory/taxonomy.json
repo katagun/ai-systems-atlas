@@ -100,6 +100,23 @@
     {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."},
     {"id": "service_native", "name": "Service-native", "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."}
   ],
+  "trust_property_statuses": [
+    {
+      "id": "documented_yes",
+      "name": "Documented",
+      "definition": "The operator publishes a statement establishing the property for the named service."
+    },
+    {
+      "id": "documented_no",
+      "name": "Documented absent",
+      "definition": "The operator publishes a statement denying the property, or stating it does not apply, for the named service."
+    },
+    {
+      "id": "undocumented",
+      "name": "Undocumented",
+      "definition": "No first-party statement about the property was found on the review date."
+    }
+  ],
   "local_runtime_types": [
     {"id": "desktop_runner", "name": "Desktop runner", "definition": "A packaged application or command-line product that installs on a personal machine and manages model download, storage, and local serving as one product."},
     {"id": "server_engine", "name": "Server engine", "definition": "An inference server built for sustained multi-request serving, batching, and deployment onto operator-controlled hardware."},

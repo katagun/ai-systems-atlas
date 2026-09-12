@@ -66,6 +66,7 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 | `metadata_verified_at` | Automation | Repository-level GitHub metadata was refreshed on this date |
 | `stars_verified_at` | Automation | `stars` was observed on this date |
 | `generated_at` | Automation/editor | The published project document was last regenerated |
+| `trust.verified_at` | Human reviewer | The trust record's properties and findings were reviewed on this date; never automated |
 
 Automation must never update `verified_at`.
 
@@ -160,6 +161,7 @@ Inference-service records are independent from project and specification records
 - **Editorial score:** `score_profile` identifies the inference-service rubric and `score` contains every weighted operational dimension plus the calculated overall; it never scores model quality, price, or transient performance.
 - **Terms and evidence:** one dated governing-terms record plus non-empty dated authoritative evidence.
 - **Review:** both the record and collection carry `verified_at` dates.
+- **Trust record (optional):** `trust` is absent until a human reviews the service for it. When present it has exactly `verified_at`, `properties`, and `findings`. `properties` has exactly `response_integrity`, `upstream_disclosure`, `credential_handling`, `cache_isolation`, `vulnerability_disclosure`, and `independent_audit`, each with `status` (from `trust_property_statuses`), a non-empty `note`, a first-party public `url`, a `scope`, and `verified_at`. The status says whether the operator publishes a statement, never what the service does, which is why it is exempt from the prose-only rule above: it compresses no capability, and the note carries every exception. `findings` is a list, possibly empty, of `{claim, published_at, source, operator_response, resolved}`; `source` is `{label, url, kind: "third_party", content_sha256, fetched_at}`, and `operator_response` and `resolved` are `null` or `{url, verified_at, summary}`. Every date in the block is on or before `trust.verified_at`, which is on or before the collection `verified_at`. The block is unscored and human-owned; see [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
 Strict validation rejects extra fields such as copied price tables or model inventories and verifies every score against the taxonomy weights. See [`INFERENCE_SERVICES.md`](INFERENCE_SERVICES.md), [ADR 010](adr/010-inference-services-are-unscored-service-records.md), [ADR 012](adr/012-inference-services-use-a-dedicated-score-profile.md), and [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md).
 

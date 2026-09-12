@@ -1276,6 +1276,60 @@ function specificationDialogMarkup(specification) {
     </div>`;
 }
 
+// A trust record is unscored and human-owned. Each status says whether the operator
+// publishes a statement about a property, never what the service does; the note
+// carries every exception. Nothing rendered here enters a score. See ADR 029.
+const TRUST_PROPERTY_LABELS = {
+  response_integrity: "Response integrity",
+  upstream_disclosure: "Upstream disclosure",
+  credential_handling: "Credential handling",
+  cache_isolation: "Cache isolation",
+  vulnerability_disclosure: "Vulnerability disclosure",
+  independent_audit: "Independent audit",
+};
+const TRUST_PROPERTY_ORDER = Object.keys(TRUST_PROPERTY_LABELS);
+
+function trustStatusName(status) {
+  return taxonomyName("trust_property_statuses", status);
+}
+
+function trustSourceLink(item, text) {
+  return `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">${escapeHTML(text)} ↗</a>`;
+}
+
+function trustResponseMarkup(label, response, absent) {
+  if (!response) return `<p><strong>${escapeHTML(label)}:</strong> ${escapeHTML(absent)}</p>`;
+  return `<p><strong>${escapeHTML(label)}:</strong> ${escapeHTML(response.summary)} ${trustSourceLink(response, "source")} <span class="evidence-date">${escapeHTML(response.verified_at)}</span></p>`;
+}
+
+function trustFindingMarkup(finding) {
+  const source = `<p>${trustSourceLink(finding.source, finding.source.label)} <span class="evidence-date">published ${escapeHTML(finding.published_at)} · read ${escapeHTML(finding.source.fetched_at)}</span></p>`;
+  return `<li><p>${escapeHTML(finding.claim)}</p>${source}${trustResponseMarkup("Operator response", finding.operator_response, "none recorded.")}${finding.resolved ? trustResponseMarkup("Closed", finding.resolved, "") : "<p><strong>Open.</strong></p>"}</li>`;
+}
+
+function trustBlockMarkup(service) {
+  const heading = "<h3>Trust record · unscored</h3>";
+  // The dialog paints from boot data and repaints when the detail file lands;
+  // until the detail file has loaded, whether trust is present or absent is
+  // unknown, which must not read as "not examined".
+  if (!inferenceDetailLoaded(service)) {
+    return `<section class="detail-block" data-trust="pending">${heading}<p>—</p></section>`;
+  }
+  const trust = service.trust;
+  if (!trust) {
+    return `<section class="detail-block" data-trust="absent">${heading}<p>Not yet examined for trust properties.</p></section>`;
+  }
+  const rows = TRUST_PROPERTY_ORDER.map(name => {
+    const item = trust.properties[name];
+    return `<tr><td>${escapeHTML(TRUST_PROPERTY_LABELS[name])}</td><td>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
+  }).join("");
+  const findings = trust.findings.length
+    ? `<ul>${trust.findings.map(trustFindingMarkup).join("")}</ul>`
+    : `<p>Reviewed on ${escapeHTML(trust.verified_at)}; no admissible third-party finding recorded. Absence of a finding is not evidence of safety.</p>`;
+  const trustState = trust.findings.length ? "findings" : "reviewed";
+  return `<section class="detail-block" data-trust="${trustState}">${heading}<table class="trust-table">${rows}</table><h4>Third-party findings</h4>${findings}<p class="unscored-note">Each status says whether the operator publishes a statement, never what the service does. Nothing here enters the score. Reviewed ${escapeHTML(trust.verified_at)}.</p></section>`;
+}
+
 function inferenceDialogMarkup(service) {
   const profile = state.taxonomy.inference_service_score_profile;
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(service.score[dimension.id])}</td></tr>`).join("");
@@ -1288,6 +1342,7 @@ function inferenceDialogMarkup(service) {
       <section class="detail-block"><h3>Regional controls</h3><p>${detailText(service.regional_controls)}</p></section>
       <section class="detail-block"><h3>Retention controls</h3><p>${detailText(service.retention_controls)}</p></section>
       <section class="detail-block"><h3>Routing and customization</h3><p><strong>Routing:</strong> ${detailText(service.routing)}</p><p><strong>Customization:</strong> ${detailText(service.customization)}</p></section>
+      ${trustBlockMarkup(service)}
       <section class="detail-block"><h3>Strengths</h3>${detailList(service.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(service.tradeoffs)}</section>
       <section class="detail-block"><h3>Governing terms</h3>${inferenceEvidenceLink(service.terms)}</section>
@@ -1336,6 +1391,12 @@ function ensureLicenseEvidence() {
 // sees the full record afterwards without being handed a new object. A failed
 // fetch clears the request so the next reader retries.
 const loadedDetail = new Set();
+// The trust dialog block and the trust comparison cell both need to tell
+// "detail hasn't loaded yet" apart from "reviewed, and trust is absent" —
+// this is the one predicate for that, keyed the same way loadDetail keys
+// loadedDetail. Safe to reference from functions defined earlier in this
+// file: none of them run until the whole script has finished loading.
+const inferenceDetailLoaded = service => loadedDetail.has(`inference:${service.id}`);
 const detailRequests = new Map();
 let modelSourceDetails = null;
 let modelSourceDetailsRequest = null;
@@ -1625,10 +1686,30 @@ const scoreCell = value => value == null ? null : `${value} / 10`;
 // so a degraded table reads consistently rather than mixing blanks and dashes.
 const listCell = values => (values || []).join(" • ") || null;
 
+function trustComparisonCell(service, name) {
+  // Detail not loaded yet (or never arrived) is unknown, not "not examined" —
+  // comparisonCell renders null as "—" so a failed fetch reads as missing data
+  // rather than a false claim that the service was reviewed and found clean.
+  if (!inferenceDetailLoaded(service)) return null;
+  const item = service.trust?.properties?.[name];
+  if (!item) return "not examined";
+  return { text: trustStatusName(item.status), title: `${item.note} (${item.verified_at})` };
+}
+
+// A cell is a string, null (rendered "—"), or { text, title }: the trust rows put
+// the status word in the cell and the reviewer's note in the title, so a table of
+// six one-word statuses still carries every exception on hover.
+const comparisonCell = value => {
+  if (value && typeof value === "object") {
+    return `<td title="${escapeHTML(value.title)}">${escapeHTML(value.text)}</td>`;
+  }
+  return `<td>${escapeHTML(value ?? "—")}</td>`;
+};
+
 function comparisonTable(records, rows) {
   return `<div class="comparison-table-wrap"><table class="comparison-table">
     <thead><tr><th scope="col">Decision factor</th>${records.map(record => `<th scope="col"><strong>${escapeHTML(record.name)}</strong></th>`).join("")}</tr></thead>
-    <tbody>${rows.map(([name, values]) => `<tr><th scope="row">${escapeHTML(name)}</th>${values.map(value => `<td>${escapeHTML(value ?? "—")}</td>`).join("")}</tr>`).join("")}</tbody>
+    <tbody>${rows.map(([name, values]) => `<tr><th scope="row">${escapeHTML(name)}</th>${values.map(comparisonCell).join("")}</tr>`).join("")}</tbody>
   </table></div>`;
 }
 
@@ -1745,7 +1826,7 @@ function openComparison() {
   } else {
     profile = state.taxonomy.inference_service_score_profile;
     eyebrow = profile.name;
-    note = "This comparison covers operational service characteristics. It excludes model quality, current price, and transient latency or throughput.";
+    note = "This comparison covers operational service characteristics. It excludes model quality, current price, and transient latency or throughput. Trust rows record whether the operator documents a property; they are unscored and never ranked.";
     rows = [
       ["Operator", records.map(item => item.operator)],
       ["Service type", records.map(item => taxonomyName("inference_service_types", item.service_type))],
@@ -1761,6 +1842,10 @@ function openComparison() {
       ["Retention controls", records.map(item => item.retention_controls)],
       ["Routing", records.map(item => item.routing)],
       ["Customization", records.map(item => item.customization)],
+      ...TRUST_PROPERTY_ORDER.map(name => [
+        `${TRUST_PROPERTY_LABELS[name]} · trust record, unscored`,
+        records.map(item => trustComparisonCell(item, name)),
+      ]),
       ["Strengths", records.map(item => listCell(item.strengths))],
       ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],

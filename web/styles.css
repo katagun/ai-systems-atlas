@@ -1102,6 +1102,10 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
 .score-table td { padding: .45rem; border-bottom: 1px solid var(--line); }
 .score-table td:last-child { color: var(--cyan); font-weight: 600; text-align: right; }
 .unscored-note { padding-top: .8rem; border-top: 1px solid var(--line); font-size: .82rem; }
+.trust-table { width: 100%; border-collapse: collapse; }
+.trust-table td { padding: .45rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.45; }
+.trust-table td:nth-child(2) { white-space: nowrap; font-weight: 600; color: var(--text); }
+.detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
 
 footer {
