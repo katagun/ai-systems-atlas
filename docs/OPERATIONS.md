@@ -23,6 +23,11 @@ Synchronization and share-page generation are write operations; the remaining co
 
 ## Metadata refresh
 
+The weekly refresh runs this alongside the models.dev import, synchronization, payload and
+share-page regeneration, and verification, as one local script; see "Scheduled workflow" below
+for `scripts/run_directory_refresh.py` and how it is scheduled and published. The commands
+below run this step, or the models.dev import, on their own.
+
 ```bash
 GITHUB_TOKEN=... uv run python scripts/update_directory.py
 ```
@@ -322,21 +327,92 @@ Resolution must update all related records atomically. Validation rejects mismat
 
 ## Scheduled workflow
 
-`.github/workflows/update-directory.yml` runs weekly and on demand. It refreshes system/runtime metadata, the complete public models.dev source snapshot, and both candidate queues; synchronizes the public data again after the model import, regenerates payloads and share pages, checks reviewed links and mutable terms, verifies the result, then opens or updates `automation/directory-refresh`. It never commits directly to the default branch. Review license incidents, evidence-link or terms-drift signals, candidates, model candidates, and the CI result before merging.
+The weekly refresh runs locally, not in GitHub Actions — the same move already made for the
+attention-source sweep, and for the same reason: a pull request opened with `GITHUB_TOKEN`
+never triggers the required `verify` check, so a workflow-opened refresh pull request could
+never reach a mergeable state without an extra repository secret. `scripts/run_directory_refresh.py`
+reproduces the retired `.github/workflows/update-directory.yml` on the maintainer's own
+machine instead: it refreshes system/runtime metadata, the complete public models.dev source
+snapshot, and both candidate queues; synchronizes the public data again after the model
+import; regenerates payloads and share pages; checks reviewed links and mutable terms; verifies
+the result; and, only when asked, opens or updates a pull request. It never commits directly to
+the default branch, and it runs no judgment of its own — it is a deterministic wrapper around
+the same scripts described above, which is what makes it safe to schedule unattended.
 
-Verification is reported, not fatal. Every check runs even after an earlier one fails, so a single broken record cannot hide the rest, and the branch is pushed either way. A refresh that fails verification opens its pull request as a **draft** titled `(verification failed)`, carrying the per-check results and a link to the run. Repair the branch and push; the next run promotes it out of draft once the catalog verifies. The job itself still fails, so the run stays red.
+```bash
+uv run python scripts/run_directory_refresh.py            # generate, verify, commit locally
+uv run python scripts/run_directory_refresh.py --publish   # also push and open/update the PR
+```
 
-This is deliberate: a crawl costs an hour of live GitHub and feed reads, and discarding it because two records disagree with an editorial invariant means waiting a week. The fail-closed gate belongs on merging into `main`, which branch protection already enforces — not on preserving the work.
+The runner refuses to start on a dirty working tree or on a `HEAD` that does not match a
+freshly fetched `origin/main` — a refresh must be generated from current main, never from a
+stale or locally modified checkout. It runs the six generation steps in order, stopping at the
+first failure, then runs every verification check even after one fails, so a single broken
+record cannot hide the rest, and prints a pass/fail summary. It stages the same explicit path
+list the retired workflow staged (`STAGED_DIRECTORY_FILES` in the script) — never an unqualified
+`git add -A directory`, which once swept the daily attention-source queue into this weekly
+branch — and, if that leaves nothing staged, says so and exits successfully. Otherwise it
+commits on `automation/directory-refresh` using the maintainer's own git identity, never
+`github-actions[bot]`.
 
-Any failed run opens or updates one issue labeled `automation-failure` and comments the run link on later failures. Close it once a refresh succeeds. A red scheduled run that nobody is told about is not a signal.
+Verification is reported, not fatal, exactly as before: a refresh that fails a check still
+commits, because discarding an hour of live GitHub and feed reads over one broken record means
+waiting a week for the next run. The fail-closed gate belongs on merging into `main`, which
+branch protection already enforces — not on preserving the work. What changes with `--publish`
+is where that gate is checked: the runner force-with-lease pushes `automation/directory-refresh`
+and opens or updates its pull request with `gh`, as a **draft** titled `(verification failed)`
+carrying the per-check results when any check failed. Because the pull request is opened with
+the maintainer's own `gh` credentials rather than a workflow token, `verify` actually runs on
+it. Without `--publish`, the runner stops after the local commit and prints the exact command
+to publish; review the commit yourself before deciding to push it. Either way the runner exits
+non-zero when a check failed, even after a successful publish, so a scheduler notices.
 
-The refresh checks out with `persist-credentials: false` and only configures git authentication in the publishing step, so third-party feeds and search results are never parsed beside a writable token.
+Schedule it with launchd, following the same pattern as the attention-source sweep. Write
+`~/Library/LaunchAgents/com.atlas.directory-refresh.plist`, substituting the checkout path,
+then load it with
+`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.directory-refresh.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.atlas.directory-refresh</string>
+  <key>WorkingDirectory</key><string>/path/to/ai-systems-atlas</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string><string>-lc</string>
+    <string>uv run python scripts/run_directory_refresh.py --publish</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>7</integer><key>Minute</key><integer>17</integer></dict>
+  <key>StandardOutPath</key><string>/tmp/atlas-directory-refresh.log</string>
+  <key>StandardErrorPath</key><string>/tmp/atlas-directory-refresh.log</string>
+</dict>
+</plist>
+```
+
+The agent runs only while the maintainer is logged in, and launchd fires a missed run once at
+next login rather than once per missed week — the same tradeoff the attention-source sweep
+already accepts. A red run still opens or updates its issue-worthy signal in the log rather than
+silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
+in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
+signals, candidates, model candidates, and the check summary before merging any refresh pull
+request.
 
 ### Tokens
 
-The job runs with `GITHUB_TOKEN` scoped to `contents: write` and `pull-requests: write`. In repository **Settings → Actions → General**, keep the default workflow permission read-only and enable **Allow GitHub Actions to create and approve pull requests** so the refresh job can create its PR.
+The runner obtains its token from the maintainer's own GitHub CLI login — `gh auth token` —
+and passes it as `GITHUB_TOKEN` only to the three scripts that read it: `update_directory.py`,
+`import_models_dev.py`, and `check_evidence_links.py`. It never prints the token. If
+`gh auth token` fails, the runner warns that GitHub rate limits may bite and runs anyway without
+one; a missing token slows discovery but does not stop it.
 
-A pull request opened with `GITHUB_TOKEN` does not trigger workflows, so `verify` — the required check — never runs on it and the pull request cannot reach a mergeable state. Add a repository secret named `ATLAS_AUTOMATION_TOKEN` holding a fine-grained personal access token or GitHub App installation token for this repository with **Contents: read and write** and **Pull requests: read and write**. The workflow prefers it and falls back to `GITHUB_TOKEN`, so the refresh still runs without the secret; it just produces a pull request whose required check has to be started by hand.
+No repository secret is needed anywhere. The old `ATLAS_AUTOMATION_TOKEN` secret existed only to
+work around a pull request opened by a GitHub Actions job with `GITHUB_TOKEN`, which never
+triggers the required `verify` check. Since `--publish` opens the pull request with the
+maintainer's own `gh` credentials instead, `verify` runs on it the same way it runs on a
+pull request from any other local branch, and the workaround secret has nothing left to fix.
 
 ## Attention-source sweep
 
@@ -546,7 +622,7 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 ## App payloads
 
-`uv run python scripts/build_web_payload.py` writes five boot payloads, five search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. `.github/workflows/update-directory.yml` synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
+`uv run python scripts/build_web_payload.py` writes five boot payloads, five search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. The weekly refresh (`scripts/run_directory_refresh.py`) synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
 
 ## Share pages
 
@@ -565,7 +641,7 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 `node scripts/build_logos.mjs --check` rebuilds `web/logos.json` in memory and fails when the committed file no longer matches the record map, the published records, or the installed icon-package versions. It also reports every monogram record and flags candidates whose id or name now matches an available icon slug. Three rails keep coverage current:
 
 - `verify.yml` runs the check on every pull request, so a record-map edit or icon-package bump cannot merge without a regenerated `web/logos.json`.
-- `update-directory.yml` writes the weekly coverage report to the run summary, surfacing records published without marks and newly available candidates.
+- The weekly refresh (`scripts/run_directory_refresh.py`) prints the same logo-coverage report as part of its verification summary, surfacing records published without marks and newly available candidates.
 - Dependabot's weekly npm pull requests bump the icon packages; the check fails on those PRs until the file is regenerated, which is when newly added icons become mappable.
 
 A candidate hint is a review prompt, never an auto-mapping: confirm the icon depicts the record's product or the maintainer/operator named in its published data, then map it — or record `null` in `RECORD_MARKS` to decline it durably with a reason.
