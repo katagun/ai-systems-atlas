@@ -29,6 +29,8 @@ Never scored. `specification_type` is one of `protocol`, `metadata_schema`, `ins
 
 `id, name, operator, service_type, url, description, service_boundary, delivery_modes, model_sources, api_styles, regional_controls, retention_controls, routing, customization, strengths, tradeoffs, score_profile, score, terms, evidence, verified_at`
 
+`trust` is optional and unscored: `{verified_at, properties: {response_integrity, upstream_disclosure, credential_handling, cache_isolation, vulnerability_disclosure, independent_audit}, findings: [...]}`. Each property is `{status, note, url, scope, verified_at}` with `status` from the `trust_property_statuses` taxonomy group. Each finding is `{claim, published_at, source, operator_response, resolved}` with a `third_party` pinned source. Absent means the service has not been examined; an empty `findings` list is not evidence of safety. See [docs/adr/029-trust-records-are-unscored-and-never-first-hand.md](../../docs/adr/029-trust-records-are-unscored-and-never-first-hand.md).
+
 `score_profile` is always `inference_service`; its eight dimensions are defined in [docs/INFERENCE_SERVICES.md](../../docs/INFERENCE_SERVICES.md). The profile never scores model quality, price, or throughput.
 
 ## `local-runtimes.json` record fields
@@ -49,6 +51,6 @@ Each source row contains `id, source_id, source_metadata`. `source_metadata` con
 
 ## `taxonomy.json` top-level groups
 
-`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, model_types, model_modalities, model_distribution_modes, inference_service_score_profile, local_runtime_score_profile, model_score_profile, specification_types, specification_scopes, specification_statuses, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
+`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, trust_property_statuses, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, model_types, model_modalities, model_distribution_modes, inference_service_score_profile, local_runtime_score_profile, model_score_profile, specification_types, specification_scopes, specification_statuses, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
 
 Each group is a list of enum entries (or a scoring-profile object for the three `*_score_profile` keys). Fetch `taxonomy.json` before filtering by any enum field to confirm current valid values — enums are added and renamed over time, and this reference is not re-verified on every taxonomy change.

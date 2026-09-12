@@ -90,6 +90,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/025-model-releases-are-independent-curated-records.md",
             "docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md",
             "docs/adr/028-attention-sources-are-pointers-not-claims.md",
+            "docs/adr/029-trust-records-are-unscored-and-never-first-hand.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
