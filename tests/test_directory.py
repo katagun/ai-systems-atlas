@@ -352,9 +352,18 @@ class DirectoryTests(unittest.TestCase):
 
         # AlphaEvolve reached general availability, so it is queued rather than excluded;
         # its results repository is excluded because it is not the system.
-        self.assertLessEqual({"AlphaEvolve", "OpenEvolve"}, candidate_names)
+        self.assertIn("AlphaEvolve", candidate_names)
+        # OpenEvolve was queued on the ShinkaEvolve precedent, whose outcome is publication.
+        # The batch's decision is that it is never excluded — so it must be either still
+        # queued or a published project, not one or the other forever.
+        project_repos = {project["repo"] for project in self.document["projects"]}
+        self.assertTrue(
+            "OpenEvolve" in candidate_names
+            or "algorithmicsuperintelligence/openevolve" in project_repos
+        )
+        self.assertNotIn("OpenEvolve", excluded_names)
+        self.assertNotIn("algorithmicsuperintelligence/openevolve", excluded_repos)
         self.assertNotIn("AlphaEvolve", excluded_names)
-        self.assertIn("algorithmicsuperintelligence/openevolve", {c["repo"] for c in candidates["candidates"]})
 
     def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(self) -> None:
         projects = {project["id"]: project for project in self.document["projects"]}

@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-05",
+  "verified_at": "2026-09-12",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -2948,7 +2948,365 @@
           "immutable_url": "https://api.github.com/repos/agiresearch/A-mem/git/blobs/12597231b2c37fef747a2e39df55cccba71c3ceb"
         }
       ]
+    },
+    {
+      "project_id": "memorix",
+      "repo": "AVIDS2/memorix",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/AVIDS2/memorix/blob/main/LICENSE",
+          "blob_sha": "272c1c517e72f8f09765a4772deb94eb671f9789",
+          "immutable_url": "https://api.github.com/repos/AVIDS2/memorix/git/blobs/272c1c517e72f8f09765a4772deb94eb671f9789"
+        }
+      ]
+    },
+    {
+      "project_id": "opencursor",
+      "repo": "PawanOsman/OpenCursor",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/PawanOsman/OpenCursor/blob/main/LICENSE",
+          "blob_sha": "91b44c52bad833cf5c1b18268c9bac5cac784dd0",
+          "immutable_url": "https://api.github.com/repos/PawanOsman/OpenCursor/git/blobs/91b44c52bad833cf5c1b18268c9bac5cac784dd0"
+        }
+      ]
+    },
+    {
+      "project_id": "plandex",
+      "repo": "plandex-ai/plandex",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/plandex-ai/plandex/blob/main/LICENSE",
+          "blob_sha": "4aa379f2105798e6d6a8a4f1020ba272f23995f4",
+          "immutable_url": "https://api.github.com/repos/plandex-ai/plandex/git/blobs/4aa379f2105798e6d6a8a4f1020ba272f23995f4"
+        }
+      ]
+    },
+    {
+      "project_id": "notabase",
+      "repo": "churichard/notabase",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/churichard/notabase/blob/main/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/churichard/notabase/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        }
+      ]
+    },
+    {
+      "project_id": "hyperresearch",
+      "repo": "jordan-gibbs/hyperresearch",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/jordan-gibbs/hyperresearch/blob/main/LICENSE",
+          "blob_sha": "5edb3e9e4946f2768e5be22a2731d0592f970d73",
+          "immutable_url": "https://api.github.com/repos/jordan-gibbs/hyperresearch/git/blobs/5edb3e9e4946f2768e5be22a2731d0592f970d73"
+        }
+      ]
+    },
+    {
+      "project_id": "mateclaw",
+      "repo": "mateaix/mateclaw",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mateaix/mateclaw/blob/dev/LICENSE",
+          "blob_sha": "1689f035449dd3992436602988a0d920fd04105d",
+          "immutable_url": "https://api.github.com/repos/mateaix/mateclaw/git/blobs/1689f035449dd3992436602988a0d920fd04105d"
+        }
+      ]
+    },
+    {
+      "project_id": "memoria",
+      "repo": "matrixorigin/memoria",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/matrixorigin/memoria/blob/main/LICENSE",
+          "blob_sha": "3487c010ca29b0dd7feeddbc38402f9eca51cb0d",
+          "immutable_url": "https://api.github.com/repos/matrixorigin/memoria/git/blobs/3487c010ca29b0dd7feeddbc38402f9eca51cb0d"
+        }
+      ]
+    },
+    {
+      "project_id": "memoir",
+      "repo": "zhangfengcdt/memoir",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/zhangfengcdt/memoir/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/zhangfengcdt/memoir/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "obsidian-second-brain",
+      "repo": "eugeniughelbur/obsidian-second-brain",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/eugeniughelbur/obsidian-second-brain/blob/main/LICENSE",
+          "blob_sha": "1d2a42d3a6545c93df1093827dc5042d7a2e6f1a",
+          "immutable_url": "https://api.github.com/repos/eugeniughelbur/obsidian-second-brain/git/blobs/1d2a42d3a6545c93df1093827dc5042d7a2e6f1a"
+        }
+      ]
+    },
+    {
+      "project_id": "claude-obsidian",
+      "repo": "AgriciDaniel/claude-obsidian",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/AgriciDaniel/claude-obsidian/blob/main/LICENSE",
+          "blob_sha": "9dd2bae4a0c88077f40ba756c49b92213af82415",
+          "immutable_url": "https://api.github.com/repos/AgriciDaniel/claude-obsidian/git/blobs/9dd2bae4a0c88077f40ba756c49b92213af82415"
+        }
+      ]
+    },
+    {
+      "project_id": "second-brain",
+      "repo": "henrydaum/second-brain",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/henrydaum/second-brain/blob/main/LICENSE",
+          "blob_sha": "cbe4ff1e8cf538bc6243f1ca7b6522746227c09a",
+          "immutable_url": "https://api.github.com/repos/henrydaum/second-brain/git/blobs/cbe4ff1e8cf538bc6243f1ca7b6522746227c09a"
+        }
+      ]
+    },
+    {
+      "project_id": "compartment",
+      "repo": "MaxFreedomPollard/Compartment",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/MaxFreedomPollard/Compartment/blob/main/LICENSE",
+          "blob_sha": "ee972b3b0890b0fb974dd9e877757071854742cb",
+          "immutable_url": "https://api.github.com/repos/MaxFreedomPollard/Compartment/git/blobs/ee972b3b0890b0fb974dd9e877757071854742cb"
+        }
+      ]
+    },
+    {
+      "project_id": "swarmclaw",
+      "repo": "swarmclawai/swarmclaw",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/swarmclawai/swarmclaw/blob/main/LICENSE",
+          "blob_sha": "6971f3e005aa0164d67870a8f605b8593a27383b",
+          "immutable_url": "https://api.github.com/repos/swarmclawai/swarmclaw/git/blobs/6971f3e005aa0164d67870a8f605b8593a27383b"
+        }
+      ]
+    },
+    {
+      "project_id": "smart-second-brain",
+      "repo": "s2b-dev/smart-second-brain",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/s2b-dev/smart-second-brain/blob/main/LICENSE",
+          "blob_sha": "a7e4073e79695b01dad7616f957c102bf00f70c0",
+          "immutable_url": "https://api.github.com/repos/s2b-dev/smart-second-brain/git/blobs/a7e4073e79695b01dad7616f957c102bf00f70c0"
+        }
+      ]
+    },
+    {
+      "project_id": "nanobrowser",
+      "repo": "nanobrowser/nanobrowser",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nanobrowser/nanobrowser/blob/master/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/nanobrowser/nanobrowser/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "swarmvault",
+      "repo": "swarmclawai/swarmvault",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/swarmclawai/swarmvault/blob/main/LICENSE",
+          "blob_sha": "e856c7bcdfbc2fcd42f26ac7d3ee76fc464b6647",
+          "immutable_url": "https://api.github.com/repos/swarmclawai/swarmvault/git/blobs/e856c7bcdfbc2fcd42f26ac7d3ee76fc464b6647"
+        }
+      ]
+    },
+    {
+      "project_id": "nerve",
+      "repo": "ClickHouse/nerve",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ClickHouse/nerve/blob/main/LICENSE",
+          "blob_sha": "987352b31c41e4a50971fe3cf99561864cc9ac0c",
+          "immutable_url": "https://api.github.com/repos/ClickHouse/nerve/git/blobs/987352b31c41e4a50971fe3cf99561864cc9ac0c"
+        }
+      ]
+    },
+    {
+      "project_id": "claudable",
+      "repo": "anymorph-ai/Claudable",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/anymorph-ai/Claudable/blob/main/LICENSE",
+          "blob_sha": "bb4a9fdfcdf7a883ebff4a2523cc70d5ebd9a6a7",
+          "immutable_url": "https://api.github.com/repos/anymorph-ai/Claudable/git/blobs/bb4a9fdfcdf7a883ebff4a2523cc70d5ebd9a6a7"
+        }
+      ]
+    },
+    {
+      "project_id": "antigravity-sdk",
+      "repo": "google-antigravity/antigravity-sdk-python",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Python SDK source in this repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google-antigravity/antigravity-sdk-python/blob/main/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/google-antigravity/antigravity-sdk-python/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        },
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "the compiled Antigravity runtime binary bundled only in the platform-specific PyPI wheels (google-antigravity), which is absent from the source repository and carries no separately stated license or terms on PyPI or in the repository",
+          "kind": "web_terms",
+          "url": "https://pypi.org/project/google-antigravity/",
+          "verified_at": "2026-09-12"
+        }
+      ]
+    },
+    {
+      "project_id": "vibecode-pro-max-kit",
+      "repo": "withkynam/vibecode-pro-max-kit",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/withkynam/vibecode-pro-max-kit/blob/main/LICENSE",
+          "blob_sha": "afbe07878b3d3aff2b3479808f6834221f2eecae",
+          "immutable_url": "https://api.github.com/repos/withkynam/vibecode-pro-max-kit/git/blobs/afbe07878b3d3aff2b3479808f6834221f2eecae"
+        }
+      ]
+    },
+    {
+      "project_id": "openevolve",
+      "repo": "algorithmicsuperintelligence/openevolve",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "entire repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/algorithmicsuperintelligence/openevolve/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/algorithmicsuperintelligence/openevolve/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "mindshub",
+      "repo": "mindsdb/mindshub",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "mindsdb/mindshub superproject glue (build scripts, top-level docs); also covers the pinned backend/core_agent (mindsdb/anton) submodule",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mindsdb/mindshub/blob/main/LICENSE",
+          "blob_sha": "3f97e1976677f98dac7d26234f2b3b5350362daa",
+          "immutable_url": "https://api.github.com/repos/mindsdb/mindshub/git/blobs/3f97e1976677f98dac7d26234f2b3b5350362daa"
+        },
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "frontend submodule (mindsdb/cowork) at the commit pinned by mindshub's main branch (4114336ee0cf1a8a04c20a96f4a92f30fe059c66)",
+          "kind": "web_terms",
+          "url": "https://github.com/mindsdb/cowork/blob/4114336ee0cf1a8a04c20a96f4a92f30fe059c66/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "backend/core_api submodule (mindsdb/cowork-server), the agent backend, at the commit pinned by mindshub's main branch (cb075bdf79242d865f5e8809cedfa1debb63e519): \"Copyright (c) 2026 MindsDB, Inc. All rights reserved. This software is proprietary and confidential.\"",
+          "kind": "web_terms",
+          "url": "https://github.com/mindsdb/cowork-server/blob/cb075bdf79242d865f5e8809cedfa1debb63e519/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "backend/data-vault submodule (mindsdb/data-vault, the MindsDB core engine) at the commit pinned by mindshub's main branch (37ccd07febc9c4a20bd5c1fcd4f677efac553dc9): Elastic License 2.0 for the core, MIT for the /mindsdb/integrations subdirectory only; recorded under LicenseRef-Commercial because the taxonomy has no dedicated Elastic-2.0 id",
+          "kind": "web_terms",
+          "url": "https://github.com/mindsdb/data-vault/blob/37ccd07febc9c4a20bd5c1fcd4f677efac553dc9/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-05"
+  "generated_at": "2026-09-12"
 }
