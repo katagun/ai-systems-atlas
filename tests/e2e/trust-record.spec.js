@@ -125,3 +125,17 @@ test("a comparison shows six unscored trust rows and marks unreviewed records as
   await expect(table).not.toContainText("undefined");
   expect(errors).toEqual([]);
 });
+
+test("a comparison record whose detail failed to load never reads as not examined", async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await serveTrust(page, "openrouter", TRUST);
+  await page.route("**/app/detail/inference/openai-api.json*", route => route.abort());
+  await page.goto("/?collection=inference&compare=inference:openrouter,openai-api");
+  const table = page.locator("#comparison-dialog-content .comparison-table");
+  const row = table.locator("tr").filter({ hasText: "Cache isolation · trust record, unscored" });
+  await expect(row).toHaveCount(1);
+  await expect(row.locator("td").nth(0)).toHaveText("Undocumented");
+  await expect(row.locator("td").nth(1)).toHaveText("—");
+  await expect(row.locator("td").nth(1)).not.toHaveText("not examined");
+  expect(errors).toEqual([]);
+});

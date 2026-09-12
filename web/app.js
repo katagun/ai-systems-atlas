@@ -1310,9 +1310,9 @@ function trustFindingMarkup(finding) {
 function trustBlockMarkup(service) {
   const heading = "<h3>Trust record · unscored</h3>";
   // The dialog paints from boot data and repaints when the detail file lands;
-  // retention_controls is detail-only, so its absence means "not loaded yet",
-  // which must not read as "not examined".
-  if (!("retention_controls" in service)) {
+  // until the detail file has loaded, whether trust is present or absent is
+  // unknown, which must not read as "not examined".
+  if (!inferenceDetailLoaded(service)) {
     return `<section class="detail-block" data-trust="pending">${heading}<p>—</p></section>`;
   }
   const trust = service.trust;
@@ -1326,8 +1326,8 @@ function trustBlockMarkup(service) {
   const findings = trust.findings.length
     ? `<ul>${trust.findings.map(trustFindingMarkup).join("")}</ul>`
     : `<p>Reviewed on ${escapeHTML(trust.verified_at)}; no admissible third-party finding recorded. Absence of a finding is not evidence of safety.</p>`;
-  const state = trust.findings.length ? "findings" : "reviewed";
-  return `<section class="detail-block" data-trust="${state}">${heading}<table class="trust-table">${rows}</table><h4>Third-party findings</h4>${findings}<p class="unscored-note">Each status says whether the operator publishes a statement, never what the service does. Nothing here enters the score. Reviewed ${escapeHTML(trust.verified_at)}.</p></section>`;
+  const trustState = trust.findings.length ? "findings" : "reviewed";
+  return `<section class="detail-block" data-trust="${trustState}">${heading}<table class="trust-table">${rows}</table><h4>Third-party findings</h4>${findings}<p class="unscored-note">Each status says whether the operator publishes a statement, never what the service does. Nothing here enters the score. Reviewed ${escapeHTML(trust.verified_at)}.</p></section>`;
 }
 
 function inferenceDialogMarkup(service) {
@@ -1391,6 +1391,12 @@ function ensureLicenseEvidence() {
 // sees the full record afterwards without being handed a new object. A failed
 // fetch clears the request so the next reader retries.
 const loadedDetail = new Set();
+// The trust dialog block and the trust comparison cell both need to tell
+// "detail hasn't loaded yet" apart from "reviewed, and trust is absent" —
+// this is the one predicate for that, keyed the same way loadDetail keys
+// loadedDetail. Safe to reference from functions defined earlier in this
+// file: none of them run until the whole script has finished loading.
+const inferenceDetailLoaded = service => loadedDetail.has(`inference:${service.id}`);
 const detailRequests = new Map();
 let modelSourceDetails = null;
 let modelSourceDetailsRequest = null;
@@ -1681,6 +1687,10 @@ const scoreCell = value => value == null ? null : `${value} / 10`;
 const listCell = values => (values || []).join(" • ") || null;
 
 function trustComparisonCell(service, name) {
+  // Detail not loaded yet (or never arrived) is unknown, not "not examined" —
+  // comparisonCell renders null as "—" so a failed fetch reads as missing data
+  // rather than a false claim that the service was reviewed and found clean.
+  if (!inferenceDetailLoaded(service)) return null;
   const item = service.trust?.properties?.[name];
   if (!item) return "not examined";
   return { text: trustStatusName(item.status), title: `${item.note} (${item.verified_at})` };
