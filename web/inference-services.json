@@ -199,7 +199,7 @@
         "kind": "web_terms",
         "label": "AWS Service Terms",
         "url": "https://aws.amazon.com/service-terms/",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -799,7 +799,7 @@
         "kind": "web_terms",
         "label": "Cohere Terms of Use",
         "url": "https://cohere.com/terms-of-use",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -1383,7 +1383,7 @@
         "kind": "web_terms",
         "label": "ModelArk Terms and Conditions",
         "url": "https://docs.byteplus.com/api/docs/ModelArk/Terms_and_Conditions",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -1806,7 +1806,7 @@
         "kind": "web_terms",
         "label": "LLM Service TokenHub Terms of Service",
         "url": "https://www.tencentcloud.com/document/product/301/78869",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -2127,7 +2127,7 @@
         "kind": "web_terms",
         "label": "Together AI Terms of Service",
         "url": "https://www.together.ai/terms-of-service",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -2376,7 +2376,7 @@
         "kind": "web_terms",
         "label": "DeepInfra Terms of Use",
         "url": "https://deepinfra.com/terms",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -2695,7 +2695,7 @@
         "kind": "web_terms",
         "label": "Ollama Terms of Service",
         "url": "https://ollama.com/terms",
-        "verified_at": "2026-08-29"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -2768,7 +2768,7 @@
         "kind": "web_terms",
         "label": "Nebius Token Factory legal quick guide",
         "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
-        "verified_at": "2026-08-29"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -2849,7 +2849,7 @@
         "kind": "web_terms",
         "label": "Baseten Terms and Conditions",
         "url": "https://www.baseten.co/terms-and-conditions/",
-        "verified_at": "2026-08-29"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -3356,7 +3356,7 @@
         "kind": "web_terms",
         "label": "NanoGPT Terms of Service",
         "url": "https://nano-gpt.com/legal/terms-of-service",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -3471,7 +3471,7 @@
         "kind": "web_terms",
         "label": "Vercel Terms of Service",
         "url": "https://vercel.com/legal/terms",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -3815,7 +3815,7 @@
         "kind": "web_terms",
         "label": "Chutes Terms of Service",
         "url": "https://chutes.ai/terms",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -4017,7 +4017,7 @@
         "kind": "web_terms",
         "label": "火山方舟大模型服务平台专用条款",
         "url": "https://docs.volcengine.com/docs/82379/1104498",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -4247,7 +4247,7 @@
         "kind": "web_terms",
         "label": "SiliconFlow Terms of Use",
         "url": "https://docs.siliconflow.com/en/legals/terms-of-service",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {
@@ -4316,7 +4316,7 @@
         "kind": "web_terms",
         "label": "七牛云服务用户协议",
         "url": "https://www.qiniu.com/agreements/user-agreement",
-        "verified_at": "2026-08-31"
+        "verified_at": "2026-09-12"
       },
       "evidence": [
         {

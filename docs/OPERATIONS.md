@@ -75,7 +75,7 @@ count as reachable but raise a visible `bot-walled reviewed link` warning, while
 that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
-shells, scripts, styles, navigation, and whitespace are removed before hashing; GitHub and
+shells, scripts, styles, navigation, per-request telemetry nonces rendered as text, and whitespace are removed before hashing; GitHub and
 Hugging Face blob pages are fetched through their stable raw-content routes. The first
 successful observation establishes an automation-owned baseline. A later content change
 fails the weekly verification and therefore opens or updates the durable
