@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-11",
+  "verified_at": "2026-09-12",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -10,6 +10,252 @@
     "license": "MIT"
   },
   "models": [
+    {
+      "id": "model-alibaba-qwen3-8-27b",
+      "source_id": "alibaba/qwen3.8-27b",
+      "name": "Qwen3.8 27B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "description": "Alibaba's 27-billion-parameter dense vision-language model for coding, office productivity, and long-horizon agentic work, published as Apache-2.0 open weights and served as the hosted qwen3.8-27b API model.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.8 27B",
+        "description": "Dense 27B vision-language model for coding, agent tasks, and image and video understanding",
+        "family": "qwen",
+        "release_date": "2026-08-14",
+        "last_updated": "2026-08-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The downloadable weights carry the verbatim Apache License 2.0, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license — unlike the custom license on the 2.4T Max sibling. Hosted qwen3.8-27b API use is governed separately by QwenCloud and Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.8-27B repository; does not cover the hosted qwen3.8-27b API service",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-27B/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.8-27B open-weights checkpoint plus official FP8 sibling together with the hosted qwen3.8-27b API release of August 2026. The 2.4T Max flagship and its custom license, the qwen3.8-max-0902 snapshot, the max-preview and flash API lines, the experimental Flash-Next preview, earlier Qwen generations, QwenCloud product packaging, ModelScope mirrors, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Permissively licensed dense 27B checkpoint with verbatim Apache-2.0 license file, documented SGLang, vLLM, and TokenSpeed recipes, and an official FP8 variant",
+        "First-party QwenCloud and Alibaba Cloud Model Studio serving under the exact qwen3.8-27b model ID plus documented Novita third-party serverless hosting"
+      ],
+      "tradeoffs": [
+        "The downloaded checkpoint is narrower than its API namesake, with smaller native context extended by YaRN versus the API default",
+        "Dense 27B still needs a high-memory single GPU or quantization for laptop-class self-operation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Qwen3.8-27B weights repository and model card",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Apache-2.0 license blob",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-27B/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "QwenCloud qwen3.8-27b model page",
+          "url": "https://www.qwencloud.com/models/qwen3.8-27b",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Alibaba Cloud Model Studio qwen3.8-27b documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-27b",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Novita serverless docs for qwen/qwen3.8-27b",
+          "url": "https://novita.ai/models/model-detail/qwen-qwen3.8-27b",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/alibaba/qwen3.8-27b.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-alibaba-qwen3-8-flash-next",
+      "source_id": "alibaba/qwen3.8-flash-next",
+      "name": "Qwen3.8 Flash Next",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "description": "Alibaba's dated experimental preview of the Qwen4 architecture: a hybrid-attention MoE with 6B active parameters per token plus offloadable n-gram embeddings, published as open weights for coding and agentic work while the production qwen3.8-flash API line stays a separate model.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.8 Flash Next",
+        "description": "Open-weight experimental preview of the Qwen4 architecture: hybrid-attention MoE (125B total, 6B active) with vision encoder for coding, agent tasks, and image and video understanding",
+        "family": "qwen",
+        "release_date": "2026-08-27",
+        "last_updated": "2026-08-27",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "qwen-community-1.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Qwen-Community-1.0"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The downloadable weights carry the Qwen Community License 1.0, which grants use, modification, distribution, hosting, and fine-tuning with attribution above 100 million monthly active users or 20 million US dollars in monthly revenue, but requires any model-as-a-service or AI-work-assistant business to obtain a separate license before any commercial use, with no revenue threshold. That stricter commercial gate distinguishes it from the Max sibling license, so the release is source-available rather than open source. The production qwen3.8-flash API service is governed separately.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Qwen-Community-1.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.8-Flash-Next repository; does not cover the hosted qwen3.8-flash API service",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the fixed, dated Qwen3.8-Flash-Next preview checkpoint released August 26, 2026 as an early look at the Qwen4 architecture — a named reviewable artifact, not a floating tag. The production qwen3.8-flash API model, the Max flagship and its snapshots, the Apache-2.0 Qwen3.8-27B sibling, earlier Qwen generations, Qwen4 proper when it lands, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "First open-weight release of the Qwen4-track architecture with full model card, tech report, and SGLang, vLLM, and TokenSpeed recipes",
+        "Roughly one-ninth the training cost of the prior generation flagship at competitive coding and agent capability with 6B active parameters per token"
+      ],
+      "tradeoffs": [
+        "The Community 1.0 weights license forces any model-as-a-service or AI-assistant business into a separate license with no revenue floor",
+        "No inference provider or first-party API serves this exact checkpoint, so self-operation is the only path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 8,
+        "deployment_portability": 4,
+        "serving_reach": 3,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 8,
+        "overall": 5.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Qwen3.8-Flash-Next weights repository and model card",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen Community License 1.0 blob",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "QwenLM release repository with August 2026 changelog entry",
+          "url": "https://github.com/QwenLM/Qwen3.8-Flash-Next/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Release report: production version served as qwen3.8-flash on QwenCloud",
+          "url": "https://www.alibabacloud.com/blog/qwen-3-8-flash-next-a-new-architecture-towards-ultimate-cost-efficiency_603501",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/alibaba/qwen3.8-flash-next.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
     {
       "id": "model-alibaba-qwen3-8-max",
       "source_id": "alibaba/qwen3.8-max",
@@ -1121,6 +1367,118 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-deepseek-deepseek-v4-flash-0731",
+      "source_id": "deepseek/deepseek-v4-flash-0731",
+      "name": "DeepSeek V4 Flash 0731",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "description": "DeepSeek's official 304-billion-parameter Flash release with 1M-token context and built-in speculative decoding for coding and long agent runs, published under the MIT License with weights on Hugging Face and exact-model third-party hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "DeepSeek V4 Flash 0731",
+        "description": "Official DeepSeek V4 Flash release with enhanced agentic capabilities and integrated DSpark speculative decoding",
+        "family": "deepseek-flash",
+        "release_date": "2026-07-31",
+        "last_updated": "2026-07-31",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 384000
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the verbatim MIT License, and the model card states that the repository and the model weights are licensed under it, with no additional model-license gates. NVIDIA's host documentation independently records the weights terms as MIT. First-party API consumption was governed separately by DeepSeek Open Platform terms while served and does not alter the weights license.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository and model weights in deepseek-ai/DeepSeek-V4-Flash-0731; API consumption governed separately by DeepSeek Open Platform terms while served",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the DeepSeek-V4-Flash-0731 official release checkpoint (304B total, 1M context, speculative-decoding module attached) released July 31, 2026. The V4 Flash preview sibling, the V4 Pro siblings and dated snapshots, the experimental multimodal Vision sibling, the V4.1 Flash successor line that the deepseek-v4-flash API name routes to, and community quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "MIT-licensed 304B weights with encoding folder, inference scripts, and documented vLLM and SGLang speculative-decoding recipes",
+        "Exact-model NVIDIA NIM hosting with first-party reference and catalog documentation"
+      ],
+      "tradeoffs": [
+        "First-party DeepSeek API serving has ended: the deepseek-v4-flash name is retired and routed to V4.1 Flash, so managed access no longer serves these weights",
+        "No Jinja chat template in-repo; message encoding requires the dedicated encoding-folder scripts"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 10,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 8.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and weight repository",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "DeepSeek API change log: July 2026 official release and September 2026 retirement routing",
+          "url": "https://api-docs.deepseek.com/updates",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM reference for deepseek-ai/deepseek-v4-flash-0731",
+          "url": "https://docs.api.nvidia.com/nim/reference/deepseek-ai-deepseek-v4-flash-0731",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/deepseek/deepseek-v4-flash-0731.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
       "id": "model-deepseek-deepseek-v4-pro",
       "source_id": "deepseek/deepseek-v4-pro",
       "name": "DeepSeek V4 Pro",
@@ -1888,6 +2246,250 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-google-gemini-3-1-pro-preview",
+      "source_id": "google/gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-1-pro-preview",
+      "description": "A preview multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; active since February 2026 as the replacement for the shut-down Gemini 3 Pro Preview, with general availability still pending.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.1 Pro Preview",
+        "description": "Reasoning-first Gemini preview for agentic coding and complex problem solving",
+        "family": "gemini-pro",
+        "release_date": "2026-02-19",
+        "last_updated": "2026-02-19",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides Gemini 3.1 Pro Preview as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service. The terms permit customer applications but prohibit developing competing models and reverse engineering, extracting, or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "scope": "Access to Gemini 3.1 Pro Preview through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service; no weight license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the preview release identified by the model code gemini-3.1-pro-preview (latest update February 2026; inputs text, image, video, audio, PDF; output text), together with its customtools endpoint variant for custom-tool-heavy agentic workflows. No shutdown date is announced and no stable successor ID exists. The retired gemini-3-pro-preview predecessor, the stable Flash line, image and audio-only releases, the Gemini consumer app, and the Vertex AI and AI Studio platforms themselves are separate model, service, or application boundaries.",
+      "strengths": [
+        "Google documents a distinct preview model code plus a customtools endpoint variant, full modality matrix, token limits, and release date",
+        "The deprecations table and changelog record the predecessor shutdown and the alias switch in writing"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Seven months in preview with only a two-week deprecation guarantee and no committed shutdown or general-availability date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.1 Pro Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-1-pro-preview",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations table",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Enterprise Agent Platform Gemini 3.1 Pro page",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-pro",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official launch announcement (February 19, 2026)",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API Additional Terms of Service",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/google/gemini-3.1-pro-preview.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-google-gemini-3-8-flash",
+      "source_id": "google/gemini-3.8-flash",
+      "name": "Gemini 3.8 Flash",
+      "developer": "Google",
+      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash",
+      "description": "A generally available multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; released September 2, 2026 as the current stable Flash model with no announced shutdown.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.8 Flash",
+        "description": "Google's most intelligent Flash model, engineered for long-horizon software engineering, autonomous agents, and complex enterprise workflows",
+        "family": "gemini-flash",
+        "release_date": "2026-09-02",
+        "last_updated": "2026-09-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides Gemini 3.8 Flash as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service. The terms permit customer applications but prohibit developing competing models and reverse engineering, extracting, or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "scope": "Access to Gemini 3.8 Flash through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service; no weight license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the stable release identified by the model code gemini-3.8-flash (generally available September 2, 2026; inputs text, image, video, audio, PDF; output text). No shutdown date is announced. The Cyber-only variant, the 3.7, 3.6, and 3.5 Flash siblings, the flash preview, the pro-preview line, image and audio-only releases, the Gemini consumer app, and the Vertex AI and AI Studio platforms themselves are separate model, service, or application boundaries.",
+      "strengths": [
+        "Google documents a generally available model code with full modality matrix, thinking levels, token limits, release date, and knowledge cutoff",
+        "Identity is corroborated across the API latest-model guide, the release changelog, the deprecations table, the models index, and a DeepMind model card"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release deprecates sampling parameters and thinking-budget configs, so existing integrations must migrate"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official guide: Gemini 3.8 Flash is generally available and ready for production",
+          "url": "https://ai.google.dev/gemini-api/docs/latest-model",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Enterprise Agent Platform Gemini 3.8 Flash page",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations table",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement (September 2, 2026)",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API Additional Terms of Service",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/google/gemini-3.8-flash.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
     },
     {
       "id": "model-google-gemma-4-31b-it",
@@ -4066,6 +4668,241 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-openai-gpt-5-5-instant",
+      "source_id": "openai/gpt-5.5-instant",
+      "name": "GPT-5.5 Instant",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/chat-latest",
+      "description": "The low-latency GPT-5.5 tier that became ChatGPT's default model, served through OpenAI's managed developer API only as the rotating chat-latest alias and as dated preview deployments on Azure Foundry, without downloadable model weights or a pinnable first-party snapshot.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.5 Instant",
+        "description": "Compact GPT model for low-latency assistance and high-volume workloads",
+        "family": null,
+        "release_date": "2026-05-05",
+        "last_updated": "2026-05-28",
+        "knowledge_cutoff": "2025-12-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": 400000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.5 Instant as an API service governed by the OpenAI Services Agreement and incorporated service-specific policies. Those terms govern managed access and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.5 Instant model served via the chat-latest alias through OpenAI API Services and incorporated service-specific terms",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.5 Instant release of May 5, 2026, exposed on the first-party API only as the moving chat-latest alias with no documented fixed snapshot: the alias page lists chat-latest as both model ID and sole snapshot and states the underlying snapshot is regularly updated. Azure Foundry hosts the same line as dated gpt-chat-latest preview deployments naming GPT-5.5 Instant as the OpenAI-side equivalent. The base GPT-5.5 release, GPT-5.5 Pro, the invite-only Cyber preview, ChatGPT application behaviors, Codex, the GPT-5.3 Instant predecessor, fine-tuned derivatives, and later Instant generations are separate service, application, or model boundaries.",
+      "strengths": [
+        "The launch announcement pins the release date and the API identity, and Azure documents dated gpt-chat-latest preview deployments mapped to GPT-5.5 Instant",
+        "First-party alias page plus system card establish Chat Completions and Responses support with image input"
+      ],
+      "tradeoffs": [
+        "No developer-published weights and no pinnable first-party snapshot exist, so production behavior can drift as the alias rotates",
+        "The only third-party hosting path is an Azure preview-lifecycle product, and the live alias page recommends GPT-6 Astra for production API use"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 4.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official chat-latest alias page: the API identity of GPT-5.5 Instant",
+          "url": "https://developers.openai.com/api/docs/models/chat-latest",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.5 Instant launch announcement (May 5, 2026)",
+          "url": "https://openai.com/index/gpt-5-5-instant/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry models listing: dated gpt-chat-latest preview deployments",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/openai/gpt-5.5-instant.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-openai-gpt-5-5-pro",
+      "source_id": "openai/gpt-5.5-pro",
+      "name": "GPT-5.5 Pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.5-pro",
+      "description": "The highest-accuracy GPT-5.5 tier, served as a dated snapshot and alias through OpenAI's managed developer API with extra test-time compute for precision-heavy reasoning and coding, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.5 Pro",
+        "description": "Highest-accuracy GPT-5.5 tier for slower, precision-heavy reasoning and coding",
+        "family": "gpt-pro",
+        "release_date": "2026-04-23",
+        "last_updated": "2026-04-23",
+        "knowledge_cutoff": "2025-12-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.5 Pro as an API service governed by the OpenAI Services Agreement and incorporated service-specific policies. Those terms govern managed access and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.5 Pro model through OpenAI API Services and incorporated service-specific terms",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.5 Pro release whose API page identifies gpt-5.5-pro-2026-04-23 as the fixed default snapshot behind the gpt-5.5-pro alias, served via the Responses API. The base GPT-5.5 release, the GPT-5.5 Instant tier, the invite-only Cyber preview, ChatGPT and Codex applications, Azure Foundry (which lists no gpt-5.5-pro row), fine-tuned derivatives, and later GPT releases are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot (gpt-5.5-pro-2026-04-23) that applications can pin, plus exact modalities, knowledge cutoff, endpoints, and rate limits",
+        "The launch announcement and system card place Pro in the API and ChatGPT Pro, Business, and Enterprise tiers with stated pricing and safeguards"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Serving is narrower than the base model: Responses API only, with no Chat Completions, no cached-input discount, and no Azure Foundry listing"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.5 Pro model, snapshot, modality, cutoff, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.5-pro",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.5 launch announcement",
+          "url": "https://openai.com/index/introducing-gpt-5-5/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-5.5-pro retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/openai/gpt-5.5-pro.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
       "id": "model-openai-gpt-6-astra",
       "source_id": "openai/gpt-6-astra",
       "name": "GPT-6 Astra",
@@ -4829,6 +5666,230 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-zhipuai-glm-5-3",
+      "source_id": "zhipuai/glm-5.3",
+      "name": "GLM-5.3",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-5.3",
+      "description": "A developer-published agentic-coding language-model release with downloadable FP8 weights under the custom GLM-5.3 License carrying a large-operator model-as-a-service security-review condition, served through the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-5.3",
+        "description": "Flagship GLM model for long-horizon coding, agents, and complex project delivery",
+        "family": "glm",
+        "release_date": "2026-08-14",
+        "last_updated": "2026-08-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-GLM-5.3"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The zai-org/GLM-5.3 repository ships a real license file granting use, copying, modification, distribution, deployment, and fine-tuning, but requires any licensee operating a model-as-a-service business above 10 billion US dollars in aggregate affiliate revenue over any consecutive twelve months to pass a Z.AI security review before any commercial use. That gate breaks from the MIT posture of GLM-5, so the release is source-available rather than open source. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-GLM-5.3",
+          "scope": "zai-org/GLM-5.3 model weights, parameters, configuration files, inference and training code, and associated documentation; does not cover the hosted glm-5.3 API service",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-5.3/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-5.3 FP8 instruction release. The BF16 sibling repository, GLM-5, GLM-5.1, GLM-5.2, GLM-5.3-Flash and its BF16 sibling, Turbo records, the GLM-4.x family, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Developer-published 141-shard FP8 checkpoint plus BF16 sibling, tokenizer, and chat template, with documented SGLang, vLLM, TokenSpeed, Transformers, and KTransformers serving paths",
+        "First-party Z.ai API documentation names glm-5.3 as a served model with 1M context"
+      ],
+      "tradeoffs": [
+        "The custom GLM-5.3 License gates commercial use by large model-as-a-service operators behind a Z.AI security review, unlike the MIT posture of GLM-5",
+        "Neither the model card nor the API documentation states a versioning policy or deprecation posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.0
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-5.3 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-5.3",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "GLM-5.3 License file with model-as-a-service security-review clause",
+          "url": "https://huggingface.co/zai-org/GLM-5.3/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai API documentation for the glm-5.3 model",
+          "url": "https://docs.z.ai/guides/llm/glm-5.3",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/zhipuai/glm-5.3.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-zhipuai-glm-5-3-flash",
+      "source_id": "zhipuai/glm-5.3-flash",
+      "name": "GLM-5.3-Flash",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "description": "A developer-published natively multimodal MoE release with downloadable MIT-licensed weights for efficient coding and long-horizon agents, served through the Z.ai API and documented third-party hosting.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GLM-5.3-Flash",
+        "description": "Native multimodal GLM model for efficient coding and long-horizon agent tasks",
+        "family": "glm",
+        "release_date": "2026-08-26",
+        "last_updated": "2026-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The zai-org/GLM-5.3-Flash repository ships a real MIT license file and declares MIT in card frontmatter — stronger evidence than the reviewed GLM-5 frontmatter-only MIT posture, with identical MIT conclusion. The companion code repository is separately Apache-2.0 and governs code, not weights. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "zai-org/GLM-5.3-Flash model weights and associated documentation files under the repository MIT license; does not cover the hosted glm-5.3-flash API service",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-5.3-Flash/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-5.3-Flash FP8 instruction release (62 Safetensors shards; weights released day-one with the API release). The BF16 sibling, GLM-5.3, GLM-5, GLM-5.1, GLM-5.2, Turbo records, the anonymous pre-release alias, the Z.ai API and coding-plan products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Developer-published 62-shard FP8 checkpoint plus MIT BF16 sibling, processor files, and chat template, with documented SGLang, vLLM, TokenSpeed, Transformers, and KTransformers paths",
+        "First-party Z.ai API documentation for glm-5.3-flash plus fetch-verified Novita serverless hosting"
+      ],
+      "tradeoffs": [
+        "No versioning policy or deprecation posture is stated in the card or API documentation",
+        "The card's fine-tuning guidance points at a shared guide rather than Flash-specific documentation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and deployment guidance",
+          "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "MIT license file for the GLM-5.3-Flash repository",
+          "url": "https://huggingface.co/zai-org/GLM-5.3-Flash/blob/main/LICENSE",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai API documentation for the glm-5.3-flash model",
+          "url": "https://docs.z.ai/guides/llm/glm-5.3-flash",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Novita AI model page documenting third-party serverless hosting",
+          "url": "https://novita.ai/models/model-detail/zai-org-glm-5.3-flash",
+          "verified_at": "2026-09-12"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/f57a900926160a597e96b62dab5de44732e95e35/models/zhipuai/glm-5.3-flash.toml",
+          "verified_at": "2026-09-12"
+        }
+      ],
+      "metadata_verified_at": "2026-09-12",
+      "verified_at": "2026-09-12"
     }
   ]
 }

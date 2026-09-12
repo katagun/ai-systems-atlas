@@ -43,7 +43,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 ### Coverage batches
 
-- [ ] Review the third models.dev batch: Gemini 3.1/3.5/3.6 stables, GPT-5.5 Pro and Instant variants, GLM-5.x point releases, and the remaining Qwen3.8 and DeepSeek dated snapshots. Alias-shaped entries are already excluded under the discriminator in [`docs/MODELS.md`](docs/MODELS.md); do not review them.
+- [ ] Decide what happens when a reviewed model line moves before the next batch. The Qwen3.8-max-0902 snapshot and the V4-Pro-0813 official release both postdate their reviewed records; whether the new snapshot gets its own record, displaces the old one, or waits is undecided, and answering it per line in passing would duplicate records by accident.
 - [ ] Work the sixty currently actionable system candidates in small evidence-backed batches; keep the thirteen robotics candidates held until their scope decision resolves.
 - [ ] Review xerj as retrieval infrastructure, with maturity treated separately from eligibility and vendor-measured efficiency treated as marketing rather than evidence. Recheck `memory_service` before fixing its role.
 - [ ] Re-check LangGraph's source model and deployment traits against the restricted agent server that made Open SWE mixed-source.

@@ -1,7 +1,19 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-11",
+  "updated_at": "2026-09-12",
   "dispositions": [
+    {
+      "source_id": "alibaba/qwen3.8-2.4t-a95b",
+      "disposition": "excluded",
+      "reason": "The open-weights checkpoint already covered by the reviewed qwen3.8-max record; a separate record would duplicate the artifact.",
+      "decided_at": "2026-09-12"
+    },
+    {
+      "source_id": "alibaba/qwen3.8-max-preview",
+      "disposition": "excluded",
+      "reason": "Retired API preview; the Max line is reviewed at the August 2026 release.",
+      "decided_at": "2026-09-12"
+    },
     {
       "source_id": "anthropic/claude-haiku-4-5-20251001",
       "disposition": "excluded",
@@ -61,6 +73,24 @@
       "disposition": "excluded",
       "reason": "API route alias discontinued 2026-07-24, not a provider-independent release.",
       "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "deepseek/deepseek-v3-0324",
+      "disposition": "excluded",
+      "reason": "Retired checkpoint; the V3 line is reviewed at V3.2.",
+      "decided_at": "2026-09-12"
+    },
+    {
+      "source_id": "deepseek/deepseek-v3.1",
+      "disposition": "excluded",
+      "reason": "Superseded August 2025 snapshot; the V3 line is reviewed at V3.2 and the API now routes past it.",
+      "decided_at": "2026-09-12"
+    },
+    {
+      "source_id": "google/gemini-3.1-pro-preview-customtools",
+      "disposition": "excluded",
+      "reason": "Endpoint variant of the reviewed gemini-3.1-pro-preview release, not a separate release.",
+      "decided_at": "2026-09-12"
     },
     {
       "source_id": "google/gemini-flash-latest",
