@@ -1,7 +1,7 @@
 # Design: unscored trust records on inference services
 
 **Date:** 2026-09-11
-**Status:** Approved design, pending implementation plan
+**Status:** Approved; implemented on branch claude/llm-router-security-1c0ef4
 
 ## Problem
 
