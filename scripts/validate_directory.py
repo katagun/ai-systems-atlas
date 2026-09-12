@@ -74,6 +74,7 @@ TAXONOMY_GROUPS = (
     "inference_delivery_modes",
     "inference_model_sources",
     "inference_api_styles",
+    "trust_property_statuses",
     "local_runtime_types",
     "runtime_accelerators",
     "runtime_model_formats",
@@ -139,6 +140,15 @@ INFERENCE_SERVICE_REQUIRED = {
     "retention_controls", "routing", "customization", "strengths", "tradeoffs",
     "score_profile", "score", "terms", "evidence", "verified_at",
 }
+INFERENCE_SERVICE_OPTIONAL = {"trust"}
+TRUST_REQUIRED = {"verified_at", "properties", "findings"}
+TRUST_PROPERTIES = (
+    "response_integrity", "upstream_disclosure", "credential_handling",
+    "cache_isolation", "vulnerability_disclosure", "independent_audit",
+)
+TRUST_PROPERTY_REQUIRED = {"status", "note", "url", "scope", "verified_at"}
+TRUST_FINDING_REQUIRED = {"claim", "published_at", "source", "operator_response", "resolved"}
+TRUST_RESPONSE_REQUIRED = {"url", "verified_at", "summary"}
 
 CANDIDATE_REQUIRED = {
     "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
@@ -861,6 +871,116 @@ def validate_web_evidence(record: dict[str, Any], prefix: str, errors: list[str]
             errors.append(f"{prefix}: evidence requires verified_at")
 
 
+def validate_trust_record(
+    trust: Any, prefix: str, statuses: set[str], collection_verified_at: object, errors: list[str]
+) -> None:
+    """Validate an unscored, human-owned trust record: documentation statuses plus pinned third-party findings.
+
+    The block never enters a score. Its statuses say whether the operator publishes a
+    statement, never what the service does; the note carries every exception in prose.
+    See docs/adr/029-trust-records-are-unscored-and-never-first-hand.md.
+    """
+    if not isinstance(trust, dict):
+        errors.append(f"{prefix}: trust must be an object")
+        return
+    if set(trust) != TRUST_REQUIRED:
+        missing = sorted(TRUST_REQUIRED - set(trust))
+        extra = sorted(set(trust) - TRUST_REQUIRED)
+        errors.append(f"{prefix}: trust fields differ from schema: missing={missing}, extra={extra}")
+        return
+    reviewed_at: str | None = trust["verified_at"]
+    if not valid_date(reviewed_at):
+        errors.append(f"{prefix}: trust verified_at must be an ISO date")
+        reviewed_at = None
+    elif valid_date(collection_verified_at) and reviewed_at > collection_verified_at:
+        errors.append(f"{prefix}: trust verified_at must not be after the collection verified_at")
+    properties = trust["properties"]
+    if not isinstance(properties, dict) or set(properties) != set(TRUST_PROPERTIES):
+        errors.append(f"{prefix}: trust properties must be exactly {sorted(TRUST_PROPERTIES)}")
+    else:
+        for name in TRUST_PROPERTIES:
+            validate_trust_property(properties[name], f"{prefix}: trust {name}", statuses, reviewed_at, errors)
+    findings = trust["findings"]
+    if not isinstance(findings, list):
+        errors.append(f"{prefix}: trust findings must be a list")
+        return
+    for index, finding in enumerate(findings):
+        validate_trust_finding(finding, f"{prefix}: trust finding {index}", reviewed_at, errors)
+
+
+def validate_trust_property(
+    item: Any, prefix: str, statuses: set[str], reviewed_at: str | None, errors: list[str]
+) -> None:
+    """One property: a taxonomy status, a prose note, and a scoped, public, first-party URL."""
+    if not isinstance(item, dict) or set(item) != TRUST_PROPERTY_REQUIRED:
+        errors.append(f"{prefix}: must have exactly {sorted(TRUST_PROPERTY_REQUIRED)}")
+        return
+    if item["status"] not in statuses:
+        errors.append(f"{prefix}: unknown trust status {item['status']!r}")
+    for field in ("note", "scope"):
+        if not isinstance(item[field], str) or not item[field].strip():
+            errors.append(f"{prefix}: {field} must be a non-empty string")
+    if https_url_host(item["url"]) is None:
+        errors.append(f"{prefix}: url must be an HTTPS URL on a public DNS host")
+    if not valid_date(item["verified_at"]):
+        errors.append(f"{prefix}: verified_at must be an ISO date")
+    elif reviewed_at is not None and item["verified_at"] > reviewed_at:
+        errors.append(f"{prefix}: verified_at must not be after the trust verified_at")
+
+
+def validate_trust_finding(
+    finding: Any, prefix: str, reviewed_at: str | None, errors: list[str]
+) -> None:
+    """One third-party finding: a quoted claim, a pinned source, and optional dated responses."""
+    if not isinstance(finding, dict) or set(finding) != TRUST_FINDING_REQUIRED:
+        errors.append(f"{prefix}: must have exactly {sorted(TRUST_FINDING_REQUIRED)}")
+        return
+    if not isinstance(finding["claim"], str) or not finding["claim"].strip():
+        errors.append(f"{prefix}: claim must be a non-empty string")
+    published_at: str | None = finding["published_at"]
+    if not valid_date(published_at):
+        errors.append(f"{prefix}: published_at must be an ISO date")
+        published_at = None
+    source = finding["source"]
+    if not isinstance(source, dict) or set(source) != EVIDENCE_REQUIRED:
+        errors.append(f"{prefix}: source must have exactly {sorted(EVIDENCE_REQUIRED)}")
+    else:
+        if source["kind"] != "third_party":
+            errors.append(f"{prefix}: source kind must be third_party")
+        if not isinstance(source["label"], str) or not source["label"].strip():
+            errors.append(f"{prefix}: source requires a label")
+        if https_url_host(source["url"]) is None:
+            errors.append(f"{prefix}: source requires an HTTPS URL on a public DNS host")
+        if not isinstance(source["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
+            source["content_sha256"]
+        ):
+            errors.append(f"{prefix}: source requires a content_sha256")
+        if not valid_date(source["fetched_at"]):
+            errors.append(f"{prefix}: source fetched_at must be an ISO date")
+        else:
+            if published_at is not None and published_at > source["fetched_at"]:
+                errors.append(f"{prefix}: published_at must not be after the source fetched_at")
+            if reviewed_at is not None and source["fetched_at"] > reviewed_at:
+                errors.append(f"{prefix}: source fetched_at must not be after the trust verified_at")
+    for field in ("operator_response", "resolved"):
+        value = finding[field]
+        if value is None:
+            continue
+        if not isinstance(value, dict) or set(value) != TRUST_RESPONSE_REQUIRED:
+            errors.append(
+                f"{prefix}: {field} must be null or have exactly {sorted(TRUST_RESPONSE_REQUIRED)}"
+            )
+            continue
+        if https_url_host(value["url"]) is None:
+            errors.append(f"{prefix}: {field} url must be an HTTPS URL on a public DNS host")
+        if not isinstance(value["summary"], str) or not value["summary"].strip():
+            errors.append(f"{prefix}: {field} summary must be a non-empty string")
+        if not valid_date(value["verified_at"]):
+            errors.append(f"{prefix}: {field} verified_at must be an ISO date")
+        elif reviewed_at is not None and value["verified_at"] > reviewed_at:
+            errors.append(f"{prefix}: {field} verified_at must not be after the trust verified_at")
+
+
 def validate_specifications(
     specifications_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -964,9 +1084,9 @@ def validate_inference_services(
             errors.append("inference-services.json: every service must be an object")
             continue
         prefix = f"inference service {service.get('id', 'unknown')}"
-        if set(service) != INFERENCE_SERVICE_REQUIRED:
-            missing = sorted(INFERENCE_SERVICE_REQUIRED - set(service))
-            extra = sorted(set(service) - INFERENCE_SERVICE_REQUIRED)
+        missing = sorted(INFERENCE_SERVICE_REQUIRED - set(service))
+        extra = sorted(set(service) - INFERENCE_SERVICE_REQUIRED - INFERENCE_SERVICE_OPTIONAL)
+        if missing or extra:
             errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
         service_id = service.get("id")
         if not isinstance(service_id, str) or not ID_PATTERN.fullmatch(service_id):
@@ -1011,6 +1131,11 @@ def validate_inference_services(
                 errors.append(f"{prefix}: terms require verified_at")
 
         validate_web_evidence(service, prefix, errors)
+        if "trust" in service:
+            validate_trust_record(
+                service["trust"], prefix, enum_ids["trust_property_statuses"],
+                inference_services_data.get("verified_at"), errors,
+            )
     return inference_services_value
 
 

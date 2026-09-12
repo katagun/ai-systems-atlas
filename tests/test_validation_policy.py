@@ -94,6 +94,110 @@ class ValidationPolicyTests(unittest.TestCase):
         "verified_at": "2026-08-29",
     }
 
+    SAMPLE_TRUST: ClassVar[dict] = {
+        "verified_at": "2026-09-03",
+        "properties": {
+            name: {
+                "status": "undocumented",
+                "note": "No first-party statement was found in the API documentation.",
+                "url": "https://example.com/docs",
+                "scope": "Public API documentation for the named service",
+                "verified_at": "2026-09-02",
+            }
+            for name in (
+                "response_integrity", "upstream_disclosure", "credential_handling",
+                "cache_isolation", "vulnerability_disclosure", "independent_audit",
+            )
+        },
+        "findings": [
+            {
+                "claim": "Routing through the gateway with shared credentials may pool prompt caches across customers.",
+                "published_at": "2026-05-28",
+                "source": {
+                    "label": "CacheProbe, arXiv 2605.30613v1",
+                    "url": "https://arxiv.org/abs/2605.30613v1",
+                    "kind": "third_party",
+                    "content_sha256": "0" * 64,
+                    "fetched_at": "2026-09-01",
+                },
+                "operator_response": None,
+                "resolved": None,
+            }
+        ],
+    }
+
+    def catalog_with_trust(self, mutate) -> list[str]:
+        """Validate the real catalog with the first service carrying a mutated SAMPLE_TRUST."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "inference-services.json"
+        services = json.loads(path.read_text(encoding="utf-8"))
+        trust = json.loads(json.dumps(self.SAMPLE_TRUST))
+        mutate(trust)
+        services["services"][0]["trust"] = trust
+        # Pin the collection's own review date so this fixture can never drift against
+        # whatever the live catalog's verified_at happens to be.
+        services["verified_at"] = "2026-09-03"
+        self.write_json(path, services)
+        self.write_json(root / "web" / "inference-services.json", services)
+        return validate(root)
+
+    def test_a_valid_trust_record_passes_validation(self) -> None:
+        self.assertEqual([], self.catalog_with_trust(lambda trust: None))
+
+    def test_trust_rejects_a_field_outside_its_schema(self) -> None:
+        errors = self.catalog_with_trust(lambda trust: trust.update({"score": 7}))
+        self.assertTrue(any("trust fields differ from schema" in error and "score" in error for error in errors), errors)
+
+    def test_trust_properties_must_be_exactly_the_six(self) -> None:
+        errors = self.catalog_with_trust(lambda trust: trust["properties"].pop("cache_isolation"))
+        self.assertTrue(any("trust properties must be exactly" in error for error in errors), errors)
+
+    def test_trust_status_must_come_from_the_taxonomy(self) -> None:
+        errors = self.catalog_with_trust(
+            lambda trust: trust["properties"]["cache_isolation"].update({"status": "safe"})
+        )
+        self.assertTrue(any("unknown trust status 'safe'" in error for error in errors), errors)
+
+    def test_trust_property_requires_note_scope_and_public_https_url(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["properties"]["independent_audit"].update({"note": "", "scope": " ", "url": "https://"})
+        errors = self.catalog_with_trust(mutate)
+        for needle in ("note must be a non-empty string", "scope must be a non-empty string", "url must be an HTTPS URL on a public DNS host"):
+            self.assertTrue(any("trust independent_audit" in error and needle in error for error in errors), errors)
+
+    def test_trust_finding_source_must_be_a_pinned_third_party_page(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["findings"][0]["source"].update({"kind": "web", "content_sha256": "abc"})
+        errors = self.catalog_with_trust(mutate)
+        self.assertTrue(any("source kind must be third_party" in error for error in errors), errors)
+        self.assertTrue(any("source requires a content_sha256" in error for error in errors), errors)
+
+    def test_trust_dates_cannot_postdate_the_review(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["properties"]["response_integrity"]["verified_at"] = "2026-09-04"
+            trust["findings"][0]["source"]["fetched_at"] = "2026-09-04"
+            trust["findings"][0]["published_at"] = "2026-09-05"
+        errors = self.catalog_with_trust(mutate)
+        self.assertTrue(any("trust response_integrity: verified_at must not be after the trust verified_at" in error for error in errors), errors)
+        self.assertTrue(any("source fetched_at must not be after the trust verified_at" in error for error in errors), errors)
+        self.assertTrue(any("published_at must not be after the source fetched_at" in error for error in errors), errors)
+
+    def test_trust_review_cannot_postdate_the_collection(self) -> None:
+        errors = self.catalog_with_trust(lambda trust: trust.update({"verified_at": "2099-01-01"}))
+        self.assertTrue(any("trust verified_at must not be after the collection verified_at" in error for error in errors), errors)
+
+    def test_trust_operator_response_is_null_or_complete(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["findings"][0]["operator_response"] = {"url": "https://example.com/statement"}
+        errors = self.catalog_with_trust(mutate)
+        self.assertTrue(any("operator_response must be null or have exactly" in error for error in errors), errors)
+
+    def test_trust_closure_carries_a_dated_first_party_source(self) -> None:
+        def mutate(trust: dict) -> None:
+            trust["findings"][0]["resolved"] = {"url": "https://example.com/fix", "verified_at": "2026-09-02", "summary": "Caches are now scoped per API key."}
+        self.assertEqual([], self.catalog_with_trust(mutate))
+
     def catalog_with_runtime(self, mutate=None) -> list[str]:
         """Validate a temporary catalog holding one synthetic local runtime."""
         temporary, root = self.temporary_catalog()
