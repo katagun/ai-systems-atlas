@@ -51,6 +51,16 @@ class DocumentationTests(unittest.TestCase):
         ):
             self.assertIn(needle, text)
 
+    def test_scheduled_prompts_name_their_checkout_and_queue(self) -> None:
+        """A scheduled run starts in no particular directory, and the signal queue lives only
+        on the local sweep branch; a prompt missing either can never run unattended."""
+        placeholder = "{{ATLAS_CHECKOUT}}"
+        for name in ("candidate-triage.md", "hn-signals.md"):
+            text = (ROOT / "docs" / "routines" / name).read_text(encoding="utf-8")
+            self.assertIn(placeholder, text, name)
+        signals = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        self.assertIn("run_hn_signals.py prepare --from-ref local/hn-signals", signals)
+
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
             "ROADMAP.md",

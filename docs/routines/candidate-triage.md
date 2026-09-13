@@ -5,8 +5,8 @@ description: Sort the Atlas candidate queue and gather pinned evidence, without 
 
 Triage the AI Systems Atlas candidate queue, once.
 
-Work from the root of the Atlas checkout — the directory holding
-`directory/candidates.json`. Every command below is run from there.
+Work from the Atlas checkout at `{{ATLAS_CHECKOUT}}` — `cd` there before anything else.
+It holds `directory/candidates.json`, and every command below is run from there.
 
     uv run python scripts/run_candidate_triage.py prepare
 
