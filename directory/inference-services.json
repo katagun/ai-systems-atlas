@@ -3943,7 +3943,7 @@
         "kind": "web_terms",
         "label": "DeepInfra Terms of Use",
         "url": "https://deepinfra.com/terms",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-13"
       },
       "evidence": [
         {
@@ -3955,7 +3955,7 @@
       ],
       "verified_at": "2026-09-12",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-13",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
@@ -3990,7 +3990,7 @@
             "note": "No security contact or disclosure policy appears in the terms or the documentation, no security.txt is served, and the trust portal refuses automated fetches.",
             "url": "https://deepinfra.com/terms",
             "scope": "DeepInfra terms of service, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-13"
           },
           "independent_audit": {
             "status": "documented_yes",
@@ -4696,7 +4696,7 @@
         "kind": "web_terms",
         "label": "Baseten Terms and Conditions",
         "url": "https://www.baseten.co/terms-and-conditions/",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-13"
       },
       "evidence": [
         {
@@ -4714,7 +4714,7 @@
       ],
       "verified_at": "2026-08-29",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-13",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
@@ -4728,7 +4728,7 @@
             "note": "The terms state only that the hosting party \"will, at its own expense, provide for the hosting of the applicable Baseten Products & Services\"; the privacy policy does not address model inputs or outputs, and the trust centre's subprocessor list renders only by script.",
             "url": "https://www.baseten.co/terms-and-conditions/",
             "scope": "Baseten terms and conditions, read for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-13"
           },
           "credential_handling": {
             "status": "documented_yes",
