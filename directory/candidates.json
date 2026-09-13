@@ -1043,6 +1043,36 @@
       ]
     },
     {
+      "repo": "godot-pty/gpty",
+      "name": "gPTY",
+      "url": "https://github.com/godot-pty/gpty",
+      "description": "Godot and Rust terminal multiplexer with a tiling pane grid, regex capture of terminal output into adjacent panes, a passive agent-lifecycle observability pane, persisted scrollback and workspaces, and a JSON-RPC, CLI, and MCP control surface through which agents spawn panes, inject text, and read output.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.45,
+      "github_detected_license": "GPL-3.0",
+      "stars": 62,
+      "topics": [
+        "ade",
+        "ai-agents",
+        "godot",
+        "godot-engine",
+        "multiplexer",
+        "omp",
+        "pty",
+        "rust",
+        "terminal"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-13",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "google-antigravity/antigravity-cli",
       "name": "antigravity-cli",
       "url": "https://github.com/google-antigravity/antigravity-cli",
@@ -1112,6 +1142,32 @@
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
       }
+    },
+    {
+      "repo": "google/artemis",
+      "name": "ARTEMIS",
+      "url": "https://github.com/google/artemis",
+      "description": "Android automation agent that turns natural-language instructions into device actions through an observe-and-act loop with element, coordinate, and visual targeting, captures Logcat and screenshots, and exposes an MCP server so coding assistants can drive test devices; reports 99%+ task completion on AndroidWorld.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.85,
+      "github_detected_license": "Apache-2.0",
+      "stars": 4452,
+      "topics": [
+        "ai-agents",
+        "android",
+        "google",
+        "test-automation",
+        "testing"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-13",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "gptme/gptme",
@@ -1534,6 +1590,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "iLands",
+      "url": "https://ilands.ai/",
+      "description": "Consumer network of user-created autonomous agents with persistent identity, memory, and relationships that post, create, commission and deliver paid work, and reach connected external social channels, available as a mobile app from PawLogic Inc. and through bring-your-own-agent access.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agent-network",
+        "autonomous-agents",
+        "mobile-app",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-13",
       "review_required": [
         "licensing",
         "classification",
@@ -2585,6 +2666,37 @@
         "proposer": "promotion review",
         "held_by": "missing licence evidence"
       }
+    },
+    {
+      "repo": "minitap-ai/mobile-use",
+      "name": "mobile-use",
+      "url": "https://github.com/minitap-ai/mobile-use",
+      "description": "Open-source agent that operates Android and iOS devices from natural-language instructions by reading the UI and acting on apps, with structured data extraction and configurable model providers; its maintainers report completing the AndroidWorld benchmark.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "browser_computer_agent",
+      "classification_confidence": 0.85,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2912,
+      "topics": [
+        "agents",
+        "ai",
+        "browser-use",
+        "langchain",
+        "langgraph",
+        "langgraph-python",
+        "mobile",
+        "mobile-use",
+        "python",
+        "qa"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-13",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "MoonshotAI/kimi-agent-sdk",
@@ -4571,6 +4683,26 @@
         "proposer": "promotion review",
         "held_by": "missing licence evidence"
       }
+    },
+    {
+      "repo": "zachsaw/graphify-csharp",
+      "name": "Graphify C#",
+      "url": "https://github.com/zachsaw/graphify-csharp",
+      "description": "Headless Roslyn and MSBuild indexer that exports compiler-resolved callers, references, implementations, inheritance, and overrides for C# solutions as one JSON graph with incremental re-indexing, plus an agent skill that tells coding agents to refresh and query it before answering structural questions.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "context_graph_engine",
+      "classification_confidence": 0.55,
+      "github_detected_license": "MIT",
+      "stars": 53,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-13",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "zylon-ai/private-gpt",
