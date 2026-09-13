@@ -598,20 +598,20 @@ function modelModalityRoute(model) {
   return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
 }
 
-// Badges replace the tags row on system, inference-service, local-runtime, and
-// reviewed-model cards. A card with none omits the row rather than printing an
+// Badges replace the tags row on system, inference-service, and
+// local-runtime cards. A card with none omits the row rather than printing an
 // empty strip. The definition rides in the title for pointers and in hidden
 // text for screen readers; badges are never controls.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
 // Modality and family on a reviewed-model card come from models.dev, not from
-// Atlas review, so they sit beside the badges as attributed plain text.
+// Atlas review, so they carry attributed plain text instead of badges.
 function modelSourceMeta(model) {
   const parts = [modelModalityRoute(model), model.source_metadata.family].filter(Boolean);
-  return `<div class="card-source-meta" title="From models.dev source metadata, not Atlas reviewed">${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
+  return `<div class="card-source-meta" title="From models.dev source metadata, not Atlas reviewed"><span class="visually-hidden">From models.dev: </span>${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
 }
 
 function importedModelCard(model, { mixed = false } = {}) {
@@ -652,7 +652,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
-        ${badgeRow(AtlasCore.cardBadges("model", record))}${modelSourceMeta(record)}
+        ${modelSourceMeta(record)}
         <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -872,7 +872,7 @@ const COLLECTIONS = {
         <span class="role-badge">${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
-        ${badgeRow(AtlasCore.cardBadges("model", model))}${modelSourceMeta(model)}
+        ${modelSourceMeta(model)}
         <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },

@@ -286,7 +286,9 @@
   // defined once and listed by id wherever it applies, so a name shared across
   // collections always tests the same field and value. A badge only asserts
   // presence: a missing, null, false, or empty field never produces one, and a
-  // card without a badge claims nothing is absent. See docs/WEB.md "Card badges".
+  // card without a badge claims nothing is absent. A badge never repeats a fact
+  // the card already prints elsewhere (role pill, license row, footer). See
+  // docs/WEB.md "Card badges".
   const CARD_BADGES = {
     "local-first": {
       name: "Local-first",
@@ -343,20 +345,10 @@
       definition: "Available as a mobile application you install and run.",
       test: { field: "deployment", anyOf: ["mobile"] },
     },
-    "bring-your-own-weights": {
-      name: "Bring your own weights",
-      definition: "Customers can import or deploy their own eligible models or weights.",
-      test: { field: "model_sources", anyOf: ["customer_supplied"] },
-    },
     "dedicated-endpoints": {
       name: "Dedicated endpoints",
       definition: "Customers can get isolated serving resources or an endpoint of their own.",
       test: { field: "delivery_modes", anyOf: ["dedicated_endpoint"] },
-    },
-    "anthropic-compatible-api": {
-      name: "Anthropic-compatible API",
-      definition: "Implements a documented subset or adaptation of Anthropic API conventions.",
-      test: { field: "api_styles", anyOf: ["anthropic_compatible"] },
     },
     "reserved-capacity": {
       name: "Reserved capacity",
@@ -388,21 +380,6 @@
       definition: "Documented to run on a dedicated neural processing unit.",
       test: { field: "accelerators", anyOf: ["npu"] },
     },
-    "downloadable-weights": {
-      name: "Downloadable weights",
-      definition: "The developer publishes weights you can download and run under the recorded terms.",
-      test: { field: "distribution_modes", anyOf: ["downloadable_weights"] },
-    },
-    "developer-api": {
-      name: "Developer API",
-      definition: "The developer offers the model through its own managed API.",
-      test: { field: "distribution_modes", anyOf: ["developer_api"] },
-    },
-    "third-party-hosting": {
-      name: "Hosted by third parties",
-      definition: "Unrelated inference operators document a hosted path for the model.",
-      test: { field: "distribution_modes", anyOf: ["third_party_hosting"] },
-    },
   };
 
   // Order is priority: a card shows the first MAX_CARD_BADGES that match.
@@ -410,9 +387,8 @@
     "system:agent_system": ["local-first", "sandboxed-execution", "browser-control", "mcp", "self-hostable"],
     "system:memory_system": ["local-first", "editable-by-you", "graph-retrieval", "plain-files", "time-aware-recall"],
     "system:assistant_system": ["local-first", "self-hostable", "desktop-app", "mobile-app"],
-    inference: ["bring-your-own-weights", "dedicated-endpoints", "anthropic-compatible-api", "reserved-capacity", "batch"],
-    runtime: ["apple-metal", "amd-rocm", "distributed-serving", "anthropic-compatible-api", "npu"],
-    model: ["downloadable-weights", "developer-api", "third-party-hosting"],
+    inference: ["dedicated-endpoints", "reserved-capacity", "batch"],
+    runtime: ["apple-metal", "amd-rocm", "distributed-serving", "npu"],
   };
   const CARD_BADGE_SET_NAMES = {
     "system:agent_system": "Agent systems",
@@ -420,13 +396,11 @@
     "system:assistant_system": "Assistant systems",
     inference: "Inference services",
     runtime: "Local runtimes",
-    model: "Reviewed models",
   };
   const MAX_CARD_BADGES = 4;
 
   function cardBadgeSetKey(kind, record) {
     if (kind === "system") return `system:${record.system_family}`;
-    if (kind === "model") return record.review_status === "reviewed" ? "model" : null;
     return kind;
   }
 

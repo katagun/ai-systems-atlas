@@ -12,7 +12,11 @@ const projects = read("projects.json").projects;
 const runtimes = read("local-runtimes.json").runtimes;
 const reviewedModels = read("app/models.json").models.filter(model => model.review_status === "reviewed");
 
-const byId = (records, id) => records.find(record => record.id === id);
+const byId = (records, id) => {
+  const record = records.find(candidate => candidate.id === id);
+  if (!record) throw new Error(`fixture ${id} is no longer published; pick another record with the property its comment states`);
+  return record;
+};
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // A badge's text is its name followed by the hidden ": definition".
 const namePatterns = badges => badges.map(badge => new RegExp("^" + escapeRegExp(badge.name) + ":"));
@@ -93,31 +97,36 @@ test("a record shows the same badges in its collection grid and in All", async (
     .toHaveText(namePatterns(runtimeBadges));
 });
 
-test("a reviewed-model card keeps its models.dev modality beside its badges", async ({ page }) => {
-  const expected = cardBadges("model", reviewedModel);
-  expect(expected.length).toBeGreaterThan(0);
+test("a reviewed-model card shows no badges and keeps its attributed models.dev modality", async ({ page }) => {
+  expect(cardBadges("model", reviewedModel)).toEqual([]);
 
   await page.goto("/?view=models");
   await page.locator("#model-search").fill(reviewedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
-  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  await expect(card.locator(".card-badges")).toHaveCount(0);
   const meta = card.locator(".card-source-meta");
   await expect(meta).toContainText("→");
   await expect(meta).toHaveAttribute("title", "From models.dev source metadata, not Atlas reviewed");
+  await expect(meta.locator(".visually-hidden")).toHaveText("From models.dev: ");
 });
 
-test("badges stay legible in the dark theme", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill(openclaw.name);
-  const badge = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
-  await expect(badge).toBeVisible();
-  const [color, background] = await badge.evaluate(element => {
-    const style = getComputedStyle(element);
-    return [style.color, style.backgroundColor];
+for (const colorScheme of ["light", "dark"]) {
+  test(`badges read as a different kind of chip from the source pill in ${colorScheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await page.goto("/?collection=systems");
+    await page.locator("#project-search").fill(openclaw.name);
+    const card = page.locator('#project-grid .project-card:has([data-project="openclaw"])');
+    const style = locator => locator.evaluate(element => {
+      const computed = getComputedStyle(element);
+      return { color: computed.color, background: computed.backgroundColor, border: computed.borderTopColor };
+    });
+    const badge = await style(card.locator(".card-badge").first());
+    const source = await style(card.locator(".source-badge"));
+    expect(badge.background).toBe("rgba(0, 0, 0, 0)");
+    expect(source.background).not.toBe(badge.background);
+    expect(badge.color).not.toBe(badge.border);
   });
-  expect(color).not.toBe(background);
-});
+}
 
 test("the Taxonomy view defines every card badge and where it appears", async ({ page }) => {
   const glossary = cardBadgeGlossary();

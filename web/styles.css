@@ -798,13 +798,24 @@ input:focus, select:focus {
   list-style: none;
 }
 .card-badge {
-  padding: .28rem .5rem;
-  border: 1px solid color-mix(in srgb, var(--cyan) 38%, var(--line));
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .26rem .5rem;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-chip);
-  background: color-mix(in srgb, var(--cyan) 9%, var(--bg-elevated));
+  background: transparent;
   color: var(--text);
   font: 600 .64rem var(--font-body);
   cursor: help;
+}
+.card-badge::before {
+  content: "";
+  flex: none;
+  width: .38rem;
+  height: .38rem;
+  border-radius: 50%;
+  background: var(--cyan);
 }
 .card-source-meta {
   display: flex;
@@ -814,7 +825,7 @@ input:focus, select:focus {
   color: var(--muted);
   font: .62rem var(--font-mono);
 }
-.card-source-meta span + span::before { content: "·"; margin-right: .35rem; }
+.card-source-meta span:not(.visually-hidden) + span::before { content: "·"; margin-right: .35rem; }
 .visually-hidden {
   position: absolute;
   width: 1px;

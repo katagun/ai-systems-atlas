@@ -831,24 +831,37 @@ test("missing, null, false, empty, and non-boolean fields never produce a badge"
   for (const record of records) assert.deepEqual(cardBadges("system", record), [], JSON.stringify(record));
 });
 
-test("specifications, unreviewed models, and unknown kinds or families get no badges", () => {
+test("specifications, models, and unknown kinds or families get no badges", () => {
   assert.deepEqual(cardBadges("spec", { status: "published", licenses: ["MIT"] }), []);
   assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights"] }), []);
   assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights"] }), []);
-  assert.deepEqual(badgeNames(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] })), ["Downloadable weights"]);
+  assert.deepEqual(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
 });
 
-test("inference-service and local-runtime badges share only the identical API fact", () => {
+test("inference-service and local-runtime badges skip facts their cards already print", () => {
   assert.deepEqual(
-    badgeNames(cardBadges("inference", { model_sources: ["customer_supplied"], delivery_modes: ["batch"], api_styles: ["anthropic_compatible"] })),
-    ["Bring your own weights", "Anthropic-compatible API", "Batch"],
+    badgeNames(cardBadges("inference", { model_sources: ["customer_supplied"], delivery_modes: ["batch", "dedicated_endpoint"], api_styles: ["anthropic_compatible"] })),
+    ["Dedicated endpoints", "Batch"],
   );
   assert.deepEqual(
-    badgeNames(cardBadges("runtime", { accelerators: ["cuda", "metal"], serving_modes: ["distributed_serving"], api_styles: ["openai_compatible"] })),
+    badgeNames(cardBadges("runtime", { accelerators: ["cuda", "metal"], serving_modes: ["distributed_serving"], api_styles: ["anthropic_compatible"] })),
     ["Apple Metal", "Distributed serving"],
   );
+});
+
+// Role pills print api_styles (services, runtimes) and distribution_modes
+// (models); service footers print model_sources. A badge on those fields
+// would repeat the card to itself.
+test("no badge tests a field its card already prints", () => {
+  const printed = { inference: ["api_styles", "model_sources"], runtime: ["api_styles"] };
+  for (const [key, fields] of Object.entries(printed)) {
+    for (const id of CARD_BADGE_SETS[key]) {
+      assert.ok(!fields.includes(CARD_BADGES[id].test.field), `${id} repeats ${CARD_BADGES[id].test.field}, which ${key} cards already print`);
+    }
+  }
+  assert.ok(!Object.hasOwn(CARD_BADGE_SETS, "model"), "model cards print distribution_modes in their role pill; they take no badges");
 });
 
 test("every badge list names a defined badge and every defined badge is listed", () => {
@@ -866,7 +879,7 @@ test("the badge glossary lists each badge once with every place it appears", () 
   assert.equal(glossary.length, Object.keys(CARD_BADGES).length);
   assert.equal(new Set(glossary.map(entry => entry.name)).size, glossary.length);
   assert.deepEqual(glossary.find(entry => entry.id === "local-first").scopes, ["Agent systems", "Memory systems", "Assistant systems"]);
-  assert.deepEqual(glossary.find(entry => entry.id === "anthropic-compatible-api").scopes, ["Inference services", "Local runtimes"]);
+  assert.deepEqual(glossary.find(entry => entry.id === "self-hostable").scopes, ["Agent systems", "Assistant systems"]);
 });
 
 // Published-data guards: a renamed taxonomy value or a badge nothing can earn
@@ -907,7 +920,6 @@ function publishedBadgeScopes() {
     "system:assistant_system": family("assistant_system"),
     inference: ["inference", readWebJSON("inference-services.json").services],
     runtime: ["runtime", readWebJSON("local-runtimes.json").runtimes],
-    model: ["model", readWebJSON("app/models.json").models.filter(record => record.review_status === "reviewed")],
   };
 }
 
@@ -940,7 +952,9 @@ test("every field a badge tests reaches the boot payload", () => {
       const { field } = CARD_BADGES[id].test;
       for (const record of published) {
         if (!(field in record)) continue;
-        assert.ok(field in bootById.get(record.id), `${kind}/${record.id} boot record lacks ${field}, which the ${id} badge tests`);
+        const bootRecord = bootById.get(record.id);
+        assert.ok(bootRecord, `${kind}/${record.id} has no boot record`);
+        assert.ok(field in bootRecord, `${kind}/${record.id} boot record lacks ${field}, which the ${id} badge tests`);
       }
     }
   }
