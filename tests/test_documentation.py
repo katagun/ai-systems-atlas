@@ -51,6 +51,16 @@ class DocumentationTests(unittest.TestCase):
         ):
             self.assertIn(needle, text)
 
+    def test_scheduled_prompts_name_their_checkout_and_queue(self) -> None:
+        """A scheduled run starts in no particular directory, and the signal queue lives only
+        on the local sweep branch; a prompt missing either can never run unattended."""
+        placeholder = "{{ATLAS_CHECKOUT}}"
+        for name in ("candidate-triage.md", "hn-signals.md"):
+            text = (ROOT / "docs" / "routines" / name).read_text(encoding="utf-8")
+            self.assertIn(placeholder, text, name)
+        signals = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        self.assertIn("run_hn_signals.py prepare --from-ref local/hn-signals", signals)
+
     def test_task_routing_documents_exist(self) -> None:
         for relative in (
             "ROADMAP.md",
@@ -107,70 +117,19 @@ class DocumentationTests(unittest.TestCase):
         end = source.index("self.assertTrue((ROOT / relative).is_file()", start)
         return source[start:end]
 
-    def refresh_workflow(self) -> str:
-        return (ROOT / ".github" / "workflows" / "update-directory.yml").read_text(encoding="utf-8")
+    def test_the_local_refresh_stages_every_directory_file_except_the_signal_queue(self) -> None:
+        """The runner's explicit staging list is what stops a new catalog file being silently
 
-    def refresh_step(self, name: str) -> str:
-        """Return one step's block from the refresh workflow, without a YAML parser."""
-        workflow = self.refresh_workflow()
-        start = workflow.index(f"      - name: {name}\n")
-        end = workflow.find("\n      - name: ", start + 1)
-        return workflow[start:] if end == -1 else workflow[start:end]
-
-    def test_refresh_withholds_push_credentials_while_parsing_third_party_input(self) -> None:
-        """Feeds and search results are parsed before the push credential exists."""
-        self.assertIn("persist-credentials: false", self.refresh_step("Check out repository"))
-
-    def test_refresh_verification_does_not_abort_the_run(self) -> None:
-        """Every check reports, so one failure never hides the rest."""
-        self.assertIn("continue-on-error: true", self.refresh_step("Verify the refreshed catalog"))
-
-    def test_refresh_publishes_its_branch_even_when_an_earlier_step_failed(self) -> None:
-        """A failed crawl stays recoverable from the branch instead of dying with the runner."""
-        self.assertIn("if: always()", self.refresh_step("Open or update the refresh pull request"))
-
-    def test_refresh_still_fails_when_the_catalog_does_not_verify(self) -> None:
-        """Publishing the branch must not turn a failing refresh green."""
-        self.assertIn(
-            "if: steps.verify.outcome == 'failure'",
-            self.refresh_step("Fail when the refreshed catalog did not verify"),
-        )
-
-    def test_refresh_prefers_a_token_that_lets_the_required_check_run(self) -> None:
-        """A pull request opened with GITHUB_TOKEN never triggers `verify`."""
-        self.assertIn(
-            "${{ secrets.ATLAS_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}",
-            self.refresh_step("Open or update the refresh pull request"),
-        )
-
-    def test_the_weekly_refresh_stages_every_directory_file_except_the_signal_queue(self) -> None:
-        """The explicit staging list is duplicated (GitHub Actions steps share no shell state);
-
-        a drifted or stale copy would silently stop committing a directory file, which is the
-        failure this task exists to prevent. Parse both copies from the file text (no YAML
-        dependency: the stdlib has no YAML parser, and this project has zero dependencies),
-        require them to match each other, and require the match to equal the directory's real
-        contents minus the daily sweep's own queue file.
+        left out of every refresh (see `scripts/run_directory_refresh.py`,
+        `STAGED_DIRECTORY_FILES`). Require it to equal the directory's real contents minus the
+        daily sweep's own queue file, which is committed separately and never by this runner.
         """
-        text = self.refresh_workflow()
-        self.assertNotIn("hn-signals.json", text)
+        from scripts import run_directory_refresh
 
-        blocks = re.findall(r"git add directory/(?:[^\n]*\\\n)*[^\n]*", text)
-        self.assertEqual(2, len(blocks), "expected exactly two explicit `git add directory/...` staging lists")
-
-        staged_sets = [set(re.findall(r"directory/([\w.-]+\.json)", block)) for block in blocks]
-        self.assertEqual(staged_sets[0], staged_sets[1], "the two staging lists have drifted apart")
-
+        self.assertNotIn("hn-signals.json", run_directory_refresh.STAGED_DIRECTORY_FILES)
         on_disk = {p.name for p in (ROOT / "directory").glob("*.json")} - {"hn-signals.json"}
-        self.assertEqual(on_disk, staged_sets[0])
-
-    def test_refresh_failures_reach_a_maintainer(self) -> None:
-        """A red scheduled run nobody watches is not a signal."""
-        workflow = self.refresh_workflow()
-        self.assertIn("  report-failure:\n", workflow)
-        report = workflow[workflow.index("  report-failure:\n"):]
-        self.assertIn("if: failure()", report)
-        self.assertIn("gh issue create", report)
+        staged = {path.split("/", 1)[1] for path in run_directory_refresh.STAGED_DIRECTORY_FILES}
+        self.assertEqual(on_disk, staged)
 
     def test_every_path_has_a_code_owner(self) -> None:
         owners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")

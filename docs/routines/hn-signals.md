@@ -5,15 +5,15 @@ description: Read pinned attention-source signals and annotate each with a revie
 
 Annotate the AI Systems Atlas attention-source signal queue, once.
 
-Work from the root of the Atlas checkout — the directory holding
-`directory/hn-signals.json`. Every command below is run from there.
+Work from the Atlas checkout at `{{ATLAS_CHECKOUT}}` — `cd` there before anything else.
+It holds `directory/hn-signals.json`, and every command below is run from there.
 
-    uv run python scripts/run_hn_signals.py prepare
+    uv run python scripts/run_hn_signals.py prepare --from-ref local/hn-signals
 
-`prepare` refreshes an isolated worktree from `origin/main` — pass `--from-ref` to build it
-from a different ref instead, which enables the local loop described in "Attention-source
-sweep" in `docs/OPERATIONS.md` — re-fetches every readable signal's vendor page, and
-prints the worktree's path. Do all of your work in that worktree. It also writes
+`prepare` builds an isolated worktree from `local/hn-signals` — the local branch the daily
+sweep commits its queue to, described under "Attention-source sweep" in
+`docs/OPERATIONS.md` — re-fetches every readable signal's vendor page, and prints the
+worktree's path. Do all of your work in that worktree. It also writes
 `.hn-signal-bundle/bundle.json` there: every page's text you are allowed to read is in
 that file, keyed by `story_id`. A page that changed since the sweep pinned it is left out
 of the bundle and out of the pending list `prepare` prints; leave those signals alone.

@@ -466,7 +466,10 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 
   for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent", "Cua", "PRAXIST Beta", "Open Grok", "Warp", "Higgsfield Supercomputer"]) {
     await page.locator("#project-search").fill(name);
-    await expect(page.locator("#project-grid .project-card h2")).toHaveText(name);
+    // Search is full-text, so another record that names this one — a memory tool
+    // listing the agents it supports, say — may match too. The named record must be
+    // found; it need not be the only result.
+    await expect(page.locator("#project-grid").getByRole("heading", { name, exact: true })).toHaveCount(1);
   }
 });
 
@@ -553,15 +556,17 @@ test("systems pagination navigates pages, resets on filter change, and applies a
 
   const pagerText = page.locator("#project-pager .pager-nav span");
   const names = page.locator("#project-grid .project-card h2");
-  await expect(pagerText).toHaveText("Page 1 of 7");
+  // Page counts follow the published data, so promoting records does not break them.
+  const activePages = pageSize => Math.max(1, Math.ceil(catalogCounts.projectsWithStatus("active") / pageSize));
+  await expect(pagerText).toHaveText(`Page 1 of ${activePages(24)}`);
   const firstPageFirstName = (await names.first().textContent())?.trim();
 
   await page.locator("#project-pager [data-pager-next]").click();
-  await expect(pagerText).toHaveText("Page 2 of 7");
+  await expect(pagerText).toHaveText(`Page 2 of ${activePages(24)}`);
   await expect(names.first()).not.toHaveText(firstPageFirstName);
 
   await page.locator("#project-pager [data-pager-prev]").click();
-  await expect(pagerText).toHaveText("Page 1 of 7");
+  await expect(pagerText).toHaveText(`Page 1 of ${activePages(24)}`);
   await expect(names.first()).toHaveText(firstPageFirstName);
 
   await page.locator("#project-pager [data-pager-next]").click();
@@ -570,7 +575,7 @@ test("systems pagination navigates pages, resets on filter change, and applies a
 
   await page.locator("#project-search").fill("");
   await page.locator("#project-pager select").selectOption("48");
-  await expect(pagerText).toHaveText("Page 1 of 4");
+  await expect(pagerText).toHaveText(`Page 1 of ${activePages(48)}`);
   await page.reload();
   await expect(page.locator("#project-pager select")).toHaveValue("48");
 });

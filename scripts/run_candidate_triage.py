@@ -163,7 +163,20 @@ shell = routine_guards.shell
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
-    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/candidate-triage.md")
+    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/candidate-triage.md", ROOT)
+
+
+def install_prompt() -> int:
+    """Install the reviewed prompt, rendered for this checkout, where the scheduler reads it."""
+    try:
+        routine_guards.install_prompt(
+            PROMPT.read_text(encoding="utf-8"), INSTALLED_PROMPT, ROOT, INSTALLED_PROMPT.parents[1]
+        )
+    except OSError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    print(f"installed {PROMPT.name} for {ROOT} at {INSTALLED_PROMPT}")
+    return 0
 
 
 def prepared_base_ref(read=root_text) -> str:
@@ -327,7 +340,7 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     return routine_guards.main(
-        argv, description=__doc__, prepare=prepare, finish=finish
+        argv, description=__doc__, prepare=prepare, finish=finish, install=install_prompt
     )
 
 
