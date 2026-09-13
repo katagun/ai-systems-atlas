@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05",
+  "generated_at": "2026-09-12",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -815,12 +815,12 @@
       },
       "strengths": [
         "One agent core reaches the editor, a CLI, cloud VMs, mobile, and an SDK, and a session hands off between local and cloud without changing rules, hooks, or MCP configuration",
-        "Terminal commands run under OS-level sandboxing \u2014 macOS Seatbelt, Linux Landlock and seccomp \u2014 with network blocked by default behind a published package-manager allowlist",
+        "Terminal commands run under OS-level sandboxing — macOS Seatbelt, Linux Landlock and seccomp — with network blocked by default behind a published package-manager allowlist",
         "Self-hosted machines split the planes: Cursor runs the agent loop and inference while file edits and commands execute on infrastructure the customer operates"
       ],
       "weaknesses": [
         "Bringing your own key does not buy independence or zero retention: requests still traverse Anysphere's backend for prompt building, and the documentation states plainly that zero data retention does not apply to your own keys",
-        "The recommended autonomy default is documented as not being a security boundary \u2014 a small classifier judges plain-English policy and \"can allow a call you would have blocked\" \u2014 and blocking its two classifier models through enterprise model access control silently disables it",
+        "The recommended autonomy default is documented as not being a security boundary — a small classifier judges plain-English policy and \"can allow a call you would have blocked\" — and blocking its two classifier models through enterprise model access control silently disables it",
         "Run modes, allowlists, and deletion protections apply only to local agents; Cloud Agents, the surface built for long-running autonomous work, never ask for approval at all",
         "Third-party model requests carry a per-token surcharge on Teams and Enterprise from which the first-party Grok and Composer models are exempt, so provider neutrality is a documented cost",
         "The legal surface contradicts itself: the privacy policy predates cloud self-hosting, the git forge, and the SpaceX acquisition, and the official compliance page publishes two document URLs that both return 404"
@@ -1228,16 +1228,16 @@
         "overall": 7.21
       },
       "strengths": [
-        "An Agent Client Protocol host: any conforming third-party agent \u2014 Codex, Claude Agent, OpenCode, Junie, Gemini CLI \u2014 becomes a first-class session inside the editor",
+        "An Agent Client Protocol host: any conforming third-party agent — Codex, Claude Agent, OpenCode, Junie, Gemini CLI — becomes a first-class session inside the editor",
         "The default local agent carries a permission model with deny, ask, and allow rules over file reads, writes, command execution, HTTP fetches, and MCP tools, scoped at project, user, and organization level",
-        "The widest reviewed provider surface among proprietary editors, spanning nine model families alongside an in-house model line \u2014 most recently SWE-2, post-trained from Kimi K3 and served only inside Devin Desktop and the CLI with no published weights and no per-token API \u2014 and a purpose-built retrieval model"
+        "The widest reviewed provider surface among proprietary editors, spanning nine model families alongside an in-house model line — most recently SWE-2, post-trained from Kimi K3 and served only inside Devin Desktop and the CLI with no published weights and no per-token API — and a purpose-built retrieval model"
       ],
       "weaknesses": [
         "Two local agents ship side by side with divergent controls, and the pages a reader lands on for memories, MCP, and command auto-execution are all scoped to the legacy one",
         "Durable memory does not survive adopting the default agent, which does not persist memories at all and offers a migration wizard instead",
         "The announced end of the legacy agent has passed without resolution: the vendor said it remained available through July, and it is still documented and still appearing in the August changelog",
         "Customer data may be used for model training by default, the opt-out is available only on paid plans and only to administrators on team plans, and remote indexing clones repositories to vendor servers",
-        "Third-party agents hosted over the protocol run outside the product's own governance \u2014 the vendor states its privacy policy and legal terms do not apply to them"
+        "Third-party agents hosted over the protocol run outside the product's own governance — the vendor states its privacy policy and legal terms do not apply to them"
       ],
       "why_it_matters": "The rename that consolidated the best-known independent agentic IDE into Cognition's line, and the reviewed catalog's clearest case of an editor that hosts other vendors' agents as peers rather than replacing them.",
       "research_confidence": "high",
@@ -3511,7 +3511,7 @@
       ],
       "weaknesses": [
         "The published package still declares alpha development status, which sits oddly beside three releases in three months and a coverage-gated pipeline",
-        "In the default path the model fills one slot \u2014 propose a mutation \u2014 inside a pipeline the caller configured, and only the headless mode puts a tool-using agent in that position",
+        "In the default path the model fills one slot — propose a mutation — inside a pipeline the caller configured, and only the headless mode puts a tool-using agent in that position",
         "The loop is long-running and unattended by design, and the primary controls are configuration files set before the run rather than intervention during it"
       ],
       "why_it_matters": "The only one of its lab's published agentic systems that is engineered as software rather than as a paper artifact, and a working example of coding agents used as the variation operator inside an outer search loop.",
@@ -4134,7 +4134,7 @@
         "Capabilities, limits, retention controls, and available tools vary by plan and change frequently",
         "Service-managed context and memory reduce data portability and local control"
       ],
-      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use\u2014not only text chat.",
+      "why_it_matters": "A reference general assistant whose product boundary now includes durable context, connected data, research, scheduled work, and consequential tool use—not only text chat.",
       "research_confidence": "medium",
       "verified_at": "2026-08-26",
       "licenses": [
@@ -8253,7 +8253,7 @@
       },
       "strengths": [
         "Genuinely multi-language rather than a Python project with ports: maintained Python, .NET, and Java trees in one repository with published PyPI and NuGet packages and per-language API references",
-        "A wide substitutable integration surface \u2014 OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
+        "A wide substitutable integration surface — OpenAI, Azure OpenAI, Hugging Face, and NVIDIA NIM backends plus documented local execution through Ollama, LM Studio, and ONNX, alongside Azure AI Search, Chroma, Elasticsearch, Qdrant, Postgres, Redis, Pinecone, MongoDB, Weaviate, and FAISS connectors",
         "Explicit developer control surfaces: typed kernel functions, OpenAPI and MCP plugins, function-choice behavior, filters, reliability policies, structured output through Pydantic models, and the Process Framework for modeling business workflows"
       ],
       "weaknesses": [
@@ -9404,7 +9404,7 @@
       "weaknesses": [
         "The runtime is vendor-operated inside a customer org with no self-hosted option, so execution and data both stay on the vendor's infrastructure",
         "Capability is bounded by the surrounding platform: the richest actions, knowledge sources, and escalation targets are all first-party",
-        "The brand covers prebuilt assistants and several separately sold products, so published material about \u201cAgentforce\u201d often describes something other than this platform"
+        "The brand covers prebuilt assistants and several separately sold products, so published material about “Agentforce” often describes something other than this platform"
       ],
       "why_it_matters": "The agent-building layer inside one of the largest enterprise data platforms, where the agent's reach is defined by records and permissions the organisation already maintains.",
       "licenses": [
@@ -10290,7 +10290,7 @@
         "overall": 7.92
       },
       "strengths": [
-        "Four interfaces \u2014 terminal, web, HTTP gateway, and an embedded client \u2014 share one config, checkpointer, memory, and sandbox stack",
+        "Four interfaces — terminal, web, HTTP gateway, and an embedded client — share one config, checkpointer, memory, and sandbox stack",
         "Memory writes pass a deterministic scope and authority gate that fails closed, and facts stay readable Markdown files",
         "Sandboxed execution spans host, Docker, Kubernetes, and remote VMs with capacity limits enforced across the deployment"
       ],
@@ -12414,7 +12414,7 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts \u2014 anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors \u2014 live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
+      "current_repo_note": "Every file in the repository is copyleft; the proprietary parts — anti-bot and captcha solving, enterprise gating, billing, and cloud browser vendors — live outside it and plug in by overriding base classes whose open implementations return nothing. A workflow sync mirrors merged changes into a private cloud repository.",
       "score": {
         "task_reliability": 7.6,
         "tool_use": 8.0,
@@ -13569,7 +13569,7 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists \u2014 role management, single sign-on with provisioning, teams, and connectors \u2014 are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
+      "current_repo_note": "Not open core: the governance features the vendor's enterprise tier lists — role management, single sign-on with provisioning, teams, and connectors — are all in the permissive tree, and the paid tiers are hosting and support. The recommended quick-start path routes inference through the vendor's public endpoint with a shared key, and version checks contact the vendor unless disabled.",
       "score": {
         "second_brain_fit": 7.6,
         "data_sovereignty": 6.8,
@@ -13580,7 +13580,7 @@
         "overall": 7.48
       },
       "strengths": [
-        "The governance features a competitor sells as enterprise \u2014 role management, single sign-on with provisioning, and teams \u2014 are in the permissive tree and documented",
+        "The governance features a competitor sells as enterprise — role management, single sign-on with provisioning, and teams — are in the permissive tree and documented",
         "Agents are first-class integration surfaces: any compatible client or tool-server host can call a configured agent",
         "A real correctness gate, with thousands of tests run on every push and coverage reported"
       ],
@@ -15110,14 +15110,14 @@
         "overall": 5.27
       },
       "strengths": [
-        "Session, sandbox, credential, and audit/replay concerns are handled by dedicated, documented primitives \u2014 local, Docker, Kubernetes, and self-hosted worker sandboxes; a resumable Server-Sent Events stream for session replay; and a SQLite-backed credential vault \u2014 independent of which model or client drives reasoning",
+        "Session, sandbox, credential, and audit/replay concerns are handled by dedicated, documented primitives — local, Docker, Kubernetes, and self-hosted worker sandboxes; a resumable Server-Sent Events stream for session replay; and a SQLite-backed credential vault — independent of which model or client drives reasoning",
         "Speaks a Claude Managed-Agents-compatible /v1 API and a six-tool MCP bridge (list_agents, create_session, run_session, get_session, list_artifacts, stop_session), so unmodified clients such as Claude Code, GitHub Copilot, Cline, and DeepSeek Harness can drive it without a bespoke integration",
-        "Runs entirely on infrastructure the operator controls \u2014 local SQLite and filesystem storage with no required hosted control plane \u2014 and the user supplies their own OpenAI, Anthropic, DeepSeek, or OpenAI-compatible API keys"
+        "Runs entirely on infrastructure the operator controls — local SQLite and filesystem storage with no required hosted control plane — and the user supplies their own OpenAI, Anthropic, DeepSeek, or OpenAI-compatible API keys"
       ],
       "weaknesses": [
         "The runtime does not execute its own agent loop; all reasoning is delegated to an external client, so autonomy, planning quality, and task reliability are properties of whichever client connects rather than of this project",
         "The project is about two months old with four GitHub contributors and rapid, closely spaced point releases (v0.3.4 through v0.3.8 within ten days), so operational maturity and long-term stability are unproven",
-        "The maintainer has run an unusually large, single-account self-promotion campaign \u2014 dozens of near-identical submissions to external 'awesome list' and MCP-directory repositories, most still 'maintainer review pending' \u2014 which this review independently confirmed against two of the linked pull requests; that pattern weakens confidence in community-adoption signals like stars and forks without changing the reviewed technical claims, which were verified directly against the project's own license, README, and installation documentation"
+        "The maintainer has run an unusually large, single-account self-promotion campaign — dozens of near-identical submissions to external 'awesome list' and MCP-directory repositories, most still 'maintainer review pending' — which this review independently confirmed against two of the linked pull requests; that pattern weakens confidence in community-adoption signals like stars and forks without changing the reviewed technical claims, which were verified directly against the project's own license, README, and installation documentation"
       ],
       "why_it_matters": "One of the few open, client-agnostic runtimes that treats agent session state, sandbox isolation, credentials, and audit/replay as infrastructure separate from the reasoning loop, letting operators pair it with whichever coding or chat agent they already use.",
       "research_confidence": "low",
@@ -15814,6 +15814,1904 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "memorix",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Memorix",
+      "repo": "AVIDS2/memorix",
+      "url": "https://github.com/AVIDS2/memorix",
+      "description": "Local-first shared project memory layer that gives multiple AI coding agents a common, searchable memory over the same Git project.",
+      "primary_role": "memory_bridge",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "relational_db",
+        "full_text",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "manual",
+        "coding_session",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "A per-project SQLite database with an FTS5 index under the Git project, plus an optional local LanceDB semantic index",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 761,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 9.0,
+        "memory_intelligence": 7.2,
+        "operational_simplicity": 7.0,
+        "maturity": 5.5,
+        "overall": 7.42
+      },
+      "strengths": [
+        "Wide agent compatibility through MCP, hooks, and native plugins",
+        "Local-first SQLite/FTS5 store with an optional semantic index",
+        "Git commits and design rationale captured as structured, queryable memory"
+      ],
+      "weaknesses": [
+        "Repository is about seven months old with a small maintainer team",
+        "Broad feature surface (orchestration, teams, locks) adds operational complexity",
+        "Behavioral and adoption claims rest on the project's own documentation"
+      ],
+      "why_it_matters": "Demonstrates a local-first, protocol-agnostic memory bridge that lets a project's context follow the developer across whichever coding agent they use that day.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-12T14:46:59Z",
+      "forks": 60,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "opencursor",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenCursor",
+      "repo": "PawanOsman/OpenCursor",
+      "url": "https://github.com/PawanOsman/OpenCursor",
+      "description": "Open-source VS Code coding-agent extension with reviewable file edits, shell and semantic-search tools, MCP support, and a fully offline local-model path.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "VS Code workspace files plus per-workspace conversation and tool-call history",
+      "deployment": [
+        "ide_extension"
+      ],
+      "agent_interfaces": [
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "mcp",
+        "multi_agent",
+        "persistent_state"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6015,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Repository was registered in 2022 as an unrelated project; the current OpenCursor coding-agent product began at v0.0.1 on 2026-07-05, so its accumulated star count predates and overstates this product's track record.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.5,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.0,
+        "interoperability": 8.0,
+        "maturity": 4.0,
+        "overall": 6.85
+      },
+      "strengths": [
+        "Broad, reviewable tool set (25 tools) with per-hunk Keep/Undo diffs",
+        "Genuine offline path: bundled llama.cpp/Ollama plus local embeddings for semantic search",
+        "Flexible provider model spanning subscription OAuth, API keys, and fully local models"
+      ],
+      "weaknesses": [
+        "The current coding-agent product is about two months old; the repository's multi-year star count reflects an unrelated earlier tool",
+        "No independent benchmarking of task completion or reliability yet",
+        "Single-maintainer project without a documented governance or support process"
+      ],
+      "why_it_matters": "Shows a fully offline-capable coding agent built directly into VS Code's extension surface, an open alternative to cloud-anchored IDE agents.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T10:16:59Z",
+      "forks": 1031,
+      "open_issues": 3,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "plandex",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Plandex",
+      "repo": "plandex-ai/plandex",
+      "url": "https://github.com/plandex-ai/plandex",
+      "description": "Terminal-based coding agent for large, multi-step tasks that keeps AI-generated changes in a reviewable, cumulative diff sandbox until accepted.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "Local project files plus a separate versioned plan/diff sandbox with branching, held locally or on a self-hosted server",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 15632,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Plandex Cloud (the hosted offering) began winding down 2025-10-03 and no longer accepts new users; self-hosted/local mode is the only supported path going forward, and the repository has had no commits since that announcement.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 6.5,
+        "autonomy": 7.5,
+        "human_control": 8.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.5,
+        "maturity": 5.0,
+        "overall": 6.95
+      },
+      "strengths": [
+        "Built for very large projects and context (2M token budget, tree-sitter project maps)",
+        "Cumulative diff review sandbox keeps AI changes isolated until accepted, with rollback",
+        "Multi-provider model support across Anthropic, OpenAI, Google, and open-source models"
+      ],
+      "weaknesses": [
+        "No commits since the October 2025 Plandex Cloud wind-down announcement, roughly eleven months of inactivity",
+        "The hosted Plandex Cloud option is discontinued and no longer accepting new users, leaving only self-hosted/local mode",
+        "No MCP or plugin ecosystem documented"
+      ],
+      "why_it_matters": "A terminal agent purpose-built for large multi-file tasks with an explicit diff-review safety boundary, now a dormant but still-installable reference design.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2025-10-03T21:49:58Z",
+      "forks": 1176,
+      "open_issues": 63,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "notabase",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Notabase",
+      "repo": "churichard/notabase",
+      "url": "https://github.com/churichard/notabase",
+      "description": "Cloud-hosted linked-notes app for networked thinking, with block references, page stacking, and a graph view.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "a Supabase-hosted PostgreSQL database (self-hostable)",
+      "deployment": [
+        "managed_cloud",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "AGPL-3.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 911,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 6.5,
+        "data_sovereignty": 4,
+        "interoperability": 5.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7.5,
+        "maturity": 6.5,
+        "overall": 6.01
+      },
+      "strengths": [
+        "Backlinks, block references, and a graph view over linked notes",
+        "Mature product with continuous development since 2020",
+        "Import and export supported"
+      ],
+      "weaknesses": [
+        "Cloud-hosted by default; self-hosting still ships the same note cap as the free hosted tier unless an operator edits the database directly",
+        "No AI or agent integration of any kind",
+        "Canonical data lives in a hosted Postgres schema rather than portable plain files"
+      ],
+      "why_it_matters": "Shows a mature, actively maintained linked-notes second brain built around a hosted-first cloud-database architecture rather than local files, with no AI layer at all.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-07-17T17:01:40Z",
+      "forks": 77,
+      "open_issues": 36,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "hyperresearch",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Hyperresearch",
+      "repo": "jordan-gibbs/hyperresearch",
+      "url": "https://github.com/jordan-gibbs/hyperresearch",
+      "description": "Deep-research agent for Claude Code: a tier-adaptive 16-step pipeline of parallel subagents that produces an adversarially-audited, citation-checked report into a persistent, searchable markdown-plus-SQLite vault.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files",
+        "full_text",
+        "vector_index",
+        "graph_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal",
+        "agentic"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated",
+        "versioned"
+      ],
+      "canonical_data": "A git-trackable vault of Markdown notes with YAML frontmatter, indexed by a fully rebuildable SQLite cache of full-text, embeddings, citations, and provenance links",
+      "deployment": [
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2999,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1.",
+      "score": {
+        "task_reliability": 8.5,
+        "tool_use": 8.5,
+        "autonomy": 7.5,
+        "human_control": 7.0,
+        "observability_recovery": 9.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "maturity": 6.5,
+        "overall": 7.94
+      },
+      "strengths": [
+        "Verification battery (quote-integrity, retracted-citation, numeric-consistency, per-citation cite-check) gates every report before it ships",
+        "Persistent, rebuildable Markdown-plus-SQLite vault with graph, full-text, and semantic search that compounds across sessions",
+        "Eight scholarly-source integrations deduplicated into one client layer, plus open-access recovery for paywalled papers with disclosed provenance",
+        "Explicit prompt-injection handling: fetched web bodies are fenced as untrusted data across every read path"
+      ],
+      "weaknesses": [
+        "Its headline benchmark claim ('currently leads the DeepResearch-Bench RACE leaderboard') is internally benchmarked only; the README itself says third-party validation is pending",
+        "Provider-native to Anthropic models via Claude Code; the maintainer has not ported the subagent roster to other providers",
+        "Single-maintainer project at v0.11.x; no independent adoption signal beyond GitHub stars and forks yet"
+      ],
+      "why_it_matters": "Shows a deep-research pipeline that treats citation integrity and retraction-checking as hard gates rather than best-effort prompting, with a durable, human-readable vault instead of a one-shot report.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T21:15:16Z",
+      "forks": 283,
+      "open_issues": 16,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "mateclaw",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "MateClaw",
+      "repo": "mateaix/mateclaw",
+      "url": "https://github.com/mateaix/mateclaw",
+      "description": "Self-hosted Spring Boot agent runtime hosting persistent 'digital employee' agents with pluggable execution engines, durable goals, a knowledge wiki, and multi-channel delivery.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import",
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "Relational database (H2/PostgreSQL/MySQL) for runtime, goal, and task state plus Markdown workspace-memory files (AGENTS.md, SOUL.md, MEMORY.md)",
+      "deployment": [
+        "self_hosted",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1099,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Repository created 2026-04-04 (about five months old) but already at v2.2.0 with roughly 1,500 commits; pushed as recently as 2026-09-12, indicating rapid, current development despite the short track record.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.3,
+        "autonomy": 8.0,
+        "human_control": 8.5,
+        "observability_recovery": 8.3,
+        "data_sovereignty": 9.0,
+        "interoperability": 9.0,
+        "maturity": 5.5,
+        "overall": 7.89
+      },
+      "strengths": [
+        "Pluggable Agent Runtime contract lets an employee run on a native StateGraph engine or an external DeepSeek Harness loop behind one session/tool/approval plane",
+        "Persistent Goals checkpoint and resume long tasks across backend restarts",
+        "RBAC, approval flows, Tool Guard, and a full audit trail target multi-user, enterprise deployment",
+        "Multi-vendor model failover with health tracking and cooldown avoids single-provider outages",
+        "LLM Wiki turns uploaded material into cited, cross-linked knowledge pages consumed automatically by employees"
+      ],
+      "weaknesses": [
+        "Repository is about five months old; breadth of enterprise claims (audit, multi-tenant RBAC) has no long production track record yet",
+        "Community is small relative to comparable runtimes (about 1,100 stars vs. tens of thousands for the OpenClaw project it explicitly benchmarks against)",
+        "No independent benchmark of the claimed failover/reliability behavior; evidence is vendor-authored README and docs",
+        "Very broad feature surface (runtime, memory, workflows, multi-channel messaging, content generation, wallets-adjacent business tooling) makes the operational boundary hard to audit end to end"
+      ],
+      "why_it_matters": "A fast-moving, enterprise-oriented alternative to single-user personal-agent runtimes, adding multi-user governance and a pluggable execution-engine contract on top of the same durable-agent pattern.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-12T10:15:55Z",
+      "forks": 329,
+      "open_issues": 168,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "memoria",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Memoria",
+      "repo": "matrixorigin/memoria",
+      "url": "https://github.com/matrixorigin/memoria",
+      "description": "Cloud or self-hosted agent-memory service that applies Git-style snapshot, branch, merge, and rollback semantics to versioned memory, on top of the maintainer's own MatrixOne database.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "hybrid",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "MatrixOne database (Copy-on-Write engine)",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 596,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 6.5,
+        "data_sovereignty": 6.0,
+        "interoperability": 8.0,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 7.0,
+        "maturity": 6.0,
+        "overall": 6.82
+      },
+      "strengths": [
+        "Full version-control semantics (snapshot, branch, merge, point-in-time rollback) applied to memory mutation, not just append or delete",
+        "MCP-native with named integrations across many coding-agent hosts (Kiro, Cursor, Claude Code, Codex, Gemini CLI, OpenClaw)",
+        "Publishes an arXiv paper and a full audit/provenance trail behind its version-control claims"
+      ],
+      "weaknesses": [
+        "Self-governing claims (automatic contradiction detection, low-confidence quarantine) are vendor-described in the README with no independent corroboration",
+        "Storage is coupled to the maintainer's own MatrixOne database, so data sovereignty and portability depend on that project's health",
+        "The recommended onboarding path is the vendor's own Memoria Cloud SaaS rather than the self-hosted Docker option"
+      ],
+      "why_it_matters": "Applies real Git-style version control (branch, merge, rollback) to agent memory instead of treating every memory update as an opaque overwrite.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0",
+      "forks": 77,
+      "open_issues": 43,
+      "metadata_verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T07:25:07Z"
+    },
+    {
+      "id": "memoir",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Memoir",
+      "repo": "zhangfengcdt/memoir",
+      "url": "https://github.com/zhangfengcdt/memoir",
+      "description": "Local Python library and CLI that stores agent memory at hierarchical semantic paths with Git-like branch, commit, merge, and rollback operations, in place of a vector database.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "full_text",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "Local memoir store addressed by hierarchical semantic paths with a Git-like commit history",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 607,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 5.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 6.5,
+        "memory_intelligence": 6.0,
+        "operational_simplicity": 7.5,
+        "maturity": 4.5,
+        "overall": 6.19
+      },
+      "strengths": [
+        "Fully local Python package with no cloud dependency (pip install memoir-ai)",
+        "Applies Git-like blame, checkout, branch, merge, and rollback semantics directly to individual memory records",
+        "Ships as installable plugins for multiple coding-agent hosts (Claude Code, Codex) in addition to a standalone CLI and SDK"
+      ],
+      "weaknesses": [
+        "The project labels its own status Alpha and remains pre-1.0 more than a year after creation",
+        "O(log n) lookup and cryptographic-integrity claims are asserted in the README with no independent benchmark",
+        "Single maintainer with no published research paper or company backing, unlike comparable agent-memory services"
+      ],
+      "why_it_matters": "Tests whether Git-style versioning of agent memory can work as a lightweight local library instead of a hosted vector-database service.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0",
+      "forks": 43,
+      "open_issues": 6,
+      "metadata_verified_at": "2026-09-12",
+      "pushed_at": "2026-09-08T05:54:46Z"
+    },
+    {
+      "id": "obsidian-second-brain",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Obsidian Second Brain",
+      "repo": "eugeniughelbur/obsidian-second-brain",
+      "url": "https://github.com/eugeniughelbur/obsidian-second-brain",
+      "description": "Cross-platform Obsidian vault skill that gives eight different AI coding-agent CLIs a shared, self-rewriting Markdown memory.",
+      "primary_role": "memory_bridge",
+      "secondary_roles": [
+        "human_pkm"
+      ],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "plain_files",
+        "full_text",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation",
+        "file_import",
+        "scheduled",
+        "audio"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "Markdown files in the user's own Obsidian vault",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4425,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 9.0,
+        "memory_intelligence": 8.0,
+        "operational_simplicity": 6.5,
+        "maturity": 6.0,
+        "overall": 7.9
+      },
+      "strengths": [
+        "One Markdown vault shared, unmodified, across eight AI-CLI hosts (Claude Code, Codex, Gemini CLI, OpenCode, Antigravity, Hermes, Pi, Grok Bot)",
+        "Notes are rewritten and reconciled in place instead of only appended, under a documented freshness policy (OKM)",
+        "Ships its own retrieval-eval and per-host conformance-report commands to measure vault search quality"
+      ],
+      "weaknesses": [
+        "Single maintainer and six months old, with releases still at v0.15 (pre-1.0)",
+        "45-command surface adds real setup and learning overhead versus a simple notes app",
+        "Live research commands reach out to X, the web, and YouTube, so 'key-less' does not mean fully offline"
+      ],
+      "why_it_matters": "Shows a single human-owned Markdown vault, not a hosted service, can serve as portable long-term memory across eight independent coding-agent CLIs.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "github_detected_license": "MIT",
+      "forks": 554,
+      "open_issues": 13,
+      "metadata_verified_at": "2026-09-12",
+      "pushed_at": "2026-09-06T20:40:00Z"
+    },
+    {
+      "id": "claude-obsidian",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "claude-obsidian",
+      "repo": "AgriciDaniel/claude-obsidian",
+      "url": "https://github.com/AgriciDaniel/claude-obsidian",
+      "description": "Local-first Agent Skills bundle and Python engine that turns captured sources into a source-cited, transaction-safe Obsidian vault for Claude Code and other agent hosts.",
+      "primary_role": "memory_bridge",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "plain_files",
+        "full_text",
+        "vector_index",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "file_import",
+        "manual",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned",
+        "supersession"
+      ],
+      "canonical_data": "A normal Obsidian vault of Markdown pages plus JSON source/claim ledgers and content-addressed raw source captures.",
+      "deployment": [
+        "local_cli",
+        "ide_extension"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 14852,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 9,
+        "data_sovereignty": 9.5,
+        "interoperability": 9.5,
+        "memory_intelligence": 8,
+        "operational_simplicity": 6.5,
+        "maturity": 6.5,
+        "overall": 8.34
+      },
+      "strengths": [
+        "Content-addressed capture with source and claim ledgers tracking authority, confidence, and contradiction",
+        "One recoverable, lockable transaction per write, with journaled backups and atomic replacement",
+        "Deterministic local BM25 retrieval with optional, explicitly gated model-based reranking",
+        "Portable across Claude Code, Codex, OpenCode, Gemini, Cursor, and Windsurf via Agent Skills"
+      ],
+      "weaknesses": [
+        "Setup is deliberately multi-step (plan, review, approved-plan-sha256, apply), trading simplicity for safety",
+        "PDF/EPUB and OCR support is metadata-only without a configured external runner",
+        "Depends on a connected Agent Skills host to perform the actual synthesis and linking",
+        "Rapid star growth (14.8k stars, 1.5k forks) with no independent evidence yet of long-run maintenance"
+      ],
+      "why_it_matters": "Demonstrates that an agent-facing memory bridge can add real provenance and transaction safety on top of a vault humans still own as plain Markdown.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-10T17:44:23Z",
+      "forks": 1478,
+      "open_issues": 20,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "second-brain",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Second Brain",
+      "repo": "henrydaum/second-brain",
+      "url": "https://github.com/henrydaum/second-brain",
+      "description": "Self-hosted, model-agnostic personal agent that automates file, task, and messaging work with a self-maintaining memory bundle.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "self_editing"
+      ],
+      "canonical_data": "A local application-data directory holding config, a SQLite-backed database, installed capability bundles, and the agent's file workspace.",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "persistent_state",
+        "multi_agent",
+        "research",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 635,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6,
+        "tool_use": 7,
+        "autonomy": 7,
+        "human_control": 6,
+        "observability_recovery": 5,
+        "data_sovereignty": 7.5,
+        "interoperability": 6.5,
+        "maturity": 5,
+        "overall": 6.21
+      },
+      "strengths": [
+        "Model-agnostic, self-hosted single agent",
+        "Path-driven and event-driven scheduled task automation",
+        "Modular capability bundles (files, memory, Gmail)",
+        "Telegram and web chat frontends alongside the terminal REPL"
+      ],
+      "weaknesses": [
+        "Reliability claims rest on a self-published benchmark, not independent evaluation",
+        "Companion web UI has no documented production deployment path outside a macOS-specific proxy",
+        "Single maintainer with a modest track record and no documented approval/audit trail for autonomous actions",
+        "Limited documented observability into task/tool failures"
+      ],
+      "why_it_matters": "Shows a model-agnostic, self-hosted general work agent that pairs scheduled file and messaging automation with a durable, self-maintaining memory bundle.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-12T15:54:19Z",
+      "forks": 77,
+      "open_issues": 1,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "compartment",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Compartment",
+      "repo": "MaxFreedomPollard/Compartment",
+      "url": "https://github.com/MaxFreedomPollard/Compartment",
+      "description": "Encrypted, fully offline local memory vault for AI agents, reachable from any MCP client with no account or network calls.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "supersession",
+        "decay"
+      ],
+      "canonical_data": "a single encrypted local vault file with an in-memory hybrid vector/keyword index",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 584,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7,
+        "data_sovereignty": 9.5,
+        "interoperability": 8.5,
+        "memory_intelligence": 7,
+        "operational_simplicity": 8,
+        "maturity": 3.5,
+        "overall": 7.32
+      },
+      "strengths": [
+        "Fully local, encrypted-at-rest vault (XChaCha20-Poly1305, Argon2id) with no account, API key, or network calls",
+        "Broad MCP client support - Claude Code, Claude Desktop, Cursor, Codex, Hermes Agent, OpenClaw, VS Code - with one-command integration",
+        "Explicit per-claim provenance, expiry, and supersession logic rather than an opaque memory blob"
+      ],
+      "weaknesses": [
+        "Repository created about two months before this review (2026-07-20); no long-term adoption track record despite rapid star growth",
+        "Its own README carries a self-authored comparison table judging competing memory servers, uncorroborated by those projects",
+        "Fixed-tier importance heuristic (0.90/0.80/0.75/0.55/0.20) is a simple rule set, not a reasoning-based memory model"
+      ],
+      "why_it_matters": "A clean, self-contained illustration of encrypted, fully local, cross-client agent memory reachable from any MCP tool, though it is too new to show durability.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T03:18:05Z",
+      "forks": 3,
+      "open_issues": 1,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "swarmclaw",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "SwarmClaw",
+      "repo": "swarmclawai/swarmclaw",
+      "url": "https://github.com/swarmclawai/swarmclaw",
+      "description": "Self-hosted control plane that delegates and orchestrates fleets of agents and CLI backends (including OpenClaw gateways) with durable memory, schedules, and structured multi-agent runs.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "hybrid",
+        "graph_traversal",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "Local SQLite database (better-sqlite3) and OS app-data directory holding agent memory, schedules, and session state",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "browser_control",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 670,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Most recent commit and release (v1.9.40) are from 2026-06-30, about ten weeks before verification; several issues opened since then (through early September 2026) show no visible maintainer follow-up as of this review.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 8.5,
+        "autonomy": 8.0,
+        "human_control": 8.0,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 9.0,
+        "maturity": 5.5,
+        "overall": 7.61
+      },
+      "strengths": [
+        "Coordinates delegation across 24+ providers and multiple external CLI agents (Claude Code, Codex, OpenCode, Gemini CLI, and others), plus OpenClaw gateways",
+        "Orchestration primitives (branching, parallel joins, restart-safe run state) support durable multi-agent workflows, not just single request/response calls",
+        "Approval gates, an Eval Lab, and an Operations Pulse dashboard give operators visibility and control over running agent fleets",
+        "Ships as desktop app, npm global CLI, and self-hosted Docker/PaaS images, all under one MIT license"
+      ],
+      "weaknesses": [
+        "No commit or release since 2026-06-30 (v1.9.40) as of this review, roughly ten weeks with several unaddressed issues opened afterward",
+        "Optional agent-linked crypto wallet features (Solana/Ethereum signing) widen the security surface beyond a typical agent runtime",
+        "Production-readiness claims (\"used in production by teams\") are vendor-asserted in the README FAQ with no independent corroboration",
+        "Shares an owner with a separate candidate (swarmvault) under review elsewhere; this review relies only on swarmclaw's own repository evidence"
+      ],
+      "why_it_matters": "A control-plane layer for coordinating swarms of delegated agents and external CLI/gateway backends, distinct from single-agent personal runtimes like the OpenClaw it explicitly integrates with.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-06-30T20:58:13Z",
+      "forks": 136,
+      "open_issues": 18,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "smart-second-brain",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Smart Second Brain",
+      "repo": "s2b-dev/smart-second-brain",
+      "url": "https://github.com/s2b-dev/smart-second-brain",
+      "description": "Obsidian plugin adding offline-capable hybrid search, an automatic topic graph, and an optional note-reading/writing AI agent to an existing vault.",
+      "primary_role": "ai_knowledge_app",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "plain_files",
+        "vector_index",
+        "graph_db",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "The user's existing Obsidian vault of local Markdown files, plus an on-disk search and topic-graph index the plugin maintains.",
+      "deployment": [
+        "ide_extension"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1253,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 8,
+        "data_sovereignty": 9,
+        "interoperability": 8,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 8,
+        "maturity": 6,
+        "overall": 7.63
+      },
+      "strengths": [
+        "Hybrid search and the topic graph work fully offline with no AI provider configured",
+        "No telemetry; the only network calls are to providers the user configures",
+        "Optional agent layer adds skills, memory, and MCP on top of the same vault",
+        "Installs directly into an existing Obsidian vault with no migration"
+      ],
+      "weaknesses": [
+        "Operates as an extension of Obsidian rather than a standalone application",
+        "Semantic search and topic modeling require the user to add an embedding model",
+        "Started as a university project and is now maintained in the team's spare time",
+        "Memory intelligence is search-and-graph clustering rather than deeper temporal or provenance reasoning"
+      ],
+      "why_it_matters": "Shows that meaningful offline search and graph intelligence can be added to an existing PKM vault without requiring a hosted model.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T21:23:03Z",
+      "forks": 117,
+      "open_issues": 36,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "nanobrowser",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Nanobrowser",
+      "repo": "nanobrowser/nanobrowser",
+      "url": "https://github.com/nanobrowser/nanobrowser",
+      "description": "Chrome/Edge extension running a local Planner-Navigator multi-agent loop for browser automation using the user's own LLM API keys.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "In-browser conversation and action history kept by the extension; no server-side store",
+      "deployment": [
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 13776,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Last functional commit and release (v0.1.13) landed 2025-11-22; the only later commit (2026-08-18) was a README edit. Several feature/fix PRs opened through September 2026 remain open and unmerged.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 6.0,
+        "autonomy": 6.5,
+        "human_control": 6.0,
+        "observability_recovery": 5.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 8.0,
+        "maturity": 5.0,
+        "overall": 6.26
+      },
+      "strengths": [
+        "Everything executes client-side in the browser; API keys and credentials never leave the user's machine",
+        "Planner/Navigator split lets the Planner self-correct and redirect the Navigator on obstacles",
+        "Per-agent model assignment across OpenAI, Anthropic, Gemini, Ollama, Groq, Cerebras, Llama, and OpenAI-compatible endpoints"
+      ],
+      "weaknesses": [
+        "No functional commit merged since November 2025 (v0.1.13); only a README update since, despite active incoming PRs",
+        "Chrome and Edge only; Firefox, Safari, and other Chromium variants are explicitly unsupported",
+        "No documented checkpoint/replay mechanism beyond in-panel conversation history"
+      ],
+      "why_it_matters": "A privacy-preserving, bring-your-own-key alternative to hosted browser-operator products, though its maintenance pace has slowed sharply over the past year.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-08-18T00:42:48Z",
+      "forks": 1454,
+      "open_issues": 81,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "swarmvault",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "SwarmVault",
+      "repo": "swarmclawai/swarmvault",
+      "url": "https://github.com/swarmclawai/swarmvault",
+      "description": "Local-first CLI that ingests documents, code, and media into a durable Markdown wiki plus a typed, provenance-tagged knowledge graph for humans and agents.",
+      "primary_role": "context_graph_engine",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "plain_files",
+        "graph_db",
+        "vector_index",
+        "full_text",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "audio",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite",
+        "consolidation",
+        "supersession"
+      ],
+      "canonical_data": "A generated Markdown wiki plus a machine-readable graph.json knowledge graph, compiled from immutable raw source captures.",
+      "deployment": [
+        "local_cli",
+        "library",
+        "desktop"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 685,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 7.5,
+        "data_sovereignty": 9,
+        "interoperability": 9.5,
+        "memory_intelligence": 8.5,
+        "operational_simplicity": 6.5,
+        "maturity": 6,
+        "overall": 7.94
+      },
+      "strengths": [
+        "Fully offline heuristic provider; no API keys required for the core workflow",
+        "Typed graph edges (extracted/inferred/ambiguous) with contradiction detection and confidence bounds",
+        "Broad export surface: HTML, SVG, GraphML, Cypher/Neo4j, Obsidian notes and canvases",
+        "MCP server plus direct install hooks for Claude Code, Codex, Gemini CLI, Copilot, and others"
+      ],
+      "weaknesses": [
+        "Very large CLI surface (dozens of subcommands) raises the learning curve versus a focused note app",
+        "No repository push since 2026-06-30 at time of review, roughly two and a half months",
+        "Single maintaining organization with a comparatively small community (685 stars, 79 forks)",
+        "Sharper concept/entity/claim extraction depends on adding a local or cloud LLM provider"
+      ],
+      "why_it_matters": "A self-contained, provenance-aware knowledge-graph engine that serves both a human wiki and MCP-connected agents without requiring any single agent host.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-06-30T20:28:43Z",
+      "forks": 79,
+      "open_issues": 8,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "nerve",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Nerve",
+      "repo": "ClickHouse/nerve",
+      "url": "https://github.com/ClickHouse/nerve",
+      "description": "Self-hosted, single-process agent runtime built on the Claude Agent SDK that gives agents persistent dual-layer memory, scheduled cron execution, task and skill management, and web/Telegram channels, in personal-assistant or plan-approve worker modes.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "upsert_rewrite",
+        "decay"
+      ],
+      "canonical_data": "a workspace directory of Markdown identity/memory files (SOUL.md, IDENTITY.md, MEMORY.md), a SQLite database for tasks (FTS5), plans, and the memU semantic memory index, all on the operator's own host",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 80,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 7.5,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 6.0,
+        "maturity": 4.0,
+        "overall": 6.88
+      },
+      "strengths": [
+        "Plans require explicit human approval before an implementation session spawns, and destructive tool calls require explicit consent, with a full audit trail of mutations",
+        "Runs as a single Python process (FastAPI + uvicorn + asyncio, no Docker or message queue required) light enough for a Raspberry Pi, and works off a Claude subscription with no API key",
+        "Dual-layer memory (curated hot Markdown memory plus a semantic SQLite index) and self-proposed, self-revised Markdown skills give the agent durable, inspectable state across restarts"
+      ],
+      "weaknesses": [
+        "Single-provider by design: the agent engine is built entirely on the Claude Agent SDK, so the runtime's behavior is coupled to Anthropic model access",
+        "Very early-stage adoption (80 stars, one primary maintainer) with no independent track record beyond its own README and test suite",
+        "Untrusted third-party content (Gmail, GitHub, Telegram) is only mitigated by a documented prompt-injection warning prefix, not sandboxed execution of ingested content"
+      ],
+      "why_it_matters": "A working, self-hosted example of a persistent agent runtime with real plan/approve governance and dual-layer memory built directly on a provider's own agent SDK rather than a bespoke orchestration layer.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-12T16:40:17Z",
+      "forks": 30,
+      "open_issues": 41,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "claudable",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Claudable",
+      "repo": "anymorph-ai/Claudable",
+      "url": "https://github.com/anymorph-ai/Claudable",
+      "description": "Web app builder that drives external coding-agent CLIs (Claude Code, Codex CLI, Cursor CLI, Qwen Code, Z.AI GLM) to generate a Next.js app with live preview, one-click Vercel deployment, and Supabase database provisioning.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "z_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "append_only"
+      ],
+      "canonical_data": "Generated Next.js project files in a local Git working tree, plus a local SQLite/Prisma database of projects, chat sessions, and deployment state",
+      "deployment": [
+        "desktop",
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "persistent_state"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4049,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "Originating organisation opactorai renamed to anymorph-ai; the last commit is dated 2026-03-04 and feature PRs and issues opened through 2026-07-28 remain unaddressed as of this review.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 7.5,
+        "autonomy": 6.0,
+        "human_control": 6.5,
+        "observability_recovery": 5.0,
+        "data_sovereignty": 7.0,
+        "interoperability": 8.0,
+        "maturity": 4.0,
+        "overall": 6.35
+      },
+      "strengths": [
+        "Five vendor coding-agent CLI/SDK integrations behind one build-and-deploy workflow",
+        "End-to-end path from prompt to live preview to Vercel deployment to a provisioned Supabase database",
+        "Packaged Electron desktop build alongside the local dev-server workflow"
+      ],
+      "weaknesses": [
+        "No commits since March 2026, with feature PRs and issues opened as late as July 2026 still unaddressed",
+        "Runs agents with full host access by design; the README advertises 'no complex sandboxes'",
+        "Originating organisation renamed and shows no visible new activity on this repository since"
+      ],
+      "why_it_matters": "Shows how far a thin, now-dormant wrapper over five vendors' coding-agent CLIs can still take a single prompt to a deployed, database-backed web app.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-04-11T03:03:40Z",
+      "forks": 616,
+      "open_issues": 45,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "antigravity-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Google Antigravity SDK",
+      "repo": "google-antigravity/antigravity-sdk-python",
+      "url": "https://github.com/google-antigravity/antigravity-sdk-python",
+      "description": "Python framework for embedding a Gemini-powered agent loop in a developer's own application: an async Agent/Conversation API with custom tools, MCP integration, hooks/policies, and triggers, driven by a compiled Antigravity runtime binary distributed only through PyPI.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "google"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "in-process conversation/session state (step history, tool calls) held by the host application; no durable store is documented",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0",
+        "LicenseRef-Unclear"
+      ],
+      "source_model": "unclear",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3372,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "The repository's own README states cloning it is not sufficient to run the SDK: the package depends on a compiled runtime binary bundled only in the platform-specific wheels published to PyPI. The reviewed Apache-2.0 LICENSE text covers the Python wrapper source in this repository; neither the repository nor the PyPI project page states separate terms for that binary, so source_model is recorded as unclear rather than mixed_source (no proprietary terms were found to cite) or open_source (the binary that actually runs the agent loop ships no source).",
+      "score": {
+        "task_reliability": 5.5,
+        "tool_use": 7.0,
+        "autonomy": 6.5,
+        "human_control": 6.5,
+        "observability_recovery": 5.5,
+        "data_sovereignty": 3.0,
+        "interoperability": 6.0,
+        "maturity": 5.0,
+        "overall": 5.71
+      },
+      "strengths": [
+        "Declarative hook/policy system (deny/allow/ask_user per tool) with a documented read-only default gives developers control before enabling write capabilities",
+        "Custom Python-function tools, MCP server integration, and scheduled triggers are first-class, documented primitives rather than bolt-ons",
+        "A layered architecture (Agent, Conversation/Session, Connection/Adapter) exposes both a batteries-included entry point and low-level streaming step access"
+      ],
+      "weaknesses": [
+        "The agent loop itself executes inside a compiled binary that ships only through the PyPI wheel and is absent from the source repository; neither the repository nor the PyPI project page documents separate terms for it, leaving its license status undocumented",
+        "No durable session store, crash recovery, or persistence layer is documented; state lives in the host process's memory for the life of the Conversation object",
+        "Tightly coupled to Google Gemini/Vertex AI (Express or Standard mode); no alternative model backend is documented"
+      ],
+      "why_it_matters": "The embeddable, code-first counterpart to Google's Antigravity desktop platform: developers who want the same agent loop inside their own application, rather than Antigravity's IDE/desktop surface, get a Python SDK instead of a GUI product.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-02T15:29:10Z",
+      "forks": 1334,
+      "open_issues": 31,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "vibecode-pro-max-kit",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Vibecode Pro Max Kit",
+      "repo": "withkynam/vibecode-pro-max-kit",
+      "url": "https://github.com/withkynam/vibecode-pro-max-kit",
+      "description": "Drop-in RIPER-5 gated-phase workflow kit that turns Claude Code, Codex, and other coding agents into a plan-first, self-healing delivery process with an autopilot mode.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Markdown plan, spec, and progress files written into the target repository",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "partial",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1127,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 5.5,
+        "tool_use": 6.0,
+        "autonomy": 7.5,
+        "human_control": 5.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 8.0,
+        "maturity": 4.5,
+        "overall": 6.38
+      },
+      "strengths": [
+        "A coherent seven-gated RIPER-5 workflow (research through update-process), not a loose prompt collection, with 36 mechanical validators guarding the kit's own structure",
+        "Runs entirely against the user's own local repository across many coding-agent hosts (Claude Code, Codex, Cursor, Windsurf, Copilot)",
+        "A resumable run-until-done token lets an autopilot run survive a fresh session"
+      ],
+      "weaknesses": [
+        "No commits, releases, or version bumps in the roughly three months before this review despite an actively marketed autopilot workflow",
+        "Explicitly promotes running with '0 need for human gate,' trading away the approval checkpoints its own gated phases otherwise provide",
+        "Reliability, cost-estimate, and self-healing claims are vendor-authored marketing copy with no independent benchmark or test evidence in the bundle"
+      ],
+      "why_it_matters": "Shows a heavily gated, self-healing prompt-and-validator workflow can be layered onto an existing coding agent instead of requiring a new agent runtime.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "github_detected_license": "MIT",
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "workflows",
+        "multi_agent"
+      ],
+      "forks": 233,
+      "open_issues": 20,
+      "metadata_verified_at": "2026-09-12",
+      "pushed_at": "2026-06-21T08:31:44Z"
+    },
+    {
+      "id": "openevolve",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenEvolve",
+      "repo": "algorithmicsuperintelligence/openevolve",
+      "url": "https://github.com/algorithmicsuperintelligence/openevolve",
+      "description": "Framework that evolves a population of candidate programs with an LLM ensemble under a MAP-Elites quality-diversity archive, scoring each mutation through a caller-supplied evaluator with cascade stages and timeouts.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "google",
+        "anthropic",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "a per-run output directory holding the MAP-Elites program archive, island populations, and numbered checkpoints on the user's own filesystem",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 7356,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 5.5,
+        "autonomy": 8.0,
+        "human_control": 5.0,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.0,
+        "maturity": 5.5,
+        "overall": 6.43
+      },
+      "strengths": [
+        "Island-based MAP-Elites archive with cascade evaluation and an artifact side-channel feeds evaluator error output back into the next generation's prompt",
+        "Runs fully local-first: host or Docker execution, local model backends, and a filesystem-only checkpoint archive with no mandatory cloud dependency",
+        "Ships a visualizer over the checkpoint archive and documents a worked example gallery with per-example evaluators"
+      ],
+      "weaknesses": [
+        "The loop has no approval gate or pause point once started; control is exercised only through the evaluator and config set before a run begins",
+        "Headline claims (\"most advanced open-source evolutionary coding agent,\" \"2-3x speedups,\" \"state-of-the-art circle packing\") are each tied to one worked example rather than an independently reproduced benchmark",
+        "Tool surface is narrow: no MCP integration and no browser, shell, or multi-agent coordination capability, only LLM mutation plus a caller-supplied evaluator"
+      ],
+      "why_it_matters": "An open, self-hostable implementation of the AlphaEvolve evolutionary-coding pattern, usable as a library or CLI to drive LLM-mutated program search against a user's own evaluator rather than a closed research demo.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-07-18T13:16:12Z",
+      "forks": 1154,
+      "open_issues": 118,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "mindshub",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "MindsHub",
+      "repo": "mindsdb/mindshub",
+      "url": "https://github.com/mindsdb/mindshub",
+      "description": "End-user agent workspace that connects data sources (BigQuery, Postgres, Gmail, Drive, HubSpot, Notion, Linear), routes across frontier and open models, runs swappable open-source agent harnesses (Anton, Hermes) against multi-step knowledge work, and publishes results as shareable artifacts.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "moonshot_ai"
+      ],
+      "architectures": [
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "connectors",
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "a per-connection credential vault, an agent backend database (memory, skills, tasks), and published artifacts, held on the user's own machine or VPC when self-hosted, or in MindsDB's hosted console",
+      "deployment": [
+        "desktop",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT",
+        "AGPL-3.0",
+        "LicenseRef-Commercial",
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 39730,
+      "stars_verified_at": "2026-09-12",
+      "historical_stars": null,
+      "current_repo_note": "This repository is a superproject: its top-level MIT LICENSE covers only the build/glue code. It pins four Git submodules, each under its own license, reviewed here at the exact commits mindshub's main branch pins: frontend (mindsdb/cowork) is AGPL-3.0; backend/core_agent (mindsdb/anton) is MIT; backend/core_api (mindsdb/cowork-server) -- the agent backend the whole product depends on to run -- carries an all-rights-reserved proprietary notice with no reuse grant; and backend/data-vault (mindsdb/data-vault, the MindsDB core engine) splits Elastic License 2.0 for its core against MIT for its `/mindsdb/integrations` subdirectory. The taxonomy has no dedicated id for Elastic License 2.0, so it is recorded here as LicenseRef-Commercial (source-available with reuse and hosting restrictions), the same bucket other Atlas records use for comparable dual-licensed cores. The README's own 'released under the MIT License' framing describes only the top-level repository, not the product a user actually runs.",
+      "score": {
+        "task_reliability": 5.5,
+        "tool_use": 8.0,
+        "autonomy": 6.5,
+        "human_control": 5.5,
+        "observability_recovery": 5.0,
+        "data_sovereignty": 4.0,
+        "interoperability": 6.5,
+        "maturity": 6.0,
+        "overall": 5.88
+      },
+      "strengths": [
+        "Connects a wide, named set of data sources (BigQuery, Postgres, Gmail, Drive, HubSpot, Notion, Linear) through a scoped credential vault, rather than one narrow integration",
+        "Model access and agent harness are both swappable: a router across Claude, GPT, Gemini, DeepSeek, Qwen, and Kimi, and interchangeable open-source harnesses (Anton, Hermes) selectable from a dropdown",
+        "High adoption signal (39.7k stars, pushed within the last day) and a documented path to deploy on-prem, air-gapped, or in a private VPC rather than only the hosted console"
+      ],
+      "weaknesses": [
+        "The agent backend that executes the whole workspace (backend/core_api, i.e. mindsdb/cowork-server) is licensed all-rights-reserved at the commit this repository pins, so the 'run on your machine, in your VPC' claim depends on a component the operator cannot inspect, modify, or redistribute",
+        "No approval-gate, audit-trail, or session-recovery mechanism is documented in the README; human-control and observability claims cannot be established from the evidence reviewed here",
+        "The repository itself ships no application code: it is a superproject of four separately licensed submodules, so behavior claims rest on the submodules' own (unreviewed-in-depth) documentation rather than this repository's content"
+      ],
+      "why_it_matters": "A widely starred example of a vendor packaging a broad, connected-data agent workspace as an ostensibly open-source superproject whose actual operational core is proprietary, which matters for any reader evaluating it on the top-level MIT badge alone.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-12",
+      "pushed_at": "2026-09-11T02:43:59Z",
+      "forks": 6243,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-09-12",
+      "github_detected_license": "MIT"
     }
   ]
 }

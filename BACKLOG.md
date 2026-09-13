@@ -43,7 +43,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 ### Coverage batches
 
-- [ ] Work the fifty-two currently actionable system candidates in small evidence-backed batches; keep the thirteen robotics candidates held until their scope decision resolves. [#141](https://github.com/katagun/ai-systems-atlas/pull/141) is open against 31 of them and would bring the queue to 43.
+- [ ] Work the twenty-one currently actionable system candidates in small evidence-backed batches. [#141](https://github.com/katagun/ai-systems-atlas/pull/141) merged, promoting twenty-two and holding nine more; the queue is now 43 total, 22 held (the original thirteen robotics candidates plus the nine new holds, each recorded with its own gating question in `held_by`).
 - [ ] Triage the first attention-source signal bundle. The sweep runs locally on a schedule and commits `directory/hn-signals.json` to a local branch that never pushes, so the published queue is empty by design and nothing from that source has reached `directory/candidates.json`; run `scripts/run_hn_signals.py prepare --from-ref local/hn-signals` from the sweep worktree, annotate the bundle, and judge from that run whether the twenty-five-signal floor and sixty-signal cap are right.
 - [ ] Review xerj as retrieval infrastructure, with maturity treated separately from eligibility and vendor-measured efficiency treated as marketing rather than evidence. Recheck `memory_service` before fixing its role.
 - [ ] Re-check LangGraph's source model and deployment traits against the restricted agent server that made Open SWE mixed-source.
