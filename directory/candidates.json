@@ -3598,59 +3598,6 @@
       }
     },
     {
-      "repo": "Roznoshchik/Lurnby",
-      "name": "Lurnby",
-      "url": "https://github.com/Roznoshchik/Lurnby",
-      "description": "A tool for active reading and personal knowledge management",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": "BSD-3-Clause",
-      "stars": 702,
-      "topics": [
-        "personal-knowledge-management",
-        "personal-knowledge-system",
-        "reading",
-        "spaced-repetition-system"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "rule": "docs/CURATION.md inclusion gate condition 2",
-        "finding": "BSD-3-Clause licensed. The README describes it as \"a tool for building a personal knowledge practice\" that \"helps you read and remember more,\" working with web articles and EPUBs and letting a user \"highlight, categorize, and review your content with active recall and spaced repetition tools.\" It is a conventional full-stack web application (Flask/Postgres backend, Preact/Vite frontend) with its own component and services documentation, screenshots, and a codecov badge — a working, self-contained engine rather than a template or prompt wrapper. No LLM or agent behavior appears anywhere in the README. The bundle reports no cross-collection hits. Boundary question: it is a reading/highlighting/spaced-repetition tool rather than a linked-notes or graph app; a reviewer should confirm this narrower \"read and remember\" workflow still clears the human-knowledge-practice bar the way plainer PKM apps elsewhere in this queue do. Promotion review 2026-09-12: Draft review passed, but a reading, highlighting and spaced-repetition tool with no writing, linking or AI behaviour may not meet the human knowledge role's relevance bar; the reviewer flagged it for a second opinion.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/Roznoshchik/Lurnby/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "91ee1f0355bf60fc02c9941693550387ef0d210f8e28a61b901c71dee501fac8",
-            "fetched_at": "2026-09-12",
-            "blob_sha": "0b0b67212bb61467de665bda0caa86354a510691",
-            "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/0b0b67212bb61467de665bda0caa86354a510691"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/Roznoshchik/Lurnby/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "e57fe72c4bb8e0b72ce0ba42be470f28837554d6860ec412bba754982c60b3c5",
-            "fetched_at": "2026-09-12",
-            "blob_sha": "7285ee4d891ca1be1018f4d6c26de730e97f2aa7",
-            "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/7285ee4d891ca1be1018f4d6c26de730e97f2aa7"
-          }
-        ],
-        "proposed_at": "2026-09-12",
-        "proposer": "promotion review",
-        "held_by": "maintainer decision: human knowledge role relevance"
-      }
-    },
-    {
       "repo": "RTGS2017/NagaAgent",
       "name": "NagaAgent",
       "url": "https://github.com/RTGS2017/NagaAgent",
@@ -4530,75 +4477,6 @@
         "traits",
         "editorial_score"
       ]
-    },
-    {
-      "repo": "xerj-org/xerj",
-      "name": "xerj",
-      "url": "https://github.com/xerj-org/xerj",
-      "description": "XERJ is the new way for AI to search data. Its autoindex capability activates agents to know your data without the token waste of grep and sed. One command indexes code, docs, logs and PDFs for search, RAG, security audits and agent memory, using 40x fewer tokens than grep. Elasticsearch compatible, so existing clients just work.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "retrieval_infrastructure",
-      "classification_confidence": 1,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1644,
-      "topics": [
-        "ai-search",
-        "ai-search-algorithms",
-        "ai-search-engine",
-        "ai-search-free",
-        "ai-search-module",
-        "ai-search-optimization",
-        "ai-searchengine",
-        "bm25-search",
-        "elastic-search",
-        "elasticsearch",
-        "elasticstack",
-        "graph-search",
-        "graph-semantic-search",
-        "hybrid-search",
-        "hybrid-semantic-search",
-        "search-api",
-        "search-engine",
-        "semantic-search",
-        "vector-database",
-        "vector-search"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-08-25",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "rule": "docs/CURATION.md inclusion gate; editorial judgement reserved to a human",
-        "finding": "Apache-2.0 licensed. The README describes it as \"a community-trusted local AI search that indexes any folder automatically, so your coding agent stops burning tokens reading files one by one and pulls the exact code it needs instead,\" with \"reference coding\" as its headline use case: pointing an agent at a task so it \"downloads the open-source repos closest to it, indexes them, and reuses how they solved the problem.\" It reports a controlled case study cutting a coding agent's output tokens \"2.7x at the same 16/16 solve rate,\" ships as a single static binary with hybrid BM25-plus-kNN search, a default offline lexical embedder, an opt-in neural embedder, native MCP support, and a documented `/memory` agent-memory recipe. The bundle reports no cross-collection hits. Boundary question: whether the record's primary value is retrieval infrastructure for agents in general, or specifically the \"reference coding\" workflow for coding agents the README leads with. Promotion review 2026-09-12: Draft review passed, but the README asks agents installed in other people's codebases to open a one-file feedback pull request, which inflates contributor and fork signals; whether that affects inclusion is a maintainer decision.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/xerj-org/xerj/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-            "fetched_at": "2026-09-12",
-            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-            "immutable_url": "https://api.github.com/repos/xerj-org/xerj/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/xerj-org/xerj/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "f9a7752212a1f641a4e7db7bfd38421d7ff35b5704feda95272b4c7d3a32a1e9",
-            "fetched_at": "2026-09-12",
-            "blob_sha": "713878b4ee86c536fc5a2a5b760699d309e28bd3",
-            "immutable_url": "https://api.github.com/repos/xerj-org/xerj/git/blobs/713878b4ee86c536fc5a2a5b760699d309e28bd3"
-          }
-        ],
-        "proposed_at": "2026-09-12",
-        "proposer": "promotion review",
-        "held_by": "maintainer decision: agent-directed feedback pull requests"
-      }
     },
     {
       "repo": "xlang-ai/Spider2",

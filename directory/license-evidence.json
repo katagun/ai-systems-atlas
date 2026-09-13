@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-12",
+  "verified_at": "2026-09-13",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3306,7 +3306,37 @@
           "verified_at": "2026-09-12"
         }
       ]
+    },
+    {
+      "project_id": "xerj",
+      "repo": "xerj-org/xerj",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/xerj-org/xerj/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/xerj-org/xerj/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "lurnby",
+      "repo": "Roznoshchik/Lurnby",
+      "items": [
+        {
+          "license_id": "BSD-3-Clause",
+          "scope": "Whole repository under the BSD 3-Clause License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Roznoshchik/Lurnby/blob/main/LICENSE",
+          "blob_sha": "0b0b67212bb61467de665bda0caa86354a510691",
+          "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/0b0b67212bb61467de665bda0caa86354a510691"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-12"
+  "generated_at": "2026-09-13"
 }

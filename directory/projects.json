@@ -17712,6 +17712,152 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "xerj",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "xerj",
+      "repo": "xerj-org/xerj",
+      "url": "https://github.com/xerj-org/xerj",
+      "description": "Single static binary that auto-indexes any folder — code, docs, logs, PDFs — into typed, Elasticsearch-compatible indices for hybrid keyword-and-vector retrieval by coding agents.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [
+        "agent_memory_service"
+      ],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "full_text",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Typed per-dataset indices built by `xerj autoindex` from whatever a folder contains (code with tree-sitter symbols, docs, logs, PDFs, SQLite, CSV), plus a separate namespaced `/_memory` store, all held on local disk under the configured data directory.",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1909,
+      "stars_verified_at": "2026-09-13",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 2.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 8.0,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 8.5,
+        "maturity": 3.0,
+        "overall": 5.97
+      },
+      "strengths": [
+        "Elasticsearch API compatibility means existing clients, dashboards, and agent tooling work against it unchanged, rather than adopting a new query language",
+        "Tree-sitter-aware code ingestion returns symbols and file:line locations rather than flat text, which is the specific retrieval shape a coding agent's reference-coding workflow needs",
+        "A single static binary with an offline default embedder needs no server, database, or model download to start, and stays usable on a host with no runtime internet access"
+      ],
+      "weaknesses": [
+        "Pre-1.0: the project is eleven weeks old and, as of this review, has shipped seventy-four release candidates and no stable 1.0.0, so its interface and index format should be treated as still moving",
+        "The README's stated membership ask, that any user or agent who runs it send back a one-file field-report pull request, is documented to work identically whether a human or an agent installed it mid-session in someone else's codebase; that mechanic can inflate contributor, pull-request, and fork counts as an adoption signal, and neither should be read as independent evidence of organic usage",
+        "The default local run mode is `--insecure`, with no TLS and no authentication; the alternative mode auto-generates an API key file on first boot rather than offering an account or tenant model, so there is no built-in multi-user access control beyond that one key",
+        "The measured token-reduction claims (2.7x fewer output tokens than a grepping agent) are the vendor's own case study on its own benchmark; they are evidence of what the study measured, not an independently reproduced result"
+      ],
+      "why_it_matters": "A concrete, working answer to the token cost of an agent reading source files one at a time: index a corpus once with no schema, then retrieve typed, symbol-aware passages through a protocol every existing search client already speaks.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-13",
+      "github_detected_license": "Apache-2.0",
+      "pushed_at": "2026-09-13T16:20:23Z",
+      "forks": 236,
+      "open_issues": 22,
+      "metadata_verified_at": "2026-09-13"
+    },
+    {
+      "id": "lurnby",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Lurnby",
+      "repo": "Roznoshchik/Lurnby",
+      "url": "https://github.com/Roznoshchik/Lurnby",
+      "description": "Hosted and self-hostable active-reading tool for web articles and ebooks: highlight, tag, and categorize what you read, then review it with spaced repetition and recall practice.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "A PostgreSQL database of saved articles, ebooks, highlights, notes, tags, and spaced-repetition review state, hosted by the maintainer at lurnby.com by default or run on a self-hosted Postgres and Redis instance from the published install script.",
+      "deployment": [
+        "managed_cloud",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "BSD-3-Clause"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 703,
+      "stars_verified_at": "2026-09-13",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "second_brain_fit": 5.0,
+        "data_sovereignty": 4.5,
+        "interoperability": 3.0,
+        "memory_intelligence": 5.0,
+        "operational_simplicity": 7.5,
+        "maturity": 5.0,
+        "overall": 4.89
+      },
+      "strengths": [
+        "Purpose-built around spaced repetition and recall practice rather than bolting review onto a generic notes app, so revisiting captured content is a first-class, scheduled workflow rather than a manual habit",
+        "Browser extensions capture web articles directly from the reading context, and ebook import covers the other main source of long-form reading, so the two most common capture paths are both native rather than requiring a separate clipper tool",
+        "Genuinely self-hostable, with a maintained install script and a conventional Flask, Postgres, and Redis stack, rather than a hosted-only product with source available for reference"
+      ],
+      "weaknesses": [
+        "No linking, backlinking, or graph view between saved items: organization is tags and categories rather than the networked-notes structure its closer PKM neighbours in this catalog provide",
+        "No AI or agent integration of any kind: capture, highlighting, and review are entirely manual",
+        "The default and only advertised path is the maintainer's hosted instance; canonical data lives in that hosted Postgres schema rather than portable plain files, and self-hosting requires operating your own database and cache rather than reading files off disk",
+        "The default branch has not been touched since January 2026; the only more recent activity is an unmerged frontend-rewrite branch from May 2026, so the shipped open-source tree is quieter than the still-live hosted product"
+      ],
+      "why_it_matters": "A working example of memory-science technique, spaced repetition and recall practice, applied to ordinary reading rather than flashcard decks, published as a genuinely self-hostable product rather than a closed reading app.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-13",
+      "github_detected_license": "BSD-3-Clause",
+      "pushed_at": "2026-05-01T14:46:54Z",
+      "forks": 18,
+      "open_issues": 9,
+      "metadata_verified_at": "2026-09-13"
     }
   ]
 }
