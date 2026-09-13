@@ -26,6 +26,12 @@ function projectsInFamily(family) {
   return projects.filter(project => project.system_family === family).length;
 }
 
+// The Systems view opens on the "Active" status filter, so its pager counts only
+// records whose status matches exactly (web/app-core.js filterProjects).
+function projectsWithStatus(status) {
+  return projects.filter(project => project.status === status).length;
+}
+
 // Reviewed-model card names filtered the way web/app-core.js filterModels
 // matches facets, in grid order — score descending, then name, which is the
 // Models view default sort — so filter expectations follow the data instead
@@ -76,6 +82,7 @@ module.exports = {
   reviewedModels: reviewedModels.length,
   allDirectoryEntries,
   projectsInFamily,
+  projectsWithStatus,
   reviewedModelsWithSourceModel,
   reviewedModelsWithModality,
   reviewedModelsWithDistribution,
