@@ -598,6 +598,22 @@ function modelModalityRoute(model) {
   return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
 }
 
+// Badges replace the tags row on system, inference-service, and
+// local-runtime cards. A card with none omits the row rather than printing an
+// empty strip. The definition rides in the title for pointers and in hidden
+// text for screen readers; badges are never controls.
+function badgeRow(badges) {
+  if (!badges.length) return "";
+  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+}
+
+// Modality and family on a reviewed-model card come from models.dev, not from
+// Atlas review, so they carry attributed plain text instead of badges.
+function modelSourceMeta(model) {
+  const parts = [modelModalityRoute(model), model.source_metadata.family].filter(Boolean);
+  return `<div class="card-source-meta" title="From models.dev source metadata, not Atlas reviewed"><span class="visually-hidden">From models.dev: </span>${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
+}
+
 function importedModelCard(model, { mixed = false } = {}) {
   const metadata = model.source_metadata;
   const reportedLicense = metadata.reported_license || "Not reported";
@@ -636,7 +652,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
-        <div class="tags"><span>${escapeHTML(modelModalityRoute(record))}</span>${record.source_metadata.family ? `<span>${escapeHTML(record.source_metadata.family)}</span>` : ""}</div>
+        ${modelSourceMeta(record)}
         <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -645,7 +661,7 @@ function renderAllDirectoryEntries() {
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
-        <div class="tags">${record.accelerators.slice(0, 3).map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
+        ${badgeRow(AtlasCore.cardBadges("runtime", record))}
         <div class="card-footer"><span>Dedicated runtime score</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -654,7 +670,7 @@ function renderAllDirectoryEntries() {
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Inference service · ${escapeHTML(taxonomyName("inference_service_types", record.service_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.operator)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
-        <div class="tags">${record.delivery_modes.slice(0, 3).map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
+        ${badgeRow(AtlasCore.cardBadges("inference", record))}
         <div class="card-footer"><span>Dedicated service score</span><button data-inference-service="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -664,7 +680,7 @@ function renderAllDirectoryEntries() {
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
-      <div class="tags">${record.architectures.slice(0, 3).map(item => `<span>${escapeHTML(architectureName(item))}</span>`).join("")}</div>
+      ${badgeRow(AtlasCore.cardBadges("system", record))}
       <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
     </article>`;
   }).join("") || '<div class="notice">No systems, model releases, inference services, or local runtimes match this search.</div>';
@@ -723,7 +739,6 @@ const COLLECTIONS = {
     records: () => filteredProjects(),
     card: (project, { family }) => {
 
-    const tags = [project.agent_relation, ...project.architectures.slice(0, 3)];
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
     const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
     return `<article class="project-card ${escapeHTML(project.system_family)}">
@@ -731,7 +746,7 @@ const COLLECTIONS = {
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
-      <div class="tags">${tags.map(tag => `<span>${escapeHTML(label(tag))}</span>`).join("")}</div>
+      ${badgeRow(AtlasCore.cardBadges("system", project))}
       <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
     </article>`;
     },
@@ -794,7 +809,7 @@ const COLLECTIONS = {
     <div class="card-top"><div class="card-identity">${cardMark(service)}<div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
-    <div class="tags">${service.delivery_modes.map(item => `<span>${escapeHTML(taxonomyName("inference_delivery_modes", item))}</span>`).join("")}</div>
+    ${badgeRow(AtlasCore.cardBadges("inference", service))}
     <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div></div>
   </article>`,
   },
@@ -824,7 +839,7 @@ const COLLECTIONS = {
     <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
-    <div class="tags">${runtime.accelerators.map(item => `<span>${escapeHTML(taxonomyName("runtime_accelerators", item))}</span>`).join("")}</div>
+    ${badgeRow(AtlasCore.cardBadges("runtime", runtime))}
     <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
   </article>`,
   },
@@ -857,7 +872,7 @@ const COLLECTIONS = {
         <span class="role-badge">${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
-        <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${model.source_metadata.family ? `<span>${escapeHTML(model.source_metadata.family)}</span>` : ""}</div>
+        ${modelSourceMeta(model)}
         <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },
@@ -1186,6 +1201,7 @@ function renderTaxonomy() {
   ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
+    ["Card badges", AtlasCore.cardBadgeGlossary().map(entry => ({ name: entry.name, definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.` }))],
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
