@@ -386,9 +386,48 @@ it. Without `--publish`, the runner stops after the local commit and prints the 
 to publish; review the commit yourself before deciding to push it. Either way the runner exits
 non-zero when a check failed, even after a successful publish, so a scheduler notices.
 
-Schedule it with launchd, following the same pattern as the attention-source sweep. Write
-`~/Library/LaunchAgents/com.atlas.directory-refresh.plist`, substituting the checkout path,
-then load it with
+Schedule it with launchd, following the same pattern as the attention-source sweep: a
+dedicated worktree and a small wrapper script, not the runner pointed at an everyday
+checkout. Three things make the wrapper necessary rather than decorative:
+
+- The runner commits with `git checkout -B automation/directory-refresh`, so a run leaves its
+  checkout on that branch, and the next week's preflight refuses because `HEAD` no longer
+  matches `origin/main`. The wrapper runs `git fetch --prune origin` and
+  `git checkout --detach origin/main` first; `--prune` keeps the force-with-lease push honest
+  after a merged refresh branch is deleted on GitHub. For the same reason, no other worktree
+  may have `automation/directory-refresh` checked out when the job runs.
+- launchd's login shell does not put Homebrew or nvm on `PATH`. Without `gh`, the runner
+  silently falls back to anonymous GitHub limits and `--publish` cannot open the pull
+  request; the Node checks need a current `node`. The wrapper sets `PATH` explicitly, with
+  the nvm `node` ahead of Homebrew so a newer Homebrew `node` does not shadow it.
+- The logo and web checks need the lockfile's devDependencies, so the wrapper runs
+  `npm ci --ignore-scripts` in the worktree before the runner, matching `verify`.
+
+Create the worktree once, and seed it with the evidence-link cache from the checkout that ran
+the last check. A worktree without `.evidence-link-cache.json` establishes fresh terms
+baselines on its first run, which silently accepts any terms change made since the last
+check (see "Evidence links and terms drift" above):
+
+```bash
+git worktree add --detach ../atlas-directory-refresh origin/main
+cp .evidence-link-cache.json ../atlas-directory-refresh/
+```
+
+Then write the wrapper, refusing a dirty tree before doing anything else:
+
+```sh
+#!/bin/sh
+set -u
+cd /path/to/atlas-directory-refresh || exit 1
+NODE_BIN=$(ls -d "$HOME"/.nvm/versions/node/v*/bin 2>/dev/null | sort -V | tail -1)
+PATH="${NODE_BIN:+$NODE_BIN:}$HOME/.local/bin:/opt/homebrew/bin:$PATH"; export PATH
+[ -z "$(git status --porcelain)" ] || { echo "refusing: worktree is dirty" >&2; exit 1; }
+git fetch -q --prune origin && git checkout -q --detach origin/main || exit 1
+npm ci --ignore-scripts --no-audit --no-fund --silent || exit 1
+exec uv run python scripts/run_directory_refresh.py "$@"
+```
+
+Point `~/Library/LaunchAgents/com.atlas.directory-refresh.plist` at it, then load it with
 `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.directory-refresh.plist`:
 
 ```xml
@@ -397,11 +436,10 @@ then load it with
 <plist version="1.0">
 <dict>
   <key>Label</key><string>com.atlas.directory-refresh</string>
-  <key>WorkingDirectory</key><string>/path/to/ai-systems-atlas</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string><string>-lc</string>
-    <string>uv run python scripts/run_directory_refresh.py --publish</string>
+    <string>$HOME/.local/bin/atlas-directory-refresh.sh --publish</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>7</integer><key>Minute</key><integer>17</integer></dict>
@@ -410,6 +448,13 @@ then load it with
 </dict>
 </plist>
 ```
+
+Before relying on the schedule, run the wrapper once under launchd without `--publish` from a
+throwaway agent: bootstrap it, then start it with `launchctl kickstart -p
+gui/$(id -u)/<label>` — a `RunAtLoad` agent bootstrapped from outside `~/Library/LaunchAgents`
+was observed never to start on its own. That exercises the real launchd environment — `PATH`,
+the `gh` token from the login keychain, Node — through a full refresh and local commit, while
+pushing nothing. Remove the throwaway agent with `launchctl bootout` afterwards.
 
 The agent runs only while the maintainer is logged in, and launchd fires a missed run once at
 next login rather than once per missed week — the same tradeoff the attention-source sweep
