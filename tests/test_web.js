@@ -922,3 +922,26 @@ test("every badge appears on at least one published card in each place it is lis
     }
   }
 });
+
+// Cards paint from the boot payload before any detail file lands, so every
+// field a badge tests must be in boot for every record that carries it.
+test("every field a badge tests reaches the boot payload", () => {
+  const boots = {
+    system: [readWebJSON("projects.json").projects, readWebJSON("app/systems.json").systems],
+    inference: [readWebJSON("inference-services.json").services, readWebJSON("app/inference.json").inference],
+    runtime: [readWebJSON("local-runtimes.json").runtimes, readWebJSON("app/runtimes.json").runtimes],
+    model: [readWebJSON("models.json").models, readWebJSON("app/models.json").models],
+  };
+  for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
+    const kind = key.split(":")[0];
+    const [published, boot] = boots[kind];
+    const bootById = new Map(boot.map(record => [record.id, record]));
+    for (const id of ids) {
+      const { field } = CARD_BADGES[id].test;
+      for (const record of published) {
+        if (!(field in record)) continue;
+        assert.ok(field in bootById.get(record.id), `${kind}/${record.id} boot record lacks ${field}, which the ${id} badge tests`);
+      }
+    }
+  }
+});

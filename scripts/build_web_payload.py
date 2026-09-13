@@ -32,6 +32,8 @@ BOOT_FIELDS = {
         "stars", "status", "source_model", "licenses", "license_review_status", "description",
         "agent_relation", "architectures", "repo", "url", "deployment", "agent_interfaces",
         "local_first", "superseded_by",
+        # Card badges test these; see CARD_BADGES in web/app-core.js.
+        "human_editable", "execution_boundaries", "agent_capabilities", "retrieval_modes",
     ),
     "inference": (
         "id", "name", "service_type", "operator", "url", "api_styles", "model_sources",
