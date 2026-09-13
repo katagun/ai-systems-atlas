@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -792,4 +792,133 @@ test("an unknown or malformed view parameter resolves to no view", () => {
   assert.equal(parseViewId(undefined), null);
   assert.equal(parseViewId("API"), null);
   assert.equal(parseViewId("constructor"), null);
+});
+
+const badgeNames = badges => badges.map(badge => badge.name);
+
+test("agent-system badges follow priority order and stop at four", () => {
+  const record = {
+    system_family: "agent_system",
+    local_first: true,
+    execution_boundaries: ["host", "container"],
+    agent_capabilities: ["mcp", "browser_control"],
+    deployment: ["self_hosted"],
+  };
+  assert.deepEqual(badgeNames(cardBadges("system", record)), ["Local-first", "Sandboxed execution", "Browser control", "MCP"]);
+});
+
+test("badges come from the record's own family", () => {
+  const memory = {
+    system_family: "memory_system",
+    local_first: false,
+    human_editable: true,
+    retrieval_modes: ["graph_traversal"],
+    architectures: ["plain_files"],
+    agent_capabilities: ["mcp"],
+  };
+  assert.deepEqual(badgeNames(cardBadges("system", memory)), ["Editable by you", "Graph retrieval", "Plain files"]);
+  assert.deepEqual(cardBadges("system", { system_family: "agent_system", human_editable: true }), []);
+});
+
+test("missing, null, false, empty, and non-boolean fields never produce a badge", () => {
+  const records = [
+    { system_family: "agent_system" },
+    { system_family: "agent_system", local_first: null, execution_boundaries: null, agent_capabilities: [], deployment: [] },
+    { system_family: "agent_system", local_first: false },
+    { system_family: "agent_system", local_first: "true" },
+    { system_family: "agent_system", deployment: "self_hosted" },
+  ];
+  for (const record of records) assert.deepEqual(cardBadges("system", record), [], JSON.stringify(record));
+});
+
+test("specifications, unreviewed models, and unknown kinds or families get no badges", () => {
+  assert.deepEqual(cardBadges("spec", { status: "published", licenses: ["MIT"] }), []);
+  assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights"] }), []);
+  assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights"] }), []);
+  assert.deepEqual(badgeNames(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] })), ["Downloadable weights"]);
+  assert.deepEqual(cardBadges("toString", { local_first: true }), []);
+  assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
+});
+
+test("inference-service and local-runtime badges share only the identical API fact", () => {
+  assert.deepEqual(
+    badgeNames(cardBadges("inference", { model_sources: ["customer_supplied"], delivery_modes: ["batch"], api_styles: ["anthropic_compatible"] })),
+    ["Bring your own weights", "Anthropic-compatible API", "Batch"],
+  );
+  assert.deepEqual(
+    badgeNames(cardBadges("runtime", { accelerators: ["cuda", "metal"], serving_modes: ["distributed_serving"], api_styles: ["openai_compatible"] })),
+    ["Apple Metal", "Distributed serving"],
+  );
+});
+
+test("every badge list names a defined badge and every defined badge is listed", () => {
+  const listed = new Set(Object.values(CARD_BADGE_SETS).flat());
+  for (const id of listed) assert.ok(Object.hasOwn(CARD_BADGES, id), `${id} is listed but not defined`);
+  for (const id of Object.keys(CARD_BADGES)) assert.ok(listed.has(id), `${id} is defined but never shown`);
+  for (const [id, badge] of Object.entries(CARD_BADGES)) {
+    assert.ok(badge.name && badge.definition, `${id} needs a name and a definition`);
+    assert.ok(Array.isArray(badge.test.anyOf) ? badge.test.anyOf.length > 0 : badge.test.anyOf === undefined, `${id} has a malformed test`);
+  }
+});
+
+test("the badge glossary lists each badge once with every place it appears", () => {
+  const glossary = cardBadgeGlossary();
+  assert.equal(glossary.length, Object.keys(CARD_BADGES).length);
+  assert.equal(new Set(glossary.map(entry => entry.name)).size, glossary.length);
+  assert.deepEqual(glossary.find(entry => entry.id === "local-first").scopes, ["Agent systems", "Memory systems", "Assistant systems"]);
+  assert.deepEqual(glossary.find(entry => entry.id === "anthropic-compatible-api").scopes, ["Inference services", "Local runtimes"]);
+});
+
+// Published-data guards: a renamed taxonomy value or a badge nothing can earn
+// fails here instead of silently emptying cards.
+const readWebJSON = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", file), "utf8"));
+
+const BADGE_FIELD_VOCABULARIES = {
+  execution_boundaries: "execution_boundaries",
+  agent_capabilities: "agent_capabilities",
+  deployment: "deployment_modes",
+  retrieval_modes: "retrieval_modes",
+  architectures: "architectures",
+  model_sources: "inference_model_sources",
+  delivery_modes: "inference_delivery_modes",
+  api_styles: "inference_api_styles",
+  accelerators: "runtime_accelerators",
+  serving_modes: "runtime_serving_modes",
+  distribution_modes: "model_distribution_modes",
+};
+
+test("every value a badge tests exists in its taxonomy vocabulary", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  for (const [id, badge] of Object.entries(CARD_BADGES)) {
+    if (!badge.test.anyOf) continue;
+    const group = BADGE_FIELD_VOCABULARIES[badge.test.field];
+    assert.ok(group, `${id} tests ${badge.test.field}, which has no known vocabulary`);
+    const known = new Set(taxonomy[group].map(item => item.id));
+    for (const value of badge.test.anyOf) assert.ok(known.has(value), `${id} names unknown ${group} value ${value}`);
+  }
+});
+
+function publishedBadgeScopes() {
+  const projects = readWebJSON("projects.json").projects;
+  const family = name => ["system", projects.filter(record => record.system_family === name)];
+  return {
+    "system:agent_system": family("agent_system"),
+    "system:memory_system": family("memory_system"),
+    "system:assistant_system": family("assistant_system"),
+    inference: ["inference", readWebJSON("inference-services.json").services],
+    runtime: ["runtime", readWebJSON("local-runtimes.json").runtimes],
+    model: ["model", readWebJSON("app/models.json").models.filter(record => record.review_status === "reviewed")],
+  };
+}
+
+test("every badge appears on at least one published card in each place it is listed", () => {
+  const scopes = publishedBadgeScopes();
+  assert.deepEqual(Object.keys(scopes).sort(), Object.keys(CARD_BADGE_SETS).sort());
+  for (const [scope, ids] of Object.entries(CARD_BADGE_SETS)) {
+    const [kind, records] = scopes[scope];
+    assert.ok(records.length > 0, `${scope} has no published records`);
+    for (const id of ids) {
+      assert.ok(records.some(record => cardBadges(kind, record).some(badge => badge.id === id)), `${id} never appears on a ${scope} card`);
+    }
+  }
 });

@@ -282,7 +282,186 @@
     return THEME_PREFERENCES[(THEME_PREFERENCES.indexOf(current) + 1) % THEME_PREFERENCES.length];
   }
 
+  // Card badges flag reviewed traits a reader scans a grid for. Each badge is
+  // defined once and listed by id wherever it applies, so a name shared across
+  // collections always tests the same field and value. A badge only asserts
+  // presence: a missing, null, false, or empty field never produces one, and a
+  // card without a badge claims nothing is absent. See docs/WEB.md "Card badges".
+  const CARD_BADGES = {
+    "local-first": {
+      name: "Local-first",
+      definition: "Designed to work with its primary data on your own device; cloud services, where offered, are optional.",
+      test: { field: "local_first" },
+    },
+    "self-hostable": {
+      name: "Self-hostable",
+      definition: "Ships a service you can deploy and run on infrastructure you control.",
+      test: { field: "deployment", anyOf: ["self_hosted"] },
+    },
+    "sandboxed-execution": {
+      name: "Sandboxed execution",
+      definition: "Can run agent actions in a local container or an external sandbox.",
+      test: { field: "execution_boundaries", anyOf: ["container", "external_sandbox"] },
+    },
+    "browser-control": {
+      name: "Browser control",
+      definition: "Can operate a web browser as part of its work.",
+      test: { field: "agent_capabilities", anyOf: ["browser_control"] },
+    },
+    mcp: {
+      name: "MCP",
+      definition: "Can use tools and data sources through the Model Context Protocol.",
+      test: { field: "agent_capabilities", anyOf: ["mcp"] },
+    },
+    "editable-by-you": {
+      name: "Editable by you",
+      definition: "People can review and edit the data it stores.",
+      test: { field: "human_editable" },
+    },
+    "graph-retrieval": {
+      name: "Graph retrieval",
+      definition: "Can recall related memories by following connections in a graph.",
+      test: { field: "retrieval_modes", anyOf: ["graph_traversal"] },
+    },
+    "plain-files": {
+      name: "Plain files",
+      definition: "Keeps data in human-readable files, such as Markdown.",
+      test: { field: "architectures", anyOf: ["plain_files"] },
+    },
+    "time-aware-recall": {
+      name: "Time-aware recall",
+      definition: "Can recall what was true as of a given point in time.",
+      test: { field: "retrieval_modes", anyOf: ["temporal"] },
+    },
+    "desktop-app": {
+      name: "Desktop app",
+      definition: "Available as a desktop application you install and run.",
+      test: { field: "deployment", anyOf: ["desktop"] },
+    },
+    "mobile-app": {
+      name: "Mobile app",
+      definition: "Available as a mobile application you install and run.",
+      test: { field: "deployment", anyOf: ["mobile"] },
+    },
+    "bring-your-own-weights": {
+      name: "Bring your own weights",
+      definition: "Customers can import or deploy their own eligible models or weights.",
+      test: { field: "model_sources", anyOf: ["customer_supplied"] },
+    },
+    "dedicated-endpoints": {
+      name: "Dedicated endpoints",
+      definition: "Customers can get isolated serving resources or an endpoint of their own.",
+      test: { field: "delivery_modes", anyOf: ["dedicated_endpoint"] },
+    },
+    "anthropic-compatible-api": {
+      name: "Anthropic-compatible API",
+      definition: "Implements a documented subset or adaptation of Anthropic API conventions.",
+      test: { field: "api_styles", anyOf: ["anthropic_compatible"] },
+    },
+    "reserved-capacity": {
+      name: "Reserved capacity",
+      definition: "Customers can reserve a defined throughput tier or capacity allocation.",
+      test: { field: "delivery_modes", anyOf: ["reserved_capacity"] },
+    },
+    batch: {
+      name: "Batch",
+      definition: "Accepts asynchronous jobs that trade an immediate response for separate capacity or pricing.",
+      test: { field: "delivery_modes", anyOf: ["batch"] },
+    },
+    "apple-metal": {
+      name: "Apple Metal",
+      definition: "Documented to run on Apple silicon GPUs through Metal.",
+      test: { field: "accelerators", anyOf: ["metal"] },
+    },
+    "amd-rocm": {
+      name: "AMD ROCm",
+      definition: "Documented to run on AMD GPUs through ROCm.",
+      test: { field: "accelerators", anyOf: ["rocm"] },
+    },
+    "distributed-serving": {
+      name: "Distributed serving",
+      definition: "Can spread a model or its requests across several accelerators or hosts.",
+      test: { field: "serving_modes", anyOf: ["distributed_serving"] },
+    },
+    npu: {
+      name: "NPU",
+      definition: "Documented to run on a dedicated neural processing unit.",
+      test: { field: "accelerators", anyOf: ["npu"] },
+    },
+    "downloadable-weights": {
+      name: "Downloadable weights",
+      definition: "The developer publishes weights you can download and run under the recorded terms.",
+      test: { field: "distribution_modes", anyOf: ["downloadable_weights"] },
+    },
+    "developer-api": {
+      name: "Developer API",
+      definition: "The developer offers the model through its own managed API.",
+      test: { field: "distribution_modes", anyOf: ["developer_api"] },
+    },
+    "third-party-hosting": {
+      name: "Hosted by third parties",
+      definition: "Unrelated inference operators document a hosted path for the model.",
+      test: { field: "distribution_modes", anyOf: ["third_party_hosting"] },
+    },
+  };
+
+  // Order is priority: a card shows the first MAX_CARD_BADGES that match.
+  const CARD_BADGE_SETS = {
+    "system:agent_system": ["local-first", "sandboxed-execution", "browser-control", "mcp", "self-hostable"],
+    "system:memory_system": ["local-first", "editable-by-you", "graph-retrieval", "plain-files", "time-aware-recall"],
+    "system:assistant_system": ["local-first", "self-hostable", "desktop-app", "mobile-app"],
+    inference: ["bring-your-own-weights", "dedicated-endpoints", "anthropic-compatible-api", "reserved-capacity", "batch"],
+    runtime: ["apple-metal", "amd-rocm", "distributed-serving", "anthropic-compatible-api", "npu"],
+    model: ["downloadable-weights", "developer-api", "third-party-hosting"],
+  };
+  const CARD_BADGE_SET_NAMES = {
+    "system:agent_system": "Agent systems",
+    "system:memory_system": "Memory systems",
+    "system:assistant_system": "Assistant systems",
+    inference: "Inference services",
+    runtime: "Local runtimes",
+    model: "Reviewed models",
+  };
+  const MAX_CARD_BADGES = 4;
+
+  function cardBadgeSetKey(kind, record) {
+    if (kind === "system") return `system:${record.system_family}`;
+    if (kind === "model") return record.review_status === "reviewed" ? "model" : null;
+    return kind;
+  }
+
+  function matchesBadgeTest(record, test) {
+    const value = record[test.field];
+    if (!test.anyOf) return value === true;
+    return Array.isArray(value) && value.some(item => test.anyOf.includes(item));
+  }
+
+  function cardBadges(kind, record) {
+    const key = cardBadgeSetKey(kind, record);
+    if (!key || !Object.hasOwn(CARD_BADGE_SETS, key)) return [];
+    return CARD_BADGE_SETS[key]
+      .filter(id => matchesBadgeTest(record, CARD_BADGES[id].test))
+      .slice(0, MAX_CARD_BADGES)
+      .map(id => ({ id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition }));
+  }
+
+  // One entry per badge, in first-listed order, naming every place it appears.
+  function cardBadgeGlossary() {
+    const entries = new Map();
+    for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
+      for (const id of ids) {
+        if (!entries.has(id)) entries.set(id, { id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, scopes: [] });
+        entries.get(id).scopes.push(CARD_BADGE_SET_NAMES[key]);
+      }
+    }
+    return [...entries.values()];
+  }
+
   return {
+    CARD_BADGES,
+    CARD_BADGE_SETS,
+    cardBadgeGlossary,
+    cardBadges,
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
