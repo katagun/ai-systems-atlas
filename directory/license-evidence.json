@@ -101,10 +101,10 @@
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "Grok consumer service at grok.com and associated mobile applications",
+          "scope": "Grok consumer service at grok.com and associated mobile applications, under consumer terms last updated September 11, 2026",
           "kind": "web_terms",
           "url": "https://x.ai/legal/terms-of-service",
-          "verified_at": "2026-08-26"
+          "verified_at": "2026-09-13"
         }
       ]
     },
@@ -1989,10 +1989,10 @@
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "xAI consumer terms of service governing the product and the autonomous actions it takes on a user's behalf; the effective date is not restated here because the host refuses automated and browser access from this environment",
+          "scope": "xAI consumer terms of service governing the product and the autonomous actions it takes on a user's behalf, last updated September 11, 2026",
           "kind": "web_terms",
           "url": "https://x.ai/legal/terms-of-service",
-          "verified_at": "2026-09-01"
+          "verified_at": "2026-09-13"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -2582,7 +2582,7 @@
           "scope": "The agent server this project pins for production self-hosting, published under the Elastic License 2.0 and requiring a licence key; that licence has no identifier in the vocabulary, and this reference stands for it",
           "kind": "web_terms",
           "url": "https://pypi.org/project/langgraph-api/",
-          "verified_at": "2026-09-02"
+          "verified_at": "2026-09-13"
         }
       ]
     },
