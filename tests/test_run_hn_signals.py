@@ -457,9 +457,6 @@ class PrepareDriftTests(unittest.TestCase):
         (worktree / ".hn-signal-bundle").mkdir()
         (worktree / run_hn_signals.BUNDLE).write_text(json.dumps(bundle), encoding="utf-8")
         installed = worktree / "SKILL.md"
-        installed.write_text(
-            run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8"
-        )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
         self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
         # ROOT is where `prepare` writes BASE_REF. Left unpatched, `prepare` here would
@@ -467,6 +464,14 @@ class PrepareDriftTests(unittest.TestCase):
         # exactly the failure this routine exists to prevent developers from causing.
         root = Path(self.enterContext(tempfile.TemporaryDirectory()))
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+        # Rendered for the patched ROOT: the drift check fills the checkout placeholder
+        # with ROOT before comparing, so a raw copy would read as drift.
+        installed.write_text(
+            run_hn_signals.routine_guards.render_prompt(
+                run_hn_signals.PROMPT.read_text(encoding="utf-8"), root
+            ),
+            encoding="utf-8",
+        )
         return worktree
 
     @staticmethod
@@ -509,6 +514,61 @@ class BoundGuardTests(unittest.TestCase):
         self.assertIn("docs/routines/hn-signals.md", str(drift))
         self.assertIsNotNone(run_hn_signals.prompt_drift("body", None))
         self.assertIsNone(run_hn_signals.prompt_drift("body\n", "  body  "))
+
+
+class PromptInstallTests(unittest.TestCase):
+    """A scheduled run starts in no particular directory, so the installed prompt names its
+    checkout — filled into the reviewed prompt's one placeholder, and nowhere else."""
+
+    PLACEHOLDER = run_hn_signals.routine_guards.CHECKOUT_PLACEHOLDER
+
+    def scratch(self) -> Path:
+        return Path(self.enterContext(tempfile.TemporaryDirectory()))
+
+    def test_drift_accepts_only_the_prompt_rendered_for_this_checkout(self) -> None:
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", Path("/machine/atlas")))
+        reviewed = f"cd {self.PLACEHOLDER}\nbody\n"
+        self.assertIsNone(run_hn_signals.prompt_drift(reviewed, "cd /machine/atlas\nbody\n"))
+        self.assertIsNotNone(run_hn_signals.prompt_drift(reviewed, "cd /elsewhere/atlas\nbody\n"))
+        self.assertIsNotNone(run_hn_signals.prompt_drift(reviewed, reviewed))
+        self.assertIsNotNone(
+            run_hn_signals.prompt_drift(reviewed, "cd /machine/atlas\nbody\nand more\n")
+        )
+
+    def test_install_prompt_writes_the_prompt_the_drift_check_accepts(self) -> None:
+        scratch = self.scratch()
+        prompt = scratch / "hn-signals.md"
+        prompt.write_text(f"cd {self.PLACEHOLDER}\nbody\n", encoding="utf-8")
+        installed = scratch / "scheduled-tasks" / "hn-signals" / "SKILL.md"
+        checkout = scratch / "checkout"
+        self.enterContext(mock.patch.object(run_hn_signals, "PROMPT", prompt))
+        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", checkout))
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(0, run_hn_signals.main(["install-prompt"]))
+        self.assertEqual(f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8"))
+        self.assertIsNone(
+            run_hn_signals.prompt_drift(
+                prompt.read_text(encoding="utf-8"), installed.read_text(encoding="utf-8")
+            )
+        )
+
+    def test_install_prompt_refuses_a_symlinked_task_directory(self) -> None:
+        scratch = self.scratch()
+        prompt = scratch / "hn-signals.md"
+        prompt.write_text("body\n", encoding="utf-8")
+        elsewhere = scratch / "elsewhere"
+        elsewhere.mkdir()
+        tasks = scratch / "scheduled-tasks"
+        tasks.mkdir()
+        (tasks / "hn-signals").symlink_to(elsewhere)
+        installed = tasks / "hn-signals" / "SKILL.md"
+        self.enterContext(mock.patch.object(run_hn_signals, "PROMPT", prompt))
+        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+            self.assertEqual(1, run_hn_signals.main(["install-prompt"]))
+        self.assertIn("symlink", stderr.getvalue())
+        self.assertFalse((elsewhere / "SKILL.md").exists())
 
 
 class IsRemoteTrackingRefTests(unittest.TestCase):
@@ -575,9 +635,6 @@ class PrepareFromRefTests(unittest.TestCase):
             json.dumps({"signals": []}), encoding="utf-8"
         )
         installed = worktree / "SKILL.md"
-        installed.write_text(
-            run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8"
-        )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
         self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
         # ROOT is where BASE_REF is written now — never WORKTREE, the model's own
@@ -585,6 +642,14 @@ class PrepareFromRefTests(unittest.TestCase):
         # (git-ignored) .hn-signal-bundle/.
         root = Path(self.enterContext(tempfile.TemporaryDirectory()))
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+        # Rendered for the patched ROOT: the drift check fills the checkout placeholder
+        # with ROOT before comparing, so a raw copy would read as drift.
+        installed.write_text(
+            run_hn_signals.routine_guards.render_prompt(
+                run_hn_signals.PROMPT.read_text(encoding="utf-8"), root
+            ),
+            encoding="utf-8",
+        )
         return worktree
 
     @staticmethod
@@ -986,9 +1051,16 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
 
         worktree = scratch / "worktree"
         installed = scratch / "SKILL.md"
-        installed.write_text(run_hn_signals.PROMPT.read_text(encoding="utf-8"), encoding="utf-8")
 
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
+        # Rendered for the patched ROOT: the drift check fills the checkout placeholder
+        # with ROOT before comparing, so a raw copy would read as drift.
+        installed.write_text(
+            run_hn_signals.routine_guards.render_prompt(
+                run_hn_signals.PROMPT.read_text(encoding="utf-8"), root
+            ),
+            encoding="utf-8",
+        )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
         self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
         self.root = root

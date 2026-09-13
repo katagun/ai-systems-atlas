@@ -1188,6 +1188,28 @@ class PromptDriftTests(unittest.TestCase):
         self.assertIsNone(runner.prompt_drift("body\n", "  body  "))
 
 
+class PromptInstallTests(unittest.TestCase):
+    def test_install_prompt_renders_the_checkout_and_passes_the_drift_check(self) -> None:
+        scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        prompt = scratch / "candidate-triage.md"
+        placeholder = runner.routine_guards.CHECKOUT_PLACEHOLDER
+        prompt.write_text(f"cd {placeholder}\nbody\n", encoding="utf-8")
+        installed = scratch / "scheduled-tasks" / "candidate-triage" / "SKILL.md"
+        checkout = scratch / "checkout"
+        for patcher in (
+            mock.patch.object(runner, "PROMPT", prompt),
+            mock.patch.object(runner, "INSTALLED_PROMPT", installed),
+            mock.patch.object(runner, "ROOT", checkout),
+        ):
+            self.enterContext(patcher)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(0, runner.main(["install-prompt"]))
+        self.assertEqual(f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8"))
+        self.assertIsNone(
+            runner.prompt_drift(prompt.read_text(encoding="utf-8"), installed.read_text(encoding="utf-8"))
+        )
+
+
 class ReplaceRefGuardTests(unittest.TestCase):
     """`routine_guards.replace_refs_problem` and the `GIT_NO_REPLACE_OBJECTS=1` env var
     on `routine_guards.shell` are shared with `run_hn_signals.py`, which has thorough
