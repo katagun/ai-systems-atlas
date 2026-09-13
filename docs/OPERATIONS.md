@@ -210,9 +210,25 @@ The harness authenticates with `GITHUB_TOKEN` when it is set and otherwise falls
 allows 60 anonymous requests an hour against the roughly 80 a default `--limit 40` run
 issues, and the run fails on the rate limit before any judgment happens.
 
-To install the routine as a scheduled task, sync `docs/routines/candidate-triage.md` to
-`~/.claude/scheduled-tasks/candidate-triage/SKILL.md` and schedule it for Tuesday morning
-local time. Scheduled tasks only run while the desktop app is open; a missed run catches
+To schedule the routine, install its prompt from the checkout it should run in — one
+whose scripts track `origin/main`, such as the attention-source sweep worktree, which
+rebases onto `origin/main` before every sweep:
+
+```bash
+uv run python scripts/run_candidate_triage.py install-prompt
+```
+
+That writes `docs/routines/candidate-triage.md` to
+`~/.claude/scheduled-tasks/candidate-triage/SKILL.md` with `{{ATLAS_CHECKOUT}}` filled in
+with that checkout's path. A scheduled run starts in no particular directory, so the prompt
+has to name one, and a machine path cannot be reviewed into the repository. `prepare`
+renders the reviewed prompt for its own checkout before comparing, so the placeholder is the
+only difference the drift check allows, and the installed prompt can only name the checkout
+doing the checking. Then register a `candidate-triage` scheduled task for Tuesday morning
+local time in the desktop app. A `SKILL.md` file alone is not a registered routine and never
+runs; if registering rewrites the file, run `install-prompt` again afterwards, and again
+after every change to the repository prompt. Scheduled tasks only run while the desktop app
+is open; a missed run catches
 up the next time the app launches, so a run is not guaranteed at the exact scheduled time.
 
 ## Review a signal batch
@@ -291,12 +307,15 @@ locally" under "Attention-source sweep" below for the `--from-ref` option that l
 `prepare` build from a local branch instead, and how `finish` still checks the right base
 when it does.
 
-To install the routine as a scheduled task, sync `docs/routines/hn-signals.md` to
-`~/.claude/scheduled-tasks/hn-signals/SKILL.md` and schedule it for each weekday morning
-local time, after the local sweep has run. `prepare` compares the two files and
-refuses to run — `error: the routine prompt is not installed` — when the installed copy is
-absent or differs, so the first run fails until it is installed and every later change to
-the repository prompt has to be re-synced before a run proceeds. Scheduled tasks only run
+To schedule the routine, run `uv run python scripts/run_hn_signals.py install-prompt` from
+the sweep worktree — the checkout holding the `local/hn-signals` branch the prompt reads with
+`--from-ref` — then register an `hn-signals` scheduled task in the desktop app for each
+morning after the local sweep has run. The installed copy is `docs/routines/hn-signals.md`
+with `{{ATLAS_CHECKOUT}}` filled in with that worktree's path, exactly as for candidate
+triage above. `prepare` refuses to run — `error: the routine prompt is not installed` —
+when the installed copy is absent or differs from the reviewed prompt rendered for its own
+checkout, so every later change to the repository prompt needs `install-prompt` again
+before a run proceeds. A `SKILL.md` file alone is not a registered routine. Scheduled tasks only run
 while the desktop app is open; a missed run catches up the next time the app launches, so
 a run is not guaranteed at the exact scheduled time.
 
@@ -484,8 +503,11 @@ load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.
 The agent runs only while you are logged in, and launchd fires a missed run once at next
 login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
 moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
-The sweep leaves `directory/hn-signals.json` modified in the working tree; commit it on a
-branch before running the routine.
+The sweep leaves `directory/hn-signals.json` modified in the working tree. The scheduled
+routine reads the queue from the local branch `local/hn-signals`, so in practice the launchd
+job runs a small wrapper from a dedicated worktree on that branch: refuse a dirty tree,
+rebase onto `origin/main` so the sweep and the routine both run current code, sweep, and
+commit the file.
 
 ### Running the loop locally
 

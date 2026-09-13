@@ -159,7 +159,20 @@ shell = routine_guards.shell
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
-    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/hn-signals.md")
+    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/hn-signals.md", ROOT)
+
+
+def install_prompt() -> int:
+    """Install the reviewed prompt, rendered for this checkout, where the scheduler reads it."""
+    try:
+        routine_guards.install_prompt(
+            PROMPT.read_text(encoding="utf-8"), INSTALLED_PROMPT, ROOT, INSTALLED_PROMPT.parents[1]
+        )
+    except OSError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    print(f"installed {PROMPT.name} for {ROOT} at {INSTALLED_PROMPT}")
+    return 0
 
 
 def bundled_story_ids(worktree: Path) -> set[str]:
@@ -449,7 +462,7 @@ def main(argv: list[str] | None = None) -> int:
     # routine's `prepare`, and routine_guards.main is shared with candidate triage, whose
     # `prepare` has no such option.
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("prepare", "finish"))
+    parser.add_argument("command", choices=("prepare", "finish", "install-prompt"))
     parser.add_argument("--limit", type=int, default=40)
     parser.add_argument(
         "--from-ref",
@@ -464,6 +477,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "prepare":
         return prepare(limit=args.limit, from_ref=args.from_ref)
+    if args.command == "install-prompt":
+        return install_prompt()
     return finish()
 
 

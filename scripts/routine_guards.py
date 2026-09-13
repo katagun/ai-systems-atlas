@@ -175,18 +175,59 @@ def shell(command: list[str], cwd: Path | None = None) -> tuple[int, str]:
     return finished.returncode, finished.stdout + finished.stderr
 
 
-def prompt_drift(repo_prompt: str, installed_prompt: str | None, document: str) -> str | None:
+# The one machine-local value a routine prompt may carry. A scheduled run starts with no
+# working directory, so the prompt has to name the checkout it runs in; that path differs
+# per machine and cannot be reviewed into the repository. The reviewed prompt holds this
+# placeholder instead, and both installation and the drift check fill it with the running
+# checkout's own ROOT — so the installed prompt still has to match the reviewed text
+# exactly, and can only name the checkout whose `prepare` is checking it.
+CHECKOUT_PLACEHOLDER = "{{ATLAS_CHECKOUT}}"
+
+
+def render_prompt(repo_prompt: str, root: Path) -> str:
+    """The reviewed prompt as installed for `root`: the placeholder filled, nothing else."""
+    return repo_prompt.replace(CHECKOUT_PLACEHOLDER, str(root))
+
+
+def prompt_drift(
+    repo_prompt: str, installed_prompt: str | None, document: str, root: Path | None = None
+) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs.
 
     `document` is the repository path each routine's prompt lives at, so a run names the
     prompt it verified. Reusing another routine's path would report the wrong file while
-    appearing to pass.
+    appearing to pass. With `root`, the reviewed prompt is rendered for that checkout
+    first; see `CHECKOUT_PLACEHOLDER`.
     """
     if installed_prompt is None:
         return "the routine prompt is not installed"
-    if installed_prompt.strip() != repo_prompt.strip():
+    expected = repo_prompt if root is None else render_prompt(repo_prompt, root)
+    if installed_prompt.strip() != expected.strip():
         return f"the installed routine prompt differs from {document}"
     return None
+
+
+def install_prompt(repo_prompt: str, installed_path: Path, root: Path, boundary: Path) -> None:
+    """Write the reviewed prompt, rendered for `root`, to where the scheduler reads it.
+
+    `boundary` is the scheduled-tasks directory. Refuses a symlink at the installed path
+    or at any directory between it and `boundary`, inclusive, for the same reason
+    `worktree_text` refuses one: the write would land somewhere other than the file
+    `prepare` later compares against. Writing the file does not register a scheduled
+    task; see the candidate-triage and attention-source install steps in
+    docs/OPERATIONS.md.
+    """
+    if not installed_path.is_relative_to(boundary):
+        raise OSError(f"{installed_path} is not under {boundary}; refusing to install there")
+    node = installed_path
+    while True:
+        if node.is_symlink():
+            raise OSError(f"{node} is a symlink; refusing to install the routine prompt through it")
+        if node == boundary:
+            break
+        node = node.parent
+    installed_path.parent.mkdir(parents=True, exist_ok=True)
+    installed_path.write_text(render_prompt(repo_prompt, root), encoding="utf-8")
 
 
 def main(
@@ -195,11 +236,14 @@ def main(
     description: str | None,
     prepare: Callable[..., int],
     finish: Callable[[], int],
+    install: Callable[[], int],
 ) -> int:
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("command", choices=("prepare", "finish"))
+    parser.add_argument("command", choices=("prepare", "finish", "install-prompt"))
     parser.add_argument("--limit", type=int, default=40)
     args = parser.parse_args(argv)
     if args.command == "prepare":
         return prepare(limit=args.limit)
+    if args.command == "install-prompt":
+        return install()
     return finish()
