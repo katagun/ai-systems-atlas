@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "verified_at": "2026-09-12",
+  "verified_at": "2026-09-13",
   "services": [
     {
       "id": "openai-api",
@@ -3019,7 +3019,7 @@
         "kind": "web_terms",
         "label": "LLM Service TokenHub Terms of Service",
         "url": "https://www.tencentcloud.com/document/product/301/78869",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-13"
       },
       "evidence": [
         {
@@ -3037,7 +3037,7 @@
       ],
       "verified_at": "2026-08-28",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-13",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
@@ -3051,7 +3051,7 @@
             "note": "The terms of service state: \"by using the Service, you authorise Tencent Cloud to engage the relevant Third-Party AI Model Provider to process the User Inputs you submit to the Service, solely for the purpose of obtaining AI Outputs from that Third-Party AI Model or system on your behalf. Tencent Cloud acts as an intermediary in facilitating such access and does not itself provide, own, or control the AI Outputs.\"",
             "url": "https://www.tencentcloud.com/document/product/301/78869",
             "scope": "Tencent Cloud TokenHub terms of service, for Tencent Cloud TokenHub",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-13"
           },
           "credential_handling": {
             "status": "documented_no",
