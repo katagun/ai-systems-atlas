@@ -30,6 +30,10 @@ Use progressive disclosure for explanation and specialist controls:
 
 Prefer plain interface labels over methodology language. Use exact taxonomy terms when changing their meaning would introduce ambiguity, but do not repeat the taxonomy thesis in the hero, filters, and footer.
 
+### Card badges
+
+System, inference-service, local-runtime, and reviewed-model cards replace the tags row with up to four badges, defined once in `CARD_BADGES` and listed per collection and system family, in priority order, in `CARD_BADGE_SETS` in `web/app-core.js`. Badges are for scanning only: they never carry merit, editorial picks, trust or evidence state, or automated signals such as stars, and they never rank. Each badge tests one reviewed field for presence — a boolean that is `true`, or an array that contains a named value — so a missing badge claims nothing is absent. Share a badge name across collections or families only when it tests the same field and value. Add a badge only when it separates cards, roughly 10–75% of its collection or family; values nearly every record carries are noise. Unreviewed models.dev rows and specifications get no badges, and a reviewed-model card keeps its models.dev modality and family as attributed plain text beside its badges. A card with no badge omits the row. Badges are not controls: each carries its definition in a `title` and in visually hidden text, and the Taxonomy view lists every badge with its definition and where it appears. Cards paint from the boot payload, so any field a badge tests must be in `BOOT_FIELDS` in `scripts/build_web_payload.py`.
+
 ## Behavioral contracts
 
 - The default Directory scope shows every reviewed system, every models.dev source record with reviewed releases overlaid, every inference service, and every local runtime alphabetically, including archived system references, with scores hidden across collections.
@@ -184,5 +188,6 @@ Then verify in a browser:
 27. use the Models quick filter, verify the full source count, search one imported text model and one non-text-output model, open their attributed details, and confirm both lack score and comparison controls; then combine model type, distribution, modality, source-model, and license filters to isolate reviewed records and verify access-score and name sorting.
 28. compare two to four models, reload a `model:` comparison URL, and confirm the table never presents quality, benchmark, price, latency, or throughput rankings.
 29. open a model detail and verify imported models.dev fields are visibly attributed as source metadata while the model boundary, licensing, score, and evidence remain reviewed Atlas fields.
+30. confirm card badges on a system from each family, an inference service, a local runtime, and a reviewed model; confirm an imported model and a specification show none; confirm a badge-less card keeps its footer at the bottom; hover a badge for its definition; and find every badge in Taxonomy in both palettes.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.
