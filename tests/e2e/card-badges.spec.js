@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { cardBadges } = require("../../web/app-core.js");
+const { cardBadgeGlossary, cardBadges } = require("../../web/app-core.js");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -117,4 +117,17 @@ test("badges stay legible in the dark theme", async ({ page }) => {
     return [style.color, style.backgroundColor];
   });
   expect(color).not.toBe(background);
+});
+
+test("the Taxonomy view defines every card badge and where it appears", async ({ page }) => {
+  const glossary = cardBadgeGlossary();
+
+  await page.goto("/?view=taxonomy");
+  const group = page.locator("#taxonomy-content .taxonomy-group").filter({ has: page.locator("h2", { hasText: /^Card badges$/ }) });
+  await expect(group.locator(".taxonomy-item")).toHaveCount(glossary.length);
+  for (const [index, entry] of glossary.entries()) {
+    const item = group.locator(".taxonomy-item").nth(index);
+    await expect(item.locator("strong")).toHaveText(entry.name);
+    await expect(item.locator("p")).toHaveText(`${entry.definition} Shown on: ${entry.scopes.join(", ")}.`);
+  }
 });

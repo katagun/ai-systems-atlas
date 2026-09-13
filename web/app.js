@@ -1201,6 +1201,7 @@ function renderTaxonomy() {
   ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
+    ["Card badges", AtlasCore.cardBadgeGlossary().map(entry => ({ name: entry.name, definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.` }))],
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
