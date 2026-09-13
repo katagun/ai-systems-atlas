@@ -64,7 +64,7 @@ Order is priority. Each card shows at most four.
 | | Batch | `delivery_modes` ∋ `batch` | 51% |
 | Local runtimes (16) | Apple Metal | `accelerators` ∋ `metal` | 44% |
 | | AMD ROCm | `accelerators` ∋ `rocm` | 50% |
-| | Multi-node serving | `serving_modes` ∋ `distributed_serving` | 50% |
+| | Distributed serving | `serving_modes` ∋ `distributed_serving` | 50% |
 | | Anthropic-compatible API | `api_styles` ∋ `anthropic_compatible` | 19% |
 | | NPU | `accelerators` ∋ `npu` | 25% |
 | Reviewed models (53) | Downloadable weights | `distribution_modes` ∋ `downloadable_weights` | 62% |
@@ -75,7 +75,7 @@ The two assistant badges below the band stay because they are rare and decisive 
 
 Simulated against today's data, the cap drops Self-hostable from 5 agent systems, Time-aware recall from 1 memory system, and Batch from 3 services. Cards with no badge: 6 agent systems, 13 memory systems, 3 assistants, 13 services, 2 runtimes, 0 models.
 
-"Downloadable weights" is deliberately not "Open weights": 15 reviewed models are source-available, and the license pill already carries the license claim.
+"Downloadable weights" is deliberately not "Open weights": 15 reviewed models are source-available, and the license pill already carries the license claim. "Distributed serving" is deliberately not "Multi-node serving": the taxonomy definition covers several accelerators on one host as well as several hosts.
 
 ### 5. Badges replace the tags row
 
@@ -98,14 +98,13 @@ Before the wording for Local-first and Editable by you merges, a research subage
 ## Implementation
 
 - **Payload.** Add `execution_boundaries`, `agent_capabilities`, `human_editable`, and `retrieval_modes` to `BOOT_FIELDS["systems"]`. Record the gzipped boot-payload delta in the PR. Regenerate `web/app/`.
-- **Logic, `web/app-core.js`.** Add a `CARD_BADGES` table whose entries carry `id`, `name`, `definition`, `scope` (`collection`, optional `family`), `test` (`{ field, values }` for enum arrays, `{ field }` for booleans), and a priority given by table order. Add and export `cardBadges(kind, record)`, which returns at most four matching entries in priority order and returns `[]` for specifications and for models that are not Atlas reviewed. Entries sharing an `id` share `name` and `definition`.
+- **Logic, `web/app-core.js`.** Define each badge once in `CARD_BADGES`, keyed by id, with `name`, `definition`, and `test` (`{ field, anyOf }` for enum arrays, `{ field }` for booleans). List each scope's badge ids in priority order in `CARD_BADGE_SETS`, so a name shared across scopes is one definition by construction. Add and export `cardBadges(kind, record)`, which returns at most four matching badges in priority order and returns `[]` for specifications and for models that are not Atlas reviewed, and `cardBadgeGlossary()`, which lists each badge once with the scopes it appears in.
 - **Rendering, `web/app.js`.** Add one `badgeRow(badges)` helper and call it from the collection cards and from the mixed cards in `renderAllDirectoryEntries` (`web/app.js:617`) in place of the tags markup. Add the models.dev plain-text line to both reviewed-model card paths. Add the "Card badges" section to `renderTaxonomy` (`web/app.js:1182`).
-- **Styles, `web/styles.css`.** Add a `.card-badges` row and a badge style using `--radius-chip` and colors derived from existing tokens with `color-mix()`, visibly distinct from `.license-badge` and `.source-badge`. Move the bottom alignment from `.tags { margin-top: auto }` (`web/styles.css:782`) to the card footer so badge-less cards align. Add a visually hidden utility class.
+- **Styles, `web/styles.css`.** Add a `.card-badges` row and a badge style using `--radius-chip` and colors derived from existing tokens with `color-mix()`, visibly distinct from `.license-badge` and `.source-badge`. Replace the bottom alignment in `.tags { margin-top: auto }` (`web/styles.css:782`) with `flex-grow: 1` on the card description, so badge-less cards keep their footer at the bottom; a second auto margin on the footer would split the free space and float the remaining tags rows mid-card. Add a visually hidden utility class.
 - **Docs.** Add a "Card badges" section to `docs/WEB.md` stating decisions 1, 2, 3, 5, and 6 and the scanning-only boundary. Add the two boolean definitions to `docs/DATA_MODEL.md`.
 
 ## Testing
 
-- **`tests/test_web.js`:** scope and family filtering; priority order and the four-badge cap; no badge from a missing, `null`, or empty field; `[]` for specifications and unreviewed models; every enum value a test names exists in the matching `taxonomy.json` vocabulary; every badge matches at least one published record; entries sharing an `id` share `name` and `definition`; the existing color-literal and radius-literal checks pass with the new styles.
-- **`tests/test_web_payload.py`:** the systems boot entry carries the four added fields.
+- **`tests/test_web.js`:** scope and family filtering; priority order and the four-badge cap; no badge from a missing, `null`, or empty field; `[]` for specifications and unreviewed models; every enum value a test names exists in the matching `taxonomy.json` vocabulary; every badge renders on at least one published record in each scope that lists it; every set names a defined badge and every defined badge is used; every field a badge tests reaches the boot payload for every record that has it; the existing color-literal and radius-literal checks pass with the new styles.
 - **Playwright:** a known agent system shows its expected badges in order; a badge-less card renders no badge row and its footer stays aligned; a reviewed-model card still shows its modality route; a record shows the same badges in its collection grid and in the All grid; badges carry definitions in accessible text and add no tab stop; the Taxonomy view lists every badge; badges render legibly in dark mode.
 - **Full check list** from `AGENTS.md`, and the browser pass it requires across all five collections.
