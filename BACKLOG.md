@@ -6,7 +6,6 @@ This is the ordered source of truth for actionable repository work. Policy and f
 
 Keep this section to five independently verifiable outcomes that can start without an unresolved product or taxonomy decision.
 
-- [ ] Add a stale-review report that distinguishes editorial `verified_at` age from live-metadata age without changing either date.
 - [ ] Resolve terms drift on Claude Agent SDK's license-and-terms anchor (`https://code.claude.com/docs/en/agent-sdk/overview#license-and-terms`, `systems:claude-agent-sdk:license:1`), which the evidence-link checker has flagged on every `--max-age-hours 0` re-crawl since 2026-09-13 and whose evidence has not been reviewed since 2026-08-25. Read the live page, decide whether anything material changed, and advance every dated reference sharing the URL together. The DeepInfra and Baseten drifts flagged the same day were resolved on 2026-09-13 with no change to either terms text.
 
 ## Next
