@@ -1290,7 +1290,7 @@
         "mcp",
         "workflows"
       ],
-      "local_first": false,
+      "local_first": true,
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
@@ -1321,7 +1321,7 @@
       ],
       "why_it_matters": "Shows the tradeoff of embedding a mature provider-owned agent runtime: unusually deep tools and controls with materially less model and licensing portability than open provider-agnostic frameworks.",
       "research_confidence": "high",
-      "verified_at": "2026-08-25",
+      "verified_at": "2026-09-14",
       "pushed_at": "2026-09-12T19:46:45Z",
       "forks": 1273,
       "open_issues": 451,
@@ -3088,7 +3088,7 @@
         "mcp",
         "workflows"
       ],
-      "local_first": true,
+      "local_first": false,
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
@@ -3118,7 +3118,7 @@
       ],
       "why_it_matters": "The rename that consolidated the best-known independent agentic IDE into Cognition's line, and the reviewed catalog's clearest case of an editor that hosts other vendors' agents as peers rather than replacing them.",
       "research_confidence": "high",
-      "verified_at": "2026-09-12",
+      "verified_at": "2026-09-14",
       "licenses": [
         "LicenseRef-Proprietary"
       ],
@@ -4364,7 +4364,7 @@
         "mcp",
         "workflows"
       ],
-      "local_first": true,
+      "local_first": false,
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
@@ -4393,7 +4393,7 @@
       ],
       "why_it_matters": "Google's consolidation of its consumer developer-agent line into one host-executing platform, and the clearest production example of agent output reviewed as artifacts rather than as chat.",
       "research_confidence": "high",
-      "verified_at": "2026-09-03",
+      "verified_at": "2026-09-14",
       "licenses": [
         "LicenseRef-Proprietary"
       ],
@@ -10898,8 +10898,8 @@
         "research",
         "multi_agent"
       ],
-      "local_first": true,
-      "human_editable": true,
+      "local_first": false,
+      "human_editable": false,
       "provenance": "moderate",
       "status": "active",
       "stars": 29302,
@@ -10928,7 +10928,7 @@
       ],
       "why_it_matters": "A useful counterpoint to heavier orchestration frameworks.",
       "research_confidence": "high",
-      "verified_at": "2026-08-23",
+      "verified_at": "2026-09-14",
       "pushed_at": "2026-08-25T18:36:00Z",
       "forks": 2958,
       "open_issues": 810,
@@ -13501,7 +13501,7 @@
       "deployment": [
         "library"
       ],
-      "local_first": true,
+      "local_first": false,
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
@@ -13535,7 +13535,7 @@
       ],
       "why_it_matters": "A compact, inspectable implementation of the A-MEM idea that cleanly separates the adoptable library from the paper-reproduction repository, while exposing how much production memory lifecycle work remains beyond semantic linking.",
       "research_confidence": "high",
-      "verified_at": "2026-09-05",
+      "verified_at": "2026-09-14",
       "licenses": [
         "MIT"
       ],
