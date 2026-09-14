@@ -66,14 +66,15 @@ test("the blog index and its posts are reachable and self-contained", async ({ p
   await page.goto("/blog/", { waitUntil: "networkidle" });
   await expect(page.locator("h1")).toHaveText("Writing");
 
-  const first = page.locator(".detail-grid h2 a").first();
+  const first = page.locator(".post-list h2 a").first();
   await expect(first).toBeVisible();
   await first.click();
 
-  // A post is a static page: no application script, no catalog fetch, nothing third-party.
+  // A post is a static page: no application script, no catalog fetch, nothing
+  // third-party. Its only script is the inline theme stamp index.html also carries.
   await expect(page.locator("h1")).not.toHaveText("Writing");
   await expect(page.locator(".eyebrow")).toContainText("not a catalog record");
-  expect(await page.locator("script").count()).toBe(0);
+  expect(await page.locator("script[src]").count()).toBe(0);
   expect(external).toEqual([]);
 });
 
@@ -90,7 +91,7 @@ test("the blog carries the site header, and its view links land on the directory
   await expect(header.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "page");
 
   // A post sits one level deeper than the index; its links must still resolve.
-  await page.locator(".detail-grid h2 a").first().click();
+  await page.locator(".post-list h2 a").first().click();
   await expect(page.locator("header.site-header")).toBeVisible();
   await page.getByRole("link", { name: "Finder" }).click();
   await expect(page).toHaveURL(/\/\?view=finder$/);

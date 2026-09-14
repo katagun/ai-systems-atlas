@@ -10,7 +10,9 @@ Run `uv run python scripts/build_blog.py` after writing or editing a post, then 
 
 ## The page shell
 
-Every blog page opens with the same site header as the directory page: the wordmark, the primary navigation, and the Suggest and GitHub tools, so a reader who arrives at a post can reach any view. It is static markup emitted by `scripts/build_blog.py`, not shared with `web/index.html`, because the main page's tabs are buttons that `web/app.js` wires up while a blog page carries no script; the blog's links reach the same views through the `view` query parameter the app restores on load. The one control it omits is the theme toggle, which needs script, so blog pages follow the OS colour preference like share pages do.
+A blog page is the site's own shell around a reading measure. It links `web/styles.css` and `web/fonts.css`, the same files the directory page loads, under the same twelve-character content stamp `scripts/build_asset_version.mjs` gives `index.html`, so `build_blog.py --check` fails whenever either file changes without a blog rebuild and a cached stylesheet can never be paired with a newer page. The blog's own rules live in `styles.css` under `.writing-page`, `.writing`, `.byline`, and `.post-card`, and take every colour, radius, and face from its tokens.
+
+Every page opens with the same header as the directory page: the wordmark, the primary navigation, and the Suggest and GitHub tools. It is static markup emitted by `scripts/build_blog.py`, not shared with `web/index.html`, because the main page's tabs are buttons that `web/app.js` wires up; the blog's links reach the same views through the `view` query parameter the app restores on load. The one control it omits is the theme toggle, which needs the application script. A blog page carries no application script and fetches nothing beyond the stylesheets and fonts; its only script is the inline pre-paint stamp `index.html` also carries, which reads a stored theme choice so a reader's choice follows them across the site.
 
 ## The markdown subset
 

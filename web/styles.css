@@ -309,7 +309,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 }
 .tab::after, .tab-link::after { display: none; }
 .tab:hover, .tab-link:hover { color: var(--text); }
-.tab.is-active { background: none; color: var(--text); box-shadow: none; border-bottom-color: var(--text); }
+.tab.is-active, .tab-link.is-active { background: none; color: var(--text); box-shadow: none; border-bottom-color: var(--text); }
 .tab:focus-visible, .tab-link:focus-visible { outline-offset: 2px; }
 .header-tools { display: flex; align-items: center; gap: .5rem; justify-self: end; }
 .theme-toggle {
@@ -1254,3 +1254,34 @@ footer #data-date {
 
 .record-link { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: .2rem 0 1rem; }
 .record-link-status { color: var(--muted); font: .72rem var(--font-mono); }
+
+/* Blog pages share this shell and its tokens; they trade the catalog grid for a reading measure. */
+.writing-page main, .writing-page footer { width: min(46rem, calc(100% - 3rem)); }
+.writing { padding: clamp(2.6rem, 5vw, 4.5rem) 0 3rem; }
+.writing h1 { max-width: none; margin: 0 0 1rem; font-size: clamp(2.3rem, 5vw, 3.6rem); letter-spacing: -.045em; line-height: 1; text-wrap: balance; }
+.writing .lead { margin: 0 0 1.1rem; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.6; text-wrap: pretty; }
+.byline { margin: 0 0 2.4rem; color: var(--muted); font: 500 .68rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.byline time { white-space: nowrap; }
+.writing h2 { margin: 2.4rem 0 .8rem; font-size: clamp(1.35rem, 2.4vw, 1.7rem); letter-spacing: -.025em; line-height: 1.15; }
+.writing p, .writing li { font-size: 1.02rem; line-height: 1.68; }
+.writing p { margin: 0 0 1.1rem; }
+.writing ul { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+.writing li { margin: .35rem 0; }
+.writing blockquote { margin: 1.3rem 0; padding: .15rem 0 .15rem 1.1rem; border-left: 3px solid var(--cyan); color: var(--muted); }
+.writing blockquote p { margin: 0; }
+.writing code { padding: .1rem .3rem; border-radius: var(--radius-chip); background: var(--chip-bg); color: var(--chip-ink); font: 600 .84em var(--font-mono); }
+.writing pre { margin: 0 0 1.2rem; padding: 1rem 1.1rem; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); font: .84rem/1.55 var(--font-mono); }
+.writing pre code { padding: 0; background: none; color: inherit; font: inherit; }
+.writing hr { margin: 2.4rem 0 1.6rem; border: 0; border-top: 1px solid var(--line-strong); }
+.writing hr ~ p { color: var(--muted); font-size: .94rem; }
+.post-list { display: grid; gap: .9rem; margin-top: 1.6rem; }
+.post-card { padding: 1.3rem 1.4rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow-small); }
+.post-card h2 { margin: 0 0 .5rem; font-size: 1.4rem; letter-spacing: -.025em; line-height: 1.15; }
+.post-card h2 a { color: var(--text); text-decoration: none; }
+.post-card h2 a:hover { color: var(--cyan); }
+.post-card p { margin: 0 0 .6rem; color: var(--muted); font-size: .98rem; line-height: 1.6; }
+.post-card .byline { margin: 0; }
+.writing-page footer { display: block; padding: 1.5rem 0 2rem; font-size: .74rem; }
+@media (max-width: 720px) {
+  .writing-page main, .writing-page footer { width: min(100% - 1.5rem, 46rem); }
+}

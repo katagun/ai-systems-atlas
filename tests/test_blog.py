@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +16,7 @@ author: Someone
 
 Body text.
 """
+STYLESHEET = "body { margin: 0; }"
 
 
 class PostFixture(unittest.TestCase):
@@ -24,6 +26,8 @@ class PostFixture(unittest.TestCase):
         root = Path(temporary.name)
         (root / "blog").mkdir()
         (root / "web").mkdir()
+        (root / "web" / "styles.css").write_text(STYLESHEET, encoding="utf-8")
+        (root / "web" / "fonts.css").write_text("@font-face {}", encoding="utf-8")
         for name, text in posts.items():
             (root / "blog" / name).write_text(text, encoding="utf-8")
         return root
@@ -190,7 +194,7 @@ class BuildTests(PostFixture):
 
 
 class HeaderTests(PostFixture):
-    """Every blog page carries the site header, so the blog reads as part of the site."""
+    """Every blog page is the site's own shell: its header, stylesheet, fonts, and theme."""
 
     def pages(self) -> dict[str, str]:
         return build_blog.build_pages(self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")}))
@@ -198,7 +202,7 @@ class HeaderTests(PostFixture):
     def test_the_index_and_posts_carry_the_site_header_before_main(self) -> None:
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertLess(html.index('<header class="site-header">'), html.index('<main id="main">'))
+                self.assertLess(html.index('<header class="site-header">'), html.index('<main id="main"'))
                 self.assertIn('<nav class="tabs" aria-label="Primary navigation">', html)
                 self.assertIn('<span class="wordmark-name">peacefulcoexistance</span>', html)
 
@@ -210,19 +214,39 @@ class HeaderTests(PostFixture):
                 self.assertIn(f'<a class="tab-link" href="{root}">Directory</a>', html)
                 for view in ("finder", "models", "specifications", "taxonomy", "api"):
                     self.assertIn(f'href="{root}?view={view}"', html)
-                self.assertIn(f'<link rel="stylesheet" href="{root}fonts.css">', html)
 
     def test_the_blog_link_is_marked_current(self) -> None:
         pages = self.pages()
         self.assertIn('<a class="tab-link is-active" aria-current="page" href="./">Blog</a>', pages["blog/index.html"])
         self.assertIn('<a class="tab-link is-active" aria-current="page" href="../">Blog</a>', pages["blog/newer/index.html"])
 
-    def test_blog_pages_stay_static(self) -> None:
-        """The header is markup only: no theme script, no application script."""
+    def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(self) -> None:
+        """The same stamp build_asset_version.mjs gives index.html, so a cached
+        stylesheet from before a change can never be paired with a newer page."""
+        import hashlib
+        stamp = hashlib.sha256(STYLESHEET.encode("utf-8")).hexdigest()[:12]
+        pages = self.pages()
+        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+            with self.subTest(path):
+                self.assertIn(f'<link rel="stylesheet" href="{root}styles.css?v={stamp}">', pages[path])
+                self.assertRegex(pages[path], rf'<link rel="stylesheet" href="{re.escape(root)}fonts\.css\?v=[0-9a-f]{{12}}">')
+                self.assertNotIn("<style>", pages[path])
+
+    def test_a_missing_stylesheet_stops_the_build(self) -> None:
+        root = self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")})
+        (root / "web" / "styles.css").unlink()
+        with self.assertRaises(build_blog.PostError) as caught:
+            build_blog.build_pages(root)
+        self.assertIn("styles.css", str(caught.exception))
+
+    def test_blog_pages_carry_only_the_theme_stamp_and_no_application_script(self) -> None:
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertNotIn("<script", html)
+                self.assertNotIn("<script src", html)
                 self.assertNotIn("theme-toggle", html)
+                self.assertEqual(1, html.count("<script>"))
+                self.assertIn('localStorage.getItem("theme")', html)
+                self.assertLess(html.index("<script>"), html.index('<link rel="stylesheet"'))
 
     def test_footers_keep_their_depth_specific_links(self) -> None:
         pages = self.pages()

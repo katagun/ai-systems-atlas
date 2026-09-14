@@ -15,6 +15,7 @@ else in this repository.
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import ipaddress
 import re
@@ -25,9 +26,9 @@ from typing import Any
 from urllib.parse import urlsplit
 
 try:
-    from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
+    from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
+    from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL
 
 ROOT = Path(__file__).resolve().parents[1]
 POSTS = "blog"
@@ -294,34 +295,33 @@ GITHUB_ICON = (
     '24 12.297c0-6.627-5.373-12-12-12"/></svg>'
 )
 
-HEADER_STYLE = """
-.skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 20; padding: .7rem 1rem; border-radius: 999px; background: var(--text); color: var(--bg); }
-.skip-link:focus { top: 1rem; }
-.site-header { min-height: 88px; padding: 0 max(1.5rem, calc((100% - 1360px) / 2)); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(20px) saturate(140%); }
-.brand { display: flex; flex-direction: column; justify-content: center; gap: .18rem; }
-.brand a { color: inherit; text-decoration: none; }
-.wordmark { display: block; font: 700 1.05rem/1 "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.035em; }
-.wordmark-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
-.wordmark-art { display: inline-grid; grid-template-columns: auto auto auto; align-items: center; line-height: 1.02; }
-.wm-pe { grid-area: 1 / 1 / 2 / 2; text-align: right; }
-.wm-a { grid-area: 1 / 2 / 3 / 3; font-size: 2.2em; line-height: .68; padding: 0 1px; }
-.wm-ceful { grid-area: 1 / 3 / 2 / 4; }
-.wm-coexist { grid-area: 2 / 1 / 3 / 2; text-align: right; }
-.wm-nce { grid-area: 2 / 3 / 3 / 4; }
-.brand small { display: block; color: var(--muted); font: 500 .6rem "JetBrains Mono", "SFMono-Regular", Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
-.tabs { display: flex; align-self: center; gap: 1.4rem; }
-.tab-link { padding: .3rem .05rem .5rem; border-bottom: 2px solid transparent; color: var(--muted); font-size: .78rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
-.tab-link:hover { color: var(--text); }
-.tab-link.is-active { color: var(--text); border-bottom-color: var(--text); }
-.header-tools { display: flex; align-items: center; gap: .5rem; justify-self: end; }
-.suggest-link, .github-link { height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: color-mix(in srgb, var(--panel) 50%, transparent); color: var(--muted); text-decoration: none; }
-.suggest-link { padding: 0 .75rem; font-size: .78rem; font-weight: 600; white-space: nowrap; }
-.github-link { width: 38px; }
-.github-link svg { width: 18px; height: 18px; fill: currentColor; }
-.suggest-link:hover, .github-link:hover { color: var(--text); border-color: var(--muted); }
-@media (max-width: 1100px) { .site-header { grid-template-columns: 1fr auto auto; column-gap: .75rem; } }
-@media (max-width: 720px) { .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; } .header-tools { order: 2; } .brand small { display: none; } .tabs { order: 3; width: 100%; gap: .8rem; overflow-x: auto; } .tab-link { flex: 0 0 auto; font-size: .7rem; } }
-""".strip()
+# The stylesheets a blog page shares with the directory page. They are linked under
+# the same content stamp build_asset_version.mjs gives index.html, so a browser that
+# cached one under the previous version can never pair it with a newer page.
+ASSETS = ("fonts.css", "styles.css")
+THEME_STAMP = (
+    "<script>\n"
+    "// Stamp a stored theme choice before first paint, exactly as index.html does, so a\n"
+    "// reader's choice follows them here. app.js owns the control; this only reads it.\n"
+    "(function () {\n"
+    "  try {\n"
+    '    var theme = localStorage.getItem("theme");\n'
+    '    if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;\n'
+    "  } catch (error) {}\n"
+    "})();\n"
+    "</script>"
+)
+
+
+def asset_versions(root: Path) -> dict[str, str]:
+    """Twelve hex characters of each shared asset's SHA-256, as the asset stamper computes."""
+    versions: dict[str, str] = {}
+    for name in ASSETS:
+        path = root / "web" / name
+        if not path.is_file():
+            raise PostError(f"web/{name} is missing; every blog page links it")
+        versions[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    return versions
 
 
 def render_header(root: str, blog: str) -> str:
@@ -345,14 +345,20 @@ def render_header(root: str, blog: str) -> str:
     )
 
 
-def _document(title: str, description: str, url: str, body: str, root: str, footer: str) -> str:
+def _document(
+    title: str, description: str, url: str, body: str, root: str, footer: str, versions: dict[str, str]
+) -> str:
     """One page. ``root`` is the relative path back to the site root; ``footer`` its links."""
     blog = "./" if root == "../" else root[3:]
+    stylesheets = "\n".join(
+        f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">' for name in ASSETS
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{THEME_STAMP}
 <title>{html.escape(title)} · {SITE_NAME}</title>
 <meta name="description" content="{html.escape(description)}">
 <link rel="canonical" href="{html.escape(url)}">
@@ -362,15 +368,12 @@ def _document(title: str, description: str, url: str, body: str, root: str, foot
 <meta property="og:description" content="{html.escape(description)}">
 <meta property="og:url" content="{html.escape(url)}">
 <meta name="theme-color" content="#f7f9fc">
-<link rel="stylesheet" href="{root}fonts.css">
-<style>
-{STYLE}
-{HEADER_STYLE}
-</style>
+{stylesheets}
+<link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
 </head>
-<body>
+<body class="writing-page">
 {render_header(root, blog)}
-<main id="main">
+<main id="main" class="writing">
 {body}
 </main>
 <footer>{SITE_NAME} · {SITE_TAGLINE} · {footer}</footer>
@@ -379,41 +382,47 @@ def _document(title: str, description: str, url: str, body: str, root: str, foot
 """
 
 
-def render_post_page(post: dict[str, Any]) -> str:
+def byline(post: dict[str, Any]) -> str:
+    date_ = html.escape(post["date"])
+    return f'<p class="byline">{html.escape(post["author"])} · <time datetime="{date_}">{date_}</time></p>'
+
+
+def render_post_page(post: dict[str, Any], versions: dict[str, str]) -> str:
     body = (
         '<p class="eyebrow">Editorial writing · not a catalog record</p>\n'
         f'<h1>{html.escape(post["title"])}</h1>\n'
         f'<p class="lead">{html.escape(post["summary"])}</p>\n'
-        f'<p class="actions">{html.escape(post["author"])} · {html.escape(post["date"])}</p>\n'
+        f'{byline(post)}\n'
         f'{post["html"]}\n'
     )
     footer = '<a href="../">All writing</a> · <a href="../../">Browse the directory</a>'
-    return _document(post["title"], post["summary"], post_url(post["slug"]), body, "../../", footer)
+    return _document(post["title"], post["summary"], post_url(post["slug"]), body, "../../", footer, versions)
 
 
-def render_index_page(posts: list[dict[str, Any]]) -> str:
+def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> str:
     entries = "\n".join(
-        f'<section class="detail-block"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
+        f'<article class="post-card"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
         f'<p>{html.escape(post["summary"])}</p>'
-        f'<p class="actions">{html.escape(post["author"])} · {html.escape(post["date"])}</p></section>'
+        f'{byline(post)}</article>'
         for post in posts
     ) or '<p class="lead">Nothing published yet.</p>'
     body = (
         '<p class="eyebrow">Editorial writing · not catalog records</p>\n'
         "<h1>Writing</h1>\n"
         '<p class="lead">How this catalog is built, and where it has been wrong.</p>\n'
-        f'<div class="detail-grid">{entries}</div>\n'
+        f'<div class="post-list">{entries}</div>\n'
     )
     description = "How the AI Systems Atlas is built, and where it has been wrong."
     # The index sits one level shallower than a post, so its relative links differ.
     footer = '<a href="../">Browse the directory</a>'
-    return _document("Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer)
+    return _document("Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer, versions)
 
 
 def build_pages(root: Path = ROOT) -> dict[str, str]:
     posts = load_posts(root)
-    pages = {f"{POSTS}/{post['slug']}/index.html": render_post_page(post) for post in posts}
-    pages[f"{POSTS}/index.html"] = render_index_page(posts)
+    versions = asset_versions(root)
+    pages = {f"{POSTS}/{post['slug']}/index.html": render_post_page(post, versions) for post in posts}
+    pages[f"{POSTS}/index.html"] = render_index_page(posts, versions)
     return pages
 
 

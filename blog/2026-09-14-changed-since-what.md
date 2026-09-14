@@ -23,6 +23,8 @@ That is the sentence I would keep from this week. A drift detector is not a prop
 
 The resolution was not to delete the cache, which the operations rules forbid, since a fresh baseline would accept any change silently. A person read both pages, confirmed nothing material had moved, and advanced the review dates so the automation could accept the new hashes. The fix that would stop this recurring is on the backlog: hash the terms body rather than the page around it, share one baseline instead of one per checkout, and report a missing baseline instead of quietly inventing one.
 
+This morning the weekly refresh fired under its scheduler for the first time. It refreshed the metadata, ran its twelve checks, failed the one for evidence links and terms drift, and opened its pull request as a draft and stopped. That is exactly the behaviour it was built to have, and it is also the alarm again. A person now has to read a page and say what changed, and since what.
+
 ## A definition is a claim about 199 records
 
 The second thing that changed the data was writing something down.
@@ -35,9 +37,13 @@ Directory cards gained badges this week: small outlined chips for traits a reade
 
 A sampled check against those sentences found about a dozen records the wording contradicted. Eleven were re-reviewed against their own sources, seven values flipped, and the Local-first set went from 105 to 108. AnythingLLM became local-first because its desktop documentation says everything is saved locally by default. claude-mem stopped being editable because its worker can delete a stored observation but has no route that edits one.
 
-More useful than the flips were the three cases the sentences do not decide. Read literally, "any vendor cloud is optional" makes Cursor, Claude Code, Antigravity, and Devin Desktop all false, because each needs its vendor's model service to do anything, while every curator so far has counted the local working tree as the main data. A library whose storage the application chooses has no default data to keep, so the literal reading says true where practice says false. And nearly every system has an editable settings file, so "settings" in the second sentence either means almost nothing or needs a narrower word. Those are now backlog decisions, written as questions, with the records each answer would move named beside them.
+More useful than the flips were the three cases the sentences did not decide. Read literally, "any vendor cloud is optional" makes Cursor, Claude Code, Antigravity, and Devin Desktop all false, because each needs its vendor's model service to do anything, while every curator so far had counted the local working tree as the main data. A library whose storage the application chooses has no default data to keep, so the literal reading says true where practice says false. And nearly every system has an editable settings file, so "settings" in the second sentence either means almost nothing or needs a narrower word.
 
-I had assumed a field with 199 consistent values was a defined field. It was a field with a shared habit. Publishing the definition is what turned the habit into something that could be wrong.
+Those three questions were settled the next day, in ADR 030, after a skeptic briefed with only the repository had argued against the obvious answers and won all three. Local-first now judges the content a system keeps and whether the vendor keeps it by default: sending a request to a remote model does not count, but recording interactions, training on them, or shipping them in telemetry does. A library is local-first only if it writes its own data to disk by default. Editable means a person can change the stored content without writing code, so configuration, delete-only controls, and API-only edits do not count. Both tooltips were rewritten so that the hover text is true under those rules, and a test now fails if the documentation and the badge text drift apart.
+
+Under the new rules five more records moved. Antigravity and Devin Desktop lost Local-first on their own terms pages, which say interaction data is recorded, or used for training, by default. Claude Agent SDK gained it, because sessions persist locally and the commercial terms forbid training on customer content. smolagents and A-mem lost it because they keep their memory in process. The Local-first set is back at 105, with a different membership than the 105 it started from.
+
+I had assumed a field with 199 consistent values was a defined field. It was a field with a shared habit. A definition published on the 13th and replaced on the 14th is not churn. It is the first time the field had anything that could be replaced.
 
 ## What the queue says about the world
 
