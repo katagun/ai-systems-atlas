@@ -8,6 +8,10 @@ One file, `blog/YYYY-MM-DD-slug.md`. The date orders the index; the slug becomes
 
 Run `uv run python scripts/build_blog.py` after writing or editing a post, then `uv run python scripts/build_share_pages.py` so the sitemap picks up the URL, and commit the generated files with the source. `--check` on either rebuilds in memory and fails when the committed output differs, so a post cannot drift from what produced it and a deleted post cannot leave a live page behind. `verify.yml` runs both.
 
+## The page shell
+
+Every blog page opens with the same site header as the directory page: the wordmark, the primary navigation, and the Suggest and GitHub tools, so a reader who arrives at a post can reach any view. It is static markup emitted by `scripts/build_blog.py`, not shared with `web/index.html`, because the main page's tabs are buttons that `web/app.js` wires up while a blog page carries no script; the blog's links reach the same views through the `view` query parameter the app restores on load. The one control it omits is the theme toggle, which needs script, so blog pages follow the OS colour preference like share pages do.
+
 ## The markdown subset
 
 There is no markdown library for the same reason there is no YAML parser, so the renderer implements a documented subset: ATX headings, paragraphs, `**bold**`, `*italic*`, `` `code` ``, links, unordered lists, blockquotes, fenced code blocks, and horizontal rules.

@@ -189,6 +189,47 @@ class BuildTests(PostFixture):
         self.assertEqual("2026-09-05", locs[f"{build_blog.SITE_URL}blog/newer/"])
 
 
+class HeaderTests(PostFixture):
+    """Every blog page carries the site header, so the blog reads as part of the site."""
+
+    def pages(self) -> dict[str, str]:
+        return build_blog.build_pages(self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")}))
+
+    def test_the_index_and_posts_carry_the_site_header_before_main(self) -> None:
+        for path, html in self.pages().items():
+            with self.subTest(path):
+                self.assertLess(html.index('<header class="site-header">'), html.index('<main id="main">'))
+                self.assertIn('<nav class="tabs" aria-label="Primary navigation">', html)
+                self.assertIn('<span class="wordmark-name">peacefulcoexistance</span>', html)
+
+    def test_view_links_point_at_the_directory_page_relative_to_each_depth(self) -> None:
+        pages = self.pages()
+        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+            with self.subTest(path):
+                html = pages[path]
+                self.assertIn(f'<a class="tab-link" href="{root}">Directory</a>', html)
+                for view in ("finder", "models", "specifications", "taxonomy", "api"):
+                    self.assertIn(f'href="{root}?view={view}"', html)
+                self.assertIn(f'<link rel="stylesheet" href="{root}fonts.css">', html)
+
+    def test_the_blog_link_is_marked_current(self) -> None:
+        pages = self.pages()
+        self.assertIn('<a class="tab-link is-active" aria-current="page" href="./">Blog</a>', pages["blog/index.html"])
+        self.assertIn('<a class="tab-link is-active" aria-current="page" href="../">Blog</a>', pages["blog/newer/index.html"])
+
+    def test_blog_pages_stay_static(self) -> None:
+        """The header is markup only: no theme script, no application script."""
+        for path, html in self.pages().items():
+            with self.subTest(path):
+                self.assertNotIn("<script", html)
+                self.assertNotIn("theme-toggle", html)
+
+    def test_footers_keep_their_depth_specific_links(self) -> None:
+        pages = self.pages()
+        self.assertIn('<a href="../">Browse the directory</a>', pages["blog/index.html"])
+        self.assertIn('<a href="../">All writing</a> · <a href="../../">Browse the directory</a>', pages["blog/newer/index.html"])
+
+
 class CheckTests(PostFixture):
     def build(self, root: Path) -> None:
         self.assertEqual(0, build_blog.main([], root=root))

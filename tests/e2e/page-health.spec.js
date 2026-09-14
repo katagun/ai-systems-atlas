@@ -82,3 +82,22 @@ test("the primary navigation links to the blog", async ({ page }) => {
   await page.getByRole("link", { name: "Blog" }).click();
   await expect(page).toHaveURL(/\/blog\/$/);
 });
+
+test("the blog carries the site header, and its view links land on the directory", async ({ page }) => {
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  const header = page.locator("header.site-header");
+  await expect(header).toBeVisible();
+  await expect(header.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "page");
+
+  // A post sits one level deeper than the index; its links must still resolve.
+  await page.locator(".detail-grid h2 a").first().click();
+  await expect(page.locator("header.site-header")).toBeVisible();
+  await page.getByRole("link", { name: "Finder" }).click();
+  await expect(page).toHaveURL(/\/\?view=finder$/);
+  await expect(page.locator("#finder")).toBeVisible();
+
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("#directory")).toBeVisible();
+});
