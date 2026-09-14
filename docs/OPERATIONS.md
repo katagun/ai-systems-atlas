@@ -21,6 +21,22 @@ Synchronization and share-page generation are write operations; the remaining co
 
 `ruff` is pinned in the `dev` dependency group and installed by `uv sync`. Its rule set is configured in `pyproject.toml`; `eslint.config.mjs` covers the browser bundle, the build scripts, and the test suites. Both run in `verify.yml`. Ruff enforces the `requires-python` floor, which matters because CI only ever runs one Python version.
 
+## Review age
+
+```bash
+uv run python scripts/report_review_age.py
+uv run python scripts/report_review_age.py --older-than 90 --collection systems
+uv run python scripts/report_review_age.py --json --as-of 2026-09-14
+```
+
+The report reads `directory/` and prints one row per reviewed record, oldest editorial date first. It changes no date, fetches nothing, and always exits 0: it is a prompt for human re-review, never a gate.
+
+- **reviewed** is the age of the record's own `verified_at`.
+- **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, or trust record, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
+- **metadata** is the newest automated timestamp, `metadata_verified_at` or `stars_verified_at`, or `none` for records without GitHub metadata. It says how fresh the live numbers are, not how fresh the review is.
+
+`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, or `specifications` and may repeat.
+
 ## Metadata refresh
 
 The weekly refresh runs this alongside the models.dev import, synchronization, payload and
@@ -715,7 +731,7 @@ A candidate hint is a review prompt, never an auto-mapping: confirm the icon dep
 
 ## GitHub Pages
 
-`.github/workflows/deploy-pages.yml` deploys only `web/` after the exact `main` revision passes the complete `verify` workflow. A manual run is accepted only from `main` and performs the deployment workflow's local validation before publishing. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.
+`.github/workflows/deploy-pages.yml` deploys only `web/`, and only after a push to `main` passes the complete `verify` workflow for that exact revision. It has no manual trigger, so nothing can publish a revision that skipped verification; the deployment workflow still runs its own local validation before publishing. To redeploy a revision without a new commit, re-run its push-triggered **Verify AI Systems Atlas** run (`gh run rerun <run-id>`): a re-run keeps the original push event and commit, so a successful re-run starts the deployment again. That path follows GitHub's documented re-run behavior and has not yet been exercised in this repository. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.
 
 The site URL follows the repository owner and name. After a transfer or rename, update any explicit links or custom-domain configuration separately; the deployment workflow itself is owner-independent.
 
