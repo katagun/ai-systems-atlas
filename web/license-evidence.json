@@ -420,7 +420,7 @@
           "scope": "Bundled Claude Code executable and TypeScript SDK distribution, excluding separately licensed wrapper components",
           "kind": "web_terms",
           "url": "https://code.claude.com/docs/en/agent-sdk/overview#license-and-terms",
-          "verified_at": "2026-08-25"
+          "verified_at": "2026-09-14"
         },
         {
           "license_id": "LicenseRef-Commercial",
