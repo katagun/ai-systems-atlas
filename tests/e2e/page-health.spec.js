@@ -102,3 +102,25 @@ test("the blog carries the site header, and its view links land on the directory
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator("#directory")).toBeVisible();
 });
+
+test("the blog's theme control cycles and its choice follows the reader to the directory", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  const toggle = page.locator("#theme-toggle");
+  await expect(toggle).toHaveAttribute("aria-label", "Theme: system");
+  await toggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await toggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveAttribute("aria-label", "Theme: dark");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#0f141b");
+
+  // The choice is the site's, not the blog's: a post and the directory both honour it.
+  await page.locator(".post-list h2 a").first().click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-label", "Theme: dark");
+  await page.locator("#theme-toggle").click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", /.+/);
+});

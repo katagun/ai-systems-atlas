@@ -1173,7 +1173,7 @@ footer {
   font-size: .76rem;
   text-align: left;
 }
-footer #data-date {
+footer #data-date, footer .footer-meta {
   grid-column: 2;
   grid-row: 1 / span 2;
   font: 500 .68rem var(--font-mono);
@@ -1237,7 +1237,7 @@ footer #data-date {
   .comparison-heading .ghost-button { align-self: flex-start; }
   .comparison-dialog { padding: 1rem; }
   footer { padding: 1.5rem 0 1.75rem; grid-template-columns: 1fr; }
-  footer #data-date { grid-column: 1; grid-row: auto; margin-top: .5rem; text-align: left; }
+  footer #data-date, footer .footer-meta { grid-column: 1; grid-row: auto; margin-top: .5rem; text-align: left; }
 }
 
 @media (max-width: 460px) {
@@ -1281,7 +1281,7 @@ footer #data-date {
 .post-card h2 a:hover { color: var(--cyan); }
 .post-card p { margin: 0 0 .6rem; color: var(--muted); font-size: .98rem; line-height: 1.6; }
 .post-card .byline { margin: 0; }
-.writing-page footer { display: block; padding: 1.5rem 0 2rem; font-size: .74rem; }
+.footer-meta a { color: inherit; }
 @media (max-width: 720px) {
   .writing-page main, .writing-page footer { width: min(100% - 1.5rem, 46rem); }
 }

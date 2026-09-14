@@ -279,8 +279,7 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 
 # The main page's header, reproduced as static markup. Its view tabs are buttons that
 # app.js wires up; here they are links to the same views through the `view` query
-# parameter the app restores on load. There is no theme control because a blog page
-# carries no script: like the share pages, it follows the OS preference.
+# parameter the app restores on load. The theme control is driven by THEME_SCRIPT.
 VIEWS = (("finder", "Finder"), ("models", "Models"), ("specifications", "Specifications"),
          ("taxonomy", "Taxonomy"), ("api", "API"))
 REPOSITORY = "https://github.com/katagun/ai-systems-atlas"
@@ -299,18 +298,48 @@ GITHUB_ICON = (
 # the same content stamp build_asset_version.mjs gives index.html, so a browser that
 # cached one under the previous version can never pair it with a newer page.
 ASSETS = ("fonts.css", "styles.css")
-THEME_STAMP = (
-    "<script>\n"
-    "// Stamp a stored theme choice before first paint, exactly as index.html does, so a\n"
-    "// reader's choice follows them here. app.js owns the control; this only reads it.\n"
-    "(function () {\n"
-    "  try {\n"
-    '    var theme = localStorage.getItem("theme");\n'
-    '    if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;\n'
-    "  } catch (error) {}\n"
-    "})();\n"
-    "</script>"
+# The directory page's footer notices, verbatim, so the two footers read as one. Its
+# fourth slot carries the data date there; here it carries the blog's own links.
+FOOTER_NOTICES = (
+    "<span>Systems score within families. Reviewed models, inference services, and local runtimes "
+    "each use a separate score; source imports and specifications are unscored.</span>"
+    "<span>Product marks identify their owners' products and imply no affiliation or endorsement.</span>"
+    '<span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
+    'rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is '
+    "Apache-2.0.</span>"
 )
+# The one script a blog page carries. It is the pre-paint stamp index.html has, plus
+# the theme control app.js drives there: cycle system, light, dark; persist under the
+# same key; keep the control's name and the browser chrome colour in step. No
+# application script is loaded, and nothing is fetched.
+THEME_SCRIPT = """<script>
+(function () {
+  var KEY = "theme", ORDER = ["system", "light", "dark"];
+  function read() {
+    try { var stored = localStorage.getItem(KEY); return stored === "light" || stored === "dark" ? stored : "system"; }
+    catch (error) { return "system"; }
+  }
+  function apply(preference) {
+    if (preference === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = preference;
+    try { if (preference === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, preference); }
+    catch (error) {}
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.setAttribute("aria-label", "Theme: " + preference);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (meta && background) meta.setAttribute("content", background);
+  }
+  var stored = read();
+  if (stored !== "system") document.documentElement.dataset.theme = stored;
+  document.addEventListener("DOMContentLoaded", function () {
+    apply(read());
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.addEventListener("click", function () { apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length]); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { apply(read()); });
+  });
+})();
+</script>"""
 
 
 def asset_versions(root: Path) -> dict[str, str]:
@@ -340,6 +369,8 @@ def render_header(root: str, blog: str) -> str:
         f'<a class="tab-link is-active" aria-current="page" href="{blog}">Blog</a></nav>\n'
         '<div class="header-tools">'
         f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
+        '<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" '
+        'title="Switch between system, light, and dark themes"></button>'
         f'<a class="github-link" href="{REPOSITORY}" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub">{GITHUB_ICON}</a>'
         "</div>\n</header>"
     )
@@ -358,7 +389,7 @@ def _document(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{THEME_STAMP}
+{THEME_SCRIPT}
 <title>{html.escape(title)} · {SITE_NAME}</title>
 <meta name="description" content="{html.escape(description)}">
 <link rel="canonical" href="{html.escape(url)}">
@@ -376,7 +407,7 @@ def _document(
 <main id="main" class="writing">
 {body}
 </main>
-<footer>{SITE_NAME} · {SITE_TAGLINE} · {footer}</footer>
+<footer>{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
 </body>
 </html>
 """

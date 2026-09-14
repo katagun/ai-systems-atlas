@@ -239,19 +239,34 @@ class HeaderTests(PostFixture):
             build_blog.build_pages(root)
         self.assertIn("styles.css", str(caught.exception))
 
-    def test_blog_pages_carry_only_the_theme_stamp_and_no_application_script(self) -> None:
+    def test_blog_pages_carry_the_theme_control_and_no_application_script(self) -> None:
+        """One inline script stamps the stored theme before paint and drives the control."""
         for path, html in self.pages().items():
             with self.subTest(path):
                 self.assertNotIn("<script src", html)
-                self.assertNotIn("theme-toggle", html)
                 self.assertEqual(1, html.count("<script>"))
-                self.assertIn('localStorage.getItem("theme")', html)
+                self.assertIn('var KEY = "theme"', html)
                 self.assertLess(html.index("<script>"), html.index('<link rel="stylesheet"'))
+                self.assertIn('<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system"', html)
+                self.assertLess(html.index('class="suggest-link"'), html.index('id="theme-toggle"'))
+                self.assertLess(html.index('id="theme-toggle"'), html.index('class="github-link"'))
 
     def test_footers_keep_their_depth_specific_links(self) -> None:
         pages = self.pages()
-        self.assertIn('<a href="../">Browse the directory</a>', pages["blog/index.html"])
-        self.assertIn('<a href="../">All writing</a> · <a href="../../">Browse the directory</a>', pages["blog/newer/index.html"])
+        self.assertIn('<span class="footer-meta"><a href="../">Browse the directory</a></span>', pages["blog/index.html"])
+        self.assertIn(
+            '<span class="footer-meta"><a href="../">All writing</a> · <a href="../../">Browse the directory</a></span>',
+            pages["blog/newer/index.html"],
+        )
+
+    def test_footers_carry_the_directory_page_notices_verbatim(self) -> None:
+        """The published index.html is the reference, so the two footers cannot drift apart."""
+        index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
+        match = re.search(r"<footer>(.*?)<span id=\"data-date\"></span></footer>", index)
+        self.assertIsNotNone(match)
+        for path, html in self.pages().items():
+            with self.subTest(path):
+                self.assertIn(f"<footer>{match.group(1)}<span class=\"footer-meta\">", html)
 
 
 class CheckTests(PostFixture):
