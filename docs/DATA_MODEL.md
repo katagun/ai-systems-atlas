@@ -35,6 +35,7 @@ Fields are grouped by responsibility:
 - **Identity:** `id`, `name`, optional GitHub `repo`, authoritative `url`, and `description`.
 - **Classification:** `system_family`, `primary_role`, `secondary_roles`, and `score_profile`.
 - **Traits:** agent relationship, optional reviewed provider relationship and model backends, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, provenance, and agent-only operation fields.
+- **Trait definitions:** `local_first` is true when a system keeps its main data on your own device or infrastructure by default and any vendor cloud is optional. `human_editable` is true when you can open and change what it stores directly, as files, settings, or in an editor, not only through chat or search. Directory cards show these traits as the Local-first and Editable by you badges; keep these definitions and the badge definitions in `web/app-core.js` in step.
 - **Licensing:** non-empty `licenses`, one `source_model`, and `license_review_status`.
 - **Lifecycle:** `status`.
 - **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
