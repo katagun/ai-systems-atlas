@@ -1,6 +1,1144 @@
 {
   "version": "1.0",
-  "updated_at": null,
-  "source": null,
-  "signals": []
+  "updated_at": "2026-09-14T00:00:00Z",
+  "source": {
+    "endpoint": "https://hn.algolia.com/api/v1/search_by_date",
+    "window_start": "2026-09-12T13:23:07Z",
+    "window_end": "2026-09-13T13:23:07Z",
+    "points_floor": 25,
+    "story_count": 786,
+    "eligible_count": 44,
+    "truncated": false,
+    "suppressed": 0
+  },
+  "signals": [
+    {
+      "story_id": "49672281",
+      "story_url": "https://news.ycombinator.com/item?id=49672281",
+      "title": "LLMs are real, AI is fake",
+      "url": "https://pluralistic.net/2026/09/12/god-in-the-box/",
+      "points": 75,
+      "num_comments": 37,
+      "submitted_at": "2026-09-12T13:47:28Z",
+      "page_status": "readable",
+      "content_sha256": "5a740b30823e84cd6e913d3882720ecd59eddfbaa4cce187043f6960c202377c",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49672342",
+      "story_url": "https://news.ycombinator.com/item?id=49672342",
+      "title": "My last six months at Evernote",
+      "url": "https://alexkras.com/my-last-six-months-at-evernote-after-bending-spoons-took-over/",
+      "points": 64,
+      "num_comments": 34,
+      "submitted_at": "2026-09-12T13:54:19Z",
+      "page_status": "readable",
+      "content_sha256": "769a57dfa4f67b82a00665656892a1e79cb4c23f34dc0903242b5b78af356b34",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Personal memoir, not a system page",
+        "finding": "A former engineering manager's account of Evernote after an acquisition, not a description of a system: \"I was an Engineering Manager at Evernote\" and \"After Bending Spoons acquired Evernote, almost everyone ended up getting laid-off.\" The page is company history and workplace narrative, not documentation of a system.",
+        "evidence": [
+          {
+            "label": "Evernote memoir post",
+            "url": "https://alexkras.com/my-last-six-months-at-evernote-after-bending-spoons-took-over/",
+            "kind": "web",
+            "content_sha256": "769a57dfa4f67b82a00665656892a1e79cb4c23f34dc0903242b5b78af356b34",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49672365",
+      "story_url": "https://news.ycombinator.com/item?id=49672365",
+      "title": "A Mathematical Framework for Transformer Circuits (2021)",
+      "url": "https://transformer-circuits.pub/2021/framework/index.html",
+      "points": 106,
+      "num_comments": 17,
+      "submitted_at": "2026-09-12T13:56:58Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49672474",
+      "story_url": "https://news.ycombinator.com/item?id=49672474",
+      "title": "Compiler Can Undo Your Security Checks",
+      "url": "https://davidbombal.com/your-compiler-can-undo-your-security-checks/",
+      "points": 28,
+      "num_comments": 67,
+      "submitted_at": "2026-09-12T14:07:58Z",
+      "page_status": "readable",
+      "content_sha256": "61dc0c91169e3a88f7fc2c4f0d6c7cff333836fd3dd3bf30d5ff2bcfb42ac25e",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Security interview, no system",
+        "finding": "A sponsored video interview about compiler optimizations and C security: \"legal compiler optimizations can remove security protections, delete memory-clearing operations and introduce time-of-check to time-of-use vulnerabilities\". It mentions AI helping analyse open-source code only in passing and ships no system of its own.",
+        "evidence": [
+          {
+            "label": "Compiler security interview page",
+            "url": "https://davidbombal.com/your-compiler-can-undo-your-security-checks/",
+            "kind": "web",
+            "content_sha256": "61dc0c91169e3a88f7fc2c4f0d6c7cff333836fd3dd3bf30d5ff2bcfb42ac25e",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49672510",
+      "story_url": "https://news.ycombinator.com/item?id=49672510",
+      "title": "We must pace the frontier",
+      "url": "https://darioamodei.com/post/we-must-pace-the-frontier",
+      "points": 743,
+      "num_comments": 1030,
+      "submitted_at": "2026-09-12T14:10:49Z",
+      "page_status": "readable",
+      "content_sha256": "11ed6a1856359d3bbba59db3d55faca6e5f00ea4600805e792dc3e3cab4a778f",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Policy essay, no shipped artifact",
+        "finding": "A policy essay arguing for slowing capability progress: \"We must slow the pace at which we improve the capabilities of AI models.\" It describes no product, release, or change to any system's boundary, license, or evidence; Anthropic's products the Atlas already carries are not re-described here.",
+        "evidence": [
+          {
+            "label": "Pacing-the-frontier essay",
+            "url": "https://darioamodei.com/post/we-must-pace-the-frontier",
+            "kind": "web",
+            "content_sha256": "11ed6a1856359d3bbba59db3d55faca6e5f00ea4600805e792dc3e3cab4a778f",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49672549",
+      "story_url": "https://news.ycombinator.com/item?id=49672549",
+      "title": "Waymo pulls over, calls cops on juvenile riders who had 'ghost gun\"",
+      "url": "https://www.latimes.com/california/story/2026-09-12/juveniles-riding-in-waymo-arrested-after-police-find-ghost-gun",
+      "points": 135,
+      "num_comments": 223,
+      "submitted_at": "2026-09-12T14:16:24Z",
+      "page_status": "readable",
+      "content_sha256": "c20663ede7626751438228f7a04adef61073f86880d94f6e7a42ce04689cda9a",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49672557",
+      "story_url": "https://news.ycombinator.com/item?id=49672557",
+      "title": "Europe's \"Less\" Is Doing More Than Anyone Gives It Credit For",
+      "url": "https://oilprice.com/Energy/Energy-General/Europes-Less-Is-Doing-More-Than-Anyone-Gives-It-Credit-For.html",
+      "points": 107,
+      "num_comments": 60,
+      "submitted_at": "2026-09-12T14:17:28Z",
+      "page_status": "readable",
+      "content_sha256": "8d9447e975ebee01cc2166ba99abe76f61e4b1ecffd40cad2a7fe3ed11d650ef",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49672641",
+      "story_url": "https://news.ycombinator.com/item?id=49672641",
+      "title": "I refuse to let SPICE die",
+      "url": "https://github.com/nefarius/vd_agent/",
+      "points": 87,
+      "num_comments": 71,
+      "submitted_at": "2026-09-12T14:25:07Z",
+      "page_status": "readable",
+      "content_sha256": "4dbd993d58115d2ccec420f23ec084ecf499ae04dd18b1e344df888664a13e91",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Virtualization utility outside the families",
+        "finding": "The repository is \"Windows SPICE guest agent. Community-maintained fork of the abandoned freedesktop.org vd_agent.\" Despite the word agent, this is a virtual-machine guest integration utility, infrastructure rather than a memory, agent, or assistant system in the Atlas sense.",
+        "evidence": [
+          {
+            "label": "vd_agent repository page",
+            "url": "https://github.com/nefarius/vd_agent/",
+            "kind": "web",
+            "content_sha256": "4dbd993d58115d2ccec420f23ec084ecf499ae04dd18b1e344df888664a13e91",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49672842",
+      "story_url": "https://news.ycombinator.com/item?id=49672842",
+      "title": "I made a build visualizer to understand Bun's compile times",
+      "url": "https://lalitm.com/post/buildprof/",
+      "points": 170,
+      "num_comments": 30,
+      "submitted_at": "2026-09-12T14:45:28Z",
+      "page_status": "readable",
+      "content_sha256": "67f2559fb4df181019fe83a3062a46c983123c2350ae37ebf28148cdb25d5372",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Build-profiling utility outside the families",
+        "finding": "A write-up of buildprof, \"an open-source tracing tool that shows where the time goes when you compile software on Linux.\" It is a developer performance utility that records build subprocesses on a timeline; it does not preserve or organize knowledge, plan and act through tools, or run a conversational workspace.",
+        "evidence": [
+          {
+            "label": "buildprof blog post",
+            "url": "https://lalitm.com/post/buildprof/",
+            "kind": "web",
+            "content_sha256": "67f2559fb4df181019fe83a3062a46c983123c2350ae37ebf28148cdb25d5372",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49673098",
+      "story_url": "https://news.ycombinator.com/item?id=49673098",
+      "title": "Nvidia is the central bank of AI",
+      "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
+      "points": 572,
+      "num_comments": 395,
+      "submitted_at": "2026-09-12T15:08:27Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49673281",
+      "story_url": "https://news.ycombinator.com/item?id=49673281",
+      "title": "Is it time for a Luddite Renaissance?",
+      "url": "https://www.npr.org/2026/09/08/nx-s1-5955618/is-it-time-for-a-luddite-renaissance",
+      "points": 59,
+      "num_comments": 47,
+      "submitted_at": "2026-09-12T15:24:47Z",
+      "page_status": "readable",
+      "content_sha256": "4080cf9fd58d5da07d898a1e8c871717e1bb96e1b4a463081984811c82408d5d",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Podcast episode, no system",
+        "finding": "A history podcast episode page: \"Throughline takes on a listener's question to explore what the 19th-century Luddite rebellion can teach us about technology and human agency.\" Commentary on AI and labour, not a system.",
+        "evidence": [
+          {
+            "label": "NPR Throughline episode page",
+            "url": "https://www.npr.org/2026/09/08/nx-s1-5955618/is-it-time-for-a-luddite-renaissance",
+            "kind": "web",
+            "content_sha256": "4080cf9fd58d5da07d898a1e8c871717e1bb96e1b4a463081984811c82408d5d",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49673580",
+      "story_url": "https://news.ycombinator.com/item?id=49673580",
+      "title": "Microcode in Intel's 8087 floating-point chip: the scale instruction",
+      "url": "https://www.righto.com/2026/09/8087-microcode-reverse-engineering-fscale.html",
+      "points": 129,
+      "num_comments": 48,
+      "submitted_at": "2026-09-12T15:49:52Z",
+      "page_status": "readable",
+      "content_sha256": "fb973e2e7d0847db8402b08527b8bb9aff2103d03cd4d56ac7cd1fd942504703",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Hardware history, no system",
+        "finding": "A reverse-engineering article on a 1980 coprocessor: \"In this post, I examine the microcode for one of the 8087's instructions\u2014FSCALE\u2014and describe how this microcode works.\" Computer-history research with no AI system involved.",
+        "evidence": [
+          {
+            "label": "8087 microcode article",
+            "url": "https://www.righto.com/2026/09/8087-microcode-reverse-engineering-fscale.html",
+            "kind": "web",
+            "content_sha256": "fb973e2e7d0847db8402b08527b8bb9aff2103d03cd4d56ac7cd1fd942504703",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49674050",
+      "story_url": "https://news.ycombinator.com/item?id=49674050",
+      "title": "Make your first edit to OpenStreetMap",
+      "url": "https://high5apps.github.io/josm-plugin-website-wizard/",
+      "points": 608,
+      "num_comments": 146,
+      "submitted_at": "2026-09-12T16:25:08Z",
+      "page_status": "readable",
+      "content_sha256": "d631bc83e0289c1250baec0a07ecb83da99e1277212b0bd4b6694e7d7bfd2518",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Mapping tutorial outside the families",
+        "finding": "A tutorial for a map-editor plugin: \"This quick tutorial will help you make a meaningful contribution to OpenStreetMap (OSM) in less than 15 minutes.\" The Website Wizard JOSM plugin is a data-editing utility, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "JOSM Website Wizard tutorial",
+            "url": "https://high5apps.github.io/josm-plugin-website-wizard/",
+            "kind": "web",
+            "content_sha256": "d631bc83e0289c1250baec0a07ecb83da99e1277212b0bd4b6694e7d7bfd2518",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49675902",
+      "story_url": "https://news.ycombinator.com/item?id=49675902",
+      "title": "Linux Zoom client proactively reading everything written to X11 clipboard",
+      "url": "https://hachyderm.io/@simontatham/117201594980991062",
+      "points": 415,
+      "num_comments": 161,
+      "submitted_at": "2026-09-12T18:58:57Z",
+      "page_status": "unreadable",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'unreadable' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49676085",
+      "story_url": "https://news.ycombinator.com/item?id=49676085",
+      "title": "An open letter to Dario: if you mean it, open the weights",
+      "url": "https://jacob.gold/posts/open-letter-to-dario-amodei-about-open-weights/",
+      "points": 302,
+      "num_comments": 98,
+      "submitted_at": "2026-09-12T19:15:32Z",
+      "page_status": "readable",
+      "content_sha256": "bee82bdfc8ac5b7a0fc6f9aaac57c003f24c3209492cde6ef5a5c26b7eabcbe4",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Open letter, no shipped artifact",
+        "finding": "An open letter responding to a policy essay, asking that \"Any AI model a company offers to the public has to be released as open weights.\" Advocacy about regulation; it describes no system and changes no existing record's evidence.",
+        "evidence": [
+          {
+            "label": "Open letter on open weights",
+            "url": "https://jacob.gold/posts/open-letter-to-dario-amodei-about-open-weights/",
+            "kind": "web",
+            "content_sha256": "bee82bdfc8ac5b7a0fc6f9aaac57c003f24c3209492cde6ef5a5c26b7eabcbe4",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49676577",
+      "story_url": "https://news.ycombinator.com/item?id=49676577",
+      "title": "Benchmark: CadQuery vs. OpenSCAD for agentic CAD work",
+      "url": "https://modelrift.com/blog/cadquery-vs-openscad/",
+      "points": 39,
+      "num_comments": 61,
+      "submitted_at": "2026-09-12T19:57:19Z",
+      "page_status": "readable",
+      "content_sha256": "e1fb87937f9e5f8019394daa6b4d90171e0046f2c1da85b8b0369ccabab0d2df",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Vendor benchmark write-up",
+        "finding": "A vendor blog benchmark, not a product description: \"We gave six AI agents the same three printable parts to model, three in CadQuery and three in OpenSCAD, then verified every mesh independently.\" The page compares two CAD scripting tools as agent targets; its one product statement, \"ModelRift generates OpenSCAD for every model on the platform\", concerns a CAD-generation service, but the page's subject is the tool comparison, not that service's boundary.",
+        "evidence": [
+          {
+            "label": "ModelRift CadQuery vs OpenSCAD post",
+            "url": "https://modelrift.com/blog/cadquery-vs-openscad/",
+            "kind": "web",
+            "content_sha256": "e1fb87937f9e5f8019394daa6b4d90171e0046f2c1da85b8b0369ccabab0d2df",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49676820",
+      "story_url": "https://news.ycombinator.com/item?id=49676820",
+      "title": "Real-SWE: Benchmarking AI models on private, real-world, enterprise codebases",
+      "url": "https://withspecific.com/benchmarks/real-swe",
+      "points": 271,
+      "num_comments": 151,
+      "submitted_at": "2026-09-12T20:25:48Z",
+      "page_status": "readable",
+      "content_sha256": "3d9ba6b2c8ae72905e6aa2e43956550fb2aec643829570e2d82994daf75d9f51",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Benchmark release, no shipped system",
+        "finding": "A benchmark announcement: \"Today we are releasing Real-SWE, a benchmark that evaluates frontier AI models on private, real-world, enterprise codebases.\" It ranks model-and-harness pairs (Claude Code, Codex CLI, Gemini CLI and others the Atlas already carries) but ships no operational system and says nothing that changes those records' boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "Real-SWE benchmark page",
+            "url": "https://withspecific.com/benchmarks/real-swe",
+            "kind": "web",
+            "content_sha256": "3d9ba6b2c8ae72905e6aa2e43956550fb2aec643829570e2d82994daf75d9f51",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49677450",
+      "story_url": "https://news.ycombinator.com/item?id=49677450",
+      "title": "P(doom)",
+      "url": "https://lucumr.pocoo.org/2026/9/12/pdoom/",
+      "points": 158,
+      "num_comments": 129,
+      "submitted_at": "2026-09-12T21:35:38Z",
+      "page_status": "readable",
+      "content_sha256": "f41d3cd2cb00fad5ba1f9821a226bde1630c563a20a9650aecd2257b8e89f040",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Opinion essay, no system",
+        "finding": "A personal essay reacting to AI-risk discourse: \"I thought it might be interesting to write down my present-day thoughts on this\". Commentary with no product or artifact described.",
+        "evidence": [
+          {
+            "label": "P(doom) essay",
+            "url": "https://lucumr.pocoo.org/2026/9/12/pdoom/",
+            "kind": "web",
+            "content_sha256": "f41d3cd2cb00fad5ba1f9821a226bde1630c563a20a9650aecd2257b8e89f040",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49677836",
+      "story_url": "https://news.ycombinator.com/item?id=49677836",
+      "title": "Killing with a car costs $1.6M, California requires drivers to carry $30K",
+      "url": "https://maxmautner.com/2026/09/11/liability-coverage.html",
+      "points": 53,
+      "num_comments": 73,
+      "submitted_at": "2026-09-12T22:22:31Z",
+      "page_status": "readable",
+      "content_sha256": "f5302daab0df0906785b98012275c4d00043f3696e4bd2cc8d5b89c92c0e1b9a",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Fetched bytes are not readable text",
+        "finding": "The page fetched with a digest, but the bundled content is undecoded binary (it reads as compressed bytes, not HTML or prose), so there is no text to assess. The submitted title concerns California car-insurance liability limits, but a title is not evidence and nothing was read.",
+        "evidence": [
+          {
+            "label": "Liability-coverage post (binary content)",
+            "url": "https://maxmautner.com/2026/09/11/liability-coverage.html",
+            "kind": "web",
+            "content_sha256": "f5302daab0df0906785b98012275c4d00043f3696e4bd2cc8d5b89c92c0e1b9a",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678423",
+      "story_url": "https://news.ycombinator.com/item?id=49678423",
+      "title": "TailTalk: A modern async user space AppleTalk stack with Rust and Tokio",
+      "url": "https://github.com/FeralFirmware/TailTalk/",
+      "points": 74,
+      "num_comments": 15,
+      "submitted_at": "2026-09-12T23:43:31Z",
+      "page_status": "readable",
+      "content_sha256": "af16a6786816252e25835ff37f2e74cfe3b88d4884932560ecbfb6bdd995fcae",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Networking stack outside the families",
+        "finding": "The repository is \"A modern async user space AppleTalk stack with Rust + Tokio\". A legacy network-protocol implementation is infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "TailTalk repository page",
+            "url": "https://github.com/FeralFirmware/TailTalk/",
+            "kind": "web",
+            "content_sha256": "af16a6786816252e25835ff37f2e74cfe3b88d4884932560ecbfb6bdd995fcae",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678432",
+      "story_url": "https://news.ycombinator.com/item?id=49678432",
+      "title": "No Atlantic hurricanes by Sept. 12 breaks a 60-year record",
+      "url": "https://www.accuweather.com/en/hurricane/no-atlantic-hurricanes-by-sept-12-breaks-a-60-year-record/1932278",
+      "points": 89,
+      "num_comments": 62,
+      "submitted_at": "2026-09-12T23:44:44Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678435",
+      "story_url": "https://news.ycombinator.com/item?id=49678435",
+      "title": "AgentsDock: An IDE designed for agentic AI research",
+      "url": "https://agentsdock.net/",
+      "points": 81,
+      "num_comments": 33,
+      "submitted_at": "2026-09-12T23:45:58Z",
+      "page_status": "readable",
+      "content_sha256": "9eb71e1330e32e924f9d06ea99fa46a8bf0263d95de7cfef452d130ef87c0434",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "Operational system not in the catalog",
+        "finding": "AgentsDock describes itself as \"An IDE designed for agentic AI research. AgentsDock currently supports Claude Code, Codex, and Cursor in one desktop and mobile workspace.\" It ships downloads for macOS, iPhone/iPad, Linux, Windows, and Android, and the setup section reads \"Set up your server with a few simple commands\", \"Access the server from any device\", \"Have your agents do research and model training for you\", installed by cloning https://github.com/ZhengyiLuo/AgentsServer. Scope and licensing flags: the page labels itself \"Open source \u00b7 Beta testing now\" but the bundled portion names no license, so the license must come from the repository, not this page; the bundled text is truncated partway through the install instructions, and much of what was read is repeated user testimonials rather than documentation. No record, candidate, or exclusion named AgentsDock exists. Boundary question: is AgentsDock an operational system in its own right, or a remote desktop/mobile front end over third-party agent CLIs (Claude Code, Codex, Cursor) that the Atlas already records, in which case it may not warrant a separate record?",
+        "evidence": [
+          {
+            "label": "AgentsDock homepage",
+            "url": "https://agentsdock.net/",
+            "kind": "web",
+            "content_sha256": "9eb71e1330e32e924f9d06ea99fa46a8bf0263d95de7cfef452d130ef87c0434",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678635",
+      "story_url": "https://news.ycombinator.com/item?id=49678635",
+      "title": "Sergey Brin pours more than $100M into fighting California's billionaire tax",
+      "url": "https://www.latimes.com/business/story/2026-08-12/googles-sergey-brin-spent-102-million-fighting-california-wealth-tax",
+      "points": 31,
+      "num_comments": 25,
+      "submitted_at": "2026-09-13T00:22:32Z",
+      "page_status": "readable",
+      "content_sha256": "c00d6efa015361c64e5916c59d23a46aafa996f46a942e9b0adbe8c036957371",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49678683",
+      "story_url": "https://news.ycombinator.com/item?id=49678683",
+      "title": "Everyone should slow down AI development except for me",
+      "url": "https://xeiaso.net/notes/2026/everyone-slowdown-but-me/",
+      "points": 781,
+      "num_comments": 443,
+      "submitted_at": "2026-09-13T00:30:44Z",
+      "page_status": "unreadable",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'unreadable' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678783",
+      "story_url": "https://news.ycombinator.com/item?id=49678783",
+      "title": "Align AI and Mathematics\u2013To Something Else",
+      "url": "https://liorpachter.wordpress.com/2026/09/12/align-ai-and-mathematics-to-something-else/",
+      "points": 34,
+      "num_comments": 30,
+      "submitted_at": "2026-09-13T00:47:48Z",
+      "page_status": "readable",
+      "content_sha256": "a9920daabd697fb88b58ae77cf3132f0cdb0ed27dde5f5517b0ab88b49f962fd",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49678878",
+      "story_url": "https://news.ycombinator.com/item?id=49678878",
+      "title": "Apple wants to train AI on your private personal data",
+      "url": "https://machinelearning.apple.com/research/introducing-third-generation-of-apple-foundation-models",
+      "points": 30,
+      "num_comments": 19,
+      "submitted_at": "2026-09-13T01:06:29Z",
+      "page_status": "readable",
+      "content_sha256": "37f018f1e62a883dbf85c2a772bb2f3ccd888a5771c39b587cd7b4155cc4614a",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "Uncovered assistant stack behind a model release",
+        "finding": "Apple's research post introduces \"our third generation of Apple Foundation Models (AFM), a family of five foundation models custom-built in collaboration with Google\", spanning on-device models and server models on Private Cloud Compute, built \"to unlock a wide range of helpful experiences for our users, like an entirely new Siri and intelligent tools that make everyday apps smarter\". AFM 3 Cloud Pro \"powers our most demanding use cases, like agentic tool use and complex reasoning.\" Flags: the page is a model and training overview dated June 8, 2026, not product documentation for Siri or Apple Intelligence, so it cannot on its own establish a product boundary; it offers no weights, API, or license terms in the bundled portion; and the text is truncated at the Evaluation section. The HN title claims Apple wants to train on private data, while the page states \"We do not use our users' private personal data or user interactions when training our foundation models\" \u2014 a mismatch a reviewer should not carry forward. Neither Apple Intelligence nor Siri has a record, candidate, or exclusion. Boundary question: is the reviewable thing the Apple Intelligence/Siri assistant (needing first-party product evidence beyond this page), or only a proprietary model family with no public access, which would fall to the model pipeline or outside the Atlas entirely?",
+        "evidence": [
+          {
+            "label": "Apple Foundation Models third-generation post",
+            "url": "https://machinelearning.apple.com/research/introducing-third-generation-of-apple-foundation-models",
+            "kind": "web",
+            "content_sha256": "37f018f1e62a883dbf85c2a772bb2f3ccd888a5771c39b587cd7b4155cc4614a",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49678969",
+      "story_url": "https://news.ycombinator.com/item?id=49678969",
+      "title": "Why are AI agents lying, cheating and coordinating?",
+      "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
+      "points": 630,
+      "num_comments": 677,
+      "submitted_at": "2026-09-13T01:22:31Z",
+      "page_status": "readable",
+      "content_sha256": "52cc060aaf6a4b07c6de61bd51d5b6ae8e92fa3d8b192190fadd0afb878382b8",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Research essay, no shipped artifact",
+        "finding": "An essay on agent misbehaviour: \"The aim is partly scientific, to generate hypotheses about the chains of cause and effect behind these behaviors, and partly practical, to anticipate what comes next.\" Analysis of training incentives with no product or artifact.",
+        "evidence": [
+          {
+            "label": "Bengio essay on agent misbehaviour",
+            "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
+            "kind": "web",
+            "content_sha256": "52cc060aaf6a4b07c6de61bd51d5b6ae8e92fa3d8b192190fadd0afb878382b8",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679360",
+      "story_url": "https://news.ycombinator.com/item?id=49679360",
+      "title": "Don't call yourself an artisanal programmer",
+      "url": "https://purplesyringa.moe/blog/dont-call-yourself-an-artisanal-programmer/",
+      "points": 57,
+      "num_comments": 65,
+      "submitted_at": "2026-09-13T02:29:39Z",
+      "page_status": "readable",
+      "content_sha256": "0045bb9c37e32d30ec7caad29e5b4c708808c6ec9a4669e8271bd23d49f4124f",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Opinion essay, no system",
+        "finding": "A personal essay on programming identity: \"By the book, I'm an artisanal coder, since I don't use LLMs.\" Commentary, no system described.",
+        "evidence": [
+          {
+            "label": "Artisanal programmer essay",
+            "url": "https://purplesyringa.moe/blog/dont-call-yourself-an-artisanal-programmer/",
+            "kind": "web",
+            "content_sha256": "0045bb9c37e32d30ec7caad29e5b4c708808c6ec9a4669e8271bd23d49f4124f",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679459",
+      "story_url": "https://news.ycombinator.com/item?id=49679459",
+      "title": "The Interim Computer Museum",
+      "url": "https://icm.museum/",
+      "points": 162,
+      "num_comments": 24,
+      "submitted_at": "2026-09-13T02:43:57Z",
+      "page_status": "readable",
+      "content_sha256": "89a7130ab85513b191b5b0ec3bd95ed4643d34dcdfa1ce7590b039483e7b7732",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Museum homepage, no system",
+        "finding": "A non-profit museum site: \"The Interim Computer Museum (ICM) strives to preserve and share the history of computing through interactive exhibits using vintage hardware with modern enhancements.\" Not an AI system.",
+        "evidence": [
+          {
+            "label": "Interim Computer Museum homepage",
+            "url": "https://icm.museum/",
+            "kind": "web",
+            "content_sha256": "89a7130ab85513b191b5b0ec3bd95ed4643d34dcdfa1ce7590b039483e7b7732",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679637",
+      "story_url": "https://news.ycombinator.com/item?id=49679637",
+      "title": "After Math",
+      "url": "https://terrytao.wordpress.com/2026/09/12/after-math/",
+      "points": 144,
+      "num_comments": 156,
+      "submitted_at": "2026-09-13T03:16:41Z",
+      "page_status": "readable",
+      "content_sha256": "fad76a00fed32aec2e4d26b1279c97a40548c63730247cf357f306ee72ab574a",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49679643",
+      "story_url": "https://news.ycombinator.com/item?id=49679643",
+      "title": "Aligned to whom?",
+      "url": "https://hyperbo.la/w/aligned-to-whom/",
+      "points": 178,
+      "num_comments": 118,
+      "submitted_at": "2026-09-13T03:17:18Z",
+      "page_status": "readable",
+      "content_sha256": "8ece48bf2bacd9bcc80f630d1c38ecaa6341b6237688ca2286475ba74d49493b",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Opinion essay, no system",
+        "finding": "A short essay addressed \"to those of you who are building agents\" about trusting model priors outside one's expertise: \"There is no such thing as an unhackable grader\". Commentary on alignment, no product described.",
+        "evidence": [
+          {
+            "label": "Aligned to whom? essay",
+            "url": "https://hyperbo.la/w/aligned-to-whom/",
+            "kind": "web",
+            "content_sha256": "8ece48bf2bacd9bcc80f630d1c38ecaa6341b6237688ca2286475ba74d49493b",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679647",
+      "story_url": "https://news.ycombinator.com/item?id=49679647",
+      "title": "A succession crisis that tore England apart (2023)",
+      "url": "https://www.historytoday.com/archive/feature/succession-crisis-tore-england-apart",
+      "points": 46,
+      "num_comments": 44,
+      "submitted_at": "2026-09-13T03:18:29Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679685",
+      "story_url": "https://news.ycombinator.com/item?id=49679685",
+      "title": "Anthropic CEO says AI swarm could 'take over the Internet' in 6-12 months",
+      "url": "https://venturebeat.com/security/anthropic-ceo-says-ai-swarm-could-take-over-the-entire-internet-in-6-12-months-commits-to-ai-slowdown-plan",
+      "points": 47,
+      "num_comments": 33,
+      "submitted_at": "2026-09-13T03:25:32Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49679734",
+      "story_url": "https://news.ycombinator.com/item?id=49679734",
+      "title": "A wandering black hole caught feeding on the run",
+      "url": "https://phys.org/news/2026-08-black-hole-caught.html",
+      "points": 63,
+      "num_comments": 59,
+      "submitted_at": "2026-09-13T03:34:53Z",
+      "page_status": "readable",
+      "content_sha256": "a0731f8a838f069d96b73644b5bf5c36efc46c391158c1b931b66d8f90d051fe",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49680485",
+      "story_url": "https://news.ycombinator.com/item?id=49680485",
+      "title": "When anyone can build software, who decides what not to build?",
+      "url": "https://architectureintel.com/when-anyone-can-build-software-who-decides-what-not-to-build-ae07fdb370e4",
+      "points": 44,
+      "num_comments": 34,
+      "submitted_at": "2026-09-13T05:59:26Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "Sweep could not read the page",
+        "finding": "The sweep recorded page_status 'failed' with no content digest, so no page text exists to assess. The submitted title is not evidence and was not used.",
+        "evidence": [],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49681152",
+      "story_url": "https://news.ycombinator.com/item?id=49681152",
+      "title": "JetKVM Mini",
+      "url": "https://jetkvm.com/blog/introducing-jetkvm-mini",
+      "points": 555,
+      "num_comments": 223,
+      "submitted_at": "2026-09-13T07:49:46Z",
+      "page_status": "readable",
+      "content_sha256": "59ffc39b59b6dfb6dee8adebb3b6a422d4b958ad27cf279c1861d784d9ea8601",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Hardware product outside the families",
+        "finding": "A hardware launch: \"JetKVM Mini is a matchbox-sized KVM, wired or wireless. 1080p video capture, the same web interface and cloud as JetKVM, and open-source firmware.\" A remote keyboard-video-mouse device is hardware, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "JetKVM Mini announcement",
+            "url": "https://jetkvm.com/blog/introducing-jetkvm-mini",
+            "kind": "web",
+            "content_sha256": "59ffc39b59b6dfb6dee8adebb3b6a422d4b958ad27cf279c1861d784d9ea8601",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49681268",
+      "story_url": "https://news.ycombinator.com/item?id=49681268",
+      "title": "Texts Reveal Kash Patel Ordering Staff to Fight \"Ifindretards\" Account",
+      "url": "https://newrepublic.com/post/215320/texts-kash-patel-order-staff-mean-social-media-posts-ifindretards",
+      "points": 81,
+      "num_comments": 3,
+      "submitted_at": "2026-09-13T08:06:42Z",
+      "page_status": "readable",
+      "content_sha256": "0782df8e13647adaed1313169b2215cc5cc4176448fb7d1b2ba2e5f8e31a20a1",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Political news, no system",
+        "finding": "A news post: \"FBI Director Kash Patel was so upset about being criticized on social media that he directed bureau agents to find offending accounts and respond to them.\" Unrelated to AI systems.",
+        "evidence": [
+          {
+            "label": "New Republic news post",
+            "url": "https://newrepublic.com/post/215320/texts-kash-patel-order-staff-mean-social-media-posts-ifindretards",
+            "kind": "web",
+            "content_sha256": "0782df8e13647adaed1313169b2215cc5cc4176448fb7d1b2ba2e5f8e31a20a1",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49681545",
+      "story_url": "https://news.ycombinator.com/item?id=49681545",
+      "title": "Homebrew 7.0.0",
+      "url": "https://brew.sh/2026/09/13/homebrew-7.0.0/",
+      "points": 610,
+      "num_comments": 244,
+      "submitted_at": "2026-09-13T08:41:17Z",
+      "page_status": "readable",
+      "content_sha256": "b72ca5a30ef1ebc2b3a9972cf2d9ea815cf56fdf0c6c4a4afb908a571fff520b",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Package manager release outside the families",
+        "finding": "A release note for a package manager: \"The most significant changes since 6.0.0 are faster installations and upgrades, stronger sandboxing, a native macOS app, built-in vulnerability checks and an advisory database\". Homebrew is a software-installation utility, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Homebrew 7.0.0 release note",
+            "url": "https://brew.sh/2026/09/13/homebrew-7.0.0/",
+            "kind": "web",
+            "content_sha256": "b72ca5a30ef1ebc2b3a9972cf2d9ea815cf56fdf0c6c4a4afb908a571fff520b",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49681724",
+      "story_url": "https://news.ycombinator.com/item?id=49681724",
+      "title": "Norton Neo Browser",
+      "url": "https://neobrowser.ai/",
+      "points": 28,
+      "num_comments": 48,
+      "submitted_at": "2026-09-13T09:07:59Z",
+      "page_status": "readable",
+      "content_sha256": "8641b11d7f5a585fc696082af16bdd6745189582b3a35397803c27e9629d449a",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "AI browser not in the catalog",
+        "finding": "Norton Neo presents itself as \"the most secure and private browser with a built-in VPN, ad blocker and AI under your control.\" AI-related claims on the page: \"Magic Box adapts to your intent: classic search, AI answers, or smart suggestions before you finish typing\"; \"Universal Search finds anything across tabs, history, and AI chats instantly\"; \"Chats and browsing history are stored locally - your data stays yours\"; and \"choose what Norton Neo remembers - and what it forgets.\" Flags: the bundled portion is marketing copy repeated many times and is truncated, with no license, model provider, or data-handling documentation read; nothing here states whether the AI features act on pages or only answer and summarize. No record, candidate, or exclusion names Norton Neo. Boundary question: is the AI a conversational workspace with retained chats and memory controls that stands as a system, or a search-and-summarize feature layer on a security-branded browser, which would sit outside the Atlas?",
+        "evidence": [
+          {
+            "label": "Norton Neo homepage",
+            "url": "https://neobrowser.ai/",
+            "kind": "web",
+            "content_sha256": "8641b11d7f5a585fc696082af16bdd6745189582b3a35397803c27e9629d449a",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49682319",
+      "story_url": "https://news.ycombinator.com/item?id=49682319",
+      "title": "Nvidia dismisses \"circular financing\", says every $1 it invests brings back $100",
+      "url": "https://invezz.com/news/2026/09/11/nvidia-says-every-1-it-invests-brings-back-100-so-why-does-the-stock-keep-falling/",
+      "points": 134,
+      "num_comments": 190,
+      "submitted_at": "2026-09-13T10:29:18Z",
+      "page_status": "readable",
+      "content_sha256": "6986fe3c8449b454ca129c75a1ada709edd9c423b3cdee2f3fcf765a9ca25e61",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Financial news, no system",
+        "finding": "A market news article: \"Nvidia says every $1 it invests brings back $100: so why does the stock keep falling?\" Stock commentary about a chip vendor's investments, not a system.",
+        "evidence": [
+          {
+            "label": "Invezz Nvidia article",
+            "url": "https://invezz.com/news/2026/09/11/nvidia-says-every-1-it-invests-brings-back-100-so-why-does-the-stock-keep-falling/",
+            "kind": "web",
+            "content_sha256": "6986fe3c8449b454ca129c75a1ada709edd9c423b3cdee2f3fcf765a9ca25e61",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49682465",
+      "story_url": "https://news.ycombinator.com/item?id=49682465",
+      "title": "GCC AI Policy Announcement",
+      "url": "https://gcc.gnu.org/pipermail/gcc/2026-July/248628.html",
+      "points": 31,
+      "num_comments": 0,
+      "submitted_at": "2026-09-13T10:50:51Z",
+      "page_status": "readable",
+      "content_sha256": "8e211fc7956b531504e5c10ba9aae942a3909c6b93555d941db7a6e0f4235f2c",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Project policy notice, no system",
+        "finding": "A mailing-list announcement: \"The GCC Steering Committee has accepted the recommended policy of the GCC AI Policy Working Group.\" The policy text itself lives at a linked URL not in this page; the page is a governance notice, not a system.",
+        "evidence": [
+          {
+            "label": "GCC AI policy mailing-list post",
+            "url": "https://gcc.gnu.org/pipermail/gcc/2026-July/248628.html",
+            "kind": "web",
+            "content_sha256": "8e211fc7956b531504e5c10ba9aae942a3909c6b93555d941db7a6e0f4235f2c",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49683033",
+      "story_url": "https://news.ycombinator.com/item?id=49683033",
+      "title": "'Fingerprints' inside the Sun could reveal if it once swallowed a planet",
+      "url": "https://ras.ac.uk/news-and-press/research-highlights/fingerprints-inside-sun-could-reveal-if-it-once-swallowed-planet",
+      "points": 125,
+      "num_comments": 42,
+      "submitted_at": "2026-09-13T12:01:52Z",
+      "page_status": "readable",
+      "content_sha256": "70194b6d10cef111d7ee5466e7d6cbda3beb866a87aa24e5ccbc9f599fdb3a2b",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14"
+    },
+    {
+      "story_id": "49683118",
+      "story_url": "https://news.ycombinator.com/item?id=49683118",
+      "title": "The SICP Challenge",
+      "url": "https://billthelizard.blogspot.com/2009/10/sicp-challenge.html",
+      "points": 27,
+      "num_comments": 0,
+      "submitted_at": "2026-09-13T12:12:31Z",
+      "page_status": "readable",
+      "content_sha256": "59b5bd141f15247106403ea6b79237565dca483c425b7dd8fa26303de3394ea7",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "2009 study-log post, no system",
+        "finding": "A 2009 blog post announcing a personal study plan: \"I've decided to follow the MIT OpenCourseWare program that uses the book and blog about my progress.\" Unrelated to AI systems.",
+        "evidence": [
+          {
+            "label": "SICP Challenge blog post",
+            "url": "https://billthelizard.blogspot.com/2009/10/sicp-challenge.html",
+            "kind": "web",
+            "content_sha256": "59b5bd141f15247106403ea6b79237565dca483c425b7dd8fa26303de3394ea7",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49683262",
+      "story_url": "https://news.ycombinator.com/item?id=49683262",
+      "title": "Why is the x86 undefined instruction called ud2? Why 2?",
+      "url": "https://devblogs.microsoft.com/oldnewthing/20260910-00/?p=112689",
+      "points": 255,
+      "num_comments": 58,
+      "submitted_at": "2026-09-13T12:30:15Z",
+      "page_status": "readable",
+      "content_sha256": "91b8dca4349e0325ec7cc86b80004c6e9082133571c78a7db66bb425e06b76f4",
+      "fetched_at": "2026-09-14T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "Architecture trivia, no system",
+        "finding": "A history note on x86: \"The ud2 instruction is an architecturally undefined instruction, guaranteed to raise an 'invalid opcode' exception.\" Not an AI system.",
+        "evidence": [
+          {
+            "label": "Old New Thing ud2 post",
+            "url": "https://devblogs.microsoft.com/oldnewthing/20260910-00/?p=112689",
+            "kind": "web",
+            "content_sha256": "91b8dca4349e0325ec7cc86b80004c6e9082133571c78a7db66bb425e06b76f4",
+            "fetched_at": "2026-09-14T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-14",
+        "proposer": "hn-signals"
+      }
+    }
+  ]
 }
