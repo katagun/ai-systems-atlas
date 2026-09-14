@@ -127,6 +127,27 @@ test("a comparison opens degraded, and bounded, when detail never arrives", asyn
   expect(detailRequests).toBeLessThanOrEqual(4);
 });
 
+test("a model comparison opens degraded, and bounded, when detail never arrives", async ({ page }) => {
+  // A model's boot record carries its overall score and card metadata only;
+  // every dimension, both lists, and the context limit live in detail. The
+  // table must still open whole, with dashes where detail would have been.
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  let detailRequests = 0;
+  await page.route("**/app/detail/**", route => { detailRequests += 1; route.abort(); });
+  await page.goto("/?view=models&compare=model:model-anthropic-claude-sonnet-4-6,model-alibaba-qwen3-235b-a22b-instruct-2507");
+
+  const table = page.locator(".comparison-table");
+  await expect(table).toBeVisible();
+  await expect(table.locator("tbody tr").filter({ hasText: "Strengths" })).toHaveCount(1);
+  // An unloaded limit is unknown, not a reported absence.
+  await expect(table.locator("tbody tr").filter({ hasText: "Context limit" })).not.toContainText("Not reported");
+  await expect(table).not.toContainText("undefined");
+  await expect(table).not.toContainText("NaN");
+  expect(detailRequests).toBeLessThanOrEqual(4);
+  expect(errors).toEqual([]);
+});
+
 // Blankness is the failure mode a payload split invites: a heading, a label or
 // a whole dialog renders from the boot record while the detail file it reads is
 // still in flight or never lands. Every check but a browser sees valid markup,

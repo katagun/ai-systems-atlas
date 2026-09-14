@@ -1799,19 +1799,25 @@ function openComparison() {
     rows = [
       ["Developer", records.map(item => item.developer)],
       ["Model type", records.map(item => taxonomyName("model_types", item.model_type))],
-      ["Overall score", records.map(item => `${item.score.overall} / 10`)],
+      ["Overall score", records.map(item => scoreCell(item.score.overall))],
       ...profile.dimensions.map(dimension => [
         `${label(dimension.id)} · ${Math.round(dimension.weight * 100)}%`,
-        records.map(item => `${item.score[dimension.id]} / 10`),
+        records.map(item => scoreCell(item.score[dimension.id])),
       ]),
-      ["Distribution", records.map(item => item.distribution_modes.map(value => taxonomyName("model_distribution_modes", value)).join(" · "))],
-      ["Input modalities", records.map(item => item.source_metadata.modalities.input.map(value => taxonomyName("model_modalities", value)).join(" · "))],
-      ["Output modalities", records.map(item => item.source_metadata.modalities.output.map(value => taxonomyName("model_modalities", value)).join(" · "))],
-      ["Context limit", records.map(item => item.source_metadata.limits.context == null ? "Not reported" : Intl.NumberFormat("en").format(item.source_metadata.limits.context))],
+      ["Distribution", records.map(item => traitNames("model_distribution_modes", item.distribution_modes) || null)],
+      ["Input modalities", records.map(item => traitNames("model_modalities", item.source_metadata?.modalities?.input) || null)],
+      ["Output modalities", records.map(item => traitNames("model_modalities", item.source_metadata?.modalities?.output) || null)],
+      // Boot carries only card metadata, so `limits` is absent until detail
+      // lands: that is unknown ("—"), not a reported absence.
+      ["Context limit", records.map(item => {
+        const limits = item.source_metadata?.limits;
+        if (!limits) return null;
+        return limits.context == null ? "Not reported" : Intl.NumberFormat("en").format(limits.context);
+      })],
       ["Source model", records.map(item => sourceModelName(item.source_model))],
       ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
-      ["Strengths", records.map(item => item.strengths.join(" • "))],
-      ["Tradeoffs", records.map(item => item.tradeoffs.join(" • "))],
+      ["Strengths", records.map(item => listCell(item.strengths))],
+      ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
       ["Editorially verified", records.map(item => item.verified_at)],
     ];
   } else if (state.comparison.kind === "runtime") {
