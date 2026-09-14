@@ -25,6 +25,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 - [ ] Exercise the declared Python 3.11 floor in CI, or raise the declared minimum to the version actually supported (`CR-08`). Run browser installation and end-to-end tests only once.
 - [ ] Document and test repository rename and transfer handling as recoverable review events that preserve evidence history.
 - [ ] Add automated accessibility checks to the existing Playwright suite without adding a shipped runtime dependency.
+- [ ] Tie the `local_first` and `human_editable` definitions in [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) to the Local-first and Editable by you badge definitions in `web/app-core.js` with a test, so the two published wordings cannot drift. Today only a sentence in the docs asks editors to keep them in step.
 - [ ] Validate the numeric snapshot in [`docs/COVERAGE.md`](docs/COVERAGE.md) against the canonical files so count drift fails loudly; keep editorial coverage-signal review a separate human task.
 - [ ] Disable administrator bypass for the `github-pages` environment in GitHub's UI; no supported API mutation exists.
 
@@ -59,7 +60,8 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 - [ ] Replace the per-collection search boxes with one search across records, specifications, and taxonomy terms that lands in the correct collection and never mixes score profiles under [ADR 013](docs/adr/013-distinct-collections-share-one-directory-surface.md).
 - [ ] Show related records and previous/next navigation inside detail dialogs using existing family, role, and successor data.
-- [ ] Surface local-runtime GitHub stars as a card badge and sort option; the canonical data and updater already carry `stars` and `stars_verified_at`.
+- [ ] Surface local-runtime GitHub stars as a card footer signal and sort option; the canonical data and updater already carry `stars` and `stars_verified_at`. Keep it out of card badges: the "Card badges" contract in [`docs/WEB.md`](docs/WEB.md) excludes automated signals. Runtime card footers currently print model formats, so decide what the stars count displaces, as system cards already show stars there.
+- [ ] Stop card-badge definitions from being announced twice. Each badge carries its definition in both visually hidden text and a `title`, and Chromium exposes the `title` as a description that some screen readers read again. Keep one source of the definition for assistive technology while pointer users still get the tooltip, and cover it with the badge Playwright spec.
 
 ## Watching
 
@@ -85,6 +87,7 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Review vendor-hosted editions of self-hosted gateways as routing aggregators, starting with Portkey and Helicone; keep the self-hostable proxy software outside the service collection under ADRs 010 and 015.
 - [ ] Decide whether domain-specific model APIs belong in Inference Services, using AlphaGenome as the boundary case. Write the general-inference-substrate rule if that is the intended limit.
 - [ ] Reassess API clients, adapters, observability SDKs, or a new collection only after a concrete user question justifies reversing their current exclusion.
+- [ ] Consider making card badges apply their matching filter when clicked. Badges shipped as plain labels; clickable filters need a filter for every badge, a place in the mixed All view (which has no filters), URL state, and phone-safe hit targets beside the card actions.
 - [ ] Settle whether an aggregator that resells other aggregators is reviewable and how its operational boundary differs from the upstream service.
 - [ ] Reconcile inference-service `operator` values around the legal entity the customer contracts with, rather than mixing brands and entities.
 - [ ] Audit models.dev providers for service coverage in boundary-collapsed batches; use it as third-party discovery metadata, never as evidence.
