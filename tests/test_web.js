@@ -864,6 +864,17 @@ test("no badge tests a field its card already prints", () => {
   assert.ok(!Object.hasOwn(CARD_BADGE_SETS, "model"), "model cards print distribution_modes in their role pill; they take no badges");
 });
 
+test("the data model quotes the trait badge definitions verbatim", () => {
+  const dataModel = fs.readFileSync(path.join(__dirname, "..", "docs", "DATA_MODEL.md"), "utf8");
+  for (const [id, field] of [["local-first", "local_first"], ["editable-by-you", "human_editable"]]) {
+    assert.equal(CARD_BADGES[id].test.field, field, `${id} must test ${field}`);
+    assert.ok(
+      dataModel.includes(`\`${field}\`: "${CARD_BADGES[id].definition}"`),
+      `docs/DATA_MODEL.md must quote the ${CARD_BADGES[id].name} badge definition verbatim for ${field}`,
+    );
+  }
+});
+
 test("every badge list names a defined badge and every defined badge is listed", () => {
   const listed = new Set(Object.values(CARD_BADGE_SETS).flat());
   for (const id of listed) assert.ok(Object.hasOwn(CARD_BADGES, id), `${id} is listed but not defined`);
