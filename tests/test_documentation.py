@@ -142,15 +142,22 @@ class DocumentationTests(unittest.TestCase):
         self.assertIsNotNone(match)
         condition = " ".join(line.strip() for line in match.group(1).splitlines())
         expected = (
-            "(github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || "
-            "(github.event_name == 'workflow_run' && "
+            "github.event_name == 'workflow_run' && "
             "github.event.workflow_run.event == 'push' && "
             "github.event.workflow_run.conclusion == 'success' && "
             "github.event.workflow_run.head_repository.full_name == github.repository && "
-            "github.event.workflow_run.head_branch == github.event.repository.default_branch)"
+            "github.event.workflow_run.head_branch == github.event.repository.default_branch"
         )
 
         self.assertEqual(expected, condition)
+
+    def test_pages_deploy_cannot_be_dispatched_by_hand(self) -> None:
+        """A manual run would publish without the complete verify workflow (CR-04).
+
+        Redeploying goes through a re-run of the push-triggered verify run instead.
+        """
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        self.assertNotIn("workflow_dispatch", workflow)
 
 
 if __name__ == "__main__":
