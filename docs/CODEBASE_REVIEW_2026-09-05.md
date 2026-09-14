@@ -11,7 +11,7 @@ After reverification, this review records no Critical or High findings, five Med
 | CR-01 | Medium | Resolved | Candidate triage fetched agent-authored URLs before validation |
 | CR-02 | Low | Resolved | Blog Markdown links allowed active `javascript:` destinations |
 | CR-03 | Medium | Resolved | Model comparison does not degrade safely when detail payloads fail |
-| CR-04 | Medium | Open | Manual Pages deployment can bypass the complete verification workflow |
+| CR-04 | Medium | Resolved | Manual Pages deployment can bypass the complete verification workflow |
 | CR-05 | Medium | Open | Multi-file updates and generated-tree rebuilds are not crash-consistent |
 | CR-06 | Medium | Open | One missing collection payload prevents the entire application from booting |
 | CR-07 | Low | Open | URL validation accepts malformed hostless URLs that the browser cannot render |
