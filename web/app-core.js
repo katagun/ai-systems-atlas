@@ -292,7 +292,7 @@
   const CARD_BADGES = {
     "local-first": {
       name: "Local-first",
-      definition: "Keeps its main data on your own device or infrastructure by default; any vendor cloud is optional.",
+      definition: "Keeps your data on your own device or servers by default. It may still send requests to an online AI model; cloud storage is opt-in.",
       test: { field: "local_first" },
     },
     "self-hostable": {
@@ -317,7 +317,7 @@
     },
     "editable-by-you": {
       name: "Editable by you",
-      definition: "You can open and change what it stores directly, as files, settings, or in an editor, not only through chat or search.",
+      definition: "You can open and change what it keeps, such as notes, memories, or instructions, directly in files or in the app, not only by chatting.",
       test: { field: "human_editable" },
     },
     "graph-retrieval": {
