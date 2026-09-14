@@ -15,6 +15,7 @@ else in this repository.
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import ipaddress
 import re
@@ -25,9 +26,9 @@ from typing import Any
 from urllib.parse import urlsplit
 
 try:
-    from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
+    from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
+    from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL
 
 ROOT = Path(__file__).resolve().parents[1]
 POSTS = "blog"
@@ -276,12 +277,119 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
     return posts
 
 
-def _document(title: str, description: str, url: str, body: str) -> str:
+# The main page's header, reproduced as static markup. Its view tabs are buttons that
+# app.js wires up; here they are links to the same views through the `view` query
+# parameter the app restores on load. The theme control is driven by THEME_SCRIPT.
+VIEWS = (("finder", "Finder"), ("models", "Models"), ("specifications", "Specifications"),
+         ("taxonomy", "Taxonomy"), ("api", "API"))
+REPOSITORY = "https://github.com/katagun/ai-systems-atlas"
+GITHUB_ICON = (
+    '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 '
+    "0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61"
+    "C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 "
+    "2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22"
+    "-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 "
+    "2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625"
+    "-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 "
+    '24 12.297c0-6.627-5.373-12-12-12"/></svg>'
+)
+
+# The stylesheets a blog page shares with the directory page. They are linked under
+# the same content stamp build_asset_version.mjs gives index.html, so a browser that
+# cached one under the previous version can never pair it with a newer page.
+ASSETS = ("fonts.css", "styles.css")
+# The directory page's footer notices, verbatim, so the two footers read as one. Its
+# fourth slot carries the data date there; here it carries the blog's own links.
+FOOTER_NOTICES = (
+    "<span>Systems score within families. Reviewed models, inference services, and local runtimes "
+    "each use a separate score; source imports and specifications are unscored.</span>"
+    "<span>Product marks identify their owners' products and imply no affiliation or endorsement.</span>"
+    '<span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
+    'rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is '
+    "Apache-2.0.</span>"
+)
+# The one script a blog page carries. It is the pre-paint stamp index.html has, plus
+# the theme control app.js drives there: cycle system, light, dark; persist under the
+# same key; keep the control's name and the browser chrome colour in step. No
+# application script is loaded, and nothing is fetched.
+THEME_SCRIPT = """<script>
+(function () {
+  var KEY = "theme", ORDER = ["system", "light", "dark"];
+  function read() {
+    try { var stored = localStorage.getItem(KEY); return stored === "light" || stored === "dark" ? stored : "system"; }
+    catch (error) { return "system"; }
+  }
+  function apply(preference) {
+    if (preference === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = preference;
+    try { if (preference === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, preference); }
+    catch (error) {}
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.setAttribute("aria-label", "Theme: " + preference);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (meta && background) meta.setAttribute("content", background);
+  }
+  var stored = read();
+  if (stored !== "system") document.documentElement.dataset.theme = stored;
+  document.addEventListener("DOMContentLoaded", function () {
+    apply(read());
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.addEventListener("click", function () { apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length]); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { apply(read()); });
+  });
+})();
+</script>"""
+
+
+def asset_versions(root: Path) -> dict[str, str]:
+    """Twelve hex characters of each shared asset's SHA-256, as the asset stamper computes."""
+    versions: dict[str, str] = {}
+    for name in ASSETS:
+        path = root / "web" / name
+        if not path.is_file():
+            raise PostError(f"web/{name} is missing; every blog page links it")
+        versions[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    return versions
+
+
+def render_header(root: str, blog: str) -> str:
+    """The site header for a page whose path to the site root is ``root``."""
+    views = "".join(f'<a class="tab-link" href="{root}?view={view}">{label}</a>' for view, label in VIEWS)
+    return (
+        '<a class="skip-link" href="#main">Skip to content</a>\n'
+        '<header class="site-header">\n'
+        f'<div class="brand"><a href="{root}"><strong class="wordmark">'
+        f'<span class="wordmark-name">{SITE_NAME}</span>'
+        '<span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span>'
+        '<span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span>'
+        f'</strong><small>{SITE_TAGLINE}</small></a></div>\n'
+        '<nav class="tabs" aria-label="Primary navigation">'
+        f'<a class="tab-link" href="{root}">Directory</a>{views}'
+        f'<a class="tab-link is-active" aria-current="page" href="{blog}">Blog</a></nav>\n'
+        '<div class="header-tools">'
+        f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
+        '<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" '
+        'title="Switch between system, light, and dark themes"></button>'
+        f'<a class="github-link" href="{REPOSITORY}" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub">{GITHUB_ICON}</a>'
+        "</div>\n</header>"
+    )
+
+
+def _document(
+    title: str, description: str, url: str, body: str, root: str, footer: str, versions: dict[str, str]
+) -> str:
+    """One page. ``root`` is the relative path back to the site root; ``footer`` its links."""
+    blog = "./" if root == "../" else root[3:]
+    stylesheets = "\n".join(
+        f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">' for name in ASSETS
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{THEME_SCRIPT}
 <title>{html.escape(title)} · {SITE_NAME}</title>
 <meta name="description" content="{html.escape(description)}">
 <link rel="canonical" href="{html.escape(url)}">
@@ -291,58 +399,61 @@ def _document(title: str, description: str, url: str, body: str) -> str:
 <meta property="og:description" content="{html.escape(description)}">
 <meta property="og:url" content="{html.escape(url)}">
 <meta name="theme-color" content="#f7f9fc">
-<link rel="stylesheet" href="../../fonts.css">
-<style>
-{STYLE}
-</style>
+{stylesheets}
+<link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
 </head>
-<body>
-<main>
+<body class="writing-page">
+{render_header(root, blog)}
+<main id="main" class="writing">
 {body}
 </main>
-<footer>{SITE_NAME} · {SITE_TAGLINE} · <a href="../">All writing</a> · <a href="../../">Browse the directory</a></footer>
+<footer>{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
 </body>
 </html>
 """
 
 
-def render_post_page(post: dict[str, Any]) -> str:
+def byline(post: dict[str, Any]) -> str:
+    date_ = html.escape(post["date"])
+    return f'<p class="byline">{html.escape(post["author"])} · <time datetime="{date_}">{date_}</time></p>'
+
+
+def render_post_page(post: dict[str, Any], versions: dict[str, str]) -> str:
     body = (
         '<p class="eyebrow">Editorial writing · not a catalog record</p>\n'
         f'<h1>{html.escape(post["title"])}</h1>\n'
         f'<p class="lead">{html.escape(post["summary"])}</p>\n'
-        f'<p class="actions">{html.escape(post["author"])} · {html.escape(post["date"])}</p>\n'
+        f'{byline(post)}\n'
         f'{post["html"]}\n'
     )
-    return _document(post["title"], post["summary"], post_url(post["slug"]), body)
+    footer = '<a href="../">All writing</a> · <a href="../../">Browse the directory</a>'
+    return _document(post["title"], post["summary"], post_url(post["slug"]), body, "../../", footer, versions)
 
 
-def render_index_page(posts: list[dict[str, Any]]) -> str:
+def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> str:
     entries = "\n".join(
-        f'<section class="detail-block"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
+        f'<article class="post-card"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
         f'<p>{html.escape(post["summary"])}</p>'
-        f'<p class="actions">{html.escape(post["author"])} · {html.escape(post["date"])}</p></section>'
+        f'{byline(post)}</article>'
         for post in posts
     ) or '<p class="lead">Nothing published yet.</p>'
     body = (
         '<p class="eyebrow">Editorial writing · not catalog records</p>\n'
         "<h1>Writing</h1>\n"
         '<p class="lead">How this catalog is built, and where it has been wrong.</p>\n'
-        f'<div class="detail-grid">{entries}</div>\n'
+        f'<div class="post-list">{entries}</div>\n'
     )
     description = "How the AI Systems Atlas is built, and where it has been wrong."
-    page = _document("Writing", description, f"{SITE_URL}{POSTS}/", body)
     # The index sits one level shallower than a post, so its relative links differ.
-    return page.replace('href="../../fonts.css"', 'href="../fonts.css"').replace(
-        '<a href="../">All writing</a> · <a href="../../">Browse the directory</a>',
-        '<a href="../">Browse the directory</a>',
-    )
+    footer = '<a href="../">Browse the directory</a>'
+    return _document("Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer, versions)
 
 
 def build_pages(root: Path = ROOT) -> dict[str, str]:
     posts = load_posts(root)
-    pages = {f"{POSTS}/{post['slug']}/index.html": render_post_page(post) for post in posts}
-    pages[f"{POSTS}/index.html"] = render_index_page(posts)
+    versions = asset_versions(root)
+    pages = {f"{POSTS}/{post['slug']}/index.html": render_post_page(post, versions) for post in posts}
+    pages[f"{POSTS}/index.html"] = render_index_page(posts, versions)
     return pages
 
 
