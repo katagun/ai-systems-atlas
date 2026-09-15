@@ -1223,24 +1223,28 @@
       "service_boundary": "Represents Cohere's hosted SaaS API, not Cohere models served by Oracle, Bedrock, Azure, or another partner and not private customer-infrastructure deployments.",
       "delivery_modes": [
         "on_demand",
-        "batch"
+        "batch",
+        "dedicated_endpoint"
       ],
       "model_sources": [
         "first_party"
       ],
       "api_styles": [
-        "service_native"
+        "service_native",
+        "openai_compatible"
       ],
       "regional_controls": "Private and partner deployments may provide different residency controls; the public direct-API docs do not establish one customer-selected regional endpoint model.",
-      "retention_controls": "Enterprise data commitments and account agreements govern input, output, and training-data handling; production customers should verify the applicable hosted-platform retention configuration.",
+      "retention_controls": "For paying SaaS Platform customers, Cohere's enterprise data commitments delete logged prompts and generations after 30 days unless law, a customer contract, or flagged misuse requires otherwise; enterprise customers can opt out of training use in dashboard settings, and approved enterprise customers can get zero data retention, under which prompts and generations are not logged. Trial API keys fall under the Terms of Use, whose default grant lets Cohere use customer data to improve and benchmark its offerings, including by sharing API and fine-tuning data with third parties.",
       "routing": "Customers select Cohere models and task APIs rather than upstream inference providers.",
-      "customization": "Fine-tuning and private deployment options are available under separate eligibility and deployment paths.",
+      "customization": "Fine-tuning was deprecated on September 15, 2025. Model Vault serves Cohere models in Cohere-managed, single-tenant deployments with control over model selection and scaling; private customer-infrastructure deployments follow separate eligibility paths.",
       "strengths": [
         "First-party generation, embedding, and reranking APIs share one enterprise-oriented platform.",
         "The service supports retrieval-heavy application patterns beyond generation alone."
       ],
       "tradeoffs": [
-        "Deployment and data commitments differ between trial, production, private, and partner paths.",
+        "Data commitments differ between trial and paying use: trial API keys fall under Terms of Use that allow sharing API data with third parties, and zero data retention requires enterprise approval.",
+        "The Terms of Use and SaaS Agreement bar using the service for benchmarking or competitive analysis.",
+        "Fine-tuning is no longer offered, so customization relies on model choice and Model Vault deployment configuration.",
         "The direct catalog is Cohere-centered rather than vendor-neutral."
       ],
       "score_profile": "inference_service",
@@ -1249,11 +1253,11 @@
         "data_governance": 7.5,
         "regional_deployment_control": 6.5,
         "serving_flexibility": 7.2,
-        "api_interoperability": 7.5,
+        "api_interoperability": 7.8,
         "traffic_resilience": 5.5,
-        "customization_lifecycle": 8.0,
+        "customization_lifecycle": 5.5,
         "documentation_transparency": 8.0,
-        "overall": 7.35
+        "overall": 7.17
       },
       "terms": {
         "kind": "web_terms",
@@ -1266,16 +1270,52 @@
           "kind": "web",
           "label": "Cohere documentation",
           "url": "https://docs.cohere.com/",
-          "verified_at": "2026-08-28"
+          "verified_at": "2026-09-15"
         },
         {
           "kind": "web",
           "label": "Cohere legal policies",
           "url": "https://cohere.com/legal",
-          "verified_at": "2026-08-28"
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Enterprise data commitments",
+          "url": "https://cohere.com/enterprise-data-commitments",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Commercial SaaS Agreement",
+          "url": "https://cohere.com/saas-agreement",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Compatibility API for the OpenAI SDK",
+          "url": "https://docs.cohere.com/docs/compatibility-api",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Fine-tuning deprecation notice",
+          "url": "https://docs.cohere.com/docs/fine-tuning",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Model Vault overview",
+          "url": "https://docs.cohere.com/docs/model-vault",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Embed Jobs API",
+          "url": "https://docs.cohere.com/docs/embed-jobs-api",
+          "verified_at": "2026-09-15"
         }
       ],
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-09-15",
       "trust": {
         "verified_at": "2026-09-12",
         "properties": {
@@ -1457,63 +1497,84 @@
       "name": "Moonshot AI Open Platform",
       "operator": "Moonshot AI",
       "service_type": "direct_model_api",
-      "url": "https://platform.moonshot.ai/docs/intro",
+      "url": "https://platform.kimi.ai/docs/overview",
       "description": "Moonshot AI's direct developer platform for Kimi model APIs and related generation capabilities.",
       "service_boundary": "Represents the Moonshot AI Open Platform API, not the Kimi consumer application, downloadable Kimi weights, or third-party Kimi hosting.",
       "delivery_modes": [
-        "on_demand"
+        "on_demand",
+        "batch"
       ],
       "model_sources": [
         "first_party"
       ],
       "api_styles": [
-        "openai_compatible"
+        "openai_compatible",
+        "anthropic_compatible"
       ],
-      "regional_controls": "The reviewed international platform documentation does not establish customer-selected processing regions.",
-      "retention_controls": "Use is governed by the Open Platform model-use agreement and privacy materials; customers should verify current retention and training-use commitments for their account and endpoint.",
+      "regional_controls": "The reviewed platform documentation does not establish customer-selected processing regions; the privacy policy states that collected information is stored on servers in Singapore.",
+      "retention_controls": "Unless otherwise agreed in writing, the model-use agreement lets Moonshot use customer content to provide and improve its services, and customers who need limits on training use must arrange an enterprise or separate written agreement. Enterprise customers can request zero data retention, which deletes request content once the response returns but excludes directly uploaded images and videos, operational data, and third-party models, connectors, and plugins. Outside it, the privacy policy states no fixed retention period.",
       "routing": "Customers select Moonshot-operated Kimi models rather than independent inference providers.",
       "customization": "The reviewed public API is a managed model-access service and does not establish imported customer-weight deployment.",
       "strengths": [
         "Direct access to Moonshot's Kimi model family.",
-        "OpenAI-compatible access lowers integration friction."
+        "OpenAI-compatible and Anthropic Messages-compatible access lowers integration friction, and a Batch API serves asynchronous bulk jobs."
       ],
       "tradeoffs": [
-        "Public regional controls are not clearly exposed.",
+        "Customer content may be used to improve the services by default, and zero data retention is limited to enterprise customers.",
+        "Public regional controls are not exposed beyond a single disclosed storage location.",
         "The service boundary differs from Kimi access through routers and other hosts."
       ],
       "score_profile": "inference_service",
       "score": {
         "operational_maturity": 6.8,
-        "data_governance": 5.0,
+        "data_governance": 5.5,
         "regional_deployment_control": 3.5,
-        "serving_flexibility": 5.0,
-        "api_interoperability": 7.8,
+        "serving_flexibility": 5.5,
+        "api_interoperability": 8.0,
         "traffic_resilience": 4.5,
         "customization_lifecycle": 3.5,
         "documentation_transparency": 6.5,
-        "overall": 5.35
+        "overall": 5.53
       },
       "terms": {
         "kind": "web_terms",
-        "label": "Moonshot Open Platform Model Use Agreement",
-        "url": "https://platform.moonshot.ai/docs/agreement/modeluse",
+        "label": "Kimi Open Platform Model Use Agreement",
+        "url": "https://platform.kimi.ai/docs/agreement/modeluse",
         "verified_at": "2026-09-15"
       },
       "evidence": [
         {
           "kind": "web",
-          "label": "Moonshot Open Platform introduction",
-          "url": "https://platform.moonshot.ai/docs/intro",
-          "verified_at": "2026-08-28"
+          "label": "Kimi Open Platform overview",
+          "url": "https://platform.kimi.ai/docs/overview",
+          "verified_at": "2026-09-15"
         },
         {
           "kind": "web",
           "label": "API reference",
-          "url": "https://platform.moonshot.ai/docs/api/chat",
-          "verified_at": "2026-08-28"
+          "url": "https://platform.kimi.ai/docs/api/chat",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Zero data retention",
+          "url": "https://platform.kimi.ai/docs/guide/zero-data-retention",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Batch API guide",
+          "url": "https://platform.kimi.ai/docs/guide/use-batch-api",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Kimi Open Platform privacy policy",
+          "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+          "verified_at": "2026-09-15"
         }
       ],
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-09-15",
       "trust": {
         "verified_at": "2026-09-12",
         "properties": {
