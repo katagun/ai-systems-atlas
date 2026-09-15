@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import difflib
 import fcntl
 import hashlib
 import json
@@ -40,6 +41,11 @@ DIRECTORY = ROOT / "directory"
 # per-checkout cache let two worktrees hold different baselines for the same page.
 SHARED_CACHE_PATH = Path("atlas") / "evidence-link-cache.json"
 LEGACY_CACHE_NAME = ".evidence-link-cache.json"
+# URL → element id whose section holds a page's terms. Add an entry only after a
+# stored diff shows the page's churn sits outside its terms; a URL fragment needs none.
+TERMS_SECTION_IDS: dict[str, str] = {}
+MAX_DIFF_SEGMENTS = 12
+MAX_SEGMENT_CHARS = 240
 
 CACHE_VERSION = "1.0"
 DEFAULT_MAX_AGE_HOURS = 20.0
@@ -101,6 +107,8 @@ class CheckSummary:
     terms_accepted: int = 0
     warnings: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    # URL → changed text segments for each page reported as terms drift.
+    drift_details: dict[str, list[str]] = field(default_factory=dict)
 
 
 Fetcher = Callable[[LinkTarget, Mapping[str, Any]], FetchResult]
@@ -376,19 +384,23 @@ class _VisibleText(HTMLParser):
             self.parts.append(data)
 
 
+def _is_html(body: bytes, content_type: str) -> bool:
+    media_type = content_type.partition(";")[0].strip().lower()
+    return media_type in {"text/html", "application/xhtml+xml"} or body.lstrip().lower().startswith(
+        (b"<!doctype html", b"<html")
+    )
+
+
 def normalized_content(body: bytes, content_type: str) -> bytes:
     """Remove transport and page-shell noise before comparing mutable terms."""
     media_type = content_type.partition(";")[0].strip().lower()
-    stripped = body.lstrip().lower()
     if media_type == "application/json":
         try:
             value = json.loads(body)
         except (UnicodeDecodeError, json.JSONDecodeError):
             return body
         return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
-    if media_type in {"text/html", "application/xhtml+xml"} or stripped.startswith(
-        (b"<!doctype html", b"<html")
-    ):
+    if _is_html(body, content_type):
         parser = _VisibleText()
         parser.feed(body.decode("utf-8", errors="replace"))
         text = " ".join(" ".join(parser.parts).split())
@@ -404,6 +416,146 @@ def normalized_content(body: bytes, content_type: str) -> bytes:
 
 def content_sha256(body: bytes, content_type: str) -> str:
     return hashlib.sha256(normalized_content(body, content_type)).hexdigest()
+
+
+_HEADING = re.compile(r"h([1-6])")
+_SEGMENT_BREAK = re.compile(r"(?<=[.!?;:])\s+")
+_SCOPE_NAMES = {"page": "whole page", "section": "anchored section"}
+
+
+class _SectionText(HTMLParser):
+    """Collect the visible text of one element, or of the section a heading opens."""
+
+    SKIPPED: ClassVar[set[str]] = {"noscript", "script", "style", "svg", "template"}
+
+    def __init__(self, element_id: str) -> None:
+        super().__init__(convert_charrefs=True)
+        self.element_id = element_id
+        self.found = False
+        self.done = False
+        self.heading_level: int | None = None
+        self.container: str | None = None
+        self.depth = 0
+        self.skipped_depth = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.done:
+            return
+        tag = tag.lower()
+        heading = _HEADING.fullmatch(tag)
+        if not self.found:
+            if dict(attrs).get("id") == self.element_id:
+                self.found = True
+                if heading:
+                    self.heading_level = int(heading.group(1))
+                else:
+                    self.container, self.depth = tag, 1
+            return
+        # A heading's section ends at the next heading of the same or a higher level.
+        if self.heading_level is not None and heading and int(heading.group(1)) <= self.heading_level:
+            self.done = True
+            return
+        if tag == self.container:
+            self.depth += 1
+        if tag in self.SKIPPED:
+            self.skipped_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.done or not self.found:
+            return
+        tag = tag.lower()
+        if tag in self.SKIPPED and self.skipped_depth:
+            self.skipped_depth -= 1
+        if tag == self.container:
+            self.depth -= 1
+            if self.depth == 0:
+                self.done = True
+
+    def handle_data(self, data: str) -> None:
+        if self.found and not self.done and not self.skipped_depth:
+            self.parts.append(data)
+
+
+def section_text(html: str, element_id: str) -> str | None:
+    """The visible text of the section an element id names, or None when the page lacks it."""
+    parser = _SectionText(element_id)
+    parser.feed(html)
+    text = " ".join(" ".join(parser.parts).split())
+    return text if parser.found and text else None
+
+
+@dataclass(frozen=True)
+class TermsContent:
+    text: str | None
+    sha256: str
+    scope: str
+    page_sha256: str
+    anchor_missing: bool = False
+
+
+def terms_content(body: bytes, content_type: str, url: str) -> TermsContent | None:
+    """The terms a URL points at: its section when it names one, otherwise the whole page.
+
+    The text is exactly what the hash covers, so a later drift can show what changed. None
+    means nothing readable remained, which proves nothing about the terms.
+    """
+    page = normalized_content(body, content_type)
+    if not page.strip():
+        return None
+    page_sha256 = hashlib.sha256(page).hexdigest()
+    element_id = urllib.parse.urlsplit(url).fragment or TERMS_SECTION_IDS.get(url)
+    anchor_missing = False
+    if element_id and _is_html(body, content_type):
+        section = section_text(body.decode("utf-8", errors="replace"), element_id)
+        if section:
+            return TermsContent(
+                section, hashlib.sha256(section.encode()).hexdigest(), "section", page_sha256
+            )
+        anchor_missing = True
+    try:
+        text: str | None = page.decode("utf-8")
+    except UnicodeDecodeError:
+        text = None
+    return TermsContent(text, page_sha256, "page", page_sha256, anchor_missing)
+
+
+def _clip(segment: str) -> str:
+    return segment if len(segment) <= MAX_SEGMENT_CHARS else segment[: MAX_SEGMENT_CHARS - 1] + "…"
+
+
+def drift_diff(before: str | None, after: str | None) -> list[str]:
+    """Changed sentence-sized segments between two stored terms texts, bounded for a terminal."""
+    if before is None:
+        return ["  (no baseline text stored; the next accepted review stores one)"]
+    if after is None:
+        return ["  (the changed content is not text, so no diff is available)"]
+    old = _SEGMENT_BREAK.split(before)
+    new = _SEGMENT_BREAK.split(after)
+    changed: list[str] = []
+    matcher = difflib.SequenceMatcher(a=old, b=new, autojunk=False)
+    for tag, old_start, old_end, new_start, new_end in matcher.get_opcodes():
+        if tag == "equal":
+            continue
+        changed.extend(f"  - {_clip(segment)}" for segment in old[old_start:old_end])
+        changed.extend(f"  + {_clip(segment)}" for segment in new[new_start:new_end])
+    if len(changed) > MAX_DIFF_SEGMENTS:
+        hidden = len(changed) - MAX_DIFF_SEGMENTS
+        changed = [*changed[:MAX_DIFF_SEGMENTS], f"  … {hidden} more changed segments"]
+    return changed
+
+
+def _entry_drift_diff(entry: Mapping[str, Any]) -> list[str]:
+    """The stored diff for an entry with open drift, noting a change of hashed scope."""
+    baseline_scope = entry.get("terms_hash_scope", "page")
+    observed_scope = entry.get("observed_terms_hash_scope", baseline_scope)
+    notes = []
+    if observed_scope != baseline_scope:
+        notes.append(
+            f"  (the baseline hashes the {_SCOPE_NAMES.get(baseline_scope, baseline_scope)}; "
+            f"the new hash covers the {_SCOPE_NAMES.get(observed_scope, observed_scope)})"
+        )
+    return [*notes, *drift_diff(entry.get("terms_text"), entry.get("observed_terms_text"))]
 
 
 def _fetch_url(url: str) -> str:
@@ -513,6 +665,19 @@ def _browser_fallback_fetch(
         return None
 
 
+def _needs_terms_body(target: LinkTarget, cached: Mapping[str, Any]) -> bool:
+    """True when a terms entry lacks the text behind a stored hash.
+
+    A conditional request can come back 304 with no body, which would leave that text
+    missing on every later run, so such an entry must fetch the page in full.
+    """
+    if not target.monitor_terms or not cached.get("terms_sha256"):
+        return False
+    return "terms_text" not in cached or (
+        bool(cached.get("observed_terms_sha256")) and "observed_terms_text" not in cached
+    )
+
+
 def fetch_target(
     target: LinkTarget,
     cached: Mapping[str, Any],
@@ -529,6 +694,7 @@ def fetch_target(
         raise FetchFailure("target is not an absolute HTTPS URL")
     opener = opener or urllib.request.build_opener(_HTTPSRedirectHandler())
     methods = ("GET",) if target.monitor_terms else ("HEAD", "GET")
+    conditional = not _needs_terms_body(target, cached)
     last_failure: FetchFailure | None = None
 
     for method in methods:
@@ -539,9 +705,9 @@ def fetch_target(
             }
             if method == "GET" and not target.monitor_terms:
                 headers["Range"] = "bytes=0-0"
-            if cached.get("etag"):
+            if conditional and cached.get("etag"):
                 headers["If-None-Match"] = str(cached["etag"])
-            if cached.get("last_modified"):
+            if conditional and cached.get("last_modified"):
                 headers["If-Modified-Since"] = str(cached["last_modified"])
             if token and parsed.hostname == "api.github.com":
                 headers["Authorization"] = f"Bearer {token}"
@@ -927,6 +1093,7 @@ def check_targets(
             summary.succeeded += 1
             if previous.get("terms_drift_detected_at"):
                 summary.errors.append(_terms_drift_error(target))
+                summary.drift_details[target.url] = _entry_drift_diff(previous)
             elif target.monitor_terms and previous.get("terms_baseline_missing"):
                 summary.errors.append(_missing_baseline_error(target))
             continue
@@ -965,27 +1132,51 @@ def check_targets(
             )
 
         if target.monitor_terms:
-            current_hash: str | None
+            current_hash: str | None = None
+            current_text: str | None = None
+            current_scope = entry.get("terms_hash_scope", "page")
+            page_hash: str | None = None
             if response.not_modified:
-                current_hash = entry.get("observed_terms_sha256") or entry.get("terms_sha256")
+                observed = entry.get("observed_terms_sha256")
+                current_hash = observed or entry.get("terms_sha256")
+                if observed:
+                    current_text = entry.get("observed_terms_text")
+                    current_scope = entry.get("observed_terms_hash_scope", current_scope)
+                else:
+                    current_text = entry.get("terms_text")
+                page_hash = current_hash if current_scope == "page" else None
             elif response.body is not None:
-                normalized = normalized_content(
-                    response.body,
-                    response.headers.get("content-type", ""),
+                # An empty normalized body (usually a JavaScript shell with no readable
+                # terms) proves nothing about the terms. terms_content returns None for
+                # it, so it counts as unavailable rather than bootstrapping an empty
+                # baseline that every later real fetch would flag as drift.
+                content = terms_content(
+                    response.body, response.headers.get("content-type", ""), target.url
                 )
-                # An empty normalized body (usually a JavaScript shell with no
-                # readable terms) proves nothing about the terms. Hashing it
-                # would bootstrap or accept an empty baseline that every later
-                # real fetch then flags as drift, so treat it as unavailable.
-                current_hash = (
-                    hashlib.sha256(normalized).hexdigest() if normalized.strip() else None
-                )
-            else:
-                current_hash = None
+                if content is not None:
+                    current_hash, current_text = content.sha256, content.text
+                    current_scope, page_hash = content.scope, content.page_sha256
+                    if content.anchor_missing:
+                        summary.warnings.append(
+                            f"terms anchor not found: {target.url} ({_reference_label(target)}); "
+                            "hashing the whole page"
+                        )
 
             baseline_hash = entry.get("terms_sha256")
             review_dates = dict(target.review_dates)
             review_advanced = _terms_review_advanced(target, entry)
+            if (
+                current_hash is not None
+                and baseline_hash is not None
+                and current_scope == "section"
+                and entry.get("terms_hash_scope", "page") == "page"
+                and page_hash == baseline_hash
+                and not entry.get("terms_drift_detected_at")
+            ):
+                # A baseline recorded over the whole page moves to the anchored section
+                # silently only when the page is exactly the one that baseline hashed.
+                _store_terms(entry, "terms", current_hash, current_text, current_scope)
+                baseline_hash = current_hash
             if current_hash is None:
                 summary.failed += 1
                 summary.succeeded -= 1
@@ -995,10 +1186,9 @@ def check_targets(
             elif baseline_hash is None:
                 reviewed_since = _reviewed_since_last_run(review_dates, last_run)
                 if reviewed_since or establish_baselines:
-                    entry["terms_sha256"] = current_hash
+                    _store_terms(entry, "terms", current_hash, current_text, current_scope)
                     entry["terms_reviewed_at"] = review_dates
-                    entry.pop("observed_terms_sha256", None)
-                    entry.pop("terms_drift_detected_at", None)
+                    _clear_observed(entry)
                     entry.pop("terms_baseline_missing", None)
                     summary.terms_bootstrapped += 1
                     if not reviewed_since:
@@ -1013,20 +1203,24 @@ def check_targets(
                     summary.errors.append(_missing_baseline_error(target))
             elif current_hash != baseline_hash or entry.get("terms_drift_detected_at"):
                 if review_advanced:
-                    entry["terms_sha256"] = current_hash
+                    _store_terms(entry, "terms", current_hash, current_text, current_scope)
                     entry["terms_reviewed_at"] = review_dates
-                    entry.pop("observed_terms_sha256", None)
-                    entry.pop("terms_drift_detected_at", None)
+                    _clear_observed(entry)
                     summary.terms_accepted += 1
                 else:
-                    entry["observed_terms_sha256"] = current_hash
+                    _store_terms(entry, "observed_terms", current_hash, current_text, current_scope)
                     entry.setdefault(
                         "terms_drift_detected_at",
                         now.date().isoformat(),
                     )
                     summary.errors.append(_terms_drift_error(target))
+                    summary.drift_details[target.url] = _entry_drift_diff(entry)
             else:
                 entry["terms_reviewed_at"] = review_dates
+                # Entries from before stored text gain it once their hash is confirmed unchanged.
+                if "terms_text" not in entry and current_text is not None:
+                    entry["terms_text"] = current_text
+                entry.setdefault("terms_hash_scope", current_scope)
 
         next_entries[target.url] = entry
 
@@ -1041,6 +1235,28 @@ def check_targets(
     # branch monitors; keep the entries this run did not check.
     cache["entries"] = {**previous_entries, **next_entries}
     return summary
+
+
+def _store_terms(
+    entry: dict[str, Any], prefix: str, sha256: str, text: str | None, scope: str
+) -> None:
+    """Record a terms hash with the text and scope it covers, as the baseline or the observation."""
+    entry[f"{prefix}_sha256"] = sha256
+    entry["terms_hash_scope" if prefix == "terms" else "observed_terms_hash_scope"] = scope
+    if text is None:
+        entry.pop(f"{prefix}_text", None)
+    else:
+        entry[f"{prefix}_text"] = text
+
+
+def _clear_observed(entry: dict[str, Any]) -> None:
+    for key in (
+        "observed_terms_sha256",
+        "observed_terms_text",
+        "observed_terms_hash_scope",
+        "terms_drift_detected_at",
+    ):
+        entry.pop(key, None)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1076,7 +1292,37 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="merge an older per-checkout cache into the cache and exit; repeatable",
     )
+    parser.add_argument(
+        "--show-drift",
+        action="store_true",
+        help="print what changed on every page with open terms drift, from the cache, and exit",
+    )
     return parser
+
+
+def _run_show_drift(cache_path: Path) -> int:
+    """Print stored diffs without fetching or locking; the cache is replaced atomically."""
+    try:
+        cache = load_cache(cache_path)
+    except (ValueError, json.JSONDecodeError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    open_drift = sorted(
+        (
+            (url, entry)
+            for url, entry in cache["entries"].items()
+            if isinstance(entry, dict) and entry.get("terms_drift_detected_at")
+        ),
+        key=lambda item: item[0],
+    )
+    if not open_drift:
+        print("no open terms drift")
+        return 0
+    for url, entry in open_drift:
+        print(f"terms drift since {entry['terms_drift_detected_at']}: {url}")
+        for line in _entry_drift_diff(entry):
+            print(line)
+    return 0
 
 
 def _run_import(cache_path: Path, sources: list[Path]) -> int:
@@ -1104,6 +1350,8 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --workers must be positive", file=sys.stderr)
         return 2
     cache_path = args.cache or default_cache_path()
+    if args.show_drift:
+        return _run_show_drift(cache_path)
     try:
         with cache_lock(cache_path):
             if args.import_cache:
@@ -1148,6 +1396,10 @@ def _run_check(cache_path: Path, args: argparse.Namespace) -> int:
         print(f"warning: {warning}", file=sys.stderr)
     for error in summary.errors:
         print(f"error: {error}", file=sys.stderr)
+    for url, lines in summary.drift_details.items():
+        print(f"changes on {url}:", file=sys.stderr)
+        for line in lines:
+            print(line, file=sys.stderr)
     return 1 if summary.errors else 0
 
 

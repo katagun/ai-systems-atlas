@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -285,6 +286,35 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertEqual(200, result.status)
         self.assertEqual(["HEAD", "GET"], [request.method for request in opener.requests])
         self.assertEqual("bytes=0-0", opener.requests[1].get_header("Range"))
+        self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
+
+    def test_terms_entry_missing_its_text_fetches_a_full_body(self) -> None:
+        # A 304 carries no body, so an entry without the text behind its hash would never gain it.
+        for cached in (
+            {"etag": '"old"', "last_modified": "yesterday", "terms_sha256": "a" * 64},
+            {
+                "etag": '"old"',
+                "terms_sha256": "a" * 64,
+                "terms_text": "Terms A.",
+                "observed_terms_sha256": "b" * 64,
+            },
+        ):
+            opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
+            check_evidence_links.fetch_target(
+                target(terms=True), cached, token=None, opener=opener, sleeper=lambda _delay: None
+            )
+            self.assertIsNone(opener.requests[0].get_header("If-none-match"), cached)
+            self.assertIsNone(opener.requests[0].get_header("If-modified-since"), cached)
+
+    def test_terms_entry_holding_its_text_keeps_conditional_requests(self) -> None:
+        opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
+        check_evidence_links.fetch_target(
+            target(terms=True),
+            {"etag": '"old"', "terms_sha256": "a" * 64, "terms_text": "Terms A."},
+            token=None,
+            opener=opener,
+            sleeper=lambda _delay: None,
+        )
         self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
 
     def test_head_404_is_confirmed_with_get_before_marking_a_link_broken(self) -> None:
@@ -810,6 +840,186 @@ class SharedCacheTests(unittest.TestCase):
                 )
             self.assertEqual(2, code)
             self.assertFalse(cache_path.exists())
+
+
+ANCHORED_URL = "https://example.com/terms#license"
+ANCHORED_PAGE = (
+    b"<html><body><nav>Menu</nav><h1>Docs</h1><p>Intro.</p>"
+    b"<h2 id='license'>License</h2><p>Use is governed by the terms.</p>"
+    b"<h3>Details</h3><p>Sub detail.</p>"
+    b"<h2>Next steps</h2><p>Other.</p></body></html>"
+)
+ANCHORED_SECTION = "License Use is governed by the terms. Details Sub detail."
+
+
+def anchored_target(*, reviewed_at: str = "2026-09-01") -> check_evidence_links.LinkTarget:
+    reference = "systems:example:license:0"
+    return check_evidence_links.LinkTarget(
+        url=ANCHORED_URL,
+        kinds=("terms",),
+        references=(reference,),
+        review_dates=((reference, reviewed_at),),
+        monitor_terms=True,
+    )
+
+
+class TermsTextTests(unittest.TestCase):
+    """Drift reports show what changed, and anchored URLs hash their section."""
+
+    def run_check(
+        self,
+        cache: dict[str, object],
+        link: check_evidence_links.LinkTarget,
+        body: bytes,
+        *,
+        now: datetime = datetime(2026, 9, 5, tzinfo=UTC),
+    ) -> check_evidence_links.CheckSummary:
+        return check_evidence_links.check_targets(
+            [link], cache, lambda _target, _cached: response(body), now=now, max_age=timedelta(0)
+        )
+
+    def test_section_of_a_heading_runs_to_the_next_same_or_higher_heading(self) -> None:
+        self.assertEqual(
+            ANCHORED_SECTION,
+            check_evidence_links.section_text(ANCHORED_PAGE.decode(), "license"),
+        )
+
+    def test_section_of_a_container_is_its_subtree_without_scripts(self) -> None:
+        html = (
+            "<div id='terms'><p>Terms apply.</p><script>track()</script>"
+            "<div>Nested clause.</div></div><p>After.</p>"
+        )
+        self.assertEqual("Terms apply. Nested clause.", check_evidence_links.section_text(html, "terms"))
+
+    def test_missing_section_id_is_none(self) -> None:
+        self.assertIsNone(check_evidence_links.section_text("<p>Terms.</p>", "license"))
+
+    def test_anchored_url_hashes_its_section_and_stores_the_text(self) -> None:
+        cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
+        summary = self.run_check(cache, anchored_target(), ANCHORED_PAGE)
+        self.assertEqual([], summary.errors)
+        entry = cache["entries"][ANCHORED_URL]
+        self.assertEqual("section", entry["terms_hash_scope"])
+        self.assertEqual(ANCHORED_SECTION, entry["terms_text"])
+        self.assertEqual(hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"])
+
+    def test_missing_anchor_warns_and_hashes_the_whole_page(self) -> None:
+        cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
+        body = b"<html><body><p>Terms without the anchor.</p></body></html>"
+        summary = self.run_check(cache, anchored_target(), body)
+        self.assertRegex(summary.warnings[0], r"^terms anchor not found: https://example\.com/terms#license")
+        entry = cache["entries"][ANCHORED_URL]
+        self.assertEqual("page", entry["terms_hash_scope"])
+        self.assertEqual(check_evidence_links.content_sha256(body, "text/html"), entry["terms_sha256"])
+
+    def test_drift_stores_both_texts_shows_a_diff_and_acceptance_moves_the_text(self) -> None:
+        cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
+        self.run_check(cache, target(terms=True), b"<html><main>Terms A. Shared clause.</main></html>")
+        self.assertEqual("Terms A. Shared clause.", cache["entries"][TERMS_URL]["terms_text"])
+
+        drifted = self.run_check(
+            cache, target(terms=True), b"<html><main>Terms B. Shared clause.</main></html>",
+            now=datetime(2026, 9, 6, tzinfo=UTC),
+        )
+        self.assertRegex(drifted.errors[0], "terms drift requires review")
+        entry = cache["entries"][TERMS_URL]
+        self.assertEqual("Terms B. Shared clause.", entry["observed_terms_text"])
+        self.assertEqual(["  - Terms A.", "  + Terms B."], drifted.drift_details[TERMS_URL])
+
+        accepted = self.run_check(
+            cache, target(reviewed_at="2026-09-07", terms=True),
+            b"<html><main>Terms B. Shared clause.</main></html>",
+            now=datetime(2026, 9, 7, tzinfo=UTC),
+        )
+        self.assertEqual([], accepted.errors)
+        entry = cache["entries"][TERMS_URL]
+        self.assertEqual("Terms B. Shared clause.", entry["terms_text"])
+        self.assertNotIn("observed_terms_text", entry)
+
+    def test_legacy_entry_gains_text_when_its_hash_is_unchanged(self) -> None:
+        body = b"<html><main>Terms A.</main></html>"
+        cache = cache_of({
+            TERMS_URL: {
+                "checked_at": "2026-09-01T00:00:00Z",
+                "terms_sha256": check_evidence_links.content_sha256(body, "text/html"),
+                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+            }
+        })
+        summary = self.run_check(cache, target(terms=True), body)
+        self.assertEqual([], summary.errors)
+        entry = cache["entries"][TERMS_URL]
+        self.assertEqual("Terms A.", entry["terms_text"])
+        self.assertEqual("page", entry["terms_hash_scope"])
+
+    def test_legacy_drift_says_no_baseline_text_was_stored(self) -> None:
+        cache = cache_of({TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})})
+        # Checked on 2026-09-10, so the run must come later for the entry to be refetched.
+        summary = self.run_check(
+            cache, target(terms=True), b"<html><main>Terms A.</main></html>",
+            now=datetime(2026, 9, 15, tzinfo=UTC),
+        )
+        self.assertRegex(summary.errors[0], "terms drift requires review")
+        self.assertRegex(" ".join(summary.drift_details[TERMS_URL]), "no baseline text stored")
+
+    def test_anchored_legacy_baseline_moves_to_the_section_when_the_page_is_unchanged(self) -> None:
+        cache = cache_of({
+            ANCHORED_URL: {
+                "checked_at": "2026-09-01T00:00:00Z",
+                "terms_sha256": check_evidence_links.content_sha256(ANCHORED_PAGE, "text/html"),
+                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+            }
+        })
+        summary = self.run_check(cache, anchored_target(), ANCHORED_PAGE)
+        self.assertEqual([], summary.errors)
+        self.assertEqual(0, summary.terms_accepted)
+        entry = cache["entries"][ANCHORED_URL]
+        self.assertEqual("section", entry["terms_hash_scope"])
+        self.assertEqual(hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"])
+        self.assertEqual(ANCHORED_SECTION, entry["terms_text"])
+
+    def test_anchored_legacy_baseline_stays_drift_when_the_page_changed(self) -> None:
+        older_page = ANCHORED_PAGE.replace(b"Intro.", b"Older intro.")
+        cache = cache_of({
+            ANCHORED_URL: {
+                "checked_at": "2026-09-01T00:00:00Z",
+                "terms_sha256": check_evidence_links.content_sha256(older_page, "text/html"),
+                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+            }
+        })
+        summary = self.run_check(cache, anchored_target(), ANCHORED_PAGE)
+        self.assertRegex(summary.errors[0], "terms drift requires review")
+        entry = cache["entries"][ANCHORED_URL]
+        self.assertEqual("section", entry["observed_terms_hash_scope"])
+        self.assertNotIn("terms_hash_scope", {key for key, value in entry.items() if value == "section"})
+        self.assertRegex(" ".join(summary.drift_details[ANCHORED_URL]), "whole page")
+
+    def test_drift_diff_is_bounded_and_clipped(self) -> None:
+        before = " ".join(f"Clause {index}." for index in range(30))
+        after = " ".join(f"Clause {index} changed." for index in range(30))
+        lines = check_evidence_links.drift_diff(before, after)
+        self.assertEqual(13, len(lines))
+        self.assertRegex(lines[-1], "48 more changed segments")
+        long_line = check_evidence_links.drift_diff("Short.", "X" * 500)[-1]
+        self.assertTrue(long_line.startswith("  + "))
+        self.assertLessEqual(len(long_line), 4 + 240)
+
+    def test_show_drift_prints_stored_diffs_without_fetching(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            cache_path = Path(temp_dir) / "evidence-link-cache.json"
+            entry = terms_entry("a", {"systems:example:license:0": "2026-09-01"}, drift="2026-09-06", observed="b")
+            entry["terms_text"] = "Terms A. Shared clause."
+            entry["observed_terms_text"] = "Terms B. Shared clause."
+            check_evidence_links.write_cache(cache_path, cache_of({TERMS_URL: entry}))
+            with (
+                mock.patch("scripts.check_evidence_links.fetch_target", side_effect=AssertionError("fetched")),
+                mock.patch("builtins.print") as printed,
+            ):
+                code = check_evidence_links.main(["--cache", str(cache_path), "--show-drift"])
+            output = "\n".join(str(call.args[0]) for call in printed.call_args_list)
+            self.assertEqual(0, code)
+            self.assertIn("terms drift since 2026-09-06: https://example.com/terms", output)
+            self.assertIn("  - Terms A.", output)
+            self.assertIn("  + Terms B.", output)
 
 
 if __name__ == "__main__":
