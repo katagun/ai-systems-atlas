@@ -100,7 +100,18 @@ that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
 shells, scripts, styles, navigation, per-request telemetry nonces rendered as text, and whitespace are removed before hashing; GitHub and
-Hugging Face blob pages are fetched through their stable raw-content routes. A page without a
+Hugging Face blob pages are fetched through their stable raw-content routes. The cache keeps
+the normalized text behind every hash (`terms_text`, and `observed_terms_text` while drift is
+open), so each drift report prints up to twelve changed sentence-sized segments, and
+`--show-drift` prints the same diffs for every open drift entry from the cache without
+fetching. When an evidence URL names a fragment, or its URL appears in the checker's
+`TERMS_SECTION_IDS` map, only that section is hashed: a heading and everything up to the next
+heading of the same or higher level, or the element carrying the id. If the id is missing
+from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a
+`TERMS_SECTION_IDS` entry only after a stored diff shows a page's churn sits outside its
+terms. An entry from before stored text gains its text silently when its hash is unchanged,
+and an anchored URL moves from its whole-page baseline to its section silently only when the
+page still hashes to that baseline; any other difference stays drift until reviewed. A page without a
 baseline gets one on its first successful observation only when every review date for that
 URL is on or after the cache's previous run: the evidence was added or re-reviewed since the
 checker last ran, so first sight follows a human review. Otherwise the check fails with
@@ -122,7 +133,8 @@ not steward, and a finding's pinned `content_sha256` is a review-time record com
 nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
-To resolve terms drift, inspect the authoritative page, update every affected conclusion
+To resolve terms drift, start from the stored diff (`--show-drift`), inspect the authoritative
+page, update every affected conclusion
 and scoped evidence item as needed, and advance every affected human-owned `verified_at`.
 On the next scheduled check, a review date newer than the cached baseline accepts the new
 hash; use `--max-age-hours 0` to verify that acceptance immediately. If the terms did not
