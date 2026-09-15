@@ -288,6 +288,35 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertEqual("bytes=0-0", opener.requests[1].get_header("Range"))
         self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
 
+    def test_terms_entry_missing_its_text_fetches_a_full_body(self) -> None:
+        # A 304 carries no body, so an entry without the text behind its hash would never gain it.
+        for cached in (
+            {"etag": '"old"', "last_modified": "yesterday", "terms_sha256": "a" * 64},
+            {
+                "etag": '"old"',
+                "terms_sha256": "a" * 64,
+                "terms_text": "Terms A.",
+                "observed_terms_sha256": "b" * 64,
+            },
+        ):
+            opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
+            check_evidence_links.fetch_target(
+                target(terms=True), cached, token=None, opener=opener, sleeper=lambda _delay: None
+            )
+            self.assertIsNone(opener.requests[0].get_header("If-none-match"), cached)
+            self.assertIsNone(opener.requests[0].get_header("If-modified-since"), cached)
+
+    def test_terms_entry_holding_its_text_keeps_conditional_requests(self) -> None:
+        opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
+        check_evidence_links.fetch_target(
+            target(terms=True),
+            {"etag": '"old"', "terms_sha256": "a" * 64, "terms_text": "Terms A."},
+            token=None,
+            opener=opener,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
+
     def test_head_404_is_confirmed_with_get_before_marking_a_link_broken(self) -> None:
         http_error = urllib.error.HTTPError(
             "https://example.com/project", 404, "Not Found", {}, None
