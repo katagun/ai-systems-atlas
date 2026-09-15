@@ -86,10 +86,13 @@ GITHUB_TOKEN=... uv run python scripts/check_evidence_links.py
 The token is optional, but avoids the low anonymous limit on GitHub API blob URLs. The
 checker deduplicates shared URLs, uses eight bounded workers, uses `HEAD` with a bounded
 `GET` fallback for ordinary links, retries transient responses and explicit rate limits,
-and keeps conditional-request validators in the ignored `.evidence-link-cache.json`. The
-scheduled workflow preserves
-that file with the GitHub Actions cache. A successful result less than twenty hours old is
-reused, so re-running a workflow does not immediately crawl all reviewed sources again.
+and keeps conditional-request validators and terms baselines in one cache shared by every
+worktree of the clone, `.git/atlas/evidence-link-cache.json` (`--cache PATH` overrides it).
+A run holds an exclusive lock on that cache from load to save, so a second concurrent run
+exits instead of overwriting the first, and replaces the file atomically. A run also keeps
+the entries of URLs it did not check, so a branch that lacks some records never erases their
+baselines. A successful result less than twenty hours old is reused, so re-running the check
+does not immediately crawl all reviewed sources again.
 A `GET` that returns `403` without rate-limit headers gets one retry with ordinary
 browser headers: pages behind a bot wall (observed on xAI and OpenAI terms hosts) then
 count as reachable but raise a visible `bot-walled reviewed link` warning, while a page
@@ -97,8 +100,14 @@ that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
 shells, scripts, styles, navigation, per-request telemetry nonces rendered as text, and whitespace are removed before hashing; GitHub and
-Hugging Face blob pages are fetched through their stable raw-content routes. The first
-successful observation establishes an automation-owned baseline. A later content change
+Hugging Face blob pages are fetched through their stable raw-content routes. A page without a
+baseline gets one on its first successful observation only when every review date for that
+URL is on or after the cache's previous run: the evidence was added or re-reviewed since the
+checker last ran, so first sight follows a human review. Otherwise the check fails with
+`terms baseline missing`, and keeps failing even while the entry is served from the cache;
+a new or lost cache therefore reports every page. After reviewing such pages, rerun with
+`--establish-baselines --max-age-hours 0`, which records them and lists each as a warning.
+Evidence reviewed on a branch that stays unmerged past a check fails once this way. A later content change
 fails the weekly verification and therefore opens or updates the durable
 `automation-failure` issue; it never edits the record, its evidence, its source model, its
 licenses, or its human-owned dates. `404` and `410` responses fail as broken reviewed
@@ -120,8 +129,23 @@ hash; use `--max-age-hours 0` to verify that acceptance immediately. If the term
 change materially, advancing the evidence date still records that a human reviewed the
 new page before the automation accepts it. Repair or replace a
 broken URL in the same review. Do not delete the cache merely to make a drift signal pass;
-a missing cache establishes new baselines and cannot prove that the reviewed terms stayed
-the same.
+a lost cache reports every baseline as missing instead of accepting the pages as they now
+are, and only a person reviewing those pages can restore it.
+
+Checkouts from before the shared cache each kept a `.evidence-link-cache.json` at their
+root. Merge them into the shared cache once; the import fetches nothing and never changes
+the source files:
+
+```bash
+uv run python scripts/check_evidence_links.py \
+  --import-cache /path/to/agent-systems-atlas/.evidence-link-cache.json \
+  --import-cache /path/to/atlas-directory-refresh/.evidence-link-cache.json
+```
+
+For each URL the import keeps an entry found in only one cache, prefers the entry accepted
+after a strictly newer human review of every reference, and otherwise keeps the most
+recently checked entry. When two baselines agree it keeps any open drift; when they disagree
+without a newer review it opens terms drift, so a person decides which page is right.
 
 ## Review a candidate
 
@@ -419,14 +443,12 @@ checkout. Three things make the wrapper necessary rather than decorative:
 - The logo and web checks need the lockfile's devDependencies, so the wrapper runs
   `npm ci --ignore-scripts` in the worktree before the runner, matching `verify`.
 
-Create the worktree once, and seed it with the evidence-link cache from the checkout that ran
-the last check. A worktree without `.evidence-link-cache.json` establishes fresh terms
-baselines on its first run, which silently accepts any terms change made since the last
-check (see "Evidence links and terms drift" above):
+Create the worktree once. Like every worktree of the clone, it reads and writes the shared
+evidence-link cache in the repository's git directory, so there is no cache to copy (see
+"Evidence links and terms drift" above):
 
 ```bash
 git worktree add --detach ../atlas-directory-refresh origin/main
-cp .evidence-link-cache.json ../atlas-directory-refresh/
 ```
 
 Then write the wrapper, refusing a dirty tree before doing anything else:
