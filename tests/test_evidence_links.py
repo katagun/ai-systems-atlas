@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 import urllib.error
 import urllib.request
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from unittest import mock
 
 from scripts import check_evidence_links
 
@@ -170,7 +173,8 @@ class EvidenceLinkTests(unittest.TestCase):
         )
 
     def test_terms_drift_stays_open_until_a_newer_human_review(self) -> None:
-        cache = {"version": "1.0", "updated_at": None, "entries": {}}
+        # The previous run predates the review, so the first sight may set the baseline.
+        cache = {"version": "1.0", "updated_at": "2026-08-31T00:00:00Z", "entries": {}}
         first = check_evidence_links.check_targets(
             [target(terms=True)],
             cache,
@@ -549,6 +553,263 @@ class EvidenceLinkTests(unittest.TestCase):
         entry = cache["entries"]["https://example.com/terms"]
         self.assertNotIn("terms_sha256", entry)
         self.assertNotIn("terms_drift_detected_at", entry)
+
+
+TERMS_URL = "https://example.com/terms"
+
+
+def terms_entry(
+    sha: str,
+    reviewed: dict[str, str],
+    *,
+    checked: str = "2026-09-10T00:00:00Z",
+    drift: str | None = None,
+    observed: str | None = None,
+) -> dict[str, object]:
+    entry: dict[str, object] = {
+        "checked_at": checked,
+        "status": 200,
+        "terms_sha256": sha * 64,
+        "terms_reviewed_at": reviewed,
+    }
+    if drift:
+        entry["terms_drift_detected_at"] = drift
+    if observed:
+        entry["observed_terms_sha256"] = observed * 64
+    return entry
+
+
+def cache_of(entries: dict[str, object], *, updated_at: str | None = "2026-09-10T00:00:00Z") -> dict[str, object]:
+    return {"version": "1.0", "updated_at": updated_at, "entries": entries}
+
+
+class SharedCacheTests(unittest.TestCase):
+    """One cache for every worktree, no silent baselines, and a fail-closed import."""
+
+    def check_terms(
+        self,
+        cache: dict[str, object],
+        *,
+        reviewed_at: str = "2026-09-01",
+        now: datetime = datetime(2026, 9, 5, tzinfo=UTC),
+        max_age: timedelta = timedelta(0),
+        fetch: object = None,
+        **options: object,
+    ) -> check_evidence_links.CheckSummary:
+        body = b"<html><main>Terms A</main></html>"
+        return check_evidence_links.check_targets(
+            [target(reviewed_at=reviewed_at, terms=True)],
+            cache,
+            fetch or (lambda _target, _cached: response(body)),
+            now=now,
+            max_age=max_age,
+            **options,
+        )
+
+    def test_default_cache_lives_in_the_shared_git_directory(self) -> None:
+        calls: list[tuple[list[str], dict[str, object]]] = []
+
+        def runner(args: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            calls.append((args, kwargs))
+            return subprocess.CompletedProcess(args, 0, stdout="/clone/.git\n", stderr="")
+
+        path = check_evidence_links.default_cache_path(Path("/clone/worktree"), runner=runner)
+        self.assertEqual(Path("/clone/.git/atlas/evidence-link-cache.json"), path)
+        self.assertEqual(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], calls[0][0])
+        self.assertEqual(Path("/clone/worktree"), calls[0][1]["cwd"])
+
+    def test_default_cache_falls_back_outside_git(self) -> None:
+        def not_a_checkout(args: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            raise subprocess.CalledProcessError(128, args)
+
+        def no_git(_args: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            raise FileNotFoundError("git")
+
+        for runner in (not_a_checkout, no_git):
+            self.assertEqual(
+                Path("/tarball/.evidence-link-cache.json"),
+                check_evidence_links.default_cache_path(Path("/tarball"), runner=runner),
+            )
+
+    def test_a_held_lock_refuses_a_second_run(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "atlas" / "evidence-link-cache.json"
+            # The first lock stays held while the second is attempted and refused.
+            with (
+                check_evidence_links.cache_lock(path),
+                self.assertRaises(check_evidence_links.CacheLocked),
+                check_evidence_links.cache_lock(path),
+            ):
+                pass
+            # Released on exit, so the next run can take it.
+            with check_evidence_links.cache_lock(path):
+                pass
+
+    def test_cache_writes_replace_the_file_without_leftovers(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "atlas" / "evidence-link-cache.json"
+            cache = cache_of({}, updated_at=None)
+            with mock.patch("scripts.check_evidence_links.os.replace", wraps=os.replace) as replace:
+                check_evidence_links.write_cache(path, cache)
+            replace.assert_called_once()
+            self.assertEqual(cache, json.loads(path.read_text(encoding="utf-8")))
+            self.assertEqual(["evidence-link-cache.json"], [item.name for item in path.parent.iterdir()])
+
+    def test_a_run_keeps_entries_it_did_not_target(self) -> None:
+        other = "https://example.com/terms-on-another-branch"
+        cache = cache_of(
+            {other: terms_entry("b", {"systems:other:license:0": "2026-09-01"})},
+            updated_at="2026-08-31T00:00:00Z",
+        )
+        self.check_terms(cache)
+        self.assertIn(other, cache["entries"])
+        self.assertIn(TERMS_URL, cache["entries"])
+
+    def test_new_baseline_is_recorded_for_terms_reviewed_since_the_last_run(self) -> None:
+        cache = cache_of({}, updated_at="2026-09-01T08:00:00Z")
+        summary = self.check_terms(cache, reviewed_at="2026-09-01")
+        self.assertEqual([], summary.errors)
+        self.assertEqual(1, summary.terms_bootstrapped)
+        self.assertIn("terms_sha256", cache["entries"][TERMS_URL])
+
+    def test_missing_baseline_for_terms_reviewed_before_the_last_run_fails(self) -> None:
+        cache = cache_of({}, updated_at="2026-09-03T08:00:00Z")
+        summary = self.check_terms(cache, reviewed_at="2026-09-01")
+        self.assertEqual(0, summary.terms_bootstrapped)
+        self.assertRegex(summary.errors[0], r"^terms baseline missing: https://example\.com/terms")
+        entry = cache["entries"][TERMS_URL]
+        self.assertNotIn("terms_sha256", entry)
+        self.assertEqual("2026-09-05", entry["terms_baseline_missing"])
+
+    def test_a_cache_without_a_previous_run_reports_every_missing_baseline(self) -> None:
+        summary = self.check_terms(cache_of({}, updated_at=None))
+        self.assertEqual(0, summary.terms_bootstrapped)
+        self.assertRegex(summary.errors[0], "terms baseline missing")
+
+    def test_missing_baseline_stays_reported_while_the_entry_is_fresh(self) -> None:
+        cache = cache_of({}, updated_at=None)
+        self.check_terms(cache, now=datetime(2026, 9, 5, 12, tzinfo=UTC))
+
+        def unexpected_fetch(_target: object, _cached: object) -> check_evidence_links.FetchResult:
+            raise AssertionError("a fresh entry should be served from the cache")
+
+        again = self.check_terms(
+            cache,
+            now=datetime(2026, 9, 5, 13, tzinfo=UTC),
+            max_age=timedelta(hours=20),
+            fetch=unexpected_fetch,
+        )
+        self.assertEqual(1, again.cached)
+        self.assertRegex(again.errors[0], "terms baseline missing")
+
+    def test_establish_baselines_records_them_with_a_warning(self) -> None:
+        cache = cache_of({}, updated_at=None)
+        self.check_terms(cache)
+        summary = self.check_terms(cache, establish_baselines=True)
+        self.assertEqual([], summary.errors)
+        self.assertEqual(1, summary.terms_bootstrapped)
+        self.assertRegex(summary.warnings[0], r"^terms baseline established by request: https://example\.com/terms")
+        entry = cache["entries"][TERMS_URL]
+        self.assertIn("terms_sha256", entry)
+        self.assertNotIn("terms_baseline_missing", entry)
+
+    def test_import_keeps_urls_found_in_only_one_cache(self) -> None:
+        shared = cache_of({}, updated_at=None)
+        report = check_evidence_links.merge_caches(
+            shared,
+            [cache_of({TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})})],
+            today="2026-09-15",
+        )
+        self.assertEqual("a" * 64, shared["entries"][TERMS_URL]["terms_sha256"])
+        self.assertEqual((1, 1), (report.sources, report.added))
+        self.assertEqual("2026-09-10T00:00:00Z", shared["updated_at"])
+
+    def test_import_of_agreeing_baselines_keeps_the_latest_check_and_open_drift(self) -> None:
+        reviewed = {"systems:example:license:0": "2026-09-01"}
+        drifted = terms_entry("a", reviewed, checked="2026-09-05T00:00:00Z", drift="2026-09-05", observed="b")
+        later = terms_entry("a", reviewed, checked="2026-09-09T00:00:00Z")
+        shared = cache_of({TERMS_URL: drifted})
+        report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: later})], today="2026-09-15")
+        entry = shared["entries"][TERMS_URL]
+        self.assertEqual("2026-09-09T00:00:00Z", entry["checked_at"])
+        self.assertEqual("2026-09-05", entry["terms_drift_detected_at"])
+        self.assertEqual("b" * 64, entry["observed_terms_sha256"])
+        self.assertEqual(1, report.agreed)
+
+    def test_import_prefers_the_entry_accepted_after_a_strictly_newer_review(self) -> None:
+        older = terms_entry(
+            "a",
+            {"inference-services:deepinfra:terms:0": "2026-09-12"},
+            checked="2026-09-12T00:00:00Z",
+            drift="2026-09-12",
+            observed="b",
+        )
+        newer = terms_entry(
+            "b",
+            {
+                "inference-services:deepinfra:terms:0": "2026-09-13",
+                "inference-services:deepinfra:trust:vulnerability_disclosure": "2026-09-13",
+            },
+            checked="2026-09-11T00:00:00Z",
+        )
+        for first, second in ((older, newer), (newer, older)):
+            shared = cache_of({TERMS_URL: dict(first)})
+            report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: dict(second)})], today="2026-09-15")
+            entry = shared["entries"][TERMS_URL]
+            self.assertEqual("b" * 64, entry["terms_sha256"])
+            self.assertNotIn("terms_drift_detected_at", entry)
+            self.assertEqual(1, report.newer_review)
+
+    def test_import_opens_drift_when_baselines_disagree_without_a_newer_review(self) -> None:
+        reviewed = {"systems:example:license:0": "2026-09-12"}
+        first = terms_entry("a", reviewed, checked="2026-09-12T00:00:00Z")
+        second = terms_entry("b", reviewed, checked="2026-09-14T00:00:00Z")
+        shared = cache_of({TERMS_URL: first})
+        report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: second})], today="2026-09-15")
+        entry = shared["entries"][TERMS_URL]
+        self.assertEqual("b" * 64, entry["terms_sha256"])
+        self.assertEqual("a" * 64, entry["observed_terms_sha256"])
+        self.assertEqual("2026-09-15", entry["terms_drift_detected_at"])
+        self.assertEqual([TERMS_URL], report.conflict_urls)
+
+        # The opened drift holds until a newer human review, like any other drift.
+        summary = self.check_terms(shared, reviewed_at="2026-09-12", now=datetime(2026, 9, 15, tzinfo=UTC))
+        self.assertRegex(summary.errors[0], "terms drift requires review")
+
+    def test_import_cli_merges_into_the_cache_and_leaves_sources_unchanged(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            cache_path = root / "shared" / "evidence-link-cache.json"
+            source = root / "old" / ".evidence-link-cache.json"
+            source.parent.mkdir()
+            source.write_text(
+                json.dumps(
+                    cache_of(
+                        {TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})},
+                        updated_at="2026-09-12T16:00:00Z",
+                    )
+                ),
+                encoding="utf-8",
+            )
+            before = source.read_bytes()
+            with mock.patch("builtins.print") as printed:
+                code = check_evidence_links.main(["--cache", str(cache_path), "--import-cache", str(source)])
+            self.assertEqual(0, code)
+            self.assertEqual(before, source.read_bytes())
+            merged = json.loads(cache_path.read_text(encoding="utf-8"))
+            self.assertEqual("a" * 64, merged["entries"][TERMS_URL]["terms_sha256"])
+            self.assertEqual("2026-09-12T16:00:00Z", merged["updated_at"])
+            self.assertIn("1 URLs added", " ".join(str(call.args[0]) for call in printed.call_args_list))
+
+    def test_import_cli_rejects_a_missing_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            cache_path = Path(temp_dir) / "evidence-link-cache.json"
+            with mock.patch("builtins.print"):
+                code = check_evidence_links.main(
+                    ["--cache", str(cache_path), "--import-cache", str(Path(temp_dir) / "missing.json")]
+                )
+            self.assertEqual(2, code)
+            self.assertFalse(cache_path.exists())
 
 
 if __name__ == "__main__":
