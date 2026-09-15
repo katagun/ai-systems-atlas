@@ -1108,7 +1108,7 @@
           "scope": "Cohere Labs Command A (c4ai-command-a-03-2025) weights, tokenizer, and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
           "kind": "web_terms",
           "url": "https://cohere.com/c4ai-cc-by-nc-license",
-          "verified_at": "2026-09-11"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Cohere-Labs-AUP",
@@ -1221,7 +1221,7 @@
           "scope": "Aya Expanse 8B weights and model release under Cohere Labs' CC-BY-NC terms",
           "kind": "web_terms",
           "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Cohere-Labs-AUP",
