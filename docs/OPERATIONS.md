@@ -104,7 +104,8 @@ Hugging Face blob pages are fetched through their stable raw-content routes. The
 the normalized text behind every hash (`terms_text`, and `observed_terms_text` while drift is
 open), so each drift report prints up to twelve changed sentence-sized segments, and
 `--show-drift` prints the same diffs for every open drift entry from the cache without
-fetching. When an evidence URL names a fragment, or its URL appears in the checker's
+fetching. Until an entry holds that text, the checker fetches its page without conditional
+request headers, because a `304 Not Modified` answer carries no body to store. When an evidence URL names a fragment, or its URL appears in the checker's
 `TERMS_SECTION_IDS` map, only that section is hashed: a heading and everything up to the next
 heading of the same or higher level, or the element carrying the id. If the id is missing
 from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a

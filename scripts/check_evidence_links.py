@@ -665,6 +665,19 @@ def _browser_fallback_fetch(
         return None
 
 
+def _needs_terms_body(target: LinkTarget, cached: Mapping[str, Any]) -> bool:
+    """True when a terms entry lacks the text behind a stored hash.
+
+    A conditional request can come back 304 with no body, which would leave that text
+    missing on every later run, so such an entry must fetch the page in full.
+    """
+    if not target.monitor_terms or not cached.get("terms_sha256"):
+        return False
+    return "terms_text" not in cached or (
+        bool(cached.get("observed_terms_sha256")) and "observed_terms_text" not in cached
+    )
+
+
 def fetch_target(
     target: LinkTarget,
     cached: Mapping[str, Any],
@@ -681,6 +694,7 @@ def fetch_target(
         raise FetchFailure("target is not an absolute HTTPS URL")
     opener = opener or urllib.request.build_opener(_HTTPSRedirectHandler())
     methods = ("GET",) if target.monitor_terms else ("HEAD", "GET")
+    conditional = not _needs_terms_body(target, cached)
     last_failure: FetchFailure | None = None
 
     for method in methods:
@@ -691,9 +705,9 @@ def fetch_target(
             }
             if method == "GET" and not target.monitor_terms:
                 headers["Range"] = "bytes=0-0"
-            if cached.get("etag"):
+            if conditional and cached.get("etag"):
                 headers["If-None-Match"] = str(cached["etag"])
-            if cached.get("last_modified"):
+            if conditional and cached.get("last_modified"):
                 headers["If-Modified-Since"] = str(cached["last_modified"])
             if token and parsed.hostname == "api.github.com":
                 headers["Authorization"] = f"Bearer {token}"
