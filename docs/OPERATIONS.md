@@ -21,6 +21,22 @@ Synchronization and share-page generation are write operations; the remaining co
 
 `ruff` is pinned in the `dev` dependency group and installed by `uv sync`. Its rule set is configured in `pyproject.toml`; `eslint.config.mjs` covers the browser bundle, the build scripts, and the test suites. Both run in `verify.yml`. Ruff enforces the `requires-python` floor, which matters because CI only ever runs one Python version.
 
+## Review age
+
+```bash
+uv run python scripts/report_review_age.py
+uv run python scripts/report_review_age.py --older-than 90 --collection systems
+uv run python scripts/report_review_age.py --json --as-of 2026-09-14
+```
+
+The report reads `directory/` and prints one row per reviewed record, oldest editorial date first. It changes no date, fetches nothing, and always exits 0: it is a prompt for human re-review, never a gate.
+
+- **reviewed** is the age of the record's own `verified_at`.
+- **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, or trust record, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
+- **metadata** is the newest automated timestamp, `metadata_verified_at` or `stars_verified_at`, or `none` for records without GitHub metadata. It says how fresh the live numbers are, not how fresh the review is.
+
+`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, or `specifications` and may repeat.
+
 ## Metadata refresh
 
 The weekly refresh runs this alongside the models.dev import, synchronization, payload and
@@ -70,10 +86,13 @@ GITHUB_TOKEN=... uv run python scripts/check_evidence_links.py
 The token is optional, but avoids the low anonymous limit on GitHub API blob URLs. The
 checker deduplicates shared URLs, uses eight bounded workers, uses `HEAD` with a bounded
 `GET` fallback for ordinary links, retries transient responses and explicit rate limits,
-and keeps conditional-request validators in the ignored `.evidence-link-cache.json`. The
-scheduled workflow preserves
-that file with the GitHub Actions cache. A successful result less than twenty hours old is
-reused, so re-running a workflow does not immediately crawl all reviewed sources again.
+and keeps conditional-request validators and terms baselines in one cache shared by every
+worktree of the clone, `.git/atlas/evidence-link-cache.json` (`--cache PATH` overrides it).
+A run holds an exclusive lock on that cache from load to save, so a second concurrent run
+exits instead of overwriting the first, and replaces the file atomically. A run also keeps
+the entries of URLs it did not check, so a branch that lacks some records never erases their
+baselines. A successful result less than twenty hours old is reused, so re-running the check
+does not immediately crawl all reviewed sources again.
 A `GET` that returns `403` without rate-limit headers gets one retry with ordinary
 browser headers: pages behind a bot wall (observed on xAI and OpenAI terms hosts) then
 count as reachable but raise a visible `bot-walled reviewed link` warning, while a page
@@ -81,8 +100,26 @@ that refuses both user agents keeps the original conclusive `403` failure.
 
 Mutable `web_terms` evidence receives an additional normalized content hash. HTML page
 shells, scripts, styles, navigation, per-request telemetry nonces rendered as text, and whitespace are removed before hashing; GitHub and
-Hugging Face blob pages are fetched through their stable raw-content routes. The first
-successful observation establishes an automation-owned baseline. A later content change
+Hugging Face blob pages are fetched through their stable raw-content routes. The cache keeps
+the normalized text behind every hash (`terms_text`, and `observed_terms_text` while drift is
+open), so each drift report prints up to twelve changed sentence-sized segments, and
+`--show-drift` prints the same diffs for every open drift entry from the cache without
+fetching. Until an entry holds that text, the checker fetches its page without conditional
+request headers, because a `304 Not Modified` answer carries no body to store. When an evidence URL names a fragment, or its URL appears in the checker's
+`TERMS_SECTION_IDS` map, only that section is hashed: a heading and everything up to the next
+heading of the same or higher level, or the element carrying the id. If the id is missing
+from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a
+`TERMS_SECTION_IDS` entry only after a stored diff shows a page's churn sits outside its
+terms. An entry from before stored text gains its text silently when its hash is unchanged,
+and an anchored URL moves from its whole-page baseline to its section silently only when the
+page still hashes to that baseline; any other difference stays drift until reviewed. A page without a
+baseline gets one on its first successful observation only when every review date for that
+URL is on or after the cache's previous run: the evidence was added or re-reviewed since the
+checker last ran, so first sight follows a human review. Otherwise the check fails with
+`terms baseline missing`, and keeps failing even while the entry is served from the cache;
+a new or lost cache therefore reports every page. After reviewing such pages, rerun with
+`--establish-baselines --max-age-hours 0`, which records them and lists each as a warning.
+Evidence reviewed on a branch that stays unmerged past a check fails once this way. A later content change
 fails the weekly verification and therefore opens or updates the durable
 `automation-failure` issue; it never edits the record, its evidence, its source model, its
 licenses, or its human-owned dates. `404` and `410` responses fail as broken reviewed
@@ -97,15 +134,31 @@ not steward, and a finding's pinned `content_sha256` is a review-time record com
 nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
-To resolve terms drift, inspect the authoritative page, update every affected conclusion
+To resolve terms drift, start from the stored diff (`--show-drift`), inspect the authoritative
+page, update every affected conclusion
 and scoped evidence item as needed, and advance every affected human-owned `verified_at`.
 On the next scheduled check, a review date newer than the cached baseline accepts the new
 hash; use `--max-age-hours 0` to verify that acceptance immediately. If the terms did not
 change materially, advancing the evidence date still records that a human reviewed the
 new page before the automation accepts it. Repair or replace a
 broken URL in the same review. Do not delete the cache merely to make a drift signal pass;
-a missing cache establishes new baselines and cannot prove that the reviewed terms stayed
-the same.
+a lost cache reports every baseline as missing instead of accepting the pages as they now
+are, and only a person reviewing those pages can restore it.
+
+Checkouts from before the shared cache each kept a `.evidence-link-cache.json` at their
+root. Merge them into the shared cache once; the import fetches nothing and never changes
+the source files:
+
+```bash
+uv run python scripts/check_evidence_links.py \
+  --import-cache /path/to/agent-systems-atlas/.evidence-link-cache.json \
+  --import-cache /path/to/atlas-directory-refresh/.evidence-link-cache.json
+```
+
+For each URL the import keeps an entry found in only one cache, prefers the entry accepted
+after a strictly newer human review of every reference, and otherwise keeps the most
+recently checked entry. When two baselines agree it keeps any open drift; when they disagree
+without a newer review it opens terms drift, so a person decides which page is right.
 
 ## Review a candidate
 
@@ -307,6 +360,33 @@ locally" under "Attention-source sweep" below for the `--from-ref` option that l
 `prepare` build from a local branch instead, and how `finish` still checks the right base
 when it does.
 
+`finish` makes one change to the queue itself. Before any guard reads the queue, it
+re-fetches each page whose signal gained an `assessment` this run — using the `url` and
+`content_sha256` from the base commit, not the run's copy — and hashes it with the same
+`extract_visible_text` and `content_hash` the sweep and `verify_signal_pages.py` use. An
+assessment whose page no longer matches is removed, and the rest of the run still commits.
+Vendor pages drift within minutes: on 2026-09-15 two runs, of 29 and 55 assessments, were
+each discarded whole because one unrelated page changed between `prepare` and `finish`.
+The removal is deliberately narrow. It touches only blocks the base queue did not have,
+so a disposition already on the branch is never removed; only a digest mismatch triggers
+it, while a page that cannot be fetched still aborts the run; the decision is made in
+`finish`'s own process, never from anything a `CHECKS` command prints; and the dropped
+story ids go to stderr and into the commit message. The field guard, validation, the
+`--recheck` in `CHECKS`, and the re-read before `git add` all run afterwards against the
+final bytes, so a page that drifts in the short window between the drop and that recheck
+still fails the run. A signal whose assessment was dropped is left with none.
+
+The queue itself is transient, and a reviewer has to act accordingly. `sweep_hackernews.py`
+rebuilds `directory/hn-signals.json` from one day's window and carries nothing forward, so
+every assessment in it — an unattended proposal, or a block you edited in place and marked
+`proposer: "human"` — is gone at the next sweep, on `main` as well as on the branch. Only
+the durable records outlive it: a candidate, a project, or an exclusion carrying the page's
+`url`, each of which the next sweep then suppresses before it fetches anything. So a day's
+proposals are worth reviewing before the following morning's sweep, and a disposition you
+want to keep belongs in one of those files rather than in the queue. Nothing enforces this;
+it is a property of a queue rebuilt daily from an attention source, and the reason a
+verdict is accepted by writing a record elsewhere rather than by editing the signal.
+
 To schedule the routine, run `uv run python scripts/run_hn_signals.py install-prompt` from
 the sweep worktree — the checkout holding the `local/hn-signals` branch the prompt reads with
 `--from-ref` — then register an `hn-signals` scheduled task in the desktop app for each
@@ -403,14 +483,12 @@ checkout. Three things make the wrapper necessary rather than decorative:
 - The logo and web checks need the lockfile's devDependencies, so the wrapper runs
   `npm ci --ignore-scripts` in the worktree before the runner, matching `verify`.
 
-Create the worktree once, and seed it with the evidence-link cache from the checkout that ran
-the last check. A worktree without `.evidence-link-cache.json` establishes fresh terms
-baselines on its first run, which silently accepts any terms change made since the last
-check (see "Evidence links and terms drift" above):
+Create the worktree once. Like every worktree of the clone, it reads and writes the shared
+evidence-link cache in the repository's git directory, so there is no cache to copy (see
+"Evidence links and terms drift" above):
 
 ```bash
 git worktree add --detach ../atlas-directory-refresh origin/main
-cp .evidence-link-cache.json ../atlas-directory-refresh/
 ```
 
 Then write the wrapper, refusing a dirty tree before doing anything else:
@@ -551,8 +629,19 @@ moves the swept window back, so `--lag-days 3` sweeps the day that ended three d
 The sweep leaves `directory/hn-signals.json` modified in the working tree. The scheduled
 routine reads the queue from the local branch `local/hn-signals`, so in practice the launchd
 job runs a small wrapper from a dedicated worktree on that branch: refuse a dirty tree,
-rebase onto `origin/main` so the sweep and the routine both run current code, sweep, and
-commit the file.
+fetch `origin main`, move the branch onto `origin/main` so the sweep and the routine both
+run current code, sweep, and commit the file.
+
+That last step resets rather than rebases, and the difference is load-bearing. Each sweep
+rewrites the queue wholesale, so replaying yesterday's sweep commits onto `main` conflicts
+with any queue change merged there. On 2026-09-15, after [#165](https://github.com/katagun/ai-systems-atlas/pull/165)
+merged a day of assessments, that rebase conflicted, aborted, and every later sweep refused
+with `could not rebase onto origin/main` — while the scheduled routine silently reran on the
+previous day's queue, because a queue that is merely stale still reads as a queue. A reset
+discards nothing that matters: assessments are committed to `hn-signals/pending` by
+`run_hn_signals.py finish`, never to this branch, and the branch is never pushed. Keep the
+previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
+remains recoverable for one generation.
 
 ### Running the loop locally
 
@@ -604,7 +693,9 @@ omitting `--from-ref` behaves exactly as before.
 
 `scripts/run_candidate_triage.py` and `scripts/run_hn_signals.py` share their mechanical
 guards through `scripts/routine_guards.py`, and this threat model applies identically to
-both. It was sharpened by an adversarial review that found the base-record file could be
+both. One behavior is not shared: `run_hn_signals.py finish` removes this run's assessments
+whose pinned page changed before its guards run (see "Review a signal batch"), while
+`run_candidate_triage.py finish` still aborts when its evidence recheck fails. It was sharpened by an adversarial review that found the base-record file could be
 relocated out of the worktree but still bypassed — read on for what closed and what did
 not.
 

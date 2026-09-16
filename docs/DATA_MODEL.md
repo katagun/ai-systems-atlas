@@ -35,7 +35,9 @@ Fields are grouped by responsibility:
 - **Identity:** `id`, `name`, optional GitHub `repo`, authoritative `url`, and `description`.
 - **Classification:** `system_family`, `primary_role`, `secondary_roles`, and `score_profile`.
 - **Traits:** agent relationship, optional reviewed provider relationship and model backends, architecture, retrieval, capture, lifecycle, deployment, local-first behavior, editability, provenance, and agent-only operation fields.
-- **Trait definitions:** `local_first` is true when a system keeps its main data on your own device or infrastructure by default and any vendor cloud is optional. `human_editable` is true when you can open and change what it stores directly, as files, settings, or in an editor, not only through chat or search. Directory cards show these traits as the Local-first and Editable by you badges; keep these definitions and the badge definitions in `web/app-core.js` in step.
+- **Trait definitions:** Directory cards show `local_first` and `human_editable` as the Local-first and Editable by you badges. Each definition below quotes its badge definition in `web/app-core.js` verbatim, a test keeps the two identical, and [ADR 030](adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md) records the rules that follow each quote.
+  - `local_first`: "Keeps your data on your own device or servers by default. It may still send requests to an online AI model; cloud storage is opt-in." True only when, by default, the working copy of the content the system keeps — files, notes, memory, sessions, conversation history, run state — lives on hardware the user controls, including servers they operate; the vendor stores none of that content beyond serving a request and bounded retention for abuse or safety monitoring, and does not use it for training; and vendor-hosted storage such as sync, cloud sessions, or remote indexes is opt-in. Sending requests to a remote model does not by itself make it false. Default telemetry that carries content — prompts, outputs, conversation or run state — counts as vendor storage; content-free usage analytics does not. A library or framework whose storage the application chooses is false unless the library itself writes its data to local disk by default.
+  - `human_editable`: "You can open and change what it keeps, such as notes, memories, or instructions, directly in files or in the app, not only by chatting." True only when a person can change the stored content itself — notes, documents, memories, messages, instructions, or agent and workflow definitions the system stores — without writing code, through files, an editor, or an in-product screen that edits those entries. Configuration alone (keys, model choice, preferences), delete-only or regenerate-only controls, editing only through an API or SDK, and source code an integrator writes for a library to run do not count.
 - **Licensing:** non-empty `licenses`, one `source_model`, and `license_review_status`.
 - **Lifecycle:** `status`.
 - **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
@@ -102,7 +104,9 @@ License-review records correspond one-to-one with projects whose `license_review
 
 See `OPERATIONS.md` for promotion and resolution procedures.
 
-`directory/hn-signals.json` is the attention-source signal queue, populated only by the
+`directory/hn-signals.json` is the attention-source signal queue, rebuilt wholesale from one
+day's window by every sweep and carrying nothing forward, so it holds no durable state and
+no assessment in it survives the next sweep; it is populated only by the
 daily sweep in `scripts/sweep_hackernews.py`; see
 [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Its envelope is
 `{"version": "1.0", "updated_at": <ISO datetime>, "source": {...}, "signals": [...]}`. When

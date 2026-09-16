@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-13",
+  "updated_at": "2026-09-14",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -35,7 +35,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"Apache License\" text, \"Version 2.0, January 2004\", with the notice \"Copyright 2024 Aden\". The README describes \"The agent harness for production workloads — state management, failure recovery, observability, and human oversight so your agents actually run.\" and says \"OpenHive is a zero-setup, model-agnostic runtime for\" colonies in which a lead Queen spawns worker clones. Listed features include \"Crash-safe park/resume, cost enforcement, and out-of-band human-in-the-loop (Sentinel)\" and \"General Compute Use and Browser Use with Native Extension\". Installation is a quickstart script that opens a browser dashboard, and the README links a \"Self-Hosting Guide\" to \"Deploy Hive on your infrastructure\". The quickstart configures a default model \"including Hive LLM and OpenRouter\", and full documentation is hosted at adenhq.com. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: is the Apache-licensed self-hosted colony runtime the whole operational product, or do the hosted documentation and the Hive LLM provider option describe a vendor-operated offering that this licence does not cover?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/aden-hive/hive/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "2cda9484e54c0e82b0f5ea2b5ba372f5875ed260234718c94e70b622d59748de",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "f72c3e53be0426cfe5a26b6369918ac0d12a7bb5",
+            "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/f72c3e53be0426cfe5a26b6369918ac0d12a7bb5"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/aden-hive/hive/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f44141d105e5b13d7f69bd414f00e763c52bd9a05e5da9af829ac973f572209f",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "8696ab3d312731e2644d1646f6ef978d3b8b3203",
+            "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/8696ab3d312731e2644d1646f6ef978d3b8b3203"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "AFK-surf/open-agent",
@@ -62,7 +89,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate condition 3",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text; its appendix copyright line is the unfilled template \"Copyright [yyyy] [name of copyright owner]\", and the README separately states \"© 2025 Open-Agent Contributors.\" and \"Licensed under\" Apache 2.0. The README presents the project as an \"Open-source alternative to Claude Agent SDK, ChatGPT Agents, and Manus.\" and says it \"is an open Agentic AI you can use or modify. Chat with cutting-edge models while our multi-agent system completes your tasks.\" It invites readers to \"Play with it, deploy it, enhance it, or use it as the foundation for your next dedicated agent.\" The only documented run path is copying a config file, adding API keys, and running Docker Compose; the README describes no tools, execution boundaries, or recovery behaviour, and one Discord badge points at a placeholder invite. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: do the repository and hosted demo provide enough implementation evidence to assess the claimed multi-agent task completion, given that the README documents only deployment?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/AFK-surf/open-agent/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "4d3ef15a7f236284a9d6dac169085ca480da5bda7bfea17882cd388876740088",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "60508c347dcc0b33941ad8b06ab06b26f44e3620",
+            "immutable_url": "https://api.github.com/repos/AFK-surf/open-agent/git/blobs/60508c347dcc0b33941ad8b06ab06b26f44e3620"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/AFK-surf/open-agent/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "dfcf45df106115772b0e5149dd7f9b971f52ad04aadaa10523465a4ec01bd7fc",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "004aa8c45a3e2bcdb67f09fe982c1722669d77c6",
+            "immutable_url": "https://api.github.com/repos/AFK-surf/open-agent/git/blobs/004aa8c45a3e2bcdb67f09fe982c1722669d77c6"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "ageerle/ruoyi-ai",
@@ -88,7 +142,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE reads \"The MIT License (MIT)\" with \"Copyright (c) 2026 ruoyi-ai\". The README headline is \"Enterprise-Grade AI Assistant Platform\", described as \"An out-of-the-box full-stack AI platform supporting multi-agent collaboration, Supervisor mode orchestration, and multiple decision models, with advanced RAG technology and visual workflow orchestration capabilities\". Its feature table lists \"Local RAG + Vector DB (Milvus/Weaviate/Qdrant) + Document parsing\", \"MCP protocol integration, Skills capability + Extensible tool ecosystem\", and an \"Agent framework based on Langchain4j, Supervisor mode orchestration, supports multiple decision models, can flexibly combine tools and skills\". The README splits the product across separate backend, user frontend, admin panel, drama, copilot, and mini-app repositories, and its demo table lists a \"Commercial Edition\" with WeChat login beside the open deployment. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: which repositories and which edition does one record cover, given that the pinned MIT licence covers only this backend repository while the README names a separate Commercial Edition?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ageerle/ruoyi-ai/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "00fcb99d17bf06a9ce9bd901cdb5cb2cb326fc4937ee13e458071f49cc2de233",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "6d6598ffd45efe7b66257c0144483afe59755b82",
+            "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/6d6598ffd45efe7b66257c0144483afe59755b82"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ageerle/ruoyi-ai/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "cc2627c76c644a445e08996d002572dd34b58cbaa866193ae08713d28f8024d9",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "a1cff71b9b52646997f808cb7ab466aeb2a6c538",
+            "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/a1cff71b9b52646997f808cb7ab466aeb2a6c538"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "agentclientprotocol/claude-agent-acp",
@@ -108,45 +189,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "AgentOps-AI/agentops",
-      "name": "agentops",
-      "url": "https://github.com/AgentOps-AI/agentops",
-      "description": "Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more. Integrates with most LLMs and agent frameworks including CrewAI, Agno, OpenAI Agents SDK, Langchain, Autogen, AG2, and CamelAI",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 5817,
-      "topics": [
-        "agent",
-        "agentops",
-        "agents-sdk",
-        "ai",
-        "anthropic",
-        "autogen",
-        "cost-estimation",
-        "crewai",
-        "evals",
-        "evaluation-metrics",
-        "groq",
-        "langchain",
-        "llm",
-        "mistral",
-        "ollama",
-        "openai",
-        "openai-agents"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "ADR 020 operational-boundary comparison",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Zed Industries, Inc. and contributors\". The README is titled \"ACP adapter for the Claude Agent SDK\" and says \"This tool implements an ACP agent by using the official\" Claude Agent SDK, supporting \"Tool calls (with permission requests)\", \"Nested subagent transcripts\", \"Interactive (and background) terminals\", and \"Client MCP servers\", plus opt-in goal, session-failure, and permission extensions. It is distributed as an npm package with a preview channel. The bundle reports no cross-collection hits, but by name the Atlas already publishes the Claude Agent SDK as a project record and the Agent Client Protocol as a specification; this repository is published by the protocol's organisation, not by the SDK's vendor. Boundary question: under ADR 020, does exposing the already-published SDK's agent loop to ACP clients, with its added extensions, change the operational boundary enough to earn a separate record, or is it an interface packaging of the Claude Agent SDK that folds into that record?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "6ed4f049cce59e05197d585bdf8a39980b45d546d6ea718ee344555f3a867c3a",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "c24b053560354d8261d5132edaa3d30b2d1cb1f3",
+            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/c24b053560354d8261d5132edaa3d30b2d1cb1f3"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "90be6e06919d7bf620d37afc6144319d7f9bed24e0719802da11ced8910fb492",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "2c9a69de918182900bdc59cf587d64a0a67475c0",
+            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/2c9a69de918182900bdc59cf587d64a0a67475c0"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "agentuniverse-ai/agentUniverse",
@@ -176,128 +246,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "ALucek/agentic-memory",
-      "name": "agentic-memory",
-      "url": "https://github.com/ALucek/agentic-memory",
-      "description": "Implementing cognitive architecture and psychological memory concepts into Agentic LLM Systems",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": null,
-      "stars": 551,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "AML-memory/agent-memory-leaderboard",
-      "name": "agent-memory-leaderboard",
-      "url": "https://github.com/AML-memory/agent-memory-leaderboard",
-      "description": "GitHub project awaiting editorial review.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": null,
-      "stars": 1141,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "askalf/dario",
-      "name": "dario",
-      "url": "https://github.com/askalf/dario",
-      "description": "Use your Claude and ChatGPT subscriptions in Cursor, Cline, Aider, Claude Code and the Agent SDK — at subscription pricing, not per-token API bills. One local Anthropic + OpenAI-compatible endpoint: either plan answers either wire shape, auto-failover when one hits its limit, multi-seat pooling, live Claude Code drift tracking.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 529,
-      "topics": [
-        "agent-sdk",
-        "ai-gateway",
-        "aider",
-        "anthropic",
-        "api-proxy",
-        "chatgpt",
-        "claude",
-        "claude-code",
-        "claude-code-proxy",
-        "claude-max",
-        "cline",
-        "codex",
-        "cursor",
-        "litellm",
-        "llm-proxy",
-        "llm-router",
-        "ollama",
-        "openai",
-        "openai-compat",
-        "openrouter"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "aws/bedrock-agentcore-sdk-python",
-      "name": "bedrock-agentcore-sdk-python",
-      "url": "https://github.com/aws/bedrock-agentcore-sdk-python",
-      "description": "Python SDK for transforming any AI agent into a production-ready application. Framework-agnostic primitives for runtime, memory, authentication, and tools with AWS-managed infrastructure.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "agent_memory_service",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 761,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "bird-bench/BIRD-Interact",
-      "name": "BIRD-Interact",
-      "url": "https://github.com/bird-bench/BIRD-Interact",
-      "description": "[ICLR 2026 Oral] BIRD-INTERACT: Re-imagines Text-to-SQL evaluation via lens of dynamic interactions.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.84,
-      "github_detected_license": "MIT",
-      "stars": 1011,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2024 Alipay\". The README states \"agentUniverse is a multi-agent framework based on large language models.\" and \"It provides flexible and easily extensible capabilities for building individual agents.\" It describes a PEER pattern that uses \"agents with different responsibilities—Plan, Execute, Express, and Review—to break down complex problems into manageable steps\", a DOE pattern, MCP server use and publishing, and OpenTelemetry-based observability. It installs with pip. Separately, \"agentUniverse provides a visual canvas platform for creating agentic workflow.\", installed as another package and \"jointly developed by\" difizen, and the README names a commercial assistant for financial professionals built on the framework. The bundle reports no cross-collection hits; its awesome-list class signal is not borne out, since the README is a framework README rather than a curated list. No same-product record was found by name. Boundary question: does the record cover only the pip-installed framework, leaving the jointly developed visual workflow platform and the commercial assistant outside its boundary?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "735ada74b12d398cdca9d3fe8e1a9e142e41c156334454d00d023df3f18178f7",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "078d1868c1cf8ba6f4be572fd95bf04ed752ac2c",
+            "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/078d1868c1cf8ba6f4be572fd95bf04ed752ac2c"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "cec937cc559ca2877aa49670a3f3a8398661a0f15f42fc568fe50ddd2ec123a0",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "5fff7f4e2bbab8306b1ca9c84999072031d6f3ae",
+            "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/5fff7f4e2bbab8306b1ca9c84999072031d6f3ae"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "browser-use/video-use",
@@ -317,7 +293,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is an \"MIT License\" with \"Copyright (c) 2026 Browser Use\". The README says the product lets you \"edit videos with Claude Code.\" and its install prompt tells the host agent to \"register the skill with whichever agent you're running under\", with a manual step to \"symlink into your agent's skills directory\". It is distributed as a skill executed by a host agent (Claude Code, Codex, Hermes, Openclaw), not as a runtime that resolves, installs, versions, or sandboxes packs itself. The bundle reports no cross-collection hits. Boundary question: whether a skill pack that a host agent runs is itself an operational system or a document collection executed by the host. BACKLOG.md reserves this under the item to settle the operational boundary for agent skill packs, whose discriminator is whether the candidate supervises the host or is run by it; here it is run by the host, so it waits on that undecided boundary.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/browser-use/video-use/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "5afa3d97bf1e6f998d587fa101e3fe0d0c416840b7fe77bcd6ae97690a334631",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "271d8e2807d0d79aee85a231f5c9dbb007902783",
+            "immutable_url": "https://api.github.com/repos/browser-use/video-use/git/blobs/271d8e2807d0d79aee85a231f5c9dbb007902783"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/browser-use/video-use/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "612bca23557cfc4501e80d3ce4babbe086dba77a70fa3a74ae5c0170393ece8f",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "0f7b264913faf30f4744162c0ae45edc99de424d",
+            "immutable_url": "https://api.github.com/repos/browser-use/video-use/git/blobs/0f7b264913faf30f4744162c0ae45edc99de424d"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage",
+        "held_by": "BACKLOG.md: settle the operational boundary for agent skill packs"
+      }
     },
     {
       "repo": "cdxiaodong/cain-agent",
@@ -352,7 +356,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\". The README says the product \"is an AI penetration-testing engineer built for\" authorized assessments, and that \"It walks a deterministic attack pipeline, enforces scope with engineering constraints\" across a recon-to-test-to-report state machine, 46 read-only security tools, separate finder and validator sessions, and a cloud module, emitting a report, an aggregated JSON, and a validation summary. It runs on a provider agent SDK; the README presents a standalone CLI rather than an SDK. The bundle reports no cross-collection hits. Boundary question: whether this vertical security-testing tool owns enough of the iterative tool-using loop to qualify, versus being classified by the SDK brand it is built on; CURATION says classify the operational product represented by the reviewed evidence, so the inclusion gate is what human review turns on.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/cdxiaodong/cain-agent/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "immutable_url": "https://api.github.com/repos/cdxiaodong/cain-agent/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/cdxiaodong/cain-agent/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "8abf804825eb003c9fad9dfefe87fc2d0a3e64f03d83c8662b9c028b1102d599",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "f2553feee032f42e7b6e2281c21d43753d11c57b",
+            "immutable_url": "https://api.github.com/repos/cdxiaodong/cain-agent/git/blobs/f2553feee032f42e7b6e2281c21d43753d11c57b"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "chaitanyagiri/munder-difflin",
@@ -391,75 +422,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "chirpz-ai/pandaprobe",
-      "name": "pandaprobe",
-      "url": "https://github.com/chirpz-ai/pandaprobe",
-      "description": "open source agent engineering platform: traces, evals, and metrics to debug and improve your AI agents. Integrates with LangGraph, CrewAI, Claude Agent SDK, and more. ",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 785,
-      "topics": [
-        "agent-engineering",
-        "agent-evaluation",
-        "agent-observability",
-        "agentic-ai",
-        "claude-agent-sdk",
-        "crewai",
-        "langgraph",
-        "monitoring",
-        "open-source",
-        "openai-agents-sdk",
-        "self-hosted",
-        "tracing"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "code-yeongyu/lazycodex",
-      "name": "lazycodex",
-      "url": "https://github.com/code-yeongyu/lazycodex",
-      "description": "The one and only agent harness for complex codebases. Project memory, planning, execution, and verified completion inside Codex.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.83,
-      "github_detected_license": "MIT",
-      "stars": 3441,
-      "topics": [
-        "ai",
-        "ai-agents",
-        "claude",
-        "claude-code",
-        "cli",
-        "codex",
-        "developer-tools",
-        "lazy",
-        "lazycodex",
-        "oh-my-openagent",
-        "omo",
-        "openai",
-        "orchestration",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is an \"MIT License\" with \"Copyright (c) 2026 Chaitanya Giri\" (the bundled pixel art is carved out under a separate LimeZu asset licence). The README says \"Munder Difflin is a desktop app that wraps\" real terminal-agent CLIs, wiring them into a coordinated hive with per-agent memory, mailboxes, a shared blackboard, an orchestrator that routes and escalates, per-agent git worktrees, budgets, and a circuit breaker. It supervises and runs other vendors' CLIs (Claude Code, Codex, Grok, Gemini and more) rather than being run by one. The bundle reports no cross-collection hits. Boundary question: whether a desktop harness that hosts and orchestrates other vendors' agent CLIs is one recordable operational system or reducible to the CLIs it wraps; published records that host other agents show this does not fail inclusion, so the inclusion gate is what review turns on.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/chaitanyagiri/munder-difflin/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "3fe5c1c9c922a77cd084e7671223589606b1f926c15e2751fc602b8dc6fc0181",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "69073fc3d4afe3a681f675e3543b534b608f37e3",
+            "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/69073fc3d4afe3a681f675e3543b534b608f37e3"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/chaitanyagiri/munder-difflin/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f2db4ebd0f287f8eaf10662dc0b16f7f88f7b84d3509636037f673b270e116ff",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "a717a50dbfb0172136e664b6284587d647111b72",
+            "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/a717a50dbfb0172136e664b6284587d647111b72"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "codefuse-ai/codefuse-chatbot",
@@ -491,7 +481,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "GitHub detected NOASSERTION, but a LICENSE.md was fetched: it opens \"Copyright [2023] [Ant Group]\" and \"Licensed under the Apache License, Version 2.0 (the \"License\");\", so licence evidence exists and the detector mismatch is a review trigger, not a missing licence. The README (Chinese) describes an \"开源AI智能助手\" that aims \"构建软件开发全生命周期的AI智能助手\", built with a multi-agent scheduling core, a DevOps toolkit, repository-level code analysis, RAG over docs and code, and a sandbox for executing code. The bundle reports no cross-collection hits. Boundary question: whether the recordable operational product is this end-to-end DevOps assistant or the underlying reusable muAgent framework it ships, and how to classify the mixed Ant Group Apache header; both are questions for human review under the inclusion gate rather than a policy question that blocks the record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/codefuse-ai/codefuse-chatbot/blob/main/LICENSE.md",
+            "kind": "git_blob",
+            "content_sha256": "a71eb3c5d7fd66b0d7bd07d8e61e639ce575975a1509c8f5982f7faa5233f2a4",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "43900fc133513a875c827414dcbcca61ddc0c63b",
+            "immutable_url": "https://api.github.com/repos/codefuse-ai/codefuse-chatbot/git/blobs/43900fc133513a875c827414dcbcca61ddc0c63b"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/codefuse-ai/codefuse-chatbot/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "c3bed35f9b22a61ebd85080057501fe4819b931ef5cbbed70488325f73253771",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "e47cc5e9096e064cee34b8c89ed8f775adb28c99",
+            "immutable_url": "https://api.github.com/repos/codefuse-ai/codefuse-chatbot/git/blobs/e47cc5e9096e064cee34b8c89ed8f775adb28c99"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "coleam00/claude-memory-compiler",
@@ -511,27 +528,26 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "coleam00/second-brain-starter",
-      "name": "second-brain-starter",
-      "url": "https://github.com/coleam00/second-brain-starter",
-      "description": "Build your own AI Second Brain with Claude Code - a skill that generates a personalized PRD for a proactive, persistent AI assistant",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.76,
-      "github_detected_license": null,
-      "stars": 773,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/CURATION.md inclusion gate condition 4",
+        "finding": "No LICENSE could be fetched: the bundle records an HTTP 404 for it, and the README makes no open-source licence claim, so no source model or licences list can be established and any licence status is unverified. The README titles the product \"LLM Personal Knowledge Base\" and claims \"Your AI conversations compile themselves into a searchable knowledge base.\", capturing Claude Code sessions through hooks and using a provider agent SDK to extract decisions and lessons into daily logs that compile into cross-referenced articles retrieved through an index file. The published claude-mem record is a comparable hook-based local memory tool, not the same product. The bundle reports no cross-collection hits. Boundary question: whether this hook-driven capture-and-compile tool is an operational memory product; it cannot proceed to review while inclusion-gate condition 4, authoritative licence or terms evidence, is unmet.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/coleam00/claude-memory-compiler/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "2a285afe73580399653f47adbab88d019c74d92200a56f7bc805b2a306c942e0",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "10268d15cbc4461968ad07e2e501a32fbd382aa8",
+            "immutable_url": "https://api.github.com/repos/coleam00/claude-memory-compiler/git/blobs/10268d15cbc4461968ad07e2e501a32fbd382aa8"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage",
+        "held_by": "missing licence evidence"
+      }
     },
     {
       "repo": "dataease/SQLBot",
@@ -560,73 +576,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "davepoon/buildwithclaude",
-      "name": "buildwithclaude",
-      "url": "https://github.com/davepoon/buildwithclaude",
-      "description": "A single hub to find Claude Skills, Agents, Commands, Hooks, Plugins, and Marketplace collections to extend Claude Code, Claude Desktop, Agent SDK and OpenClaw",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 3441,
-      "topics": [
-        "claude",
-        "claude-code",
-        "claude-code-commands",
-        "claude-skills",
-        "cli-tool",
-        "commands",
-        "mcp",
-        "mcp-server",
-        "mcp-tools",
-        "openclaw",
-        "plugin-marketplace",
-        "subagents"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "DEEP-PolyU/Awesome-LLM-based-Text2SQL",
-      "name": "Awesome-LLM-based-Text2SQL",
-      "url": "https://github.com/DEEP-PolyU/Awesome-LLM-based-Text2SQL",
-      "description": "[TKDE2025] Next-Generation Database Interfaces: A Survey of LLM-based Text-to-SQL | A curated list of resources (surveys, papers, benchmarks, and opensource projects) on large language model-based text-to-SQL.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 1.0,
-      "github_detected_license": "MIT",
-      "stars": 1367,
-      "topics": [
-        "awesome",
-        "awesome-text-to-sql",
-        "awesome-text2sql",
-        "database",
-        "large-language-models",
-        "llms",
-        "natual-language-processing",
-        "natural-language-understanding",
-        "nl2sql",
-        "survey",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is headed \"# Open Source License\" and states \"SQLBot is licensed under a modified version of the GNU General Public License version 3 (GPLv3), with the following additional conditions:\" including a logo/copyright-retention clause, signed \"© 2025 FIT2CLOUD, Inc.\"; GitHub reports NOASSERTION. The README (Chinese) describes a \"基于大语言模型和 RAG 的智能问数系统\" that lets users \"实现对话式数据分析（ChatBI）\", generating SQL and visual charts from natural language over configured data sources with workspace isolation, term libraries, calibrating SQL examples, and MCP/embedding integration, deployed via Docker. The bundle reports no cross-collection hits. Boundary question: whether this conversational text-to-SQL and data-analysis product demonstrates the required query planning or refinement, execution, result validation or repair, and an explanation surface; that is exactly what the inclusion gate and the data-analysis scope test put to human review.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/dataease/SQLBot/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "426022abd84da60b733aee2d5f5f2a99b2afab4333bd4ae65f9ad730dd0e52b4",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "042baf3dbf2e597df24aa8b48a0e2839910fd20d",
+            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/042baf3dbf2e597df24aa8b48a0e2839910fd20d"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/dataease/SQLBot/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "dd1cd2d887431e71531d9a681f660967e0acc74c7a25a989d58f7c2e329e7d7f",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "8d34fb9478a62250f8ee57719a857f3f49b76c43",
+            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/8d34fb9478a62250f8ee57719a857f3f49b76c43"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "disler/super-simple-software-factory",
@@ -731,37 +708,6 @@
       }
     },
     {
-      "repo": "eosphoros-ai/DB-GPT-Hub",
-      "name": "DB-GPT-Hub",
-      "url": "https://github.com/eosphoros-ai/DB-GPT-Hub",
-      "description": "A repository that contains models, datasets, and fine-tuning techniques for DB-GPT, with the purpose of enhancing model performance  in Text-to-SQL",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 1.0,
-      "github_detected_license": "MIT",
-      "stars": 2012,
-      "topics": [
-        "database",
-        "datasets",
-        "fine-tuning",
-        "gpt",
-        "hacktoberfest",
-        "llm",
-        "nl2sql",
-        "sql",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "FailproofAI/failproofai",
       "name": "failproofai",
       "url": "https://github.com/FailproofAI/failproofai",
@@ -800,7 +746,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/CURATION.md inclusion gate; ADR 020 reserves plugins, skill packs, and harness extensions to BACKLOG.md",
+        "finding": "GitHub reports NOASSERTION. The LICENSE text is the MIT License followed by the \"Commons Clause License Condition v1.0\", which withholds the right to sell the software (\"Licensor: ExosphereHost Inc\"). The README pitches \"Observability and enforcement for every harness your agents run in.\" It hooks twelve third-party harnesses, among them Claude Code, Codex, OpenCode, Pi, Goose, Hermes and OpenClaw, \"capturing every run and blocking dangerous\" tool calls through installable policy packs. A local dashboard reads \"the run history already on your machine\". A hosted product \"is the hosted side of the same data model\". A Python SDK for agents outside those harnesses \"which gives you tracing, sessions and audits\". The bundle reports no cross-collection hits. Several harnesses it hooks are published records, but none is the same product. Boundary question: is a policy-and-trace layer that supervises other harnesses from outside a harness extension, and so waiting on the pending skill-pack and add-on decision? Or is it an observability product that stays outside the scored catalog?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/FailproofAI/failproofai/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "784a1db64fd62514bc78d3501076722afc3235e1bceeea5d5024821216f49d79",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "9802e634beb5684a90c414bee005df26d96e50f9",
+            "immutable_url": "https://api.github.com/repos/FailproofAI/failproofai/git/blobs/9802e634beb5684a90c414bee005df26d96e50f9"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/FailproofAI/failproofai/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "03fd84239fe4eea79511efb2bb8854588bca0d0b37be28022c8bb2f9a0429d8f",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "63496d24db4924042629c8816823fc512aaccc8f",
+            "immutable_url": "https://api.github.com/repos/FailproofAI/failproofai/git/blobs/63496d24db4924042629c8816823fc512aaccc8f"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage",
+        "held_by": "BACKLOG.md: settle the operational boundary for agent skill packs"
+      }
     },
     {
       "repo": "fastclaw-ai/fastclaw",
@@ -826,7 +800,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "GitHub reports NOASSERTION. The LICENSE is the \"FastClaw Community License Agreement\", which states \"FastClaw is licensed under the FastClaw Community License, based on\" Apache 2.0 with added conditions. It requires a commercial licence to use the \"source code to operate a multi-tenant service where\" FastClaw is sold as a service to third parties. It bars removing frontend branding, and says \"ThinkAny, LLC may adjust the open-source agreement to be more\" strict or relaxed. The README calls the project \"A lightweight AI Agent runtime written in Go.\" and says \"it creates, manages, and runs AI agents\". It adds that \"FastClaw handles the LLM communication, tool execution, sandbox isolation, and session management.\" The README documents built-in exec, file and web tools, Docker or E2B sandboxes, per-agent memory files, Telegram, Discord and Slack channels, a cron scheduler, an admin dashboard and an OpenAI-compatible API. Its storage table assigns user accounts and billing to a downstream application, naming ChatClaw. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is the record the self-hosted runtime and dashboard alone, or also the downstream applications the README positions it as a backend for?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/fastclaw-ai/fastclaw/blob/dev/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "6cfb4b1890e2036691e4711e16405fa3d6309575c785c0bc84c29e4f81bfc1f0",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "f8f244d2339f937c35d04ea2ab4bc0d74d678be3",
+            "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/f8f244d2339f937c35d04ea2ab4bc0d74d678be3"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/fastclaw-ai/fastclaw/blob/dev/README.md",
+            "kind": "git_blob",
+            "content_sha256": "57c90badad59f87dd6f168ecd88eeb85da6b7264257e4cb1020dcefdd268e05b",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "da854be7f5c27d4eaff4be81fc7d6eee3a20facf",
+            "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/da854be7f5c27d4eaff4be81fc7d6eee3a20facf"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "feder-cr/AIHawk",
@@ -867,7 +868,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate; ADR 020 operational-boundary comparison",
+        "finding": "The LICENSE is the \"MIT License\" (\"Copyright (c) 2024-2026 AIHawk contributors\"). The README adds that everything \"distributed before 2 September 2026 was released under AGPL-3.0\" and stays under it. The README says \"AIHawk is an anti detect browser and web browsing agent, open source, with an MCP server for coding agents\". It offers two surfaces: an MCP server added to Claude Code, Codex or Gemini CLI, and a standalone web UI with \"Chat on the left, the live browser on the right.\" It says \"It drives the page the way a person would: the pointer moves, keys are pressed.\" It also says \"AIHawk runs on your machine and has no server of its own.\" Models come through the user's OpenRouter key. The README's featured-in links point to 2024 articles whose addresses refer to automated job applications, not to the browser agent described today. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is the current stealth browser agent and MCP server the same operational system that earned the repository's adoption signals? ADR 020 compares operational boundaries, not repositories.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/feder-cr/AIHawk/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "7bd49adceb91947129a3ad60d2131884b60775c54e47b3ef1740a110904a1d8b",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "9036d5efbfaf66e50d1a318d07d08a404aa64250",
+            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/9036d5efbfaf66e50d1a318d07d08a404aa64250"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/feder-cr/AIHawk/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "aa9f8d096fca7ead9de8c9aa655dc45e5c6caba4d9186b8d94552de67ae4c383",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "06ebccd1aa7938f09718353a96561c7ff40c0929",
+            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/06ebccd1aa7938f09718353a96561c7ff40c0929"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "FoundationAgents/MetaGPT",
@@ -893,7 +921,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is \"The MIT License\" (\"Copyright (c) 2024 Chenglin Wu\"). The README's tagline is \"Assign different roles to GPTs to form a collaborative entity for complex tasks.\" It says MetaGPT takes a one-line requirement and outputs user stories, requirements, designs and code, and that \"It provides the entire process of a\" software company through orchestrated SOPs: \"We materialize SOP and apply it to teams composed of LLMs.\" It installs from PyPI and runs from a CLI, where one example says \"this will create a repo in ./workspace\". It also works as a library, including a Data Interpreter role. The README's news section, last dated March 2025, announces a hosted product: \"Today we are officially launching our natural language programming product\" MGX. It also points to research code for papers under examples. The bundle reports no cross-collection hits, and no published record for MetaGPT or MGX was found. Boundary question: is the record the open-source framework and CLI alone, or also the hosted MGX product the README announces?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/FoundationAgents/MetaGPT/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "74945da6216c3f6498159a55cd25c0564acc684b791c169f869117a095808b00",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "00d36a832e74e0a131ed5e698896206cb3724323",
+            "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/00d36a832e74e0a131ed5e698896206cb3724323"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/FoundationAgents/MetaGPT/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "c3fc0ecd674161a7f5fe858d738ba5f02e2048d68190cefc45f5149f40daa962",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "080c02cd99015ca01f5db2c1063473fc22939bec",
+            "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/080c02cd99015ca01f5db2c1063473fc22939bec"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "GD4AI/obsidian-llm-wiki",
@@ -926,44 +981,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "Gentleman-Programming/gentle-ai",
-      "name": "gentle-ai",
-      "url": "https://github.com/Gentleman-Programming/gentle-ai",
-      "description": "Gentle-AI configures the AI coding agents you already use: Claude Code, Cursor, OpenCode, Codex, Pi, and more. Choose persistent memory, Spec-Driven Development, curated skills, MCP servers, personas, and optional bounded review. Open source, no agent lock-in.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.86,
-      "github_detected_license": "MIT",
-      "stars": 6719,
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "ai-coding",
-        "claude-code",
-        "code-review",
-        "codex",
-        "coding-agents",
-        "copilot",
-        "cursor",
-        "developer-tools",
-        "golang",
-        "llm",
-        "mcp",
-        "opencode",
-        "persistent-memory",
-        "spec-driven-development"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the Apache \"Version 2.0, January 2004\" text (\"Copyright 2025-2026 Greener-Dalii\"). The README describes \"An Obsidian plugin that turns your notes into a connected, queryable knowledge base\". It says \"the LLM extracts entities and concepts and generates an interlinked wiki with\" bidirectional links. Queries retrieve context through \"Personalized PageRank over your existing\" link graph rather than embeddings. It says \"The plugin modifies nothing in your original notes\" and writes only new pages under a wiki folder. It documents lint and repair commands, PDF and Office ingest, and more than sixteen model providers including local ones. Its retrieval benchmark is measured \"on the project's own benchmark corpus\". The README also names a sibling repository that ships a headless CLI running the same engine outside Obsidian. The bundle reports no cross-collection hits. Smart Second Brain, a different Obsidian plugin, is a published record, so plugin form alone does not block review. Boundary question: is the record the Obsidian plugin alone, or also the sibling headless CLI built on the same engine?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "b669d54594b161f62cb9f6d4f23ff74f8431d50ecd63b6d101913402087cb081",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6",
+            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "6e5ac46570729fa4ff7f9f0e4f5f4fed4009734abbed3ed8bd2bbbe266149787",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "33c0e99c23759f46efb91b2078cb094a5ee3e8cc",
+            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/33c0e99c23759f46efb91b2078cb094a5ee3e8cc"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "getnao/sylph",
@@ -1040,57 +1085,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "godot-pty/gpty",
-      "name": "gPTY",
-      "url": "https://github.com/godot-pty/gpty",
-      "description": "Godot and Rust terminal multiplexer with a tiling pane grid, regex capture of terminal output into adjacent panes, a passive agent-lifecycle observability pane, persisted scrollback and workspaces, and a JSON-RPC, CLI, and MCP control surface through which agents spawn panes, inject text, and read output.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.45,
-      "github_detected_license": "GPL-3.0",
-      "stars": 62,
-      "topics": [
-        "ade",
-        "ai-agents",
-        "godot",
-        "godot-engine",
-        "multiplexer",
-        "omp",
-        "pty",
-        "rust",
-        "terminal"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "google-antigravity/antigravity-cli",
-      "name": "antigravity-cli",
-      "url": "https://github.com/google-antigravity/antigravity-cli",
-      "description": "Antigravity CLI brings the reasoning, execution, and orchestration capabilities of Antigravity agent harness directly into your terminal.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "stateful_agent_runtime",
-      "classification_confidence": 0.83,
-      "github_detected_license": null,
-      "stars": 2267,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the Apache License, Version 2.0 (\"Copyright 2026 Ghostwright\"). The README calls Phantom \"An AI co-worker with its own computer.\" It says \"It is a co-worker that runs on Slack, has a web chat interface at\" a chat path, and that it has its own email address, persistent vector memory, runtime-created MCP tools and self-evolution: \"The agent rewrites its own config after every session, validated by LLM judges.\" It runs self-hosted through Docker Compose with Qdrant and Ollama. The README warns that this mounts the host Docker socket. A managed tier is also offered: \"Get a Phantom on a dedicated VM with nothing to install.\" Its showcase stories are vendor-reported (\"These are not mockups. They happened on production Phantom instances.\"). The repository description says it is built on the Claude Agent SDK, a separately published record with a different operational outcome, so this is not a duplicate of it. The bundle reports no cross-collection hits. Boundary question: is the record the self-hosted Apache-2.0 deployment alone, or also the managed Phantom that Ghostwright hosts?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ghostwright/phantom/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "39fa0b562e5d649c80253d11c6582616d3937489b888c425f15fcf0e7003fce3",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "96074f698816b4b073b365d2d56b83f3afddb70f",
+            "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/96074f698816b4b073b365d2d56b83f3afddb70f"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ghostwright/phantom/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "ddb3e448b948bb21abba36c42c07ff7de72c96c7f0b7e9a5134966b429489f77",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "3eacb3560e66fc64c7d91be8c34738d31cbab3ee",
+            "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/3eacb3560e66fc64c7d91be8c34738d31cbab3ee"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "google-deepmind/gemini-robotics-sdk",
@@ -1167,7 +1189,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with the notice \"Copyright 2026 Google LLC.\" The README adds \"This project includes source code developed by\" Minitap, Inc., linking minitap-ai/mobile-use. The README says ARTEMIS \"Executes testing workflows and everyday tasks on Android from natural language instructions.\" It documents a one-click start script, a web console, a CLI, a native MCP server for AI IDEs, and a Python client, plus two execution profiles; the Pro profile is described as a Planner, Operator, and read-only Checker with pre-execution checks and recovery from blocked actions. The README reports a 99%+ completion rate on Google Research's AndroidWorld benchmark; that is a result the maintainers report about their own system. The bundle reports no cross-collection hits, and no published record under this name was found. minitap-ai/mobile-use is itself a queued candidate, not a published record. Boundary question: under ADR 020, is ARTEMIS operationally distinct from the queued mobile-use candidate whose source code it includes, so that the two should be reviewed together rather than separately?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/google/artemis/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "4fde6a96f857a2b976714d620efc29ccb7209810a36992a5343bcfe0240b6826",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "ba262877bba9344e5e5b8ff5828ba2e7e2c8d963",
+            "immutable_url": "https://api.github.com/repos/google/artemis/git/blobs/ba262877bba9344e5e5b8ff5828ba2e7e2c8d963"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/google/artemis/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "48f6fa11dc93a02239e8ea1e7a2ba511fdd9059d0556ed166f69384c841c642a",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "d18836053c4b1b4c423970e2c4e57693419543f6",
+            "immutable_url": "https://api.github.com/repos/google/artemis/git/blobs/d18836053c4b1b4c423970e2c4e57693419543f6"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "gptme/gptme",
@@ -1204,7 +1253,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE carries the MIT permission notice with \"Copyright 2023 Erik Bjäreholt\", matching GitHub's MIT detection. The README calls gptme a personal AI agent for any terminal and says it is \"A great coding agent, but general-purpose enough to assist in all kinds of knowledge-work.\" It documents shell, Python, file-patching, browser, vision, computer-use, and subagent tools, and it says \"Output is fed back to the assistant, allowing it to respond and self-correct.\" It also documents a non-interactive CI mode, MCP in both directions, and ACP editor integration. The same README describes several surfaces around the CLI: a self-hostable server and web UI, a desktop app, a template for persistent autonomous agents, and gptme.ai, a \"managed cloud service for running gptme agents\" in early access. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: does one record cover the terminal agent together with its server, web UI, desktop app, and the early-access managed service, or only the self-hosted CLI? BACKLOG.md leaves the same question open for Codex.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/gptme/gptme/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "57efff501c55fb6466314bab6b07318d27d99d5f5ab0fe4d39a689631cb0c2ac",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "4b8507e51d1a4906711b3f94a01a95f663e1b00a",
+            "immutable_url": "https://api.github.com/repos/gptme/gptme/git/blobs/4b8507e51d1a4906711b3f94a01a95f663e1b00a"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/gptme/gptme/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "6ef170cdfd72781af942955c730492d0f998580efe1a5800f8a8d8746d1036ef",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "175e405d6c9c5e0310862c0b52d2650b8f120dcc",
+            "immutable_url": "https://api.github.com/repos/gptme/gptme/git/blobs/175e405d6c9c5e0310862c0b52d2650b8f120dcc"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "guy-hartstein/company-research-agent",
@@ -1240,7 +1316,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate; Scope boundaries vertical-agent clause",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Guy Hartstein\", matching GitHub's Apache-2.0 detection. The README contradicts it: \"This project is licensed under the MIT License\". A reviewer needs to settle which terms govern. The README describes \"A multi-agent tool that generates comprehensive company research reports.\" and says \"The platform follows an agentic framework with specialized nodes that process data sequentially:\". Those nodes are four research analyzers, a collector, a curator that filters by Tavily relevance score, and briefing and editor steps backed by Gemini and GPT models. It runs as a FastAPI backend with a React frontend, it can be deployed with Docker, and the README links a hosted instance on a tavily.com subdomain. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: does a fixed sequential pipeline of research and processing nodes satisfy the vertical-agent requirement of an iterative, tool-using workflow with domain-specific failure and recovery behaviour, or is it a report generator that does not reach that bar?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "0db3f5d0676b2d86b5c81d6131c4e9fe5b73b27c715bdfa46c1d4814cee8e948",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "563b12b8bf555029764207b6e5978c52ba3aecce",
+            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/563b12b8bf555029764207b6e5978c52ba3aecce"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "5d8a37352d2f9cb1c8f26645458618c58a9b1d9ea56d541784fd9c6eff8bd5de",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "bbd90404d6694283445f04133d6fba0a58f80c91",
+            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/bbd90404d6694283445f04133d6fba0a58f80c91"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "HKUDS/DeepCode",
@@ -1264,7 +1367,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"MIT License\" with \"Copyright (c) 2025 ✨Data Intelligence Lab@HKU✨\", matching GitHub's MIT detection. The README says \"DeepCode is an open-source Coding Agent for real software engineering.\" and \"DeepCode provides TUI, Desktop, and Web clients over one shared local service.\" It documents the deepcode-hku package, desktop releases, durable sessions, goal-driven loops that verify and repair, project trust, allow, ask, and deny permissions, a command sandbox, isolated worktrees for parallel agents, scheduled automations, and MCP and Skills support. It also presents Paper2Code, the project's original research workflow, as a specialized workflow inside the same product, and cites PaperBench scores with the note \"These are PaperBench-specific results reported by the original study.\" The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: are the v2 coding product and the Paper2Code reproduction workflow one operational boundary, as the README's shared local service claims, with the paper-derived benchmark figures treated as the maintainers' own claim rather than as product evidence?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/HKUDS/DeepCode/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "68c9fc511bb10d1488522aa139d1e91289b76ab998fc8ca815e93a85c4ea4850",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "b3ba37ce442298d5bdec96e2e52a8a812a25f123",
+            "immutable_url": "https://api.github.com/repos/HKUDS/DeepCode/git/blobs/b3ba37ce442298d5bdec96e2e52a8a812a25f123"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/HKUDS/DeepCode/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "a1444d71c72928adf0bf410cf3fc61df2640ac36135a36eb7d7b156ddc672e10",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "aaaa4a858f651470a6d29175c886bfe4b04c9ae1",
+            "immutable_url": "https://api.github.com/repos/HKUDS/DeepCode/git/blobs/aaaa4a858f651470a6d29175c886bfe4b04c9ae1"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "HKUDS/OpenHarness",
@@ -1284,43 +1414,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
-    },
-    {
-      "repo": "HKUSTDial/NL2SQL_Handbook",
-      "name": "NL2SQL_Handbook",
-      "url": "https://github.com/HKUSTDial/NL2SQL_Handbook",
-      "description": "This is a continuously updated handbook for readers to easily track the latest Text-to-SQL techniques in the literature and provide practical guidance for researchers and practitioners. ",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 1.0,
-      "github_detected_license": null,
-      "stars": 1592,
-      "topics": [
-        "ai4db",
-        "awesome",
-        "awesome-agents",
-        "awesome-nl2sql",
-        "awesome-text-to-sql",
-        "awesome-text2sql",
-        "db",
-        "llms",
-        "nl-to-code",
-        "nl-to-sql",
-        "nl2sql",
-        "nlp",
-        "text-to-code",
-        "text-to-sql",
-        "text2sql"
       ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The LICENSE is the \"MIT License\" with \"Copyright (c) 2025 OpenHarness Contributors\", matching GitHub's MIT detection. The README says OpenHarness \"delivers core lightweight agent infrastructure: tool-use, skills, memory, and multi-agent coordination.\" It documents the oh CLI and React TUI, the openharness-ai package, 43 tools, permission modes, hooks, MCP, subagent spawning, and plugins compatible with Claude Code. The same repository packages a second product: ohmo \"is a personal AI agent built on OpenHarness — not another chatbot, but an assistant that actually works for you over long sessions.\" ohmo is reached through Feishu, Slack, Telegram, and Discord, and the README says \"ohmo runs on your existing Claude Code or Codex subscription — no extra API key needed.\" The README also frames OpenHarness as a community-driven research project for researchers and builders. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: are the oh harness and the ohmo personal agent shipped beside it one operational boundary, or two products with different interfaces and outcomes that need separate records?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/HKUDS/OpenHarness/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "dcb4464b75fbeec7fe5e9b13eeadf37a1e813ded33392c6303f091c37da6fa20",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "06c5e27f80b8f078957cfe35bb0e970acd39beed",
+            "immutable_url": "https://api.github.com/repos/HKUDS/OpenHarness/git/blobs/06c5e27f80b8f078957cfe35bb0e970acd39beed"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/HKUDS/OpenHarness/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "cf31a93fee69c031a23637551234c9e4e52d0eca95a3776b22cddf8b3dd29eea",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "c99de34235be4b9077a38c12beae225755c59127",
+            "immutable_url": "https://api.github.com/repos/HKUDS/OpenHarness/git/blobs/c99de34235be4b9077a38c12beae225755c59127"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "holaboss-ai/holaOS",
@@ -1361,7 +1482,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "GitHub reports NOASSERTION. The LICENSE is a \"Modified Apache 2.0 License\": Apache 2.0 plus conditions, under which \"Should the conditions below be met, a commercial license must be obtained\". It restricts hosted or embedded commercial service, forbids removing the logo from the frontend, and lets the producer change the agreement. Dify's modified Apache licence is an existing precedent for recording terms like these. The README describes a local-first desktop workspace where apps, chat tools, integrations, MCP servers, skills, and a shared file-based memory sit beside the agent, and it says \"Claude Code, Codex, and the built-in holaOS agent — side by side, no switching.\" It also offers built-in models under an account, \"One account, every model — no keys, no setup, no switching between providers.\", as well as bring-your-own keys and an enterprise tier. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: does holaOS's own built-in agent carry reviewable planning and tool use, apart from its hosting of Claude Code and Codex (the T3 Code exclusion turned on exactly that), given that BACKLOG.md's open item on hosting other vendors' agents did not block Warp or Devin Desktop?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/holaboss-ai/holaOS/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "27615f0ca701c3f830cb3e85ef385c3a82a0cc130bb1ce0d90946e1807d39664",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "ffc48d2aacf0a6cecdf2d995498f467c9ba9e91a",
+            "immutable_url": "https://api.github.com/repos/holaboss-ai/holaOS/git/blobs/ffc48d2aacf0a6cecdf2d995498f467c9ba9e91a"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/holaboss-ai/holaOS/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "aa3cae9963d3733354d7b92b5ebdea7566ee5ff4587f191ec63e7ede261f188d",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "14cdada0a505eb1d6c05af669eb6e37524838121",
+            "immutable_url": "https://api.github.com/repos/holaboss-ai/holaOS/git/blobs/14cdada0a505eb1d6c05af669eb6e37524838121"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": null,
@@ -2122,7 +2270,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "out_of_scope",
+        "rule": "Bare models, prompt templates, benchmarks, and datasets remain research inputs rather than operational agent systems.",
+        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text, with the appendix notice left as the unfilled template \"Copyright [yyyy] [name of copyright owner]\". The README describes a framework for developing, orchestrating, and evaluating industrial asset-operations agents and says \"It provides reproducible scenarios, agent tooling, and evaluation pipelines for multi-step workflows in simulated industrial environments.\" It lists five domain MCP servers, reference agent runners for plan-execute, deep-agent, Claude, and OpenAI setups, a Hugging Face dataset, leaderboards scored by an LLM judge, and public agent competitions. The paper was accepted to the KDD 2026 Datasets and Benchmarks track. The quick-start scenario command is annotated \"Try a scenario (to be enabled)\", and earlier publication code is maintained on separate branches. The bundle's class signal is 'benchmark'. The bundle reports no cross-collection hits. Boundary question: are its MCP servers and plan-execute runner a maintained operational product for real asset operations, or the evaluation scaffolding of a benchmark whose scenarios run against simulated environments, which the scope boundaries treat as a research input?",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/IBM/AssetOpsBench/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/IBM/AssetOpsBench/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/IBM/AssetOpsBench/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "178087092c0d88c3c61e96be73cc2e7ef2a7ce709ae3419c76c5cde4da4a5789",
+            "fetched_at": "2026-09-15",
+            "blob_sha": "a3b51e7fc925c8df2a40cb92507907e0c94ed499",
+            "immutable_url": "https://api.github.com/repos/IBM/AssetOpsBench/git/blobs/a3b51e7fc925c8df2a40cb92507907e0c94ed499"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "InternLM/MindSearch",
