@@ -2467,8 +2467,8 @@
       },
       "terms": {
         "kind": "web_terms",
-        "label": "Microsoft Product Terms for Azure",
-        "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/all",
+        "label": "Microsoft Product Terms for Azure (EA/EAS)",
+        "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS",
         "verified_at": "2026-09-15"
       },
       "evidence": [

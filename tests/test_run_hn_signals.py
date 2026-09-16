@@ -989,6 +989,180 @@ class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
         self.assertNotIn(["git", "add"], [call[:2] for call in calls])
 
 
+class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
+    """A page that changed between `prepare` and `finish` costs only the assessment citing
+    it. `finish` drops that block in its own process before any guard reads the queue and
+    commits the rest; a page it cannot fetch still aborts the run, and nothing a CHECKS
+    command prints can choose what is dropped."""
+
+    BASE_SHA: ClassVar[str] = "c" * 40
+
+    @staticmethod
+    def page(name: str) -> str:
+        return f"<html><body><p>{name} launch page</p></body></html>"
+
+    def signal(self, story_id: str, **overrides) -> dict:
+        from scripts import verify_signal_pages
+
+        text = verify_signal_pages.extract_visible_text(self.page(story_id))
+        signal = {
+            "story_id": story_id, "story_url": f"https://news.ycombinator.com/item?id={story_id}",
+            "title": "t", "url": f"https://vendor.example/{story_id}", "points": 10,
+            "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable", "content_sha256": verify_signal_pages.content_hash(text),
+            "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
+            "discovered_at": "2026-09-09",
+        }
+        signal.update(overrides)
+        return signal
+
+    @staticmethod
+    def queue(signals: list[dict]) -> str:
+        return json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": signals})
+
+    def fetcher(self, fetched: list[str], *, drifted: frozenset[str] = frozenset()):
+        def fetch(url: str) -> str:
+            fetched.append(url)
+            story_id = url.rsplit("/", 1)[1]
+            return self.page(story_id + (" edited" if story_id in drifted else ""))
+        return fetch
+
+    def run_finish(self, base: str, run_queue: str, fetch, *, head: str = "1111",
+                   recheck: tuple[int, str] = (0, "")):
+        state = {"queue": run_queue, "writes": 0, "writes_before_recheck": None}
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
+            if command[:3] == ["git", "status", "--porcelain"]:
+                return 0, (" M directory/hn-signals.json\n" if state["queue"] != base else "")
+            if command[:2] == ["git", "rev-parse"]:
+                return 0, (head if command[2] == "HEAD" else self.BASE_SHA) + "\n"
+            if command[:2] == ["git", "show"]:
+                return 0, base
+            if command[:2] == ["git", "diff"]:
+                return 0, "" if head == self.BASE_SHA else run_hn_signals.QUEUE
+            if "--recheck" in command:
+                state["writes_before_recheck"] = state["writes"]
+                return recheck
+            return 0, ""  # every other CHECKS command, stubbed to succeed
+
+        def fake_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.QUEUE, path)
+            return state["queue"]
+
+        def fake_write(path: str, text: str) -> None:
+            self.assertEqual(run_hn_signals.QUEUE, path)
+            state["queue"] = text
+            state["writes"] += 1
+
+        def fake_base_read(path: str) -> str:
+            self.assertEqual(run_hn_signals.BASE_REF, path)
+            return json.dumps({"sha": self.BASE_SHA, "from_ref": "local-sweep-branch"})
+
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.finish(
+                run=fake_run, read=fake_read, base_read=fake_base_read,
+                write=fake_write, fetcher=fetch,
+            )
+        return code, state, calls, stdout.getvalue(), stderr.getvalue()
+
+    @staticmethod
+    def commits(calls: list[list[str]]) -> list[list[str]]:
+        return [call for call in calls if call[:2] == ["git", "commit"]]
+
+    def test_a_drifted_page_drops_only_its_own_assessment_and_the_rest_commits(self) -> None:
+        base = self.queue([self.signal("1"), self.signal("2")])
+        run_queue = self.queue([
+            self.signal("1", assessment={"verdict": "worth_review"}),
+            self.signal("2", assessment={"verdict": "out_of_scope"}),
+        ])
+        code, state, calls, _, stderr = self.run_finish(
+            base, run_queue, self.fetcher([], drifted=frozenset({"2"}))
+        )
+        self.assertEqual(0, code, stderr)
+        signals = json.loads(state["queue"])["signals"]
+        self.assertIn("assessment", signals[0])
+        self.assertNotIn("assessment", signals[1])
+        self.assertIn("dropped 1 assessment(s)", stderr)
+        # CHECKS, including the strict recheck, saw the dropped queue, not the original.
+        self.assertEqual(1, state["writes_before_recheck"])
+        [commit] = self.commits(calls)
+        self.assertIn("Dropped assessments whose page changed since the sweep: 2", commit[-1])
+
+    def test_a_page_that_cannot_be_fetched_aborts_instead_of_dropping(self) -> None:
+        base = self.queue([self.signal("1")])
+        run_queue = self.queue([self.signal("1", assessment={"verdict": "worth_review"})])
+
+        def unreachable(_url: str) -> str:
+            raise OSError("timed out")
+
+        code, state, calls, _, stderr = self.run_finish(base, run_queue, unreachable)
+        self.assertEqual(1, code)
+        self.assertIn("re-fetch failed", stderr)
+        self.assertEqual(0, state["writes"])
+        self.assertEqual(run_queue, state["queue"])
+        self.assertEqual([], self.commits(calls))
+
+    def test_checks_output_cannot_choose_what_is_dropped(self) -> None:
+        """Every page verifies in `finish`'s own fetch, but the worktree's recheck claims
+        drift. That claim can only fail the run; it must never remove an assessment."""
+        base = self.queue([self.signal("1"), self.signal("2")])
+        run_queue = self.queue([
+            self.signal("1", assessment={"verdict": "worth_review"}),
+            self.signal("2", assessment={"verdict": "out_of_scope"}),
+        ])
+        code, state, calls, _, _ = self.run_finish(
+            base, run_queue, self.fetcher([]),
+            recheck=(1, "error: signal 2: page changed since the sweep recorded it"),
+        )
+        self.assertEqual(1, code)
+        self.assertEqual(0, state["writes"])
+        self.assertEqual(run_queue, state["queue"])
+        self.assertEqual([], self.commits(calls))
+
+    def test_an_assessment_already_on_the_base_is_never_refetched_or_dropped(self) -> None:
+        held = {"verdict": "out_of_scope", "proposer": "human"}
+        base = self.queue([self.signal("1", assessment=dict(held)), self.signal("2")])
+        run_queue = self.queue([
+            self.signal("1", assessment=dict(held)),
+            self.signal("2", assessment={"verdict": "worth_review"}),
+        ])
+        fetched: list[str] = []
+        code, state, _, _, stderr = self.run_finish(
+            base, run_queue, self.fetcher(fetched, drifted=frozenset({"1"}))
+        )
+        self.assertEqual(0, code, stderr)
+        self.assertEqual(["https://vendor.example/2"], fetched)
+        self.assertEqual(0, state["writes"])
+
+    def test_the_base_url_is_fetched_never_the_runs_copy(self) -> None:
+        """The drop runs before the field guard, so a url the run rewrote must not reach
+        the fetcher; the field guard then rejects the rewrite."""
+        base = self.queue([self.signal("1")])
+        run_queue = self.queue([self.signal(
+            "1", url="https://attacker.example/1", assessment={"verdict": "worth_review"},
+        )])
+        fetched: list[str] = []
+        code, _, calls, _, stderr = self.run_finish(base, run_queue, self.fetcher(fetched))
+        self.assertEqual(["https://vendor.example/1"], fetched)
+        self.assertEqual(1, code)
+        self.assertIn("'url'", stderr)
+        self.assertEqual([], self.commits(calls))
+
+    def test_dropping_every_new_assessment_leaves_nothing_to_commit(self) -> None:
+        base = self.queue([self.signal("1")])
+        run_queue = self.queue([self.signal("1", assessment={"verdict": "worth_review"})])
+        code, state, calls, stdout, stderr = self.run_finish(
+            base, run_queue, self.fetcher([], drifted=frozenset({"1"})), head=self.BASE_SHA
+        )
+        self.assertEqual(0, code, stderr)
+        self.assertEqual(base, state["queue"])
+        self.assertIn("no signal assessments to commit", stdout)
+        self.assertEqual([], self.commits(calls))
+
+
 class CLIFromRefWiringTests(unittest.TestCase):
     def test_main_passes_from_ref_through_to_prepare(self) -> None:
         with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:

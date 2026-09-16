@@ -11,14 +11,16 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 try:
-    from . import routine_guards
+    from . import routine_guards, verify_signal_pages
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     import routine_guards
+    import verify_signal_pages
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -152,6 +154,74 @@ def root_text(path: str) -> str:
     never wrote.
     """
     return routine_guards.worktree_text(path, ROOT)
+
+
+def worktree_write(path: str, text: str) -> None:
+    """Write a file into the run's worktree, refusing to follow a symlink out of it."""
+    target = WORKTREE / path
+    if target.is_symlink():
+        raise OSError(f"{path} is a symlink; refusing to write through it")
+    target.write_text(text, encoding="utf-8")
+
+
+def drop_drifted_assessments(
+    before: str, after: str, fetcher: Callable[[str], str]
+) -> tuple[list[str], list[str], str]:
+    """Remove this run's assessments whose cited page no longer hashes to its pin.
+
+    Returns the dropped story ids, any re-fetch failures, and the queue text to carry
+    forward. Only an assessment the base queue lacked is in scope, so a block a human may
+    already have read is never touched, and only a digest mismatch drops one: a page that
+    cannot be fetched at all proves nothing about its content, so that is a failure that
+    aborts the run rather than silently deleting work. The url fetched and the digest
+    compared come from the base queue, never the run's copy, because this runs before the
+    field guard has confirmed the run left both untouched. A queue either side cannot
+    parse is returned unchanged for the field guard to report.
+    """
+    try:
+        base_document = json.loads(before)
+        run_document = json.loads(after)
+    except json.JSONDecodeError:
+        return [], [], after
+    if not isinstance(base_document, dict) or not isinstance(run_document, dict):
+        return [], [], after
+    base, base_problems = index_signals(base_document.get("signals"), "base")
+    current, run_problems = index_signals(run_document.get("signals"), "run")
+    if base_problems or run_problems:
+        return [], [], after
+    dropped: list[str] = []
+    problems: list[str] = []
+    for key in sorted(current):
+        pinned = base.get(key)
+        if pinned is None or "assessment" in pinned:
+            continue
+        if not isinstance(current[key].get("assessment"), dict):
+            continue
+        if pinned.get("page_status") != "readable":
+            continue
+        url = pinned.get("url")
+        if not isinstance(url, str):
+            problems.append(f"signal {key}: the base queue records no url to re-fetch")
+            continue
+        try:
+            body = fetcher(url)
+        except (OSError, ValueError) as error:
+            problems.append(f"signal {key}: re-fetch failed: {error}")
+            continue
+        # The same extraction and hash the sweep pinned and `--recheck` compares, taken
+        # from verify_signal_pages so the two can never disagree about what drifted.
+        text = verify_signal_pages.extract_visible_text(body)
+        if verify_signal_pages.content_hash(text) != pinned.get("content_sha256"):
+            dropped.append(key)
+    if problems:
+        return [], problems, after
+    if not dropped:
+        return [], [], after
+    for key in dropped:
+        del current[key]["assessment"]
+    if run_document == base_document:
+        return dropped, [], before
+    return dropped, [], json.dumps(run_document, indent=2) + "\n"
 
 
 shell = routine_guards.shell
@@ -314,7 +384,9 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
     # one page drifted, and propagating that discarded every other page in the run — a
     # single vendor edit costing the whole day. The drifted page is already absent from
     # the bundle, so the routine cannot read it; that is the whole remedy needed here.
-    # `finish --recheck` stays strict: nothing is committed while a pin is unverified.
+    # `finish` keeps pins strict without discarding a day either: it drops only the
+    # assessments whose page drifted and commits the rest, so nothing is committed while
+    # a pin is unverified.
     if code != 0 and not bundled:
         print(
             "error: no signal page verified against its recorded digest; nothing to assess",
@@ -351,7 +423,10 @@ def prepared_base_ref(read=root_text) -> str:
     return routine_guards.prepared_base_ref(BASE_REF, read, DEFAULT_FROM_REF)
 
 
-def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
+def finish(
+    *, run=shell, read=worktree_text, base_read=root_text, write=worktree_write,
+    fetcher=verify_signal_pages.fetch_web_text,
+) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
     # Checked before any guard below reads a diff or a blob: a populated refs/replace
     # would let those reads be silently redirected. See routine_guards.replace_refs_problem.
@@ -412,6 +487,40 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
     except OSError as exc:
         print(f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr)
         return 1
+    # Before any guard judges the queue: a page that changed since the sweep pinned it
+    # can no longer back the assessment citing it, so that one assessment is dropped here
+    # and every other verified one still commits. Decided in this process from the base
+    # queue's url and digest, never from CHECKS output or the run's own copy; the field
+    # guard, CHECKS, and the re-read before `git add` all run on the result. See "Review a
+    # signal batch" in docs/OPERATIONS.md.
+    dropped, fetch_problems, after = drop_drifted_assessments(before, after, fetcher)
+    if fetch_problems:
+        for problem in fetch_problems:
+            print(f"error: {problem}", file=sys.stderr)
+        return 1
+    if dropped:
+        print(
+            f"warning: dropped {len(dropped)} assessment(s) whose page changed since the "
+            f"sweep: {dropped}",
+            file=sys.stderr,
+        )
+        try:
+            write(QUEUE, after)
+        except OSError as exc:
+            print(f"error: could not write {QUEUE} to the worktree: {exc}", file=sys.stderr)
+            return 1
+        status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
+        if status_code != 0:
+            print("error: could not read git status", file=sys.stderr)
+            return 1
+        forbidden = unexpected_changes(porcelain)
+        if forbidden:
+            print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
+            return 1
+        dirty = bool(porcelain.strip())
+        if not dirty and head.strip() == base.strip():
+            print("no signal assessments to commit")
+            return 0
     overreach = unexpected_field_changes(before, after, base_label=base_ref)
     if overreach:
         print("error: the run wrote outside the fields it may write:", file=sys.stderr)
@@ -441,12 +550,17 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
                 file=sys.stderr,
             )
             return 1
+    message = f"Propose signal review for {date.today().isoformat()}"
+    if dropped:
+        message += (
+            "\n\nDropped assessments whose page changed since the sweep: " + ", ".join(dropped)
+        )
     commands = [["git", "checkout", "-B", "hn-signals/pending"]]
     if dirty:
         commands = [
             ["git", "add", QUEUE],
             ["git", "checkout", "-B", "hn-signals/pending"],
-            ["git", "commit", "-m", f"Propose signal review for {date.today().isoformat()}"],
+            ["git", "commit", "-m", message],
         ]
     for command in commands:
         code, output = run(command, WORKTREE)
