@@ -170,6 +170,12 @@
       "useful_lesson": "This is what it looks like when licences genuinely do not decide inclusion. The most permissive record in a cluster and the most restricted one are excluded by the same sentence of the same rule, and a reader can check that the Atlas applies ADR 007 symmetrically rather than only when the restrictive answer is convenient."
     },
     {
+      "name": "Build with Claude",
+      "repo": "davepoon/buildwithclaude",
+      "reason": "MIT licensed (\"Copyright (c) 2025 davepoon\"). The README describes \"A plugin marketplace and discovery platform for\" Claude Code, where a reader can \"Browse curated plugins, discover community contributions, and extend your Claude Code workflows.\" What the repository maintains is a catalog of agent, command, hook, and skill definitions written as Markdown with frontmatter, installed through Claude Code's own marketplace or by copying the files into its directories, and its web surface indexes other people's plugins and marketplaces besides. Claude Code runs everything here. Under ADR 031 the repository owns no state it reads back and does no enforced work, which is the disposition already recorded for the agent-toolkit and claude-code-tresor catalogs.",
+      "useful_lesson": "A marketplace is a directory of systems rather than one of them. The entries it lists are each reviewable on their own evidence, and indexing them adds no operational boundary of its own."
+    },
+    {
       "name": "Bullet",
       "repo": "bulletphysics/bullet3",
       "reason": "Bullet is a general-purpose real-time collision-detection and multi-physics simulation SDK used across games, visual effects, robotics, and machine learning, most commonly accessed through the PyBullet Python bindings; its README documents no model, language-driven decision loop, or conversational component, only physics simulation demos and an example browser. Inclusion-gate condition 2 in docs/CURATION.md fails because a general physics-simulation library is not materially relevant to any family in directory/taxonomy.json, for the same reason MuJoCo fails it. No dedicated serving product built on Bullet was reviewed separately, unlike MuJoCo's more extensive first-party binding ecosystem; PyBullet remains a language binding onto the same engine rather than a distinct serving product.",
@@ -468,6 +474,12 @@
       "repo": "decodingai-magazine/second-brain-ai-assistant-course",
       "reason": "The repository is the code companion to a six-module open course, and the course rather than the assistant is the product: the readme opens by naming it a course, its module table marks the first module as having no code, its lessons live off the repository on the publisher's site, and its header credits several tool vendors as collaborators. The code is real but ungated. Its three tests only check that datasets download, its continuous integration runs two jobs and both are formatting and linting with no test step, it has published no release, and its last code change predates this review by more than a year while the only newer commit edits the readme. The curation rules keep templates and teaching material as research inputs rather than operational systems.",
       "useful_lesson": "A course ships the same directory listing as a product: pipelines, applications, a compose file, a lint workflow. Read the continuous integration for a test step, and the readme for a module table."
+    },
+    {
+      "name": "Second Brain Starter",
+      "repo": "coleam00/second-brain-starter",
+      "reason": "No licence is served at any usual path — LICENSE, LICENSE.md, and LICENSE.txt all return 404 — and the README claims none, so no source model could be established. The repository ships one skill document, six Markdown memory templates, an architecture reference, and two images; it contains no code. Its README says it is \"A skill for Claude Code that generates a personalized Product Requirements Document (PRD) for building your own AI second brain\", so what a reader adopts is a blueprint the host agent writes from a filled-in template. Under ADR 031 it owns no state it reads back and does no enforced work.",
+      "useful_lesson": "A pack whose output is a plan for a system is not that system. Seed templates become someone's memory only once they build the thing the plan describes, and the repository never reads them again."
     },
     {
       "name": "Second-Brain",
