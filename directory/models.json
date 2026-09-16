@@ -3084,6 +3084,582 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-cohere-command-r-08-2024",
+      "source_id": "cohere/command-r-08-2024",
+      "name": "Command R",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/c4ai-command-r-08-2024",
+      "description": "Cohere's 32-billion-parameter Command R refresh for retrieval-augmented generation and tool use, published as gated weights under CC-BY-NC-4.0 with a hosted Cohere API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command R",
+        "description": "Cohere retrieval model for long-context chat and enterprise RAG workflows",
+        "family": "command-r",
+        "release_date": "2024-08-30",
+        "last_updated": "2024-08-30",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-r-08-2024"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs c4ai-command-r-08-2024 weights, tokenizer, and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/c4ai-command-r-08-2024 weight release of August 2024, together with the hosted command-r-08-2024 API model. Earlier Command R snapshots, the R+ and R7B lines, Cohere's hosted API platform and cloud-marketplace copies, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms, with tokenizer and chat templates",
+        "Cohere's own docs list command-r-08-2024 as a Live API model with a 128K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact snapshot; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/c4ai-command-r-08-2024",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere model documentation listing command-r-08-2024",
+          "url": "https://docs.cohere.com/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-r-08-2024.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-r-plus-08-2024",
+      "source_id": "cohere/command-r-plus-08-2024",
+      "name": "Command R+",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024",
+      "description": "Cohere's 104-billion-parameter Command R+ refresh for demanding retrieval and tool workflows, published as gated weights under CC-BY-NC-4.0 with a hosted Cohere API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command R+",
+        "description": "Cohere's RAG workhorse for long-context enterprise search and tool use",
+        "family": "command-r",
+        "release_date": "2024-08-30",
+        "last_updated": "2024-08-30",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs c4ai-command-r-plus-08-2024 weights, tokenizer, and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/c4ai-command-r-plus-08-2024 weight release of August 2024, together with the hosted command-r-plus-08-2024 API model. Earlier Command R+ snapshots, the R and R7B lines, Cohere's hosted API platform and cloud-marketplace copies, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 104B weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's own docs list command-r-plus-08-2024 as a Live API model with a 128K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact snapshot; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere model documentation listing command-r-plus-08-2024",
+          "url": "https://docs.cohere.com/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-r-plus-08-2024.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-r7b-12-2024",
+      "source_id": "cohere/command-r7b-12-2024",
+      "name": "Command R7B",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024",
+      "description": "Cohere's 7-billion-parameter small fast Command refresh, published as gated weights under CC-BY-NC-4.0 with a hosted Cohere API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command R7B",
+        "description": "Cohere retrieval model for long-context chat and enterprise RAG workflows",
+        "family": "command-r",
+        "release_date": "2024-12-02",
+        "last_updated": "2024-12-02",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs c4ai-command-r7b-12-2024 weights, tokenizer, and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/c4ai-command-r7b-12-2024 weight release of December 2024, together with the hosted command-r7b-12-2024 API model. The R and R+ lines, the Arabic sibling, Cohere's hosted API platform, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 7B weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms, sized for smaller deployments",
+        "Cohere's own docs list command-r7b-12-2024 as a Live API model with a 128K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact snapshot; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere model documentation listing command-r7b-12-2024",
+          "url": "https://docs.cohere.com/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command R7B launch announcement (December 2024)",
+          "url": "https://cohere.com/blog/command-r7b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-r7b-12-2024.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-r7b-arabic-02-2025",
+      "source_id": "cohere/command-r7b-arabic-02-2025",
+      "name": "Command R7B Arabic",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-arabic-02-2025",
+      "description": "Cohere's Arabic-optimized Command R7B release, published as gated weights under CC-BY-NC-4.0 with playground serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command R7B Arabic",
+        "description": "Open Command R model optimized for Arabic enterprise chat, RAG, and cultural knowledge",
+        "family": "command-r",
+        "release_date": "2025-02-27",
+        "last_updated": "2025-02-27",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-arabic-02-2025"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs c4ai-command-r7b-arabic-02-2025 weights, tokenizer, and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/c4ai-command-r7b-arabic-02-2025 weight release of February 2025 for Arabic and English workloads, with playground serving under the exact model ID. The base R7B line, other Command lines, and downstream quantizations and fine-tunes remain separate boundaries. Cohere's changelog announces this release under the base R7B ID by mistake; the repository, card, paper, and blog fix the true identity recorded here.",
+      "strengths": [
+        "Gated Arabic-optimized weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's February 2025 launch announcement pins the release with its research paper"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No models-table row or third-party host documents this exact ID; managed serving is playground-only"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.44
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-arabic-02-2025",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command R7B Arabic launch announcement (February 2025)",
+          "url": "https://cohere.com/blog/command-r7b-arabic",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-r7b-arabic-02-2025.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-c4ai-aya-expanse-32b",
+      "source_id": "cohere/c4ai-aya-expanse-32b",
+      "name": "Aya Expanse 32B",
+      "developer": "Cohere Labs",
+      "url": "https://huggingface.co/CohereLabs/aya-expanse-32b",
+      "description": "Cohere Labs' 32-billion-parameter multilingual research release, published as gated weights under CC-BY-NC-4.0 with a hosted Chat API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Aya Expanse 32B",
+        "description": "Open multilingual model optimized for generation across 23 languages",
+        "family": null,
+        "release_date": "2024-10-24",
+        "last_updated": "2024-10-24",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/aya-expanse-32b"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs aya-expanse-32b weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/aya-expanse-32b weight release of October 2024, together with the hosted c4ai-aya-expanse-32b Chat API model. The 8B sibling, the Aya Vision lines, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 32B multilingual weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's Aya docs serve c4ai-aya-expanse-32b on the Chat API with a 128K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No changelog tracks the line beyond the dated paper and repository"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.76
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/aya-expanse-32b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere Aya Expanse documentation serving c4ai-aya-expanse-32b",
+          "url": "https://docs.cohere.com/docs/aya-expanse",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/c4ai-aya-expanse-32b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-cohere-c4ai-aya-expanse-8b",
       "source_id": "cohere/c4ai-aya-expanse-8b",
       "name": "Aya Expanse 8B",
@@ -3189,6 +3765,229 @@
       ],
       "metadata_verified_at": "2026-09-04",
       "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-cohere-c4ai-aya-vision-32b",
+      "source_id": "cohere/c4ai-aya-vision-32b",
+      "name": "Aya Vision 32B",
+      "developer": "Cohere Labs",
+      "url": "https://huggingface.co/CohereLabs/aya-vision-32b",
+      "description": "Cohere Labs' 32-billion-parameter multilingual vision-language release accepting image and text input, published as gated weights under CC-BY-NC-4.0 with a hosted Chat API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Aya Vision 32B",
+        "description": "Open multilingual vision model for OCR, visual reasoning, and image question answering",
+        "family": null,
+        "release_date": "2025-03-04",
+        "last_updated": "2025-05-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/aya-vision-32b"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs aya-vision-32b weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/aya-vision-32b weight release of March 2025 with image and text input and text output, together with the hosted c4ai-aya-vision-32b Chat API model. The 8B sibling, the Expanse text lines, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 32B vision-language weights under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's docs serve c4ai-aya-vision-32b on the Chat API with image input"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "Self-operation needs a non-stock transformers build for the vision adapter"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.56
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/aya-vision-32b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere Aya Vision documentation serving c4ai-aya-vision-32b",
+          "url": "https://docs.cohere.com/docs/aya-vision",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/c4ai-aya-vision-32b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-c4ai-aya-vision-8b",
+      "source_id": "cohere/c4ai-aya-vision-8b",
+      "name": "Aya Vision 8B",
+      "developer": "Cohere Labs",
+      "url": "https://huggingface.co/CohereLabs/aya-vision-8b",
+      "description": "Cohere Labs' 8-billion-parameter multilingual vision-language release accepting image and text input, published as gated weights under CC-BY-NC-4.0 without a managed API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Aya Vision 8B",
+        "description": "Compact open multilingual vision model for OCR and visual question answering",
+        "family": null,
+        "release_date": "2025-03-04",
+        "last_updated": "2025-05-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/aya-vision-8b"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs aya-vision-8b weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/aya-vision-8b weight release of March 2025 with image and text input and text output. The 32B sibling, the Expanse text lines, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 8B vision-language weights under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Vision adapter over the multilingual Expanse recipe with a 16K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No managed API serves this exact ID; use is self-operated or demo-only"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/aya-vision-8b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/c4ai-aya-vision-8b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
     },
     {
       "id": "model-deepseek-deepseek-v3-2",
