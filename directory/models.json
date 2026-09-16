@@ -3388,6 +3388,440 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-minimax-minimax-m2-1",
+      "source_id": "minimax/MiniMax-M2.1",
+      "name": "MiniMax-M2.1",
+      "developer": "MiniMax",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.1",
+      "description": "MiniMax's 229-billion-parameter reasoning release for coding agents and tool-heavy workflows, published as downloadable weights under a modified MIT license that requires any commercial product or service to display the model name.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiniMax-M2.1",
+        "description": "Earlier MiniMax agent model for practical coding and productivity tasks",
+        "family": "minimax",
+        "release_date": "2025-12-23",
+        "last_updated": "2025-12-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.1"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-MiniMax-M2.1-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The Hugging Face weight repository carries no license file of its own and points to the LICENSE file in the MiniMax-M2.1 GitHub repository. That document reproduces the MIT grant but requires any commercial product or service using the software or its derivatives to prominently display 'MiniMax M2.1' — with no user-count or revenue threshold, unlike the M2 terms — so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-MiniMax-M2.1-Modified-MIT",
+          "scope": "MiniMax-M2.1 model weights, repository code, and derivative works, as linked from the Hugging Face model card",
+          "kind": "web_terms",
+          "url": "https://github.com/MiniMax-AI/MiniMax-M2.1/blob/ea93fc40128a5bc366e3531a924f01f3d6d9cc15/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the MiniMaxAI/MiniMax-M2.1 repository release at Hugging Face commit cd97f59135f37b2a6bf09356e485d5e4aeb7dc9c (last modified 2026-02-13). The MiniMax-M2 predecessor, later M2.x releases and the M3 generation, the highspeed endpoint tier, the MiniMax Agent product, the MiniMax Open Platform API, and downstream quantizations remain separate boundaries.",
+      "strengths": [
+        "MiniMax publishes 130 Safetensors shards with in-repository deployment guides for SGLang, vLLM, Transformers, and MLX",
+        "The MiniMax Open Platform documentation lists MiniMax-M2.1 as a served model at 204,800 context alongside its highspeed tier"
+      ],
+      "tradeoffs": [
+        "The governing license lives in a separate GitHub repository rather than alongside the weights, and its threshold-free attribution duty covers any commercial use",
+        "Dated December 2025 repository history with no stated retirement posture, and development continues on a mutable main branch"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 6.82
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and in-repository deployment guides",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.1",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiniMax Open Platform text-generation documentation listing MiniMax-M2.1",
+          "url": "https://platform.minimax.io/docs/guides/text-generation",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/minimax/MiniMax-M2.1.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-minimax-minimax-m2-5",
+      "source_id": "minimax/MiniMax-M2.5",
+      "name": "MiniMax-M2.5",
+      "developer": "MiniMax",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5",
+      "description": "MiniMax's 229-billion-parameter reasoning release for coding agents and complex workflows, published as downloadable weights under a bespoke model license for the weights and a modified MIT license for the repository code.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiniMax-M2.5",
+        "description": "Prior MiniMax coding model for agent workflows, office edits, and automation",
+        "family": "minimax",
+        "release_date": "2026-02-12",
+        "last_updated": "2026-02-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-MiniMax-M2.5-Model",
+        "LicenseRef-MiniMax-M2.5-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The weight repository carries LICENSE-MODEL beside the shards while repository code is governed by a separate LICENSE-CODE file in the MiniMax-M2.5 GitHub repository; the card metadata points at a plain LICENSE path the weight repository does not carry. The model license grants use, reproduction, distribution, and modification of the model materials with a retained attribution notice, subject to a prohibited-uses policy and Singapore arbitration, while the code license reproduces the MIT grant with an unconditional duty to display 'MiniMax M2.5' on any commercial product or service. Both documents keep the release source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-MiniMax-M2.5-Model",
+          "scope": "MiniMax-M2.5 model weights and accompanying materials beside the shards",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5/blob/f710177d938eff80b684d42c5aa84b382612f21f/LICENSE-MODEL",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-MiniMax-M2.5-Modified-MIT",
+          "scope": "MiniMax-M2.5 repository code and derivative works in the MiniMax-M2.5 GitHub repository",
+          "kind": "web_terms",
+          "url": "https://github.com/MiniMax-AI/MiniMax-M2.5/blob/0fe00c843c16e7081a9631daeafc11288f5f871c/LICENSE-CODE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the MiniMaxAI/MiniMax-M2.5 weight release at Hugging Face commit f710177d938eff80b684d42c5aa84b382612f21f (last modified 2026-03-10), released under license terms dated 2026-02-13. The MiniMax-M2.1 predecessor, M2.7 and M3 successors, the M2.5-highspeed endpoint tier, the MiniMax Agent product, the platform API, and downstream quantizations remain separate boundaries.",
+      "strengths": [
+        "126 Safetensors shards with LICENSE-MODEL beside the weights plus in-repository SGLang, vLLM, Transformers, and tool-calling guides",
+        "The Open Platform lists MiniMax-M2.5 as a current served model at 204,800 context with a highspeed tier"
+      ],
+      "tradeoffs": [
+        "Two governing documents split across the weight repository and GitHub, with the card's license link not matching any file beside the weights",
+        "No changelog or retirement posture accompanies the dated release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 7,
+        "overall": 7.3
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and in-repository deployment guides",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.5",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiniMax Open Platform text-generation documentation listing MiniMax-M2.5",
+          "url": "https://platform.minimax.io/docs/guides/text-generation",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/minimax/MiniMax-M2.5.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-minimax-minimax-m2-7",
+      "source_id": "minimax/MiniMax-M2.7",
+      "name": "MiniMax-M2.7",
+      "developer": "MiniMax",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7",
+      "description": "MiniMax's 229-billion-parameter reasoning release for agentic coding work, published as downloadable weights under a non-commercial license that requires prior written authorization for any commercial use.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiniMax-M2.7",
+        "description": "Open MiniMax flagship for coding agents, office automation, and complex environments",
+        "family": "minimax",
+        "release_date": "2026-03-18",
+        "last_updated": "2026-03-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-MiniMax-M2.7-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The full license text sits both beside the weights and in the MiniMax-M2.7 GitHub repository. It permits non-commercial use on MIT-style terms but prohibits any commercial use without separate prior written authorization from MiniMax, and additionally requires commercial deployments to display 'Built with MiniMax M2.7' — with no revenue or user threshold — so the release is source-available under terms stricter than M2's.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-MiniMax-M2.7-License",
+          "scope": "MiniMax-M2.7 model weights, repository code, and derivative works, beside the weights and in the GitHub repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7/blob/d494266a4affc0d2995ba1fa35c8481cbd84294b/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the MiniMaxAI/MiniMax-M2.7 weight release at Hugging Face commit d494266a4affc0d2995ba1fa35c8481cbd84294b (last modified 2026-04-20). The MiniMax-M2.5 predecessor, the M3 generation, the M2.7-highspeed endpoint tier, the platform API, and downstream quantizations remain separate boundaries.",
+      "strengths": [
+        "130 Safetensors shards with the full license text beside the weights and in-repository SGLang, vLLM, and Transformers deployment guides",
+        "The Open Platform lists MiniMax-M2.7 as a served model at 204,800 context"
+      ],
+      "tradeoffs": [
+        "Any commercial use requires separate prior written authorization, the strictest commercial posture in the M2 line",
+        "No changelog or retirement posture accompanies the release, and the platform lists a same-performance highspeed tier beside the line that carries no release identity of its own"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 6.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and in-repository deployment guides",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiniMax Open Platform text-generation documentation listing MiniMax-M2.7",
+          "url": "https://platform.minimax.io/docs/guides/text-generation",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/minimax/MiniMax-M2.7.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-minimax-minimax-m3",
+      "source_id": "minimax/MiniMax-M3",
+      "name": "MiniMax-M3",
+      "developer": "MiniMax",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3",
+      "description": "MiniMax's 428-billion-parameter native multimodal release for agentic reasoning, coding, and long-context work, published as downloadable weights under a community license with a revenue-gated commercial authorization.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiniMax-M3",
+        "description": "MiniMax multimodal model for long-context coding, perception, and agent planning",
+        "family": "minimax",
+        "release_date": "2026-06-01",
+        "last_updated": "2026-06-01",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 512000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-MiniMax-M3-Community"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The LICENSE file sits beside the weights and is the governing document; the M3 GitHub repository carries code and documentation but no license file of its own. The MiniMax Community License permits non-commercial use, requires commercial products and services to display 'Built with MiniMax M3', and requires separate prior written authorization above 20 million US dollars in yearly revenue — a one-time notice suffices below that line — so the release is source-available.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-MiniMax-M3-Community",
+          "scope": "MiniMax-M3 model weights and accompanying materials beside the shards",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/f0e1c1e04d40177e4673a22097036854f536e9c0/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the MiniMaxAI/MiniMax-M3 weight release at Hugging Face commit f0e1c1e04d40177e4673a22097036854f536e9c0 (last modified 2026-07-23). The M2 generation lines, downstream quantizations and fine-tunes, the platform API, and independent hosting providers remain separate boundaries.",
+      "strengths": [
+        "59 Safetensors shards with the community license beside the weights and in-repository evaluation results",
+        "Native text, image, and video input with a 1M-token context window documented on the first-party platform"
+      ],
+      "tradeoffs": [
+        "Commercial use above 20 million US dollars in yearly revenue needs prior written authorization, and every commercial deployment carries the attribution duty",
+        "No changelog or retirement posture accompanies the dated release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and runtime guidance",
+          "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiniMax Open Platform text-generation documentation listing MiniMax-M3",
+          "url": "https://platform.minimax.io/docs/guides/text-generation",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/minimax/MiniMax-M3.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-mistral-devstral-small-2507",
       "source_id": "mistral/devstral-small-2507",
       "name": "Devstral Small",
