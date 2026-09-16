@@ -24,7 +24,23 @@
       "content_sha256": "e770654fd44bc1ab1db87df0aa3c04c19d9bffc0e58bce93b7c6102f658ddfae",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A 2020 engineering blog post about a garbage collector: \"Oilpan is a garbage collector written in C++ for managing C++ memory\". It is language runtime infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "V8 Oilpan engineering post",
+            "url": "https://v8.dev/blog/high-performance-cpp-gc",
+            "kind": "web",
+            "content_sha256": "e770654fd44bc1ab1db87df0aa3c04c19d9bffc0e58bce93b7c6102f658ddfae",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49695408",
@@ -66,7 +82,15 @@
       "content_sha256": null,
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49695519",
@@ -80,7 +104,23 @@
       "content_sha256": "3131a9f42e6acf2a0455a8283b7e7710c200b06214f3773343fa7b00800f9fd9",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A recreational mathematics post: \"There are only twelve 4x4 sudokus!\" It is not a system.",
+        "evidence": [
+          {
+            "label": "4x4 sudoku post",
+            "url": "https://baldino.dev/blog/there-are-only-twelve-4x4-sudokus/",
+            "kind": "web",
+            "content_sha256": "3131a9f42e6acf2a0455a8283b7e7710c200b06214f3773343fa7b00800f9fd9",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49695550",
@@ -122,7 +162,23 @@
       "content_sha256": "91508a8f356df1ad64bacd09123809b6e055dcb6392ee551a12cbf7edd6f324e",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal hardware journal entry: \"An experiment to design a cute PCB (without touching any tools) in plain English\" by prompting a model. It is an experience report, not a system to review.",
+        "evidence": [
+          {
+            "label": "PCB experiment journal",
+            "url": "https://a6mzero.com/posts/this-pcb-is-brought-to-you-by-fable-5/",
+            "kind": "web",
+            "content_sha256": "91508a8f356df1ad64bacd09123809b6e055dcb6392ee551a12cbf7edd6f324e",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49695805",
@@ -150,7 +206,23 @@
       "content_sha256": "cbe06653afa1e334c2e8cfa442c9d71bba098aaf3436ebb43c91244bdc398a6f",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A developer blog post on a security incident: \"It seems like OpenAI Bots knew about the RubyGems caching vulnerability\". It is incident commentary, not a system.",
+        "evidence": [
+          {
+            "label": "RubyGems incident blog post",
+            "url": "https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/",
+            "kind": "web",
+            "content_sha256": "cbe06653afa1e334c2e8cfa442c9d71bba098aaf3436ebb43c91244bdc398a6f",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49696125",
@@ -164,7 +236,23 @@
       "content_sha256": "24bb00c4f1947955a42eac8ec2bf95688f3298409f04fbb0c5e5f92ee1c6cee6",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A book excerpt on writing: \"A good design doc can save you years of development time.\" It is writing advice, not a system.",
+        "evidence": [
+          {
+            "label": "Design doc guide excerpt",
+            "url": "https://refactoringenglish.com/excerpts/write-an-effective-design-doc/",
+            "kind": "web",
+            "content_sha256": "24bb00c4f1947955a42eac8ec2bf95688f3298409f04fbb0c5e5f92ee1c6cee6",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49696132",
@@ -178,7 +266,23 @@
       "content_sha256": "21402eefcfe9be953dd82ea7519bb20227b8f9163cf7883c5e67b78993968170",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "Archaeology news: \"A vast mosaic uncovered in Rome, the largest ever discovered in the Roman world, has opened to the public for the first time.\" Not a system.",
+        "evidence": [
+          {
+            "label": "Roman mosaic news",
+            "url": "https://www.theartnewspaper.com/2026/09/14/largest-roman-mosaic-opens-to-the-public",
+            "kind": "web",
+            "content_sha256": "21402eefcfe9be953dd82ea7519bb20227b8f9163cf7883c5e67b78993968170",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49696313",
@@ -192,7 +296,15 @@
       "content_sha256": null,
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49696335",
@@ -220,7 +332,23 @@
       "content_sha256": "437caee3f4f1759973290c394fc03b8e725f25609aa8e775250e5bc957fc424c",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A gallery of SVG drawing prompts \"given to language models in 2025 and 2026\", comparing model outputs. It is an informal benchmark page, not a system.",
+        "evidence": [
+          {
+            "label": "SVG prompt gallery",
+            "url": "https://gally.net/temp/20260914pelican-alternatives/index.html",
+            "kind": "web",
+            "content_sha256": "437caee3f4f1759973290c394fc03b8e725f25609aa8e775250e5bc957fc424c",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49696453",
@@ -262,7 +390,23 @@
       "content_sha256": "6e75ada14fae32843f5d601d61e7ad9f669e8472edcaea50755219c092377b88",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A labor-market summary: \"The AI labor market in September 2026 from LinkedIn, WEF, Stanford, PwC and Bain data\". It is commentary, not a system.",
+        "evidence": [
+          {
+            "label": "AI job market post",
+            "url": "https://www.ilinmaks.com/blog/en/ai-jobs-market-2026",
+            "kind": "web",
+            "content_sha256": "6e75ada14fae32843f5d601d61e7ad9f669e8472edcaea50755219c092377b88",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697014",
@@ -276,7 +420,23 @@
       "content_sha256": "1532b3a887cf95274b467e98a94ef180218f5dde183a6b911e55d0c06ebd25b8",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A blog post of \"Notes on migrating 35kb prompts away from Anthropic/OpenAI to Self-Hosted Ollama+opencode\". Ollama and OpenCode already have Atlas records, and this experience report does not change either record's boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "Self-hosting migration notes",
+            "url": "https://patrickmccanna.net/notes-on-migrating-large-prompts-away-from-anthropic-openai-to-self-hosted-llms/",
+            "kind": "web",
+            "content_sha256": "1532b3a887cf95274b467e98a94ef180218f5dde183a6b911e55d0c06ebd25b8",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697094",
@@ -318,7 +478,23 @@
       "content_sha256": "2658d05cc8c115d041b1e9cc55ff631ee4b2e4c9ef389b026a76ae73b8dad633",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal tutorial: \"I am in the middle of migrating my machines from NixOS to Guix.\" It is operating-system configuration writing, not an AI system.",
+        "evidence": [
+          {
+            "label": "Guix service tutorial",
+            "url": "https://aloysberger.com/posts/writing-a-guix-service-from-scratch-as-a-beginner.html",
+            "kind": "web",
+            "content_sha256": "2658d05cc8c115d041b1e9cc55ff631ee4b2e4c9ef389b026a76ae73b8dad633",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697235",
@@ -346,7 +522,23 @@
       "content_sha256": "bfc1e2902f265a9e8400799be5112603697531b9cb7c7ecf9f9ea6a5788445e9",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal essay titled \"My Health Insurance Denied My Cancer Treatment\". Not a system.",
+        "evidence": [
+          {
+            "label": "Vanity Fair essay",
+            "url": "https://www.vanityfair.com/story/healthcare-cancer-treatment-essay",
+            "kind": "web",
+            "content_sha256": "bfc1e2902f265a9e8400799be5112603697531b9cb7c7ecf9f9ea6a5788445e9",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697477",
@@ -360,7 +552,23 @@
       "content_sha256": "671f468dff1a195a089d2efdd6addb2d9c1fc23f41fe6dd2a9721a94229598dc",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An engineering post about \"our eBPF security agent\" where \"we cache which policy applies for each inode. This dropped our kernel CPU cost by about 90%.\" Agent here names a host security enforcement daemon; it is security infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "eBPF memoization post",
+            "url": "https://nathannaveen.dev/posts/dropping-ebpf-cpu-cost-by-90/",
+            "kind": "web",
+            "content_sha256": "671f468dff1a195a089d2efdd6addb2d9c1fc23f41fe6dd2a9721a94229598dc",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697496",
@@ -388,7 +596,23 @@
       "content_sha256": "2f0951072e81b35fcfdca27c8ffd55efcc0ae60d3162ef5ccf65b54552f4200c",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A research release: \"Today, IBM and NASA are open-sourcing the most thorough model for mapping the Moon to date.\" It announces a scientific model artifact for lunar mapping, not an operational memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "IBM NASA lunar model post",
+            "url": "https://research.ibm.com/blog/nasa-ibm-lunar-foundation-model",
+            "kind": "web",
+            "content_sha256": "2f0951072e81b35fcfdca27c8ffd55efcc0ae60d3162ef5ccf65b54552f4200c",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697580",
@@ -402,7 +626,23 @@
       "content_sha256": "255aa4c56d3bca2b1f5a8449ec34e36cce01484aaa24517b545bd1acfb1f069d",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "News: \"Norway's capital Oslo, said Thursday it had banned smart glasses in schools\". Not a system.",
+        "evidence": [
+          {
+            "label": "Oslo smart glasses news",
+            "url": "https://www.thelocal.no/20260910/oslo-bans-smart-glasses-in-schools",
+            "kind": "web",
+            "content_sha256": "255aa4c56d3bca2b1f5a8449ec34e36cce01484aaa24517b545bd1acfb1f069d",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697642",
@@ -430,7 +670,23 @@
       "content_sha256": "a434f559b118c10204e5a3e4cfb693d96c777562ce7d5128331b8a33a0973b32",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An essay on messaging protocols: \"A frequent argument against the Extensible Messaging and Presence Protocol (XMPP) is that the baseline feature set is too small\". Not an AI system.",
+        "evidence": [
+          {
+            "label": "XMPP adoption essay",
+            "url": "https://gultsch.de/posts/how-do-we-gain-traction/",
+            "kind": "web",
+            "content_sha256": "a434f559b118c10204e5a3e4cfb693d96c777562ce7d5128331b8a33a0973b32",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697666",
@@ -444,7 +700,23 @@
       "content_sha256": "aff1a092173efaacedf40f6a8bf0dbac4b893e7a34ccacff839756dd99efaeb5",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A security commentary post: \"OpenAI agents attacked RubyGems in May 2026.\" It is incident commentary, not a system.",
+        "evidence": [
+          {
+            "label": "RubyGems supply chain post",
+            "url": "https://rietta.com/blog/rubygems-supply-chain-openai/",
+            "kind": "web",
+            "content_sha256": "aff1a092173efaacedf40f6a8bf0dbac4b893e7a34ccacff839756dd99efaeb5",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697713",
@@ -472,7 +744,23 @@
       "content_sha256": "4d7aba27429041c1aaabc830a07a1cf7e8451697a203c746d968c6c83a804034",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A rebuttal essay: \"Dario Amodei, the CEO of Anthropic, recently published a blog post titled We Must Pace the Frontier\". It is commentary, not a system.",
+        "evidence": [
+          {
+            "label": "Dario, Please essay",
+            "url": "https://pop.rdi.sh/dario-please/",
+            "kind": "web",
+            "content_sha256": "4d7aba27429041c1aaabc830a07a1cf7e8451697a203c746d968c6c83a804034",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49697965",
@@ -486,7 +774,23 @@
       "content_sha256": "5e22d3a271d65576f3a70eda4c4174f935b12acf8c5dc4428d50bcabb6737da6",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A browser game: \"A free missile arcade game.\" Not an AI system.",
+        "evidence": [
+          {
+            "label": "One Gets Through game",
+            "url": "https://onegetsthrough.com/",
+            "kind": "web",
+            "content_sha256": "5e22d3a271d65576f3a70eda4c4174f935b12acf8c5dc4428d50bcabb6737da6",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49698423",
@@ -500,7 +804,23 @@
       "content_sha256": "6381606a74e2e7cfa0fb2ac26c1e1dd516cf3a7551ddcada1b48f7d01c731b0c",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal rant: \"I have been looking at a new car and am thoroughly unimpressed with all the options available to me\". Not a system.",
+        "evidence": [
+          {
+            "label": "Car annoyances blog post",
+            "url": "https://blog.decryption.net.au/posts/cars_suck.html",
+            "kind": "web",
+            "content_sha256": "6381606a74e2e7cfa0fb2ac26c1e1dd516cf3a7551ddcada1b48f7d01c731b0c",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49698603",
@@ -514,7 +834,23 @@
       "content_sha256": "a36733c8fabc2a366f51f00d7d6cd6cbfd4b6bf921865e820d56a3914fcdb0a1",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An educational guide whose read portion is a table of contents starting \"1. The Evolution of Intelligence\" and covering training, inference, and retrieval topics. It is teaching material, not a shipped system.",
+        "evidence": [
+          {
+            "label": "Foundation model engineering guide",
+            "url": "https://sungeuns.github.io/foundation-model-engineering/",
+            "kind": "web",
+            "content_sha256": "a36733c8fabc2a366f51f00d7d6cd6cbfd4b6bf921865e820d56a3914fcdb0a1",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49698607",
@@ -528,7 +864,23 @@
       "content_sha256": "466656346f4733e4a04650fbbe55621b54d9d88f2b484af38d28fbd5cea025ce",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A Rust engineering post: \"There are few hard-and-fast rules for writing code that performs well on Tokio runtimes\". Not an AI system.",
+        "evidence": [
+          {
+            "label": "Tokio performance post",
+            "url": "https://dial9-rs.github.io/blog/principles-for-fast-tokio-applications/",
+            "kind": "web",
+            "content_sha256": "466656346f4733e4a04650fbbe55621b54d9d88f2b484af38d28fbd5cea025ce",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49698664",
@@ -556,7 +908,23 @@
       "content_sha256": "a876ce04aecbcddbe6637f2b7957292555d950b78221372b52649fddb8200ea4",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An essay on the mathematics profession: \"A year ago, internal models at OpenAI and DeepMind received the equivalent of a gold-medal score on the IMO.\" It is commentary, not a system.",
+        "evidence": [
+          {
+            "label": "Mathematics and AI essay",
+            "url": "https://www.daniellitt.com/blog/2026/9/13/a-beginning-for-mathematics/",
+            "kind": "web",
+            "content_sha256": "a876ce04aecbcddbe6637f2b7957292555d950b78221372b52649fddb8200ea4",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699134",
@@ -570,7 +938,23 @@
       "content_sha256": "1718d54b8fccfe47185e5b852a5bc52bdd74ed4a180754d094eface3794cb0f6",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A 2023 linear algebra tutorial: \"Truncated SVD is simply the act of zeroing-out all the coefficients\". Not a system.",
+        "evidence": [
+          {
+            "label": "Truncated SVD tutorial",
+            "url": "https://brashandplucky.com/2023/09/09/truncated-svd.html",
+            "kind": "web",
+            "content_sha256": "1718d54b8fccfe47185e5b852a5bc52bdd74ed4a180754d094eface3794cb0f6",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699145",
@@ -584,7 +968,23 @@
       "content_sha256": "814fc345012d33e2d5b6f7bb925cc0fde0c00868ab51781a6fa992f9749a7766",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A history blog, \"Chronicles of worldly wonders by Jimmy Maher\", here on the Tudor kings. Not a system.",
+        "evidence": [
+          {
+            "label": "Analog Antiquarian history post",
+            "url": "https://analog-antiquarian.net/2026/09/11/the-tudor-kings/",
+            "kind": "web",
+            "content_sha256": "814fc345012d33e2d5b6f7bb925cc0fde0c00868ab51781a6fa992f9749a7766",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699158",
@@ -598,7 +998,23 @@
       "content_sha256": "2492e464d0548c08af01c8a563cc8213f48c08943c4d59e3b780879c17e83ef0",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A reading list: \"A selected list of timeless and influential papers in distributed systems\". Not a system.",
+        "evidence": [
+          {
+            "label": "Distributed systems reading list",
+            "url": "https://nvartolomei.com/dist-sys-classics/",
+            "kind": "web",
+            "content_sha256": "2492e464d0548c08af01c8a563cc8213f48c08943c4d59e3b780879c17e83ef0",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699159",
@@ -612,7 +1028,15 @@
       "content_sha256": null,
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699267",
@@ -626,7 +1050,23 @@
       "content_sha256": "1812c3a444fa54affc62ff820e891dd72f3e10b4afee39f2c62522d2f98c79f0",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A vendor benchmark post for speech model APIs: \"Our Qwen3-ASR Fast model is ranked #1 in Time-to-Final-Segment (TTFS)\", with an inference offering that says \"We deploy, optimize, and scale it.\" Text-to-speech and speech-to-text endpoints are not a memory, agent, or assistant system; whether the hosted inference belongs in the inference services collection is a separate question this pass does not decide.",
+        "evidence": [
+          {
+            "label": "Nari Labs benchmark post",
+            "url": "https://narilabs.com/blog/nari-labs-leads-coval-voice-ai-benchmarks/",
+            "kind": "web",
+            "content_sha256": "1812c3a444fa54affc62ff820e891dd72f3e10b4afee39f2c62522d2f98c79f0",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699297",
@@ -682,7 +1122,23 @@
       "content_sha256": "a8ee2e8f8b6911050276e1c4fb074c991b2c38c85e379e3509155abd85b05027",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "AI-written news about academic research: \"Researchers at MIT built a method called HardFlow\", and \"The catch: everything so far has run in simulation\". It is a research method with no shipped system in the read portion.",
+        "evidence": [
+          {
+            "label": "HardFlow research news",
+            "url": "https://theframenews.org/en/hardflow-safety-critical-ai/",
+            "kind": "web",
+            "content_sha256": "a8ee2e8f8b6911050276e1c4fb074c991b2c38c85e379e3509155abd85b05027",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699477",
@@ -696,7 +1152,23 @@
       "content_sha256": "3c056a17f1c95b26507a553dd7a9feff0e04a804982efc843565acb8630d3f88",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A programming language site: \"AttaLambda is a small language built on pure, untyped lambda calculus.\" and \"AttaLambda is open source under the Apache License 2.0.\" It is a language, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "AttaLambda home page",
+            "url": "https://attalambda.com",
+            "kind": "web",
+            "content_sha256": "3c056a17f1c95b26507a553dd7a9feff0e04a804982efc843565acb8630d3f88",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699489",
@@ -710,7 +1182,23 @@
       "content_sha256": "a75f1a64741e862042df71701efd1405813bcd149adc26dbb9a093993718fea0",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal hardware debugging post: \"I bought an Xteink X3.\" Not an AI system.",
+        "evidence": [
+          {
+            "label": "E-reader debugging post",
+            "url": "https://www.serpentine.com/posts/2026/x3-stripes/",
+            "kind": "web",
+            "content_sha256": "a75f1a64741e862042df71701efd1405813bcd149adc26dbb9a093993718fea0",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699493",
@@ -738,7 +1226,23 @@
       "content_sha256": "45c5fd5c642f91e769c15eed21010277511f862a56b6d92f92cec38408b4aa3e",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A security research write-up of a conference talk \"on how attackers can abuse today's AI agents\" deployed for customer service. It describes attack techniques against third-party deployments, not a system to review.",
+        "evidence": [
+          {
+            "label": "Intigriti AI agent hacking post",
+            "url": "https://www.intigriti.com/researchers/blog/hacking-tools/hacking-ai-customer-service-agents",
+            "kind": "web",
+            "content_sha256": "45c5fd5c642f91e769c15eed21010277511f862a56b6d92f92cec38408b4aa3e",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49699590",
@@ -808,7 +1312,23 @@
       "content_sha256": "99b4ee75b12705cc0fa1007712441dfcb745152a62e8d1fe18618fbb81b1b96e",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "Andon Labs announces a product launch: \"Today Andon is releasing Pion, an agent designed to run any company fully autonomously.\" The page says \"Pion is the platform we built to run all of these businesses.\" and describes its own deployments: \"In April 2026, we gave one agent a retail store in SF, Andon Market, and another a cafe in Stockholm, Andon Cafe.\" with \"Neither is profitable today\". Access is gated: \"If you want to run one, join the waitlist.\" No license, pricing, or technical architecture appears before the truncation marker, so none is asserted. No Pion or Andon record appears in the catalog. Boundary question: is a waitlist-gated platform, grown out of an evaluation lab's own deployments, already a maintained operational product a user can adopt, or still a research program to revisit once it is generally available?",
+        "evidence": [
+          {
+            "label": "Pion launch post",
+            "url": "https://andonlabs.com/blog/why-we-built-pion",
+            "kind": "web",
+            "content_sha256": "99b4ee75b12705cc0fa1007712441dfcb745152a62e8d1fe18618fbb81b1b96e",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49700661",
@@ -822,7 +1342,15 @@
       "content_sha256": null,
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49701004",
@@ -836,7 +1364,23 @@
       "content_sha256": "415dff54012cf96dadaa28f944f812d41b62b38f7ad4105bd985e68edabd23a4",
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "Apple's newsroom announces \"Siri AI is an entirely new version of Siri powered by the next generation of Apple Intelligence\", described as \"A more capable and conversational assistant with personal context understanding, broad world knowledge, onscreen awareness, and even more systemwide app actions\". It says \"Siri AI can understand personal context across messages, emails, photos, and more\" and \"A dedicated Siri app uses iCloud to privately sync conversational history\". Status: \"Siri AI is now rolling out as a beta in English\". The same page bundles many unrelated OS features (parental controls, Photos editing, Safari tab tools). No Siri or Apple Intelligence record appears in the catalog. Boundary question: is Siri AI a single maintained end-user product owning a broad conversational workspace with durable context, and where does its record stop relative to the wider Apple Intelligence feature set announced alongside it?",
+        "evidence": [
+          {
+            "label": "Apple software update newsroom post",
+            "url": "https://www.apple.com/newsroom/2026/09/major-updates-for-apples-software-platforms-are-now-available/",
+            "kind": "web",
+            "content_sha256": "415dff54012cf96dadaa28f944f812d41b62b38f7ad4105bd985e68edabd23a4",
+            "fetched_at": "2026-09-15T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     },
     {
       "story_id": "49701104",
@@ -850,7 +1394,15 @@
       "content_sha256": null,
       "fetched_at": "2026-09-15T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
+      "discovered_at": "2026-09-15",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-09-15",
+        "proposer": "hn-signals"
+      }
     }
   ]
 }
