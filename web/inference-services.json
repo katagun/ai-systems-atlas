@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "verified_at": "2026-09-13",
+  "verified_at": "2026-09-15",
   "services": [
     {
       "id": "openai-api",
@@ -313,7 +313,7 @@
         "kind": "web_terms",
         "label": "AWS Service Terms",
         "url": "https://aws.amazon.com/service-terms/",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -1223,24 +1223,28 @@
       "service_boundary": "Represents Cohere's hosted SaaS API, not Cohere models served by Oracle, Bedrock, Azure, or another partner and not private customer-infrastructure deployments.",
       "delivery_modes": [
         "on_demand",
-        "batch"
+        "batch",
+        "dedicated_endpoint"
       ],
       "model_sources": [
         "first_party"
       ],
       "api_styles": [
-        "service_native"
+        "service_native",
+        "openai_compatible"
       ],
       "regional_controls": "Private and partner deployments may provide different residency controls; the public direct-API docs do not establish one customer-selected regional endpoint model.",
-      "retention_controls": "Enterprise data commitments and account agreements govern input, output, and training-data handling; production customers should verify the applicable hosted-platform retention configuration.",
+      "retention_controls": "For paying SaaS Platform customers, Cohere's enterprise data commitments delete logged prompts and generations after 30 days unless law, a customer contract, or flagged misuse requires otherwise; enterprise customers can opt out of training use in dashboard settings, and approved enterprise customers can get zero data retention, under which prompts and generations are not logged. Trial API keys fall under the Terms of Use, whose default grant lets Cohere use customer data to improve and benchmark its offerings, including by sharing API and fine-tuning data with third parties.",
       "routing": "Customers select Cohere models and task APIs rather than upstream inference providers.",
-      "customization": "Fine-tuning and private deployment options are available under separate eligibility and deployment paths.",
+      "customization": "Fine-tuning was deprecated on September 15, 2025. Model Vault serves Cohere models in Cohere-managed, single-tenant deployments with control over model selection and scaling; private customer-infrastructure deployments follow separate eligibility paths.",
       "strengths": [
         "First-party generation, embedding, and reranking APIs share one enterprise-oriented platform.",
         "The service supports retrieval-heavy application patterns beyond generation alone."
       ],
       "tradeoffs": [
-        "Deployment and data commitments differ between trial, production, private, and partner paths.",
+        "Data commitments differ between trial and paying use: trial API keys fall under Terms of Use that allow sharing API data with third parties, and zero data retention requires enterprise approval.",
+        "The Terms of Use and SaaS Agreement bar using the service for benchmarking or competitive analysis.",
+        "Fine-tuning is no longer offered, so customization relies on model choice and Model Vault deployment configuration.",
         "The direct catalog is Cohere-centered rather than vendor-neutral."
       ],
       "score_profile": "inference_service",
@@ -1249,33 +1253,69 @@
         "data_governance": 7.5,
         "regional_deployment_control": 6.5,
         "serving_flexibility": 7.2,
-        "api_interoperability": 7.5,
+        "api_interoperability": 7.8,
         "traffic_resilience": 5.5,
-        "customization_lifecycle": 8.0,
+        "customization_lifecycle": 5.5,
         "documentation_transparency": 8.0,
-        "overall": 7.35
+        "overall": 7.17
       },
       "terms": {
         "kind": "web_terms",
         "label": "Cohere Terms of Use",
         "url": "https://cohere.com/terms-of-use",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
           "kind": "web",
           "label": "Cohere documentation",
           "url": "https://docs.cohere.com/",
-          "verified_at": "2026-08-28"
+          "verified_at": "2026-09-15"
         },
         {
           "kind": "web",
           "label": "Cohere legal policies",
           "url": "https://cohere.com/legal",
-          "verified_at": "2026-08-28"
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Enterprise data commitments",
+          "url": "https://cohere.com/enterprise-data-commitments",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Commercial SaaS Agreement",
+          "url": "https://cohere.com/saas-agreement",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Compatibility API for the OpenAI SDK",
+          "url": "https://docs.cohere.com/docs/compatibility-api",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Fine-tuning deprecation notice",
+          "url": "https://docs.cohere.com/docs/fine-tuning",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Model Vault overview",
+          "url": "https://docs.cohere.com/docs/model-vault",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Embed Jobs API",
+          "url": "https://docs.cohere.com/docs/embed-jobs-api",
+          "verified_at": "2026-09-15"
         }
       ],
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-09-15",
       "trust": {
         "verified_at": "2026-09-12",
         "properties": {
@@ -1457,63 +1497,84 @@
       "name": "Moonshot AI Open Platform",
       "operator": "Moonshot AI",
       "service_type": "direct_model_api",
-      "url": "https://platform.moonshot.ai/docs/intro",
+      "url": "https://platform.kimi.ai/docs/overview",
       "description": "Moonshot AI's direct developer platform for Kimi model APIs and related generation capabilities.",
       "service_boundary": "Represents the Moonshot AI Open Platform API, not the Kimi consumer application, downloadable Kimi weights, or third-party Kimi hosting.",
       "delivery_modes": [
-        "on_demand"
+        "on_demand",
+        "batch"
       ],
       "model_sources": [
         "first_party"
       ],
       "api_styles": [
-        "openai_compatible"
+        "openai_compatible",
+        "anthropic_compatible"
       ],
-      "regional_controls": "The reviewed international platform documentation does not establish customer-selected processing regions.",
-      "retention_controls": "Use is governed by the Open Platform model-use agreement and privacy materials; customers should verify current retention and training-use commitments for their account and endpoint.",
+      "regional_controls": "The reviewed platform documentation does not establish customer-selected processing regions; the privacy policy states that collected information is stored on servers in Singapore.",
+      "retention_controls": "Unless otherwise agreed in writing, the model-use agreement lets Moonshot use customer content to provide and improve its services, and customers who need limits on training use must arrange an enterprise or separate written agreement. Enterprise customers can request zero data retention, which deletes request content once the response returns but excludes directly uploaded images and videos, operational data, and third-party models, connectors, and plugins. Outside it, the privacy policy states no fixed retention period.",
       "routing": "Customers select Moonshot-operated Kimi models rather than independent inference providers.",
       "customization": "The reviewed public API is a managed model-access service and does not establish imported customer-weight deployment.",
       "strengths": [
         "Direct access to Moonshot's Kimi model family.",
-        "OpenAI-compatible access lowers integration friction."
+        "OpenAI-compatible and Anthropic Messages-compatible access lowers integration friction, and a Batch API serves asynchronous bulk jobs."
       ],
       "tradeoffs": [
-        "Public regional controls are not clearly exposed.",
+        "Customer content may be used to improve the services by default, and zero data retention is limited to enterprise customers.",
+        "Public regional controls are not exposed beyond a single disclosed storage location.",
         "The service boundary differs from Kimi access through routers and other hosts."
       ],
       "score_profile": "inference_service",
       "score": {
         "operational_maturity": 6.8,
-        "data_governance": 5.0,
+        "data_governance": 5.5,
         "regional_deployment_control": 3.5,
-        "serving_flexibility": 5.0,
-        "api_interoperability": 7.8,
+        "serving_flexibility": 5.5,
+        "api_interoperability": 8.0,
         "traffic_resilience": 4.5,
         "customization_lifecycle": 3.5,
         "documentation_transparency": 6.5,
-        "overall": 5.35
+        "overall": 5.53
       },
       "terms": {
         "kind": "web_terms",
-        "label": "Moonshot Open Platform Model Use Agreement",
-        "url": "https://platform.moonshot.ai/docs/agreement/modeluse",
-        "verified_at": "2026-08-28"
+        "label": "Kimi Open Platform Model Use Agreement",
+        "url": "https://platform.kimi.ai/docs/agreement/modeluse",
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
           "kind": "web",
-          "label": "Moonshot Open Platform introduction",
-          "url": "https://platform.moonshot.ai/docs/intro",
-          "verified_at": "2026-08-28"
+          "label": "Kimi Open Platform overview",
+          "url": "https://platform.kimi.ai/docs/overview",
+          "verified_at": "2026-09-15"
         },
         {
           "kind": "web",
           "label": "API reference",
-          "url": "https://platform.moonshot.ai/docs/api/chat",
-          "verified_at": "2026-08-28"
+          "url": "https://platform.kimi.ai/docs/api/chat",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Zero data retention",
+          "url": "https://platform.kimi.ai/docs/guide/zero-data-retention",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Batch API guide",
+          "url": "https://platform.kimi.ai/docs/guide/use-batch-api",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Kimi Open Platform privacy policy",
+          "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+          "verified_at": "2026-09-15"
         }
       ],
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-09-15",
       "trust": {
         "verified_at": "2026-09-12",
         "properties": {
@@ -2406,9 +2467,9 @@
       },
       "terms": {
         "kind": "web_terms",
-        "label": "Microsoft Product Terms for Azure",
-        "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/all",
-        "verified_at": "2026-08-28"
+        "label": "Microsoft Product Terms for Azure (EA/EAS)",
+        "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS",
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -3723,7 +3784,7 @@
         "kind": "web_terms",
         "label": "Cerebras Terms of Service",
         "url": "https://www.cerebras.ai/terms-of-service",
-        "verified_at": "2026-08-28"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -3741,49 +3802,49 @@
       ],
       "verified_at": "2026-08-28",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-15",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
             "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
             "url": "https://inference-docs.cerebras.ai/",
             "scope": "Cerebras inference documentation, for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "upstream_disclosure": {
             "status": "documented_yes",
             "note": "The terms of service state the operator's role over prompts and outputs: \"We reserve the right to use Service Content to provide the Service to you, comply with applicable law and enforce these Terms\", and that this \"does not grant Cerebras the right to use Service Content for the purpose of training or fine-tuning models\". No subprocessor is named; the trust centre's list is behind a request-access control.",
             "url": "https://www.cerebras.ai/terms-of-service",
             "scope": "Cerebras terms of service, for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "credential_handling": {
             "status": "documented_no",
             "note": "The API offers no customer-supplied-key path: \"API keys are static secrets you generate in the Cloud Console and include in every request for authentication.\"",
             "url": "https://inference-docs.cerebras.ai/console/api-keys",
             "scope": "Cerebras Cloud Console API-keys page, for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "cache_isolation": {
             "status": "documented_yes",
             "note": "The prompt-caching guide states: \"Prompt caches are never shared between organizations. Only members of your organization can benefit from caches created by identical prompts within your team.\"",
             "url": "https://inference-docs.cerebras.ai/capabilities/prompt-caching",
             "scope": "Cerebras prompt-caching guide, for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "vulnerability_disclosure": {
             "status": "documented_yes",
             "note": "A responsible-disclosure policy is published: \"We welcome reports from the security community to help us identify and remediate vulnerabilities in a responsible manner.\"",
             "url": "https://www.cerebras.ai/cerebras-responsible-disclosure-policy",
             "scope": "Cerebras responsible-disclosure policy, for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "independent_audit": {
             "status": "undocumented",
             "note": "The public trust centre shows company-level SOC 2 Type 2 material behind a request-access control (\"Use this Trust Center to learn about our security posture and request access to our security documentation.\") and nothing names the inference service, so it is recorded as undocumented for the named service.",
             "url": "https://trust.cerebras.ai",
             "scope": "Cerebras trust centre, read for Cerebras Inference",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           }
         },
         "findings": []
@@ -3943,7 +4004,7 @@
         "kind": "web_terms",
         "label": "DeepInfra Terms of Use",
         "url": "https://deepinfra.com/terms",
-        "verified_at": "2026-09-13"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -3955,49 +4016,49 @@
       ],
       "verified_at": "2026-09-12",
       "trust": {
-        "verified_at": "2026-09-13",
+        "verified_at": "2026-09-15",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
             "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
             "url": "https://deepinfra.com/docs",
             "scope": "DeepInfra documentation, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "upstream_disclosure": {
             "status": "documented_yes",
             "note": "The data-privacy page names the third parties that receive content for partner models: \"If you opt to use a Google model, Google will store the output as outlined in their Privacy Notice. ... If you opt to use an Anthropic model, Anthropic will store the output as outlined in their Trust Center.\" The operator serves the open-weight catalogue itself.",
             "url": "https://docs.deepinfra.com/account/data-privacy",
             "scope": "DeepInfra data-privacy page, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "credential_handling": {
             "status": "documented_no",
             "note": "The API offers no customer-supplied-key path: \"DeepInfra supports two authentication methods: API keys — full-access tokens for your own use Scoped JWTs — short-lived, scope-limited tokens you can issue to third parties\".",
             "url": "https://docs.deepinfra.com/account/authentication",
             "scope": "DeepInfra authentication page, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "cache_isolation": {
             "status": "documented_yes",
             "note": "The prompt-caching page states: \"Caches are per-model and per-account\".",
             "url": "https://docs.deepinfra.com/chat/prompt-caching",
             "scope": "DeepInfra prompt-caching page, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "vulnerability_disclosure": {
             "status": "undocumented",
             "note": "No security contact or disclosure policy appears in the terms or the documentation, no security.txt is served, and the trust portal refuses automated fetches.",
             "url": "https://deepinfra.com/terms",
             "scope": "DeepInfra terms of service, for DeepInfra",
-            "verified_at": "2026-09-13"
+            "verified_at": "2026-09-15"
           },
           "independent_audit": {
             "status": "documented_yes",
             "note": "The operator's funding announcement names the service: \"150+ open-source models through OpenAI-compatible APIs, zero data retention, SOC 2 and ISO 27001 certified — production-grade from day one.\" The trust portal holding the reports refuses automated fetches.",
             "url": "https://deepinfra.com/blog/deepinfra-series-b",
             "scope": "DeepInfra Series B announcement, for DeepInfra",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           }
         },
         "findings": [
@@ -4567,7 +4628,7 @@
         "kind": "web_terms",
         "label": "Nebius Token Factory legal quick guide",
         "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -4597,49 +4658,49 @@
       ],
       "verified_at": "2026-08-29",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-15",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
             "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
             "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/overview",
             "scope": "Nebius Token Factory inference overview, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "upstream_disclosure": {
             "status": "documented_yes",
             "note": "The legal quick guide states the operator's role: \"for the content you submit to our model inference and fine-tuning endpoints via the API or web interface (prompts, datasets, etc.) and the output you receive, we act as the Data Processor under our DPA.\"",
             "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
             "scope": "Nebius Token Factory legal quick guide, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "credential_handling": {
             "status": "documented_no",
             "note": "The API offers no customer-supplied-key path: the quickstart's only credential step is \"Get API key\" from the Token Factory console, and every documented request uses it.",
             "url": "https://docs.tokenfactory.nebius.com/quickstart",
             "scope": "Nebius Token Factory quickstart, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "cache_isolation": {
             "status": "undocumented",
             "note": "No prompt or prefix caching scope is documented in the inference overview or elsewhere in the documentation.",
             "url": "https://docs.tokenfactory.nebius.com/ai-models-inference/overview",
             "scope": "Nebius Token Factory inference overview, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "vulnerability_disclosure": {
             "status": "documented_yes",
             "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@nebius.com\").",
             "url": "https://nebius.com/.well-known/security.txt",
             "scope": "Nebius security.txt, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "independent_audit": {
             "status": "documented_yes",
             "note": "The Token Factory legal quick guide states: \"We are a certified company holding ISO 27001, ISO 27701 and SOC 2 Type II certifications.\" The statement is company-wide but sits in the service's own documentation; the reports are behind a request-access control.",
             "url": "https://docs.tokenfactory.nebius.com/legal/legal-quick-guide",
             "scope": "Nebius Token Factory legal quick guide, for Nebius Token Factory",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           }
         },
         "findings": []
@@ -4667,36 +4728,37 @@
         "service_native"
       ],
       "regional_controls": "Baseten documents multi-cloud capacity management across providers and regions, regional environments intended to satisfy data-residency requirements, private networking, and workload isolation. Specific region availability depends on the hosting option selected.",
-      "retention_controls": "Baseten's terms make the customer the exclusive owner of its content, prohibit training on customer content, limit Baseten's own use to deidentified and aggregated statistics, and commit to destroying copies of customer content after a twenty-day retrieval window following termination.",
+      "retention_controls": "Baseten's terms, rewritten on 2026-09-15, make the customer the owner of its content, bar Baseten from using customer content, models, outputs, or inference logs to train or fine-tune models, and limit analytics and benchmarking use to aggregated or de-identified form. Customers can export their content during the term and for thirty days after it; past that Baseten has no obligation to keep the content and deletes it on written request rather than automatically.",
       "routing": "The platform provisions GPU capacity across clouds and regions and autoscales dedicated deployments; it is not a cross-provider model router and does not expose upstream provider selection.",
       "customization": "Dedicated deployment of open-source, fine-tuned, and custom models is a primary path, alongside supervised fine-tuning and reinforcement learning loops and training jobs on dedicated GPU clusters.",
       "strengths": [
         "Hosted model APIs and dedicated deployment of customer-supplied models sit in one platform with a shared observability surface.",
-        "Terms are explicit that customer content is customer-owned, is not used for training, and is destroyed after a stated retrieval window.",
+        "Terms are explicit that customer content is customer-owned and is not used to train models, and that any analytics use is aggregated or de-identified.",
         "Multi-cloud capacity management with regional environments and private networking addresses procurement and residency constraints directly."
       ],
       "tradeoffs": [
         "Region and capacity availability depend on the hosting option and provider mix rather than a single published region list.",
+        "The rewritten terms drop the previous commitment to destroy all copies after a retrieval window: content is exportable for thirty days after the term, and deletion then happens on written request.",
         "The platform targets teams operating their own models; it is not a catalogue of third-party proprietary frontier models.",
         "Anthropic Messages compatibility is documented as beta, so contract parity should be confirmed before relying on it."
       ],
       "score_profile": "inference_service",
       "score": {
         "operational_maturity": 8.0,
-        "data_governance": 8.0,
+        "data_governance": 7.5,
         "regional_deployment_control": 7.5,
         "serving_flexibility": 7.5,
         "api_interoperability": 8.0,
         "traffic_resilience": 7.0,
         "customization_lifecycle": 8.5,
         "documentation_transparency": 7.0,
-        "overall": 7.74
+        "overall": 7.65
       },
       "terms": {
         "kind": "web_terms",
         "label": "Baseten Terms and Conditions",
         "url": "https://www.baseten.co/terms-and-conditions/",
-        "verified_at": "2026-09-13"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -4712,51 +4774,51 @@
           "verified_at": "2026-08-29"
         }
       ],
-      "verified_at": "2026-08-29",
+      "verified_at": "2026-09-15",
       "trust": {
-        "verified_at": "2026-09-13",
+        "verified_at": "2026-09-15",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
             "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
             "url": "https://docs.baseten.co/development/model-apis/overview",
             "scope": "Baseten Model APIs overview, for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "upstream_disclosure": {
             "status": "undocumented",
-            "note": "The terms state only that the hosting party \"will, at its own expense, provide for the hosting of the applicable Baseten Products & Services\"; the privacy policy does not address model inputs or outputs, and the trust centre's subprocessor list renders only by script.",
+            "note": "The terms disclose only the categories of party behind the service: Baseten uses \"compute, networking, storage, and hardware resources from third-party cloud service providers, GPU and hardware suppliers, data center and colocation operators, and chip developers (collectively, \" Infrastructure Providers \")\", and says \"Upon reasonable request, Baseten will make available a list of material Infrastructure Providers.\" No first-party page this review could read names them, and the trust centre's subprocessor list renders only by script.",
             "url": "https://www.baseten.co/terms-and-conditions/",
             "scope": "Baseten terms and conditions, read for Baseten",
-            "verified_at": "2026-09-13"
+            "verified_at": "2026-09-15"
           },
           "credential_handling": {
             "status": "documented_yes",
             "note": "Customer secrets used by deployed models are stored in a documented store: \"store a Hugging Face access token as a secret named hf_access_token in Baseten's secret manager\". Whether the store encrypts at rest is not stated.",
             "url": "https://docs.baseten.co/truss/examples/09-private-huggingface",
             "scope": "Baseten private Hugging Face model guide, for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "cache_isolation": {
             "status": "undocumented",
-            "note": "The runtime-caching page (\"Cache is shared across every replica within a single deployment.\") concerns model weights and build artefacts, not prompt caching; no page states how a prompt or prefix cache is scoped.",
+            "note": "The runtime-caching page describes b10cache scopes for model artefacts, not prompt caching: \"Deployment scope: /cache/model/ Shared across every replica within a single deployment.\" No page states how a prompt or prefix cache is scoped.",
             "url": "https://docs.baseten.co/development/model/runtime-caching",
             "scope": "Baseten runtime-caching page, read for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "vulnerability_disclosure": {
             "status": "documented_yes",
             "note": "The public trust centre publishes a disclosure route: \"If you believe you've discovered a security vulnerability in our services, please report it to security@baseten.co with details of your findings.\"",
             "url": "https://trust.baseten.co/",
             "scope": "Baseten trust centre, for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "independent_audit": {
             "status": "documented_yes",
             "note": "The operator's announcement states: \"Baseten has completed a rigorous audit by Sensiba San Filippo LLP, a leading CPA firm, to achieve System and Organization Controls (SOC) 2 Type II certification.\" The public trust centre lists a Baseten Labs, Inc. SOC 2 Type 2 report behind a request-access control.",
             "url": "https://www.baseten.co/blog/soc-2-type-2/",
             "scope": "Baseten SOC 2 announcement, for Baseten",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           }
         },
         "findings": []
@@ -5299,7 +5361,7 @@
         "kind": "web_terms",
         "label": "NanoGPT Terms of Service",
         "url": "https://nano-gpt.com/legal/terms-of-service",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -6008,7 +6070,7 @@
         "kind": "web_terms",
         "label": "火山方舟大模型服务平台专用条款",
         "url": "https://docs.volcengine.com/docs/82379/1104498",
-        "verified_at": "2026-09-12"
+        "verified_at": "2026-09-15"
       },
       "evidence": [
         {
@@ -6032,49 +6094,49 @@
       ],
       "verified_at": "2026-08-31",
       "trust": {
-        "verified_at": "2026-09-12",
+        "verified_at": "2026-09-15",
         "properties": {
           "response_integrity": {
             "status": "undocumented",
             "note": "No signature, attestation, or equivalent mechanism for verifying that a response arrived unaltered from the model appears in the API reference or the security documentation.",
             "url": "https://docs.volcengine.com/docs/82379/1396491?lang=zh",
             "scope": "Volcengine Ark context API documentation, for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "upstream_disclosure": {
             "status": "documented_yes",
             "note": "The platform terms state who receives data: \"高阶安全防护即火山引擎为您提供的安全沙箱安全互信方案，保护您的数据不会被提供给模型服务商。如您选择使用不具备高阶安全防护的模型服务，那么您的数据处理规则将遵循您接受的模型服务协议与规则的约定。\" (advanced security protection is a sandbox scheme under which your data is not provided to the model provider; for model services without it, the model provider's own agreement governs your data).",
             "url": "https://docs.volcengine.com/docs/82379/1104498",
             "scope": "Volcengine Ark platform terms, for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "credential_handling": {
             "status": "documented_no",
             "note": "The service offers no customer-supplied-key path: every documented request authenticates with a Volcengine-issued key (\"Authorization: Bearer $ARK_API_KEY\").",
             "url": "https://docs.volcengine.com/docs/82379/1396491?lang=zh",
             "scope": "Volcengine Ark context API documentation, for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "cache_isolation": {
             "status": "documented_yes",
             "note": "The platform terms state where cached data lives: \"您理解您的数据将会存储在火山方舟平台为您提供的存储空间中以实现您对数据缓存存储、监控观测、加标识、Agents 托管等目的。\" (your data is stored in the storage space the Ark platform provides for you, for cache storage, monitoring, labelling, and agent hosting). The terms describe per-customer storage rather than cache-key behaviour.",
             "url": "https://docs.volcengine.com/docs/82379/1104498",
             "scope": "Volcengine Ark platform terms, for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "vulnerability_disclosure": {
             "status": "documented_yes",
             "note": "ByteDance's security response centre, which covers Volcengine, publishes a vulnerability submission route (\"提交漏洞\") and the mailbox security@bytedance.com; it is company-wide rather than named for Ark.",
             "url": "https://security.bytedance.com/news/volcengine-sec-white-paper-released/",
             "scope": "ByteDance security response centre, for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           },
           "independent_audit": {
             "status": "undocumented",
             "note": "The Volcengine trust and compliance page lists company certifications and does not name Ark, so it is recorded as undocumented for the named service.",
             "url": "https://www.volcengine.com/trust/compliance",
             "scope": "Volcengine trust and compliance page, read for Volcengine Ark",
-            "verified_at": "2026-09-12"
+            "verified_at": "2026-09-15"
           }
         },
         "findings": []

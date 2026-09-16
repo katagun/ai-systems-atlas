@@ -11,7 +11,7 @@
           "scope": "Amazon Quick managed service and product features governed by AWS service terms",
           "kind": "web_terms",
           "url": "https://aws.amazon.com/service-terms/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -121,10 +121,10 @@
         },
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "Microsoft 365 online-service product terms and offering-specific use rights",
+          "scope": "Microsoft 365 online-service product terms and offering-specific use rights, as published for the Enterprise Agreement and Enrollment for Education Solutions programs",
           "kind": "web_terms",
-          "url": "https://www.microsoft.com/licensing/terms/productoffering/Microsoft365/all",
-          "verified_at": "2026-08-26"
+          "url": "https://www.microsoft.com/licensing/terms/productoffering/Microsoft365/EAEAS",
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -151,7 +151,7 @@
           "scope": "Underlying Microsoft Services Agreement incorporated by Copilot terms",
           "kind": "web_terms",
           "url": "https://www.microsoft.com/en-us/servicesagreement/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -420,7 +420,7 @@
           "scope": "Bundled Claude Code executable and TypeScript SDK distribution, excluding separately licensed wrapper components",
           "kind": "web_terms",
           "url": "https://code.claude.com/docs/en/agent-sdk/overview#license-and-terms",
-          "verified_at": "2026-08-25"
+          "verified_at": "2026-09-14"
         },
         {
           "license_id": "LicenseRef-Commercial",
@@ -732,7 +732,7 @@
           "scope": "Kiro IDE and CLI downloads governed by AWS customer and service terms",
           "kind": "web_terms",
           "url": "https://kiro.dev/downloads/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -1538,14 +1538,14 @@
           "scope": "Microsoft Azure Services product offering terms, which name Foundry Tools directly",
           "kind": "web_terms",
           "url": "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzureServices/EAEAS",
-          "verified_at": "2026-08-30"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
           "scope": "Supplemental Terms of Use for Microsoft Azure Previews, which govern the service's preview capabilities",
           "kind": "web_terms",
           "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -1555,10 +1555,10 @@
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "AWS Service Terms; the only AgentCore-specific section is 50.15, covering the preview Payments capability",
+          "scope": "AWS Service Terms; the only AgentCore-specific section is 50.15, covering the Payments capability",
           "kind": "web_terms",
           "url": "https://aws.amazon.com/service-terms/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -2052,7 +2052,7 @@
           "scope": "Vendor terms of service, effective June 2, 2025, governing the hosted memory API and the closed engine that the open client libraries call",
           "kind": "web_terms",
           "url": "https://supermemory.ai/terms",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -2302,10 +2302,10 @@
         },
         {
           "license_id": "LicenseRef-Commercial",
-          "scope": "The managed cloud and its anti-bot, captcha, enterprise-gating, and billing components, which the repository's own code comments describe as cloud overrides living outside this tree",
+          "scope": "The managed Skyvern Cloud, whose Terms of Service reserve the platform's software, models, interfaces, and related intellectual property to Skyvern under a limited licence to use the service; the repository's own code comments describe its anti-bot, captcha, enterprise-gating, and billing components as cloud overrides living outside this tree",
           "kind": "web_terms",
-          "url": "https://www.skyvern.com/",
-          "verified_at": "2026-09-02"
+          "url": "https://www.skyvern.com/terms",
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -2579,10 +2579,10 @@
         },
         {
           "license_id": "LicenseRef-Commercial",
-          "scope": "The agent server this project pins for production self-hosting, published under the Elastic License 2.0 and requiring a licence key; that licence has no identifier in the vocabulary, and this reference stands for it",
+          "scope": "The agent server this project pins for production self-hosting, langgraph-api, whose PyPI metadata publishes it under the Elastic License 2.0 and whose licence key the project's install docs require; that licence has no identifier in the vocabulary, and this reference stands for its text",
           "kind": "web_terms",
-          "url": "https://pypi.org/project/langgraph-api/",
-          "verified_at": "2026-09-13"
+          "url": "https://www.elastic.co/licensing/elastic-license",
+          "verified_at": "2026-09-15"
         }
       ]
     },
@@ -3334,6 +3334,21 @@
           "url": "https://github.com/Roznoshchik/Lurnby/blob/main/LICENSE",
           "blob_sha": "0b0b67212bb61467de665bda0caa86354a510691",
           "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/0b0b67212bb61467de665bda0caa86354a510691"
+        }
+      ]
+    },
+    {
+      "project_id": "gentle-ai",
+      "repo": "Gentleman-Programming/gentle-ai",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the README's trademark notice reserves the Gentle AI and Engram names without altering the code licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Gentleman-Programming/gentle-ai/blob/main/LICENSE",
+          "blob_sha": "3f361df0f623aebd8be1de6f838ee808c23484de",
+          "immutable_url": "https://api.github.com/repos/Gentleman-Programming/gentle-ai/git/blobs/3f361df0f623aebd8be1de6f838ee808c23484de"
         }
       ]
     }

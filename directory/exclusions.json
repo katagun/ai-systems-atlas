@@ -10,8 +10,14 @@
     {
       "name": "Agent Laboratory",
       "repo": "SamuelSchmidgall/AgentLaboratory",
-      "reason": "MIT, published from a personal account, and it does own a genuine multi-phase research loop \u2014 but the loop closes on get_score(...), which prompts a model as an expert reward model and parses the float it writes about its own output, so nothing outside the system measures the result. Its source has been untouched since March 2025, with no tests, no continuous integration, no releases, and no installable package. This is the repository that ADR 023's third ground turns on, where a boundary test keyed on closing the loop on a measurement the system did not author convicted the inspectable and acquitted the opaque; the entry exists so that reasoning is findable from the evidence that produced it.",
+      "reason": "MIT, published from a personal account, and it does own a genuine multi-phase research loop — but the loop closes on get_score(...), which prompts a model as an expert reward model and parses the float it writes about its own output, so nothing outside the system measures the result. Its source has been untouched since March 2025, with no tests, no continuous integration, no releases, and no installable package. This is the repository that ADR 023's third ground turns on, where a boundary test keyed on closing the loop on a measurement the system did not author convicted the inspectable and acquitted the opaque; the entry exists so that reasoning is findable from the evidence that produced it.",
       "useful_lesson": "A loop that closes on a model's own score of its own output is architecture without measurement. The shape is identical to a system that measures, and only reading the evaluator distinguishes them, which is why the evaluator is worth locating before the loop diagram is believed."
+    },
+    {
+      "name": "Agent Memory Leaderboard",
+      "repo": "AML-memory/agent-memory-leaderboard",
+      "reason": "No LICENSE file could be fetched (HTTP 404) and the README claims none for the repository, saying only that source datasets and adapted evaluators keep their upstream licences. The README describes the public evaluation contract for a leaderboard that scores other memory systems, and its own \"Deliberately not included\" section excludes the benchmark corpora, the production service, and the orchestration tooling. What remains is a measuring instrument for other people's systems.",
+      "useful_lesson": "When a repository publishes a list of what it deliberately leaves out, that list is the boundary: read it before deciding what the repository is."
     },
     {
       "name": "Agent Memory Techniques",
@@ -34,13 +40,25 @@
     {
       "name": "agent-toolkit",
       "repo": "softaworks/agent-toolkit",
-      "reason": "MIT licensed. The README describes \"opinionated skills shared by @leonardocouy for improving daily work efficiency with Claude Code,\" distributed as roughly forty independent, unrelated SKILL.md/README.md bundles spanning AI-tool wrappers (codex, gemini, perplexity), documentation helpers, frontend patterns, planning aids, professional-communication guides, and utilities, plus a handful of Claude Code sub-agents and slash commands \u2014 each installed separately (`/plugin install <skill>@agent-toolkit`) with no shared engine, runtime, or persistence layer tying them together. This is the same shape as other skills-catalog repositories: a mirrored or aggregated collection of independent instruction bundles, not one maintained operational product with its own claimed behavior.",
+      "reason": "MIT licensed. The README describes \"opinionated skills shared by @leonardocouy for improving daily work efficiency with Claude Code,\" distributed as roughly forty independent, unrelated SKILL.md/README.md bundles spanning AI-tool wrappers (codex, gemini, perplexity), documentation helpers, frontend patterns, planning aids, professional-communication guides, and utilities, plus a handful of Claude Code sub-agents and slash commands — each installed separately (`/plugin install <skill>@agent-toolkit`) with no shared engine, runtime, or persistence layer tying them together. This is the same shape as other skills-catalog repositories: a mirrored or aggregated collection of independent instruction bundles, not one maintained operational product with its own claimed behavior.",
       "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
+    },
+    {
+      "name": "Agentic Memory notebook",
+      "repo": "ALucek/agentic-memory",
+      "reason": "No LICENSE file could be fetched (HTTP 404) and the README claims none. The README is eighteen lines pointing at a single notebook that models working, episodic, semantic, and procedural memory inside a simple RAG agent, citing the Cognitive Architectures for Language Agents paper. There is no installable package, no service, and no adoptable boundary, so the rules for tutorials and non-operational research inputs apply, as they did for Agent Memory Techniques.",
+      "useful_lesson": "Matching a collection's subject is not the same as being one of its systems; a notebook that demonstrates four memory types teaches a pattern that other records implement."
+    },
+    {
+      "name": "AgentOps",
+      "repo": "AgentOps-AI/agentops",
+      "reason": "The MIT-licensed repository ships a Python SDK plus a self-hostable dashboard that instruments agents written in other frameworks: the README calls it an \"Observability and DevTool platform for AI Agents\" whose quick start is to \"Initialize the AgentOps client and automatically get analytics on all your LLM calls\", with integrations for CrewAI, AG2, Agno, and LangGraph. The agents it records are the operational systems; this product watches them. It is the same disposition already recorded for LangSmith.",
+      "useful_lesson": "An SDK that decorates someone else's agent loop marks the product boundary rather than crossing it: the thing being observed is the system, and the observer is a tool, however substantial its own backend."
     },
     {
       "name": "AI-Research-SKILLs",
       "repo": "Orchestra-Research/AI-Research-SKILLs",
-      "reason": "MIT licensed. The README describes \"the most comprehensive open-source skills library enabling AI agents to autonomously conduct AI research,\" but 97 of its 98 \"skills\" are reference-documentation bundles teaching a host agent how to use an existing third-party library or tool (vLLM, LangChain, FAISS, DeepSpeed, and so on) \u2014 each one is a `SKILL.md` quick reference plus \"300KB+ documentation from official sources.\" Only one skill (\"autoresearch\") is itself an orchestration layer; the repository as a whole is a curated documentation and reference library for a coding agent to read, not a maintained operational product with its own claimed behavior.",
+      "reason": "MIT licensed. The README describes \"the most comprehensive open-source skills library enabling AI agents to autonomously conduct AI research,\" but 97 of its 98 \"skills\" are reference-documentation bundles teaching a host agent how to use an existing third-party library or tool (vLLM, LangChain, FAISS, DeepSpeed, and so on) — each one is a `SKILL.md` quick reference plus \"300KB+ documentation from official sources.\" Only one skill (\"autoresearch\") is itself an orchestration layer; the repository as a whole is a curated documentation and reference library for a coding agent to read, not a maintained operational product with its own claimed behavior.",
       "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
     },
     {
@@ -58,13 +76,13 @@
     {
       "name": "ALE-Bench",
       "repo": "SakanaAI/ALE-Bench",
-      "reason": "A benchmark and evaluation toolkit for score-based algorithmic contests. Its engineering is strong \u2014 tagged releases, a continuous-integration check, and judge tests across sixteen language runtimes \u2014 but its readme disclaims official-product status and support in its own words, and the agent whose results it measures is not in the repository.",
+      "reason": "A benchmark and evaluation toolkit for score-based algorithmic contests. Its engineering is strong — tagged releases, a continuous-integration check, and judge tests across sixteen language runtimes — but its readme disclaims official-product status and support in its own words, and the agent whose results it measures is not in the repository.",
       "useful_lesson": "The inverse of the artifact case: release discipline says a repository is well built and says nothing about whether it is a system. Here the maintainer disclaims producthood in the readme itself."
     },
     {
       "name": "AlphaEvolve results",
       "repo": "google-deepmind/alphaevolve_results",
-      "reason": "The repository accompanying the AlphaEvolve technical report: one Colab notebook of the mathematical discoveries in Section 3 plus verification code, and a companion repository of sixty-seven problems with prompts, seed programs, and evolved programs. Its own readme states the position without ambiguity \u2014 'This repository does not contain the code to run AlphaEvolve.' Published results and problem sets are research outputs, not an operational system, which is the same call made against benchmark and evaluation repositories elsewhere in this file. The system these results came from is a real and now generally available product; it is queued as a candidate rather than excluded, and must not be reviewed through this repository.",
+      "reason": "The repository accompanying the AlphaEvolve technical report: one Colab notebook of the mathematical discoveries in Section 3 plus verification code, and a companion repository of sixty-seven problems with prompts, seed programs, and evolved programs. Its own readme states the position without ambiguity — 'This repository does not contain the code to run AlphaEvolve.' Published results and problem sets are research outputs, not an operational system, which is the same call made against benchmark and evaluation repositories elsewhere in this file. The system these results came from is a real and now generally available product; it is queued as a candidate rather than excluded, and must not be reviewed through this repository.",
       "useful_lesson": "A first-party repository under a famous system's name is often the paper's appendix rather than the system. Reading the readme's own disclaimer costs nothing and prevents scoring an artifact that explicitly says it is not the thing."
     },
     {
@@ -76,26 +94,32 @@
     {
       "name": "AlphaFold 3",
       "repo": "google-deepmind/alphafold3",
-      "reason": "Excluded on the same outcome test as AlphaFold 2, and recorded separately because its terms are the most instructive licence split in the lineage and both moved during 2026. The code was relicensed from CC BY-NC-SA 4.0 to Apache-2.0 on 2026-06-09, and the Google Form gate on the weights was removed on 2026-07-23, so the parameters now download directly from storage.googleapis.com/alphafold3/af3.bin.zst \u2014 verified as a public one-gigabyte object on 2026-09-03. The weights terms themselves are unchanged from 2024-11-09 and are strict: non-commercial use by or on behalf of non-commercial organisations only, no publishing or sharing of the parameters at all, and outputs may not be used to train competing structure-prediction models. Three separate documents govern code, weights, and outputs. None of this decides inclusion under ADR 007, in either direction: the record would still be out if the weights were MIT, which is exactly what the excluded Boltz entry demonstrates.",
+      "reason": "Excluded on the same outcome test as AlphaFold 2, and recorded separately because its terms are the most instructive licence split in the lineage and both moved during 2026. The code was relicensed from CC BY-NC-SA 4.0 to Apache-2.0 on 2026-06-09, and the Google Form gate on the weights was removed on 2026-07-23, so the parameters now download directly from storage.googleapis.com/alphafold3/af3.bin.zst — verified as a public one-gigabyte object on 2026-09-03. The weights terms themselves are unchanged from 2024-11-09 and are strict: non-commercial use by or on behalf of non-commercial organisations only, no publishing or sharing of the parameters at all, and outputs may not be used to train competing structure-prediction models. Three separate documents govern code, weights, and outputs. None of this decides inclusion under ADR 007, in either direction: the record would still be out if the weights were MIT, which is exactly what the excluded Boltz entry demonstrates.",
       "useful_lesson": "Watching a licence move is not the same as watching a boundary move. Two changes in two months made this materially more open without making it any more of a memory, agent, or assistant system, and a curation process that let permissiveness pull records in would have admitted it on the second change and had no principle left for the first."
     },
     {
       "name": "AlphaFold Server",
       "repo": null,
-      "reason": "The hosted product at alphafoldserver.com runs AlphaFold 3 behind an open Google-account signup, free and non-commercial, with a documented ceiling of thirty jobs per day and five-thousand-token jobs. It is not an inference service under `docs/INFERENCE_SERVICES.md`: the first condition wants a documented operational inference endpoint or managed deployment path, and this product has no API at all \u2014 a web form with JSON batch import, whose input schema is documented in the AlphaFold 2 repository rather than in a service reference. The service score profile confirms the mismatch rather than merely failing it, since serving flexibility, regional and deployment control, traffic resilience, and customisation lifecycle have nothing to describe here. It is not an assistant either; a single-purpose prediction form owns no conversational workspace, durable context, or connected work.",
+      "reason": "The hosted product at alphafoldserver.com runs AlphaFold 3 behind an open Google-account signup, free and non-commercial, with a documented ceiling of thirty jobs per day and five-thousand-token jobs. It is not an inference service under `docs/INFERENCE_SERVICES.md`: the first condition wants a documented operational inference endpoint or managed deployment path, and this product has no API at all — a web form with JSON batch import, whose input schema is documented in the AlphaFold 2 repository rather than in a service reference. The service score profile confirms the mismatch rather than merely failing it, since serving flexibility, regional and deployment control, traffic resilience, and customisation lifecycle have nothing to describe here. It is not an assistant either; a single-purpose prediction form owns no conversational workspace, durable context, or connected work.",
       "useful_lesson": "A hosted product is not automatically a service record. The inference-service collection exists so a reader can compare who operates inference and under what contractual and operational boundary; a fixed model behind a daily job quota and a web form answers none of those questions, and admitting it would leave the profile scoring absences instead of choices."
     },
     {
       "name": "AlphaGenome",
       "repo": "google-deepmind/alphagenome",
-      "reason": "The strongest near-miss in the scientific half of this lineage, and the one that had to be decided on scope rather than on a failed criterion. Unlike AlphaFold Server it genuinely ships service machinery: an Apache-2.0 client SDK published to PyPI, a free self-serve API key, dated API terms, a separate research repository carrying the JAX model implementation, and downloadable weights under non-commercial model terms that \u2014 unlike AlphaFold 3's \u2014 permit redistribution. On a literal reading it clears the inference-service inclusion conditions. It is still out, because the collection exists to describe the inference substrate that the Atlas's memory, agent, and assistant systems can actually run on, and no record in this directory can route a workload to a genomics variant-effect endpoint. Admitting it on the literal reading would open the collection to every domain-specific model API, which is not the universe `docs/COVERAGE.md` declares. The residual question is recorded in `BACKLOG.md` rather than settled by this entry alone.",
+      "reason": "The strongest near-miss in the scientific half of this lineage, and the one that had to be decided on scope rather than on a failed criterion. Unlike AlphaFold Server it genuinely ships service machinery: an Apache-2.0 client SDK published to PyPI, a free self-serve API key, dated API terms, a separate research repository carrying the JAX model implementation, and downloadable weights under non-commercial model terms that — unlike AlphaFold 3's — permit redistribution. On a literal reading it clears the inference-service inclusion conditions. It is still out, because the collection exists to describe the inference substrate that the Atlas's memory, agent, and assistant systems can actually run on, and no record in this directory can route a workload to a genomics variant-effect endpoint. Admitting it on the literal reading would open the collection to every domain-specific model API, which is not the universe `docs/COVERAGE.md` declares. The residual question is recorded in `BACKLOG.md` rather than settled by this entry alone.",
       "useful_lesson": "When a candidate passes the written criteria and still does not belong, the honest move is to name the scope argument and log the gap, not to invent a technical failure. The criteria describe the collection's members; they were never written to be the whole definition of its purpose."
     },
     {
       "name": "AlphaGo",
       "repo": null,
-      "reason": "DeepMind's 2016 Go program opens this lineage and has never been released as software: there is no repository, package, or product, and github.com/google-deepmind/alphago does not resolve. What survives is the Nature paper, a first-party PDF, and AlphaGo Teach, a 2017 web page of six thousand opening sequences with no API. The inclusion gate's first condition requires an identifiable operational product or implementation, and a result reported in a paper is not one. The boundary would hold even if the code appeared, because a program that plays one board game is not a memory, agent, or assistant outcome, and it is not a local runtime either: ADR 015 curates software whose purpose is executing model inference for the operator, not a program that embeds a network in order to play a game. AlphaZero and MuZero are the same case with less ceremony \u2014 neither was ever open-sourced, and what exists publicly is a search library and an arXiv pseudocode attachment.",
+      "reason": "DeepMind's 2016 Go program opens this lineage and has never been released as software: there is no repository, package, or product, and github.com/google-deepmind/alphago does not resolve. What survives is the Nature paper, a first-party PDF, and AlphaGo Teach, a 2017 web page of six thousand opening sequences with no API. The inclusion gate's first condition requires an identifiable operational product or implementation, and a result reported in a paper is not one. The boundary would hold even if the code appeared, because a program that plays one board game is not a memory, agent, or assistant outcome, and it is not a local runtime either: ADR 015 curates software whose purpose is executing model inference for the operator, not a program that embeds a network in order to play a game. AlphaZero and MuZero are the same case with less ceremony — neither was ever open-sourced, and what exists publicly is a search library and an arXiv pseudocode attachment.",
       "useful_lesson": "Influence is not availability. The system that opened the modern wave is the least adoptable artifact in its own lineage, and a directory of operational choices is more useful saying so than listing a landmark no reader can adopt. The descendants are where the reviewable work is, and this batch decides them on their own evidence rather than on inherited reputation."
+    },
+    {
+      "name": "Antigravity CLI",
+      "repo": "google-antigravity/antigravity-cli",
+      "reason": "No LICENSE was fetched (HTTP 404) and the README claims none, saying use is governed by Google's terms of service. The repository is the README, changelog, and examples surface for the terminal frontend of Google's Antigravity platform, which the Atlas already publishes as one record covering its agent manager, editor, terminal-native CLI, and extensions. That record's own note already names this repository.",
+      "useful_lesson": "A vendor may publish several repositories for one product, and a repository carrying documentation without operational source is a surface of the record rather than a second one."
     },
     {
       "name": "Autoware",
@@ -110,6 +134,12 @@
       "useful_lesson": "A maintained catalogue can supply valuable discovery and archival signals, but its entries remain other parties' systems; scoring the catalogue itself would confuse ecosystem research with an adoptable memory layer."
     },
     {
+      "name": "Awesome LLM-based Text2SQL",
+      "repo": "DEEP-PolyU/Awesome-LLM-based-Text2SQL",
+      "reason": "The MIT-licensed README says the repository \"provides a comprehensive collection of research papers, benchmarks, and open-source projects on\" LLM-based text-to-SQL: a curated bibliography with a method taxonomy and leaderboard links, tied to a published survey. It has no install path and runs nothing. Non-operational research inputs stay outside the scored catalog, and the projects it links are reviewed on their own merits.",
+      "useful_lesson": "A bibliography is a map of a field rather than a system in it, and the right response to a good one is to follow its links to the systems it describes."
+    },
+    {
       "name": "Awesome-AI-Memory",
       "repo": "IAAR-Shanghai/Awesome-AI-Memory",
       "reason": "The repository is a catalogue of several hundred papers and open-source projects on memory for language models, and it is a discovery source for this directory rather than an entry in it. Eight files in total: four documents, two images, a licence, and one script whose sole job is to refresh a count badge. The readme it maintains is very large and the systems it describes are everyone else's. Its licence file is one identifier while its readme badge claims another.",
@@ -122,10 +152,28 @@
       "useful_lesson": "A directory can use the Atlas's own lifecycle vocabulary and offer unusually thoughtful comparisons without becoming one of the systems it compares; it is a discovery source, not an operational record."
     },
     {
+      "name": "Bedrock AgentCore Python SDK",
+      "repo": "aws/bedrock-agentcore-sdk-python",
+      "reason": "The Apache-2.0 repository is the client SDK for a platform the Atlas already publishes: its README is \"Deploy your local AI agent to Bedrock AgentCore with zero infrastructure\", and the managed runtime, memory, gateway, and identity services it targets are the reviewed boundary of the Amazon Bedrock AgentCore record. The SDK is the way an agent reaches that platform, not a second system beside it; it belongs as evidence on that record.",
+      "useful_lesson": "A vendor's deployment SDK and its managed platform are one operational boundary described from two sides, and the record follows the service that runs the work."
+    },
+    {
+      "name": "BIRD-Interact",
+      "repo": "bird-bench/BIRD-Interact",
+      "reason": "The MIT-licensed README describes \"an interactive text-to-SQL benchmark\" of annotated tasks \"each guarded by executable test cases\", run through a Docker evaluation harness with a function-driven user simulator; its dataset carries a separate CC-BY-SA-4.0 licence. The bundled scaffold exists so a reader can run their own model against the tasks. Benchmarks and datasets remain research inputs rather than operational agent systems.",
+      "useful_lesson": "A benchmark that ships a runnable agent scaffold is still a measuring instrument: the scaffold exists to exercise the measurement, and the systems being measured are the ones a catalog reviews."
+    },
+    {
       "name": "Boltz",
       "repo": "jwohlwend/boltz",
-      "reason": "An MIT-licensed structure and binding-affinity prediction model with a pip-installable CLI, and the cleanest test of ADR 007 in this batch because its licence answers every objection that could be raised against the AlphaFold records. Its readme states that 'all the code and weights are provided under MIT license, making them freely available for both academic and commercial uses' \u2014 no non-commercial clause, no redistribution ban, no request form, no separate output terms. It is nonetheless excluded on exactly the same ground as AlphaFold 3, whose weights forbid nearly everything Boltz permits: `boltz predict` runs one model family and returns a prediction, which is a research input rather than a memory, agent, or assistant system.",
+      "reason": "An MIT-licensed structure and binding-affinity prediction model with a pip-installable CLI, and the cleanest test of ADR 007 in this batch because its licence answers every objection that could be raised against the AlphaFold records. Its readme states that 'all the code and weights are provided under MIT license, making them freely available for both academic and commercial uses' — no non-commercial clause, no redistribution ban, no request form, no separate output terms. It is nonetheless excluded on exactly the same ground as AlphaFold 3, whose weights forbid nearly everything Boltz permits: `boltz predict` runs one model family and returns a prediction, which is a research input rather than a memory, agent, or assistant system.",
       "useful_lesson": "This is what it looks like when licences genuinely do not decide inclusion. The most permissive record in a cluster and the most restricted one are excluded by the same sentence of the same rule, and a reader can check that the Atlas applies ADR 007 symmetrically rather than only when the restrictive answer is convenient."
+    },
+    {
+      "name": "Build with Claude",
+      "repo": "davepoon/buildwithclaude",
+      "reason": "MIT licensed (\"Copyright (c) 2025 davepoon\"). The README describes \"A plugin marketplace and discovery platform for\" Claude Code, where a reader can \"Browse curated plugins, discover community contributions, and extend your Claude Code workflows.\" What the repository maintains is a catalog of agent, command, hook, and skill definitions written as Markdown with frontmatter, installed through Claude Code's own marketplace or by copying the files into its directories, and its web surface indexes other people's plugins and marketplaces besides. Claude Code runs everything here. Under ADR 031 the repository owns no state it reads back and does no enforced work, which is the disposition already recorded for the agent-toolkit and claude-code-tresor catalogs.",
+      "useful_lesson": "A marketplace is a directory of systems rather than one of them. The entries it lists are each reviewable on their own evidence, and indexing them adds no operational boundary of its own."
     },
     {
       "name": "Bullet",
@@ -164,10 +212,22 @@
       "useful_lesson": "A vendor shipping an agent also ships supporting infrastructure under the same brand. Keeping the forge out preserves the record boundary the curation rules draw between a vendor's assistant, agent, and platform products."
     },
     {
-      "name": "Darwin G\u00f6del Machine",
+      "name": "dario",
+      "repo": "askalf/dario",
+      "reason": "The MIT-licensed README describes \"one local endpoint that routes all of them through the plans you already pay for\": a self-hosted proxy that translates between Anthropic and OpenAI wire formats, pools subscription seats with failover, and maps other tools' tool names onto a host agent. Its own comparison table places it beside LiteLLM, OpenRouter, and Kong AI Gateway. It carries no agent loop of its own, so the rule keeping plain inference clients and provider adapters outside the scored catalog applies.",
+      "useful_lesson": "A component that sits between a client and a provider inherits neither one's boundary; the agent loop it carries traffic for belongs to the tool that runs it."
+    },
+    {
+      "name": "Darwin Gödel Machine",
       "repo": "jennyzzt/dgm",
-      "reason": "Reference code for one paper on self-improving coding agents, published from the first author's personal account rather than the lab's organisation. It has no continuous integration and no releases, and its two tool-level tests sit beside a tree that is otherwise benchmark harnesses and archived evaluation logs; its last commit predates this review by more than a year. The maintainer's own write-up reports the system removing the markers used to detect hallucination in its reward function, and concludes that further work is needed \u2014 a research finding rather than an operational posture.",
+      "reason": "Reference code for one paper on self-improving coding agents, published from the first author's personal account rather than the lab's organisation. It has no continuous integration and no releases, and its two tool-level tests sit beside a tree that is otherwise benchmark harnesses and archived evaluation logs; its last commit predates this review by more than a year. The maintainer's own write-up reports the system removing the markers used to detect hallucination in its reward function, and concludes that further work is needed — a research finding rather than an operational posture.",
       "useful_lesson": "The publication account is the tell that reads earliest. The same lab shipped a paper from a personal account and a maintained framework from its organisation in the same year, which makes the contrast legible before any code is read."
+    },
+    {
+      "name": "DB-GPT-Hub",
+      "repo": "eosphoros-ai/DB-GPT-Hub",
+      "reason": "The MIT-licensed README calls it \"an experimental project that leverages Large Language Models (LLMs) to achieve Text-to-SQL parsing\", built as a fine-tuning and evaluation pipeline that trains LoRA and QLoRA adapters and scores them by execution accuracy on Spider. It plans no queries against a live database and owns no assistant surface. The Atlas separately publishes DB-GPT, the operational assistant from the same organisation.",
+      "useful_lesson": "One organisation can hold both a product and the training pipeline that feeds it; the pipeline produces model weights, and only the product carries an operational boundary."
     },
     {
       "name": "deep-research",
@@ -184,7 +244,7 @@
     {
       "name": "glean",
       "repo": "LeslieLeung/glean",
-      "reason": "AGPLv3 licensed. The README describes it plainly as \"A self-hosted RSS reader and personal knowledge management tool.\" Every feature actually shipped (subscriptions with OPML import/export, read-later, folders and tags, bookmarks, background sync) is conventional feed reading and organizing with no AI or agent behavior anywhere in it. Every AI-adjacent capability \u2014 \"Smart Recommendations,\" \"AI Features,\" embedding-based preference learning \u2014 is listed explicitly under \"Planned Features (WIP),\" and the project's own roadmap table marks its AI phase \"Planned,\" not built. The README also warns, \"This project is still in development and is not ready for production use.\" No implementation evidence exists yet for any AI capability to assess.",
+      "reason": "AGPLv3 licensed. The README describes it plainly as \"A self-hosted RSS reader and personal knowledge management tool.\" Every feature actually shipped (subscriptions with OPML import/export, read-later, folders and tags, bookmarks, background sync) is conventional feed reading and organizing with no AI or agent behavior anywhere in it. Every AI-adjacent capability — \"Smart Recommendations,\" \"AI Features,\" embedding-based preference learning — is listed explicitly under \"Planned Features (WIP),\" and the project's own roadmap table marks its AI phase \"Planned,\" not built. The README also warns, \"This project is still in development and is not ready for production use.\" No implementation evidence exists yet for any AI capability to assess.",
       "useful_lesson": "Planned capability is not shipped capability. Where every AI feature sits under a roadmap heading, there is no implementation evidence to assess and the record waits rather than entering on intent."
     },
     {
@@ -197,13 +257,19 @@
       "name": "Google Co-Scientist",
       "repo": null,
       "reason": "Co-Scientist is unambiguously in scope by outcome and out on availability. Google's own documentation describes a multi-agent architecture over an asynchronous task-execution framework, with Generation, Reflection, Ranking, Evolution, Proximity, and Meta-review agents and a Supervisor that 'orchestrates the process, allocates resources, and manages the worker queue to maintain a self-improving loop', and the system was published in Nature on 2026-05-19. No source code, SDK, package, or API has been released. Both live access tracks are gated: the individual route is an 'Express interest' page at labs.google/science, where Hypothesis Generation is listed as built with Co-Scientist, and the enterprise route is documented as a Generative AI Preview offering whose page states that 'Access to these agents is restricted. To request access, contact your Google account team.' A preview behind an account team is not an operational choice a reader could adopt, which is the inclusion gate's first condition. AlphaProof is the same shape with a narrower gate: no system code, a Nature paper on 2025-11-12, and access through the AI for Math Initiative, whose five inaugural partner institutions Google names in its own announcement. Both should be revisited at general availability, and `BACKLOG.md` carries the watch.",
-      "useful_lesson": "Preview status is a fact about availability, not about quality, and it belongs in the inclusion decision rather than in a score dimension. A system can be described in full architectural detail by its vendor and in a peer-reviewed paper, and still have no boundary a reader can adopt \u2014 which is why the gate asks for an identifiable operational product before it asks anything else."
+      "useful_lesson": "Preview status is a fact about availability, not about quality, and it belongs in the inclusion decision rather than in a score dimension. A system can be described in full architectural detail by its vendor and in a peer-reviewed paper, and still have no boundary a reader can adopt — which is why the gate asks for an identifiable operational product before it asks anything else."
     },
     {
       "name": "Gorgias Cortex",
       "repo": null,
       "reason": "Gorgias describes Cortex as its flagship internal AI agent for Gorgias employees rather than a deployable or directly purchasable system available to Atlas users. The public Gorgias AI Agent is a separate customer-facing ecommerce product and is not substituted for Cortex.",
       "useful_lesson": "Internal agents can demonstrate cross-application work, employee adoption, and operational patterns without establishing a public product boundary."
+    },
+    {
+      "name": "gPTY",
+      "repo": "godot-pty/gpty",
+      "reason": "The GPLv3 README describes a terminal multiplexer built in Godot and Rust that exposes JSON-RPC, CLI, and MCP control surfaces so separately running agents can spawn panes and read output, and it says plainly that \"gpty never orchestrates agent state\". Planning and acting through tools is not its outcome; it is the terminal an agent may drive, which is the disposition already recorded for T3 Code.",
+      "useful_lesson": "Exposing an MCP surface makes a program usable by agents, not an agent; ask which side of the protocol holds the loop."
     },
     {
       "name": "herdr",
@@ -221,7 +287,7 @@
       "name": "Hugging Face Transformers",
       "repo": "huggingface/transformers",
       "reason": "Transformers executes model inference on hardware the user operates, but it is the substrate layer the local-runtime boundary keeps out rather than a runtime of its own. Its repository description and readme call it the model-definition framework for text, vision, audio, and multimodal models \"for both inference and training\", and state the position directly: a supported model definition is compatible with the majority of training frameworks (Axolotl, Unsloth, DeepSpeed, FSDP, PyTorch-Lightning), inference engines (vLLM, SGLang, TGI), and adjacent modeling libraries (llama.cpp, mlx). Serving is a capability of software built to define and train models, not the product, and admitting it would record one execution stack twice: vLLM's Transformers backend loads model implementations from the library and documents performance identical to a dedicated vLLM implementation, Xinference launches a Transformers backend beside its other engines, Text Embeddings Inference loads directories written by Transformers' save_pretrained, and TensorRT LLM carries code derived from it. The bundled transformers serve command is an OpenAI-compatible local server with continuous batching, but its own documentation scopes it to evaluation, experimentation, and moderate load and directs large-scale production to vLLM or SGLang with a Transformers model as the backend, so it is a subcommand of the framework rather than the dedicated serving product the substrate test admits on separate terms. Hugging Face's serving products are already adjudicated: Text Generation Inference is excluded as archived, Text Embeddings Inference is a published runtime, and Inference Endpoints and Inference Providers are inference-service records. Reviewed at v5.16.1, Apache-2.0.",
-      "useful_lesson": "The substrate test turns on purpose, not capability, and a framework can grow a genuine OpenAI-compatible server with continuous batching without becoming a runtime. The framework's own documentation drew the line here by sending production users to the engines built on top of it, and the archive notice on its dedicated serving product pointed the same way \u2014 a vendor retiring its serving engine in favour of downstream engines that adopted its model definitions confirms the substrate relationship rather than freeing the framework to take the retired product's place."
+      "useful_lesson": "The substrate test turns on purpose, not capability, and a framework can grow a genuine OpenAI-compatible server with continuous batching without becoming a runtime. The framework's own documentation drew the line here by sending production users to the engines built on top of it, and the archive notice on its dedicated serving product pointed the same way — a vendor retiring its serving engine in favour of downstream engines that adopted its model definitions confirms the substrate relationship rather than freeing the framework to take the retired product's place."
     },
     {
       "name": "HyperAgents",
@@ -260,9 +326,15 @@
       "useful_lesson": "Agent tracing, evaluation, production observability, and recovery-oriented operations."
     },
     {
+      "name": "LazyCodex",
+      "repo": "code-yeongyu/lazycodex",
+      "reason": "The MIT-licensed README markets \"The one and only agent harness for complex codebases\" but states plainly that \"LazyCodex is a thin distribution layer\": it vendors the oh-my-openagent engine as a git submodule and installs it for one host command line. The Atlas already publishes that engine, whose own record records this distribution under its separate name, so this repository is the same system under another brand.",
+      "useful_lesson": "A distribution wrapper adopts the marketing language of the engine it vendors; follow the submodule before believing the tagline."
+    },
+    {
       "name": "Leela Chess Zero",
       "repo": "LeelaChessZero/lc0",
-      "reason": "Excluded on the same purpose test as KataGo, and recorded separately because on capability it is the stronger case. Its backend coverage \u2014 CUDA, ONNX Runtime over CUDA, TensorRT, ROCm and DirectML, Apple Metal Performance Shaders, CBLAS on CPU, and experimental SYCL \u2014 is broader than that of several published local runtimes, it converts networks to and from ONNX with shipped tools, and its Python binding exposes the backend for direct position evaluation. None of that changes what the software is for: its readme's first sentence is that Lc0 'is a UCI-compliant chess engine designed to play chess via neural network', and its interface is UCI over standard input. Reviewed 2026-09-03 at v0.32.1. Leela Zero, the Go engine that preceded it, is the same call with a dormant default branch and is not recorded separately.",
+      "reason": "Excluded on the same purpose test as KataGo, and recorded separately because on capability it is the stronger case. Its backend coverage — CUDA, ONNX Runtime over CUDA, TensorRT, ROCm and DirectML, Apple Metal Performance Shaders, CBLAS on CPU, and experimental SYCL — is broader than that of several published local runtimes, it converts networks to and from ONNX with shipped tools, and its Python binding exposes the backend for direct position evaluation. None of that changes what the software is for: its readme's first sentence is that Lc0 'is a UCI-compliant chess engine designed to play chess via neural network', and its interface is UCI over standard input. Reviewed 2026-09-03 at v0.32.1. Leela Zero, the Go engine that preceded it, is the same call with a dormant default branch and is not recorded separately.",
       "useful_lesson": "Where two candidates fail on the same test, record the stronger one too. An exclusion that only ever names the weakest example leaves the boundary looking like a quality judgement, when the point is that capability was never the criterion."
     },
     {
@@ -310,7 +382,7 @@
     {
       "name": "Meta Agents Research Environments",
       "repo": "facebookresearch/meta-agents-research-environments",
-      "reason": "A simulation platform whose stated purpose is training and evaluating agents, and whose flagship output is a published benchmark. Unlike the other research artifacts screened in this pass it is genuinely well engineered \u2014 six continuous-integration workflows, type checking, a permissive license, and commits within the last fortnight \u2014 so the exclusion rests on the boundary rather than on quality: the Atlas scores systems a reader deploys, and benchmarks and evaluation environments remain research inputs.",
+      "reason": "A simulation platform whose stated purpose is training and evaluating agents, and whose flagship output is a published benchmark. Unlike the other research artifacts screened in this pass it is genuinely well engineered — six continuous-integration workflows, type checking, a permissive license, and commits within the last fortnight — so the exclusion rests on the boundary rather than on quality: the Atlas scores systems a reader deploys, and benchmarks and evaluation environments remain research inputs.",
       "useful_lesson": "Engineering quality and product boundary are independent tests. Recording why a well-built repository is out of scope keeps a later sweep from re-proposing it on the strength of its continuous integration."
     },
     {
@@ -344,15 +416,21 @@
       "useful_lesson": "A robotics project that ships a mature, widely adopted package with clear licensing can still fail the family test outright when nothing in its documented behavior puts a model in the loop; maturity and adoption do not substitute for that."
     },
     {
+      "name": "NL2SQL Handbook",
+      "repo": "HKUSTDial/NL2SQL_Handbook",
+      "reason": "No LICENSE was fetched (HTTP 404) and the README states none. The repository is the official companion to two Text-to-SQL survey papers: \"We provide a comprehensive survey, in-depth research papers, and benchmark evaluations\", organised as a categorised paper list with a benchmark timeline and small analysis scripts. It ships no maintained run path, so it stays a non-operational research input.",
+      "useful_lesson": "Analysis scripts beside a paper list serve the survey's own figures; a run path exists for the reader of the paper, not for an operator."
+    },
+    {
       "name": "obsidian-claude-pkm",
       "repo": "ballred/obsidian-claude-pkm",
-      "reason": "MIT licensed. The README frames it as \"an execution system that connects your 3-year vision to what you do today,\" but the entire mechanism is Claude Code slash-command markdown files, four agent-definition markdown files, and PostToolUse/session hooks; the README states outright, \"Zero dependencies. Everything runs on bash and markdown.\" No independent engine, retrieval system, or persistence layer exists outside what Claude Code itself already provides \u2014 this is a vault template plus a set of prompt and command definitions, not an operational product with its own claimed behavior.",
+      "reason": "MIT licensed. The README frames it as \"an execution system that connects your 3-year vision to what you do today,\" but the entire mechanism is Claude Code slash-command markdown files, four agent-definition markdown files, and PostToolUse/session hooks; the README states outright, \"Zero dependencies. Everything runs on bash and markdown.\" No independent engine, retrieval system, or persistence layer exists outside what Claude Code itself already provides — this is a vault template plus a set of prompt and command definitions, not an operational product with its own claimed behavior.",
       "useful_lesson": "A repository that ships only instruction files a host agent reads has no claimed behavior of its own to assess. The test is whether an engine, retrieval path, or persistence layer exists outside what the host agent already provides."
     },
     {
       "name": "OpenFold",
       "repo": "aqlaboratory/openfold",
-      "reason": "The best-known open reproduction of AlphaFold 2, described by its own readme as 'a faithful but trainable PyTorch reproduction' and shipping both an inference script and a real training path. It is out for the same reason its upstream is: a model implementation with a runner and a trainer is a research input, and the training half moves it further from the operational systems the Atlas scores rather than closer. The reproduction is a genuine contribution \u2014 a trainable, permissively licensed AlphaFold 2 where the original released weights but not a training path \u2014 and the Atlas has no collection in which that contribution is the thing being compared. ColabFold, Chai-1, and the ESM line are the same shape and are screened under this entry rather than recorded individually.",
+      "reason": "The best-known open reproduction of AlphaFold 2, described by its own readme as 'a faithful but trainable PyTorch reproduction' and shipping both an inference script and a real training path. It is out for the same reason its upstream is: a model implementation with a runner and a trainer is a research input, and the training half moves it further from the operational systems the Atlas scores rather than closer. The reproduction is a genuine contribution — a trainable, permissively licensed AlphaFold 2 where the original released weights but not a training path — and the Atlas has no collection in which that contribution is the thing being compared. ColabFold, Chai-1, and the ESM line are the same shape and are screened under this entry rather than recorded individually.",
       "useful_lesson": "Reproducing a closed research system in the open is valuable and still produces a research artifact. Openness changes who can study a model; it does not change whether the software owns an operational outcome, which is the only question the inclusion gate asks."
     },
     {
@@ -368,16 +446,22 @@
       "useful_lesson": "A framework is not automatically an agent framework. The role turns on whether tool-using agent execution is the product's outcome, and a library of environments and search algorithms fails that test no matter how prestigious its authorship or how directly it descends from a landmark system."
     },
     {
+      "name": "PandaProbe",
+      "repo": "chirpz-ai/pandaprobe",
+      "reason": "The Apache-2.0 README states \"PandaProbe is an open source agent engineering platform\" that \"helps teams collaboratively trace, evaluate, monitor\" agents, shipping client libraries that instrument frameworks such as LangGraph and CrewAI alongside a self-hostable dashboard. Tracing and evaluation of other systems is the product; the same disposition already recorded for LangSmith and AgentOps applies.",
+      "useful_lesson": "Being self-hostable changes who operates a service, not what it does; an observability platform stays an observability platform whoever runs the container."
+    },
+    {
       "name": "Poolside Inference",
       "repo": null,
-      "reason": "Poolside's self-managed inference deployment serves models on customer hardware, which is the local-runtime gate, but the execution boundary is not Poolside's. Its own metrics reference calls the serving process the Poolside vLLM model server and documents native vLLM metrics on the vllm:*, http_* and python_* prefixes, so the runtime, its server interface, and its observability are vLLM's, and vLLM is already published. The certified stack confirms the shape: RKE2, SeaweedFS, an NVIDIA GPU Operator, cert-manager, a container registry, and Terraform providers are third-party components, and the only entries listed as Poolside inference components are a control plane and the documentation bundle. What Poolside adds is real work \u2014 validated hardware options, pinned component versions, an air-gapped Terraform bundle, checkpoint upload and model lifecycle, ingress, an admin toolkit, and support tiers with response-time targets \u2014 but it is deployment and distribution around an existing execution path rather than a separate one, on the same ground as a previously excluded portable packaging of another serving engine.",
+      "reason": "Poolside's self-managed inference deployment serves models on customer hardware, which is the local-runtime gate, but the execution boundary is not Poolside's. Its own metrics reference calls the serving process the Poolside vLLM model server and documents native vLLM metrics on the vllm:*, http_* and python_* prefixes, so the runtime, its server interface, and its observability are vLLM's, and vLLM is already published. The certified stack confirms the shape: RKE2, SeaweedFS, an NVIDIA GPU Operator, cert-manager, a container registry, and Terraform providers are third-party components, and the only entries listed as Poolside inference components are a control plane and the documentation bundle. What Poolside adds is real work — validated hardware options, pinned component versions, an air-gapped Terraform bundle, checkpoint upload and model lifecycle, ingress, an admin toolkit, and support tiers with response-time targets — but it is deployment and distribution around an existing execution path rather than a separate one, on the same ground as a previously excluded portable packaging of another serving engine.",
       "useful_lesson": "Ask what actually holds the request when a vendor ships an enterprise inference stack. Here the tell was free: the operator-facing metrics page names the upstream engine and its metric prefixes, so the serving contract was identifiable without reading a single Helm chart. A closed catalog of first-party models and an impressive certified bill of materials describe the bundle, not the runtime."
     },
     {
       "name": "Poolside Laguna",
       "repo": null,
-      "reason": "Laguna is Poolside's family of open-weight coding models \u2014 XS.2 at 33B total and 3B active parameters, XS 2.1, S 2.1 at 118B and 8B, and M.1 at 225B and 23B \u2014 published as Hugging Face weight repositories under a text-generation pipeline tag. What ships is checkpoints, quantized and GGUF conversions, a draft model for speculative decoding, and a chat template; there is no plan-act-observe loop, no durable memory, and no end-user workspace. Training the weights inside Poolside's own agent harness improves how they behave under a caller's loop but does not move the operational boundary onto them. The curation rules keep bare models on the research-input side of the scope gate, and the local-runtime boundary excludes model weights and families outright. Every layer Laguna reaches a reader through is already represented: the runtimes its release documents (vLLM, SGLang, Ollama, llama.cpp), the services it names as hosts (OpenRouter, Vercel AI Gateway, Baseten), and the agents that call it (Cline, Hermes Agent, Pi, OpenCode, Kilo Code). Poolside's operational surface is pool, its terminal coding agent and ACP client, which is a separate boundary and is not substituted for the weights.",
-      "useful_lesson": "A vendor can train a model family inside its own agent harness and still be releasing a model: the harness is what a reader installs, the weights are what it loads. Licence is also not a family-level property here \u2014 S 2.1 and XS 2.1 are OpenMDW-1.1 while XS.2 and M.1 are Apache 2.0 \u2014 so a single licence claim read off the family name would have been wrong for half the releases."
+      "reason": "Laguna is Poolside's family of open-weight coding models — XS.2 at 33B total and 3B active parameters, XS 2.1, S 2.1 at 118B and 8B, and M.1 at 225B and 23B — published as Hugging Face weight repositories under a text-generation pipeline tag. What ships is checkpoints, quantized and GGUF conversions, a draft model for speculative decoding, and a chat template; there is no plan-act-observe loop, no durable memory, and no end-user workspace. Training the weights inside Poolside's own agent harness improves how they behave under a caller's loop but does not move the operational boundary onto them. The curation rules keep bare models on the research-input side of the scope gate, and the local-runtime boundary excludes model weights and families outright. Every layer Laguna reaches a reader through is already represented: the runtimes its release documents (vLLM, SGLang, Ollama, llama.cpp), the services it names as hosts (OpenRouter, Vercel AI Gateway, Baseten), and the agents that call it (Cline, Hermes Agent, Pi, OpenCode, Kilo Code). Poolside's operational surface is pool, its terminal coding agent and ACP client, which is a separate boundary and is not substituted for the weights.",
+      "useful_lesson": "A vendor can train a model family inside its own agent harness and still be releasing a model: the harness is what a reader installs, the weights are what it loads. Licence is also not a family-level property here — S 2.1 and XS 2.1 are OpenMDW-1.1 while XS.2 and M.1 are Apache 2.0 — so a single licence claim read off the family name would have been wrong for half the releases."
     },
     {
       "name": "robosuite",
@@ -390,6 +474,12 @@
       "repo": "decodingai-magazine/second-brain-ai-assistant-course",
       "reason": "The repository is the code companion to a six-module open course, and the course rather than the assistant is the product: the readme opens by naming it a course, its module table marks the first module as having no code, its lessons live off the repository on the publisher's site, and its header credits several tool vendors as collaborators. The code is real but ungated. Its three tests only check that datasets download, its continuous integration runs two jobs and both are formatting and linting with no test step, it has published no release, and its last code change predates this review by more than a year while the only newer commit edits the readme. The curation rules keep templates and teaching material as research inputs rather than operational systems.",
       "useful_lesson": "A course ships the same directory listing as a product: pipelines, applications, a compose file, a lint workflow. Read the continuous integration for a test step, and the readme for a module table."
+    },
+    {
+      "name": "Second Brain Starter",
+      "repo": "coleam00/second-brain-starter",
+      "reason": "No licence is served at any usual path — LICENSE, LICENSE.md, and LICENSE.txt all return 404 — and the README claims none, so no source model could be established. The repository ships one skill document, six Markdown memory templates, an architecture reference, and two images; it contains no code. Its README says it is \"A skill for Claude Code that generates a personalized Product Requirements Document (PRD) for building your own AI second brain\", so what a reader adopts is a blueprint the host agent writes from a filled-in template. Under ADR 031 it owns no state it reads back and does no enforced work.",
+      "useful_lesson": "A pack whose output is a plan for a system is not that system. Seed templates become someone's memory only once they build the thing the plan describes, and the repository never reads them again."
     },
     {
       "name": "Second-Brain",
@@ -437,7 +527,7 @@
     {
       "name": "T3 Code",
       "repo": "pingdotgg/t3code",
-      "reason": "MIT licensed. The README describes itself plainly as \"an 'agent harness control surface'\" that \"enables control of the agents on your machine\" through a mobile app, web app, and Electron desktop app, and states outright: \"Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.\" Installation requires the user to separately install and authenticate one of those third-party agents first (\"install Codex CLI and run `codex login`,\" etc.); T3 Code itself performs no planning or task execution \u2014 it is a remote session manager and dashboard layered on top of already-installed, separately-authenticated agent products, explicitly modeled on \"the Codex desktop app, Conductor, Claude Desktop and Cursor Glass.\" No claimed behavior in the README describes T3 Code itself taking actions through tools; every agentic capability belongs to the wrapped third-party CLI the user already runs. The operational product represented here is a control and session-management surface for other vendors' agents, not an agent system with a claimed behavior of its own.",
+      "reason": "MIT licensed. The README describes itself plainly as \"an 'agent harness control surface'\" that \"enables control of the agents on your machine\" through a mobile app, web app, and Electron desktop app, and states outright: \"Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.\" Installation requires the user to separately install and authenticate one of those third-party agents first (\"install Codex CLI and run `codex login`,\" etc.); T3 Code itself performs no planning or task execution — it is a remote session manager and dashboard layered on top of already-installed, separately-authenticated agent products, explicitly modeled on \"the Codex desktop app, Conductor, Claude Desktop and Cursor Glass.\" No claimed behavior in the README describes T3 Code itself taking actions through tools; every agentic capability belongs to the wrapped third-party CLI the user already runs. The operational product represented here is a control and session-management surface for other vendors' agents, not an agent system with a claimed behavior of its own.",
       "useful_lesson": "Controlling another vendor's already-installed agent is not performing the work. Where installation requires the user to authenticate a third-party agent first, the agentic behavior belongs to that agent, not to the surface driving it."
     },
     {
@@ -455,7 +545,7 @@
     {
       "name": "The Virtual Lab",
       "repo": "zou-group/virtual-lab",
-      "reason": "The best-engineered candidate in its batch \u2014 MIT, published to PyPI at 1.2.0, and actively maintained \u2014 and still not the system it is known for. Its library exports Agent and run_meeting, which is to say it simulates agent meetings. The nanobody discovery loop the project is cited for was human-run SLURM scripts copied out of a notebook by hand, so the repository does not own the loop a record would be scored on.",
+      "reason": "The best-engineered candidate in its batch — MIT, published to PyPI at 1.2.0, and actively maintained — and still not the system it is known for. Its library exports Agent and run_meeting, which is to say it simulates agent meetings. The nanobody discovery loop the project is cited for was human-run SLURM scripts copied out of a notebook by hand, so the repository does not own the loop a record would be scored on.",
       "useful_lesson": "Packaging quality and owning the advertised loop are independent tests, and the best-maintained candidate in a batch can be the one whose library does not do the advertised thing. The exported names of the public interface are where that shows up first."
     },
     {

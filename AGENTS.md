@@ -17,6 +17,8 @@ Read only the documents required by the change:
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
 | visual builders, authoring surface, or agent interfaces | `docs/TAXONOMY.md`, then `docs/adr/019-authoring-surface-is-a-trait-not-a-role.md` |
+| skill packs, plugins, vault bundles, or harness add-ons | `docs/CURATION.md`, then `docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md` |
+| local-first or editability traits, or their card badges | `docs/DATA_MODEL.md`, then `docs/adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md` |
 | vendor-hosted platforms, who operates a system, or deployment traits | `docs/TAXONOMY.md`, then `docs/adr/018-operating-party-is-a-trait-not-a-role.md` and `docs/adr/003-multi-axis-directory.md` |
 | provider relationships or model backends | `docs/DATA_MODEL.md`, then `docs/adr/006-provider-relationships-are-orthogonal.md` |
 | forks, ports, renames, or derivative candidates | `docs/CURATION.md`, then `docs/adr/020-derivative-records-turn-on-operational-boundary.md` for the boundary test and `docs/adr/016-superseded-predecessors-keep-their-record.md` for renames and declared successors |

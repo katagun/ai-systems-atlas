@@ -66,14 +66,15 @@ test("the blog index and its posts are reachable and self-contained", async ({ p
   await page.goto("/blog/", { waitUntil: "networkidle" });
   await expect(page.locator("h1")).toHaveText("Writing");
 
-  const first = page.locator(".detail-grid h2 a").first();
+  const first = page.locator(".post-list h2 a").first();
   await expect(first).toBeVisible();
   await first.click();
 
-  // A post is a static page: no application script, no catalog fetch, nothing third-party.
+  // A post is a static page: no application script, no catalog fetch, nothing
+  // third-party. Its only script is the inline theme stamp index.html also carries.
   await expect(page.locator("h1")).not.toHaveText("Writing");
   await expect(page.locator(".eyebrow")).toContainText("not a catalog record");
-  expect(await page.locator("script").count()).toBe(0);
+  expect(await page.locator("script[src]").count()).toBe(0);
   expect(external).toEqual([]);
 });
 
@@ -81,4 +82,45 @@ test("the primary navigation links to the blog", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
   await page.getByRole("link", { name: "Blog" }).click();
   await expect(page).toHaveURL(/\/blog\/$/);
+});
+
+test("the blog carries the site header, and its view links land on the directory", async ({ page }) => {
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  const header = page.locator("header.site-header");
+  await expect(header).toBeVisible();
+  await expect(header.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "page");
+
+  // A post sits one level deeper than the index; its links must still resolve.
+  await page.locator(".post-list h2 a").first().click();
+  await expect(page.locator("header.site-header")).toBeVisible();
+  await page.getByRole("link", { name: "Finder" }).click();
+  await expect(page).toHaveURL(/\/\?view=finder$/);
+  await expect(page.locator("#finder")).toBeVisible();
+
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("#directory")).toBeVisible();
+});
+
+test("the blog's theme control cycles and its choice follows the reader to the directory", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  const toggle = page.locator("#theme-toggle");
+  await expect(toggle).toHaveAttribute("aria-label", "Theme: system");
+  await toggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await toggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveAttribute("aria-label", "Theme: dark");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#0f141b");
+
+  // The choice is the site's, not the blog's: a post and the directory both honour it.
+  await page.locator(".post-list h2 a").first().click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-label", "Theme: dark");
+  await page.locator("#theme-toggle").click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", /.+/);
 });
