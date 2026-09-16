@@ -361,6 +361,18 @@
       "disposition": "held",
       "reason": "Early preview under active development with no dated identity and no weight repository; held per the qwen3.8-max-preview precedent until it stabilizes or retires.",
       "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "alibaba/qwen3-vl-235b-a22b-instruct",
+      "disposition": "held",
+      "reason": "No weight-scope license document in the Hugging Face repository (badge only); the code-repo Apache appendix is an uncompleted template that does not cover the weights. Held until Qwen publishes governing terms.",
+      "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "alibaba/qwen3-vl-235b-a22b-thinking",
+      "disposition": "held",
+      "reason": "No weight-scope license document in the Hugging Face repository (badge only); the code-repo Apache appendix is an uncompleted template that does not cover the weights. Held until Qwen publishes governing terms.",
+      "decided_at": "2026-09-16"
     }
   ]
 }
