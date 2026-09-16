@@ -11,7 +11,7 @@
           "scope": "Amazon Quick managed service and product features governed by AWS service terms",
           "kind": "web_terms",
           "url": "https://aws.amazon.com/service-terms/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
@@ -1555,10 +1555,10 @@
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "AWS Service Terms; the only AgentCore-specific section is 50.15, covering the preview Payments capability",
+          "scope": "AWS Service Terms; the only AgentCore-specific section is 50.15, covering the Payments capability",
           "kind": "web_terms",
           "url": "https://aws.amazon.com/service-terms/",
-          "verified_at": "2026-09-12"
+          "verified_at": "2026-09-15"
         },
         {
           "license_id": "LicenseRef-Proprietary",
