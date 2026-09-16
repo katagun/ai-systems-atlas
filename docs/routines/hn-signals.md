@@ -42,8 +42,10 @@ proposal for a human, never an accepted classification. See
 NEVER FETCH ANYTHING YOURSELF. You have no need to: `prepare` already fetched, hashed,
 and bundled every readable page, using the same hardened fetch path
 `scripts/build_candidate_evidence.py` uses for arbitrary hosts. `finish` re-fetches every
-page again and rejects the run if any page's `content_sha256` no longer matches what was
-recorded — that catches a vendor page that changed underneath you. Validation is what
+page you assessed. If a page's `content_sha256` no longer matches what was recorded — a
+vendor page that changed underneath you — `finish` itself drops that one assessment and
+commits the rest; never remove one yourself. If a page cannot be fetched at all, `finish`
+rejects the whole run. Validation is what
 catches an assessment resting on evidence nobody can reproduce: an assessment may cite
 only its own signal's pinned page, and an evidence `url` or `content_sha256` that differs
 from that signal's is rejected. Cite the page you were handed and nothing else.
