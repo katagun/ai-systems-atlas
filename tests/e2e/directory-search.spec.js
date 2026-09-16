@@ -167,6 +167,10 @@ test("a cross-profile comparison URL is discarded rather than partially restored
 test("mixed browsing surfaces local runtimes without scores or comparison", async ({ page }) => {
   await page.goto("/");
 
+  // Past the default 24: reviewed model records name their SGLang
+  // deployment path, so the runtime card sorts past page one.
+  await page.locator('#all-directory-pager select[aria-label="Results per page"]').selectOption("96");
+
   await page.locator("#all-directory-search").fill("SGLang");
   const runtimeCards = page.locator("#all-directory-grid .local-runtime-card h2");
   await expect(runtimeCards.filter({ hasText: /^SGLang$/ })).toHaveCount(1);
