@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -537,6 +537,7 @@ test("record references parse only a known kind and a plain id", () => {
   assert.deepEqual(parseRecordReference("inference:openai-api"), { kind: "inference", id: "openai-api" });
   assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
   assert.deepEqual(parseRecordReference("model:model-alibaba-qwen2-5-coder-0-5b"), { kind: "model", id: "model-alibaba-qwen2-5-coder-0-5b" });
+  assert.deepEqual(parseRecordReference("pack:superpowers"), { kind: "pack", id: "superpowers" });
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
@@ -548,7 +549,44 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("inference", "openai-api"), "records/inference-services/openai-api/");
   assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
   assert.equal(shareRecordPath("model", "model-alibaba-qwen2-5-coder-0-5b"), "records/models/model-alibaba-qwen2-5-coder-0-5b/");
+  assert.equal(shareRecordPath("pack", "superpowers"), "records/packs/superpowers/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
+});
+
+const packs = [
+  { id: "superpowers", name: "Superpowers", steward: "obra", description: "A development methodology as skills.", pack_type: "process_kit", hosts: ["claude_code", "codex"], install_mechanism: "host_marketplace", licenses: ["MIT"], evidence: [{ url: "https://hidden.example/manifest" }] },
+  { id: "kit", name: "Brain Kit", steward: "coleam00", description: "A vault starter.", pack_type: "vault_bundle", hosts: ["claude_code"], install_mechanism: "clone_template", licenses: ["LicenseRef-Unclear"], evidence: [] },
+  { id: "market", name: "Agent Market", steward: "dave", description: "A marketplace manifest.", pack_type: "marketplace", hosts: ["claude_code"], install_mechanism: "host_marketplace", licenses: ["MIT"], evidence: [] },
+];
+
+test("pack filters combine type, host, install mechanism, and licence, sorted by name only", () => {
+  assert.deepEqual(filterPacks(packs, {}).map(item => item.name), ["Agent Market", "Brain Kit", "Superpowers"]);
+  assert.deepEqual(filterPacks(packs, { sort: "score" }).map(item => item.name), ["Agent Market", "Brain Kit", "Superpowers"]);
+  assert.deepEqual(filterPacks(packs, { type: "marketplace" }).map(item => item.name), ["Agent Market"]);
+  assert.deepEqual(filterPacks(packs, { host: "codex" }).map(item => item.name), ["Superpowers"]);
+  assert.deepEqual(filterPacks(packs, { install: "clone_template" }).map(item => item.name), ["Brain Kit"]);
+  assert.deepEqual(filterPacks(packs, { license: "MIT" }).map(item => item.name), ["Agent Market", "Superpowers"]);
+});
+
+test("pack search covers identity and steward prose but not evidence URLs", () => {
+  assert.deepEqual(filterPacks(packs, { term: "coleam00" }).map(item => item.name), ["Brain Kit"]);
+  assert.deepEqual(filterPacks(packs, { term: "hidden" }), []);
+  assert.deepEqual(filterPacks(packs, { term: "manifest", searchIndex: { superpowers: "manifest words" } }).map(item => item.name), ["Agent Market", "Superpowers"]);
+});
+
+test("mixed directory browsing includes packs and reads their own index key", () => {
+  const combinedProjects = [{ ...projects[3], id: "agent", description: "Coding system" }];
+  const entries = filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, {}, packs);
+  assert.ok(entries.some(item => item.kind === "pack" && item.record.name === "Superpowers"));
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }, packs).map(item => [item.kind, item.record.name]),
+    [["pack", "Superpowers"]],
+  );
+  assert.deepEqual(
+    filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "onlyinindex", packSearchIndex: { kit: "onlyinindex" } }, packs).map(item => item.record.name),
+    ["Brain Kit"],
+  );
+  assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }), []);
 });
 
 test("theme preference cycles system, light, dark and recovers from unknown values", () => {
@@ -838,6 +876,7 @@ test("specifications, models, and unknown kinds or families get no badges", () =
   assert.deepEqual(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
+  assert.deepEqual(cardBadges("pack", packs[0]), []);
 });
 
 test("inference-service and local-runtime badges skip facts their cards already print", () => {
