@@ -6375,6 +6375,330 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-openai-gpt-5-4-mini",
+      "source_id": "openai/gpt-5.4-mini",
+      "name": "GPT-5.4 mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+      "description": "The efficient GPT-5.4 variant for coding, computer use, and subagents at high volume, exposed as the gpt-5.4-mini alias over the gpt-5.4-mini-2026-03-17 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.4 mini",
+        "description": "Strong small GPT for coding subagents, quick tool use, and high-volume work",
+        "family": "gpt-mini",
+        "release_date": "2026-03-17",
+        "last_updated": "2026-03-17",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.4 Mini as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.4 Mini model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.4 Mini release whose API page identifies gpt-5.4-mini-2026-03-17 as the fixed snapshot behind the gpt-5.4-mini alias; the API deprecation page carries no retirement entry for this line as of review. ChatGPT, the GPT-5.4, GPT-5.4 Nano, and GPT-5.4 Pro siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with chat, responses, and batch endpoints, and Azure Foundry, whose reasoning-models page names gpt-5.4-mini"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Access, quotas, and lifecycle remain controlled by the managed APIs rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.4 Mini model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.4-mini",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.4-mini.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-4-nano",
+      "source_id": "openai/gpt-5.4-nano",
+      "name": "GPT-5.4 nano",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4-nano",
+      "description": "The cheapest GPT-5.4 variant for simple high-volume work such as classification and extraction, exposed as the gpt-5.4-nano alias over the gpt-5.4-nano-2026-03-17 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.4 nano",
+        "description": "Cheapest GPT-5.4 lane for simple routing, extraction, and bulk automation",
+        "family": "gpt-nano",
+        "release_date": "2026-03-17",
+        "last_updated": "2026-03-17",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.4 Nano as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.4 Nano model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.4 Nano release whose API page identifies gpt-5.4-nano-2026-03-17 as the fixed snapshot behind the gpt-5.4-nano alias; the API deprecation page carries no retirement entry for this line as of review. ChatGPT, the GPT-5.4, GPT-5.4 Mini, and GPT-5.4 Pro siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with chat, responses, and batch endpoints, and Azure Foundry, whose reasoning-models page names gpt-5.4-nano"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Access, quotas, and lifecycle remain controlled by the managed APIs rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.4 Nano model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.4-nano",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.4-nano",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.4-nano.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-4-pro",
+      "source_id": "openai/gpt-5.4-pro",
+      "name": "GPT-5.4 Pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4-pro",
+      "description": "The precision GPT-5.4 tier with more test-time compute for demanding professional reasoning, exposed as the gpt-5.4-pro alias over the gpt-5.4-pro-2026-03-05 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.4 Pro",
+        "description": "More exact GPT-5.4 tier for demanding professional reasoning and agent tasks",
+        "family": "gpt-pro",
+        "release_date": "2026-03-05",
+        "last_updated": "2026-03-05",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.4 Pro as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.4 Pro model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.4 Pro release whose API page identifies gpt-5.4-pro-2026-03-05 as the fixed snapshot behind the gpt-5.4-pro alias; the API deprecation page carries no retirement entry for this line as of review. ChatGPT, the GPT-5.4, GPT-5.4 Mini, and GPT-5.4 Nano siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with a 1M-token context window, and Azure Foundry, whose reasoning-models page names gpt-5.4-pro"
+      ],
+      "tradeoffs": [
+        "Serving is narrower than the base model: Responses API only, with no Chat Completions and no batch endpoint",
+        "No developer-published weights are available for self-operation or independent deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.4 Pro model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.4-pro",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.4-pro",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.4-pro.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-openai-gpt-5-5",
       "source_id": "openai/gpt-5.5",
       "name": "GPT-5.5",
