@@ -360,6 +360,22 @@ locally" under "Attention-source sweep" below for the `--from-ref` option that l
 `prepare` build from a local branch instead, and how `finish` still checks the right base
 when it does.
 
+`finish` makes one change to the queue itself. Before any guard reads the queue, it
+re-fetches each page whose signal gained an `assessment` this run — using the `url` and
+`content_sha256` from the base commit, not the run's copy — and hashes it with the same
+`extract_visible_text` and `content_hash` the sweep and `verify_signal_pages.py` use. An
+assessment whose page no longer matches is removed, and the rest of the run still commits.
+Vendor pages drift within minutes: on 2026-09-15 two runs, of 29 and 55 assessments, were
+each discarded whole because one unrelated page changed between `prepare` and `finish`.
+The removal is deliberately narrow. It touches only blocks the base queue did not have,
+so a disposition already on the branch is never removed; only a digest mismatch triggers
+it, while a page that cannot be fetched still aborts the run; the decision is made in
+`finish`'s own process, never from anything a `CHECKS` command prints; and the dropped
+story ids go to stderr and into the commit message. The field guard, validation, the
+`--recheck` in `CHECKS`, and the re-read before `git add` all run afterwards against the
+final bytes, so a page that drifts in the short window between the drop and that recheck
+still fails the run. A signal whose assessment was dropped is left with none.
+
 To schedule the routine, run `uv run python scripts/run_hn_signals.py install-prompt` from
 the sweep worktree — the checkout holding the `local/hn-signals` branch the prompt reads with
 `--from-ref` — then register an `hn-signals` scheduled task in the desktop app for each
@@ -655,7 +671,9 @@ omitting `--from-ref` behaves exactly as before.
 
 `scripts/run_candidate_triage.py` and `scripts/run_hn_signals.py` share their mechanical
 guards through `scripts/routine_guards.py`, and this threat model applies identically to
-both. It was sharpened by an adversarial review that found the base-record file could be
+both. One behavior is not shared: `run_hn_signals.py finish` removes this run's assessments
+whose pinned page changed before its guards run (see "Review a signal batch"), while
+`run_candidate_triage.py finish` still aborts when its evidence recheck fails. It was sharpened by an adversarial review that found the base-record file could be
 relocated out of the worktree but still bypassed — read on for what closed and what did
 not.
 
