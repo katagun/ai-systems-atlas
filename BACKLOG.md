@@ -85,6 +85,7 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Re-read and scope the Meta Business Agent terms when their browser-only host becomes reachable.
 - [ ] Revisit Google Co-Scientist and AlphaProof when either becomes generally available through a self-serve or contractable product boundary.
 - [ ] Revisit Meta's announced Harness framework only after a repository, documentation, or first-party product page exists.
+- [ ] Revisit Harvey Tenet only if Harvey publishes weights, a model card with a license, or a callable endpoint. Harvey's 2026-08-20 research preview names a Kimi K3 base post-trained with Fireworks, but neither that post nor Fireworks' 2026-08-26 write-up offers an artifact, license, or API; Hugging Face lists no Harvey organisation and models.dev has no source ID. It therefore fails the identity and evidence gate in [`docs/MODELS.md`](docs/MODELS.md) and cannot be held in `model-dispositions.json`, which requires a snapshot source ID. Today it is a proprietary checkpoint inside the Harvey product, which the reviewed Kimi K3 record's boundary already excludes as a downstream fine-tune; the Harvey product itself would meet the same repo-less queue gap recorded for Elicit.
 
 ## Later
 
