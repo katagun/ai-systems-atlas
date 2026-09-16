@@ -4846,6 +4846,71 @@
         "proposer": "human",
         "held_by": "ADR 031 scored review of the brainstorming companion server and host plugins"
       }
+    },
+    {
+      "repo": "ballred/obsidian-claude-pkm",
+      "name": "obsidian-claude-pkm",
+      "url": "https://github.com/ballred/obsidian-claude-pkm",
+      "description": "A complete starter kit for an Obsidian + Claude Code personal knowledge management system.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "memory_bridge",
+      "classification_confidence": 0.5,
+      "github_detected_license": "MIT",
+      "stars": 1865,
+      "topics": [
+        "ai-agents",
+        "claude-code",
+        "goal-tracking",
+        "obsidian",
+        "pkm",
+        "productivity",
+        "second-brain"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-16",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md",
+        "finding": "The tree ships a vault-template/ directory with 13 SKILL.md skill directories, 4 agent definitions, 4 rule documents, and an output style under `vault-template/.claude/`, plus 4 Goals documents, 3 note Templates, a root CLAUDE.md, and an example daily note and project. It also ships `vault-template/.claude/settings.json`, whose PostToolUse matcher on Write and Edit runs `vault-template/.claude/hooks/auto-commit.sh`, which runs `git add .` and `git commit` over the user's vault after every edit the host makes, and whose SessionStart entry runs `session-init.sh`, which greps `Goals/3. Weekly Review.md` for the user's \"ONE Big Thing\" and the date of the last review and prints them back into the session. Shipped code that runs at runtime and acts on the user's vault is not the install, sync, or load-and-print machinery that boundary test 4 in `docs/PACKS.md` admits, so the repository cannot be an unscored pack record. Whether those hooks amount to owned state or enforced work is ADR 031's question and is not decided here.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ballred/obsidian-claude-pkm/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "6af0de1a64d48e20f8cc2ab031750cc6a9975d5b22cdf43e079110855521db32",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "83d777705e6acaca608156882205a2fa365eb1c5",
+            "immutable_url": "https://api.github.com/repos/ballred/obsidian-claude-pkm/git/blobs/83d777705e6acaca608156882205a2fa365eb1c5"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ballred/obsidian-claude-pkm/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "afaf6de63ed4fbab2c2503a53f9452f90547eba09cb65e682fc5094d22b0eb08",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "f62634dd69d8173f4118c99618bf180e906c8490",
+            "immutable_url": "https://api.github.com/repos/ballred/obsidian-claude-pkm/git/blobs/f62634dd69d8173f4118c99618bf180e906c8490"
+          },
+          {
+            "label": "Vault auto-commit hook",
+            "url": "https://github.com/ballred/obsidian-claude-pkm/blob/main/vault-template/.claude/hooks/auto-commit.sh",
+            "kind": "git_blob",
+            "content_sha256": "c5c1ed809f4ea05b52b5fe8a33867c0f0d0ac9b574bcb28c339135fa9d4f521b",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "1368f615b2cec90ae572f9c13406d4532a98d339",
+            "immutable_url": "https://api.github.com/repos/ballred/obsidian-claude-pkm/git/blobs/1368f615b2cec90ae572f9c13406d4532a98d339"
+          }
+        ],
+        "proposed_at": "2026-09-16",
+        "proposer": "human",
+        "held_by": "ADR 031 scored review of the vault hooks"
+      }
     }
   ]
 }

@@ -719,9 +719,10 @@ class DirectoryTests(unittest.TestCase):
     def test_packs_are_a_separate_unscored_collection(self) -> None:
         records = self.packs["packs"]
         project_repos = {p["repo"].lower() for p in self.document["projects"] if p.get("repo")}
-        # superpowers is absent by review: its brainstorming skill ships a server that runs
-        # the user's browser and keeps a store it re-reads, so ADR 031 decides it, not ADR 032.
-        expected = {"claude-code-tresor", "agent-toolkit", "buildwithclaude", "second-brain-starter", "obsidian-claude-pkm"}
+        # superpowers and obsidian-claude-pkm are absent by review: both ship code that runs at
+        # runtime — a browser companion server with a state directory, and vault hooks that commit
+        # after every edit — so boundary test 4 sends them to ADR 031 rather than to this collection.
+        expected = {"claude-code-tresor", "agent-toolkit", "buildwithclaude", "second-brain-starter"}
         self.assertLessEqual(expected, {record["id"] for record in records})
         for record in records:
             for field in ("system_family", "primary_role", "score_profile", "score", "stars", "stars_verified_at"):
