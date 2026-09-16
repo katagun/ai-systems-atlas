@@ -376,6 +376,17 @@ story ids go to stderr and into the commit message. The field guard, validation,
 final bytes, so a page that drifts in the short window between the drop and that recheck
 still fails the run. A signal whose assessment was dropped is left with none.
 
+The queue itself is transient, and a reviewer has to act accordingly. `sweep_hackernews.py`
+rebuilds `directory/hn-signals.json` from one day's window and carries nothing forward, so
+every assessment in it — an unattended proposal, or a block you edited in place and marked
+`proposer: "human"` — is gone at the next sweep, on `main` as well as on the branch. Only
+the durable records outlive it: a candidate, a project, or an exclusion carrying the page's
+`url`, each of which the next sweep then suppresses before it fetches anything. So a day's
+proposals are worth reviewing before the following morning's sweep, and a disposition you
+want to keep belongs in one of those files rather than in the queue. Nothing enforces this;
+it is a property of a queue rebuilt daily from an attention source, and the reason a
+verdict is accepted by writing a record elsewhere rather than by editing the signal.
+
 To schedule the routine, run `uv run python scripts/run_hn_signals.py install-prompt` from
 the sweep worktree — the checkout holding the `local/hn-signals` branch the prompt reads with
 `--from-ref` — then register an `hn-signals` scheduled task in the desktop app for each
@@ -618,8 +629,19 @@ moves the swept window back, so `--lag-days 3` sweeps the day that ended three d
 The sweep leaves `directory/hn-signals.json` modified in the working tree. The scheduled
 routine reads the queue from the local branch `local/hn-signals`, so in practice the launchd
 job runs a small wrapper from a dedicated worktree on that branch: refuse a dirty tree,
-rebase onto `origin/main` so the sweep and the routine both run current code, sweep, and
-commit the file.
+fetch `origin main`, move the branch onto `origin/main` so the sweep and the routine both
+run current code, sweep, and commit the file.
+
+That last step resets rather than rebases, and the difference is load-bearing. Each sweep
+rewrites the queue wholesale, so replaying yesterday's sweep commits onto `main` conflicts
+with any queue change merged there. On 2026-09-15, after [#165](https://github.com/katagun/ai-systems-atlas/pull/165)
+merged a day of assessments, that rebase conflicted, aborted, and every later sweep refused
+with `could not rebase onto origin/main` — while the scheduled routine silently reran on the
+previous day's queue, because a queue that is merely stale still reads as a queue. A reset
+discards nothing that matters: assessments are committed to `hn-signals/pending` by
+`run_hn_signals.py finish`, never to this branch, and the branch is never pushed. Keep the
+previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
+remains recoverable for one generation.
 
 ### Running the loop locally
 
