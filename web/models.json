@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-12",
+  "verified_at": "2026-09-16",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -2263,9 +2263,9 @@
       "id": "model-google-gemini-3-1-pro-preview",
       "source_id": "google/gemini-3.1-pro-preview",
       "name": "Gemini 3.1 Pro Preview",
-       "developer": "Google",
-       "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-pro",
-       "description": "A preview multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; active since February 2026 as the replacement for the shut-down Gemini 3 Pro Preview, with general availability still pending.",
+      "developer": "Google",
+      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-pro",
+      "description": "A preview multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, without downloadable model weights; active since February 2026 as the replacement for the shut-down Gemini 3 Pro Preview, with general availability still pending.",
       "model_type": "multimodal_language_model",
       "distribution_modes": [
         "developer_api"
@@ -4254,6 +4254,111 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-openai-gpt-oss-20b",
+      "source_id": "openai/gpt-oss-20b",
+      "name": "GPT OSS 20B",
+      "developer": "OpenAI",
+      "url": "https://huggingface.co/openai/gpt-oss-20b",
+      "description": "OpenAI's 21-billion-parameter open-weight reasoning model for low-latency, local, or specialized use, published as Apache-2.0 weights with an accompanying law-only usage statement.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "GPT OSS 20B",
+        "description": "Open GPT reasoning model for self-hosted agents and controllable deployments",
+        "family": "gpt-oss",
+        "release_date": "2025-08-05",
+        "last_updated": "2025-08-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/openai/gpt-oss-20b"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text and governs the published weights, tokenizer, and chat template. A separate USAGE_POLICY file asks users to comply with applicable law but adds no use-based restrictions beyond the license, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "openai/gpt-oss-20b model weights, tokenizer, chat template, and original and Metal checkpoint artifacts",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/openai/gpt-oss-20b/blob/6cee5e81ee83917806bbde320786a8fb61efebee/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the openai/gpt-oss-20b weight release at Hugging Face commit 6cee5e81ee83917806bbde320786a8fb61efebee, last modified 2025-08-26. The gpt-oss-120b sibling, downstream quantizations and fine-tunes, and independent hosting providers remain separate boundaries; OpenAI serves no managed API for this model.",
+      "strengths": [
+        "OpenAI publishes Safetensors, original checkpoint, and Metal artifacts in one ungated repository with a repository license file",
+        "The 20B sizing runs within 16 GB of memory with documented Transformers, vLLM, SGLang, Ollama, LM Studio, and Docker paths, and the smaller model can be fine-tuned on consumer hardware"
+      ],
+      "tradeoffs": [
+        "Neither the model card nor OpenAI's docs page carries dated release notes or a deprecation posture, so version identity rests on repository commits",
+        "OpenAI's docs page is reference-only with zero rate limits, so every deployment is self-operated or third-party"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 8.08
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoints, and runtime guidance",
+          "url": "https://huggingface.co/openai/gpt-oss-20b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI docs page for gpt-oss-20b",
+          "url": "https://developers.openai.com/api/docs/models/gpt-oss-20b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-oss-20b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-openai-gpt-4-1",
       "source_id": "openai/gpt-4.1",
       "name": "GPT-4.1",
@@ -4348,6 +4453,215 @@
       ],
       "metadata_verified_at": "2026-09-04",
       "verified_at": "2026-09-04"
+    },
+    {
+      "id": "model-openai-gpt-4-1-mini",
+      "source_id": "openai/gpt-4.1-mini",
+      "name": "GPT-4.1 mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+      "description": "The smaller, faster GPT-4.1 variant for instruction following and tool calling with a 1M-token context window and no reasoning step, exposed as the gpt-4.1-mini alias over the gpt-4.1-mini-2025-04-14 snapshot through OpenAI's managed developer API, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-4.1 mini",
+        "description": "Affordable GPT-4.1 lane for fast coding help and structured extraction",
+        "family": "gpt-mini",
+        "release_date": "2025-04-14",
+        "last_updated": "2025-04-14",
+        "knowledge_cutoff": "2024-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1047576,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-4.1 Mini as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-4.1 Mini model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-4.1 Mini release whose API page identifies gpt-4.1-mini-2025-04-14 as the fixed snapshot behind the gpt-4.1-mini alias. OpenAI's February 2026 retirement of GPT-4.1 mini from ChatGPT explicitly leaves the API unchanged, and the API deprecation page carries no entry for this snapshot as of review. ChatGPT, the GPT-4.1 and GPT-4.1 nano siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "The managed API supports fine-tuning on the mini snapshot alongside chat, responses, assistants, and batch endpoints"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "OpenAI's own page steers new complex work toward GPT-5 Mini, and the ChatGPT retirement scopes this line's future to the API"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.66
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-4.1 Mini model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI announcement scoping the GPT-4.1 mini retirement to ChatGPT with no API changes",
+          "url": "https://openai.com/index/retiring-gpt-4o-and-older-models/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-4.1-mini.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-4-1-nano",
+      "source_id": "openai/gpt-4.1-nano",
+      "name": "GPT-4.1 nano",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4.1-nano",
+      "description": "The fastest, cheapest GPT-4.1 variant for instruction following and tool calling with a 1M-token context window and no reasoning step, exposed as the gpt-4.1-nano alias over the gpt-4.1-nano-2025-04-14 snapshot through OpenAI's managed developer API, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-4.1 nano",
+        "description": "Tiny GPT-4.1 option for classification, routing, and very high-volume tasks",
+        "family": "gpt-nano",
+        "release_date": "2025-04-14",
+        "last_updated": "2025-04-14",
+        "knowledge_cutoff": "2024-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1047576,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-4.1 Nano as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-4.1 Nano model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-4.1 Nano release whose API page identifies gpt-4.1-nano-2025-04-14 as the fixed snapshot behind the gpt-4.1-nano alias; OpenAI's deprecation page lists that snapshot for shutdown on 2026-10-23 with gpt-5.6-luna as the substitute model. ChatGPT, the GPT-4.1 and GPT-4.1 Mini siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "The deprecation page records an announcement date, shutdown date, and substitute model for the snapshot"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "The only documented snapshot shuts down on 2026-10-23, about five weeks after review, with migration directed at gpt-5.6-luna"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.66
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-4.1 Nano model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4.1-nano",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-4.1-nano.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
     },
     {
       "id": "model-openai-gpt-4o",
@@ -4452,6 +4766,108 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-openai-gpt-4o-mini",
+      "source_id": "openai/gpt-4o-mini",
+      "name": "GPT-4o mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+      "description": "The fast, affordable GPT-4o variant for focused tasks and fine-tuning, exposed as the gpt-4o-mini alias over the gpt-4o-mini-2024-07-18 snapshot through OpenAI's managed developer API, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-4o mini",
+        "description": "Small omni GPT for cheap multimodal assistance and production-scale traffic",
+        "family": "gpt-mini",
+        "release_date": "2024-07-18",
+        "last_updated": "2024-07-18",
+        "knowledge_cutoff": "2023-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-4o Mini as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-4o Mini model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-4o Mini release whose API page identifies gpt-4o-mini-2024-07-18 as the fixed snapshot behind the gpt-4o-mini alias; the API deprecation page carries no entry for this snapshot as of review. ChatGPT, GPT-4o, the transcribe, realtime, audio, and search mini variants, fine-tuned derivatives, and later GPT releases are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "The managed API supports fine-tuning on the mini snapshot, and larger-model outputs can be distilled into it for lower cost and latency"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.66
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-4o Mini model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-4o-mini.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-openai-gpt-5",
       "source_id": "openai/gpt-5",
       "name": "GPT-5",
@@ -4551,6 +4967,222 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-openai-gpt-5-mini",
+      "source_id": "openai/gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5-mini",
+      "description": "The cost-efficient GPT-5 variant for low-latency, high-volume work, exposed as the gpt-5-mini alias over the gpt-5-mini-2025-08-07 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5 Mini",
+        "description": "Small GPT-5 for responsive agents, coding help, and everyday automation",
+        "family": "gpt-mini",
+        "release_date": "2025-08-07",
+        "last_updated": "2025-08-07",
+        "knowledge_cutoff": "2024-05-30",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5 Mini as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5 Mini model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5 Mini release whose API page identifies gpt-5-mini-2025-08-07 as the fixed snapshot behind the gpt-5-mini alias; OpenAI's deprecation page lists that snapshot for shutdown on 2026-12-11 with gpt-5.6-terra as the recommended replacement. ChatGPT, the GPT-5, GPT-5 nano, and later GPT-5.x releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API and Azure Foundry, whose reasoning-models page names gpt-5-mini with dated feature support"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "The only documented snapshot is already scheduled for shutdown on 2026-12-11, with migration directed at gpt-5.6-terra"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5 Mini model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5-mini",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5-mini",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5-mini.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-nano",
+      "source_id": "openai/gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5-nano",
+      "description": "The fastest, cheapest GPT-5 variant for summarization and classification, exposed as the gpt-5-nano alias over the gpt-5-nano-2025-08-07 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5 Nano",
+        "description": "Tiny GPT-5 lane for routing, extraction, classification, and bulk jobs",
+        "family": "gpt-nano",
+        "release_date": "2025-08-07",
+        "last_updated": "2025-08-07",
+        "knowledge_cutoff": "2024-05-30",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5 Nano as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5 Nano model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5 Nano release whose API page identifies gpt-5-nano-2025-08-07 as the fixed snapshot behind the gpt-5-nano alias; OpenAI's deprecation page lists that snapshot for shutdown on 2026-12-11 with gpt-5.6-luna as the recommended replacement. ChatGPT, the GPT-5, GPT-5 Mini, and later GPT-5.x releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API and Azure Foundry, whose reasoning-models page names gpt-5-nano with dated feature support"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "The only documented snapshot is already scheduled for shutdown on 2026-12-11, with migration directed at gpt-5.6-luna"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5 Nano model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5-nano",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5-nano",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5-nano.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
     },
     {
       "id": "model-openai-gpt-5-5",
