@@ -34,11 +34,15 @@ Two consequences follow. A pack whose only durable artifacts are prose that a ho
 
 A product that does both is reviewed for what it enforces. Its telemetry belongs in prose and never earns the record by itself, so a pack that only watches stays excluded, and the three observability exclusions stand unchanged.
 
-### What this changes
+### The rule's first test caught a mistake in the drafting of it
 
-`vibecode-pro-max-kit` is published and fails both prongs on its own record. Its `canonical_data` is "Markdown plan, spec, and progress files written into the target repository", its architecture is `plain_files`, and it is the only `coding_agent_workflow` record without `persistent_state` among its capabilities. Its two shipped scripts are distribution machinery: one resolves a manifest of file patterns, the other computes a sync plan between the kit and a target project and says of itself, "No side effects — reads files, never writes." The plan documents it is credited with are written by the host agent following its instructions.
+`vibecode-pro-max-kit` looked like the record this rule would evict. Its `canonical_data` is "Markdown plan, spec, and progress files written into the target repository", its architecture is `plain_files`, it is the only `coding_agent_workflow` record without `persistent_state` among its capabilities, and its two top-level scripts are distribution machinery — one resolves a manifest of file patterns, the other computes a sync plan and says of itself, "No side effects — reads files, never writes." A reviewer working from the record, and a skeptic briefed to attack this rule using the repository alone, both concluded it fails each prong.
 
-That record is re-reviewed under this rule rather than left standing as a silent exception. The rule is worth little if the first record it contradicts is the one it declines to touch.
+The repository says otherwise. The kit ships ninety-two executable files, among them a browser skill whose scripts drive Chrome directly to navigate, click, fill, and screenshot, and around forty validators its skills invoke. Its own program runs; it does not only tell a host to run one. It holds its record under the second prong.
+
+Two things follow, and both are the reason the evidence rule is written the way it is. Record prose is not evidence either: `plain_files` and a canonical-data line describing Markdown artifacts survived a review of a repository that ships a Chrome automation library. And the pack that best fits the excluded shape on paper can fail that shape on disk, which is why a reviewer opens the repository before deciding.
+
+The record is re-reviewed to correct what it claims this kit keeps and does, not to remove it.
 
 ## Alternatives considered
 
