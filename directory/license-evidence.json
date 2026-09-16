@@ -3351,6 +3351,21 @@
           "immutable_url": "https://api.github.com/repos/Gentleman-Programming/gentle-ai/git/blobs/3f361df0f623aebd8be1de6f838ee808c23484de"
         }
       ]
+    },
+    {
+      "project_id": "engram",
+      "repo": "Gentleman-Programming/engram",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Gentleman-Programming/engram/blob/main/LICENSE",
+          "blob_sha": "5fac9d86f341b8b16cd2bbf6f76a503d9cf26ac8",
+          "immutable_url": "https://api.github.com/repos/Gentleman-Programming/engram/git/blobs/5fac9d86f341b8b16cd2bbf6f76a503d9cf26ac8"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-13"
