@@ -1415,13 +1415,13 @@ test("the agent packs scope filters, opens its own dialog, and never scores or c
   await expect(names).toHaveText(["Build with Claude", "agent-toolkit"].sort((a, b) => a.localeCompare(b)));
 
   await page.locator("#reset-pack-filters").click();
-  await page.locator("#pack-search").fill("Superpowers");
-  await expect(names).toHaveText(["Superpowers"]);
-  await page.locator('#pack-grid [data-pack="superpowers"]').click();
+  await page.locator("#pack-search").fill("tresor");
+  await expect(names).toHaveText(["claude-code-tresor"]);
+  await page.locator('#pack-grid [data-pack="claude-code-tresor"]').click();
   await expect(page.locator("#pack-dialog")).toBeVisible();
   await expect(page.locator("#pack-dialog-content .eyebrow")).toContainText("Unscored");
   await expect(page.locator("#pack-dialog-content")).toContainText("What it installs");
-  await expect(page).toHaveURL(/record=pack(%3A|:)superpowers/);
+  await expect(page).toHaveURL(/record=pack(%3A|:)claude-code-tresor/);
 
   await page.reload();
   await expect(page.locator("#pack-dialog")).toBeVisible();
@@ -1431,8 +1431,8 @@ test("the agent packs scope filters, opens its own dialog, and never scores or c
 
 test("mixed browsing surfaces agent packs without scores or comparison", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#all-directory-search").fill("Superpowers");
-  const card = page.locator('#all-directory-grid .agent-pack-card:has([data-pack="superpowers"])');
+  await page.locator("#all-directory-search").fill("tresor");
+  const card = page.locator('#all-directory-grid .agent-pack-card:has([data-pack="claude-code-tresor"])');
   await expect(card).toHaveCount(1);
   await expect(card.locator(".family-label")).toContainText("Agent pack · Process kit");
   await expect(card.locator(".score-ring")).toHaveCount(0);
@@ -1440,10 +1440,13 @@ test("mixed browsing surfaces agent packs without scores or comparison", async (
 });
 
 test("a packaging-format link in a pack dialog opens the specification", async ({ page }) => {
-  await page.goto("/?record=pack:superpowers");
+  await page.goto("/?record=pack:claude-code-tresor");
   await page.locator('#pack-dialog-content [data-open-spec="agent-skills"]').click();
   await expect(page.locator("#specification-dialog")).toBeVisible();
   await expect(page.locator("#specification-dialog-content h1")).toHaveText("Agent Skills");
+  // The pack dialog's queued close event must not strip the successor's record URL.
+  await expect(page).toHaveURL(/record=spec(%3A|:)agent-skills/);
+  await expect(page).not.toHaveURL(/record=pack/);
 });
 
 test("taxonomy documents every pack group", async ({ page }) => {
@@ -1456,7 +1459,7 @@ test("taxonomy documents every pack group", async ({ page }) => {
 });
 ```
 
-If Superpowers' `packaging_formats` from Task 7 does not include `agent-skills`, point the third test at a format the record does carry.
+Task 7 recorded five packs; `obra/superpowers` returned to the candidate queue for an ADR 031 review, so every test above targets `claude-code-tresor` (a process kit whose `packaging_formats` includes `agent-skills`). The two marketplace records are `Build with Claude` and `agent-toolkit`.
 
 - [ ] **Step 3: Run the suite**
 
