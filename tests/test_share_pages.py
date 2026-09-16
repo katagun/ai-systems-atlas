@@ -30,6 +30,7 @@ class SharePageTests(unittest.TestCase):
             "records/models/model-alibaba-qwen2-5-coder-0-5b/index.html",
             share_page_path("model", "model-alibaba-qwen2-5-coder-0-5b"),
         )
+        self.assertEqual("records/packs/kit/index.html", share_page_path("pack", "kit"))
         with self.assertRaises(ValueError):
             share_page_path("constructor", "ollama")
         with self.assertRaises(ValueError):
@@ -44,7 +45,7 @@ class SharePageTests(unittest.TestCase):
         self.assertNotIn("wor…", capped)
 
     def test_every_record_gets_a_page_plus_sitemap_and_robots(self) -> None:
-        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes", "models"))
+        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes", "models", "packs"))
         self.assertEqual(records + 2, len(self.pages))
         self.assertIn("sitemap.xml", self.pages)
         self.assertIn("robots.txt", self.pages)
@@ -79,7 +80,7 @@ class SharePageTests(unittest.TestCase):
         )
 
     def test_pages_escape_record_text_everywhere(self) -> None:
-        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes", "models")}
+        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes", "models", "packs")}
         catalog["taxonomy"] = self.catalog["taxonomy"]
         catalog["runtimes"] = [{
             **self.catalog["runtimes"][0],

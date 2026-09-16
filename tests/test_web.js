@@ -643,7 +643,7 @@ test("the shared app/detail stamp hashes every detail file's content under a che
 test("every app payload class is versioned, with one shared stamp for detail", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
   const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
-  for (const collection of ["systems", "inference", "runtimes", "specifications"]) {
+  for (const collection of ["systems", "inference", "runtimes", "specifications", "packs"]) {
     assert.match(versions[`app/${collection}.json`], /^[0-9a-f]{12}$/);
     assert.match(versions[`app/search/${collection}.json`], /^[0-9a-f]{12}$/);
   }
