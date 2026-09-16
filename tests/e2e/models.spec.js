@@ -81,6 +81,9 @@ test("the Directory quick filters include Models and its complete source count",
 test("Models comparisons stay inside the model-access profile and restore from the URL", async ({ page }) => {
   await page.goto("/?view=models");
 
+  // Past the default 24: high-scoring new records sort above older ones.
+  await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
+
   await page.locator(`#model-grid [data-compare-id="${QWEN}"]`).click();
   await page.locator(`#model-grid [data-compare-id="${DEEPSEEK}"]`).click();
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
