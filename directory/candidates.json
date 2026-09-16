@@ -2947,35 +2947,6 @@
       ]
     },
     {
-      "repo": "NicholasSpisak/second-brain",
-      "name": "second-brain",
-      "url": "https://github.com/NicholasSpisak/second-brain",
-      "description": "LLM-maintained personal knowledge base for Obsidian. Based on Andrej Karpathy's LLM Wiki pattern.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.76,
-      "github_detected_license": null,
-      "stars": 710,
-      "topics": [
-        "agent-skills",
-        "ai",
-        "knowledge-base",
-        "llm",
-        "markdown",
-        "obsidian",
-        "personal-wiki",
-        "second-brain"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "nickscamara/open-deep-research",
       "name": "open-deep-research",
       "url": "https://github.com/nickscamara/open-deep-research",
