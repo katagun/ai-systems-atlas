@@ -73,6 +73,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/INFERENCE_SERVICES.md",
             "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",
+            "docs/PACKS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
             "docs/adr/003-multi-axis-directory.md",
@@ -102,6 +103,8 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/028-attention-sources-are-pointers-not-claims.md",
             "docs/adr/029-trust-records-are-unscored-and-never-first-hand.md",
             "docs/adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md",
+            "docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md",
+            "docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

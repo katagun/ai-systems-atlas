@@ -1,6 +1,6 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory, agent, and assistant systems plus provider-independent model releases, unscored interoperability specifications, managed inference services, and self-operated local runtimes. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory, agent, and assistant systems plus provider-independent model releases, unscored interoperability specifications, managed inference services, and self-operated local runtimes, and unscored agent packs a host agent installs. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 
@@ -17,7 +17,7 @@ Read only the documents required by the change:
 | licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
 | project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
 | visual builders, authoring surface, or agent interfaces | `docs/TAXONOMY.md`, then `docs/adr/019-authoring-surface-is-a-trait-not-a-role.md` |
-| skill packs, plugins, vault bundles, or harness add-ons | `docs/CURATION.md`, then `docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md` |
+| skill packs, plugins, vault bundles, marketplaces, or harness add-ons | `docs/PACKS.md`, then `docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md` and `docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md` |
 | local-first or editability traits, or their card badges | `docs/DATA_MODEL.md`, then `docs/adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md` |
 | vendor-hosted platforms, who operates a system, or deployment traits | `docs/TAXONOMY.md`, then `docs/adr/018-operating-party-is-a-trait-not-a-role.md` and `docs/adr/003-multi-axis-directory.md` |
 | provider relationships or model backends | `docs/DATA_MODEL.md`, then `docs/adr/006-provider-relationships-are-orthogonal.md` |
@@ -79,6 +79,7 @@ Run synchronization and share-page generation after changing any published `dire
 - Never let automated refreshes change editorial prose, scores, evidence, confidence, or `verified_at`.
 - Never promote `directory/candidates.json` records without the complete curation workflow.
 - Keep specifications outside `system_family` and score profiles; classify their type, integration scope, and maturity without ranking unlike artifacts.
+- Keep agent packs outside `system_family` and every score profile; record what a pack installs from its pinned tree, never what it does; never carry stars, scores, or a marketplace's entries; and never let a repository appear in more than one of `projects.json`, `packs.json`, and `exclusions.json`.
 - Keep inference services outside `system_family` and system-family score profiles; use their dedicated service profile, curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
 - Trust records on inference services are unscored, present only after human review, and carry third-party findings only as dated, pinned, bounded claims from sources that name the service; never render an empty findings list as clean, and never let automation write the block.
 - Keep local runtimes outside `system_family` and system-family score profiles; use their dedicated runtime profile, curate self-operated execution software rather than models, managed services, or client libraries, and never score them with throughput, latency, or benchmark results.
