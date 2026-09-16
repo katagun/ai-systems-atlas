@@ -59,6 +59,7 @@ directory/inference-services.json reviewed and separately scored managed inferen
 directory/local-runtimes.json  reviewed and separately scored self-operated inference runtimes
 directory/models.json         reviewed and separately scored model releases
 directory/models-dev.json     complete commit-pinned models.dev source snapshot
+directory/packs.json          reviewed unscored agent packs a host agent installs
 directory/model-candidates.json unpublished text-output model review queue
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue

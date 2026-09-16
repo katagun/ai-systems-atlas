@@ -18,6 +18,7 @@ class DirectoryTests(unittest.TestCase):
         cls.local_runtimes = json.loads((ROOT / "directory" / "local-runtimes.json").read_text(encoding="utf-8"))
         cls.models = json.loads((ROOT / "directory" / "models.json").read_text(encoding="utf-8"))
         cls.models_dev = json.loads((ROOT / "directory" / "models-dev.json").read_text(encoding="utf-8"))
+        cls.packs = json.loads((ROOT / "directory" / "packs.json").read_text(encoding="utf-8"))
 
     def test_models_dev_source_snapshot_contains_every_upstream_record(self) -> None:
         source_records = self.models_dev["models"]
@@ -714,6 +715,17 @@ class DirectoryTests(unittest.TestCase):
                     records[related_id]["related_specifications"],
                     f"{specification_id} -> {related_id}",
                 )
+
+    def test_packs_are_a_separate_unscored_collection(self) -> None:
+        records = self.packs["packs"]
+        project_repos = {p["repo"].lower() for p in self.document["projects"] if p.get("repo")}
+        for record in records:
+            for field in ("system_family", "primary_role", "score_profile", "score", "stars", "stars_verified_at"):
+                self.assertNotIn(field, record, record["id"])
+            self.assertTrue(record["installs"].strip(), record["id"])
+            self.assertNotIn(record["repo"].lower(), project_repos, record["id"])
+        for group in ("pack_types", "pack_hosts", "pack_install_mechanisms"):
+            self.assertTrue(self.taxonomy[group], group)
 
 
 if __name__ == "__main__":

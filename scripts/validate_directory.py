@@ -26,7 +26,7 @@ DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
     "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
     "specifications.json", "inference-services.json", "local-runtimes.json", "models.json",
-    "models-dev.json",
+    "models-dev.json", "packs.json",
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "model-dispositions.json",
@@ -86,6 +86,9 @@ TAXONOMY_GROUPS = (
     "specification_types",
     "specification_scopes",
     "specification_statuses",
+    "pack_types",
+    "pack_hosts",
+    "pack_install_mechanisms",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -124,6 +127,15 @@ SPECIFICATION_REQUIRED = {
     "does_not_standardize", "licenses", "license_note", "related_specifications",
     "evidence", "license_evidence", "verified_at",
 }
+
+PACK_REQUIRED = {
+    "id", "name", "steward", "repo", "url", "description", "pack_type", "hosts",
+    "packaging_formats", "install_mechanism", "installs", "not_a_system", "status",
+    "licenses", "license_note", "license_evidence", "evidence", "verified_at",
+}
+PACK_OPTIONAL = {"short_name", "distribution_machinery", "related_packs", "related_systems"}
+# A pack is recorded for what it installs, never ranked or scored (ADR 032).
+PACK_FORBIDDEN = {"stars", "stars_verified_at", "score", "score_profile", "system_family", "primary_role"}
 
 LOCAL_RUNTIME_REQUIRED = {
     "id", "name", "maintainer", "runtime_type", "repo", "url", "description",
@@ -981,6 +993,40 @@ def validate_trust_finding(
             errors.append(f"{prefix}: {field} verified_at must not be after the trust verified_at")
 
 
+def validate_evidence_items(
+    evidence_items: Any, repo: Any, prefix: str, errors: list[str]
+) -> None:
+    """Validate pinned git-blob or dated web evidence. Specifications and packs cite alike."""
+    if not isinstance(evidence_items, list) or not evidence_items:
+        errors.append(f"{prefix}: evidence must be a non-empty list")
+        evidence_items = []
+    for item in evidence_items:
+        if not isinstance(item, dict) or not isinstance(item.get("label"), str):
+            errors.append(f"{prefix}: evidence requires an object with a label")
+            continue
+        if item.get("kind") == "git_blob":
+            blob_sha = item.get("blob_sha")
+            if not repo:
+                errors.append(f"{prefix}: git-blob evidence requires a repository")
+            elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
+                errors.append(f"{prefix}: invalid evidence blob SHA")
+            elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
+                errors.append(f"{prefix}: immutable evidence URL must address the blob SHA")
+            if not isinstance(item.get("path"), str) or not item["path"]:
+                errors.append(f"{prefix}: git-blob evidence requires a path")
+            if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                f"https://github.com/{repo}/blob/"
+            ):
+                errors.append(f"{prefix}: evidence source must be a GitHub blob URL")
+        elif item.get("kind") == "web":
+            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+                errors.append(f"{prefix}: web evidence requires an authoritative HTTPS URL")
+            if not valid_date(item.get("verified_at")):
+                errors.append(f"{prefix}: web evidence requires verified_at")
+        else:
+            errors.append(f"{prefix}: unknown evidence kind {item.get('kind')!r}")
+
+
 def validate_specifications(
     specifications_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -1037,38 +1083,77 @@ def validate_specifications(
         if not valid_date(specification.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
 
-        evidence_items = specification.get("evidence")
-        if not isinstance(evidence_items, list) or not evidence_items:
-            errors.append(f"{prefix}: evidence must be a non-empty list")
-            evidence_items = []
-        for item in evidence_items:
-            if not isinstance(item, dict) or not isinstance(item.get("label"), str):
-                errors.append(f"{prefix}: evidence requires an object with a label")
-                continue
-            if item.get("kind") == "git_blob":
-                blob_sha = item.get("blob_sha")
-                if not repo:
-                    errors.append(f"{prefix}: git-blob evidence requires a repository")
-                elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
-                    errors.append(f"{prefix}: invalid evidence blob SHA")
-                elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
-                    errors.append(f"{prefix}: immutable evidence URL must address the blob SHA")
-                if not isinstance(item.get("path"), str) or not item["path"]:
-                    errors.append(f"{prefix}: git-blob evidence requires a path")
-                if not isinstance(item.get("url"), str) or not item["url"].startswith(
-                    f"https://github.com/{repo}/blob/"
-                ):
-                    errors.append(f"{prefix}: evidence source must be a GitHub blob URL")
-            elif item.get("kind") == "web":
-                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
-                    errors.append(f"{prefix}: web evidence requires an authoritative HTTPS URL")
-                if not valid_date(item.get("verified_at")):
-                    errors.append(f"{prefix}: web evidence requires verified_at")
-            else:
-                errors.append(f"{prefix}: unknown evidence kind {item.get('kind')!r}")
+        validate_evidence_items(specification.get("evidence"), repo, prefix, errors)
 
         validate_scoped_license_evidence(specification, repo, prefix, errors)
     return specifications_value
+
+
+def validate_packs(
+    packs_data: dict[str, Any],
+    tax: Taxonomy,
+    specification_ids: set[str],
+    index: ProjectIndex,
+    errors: list[str],
+) -> list[Any]:
+    """Validate unscored agent-pack records: what a host installs, never what it does (ADR 032)."""
+    enum_ids = tax.enum_ids
+    packs_value = validate_collection_envelope(packs_data, "packs.json", "1.0", "packs", errors)
+    pack_ids = {
+        item.get("id") for item in packs_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    for pack in packs_value:
+        if not isinstance(pack, dict):
+            errors.append("packs.json: every pack must be an object")
+            continue
+        prefix = f"pack {pack.get('id', 'unknown')}"
+        for field in sorted(PACK_FORBIDDEN & set(pack)):
+            errors.append(f"{prefix}: {field} is never recorded on a pack")
+        fields = set(pack) - PACK_FORBIDDEN
+        if PACK_REQUIRED - fields or fields - PACK_REQUIRED - PACK_OPTIONAL:
+            missing = sorted(PACK_REQUIRED - fields)
+            extra = sorted(fields - PACK_REQUIRED - PACK_OPTIONAL)
+            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+        pack_id = pack.get("id")
+        if not isinstance(pack_id, str) or not ID_PATTERN.fullmatch(pack_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in ("name", "steward", "url", "description", "installs", "not_a_system", "license_note"):
+            if not isinstance(pack.get(field), str) or not pack[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        for field in ("short_name", "distribution_machinery"):
+            if field in pack and (not isinstance(pack[field], str) or not pack[field].strip()):
+                errors.append(f"{prefix}: {field} must be a non-empty string when present")
+        if not isinstance(pack.get("url"), str) or not pack["url"].startswith("https://"):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        repo = pack.get("repo")
+        if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo):
+            errors.append(f"{prefix}: invalid GitHub repository")
+            repo = None
+        elif repo.lower() in index.repos:
+            errors.append(f"{prefix}: {repo} cannot be both a system and a pack")
+        if pack.get("pack_type") not in enum_ids["pack_types"]:
+            errors.append(f"{prefix}: unknown pack type")
+        if pack.get("install_mechanism") not in enum_ids["pack_install_mechanisms"]:
+            errors.append(f"{prefix}: unknown install mechanism")
+        if pack.get("status") not in enum_ids["project_statuses"]:
+            errors.append(f"{prefix}: unknown status")
+        validate_string_list(pack, "hosts", enum_ids["pack_hosts"], prefix, errors)
+        validate_string_list(pack, "licenses", enum_ids["licenses"], prefix, errors)
+        validate_string_list(
+            pack, "packaging_formats", specification_ids, prefix, errors, allow_empty=True,
+        )
+        if "related_packs" in pack:
+            validate_string_list(pack, "related_packs", pack_ids, prefix, errors, allow_empty=True)
+            if pack_id in pack.get("related_packs", []):
+                errors.append(f"{prefix}: cannot relate to itself")
+        if "related_systems" in pack:
+            validate_string_list(pack, "related_systems", index.ids, prefix, errors, allow_empty=True)
+        if not valid_date(pack.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+        validate_evidence_items(pack.get("evidence"), repo, prefix, errors)
+        validate_scoped_license_evidence(pack, repo, prefix, errors)
+    return packs_value
 
 
 def validate_inference_services(
@@ -1576,6 +1661,7 @@ def validate_unique_record_ids(
     local_runtimes_value: list[Any],
     models_value: list[Any],
     errors: list[str],
+    packs_value: list[Any] | None = None,
 ) -> None:
     """No identifier may name a record in more than one collection."""
     collection_ids: dict[str, list[str]] = {}
@@ -1585,6 +1671,7 @@ def validate_unique_record_ids(
         ("inference-services.json", inference_services_value),
         ("local-runtimes.json", local_runtimes_value),
         ("models.json", models_value),
+        ("packs.json", packs_value or []),
     ):
         for record in collection_records:
             if isinstance(record, dict) and isinstance(record.get("id"), str):
@@ -2005,9 +2092,19 @@ def validate(root: Path = ROOT) -> list[str]:
     if catalog["model-candidates.json"].get("source_record_count") != catalog["models-dev.json"].get("source_record_count"):
         errors.append("model-candidates.json: source_record_count differs from models-dev.json")
 
+    specification_ids = {
+        item["id"] for item in specifications_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    packs_value = validate_packs(catalog["packs.json"], tax, specification_ids, index, errors)
+    pack_repos = {
+        item["repo"].lower() for item in packs_value
+        if isinstance(item, dict) and isinstance(item.get("repo"), str)
+    }
+
     validate_unique_record_ids(
         index.projects, specifications_value, inference_services_value, local_runtimes_value,
-        models_value, errors,
+        models_value, errors, packs_value=packs_value,
     )
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
@@ -2020,7 +2117,7 @@ def validate(root: Path = ROOT) -> list[str]:
         dispositioned_ids,
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
-    validate_exclusions(catalog["exclusions.json"], index.repos, candidate_repos, errors)
+    validate_exclusions(catalog["exclusions.json"], index.repos | pack_repos, candidate_repos, errors)
     validate_queue_envelopes(catalog["candidates.json"], catalog["license-review.json"], errors)
     validate_published_copies(root, errors)
 
@@ -2038,11 +2135,13 @@ def main() -> int:
     local_runtime_count = len(load("local-runtimes.json")["runtimes"])
     model_count = len(load("models.json")["models"])
     source_model_count = len(load("models-dev.json")["models"])
+    pack_count = len(load("packs.json")["packs"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
         f"{inference_service_count} scored inference services; "
         f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
+        f"{pack_count} unscored agent packs; "
         f"{source_model_count} attributed models.dev source records"
     )
     return 0

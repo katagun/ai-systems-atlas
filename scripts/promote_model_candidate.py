@@ -216,6 +216,7 @@ def preflight_promotion(
     specifications_data = load_json(directory / "specifications.json")
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
+    packs_data = load_json(directory / "packs.json")
     source_id = record.get("source_id")
     if not isinstance(source_id, str) or not source_id:
         raise PromotionError("review record requires a models.dev source_id")
@@ -266,6 +267,7 @@ def preflight_promotion(
         local_runtimes_data.get("runtimes", []),
         published_models if isinstance(published_models, list) else [],
         errors,
+        packs_value=packs_data.get("packs") if isinstance(packs_data.get("packs"), list) else [],
     )
     validate_model_candidates(
         proposed_candidates,
