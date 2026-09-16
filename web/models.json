@@ -11,6 +11,218 @@
   },
   "models": [
     {
+      "id": "model-alibaba-qwen2-5-coder-32b-instruct",
+      "source_id": "alibaba/qwen2.5-coder-32b-instruct",
+      "name": "Qwen2.5-Coder-32B-Instruct",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct",
+      "description": "Alibaba's 32-billion-parameter Qwen2.5 coding release, published as Apache-2.0 open weights with Alibaba PAI deployment guidance.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Qwen2.5-Coder-32B-Instruct",
+        "description": "Open coding-focused Qwen model for code generation, repair, and repository reasoning",
+        "family": "qwen",
+        "release_date": "2024-11-12",
+        "last_updated": "2024-11-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2024 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen2.5-Coder-32B-Instruct repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct/blob/381fc969f78efac66bc87ff7ddeadb7e73c218a7/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen2.5-Coder-32B-Instruct weight release of November 2024 at Hugging Face commit 381fc969f78efac66bc87ff7ddeadb7e73c218a7 (last modified 2025-01-12), with Alibaba PAI deployment guidance. The Base weights, the Qwen3 coder successors, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 32B coding checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "Alibaba PAI documentation uses this exact model for deployment, fine-tuning, and evaluation guidance"
+      ],
+      "tradeoffs": [
+        "No current exact-ID Model Studio serving page documents a managed endpoint for this line",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Alibaba PAI deployment guidance built on this exact model",
+          "url": "https://www.alibabacloud.com/help/en/pai/use-cases/training-evaluation-compression-and-deployment-of-qwen2-5-coder-model",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen2.5-coder-32b-instruct.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen2-5-vl-72b-instruct",
+      "source_id": "alibaba/qwen2-5-vl-72b-instruct",
+      "name": "Qwen2.5-VL 72B Instruct",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct",
+      "description": "Alibaba's 72-billion-parameter Qwen2.5 vision-language release, published as downloadable weights under the custom Qwen License Agreement with a commercial-use authorization gate.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen2.5-VL 72B Instruct",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": "qwen",
+        "release_date": "2024-09",
+        "last_updated": "2024-09",
+        "knowledge_cutoff": "2024-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Qwen-License-Agreement"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the Qwen License Agreement dated September 19, 2024. It grants a non-exclusive, non-transferable, royalty-free license to use, reproduce, distribute, and modify the materials, but commercial products or services above 100 million monthly active users require Alibaba Cloud's express authorization, and training new models on the materials or their outputs requires a 'Built with Qwen' attribution, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Qwen-License-Agreement",
+          "scope": "Qwen2.5-VL-72B-Instruct model weights, parameters, code, and documentation, including derivative works",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct/blob/89c86200743eec961a297729e7990e8f2ddbc4c5/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen2.5-VL-72B-Instruct weight release of January 2025 at Hugging Face commit 89c86200743eec961a297729e7990e8f2ddbc4c5 (last modified 2026-06-06), together with its exact-name commercial API listing. The smaller VL siblings, the Qwen3-VL successors, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 72B multimodal checkpoint carrying its governing license file beside the weights",
+        "Alibaba's commercialization listing names qwen2.5-vl-72b-instruct as a managed-service model"
+      ],
+      "tradeoffs": [
+        "Commercial use above 100 million monthly active users needs Alibaba Cloud's express authorization, and training on the materials requires attribution",
+        "No dedicated capability page documents limits for this line beyond the weight repository"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Alibaba Cloud commercialization listing naming qwen2.5-vl-72b-instruct",
+          "url": "https://www.alibabacloud.com/en/notice/commercialization_launch_announcement_for_qwen25qwen25vl_opensource_free_trial_model_4d3",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen2-5-vl-72b-instruct.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-alibaba-qwen3-235b-a22b",
       "source_id": "alibaba/qwen3-235b-a22b",
       "name": "Qwen3 235B-A22B",
@@ -322,6 +534,218 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3-32b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-coder-30b-a3b-instruct",
+      "source_id": "alibaba/qwen3-coder-30b-a3b-instruct",
+      "name": "Qwen3-Coder 30B-A3B Instruct",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "description": "Alibaba's 30-billion-parameter Mixture-of-Experts coding release with 3B active parameters for agentic coding workflows, published as Apache-2.0 open weights with a hosted Model Studio API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3-Coder 30B-A3B Instruct",
+        "description": "Smaller Qwen coder for efficient local agents and repo-level fixes",
+        "family": "qwen",
+        "release_date": "2025-04",
+        "last_updated": "2025-04",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2024 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3-Coder-30B-A3B-Instruct repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct/blob/b2cff646eb4bb1d68355c01b18ae02e7cf42d120/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3-Coder-30B-A3B-Instruct weight release of July 2025 at Hugging Face commit b2cff646eb4bb1d68355c01b18ae02e7cf42d120 (last modified 2025-12-03), together with the hosted qwen3-coder-30b-a3b-instruct API model. The Base weights, the 480B flagship sibling, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated MoE coding checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "First-party Model Studio serving under the exact qwen3-coder-30b-a3b-instruct model ID"
+      ],
+      "tradeoffs": [
+        "Version identity rests on repository commits with no stated retirement posture",
+        "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio qwen3-coder-30b-a3b-instruct API documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-coder-30b-a3b-instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3-coder-30b-a3b-instruct.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-coder-480b-a35b-instruct",
+      "source_id": "alibaba/qwen3-coder-480b-a35b-instruct",
+      "name": "Qwen3-Coder 480B-A35B Instruct",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct",
+      "description": "Alibaba's 480-billion-parameter Mixture-of-Experts flagship coding release with 35B active parameters, published as Apache-2.0 open weights with a hosted Model Studio API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3-Coder 480B-A35B Instruct",
+        "description": "Open Qwen coding heavyweight for repository reasoning and agentic engineering",
+        "family": "qwen",
+        "release_date": "2025-04",
+        "last_updated": "2025-04",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2024 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3-Coder-480B-A35B-Instruct repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct/blob/9d90cf8fca1bf7b7acca42d3fc9ae694a2194069/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3-Coder-480B-A35B-Instruct weight release of July 2025 at Hugging Face commit 9d90cf8fca1bf7b7acca42d3fc9ae694a2194069 (last modified 2025-08-21), together with the hosted qwen3-coder-480b-a35b-instruct API model. The Base weights, the 30B sibling, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 480B flagship checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "First-party Model Studio serving under the exact qwen3-coder-480b-a35b-instruct model ID"
+      ],
+      "tradeoffs": [
+        "480B total parameters need multi-GPU-cluster serving, putting self-operation out of reach for most operators",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 4,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio qwen3-coder-480b-a35b-instruct API documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-coder-480b-a35b-instruct",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3-coder-480b-a35b-instruct.toml",
           "verified_at": "2026-09-16"
         }
       ],
