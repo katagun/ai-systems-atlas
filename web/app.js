@@ -1733,6 +1733,13 @@ function writeRecordURL(kind, id) {
 }
 
 function clearRecordURL() {
+  // A dialog's close event is queued, not synchronous, so a handler that
+  // closes one dialog and opens another (e.g. a pack's packaging-format or
+  // related-record buttons) writes the new record's URL before this fires.
+  // `.open` still flips to false synchronously on close, so checking it here
+  // tells a genuine close (nothing open) from that close-then-open sequence
+  // (a different dialog now open) without touching the handlers themselves.
+  if (RECORD_DIALOG_SELECTORS.some(selector => $(selector).open)) return;
   const url = new URL(window.location.href);
   if (!url.searchParams.has("record")) return;
   url.searchParams.delete("record");
