@@ -241,6 +241,12 @@
       "disposition": "excluded",
       "reason": "API speed-tier alias of the reviewed Kimi-K2.7-Code line with no weight repository, license, or fixed release identity of its own; the platform describes it as the high-speed version of the same model.",
       "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "openai/gpt-5.3-codex-spark",
+      "disposition": "held",
+      "reason": "Research preview with no model page and design-partner-only API access; held until it reaches general availability with stable documentation or retires with a successor pointer.",
+      "decided_at": "2026-09-16"
     }
   ]
 }
