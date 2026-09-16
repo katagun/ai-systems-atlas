@@ -64,6 +64,6 @@ Packs join the Directory as a fifth scope under [ADR 013](013-distinct-collectio
 ## Consequences
 
 - `docs/PACKS.md` carries the inclusion boundary, classification order, marketplace rule, and evidence workflow.
-- The six packs excluded under ADR 031's first application are re-reviewed from their trees and, where they pass this boundary, move from `exclusions.json` to `packs.json`.
+- The six packs excluded under ADR 031's first application were re-reviewed from their trees. Five pass this boundary and move from `exclusions.json` to `packs.json`. `obra/superpowers` does not: beyond the session hook that prints a skill document, its tree ships a brainstorming companion server with a state directory and a browser launcher, and plugin code for three hosts, so it returns to `candidates.json` on hold for a scored review under ADR 031 rather than staying excluded on a reason its tree no longer supports.
 - A candidate bound for this collection waits under `triage.held_by: "ADR 032 pack review"`; automation never writes a pack record. Extending the triage routine's routing is a `BACKLOG.md` follow-up.
 - Every script that enumerates collections gains a row; `docs/AGENT_DOCS.md`'s one-commit rule for published files applies.

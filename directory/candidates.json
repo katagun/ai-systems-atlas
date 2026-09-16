@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-14",
+  "updated_at": "2026-09-16",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -4780,6 +4780,72 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "obra/superpowers",
+      "name": "Superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.6,
+      "github_detected_license": "MIT",
+      "stars": 287582,
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-16",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md",
+        "finding": "The tree ships a SessionStart hook, `hooks/session-start`, that reads `skills/using-superpowers/SKILL.md` and prints it back as the session's additional context, which is the disposition ADR 032 assumed for the whole repository. It also ships `skills/brainstorming/scripts/server.cjs`, a hand-written HTTP and WebSocket server that `skills/brainstorming/visual-companion.md` describes as one where \"The server watches a directory for HTML files and serves the newest one to the browser\", launched by `scripts/start-server.sh` whose `--open` flag \"auto-opens their browser on the first screen\" and whose user choices are \"recorded to `state_dir/events` that you read on your next turn\"; `skills/brainstorming/SKILL.md` is what tells the host to start it. Alongside it are host plugin files under `.opencode/`, `.pi/`, and `.hermes-plugin/`, and `package.json` declares `.opencode/plugins/superpowers.js` as the package `main`. Shipped code that opens the user's browser and keeps a store the pack reads back on a later turn is not distribution machinery, so the repository fails boundary test 4 in `docs/PACKS.md` and cannot be an unscored pack record; whether that owned state or enforced work earns a scored record is ADR 031's question and is not decided here.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/obra/superpowers/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "abf0390320aa14406af7a520b9b0739fdda9bf08",
+            "immutable_url": "https://api.github.com/repos/obra/superpowers/git/blobs/abf0390320aa14406af7a520b9b0739fdda9bf08"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/obra/superpowers/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "4cd0e751210f24a5e4788730e7b5bb145b4d03a2b2c71202721454481a5c5e81",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "09a91c6d03cfa3d874c5c33b6f8cc3d0b2d89645",
+            "immutable_url": "https://api.github.com/repos/obra/superpowers/git/blobs/09a91c6d03cfa3d874c5c33b6f8cc3d0b2d89645"
+          },
+          {
+            "label": "Brainstorming companion server",
+            "url": "https://github.com/obra/superpowers/blob/main/skills/brainstorming/scripts/server.cjs",
+            "kind": "git_blob",
+            "content_sha256": "2d2961ea8d11f56c5f4c3a1a68d22709efa5d7601a2246d8c880774e7e9e8412",
+            "fetched_at": "2026-09-16",
+            "blob_sha": "a828b35af64d5c64ca68b9ec78473999ce698874",
+            "immutable_url": "https://api.github.com/repos/obra/superpowers/git/blobs/a828b35af64d5c64ca68b9ec78473999ce698874"
+          }
+        ],
+        "proposed_at": "2026-09-16",
+        "proposer": "human",
+        "held_by": "ADR 031 scored review of the brainstorming companion server and host plugins"
+      }
     }
   ]
 }
