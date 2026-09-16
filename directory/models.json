@@ -1595,9 +1595,9 @@
         },
         {
           "kind": "web",
-          "label": "NVIDIA NIM reference for deepseek-ai/deepseek-v4-pro-0813",
-          "url": "https://docs.api.nvidia.com/nim/reference/deepseek-ai-deepseek-v4-pro-0813",
-          "verified_at": "2026-09-12"
+          "label": "NVIDIA NIM model page for deepseek-v4-pro-0813",
+          "url": "https://build.nvidia.com/deepseek-ai/deepseek-v4-pro-0813",
+          "verified_at": "2026-09-15"
         },
         {
           "kind": "web",

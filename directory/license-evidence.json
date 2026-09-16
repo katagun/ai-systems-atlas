@@ -2302,10 +2302,10 @@
         },
         {
           "license_id": "LicenseRef-Commercial",
-          "scope": "The managed cloud and its anti-bot, captcha, enterprise-gating, and billing components, which the repository's own code comments describe as cloud overrides living outside this tree",
+          "scope": "The managed Skyvern Cloud, whose Terms of Service reserve the platform's software, models, interfaces, and related intellectual property to Skyvern under a limited licence to use the service; the repository's own code comments describe its anti-bot, captcha, enterprise-gating, and billing components as cloud overrides living outside this tree",
           "kind": "web_terms",
-          "url": "https://www.skyvern.com/",
-          "verified_at": "2026-09-02"
+          "url": "https://www.skyvern.com/terms",
+          "verified_at": "2026-09-15"
         }
       ]
     },
