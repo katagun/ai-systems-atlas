@@ -104,7 +104,9 @@ License-review records correspond one-to-one with projects whose `license_review
 
 See `OPERATIONS.md` for promotion and resolution procedures.
 
-`directory/hn-signals.json` is the attention-source signal queue, populated only by the
+`directory/hn-signals.json` is the attention-source signal queue, rebuilt wholesale from one
+day's window by every sweep and carrying nothing forward, so it holds no durable state and
+no assessment in it survives the next sweep; it is populated only by the
 daily sweep in `scripts/sweep_hackernews.py`; see
 [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Its envelope is
 `{"version": "1.0", "updated_at": <ISO datetime>, "source": {...}, "signals": [...]}`. When
