@@ -476,6 +476,12 @@
       "useful_lesson": "A course ships the same directory listing as a product: pipelines, applications, a compose file, a lint workflow. Read the continuous integration for a test step, and the readme for a module table."
     },
     {
+      "name": "Second Brain LLM Wiki pack",
+      "repo": "NicholasSpisak/second-brain",
+      "reason": "No licence is served at any usual path — LICENSE, LICENSE.md, LICENSE.txt, and COPYING all return 404, and GitHub reports none — so no source model could be established. The repository is seventeen files: four SKILL.md documents, agent-configuration and schema references, two documentation pages, an image, an onboarding shell script, and that script's test. The README describes the work as the host's: \"You feed raw material (articles, papers, notes, transcripts) into a `raw/` folder. The LLM reads everything, writes structured wiki pages, creates cross-references, and maintains an index.\" Under ADR 031 the pack owns no state it reads back and does no enforced work; the onboarding script installs, and installation is not work the host would not otherwise do. It shares a repository name with the published second-brain record, and ADR 020's field comparison separates the two rather than folding either into the other: that record is a self-hosted agent with a SQLite-backed store, terminal, web, and API surfaces, and container execution, none of which this repository has.",
+      "useful_lesson": "A shared repository name is not lineage. ADR 020 asks what a reader would be choosing, and two projects can carry one name while one is a self-hosted agent and the other is a folder of instructions for somebody else's."
+    },
+    {
       "name": "Second Brain Starter",
       "repo": "coleam00/second-brain-starter",
       "reason": "No licence is served at any usual path — LICENSE, LICENSE.md, and LICENSE.txt all return 404 — and the README claims none, so no source model could be established. The repository ships one skill document, six Markdown memory templates, an architecture reference, and two images; it contains no code. Its README says it is \"A skill for Claude Code that generates a personalized Product Requirements Document (PRD) for building your own AI second brain\", so what a reader adopts is a blueprint the host agent writes from a filled-in template. Under ADR 031 it owns no state it reads back and does no enforced work.",

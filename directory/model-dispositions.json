@@ -229,6 +229,18 @@
       "disposition": "held",
       "reason": "API-only dialogue endpoint with no published weights, license, or pinned release; held in case MiniMax publishes a fixed release with governing terms.",
       "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "moonshotai/kimi-k2-thinking-turbo",
+      "disposition": "excluded",
+      "reason": "API speed-tier alias of the reviewed Kimi-K2-Thinking line with no weight repository, license, or fixed release identity of its own; the platform lists it only as a deprecated API row.",
+      "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "moonshotai/kimi-k2.7-code-highspeed",
+      "disposition": "excluded",
+      "reason": "API speed-tier alias of the reviewed Kimi-K2.7-Code line with no weight repository, license, or fixed release identity of its own; the platform describes it as the high-speed version of the same model.",
+      "decided_at": "2026-09-16"
     }
   ]
 }
