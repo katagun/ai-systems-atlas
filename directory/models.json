@@ -4471,6 +4471,329 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-moonshotai-kimi-k2-5",
+      "source_id": "moonshotai/kimi-k2.5",
+      "name": "Kimi K2.5",
+      "developer": "Moonshot AI",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.5",
+      "description": "Moonshot AI's native multimodal reasoning release with downloadable compressed-tensors weights under the Modified MIT License carrying the Kimi K2.5 attribution clause.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Kimi K2.5",
+        "description": "Earlier Kimi frontier model for long-context agents, coding, and multimodal work",
+        "family": "kimi-k2",
+        "release_date": "2026-01",
+        "last_updated": "2026-01",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/moonshotai/Kimi-K2.5"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Kimi-K2-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Both the code repository and the model weights are released under the Modified MIT License, which reproduces the MIT grant but requires commercial products above 100 million monthly active users or 20 million US dollars in monthly revenue to prominently display 'Kimi K2.5'. That conditional attribution obligation is not part of the OSI-approved MIT text, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Kimi-K2-Modified-MIT",
+          "scope": "moonshotai/Kimi-K2.5 repository code and model weights, including derivative works",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.5/blob/4d01dfe0332d63057c186e0b262165819efb6611/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the moonshotai/Kimi-K2.5 weight release at commit 4d01dfe0332d63057c186e0b262165819efb6611 (last modified 2026-04-30). The Kimi-K2-Thinking predecessor, the Kimi-K2.6 and Kimi-K2.7-Code successors, the Moonshot AI API — which discontinued kimi-k2.5 on August 31, 2026 — and downstream requantizations remain separate boundaries.",
+      "strengths": [
+        "Moonshot AI publishes 64 compressed-tensors shards with the license file, third-party notices, and an in-repository deployment guide",
+        "The repository carries modeling code, processor code, and chat-template tool-calling support beside the weights"
+      ],
+      "tradeoffs": [
+        "The Modified MIT License adds a usage-threshold attribution obligation, so the release is source-available rather than open source",
+        "Moonshot AI discontinued the kimi-k2.5 API endpoint on August 31, 2026, leaving self-operation as the supported path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 6.56
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and in-repository deployment guidance",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.5",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Moonshot AI model list: kimi-k2.5 discontinued August 31, 2026",
+          "url": "https://platform.moonshot.ai/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/moonshotai/kimi-k2.5.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-moonshotai-kimi-k2-6",
+      "source_id": "moonshotai/kimi-k2.6",
+      "name": "Kimi K2.6",
+      "developer": "Moonshot AI",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.6",
+      "description": "Moonshot AI's native multimodal agentic release with downloadable weights under the Modified MIT License carrying the Kimi K2.6 attribution clause.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Kimi K2.6",
+        "description": "Multimodal Kimi workhorse for agent loops, coding tasks, and visual context",
+        "family": "kimi-k2",
+        "release_date": "2026-04-21",
+        "last_updated": "2026-04-21",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/moonshotai/Kimi-K2.6"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Kimi-K2-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Both the code repository and the model weights are released under the Modified MIT License, which reproduces the MIT grant but requires commercial products above 100 million monthly active users or 20 million US dollars in monthly revenue to prominently display 'Kimi K2.6'. That conditional attribution obligation is not part of the OSI-approved MIT text, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Kimi-K2-Modified-MIT",
+          "scope": "moonshotai/Kimi-K2.6 repository code and model weights, including derivative works",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.6/blob/7eb5002f6aadc958aed6a9177b7ed26bb94011bb/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the moonshotai/Kimi-K2.6 weight release at commit 7eb5002f6aadc958aed6a9177b7ed26bb94011bb (last modified 2026-05-19). The Kimi-K2.5 predecessor, the Kimi-K2.7-Code and Kimi-K3 successors, the platform API, and downstream requantizations remain separate boundaries.",
+      "strengths": [
+        "Moonshot AI publishes 64 compressed-tensors shards with the license file, evaluation results, and an in-repository deployment guide",
+        "The first-party platform lists kimi-k2.6 as a served model with text, image, and video input at 256K context"
+      ],
+      "tradeoffs": [
+        "The Modified MIT License adds a usage-threshold attribution obligation, so the release is source-available rather than open source",
+        "Dated April–May 2026 commit trail with no retirement posture, and no per-snapshot versioning statement"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 6.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, evaluation results, and deployment guidance",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.6",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Moonshot AI model list naming kimi-k2.6",
+          "url": "https://platform.moonshot.ai/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/moonshotai/kimi-k2.6.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-moonshotai-kimi-k2-7-code",
+      "source_id": "moonshotai/kimi-k2.7-code",
+      "name": "Kimi K2.7 Code",
+      "developer": "Moonshot AI",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code",
+      "description": "Moonshot AI's dedicated coding release with downloadable weights under the Modified MIT License carrying the Kimi K2.7 Code attribution clause.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Kimi K2.7 Code",
+        "description": "Coding-focused Kimi model, stronger on long-horizon repo work with less overthinking",
+        "family": "kimi-k2",
+        "release_date": "2026-06-12",
+        "last_updated": "2026-06-12",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Kimi-K2-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "Both the code repository and the model weights are released under the Modified MIT License, which reproduces the MIT grant but requires commercial products above 100 million monthly active users or 20 million US dollars in monthly revenue to prominently display 'Kimi K2.7 Code'. That conditional attribution obligation is not part of the OSI-approved MIT text, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Kimi-K2-Modified-MIT",
+          "scope": "moonshotai/Kimi-K2.7-Code repository code and model weights, including derivative works",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/74797c9c62378b951a1f6fcf5c4631024e9b8bef/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the moonshotai/Kimi-K2.7-Code weight release at commit 74797c9c62378b951a1f6fcf5c4631024e9b8bef (last modified 2026-06-15). The Kimi-K2.6 sibling line, Kimi-K3, the kimi-k2.7-code-highspeed endpoint tier, the platform API, and downstream requantizations remain separate boundaries.",
+      "strengths": [
+        "Moonshot AI publishes 64 compressed-tensors shards with the license file, third-party notices, and an in-repository deployment guide",
+        "The first-party platform lists kimi-k2.7-code as its dedicated coding model at 256K context"
+      ],
+      "tradeoffs": [
+        "The Modified MIT License adds a usage-threshold attribution obligation, so the release is source-available rather than open source",
+        "No changelog or retirement posture accompanies the dated release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 6.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and in-repository deployment guidance",
+          "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Moonshot AI model list naming kimi-k2.7-code",
+          "url": "https://platform.moonshot.ai/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/moonshotai/kimi-k2.7-code.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-moonshotai-kimi-k3",
       "source_id": "moonshotai/kimi-k3",
       "name": "Kimi K3",
