@@ -965,6 +965,761 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-alibaba-qwen3-5-122b-a10b",
+      "source_id": "alibaba/qwen3.5-122b-a10b",
+      "name": "Qwen3.5 122B-A10B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B",
+      "description": "Alibaba's 122-billion-parameter Mixture-of-Experts Qwen3.5 release with 10B active parameters, published as Apache-2.0 open weights with Model Studio serving.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.5 122B-A10B",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": "qwen",
+        "release_date": "2026-02-23",
+        "last_updated": "2026-02-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.5-122B-A10B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B/blob/dc4d348443bc740c68e2d77492492c11606384d5/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.5-122B-A10B weight release of February 2026 at Hugging Face commit dc4d348443bc740c68e2d77492492c11606384d5 (last modified 2026-04-24), together with its Model Studio serving row. Smaller and larger Qwen3.5 siblings, the hosted Flash counterpart line, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 122B MoE checkpoint carrying the verbatim Apache-2.0 license file from day one",
+        "Model Studio lists qwen3.5-122b-a10b as a served model"
+      ],
+      "tradeoffs": [
+        "122B total parameters need tensor-parallel serving across multiple GPUs",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.22
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio model listing naming qwen3.5-122b-a10b",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.5-122b-a10b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-5-27b",
+      "source_id": "alibaba/qwen3.5-27b",
+      "name": "Qwen3.5 27B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-27B",
+      "description": "Alibaba's 27-billion-parameter dense Qwen3.5 release with a vision encoder, published as Apache-2.0 open weights with a hosted Model Studio API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.5 27B",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": "qwen",
+        "release_date": "2026-02-23",
+        "last_updated": "2026-02-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.5-27B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.5-27B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-27B/blob/fc05daec18b0a78c049392ed2e771dde82bdf654/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.5-27B weight release of February 2026 at Hugging Face commit fc05daec18b0a78c049392ed2e771dde82bdf654 (last modified 2026-04-24), together with the hosted qwen3.5-27b API model. Smaller and larger Qwen3.5 siblings, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 27B dense checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "First-party Model Studio serving under the exact qwen3.5-27b model ID"
+      ],
+      "tradeoffs": [
+        "The license file arrived about two months after the weight release",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 9,
+        "overall": 8.3
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-27B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio qwen3.5-27b API documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-5-27b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.5-27b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-5-35b-a3b",
+      "source_id": "alibaba/qwen3.5-35b-a3b",
+      "name": "Qwen3.5 35B-A3B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B",
+      "description": "Alibaba's 35-billion-parameter Mixture-of-Experts Qwen3.5 release with 3B active parameters, published as Apache-2.0 open weights with Model Studio serving.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.5 35B-A3B",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": "qwen",
+        "release_date": "2026-02-23",
+        "last_updated": "2026-02-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.5-35B-A3B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/blob/59d61f3ce65a6d9863b86d2e96597125219dc754/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.5-35B-A3B weight release of February 2026 at Hugging Face commit 59d61f3ce65a6d9863b86d2e96597125219dc754 (last modified 2026-04-24), together with its Model Studio serving row. Smaller and larger Qwen3.5 siblings, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 35B MoE checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "Model Studio lists qwen3.5-35b-a3b as a served model"
+      ],
+      "tradeoffs": [
+        "Version identity rests on repository commits with no stated retirement posture",
+        "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio model listing naming qwen3.5-35b-a3b",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.5-35b-a3b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-5-397b-a17b",
+      "source_id": "alibaba/qwen3.5-397b-a17b",
+      "name": "Qwen3.5 397B-A17B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B",
+      "description": "Alibaba's 397-billion-parameter Mixture-of-Experts Qwen3.5 flagship with 17B active parameters, published as Apache-2.0 open weights with Model Studio serving.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.5 397B-A17B",
+        "description": "Large open Qwen multimodal MoE for visual agents and long technical tasks",
+        "family": "qwen",
+        "release_date": "2026-02-15",
+        "last_updated": "2026-02-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.5-397B-A17B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B/blob/8472618112abcbd45acbcdc58436aff4233c23f7/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.5-397B-A17B weight release of February 2026 at Hugging Face commit 8472618112abcbd45acbcdc58436aff4233c23f7 (last modified 2026-04-24), together with its Model Studio serving row. Smaller Qwen3.5 siblings, the hosted Plus counterpart line, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 397B flagship checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "Model Studio lists qwen3.5-397b-a17b as a served model"
+      ],
+      "tradeoffs": [
+        "397B total parameters need cluster-class serving, putting self-operation out of reach for most operators",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.02
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio model listing naming qwen3.5-397b-a17b",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.5-397b-a17b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-5-9b",
+      "source_id": "alibaba/qwen3.5-9b",
+      "name": "Qwen3.5 9B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+      "description": "Alibaba's 9-billion-parameter dense Qwen3.5 release with a vision encoder, published as Apache-2.0 open weights for single-GPU self-operation.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.5 9B",
+        "description": "Qwen instruction model for multilingual chat, reasoning, and tool use",
+        "family": "qwen",
+        "release_date": "2026-02-23",
+        "last_updated": "2026-02-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.5-9B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.5-9B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-9B/blob/c202236235762e1c871ad0ccb60c8ee5ba337b9a/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.5-9B weight release of February 2026 at Hugging Face commit c202236235762e1c871ad0ccb60c8ee5ba337b9a (last modified 2026-03-02), with in-repository SGLang, vLLM, and Transformers serving recipes. Smaller Qwen3.5 dense siblings, later Qwen generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 9B dense checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "Single-GPU self-operation with documented SGLang and vLLM serving recipes"
+      ],
+      "tradeoffs": [
+        "No Model Studio model page documents a managed endpoint for this exact ID",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.34
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoint, and serving recipes",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.5-9b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-6-27b",
+      "source_id": "alibaba/qwen3.6-27b",
+      "name": "Qwen3.6 27B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+      "description": "Alibaba's 27-billion-parameter dense Qwen3.6 release with native multimodal input, published as Apache-2.0 open weights with a hosted Model Studio API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.6 27B",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": "qwen",
+        "release_date": "2026-04-22",
+        "last_updated": "2026-04-22",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.6-27B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.6-27B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.6-27B/blob/6a9e13bd6fc8f0983b9b99948120bc37f49c13e9/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.6-27B weight release of April 2026 at Hugging Face commit 6a9e13bd6fc8f0983b9b99948120bc37f49c13e9 (last modified 2026-04-24), together with the hosted qwen3.6-27b API model. The 35B MoE sibling, earlier Qwen generations, later Qwen lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 27B dense checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "First-party Model Studio serving under the exact qwen3.6-27b model ID with image, text, and video input"
+      ],
+      "tradeoffs": [
+        "Version identity rests on repository commits with no stated retirement posture",
+        "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.6-27B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio qwen3.6-27b API documentation",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-6-27b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.6-27b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-alibaba-qwen3-6-35b-a3b",
+      "source_id": "alibaba/qwen3.6-35b-a3b",
+      "name": "Qwen3.6 35B-A3B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "description": "Alibaba's 35-billion-parameter Mixture-of-Experts Qwen3.6 release with 3B active parameters, published as Apache-2.0 open weights with a hosted Model Studio API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.6 35B-A3B",
+        "description": "Open multimodal Qwen MoE for local agents that need vision, audio, and code",
+        "family": "qwen",
+        "release_date": "2026-04-17",
+        "last_updated": "2026-04-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, appendix completed as Copyright 2026 Alibaba Cloud, permitting use, modification, distribution, hosting, and fine-tuning with no attribution gate, revenue threshold, or separate model-as-a-service license. Hosted API use is governed separately by Alibaba Cloud Model Studio service terms.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Model weights, parameters, configuration files, inference code, and associated documentation in the Qwen/Qwen3.6-35B-A3B repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B/blob/995ad96eacd98c81ed38be0c5b274b04031597b0/LICENSE",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen/Qwen3.6-35B-A3B weight release of April 2026 at Hugging Face commit 995ad96eacd98c81ed38be0c5b274b04031597b0 (last modified 2026-04-24), together with the hosted qwen3.6-35b-a3b API model. The 27B dense sibling, earlier Qwen generations, later Qwen lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 35B MoE checkpoint carrying the verbatim Apache-2.0 license file beside the weights",
+        "First-party Model Studio serving under the exact qwen3.6-35b-a3b model ID"
+      ],
+      "tradeoffs": [
+        "Version identity rests on repository commits with no stated retirement posture",
+        "Access, quotas, and lifecycle remain controlled by the managed API rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Model Studio qwen3.6-35b-a3b API documentation",
+          "url": "https://docs.modelstudio.console.alibabacloud.com/en/model-studio/qwen3-6-35b-a3b",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/alibaba/qwen3.6-35b-a3b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-alibaba-qwen3-8-27b",
       "source_id": "alibaba/qwen3.8-27b",
       "name": "Qwen3.8 27B",
