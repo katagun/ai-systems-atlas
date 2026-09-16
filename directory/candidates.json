@@ -550,45 +550,6 @@
       }
     },
     {
-      "repo": "coleam00/second-brain-starter",
-      "name": "second-brain-starter",
-      "url": "https://github.com/coleam00/second-brain-starter",
-      "description": "Build your own AI Second Brain with Claude Code - a skill that generates a personalized PRD for a proactive, persistent AI assistant",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.76,
-      "github_detected_license": null,
-      "stars": 773,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "No LICENSE was fetched: the bundle records an HTTP 404 for it, and the README states no licence, so any licence status is unverified. The README describes a skill for Claude Code \"that generates a personalized Product Requirements Document (PRD) for building your own AI second brain\", shipped under an \"Install the Skill\" step with starter memory templates, and states \"The second brain is built on Claude Code and the Claude Agent SDK.\" The artifact is a skill plus templates invoked and run by a host agent, producing a blueprint rather than operating on its own. The bundle reports no cross-collection hits. Boundary question: whether a host-run skill that generates a planning document and ships vault templates is an operational system or a document collection executed by a host; BACKLOG.md reserves this under the item to settle the operational boundary for agent skill packs, and its discriminator (run by the host, not supervising it) leaves this candidate blocked on that undecided boundary.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/coleam00/second-brain-starter/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "792b7731bf2363499723a633cb82ede0a3533c0dd0102fbb60eb19eec738d94a",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "a25ba3d52ed3e6bdf235e33c1d1df23c0375b67a",
-            "immutable_url": "https://api.github.com/repos/coleam00/second-brain-starter/git/blobs/a25ba3d52ed3e6bdf235e33c1d1df23c0375b67a"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage",
-        "held_by": "BACKLOG.md: settle the operational boundary for agent skill packs"
-      }
-    },
-    {
       "repo": "dataease/SQLBot",
       "name": "SQLBot",
       "url": "https://github.com/dataease/SQLBot",
@@ -638,66 +599,6 @@
             "fetched_at": "2026-09-15",
             "blob_sha": "8d34fb9478a62250f8ee57719a857f3f49b76c43",
             "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/8d34fb9478a62250f8ee57719a857f3f49b76c43"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "davepoon/buildwithclaude",
-      "name": "buildwithclaude",
-      "url": "https://github.com/davepoon/buildwithclaude",
-      "description": "A single hub to find Claude Skills, Agents, Commands, Hooks, Plugins, and Marketplace collections to extend Claude Code, Claude Desktop, Agent SDK and OpenClaw",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 3441,
-      "topics": [
-        "claude",
-        "claude-code",
-        "claude-code-commands",
-        "claude-skills",
-        "cli-tool",
-        "commands",
-        "mcp",
-        "mcp-server",
-        "mcp-tools",
-        "openclaw",
-        "plugin-marketplace",
-        "subagents"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "out_of_scope",
-        "rule": "`directory/exclusions.json` is reserved for systems that fail a family or role boundary, duplicates, and non-operational research inputs.",
-        "finding": "The LICENSE is the \"MIT License\" (\"Copyright (c) 2025 davepoon\"). The README describes the repository as \"A plugin marketplace and discovery platform for\" Claude Code, meant to let readers \"Browse curated plugins, discover community contributions, and extend your Claude Code workflows.\" What it maintains is a collection of agent, command, hook and skill definitions in markdown with frontmatter, installed through Claude Code's plugin marketplace or by copying the files into Claude Code's own directories. The README says \"Hooks run automatically on events like tool calls or session start.\" It documents no runtime of its own: Claude Code runs everything the repository ships. The web UI also indexes community plugins, MCP servers and plugin marketplaces from the wider ecosystem, much like the curated maps already in exclusions. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is a catalogue and marketplace of plugin definitions run by a host a discovery source outside the catalog, or a skill-pack collection that should wait for the pending skill-pack boundary decision?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/davepoon/buildwithclaude/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "8efd864bb5e08dc3065eb70e507a9337ec640dc7637195ab558777838fb8ba43",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "715e02c14fb418382ca11675ee0a1bd3f9b950b9",
-            "immutable_url": "https://api.github.com/repos/davepoon/buildwithclaude/git/blobs/715e02c14fb418382ca11675ee0a1bd3f9b950b9"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/davepoon/buildwithclaude/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "00d965b55e129a6f085143213a7100b284dca3de38e4a20d5ae7fead8723b9a4",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "20236e3a1c586d36cfe34ce7094bf9cfaec6f66c",
-            "immutable_url": "https://api.github.com/repos/davepoon/buildwithclaude/git/blobs/20236e3a1c586d36cfe34ce7094bf9cfaec6f66c"
           }
         ],
         "proposed_at": "2026-09-15",
