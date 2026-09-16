@@ -9,7 +9,7 @@ Add a repository to `directory/packs.json` when all four hold:
 1. **One steward authored the contents.** A mirror, a daily sync of other products' documentation, or an aggregate of other authors' bundles is not a pack.
 2. **It is offered for install as one unit:** a plugin manifest, a skills folder, a marketplace manifest, a vault template, or an install script that copies the whole pack into a host's discovery locations. A personal snapshot nobody is invited to install is not a pack.
 3. **A host agent consumes it.** Books, courses, and awesome-lists stay out.
-4. **Its contents are documents, not running code.** Open the tree before deciding. A pack that ships a program the host runs at runtime is decided by ADR 031: scored if it owns state or does enforced work, excluded if what it runs is observation. Install, sync, manifest-resolution, and self-validation scripts are distribution machinery and do not move a pack out of this collection; record them in `distribution_machinery`.
+4. **Its contents are documents, not running code.** Open the tree before deciding. A pack that ships a program the host runs at runtime is decided by ADR 031: scored if it owns state or does enforced work, excluded if what it runs is observation. Install, sync, manifest-resolution, and self-validation scripts, and a hook or script that only loads, prints, or installs the pack's own documents into the session, are distribution machinery and do not move a pack out of this collection; record them in `distribution_machinery`. A pack whose shipped code records what the host did is observation and stays excluded, as ADR 031 already holds.
 
 A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`. Adoption does not establish an operational boundary, and it does not decide inclusion here either; a pack enters `candidates.json` and is reviewed from its tree like any other record.
 
@@ -23,7 +23,7 @@ Choose one `pack_type`:
 - `vault_bundle`: a knowledge-vault template with the instructions a host reads to maintain it;
 - `marketplace`: a host-consumable manifest that lists other packs.
 
-Then record every host the pack **documents** installing into (`pack_hosts`), never a host inferred from a format's compatibility list; use `any_agent_skills_host` when the pack documents only the Agent Skills format. Record one `install_mechanism`, and name each `packaging_formats` entry as a `specifications.json` id (`agent-skills`, `claude-code-plugins`, `agent-plugins`, or an instruction convention). Assign `status` from the project statuses so an abandoned pack is labelled rather than removed.
+Then record in `hosts` every host the pack **documents** installing into, using values from the `pack_hosts` group, never a host inferred from a format's compatibility list; use `any_agent_skills_host` when the pack documents only the Agent Skills format. Record one `install_mechanism`, and name each `packaging_formats` entry as a `specifications.json` id (`agent-skills`, `claude-code-plugins`, `agent-plugins`, or an instruction convention). Assign `status` from the project statuses so an abandoned pack is labelled rather than removed.
 
 ## The marketplace rule
 
