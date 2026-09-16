@@ -11839,9 +11839,10 @@
         "coding_session"
       ],
       "memory_lifecycle": [
-        "upsert_rewrite"
+        "upsert_rewrite",
+        "versioned"
       ],
-      "canonical_data": "Markdown plan, spec, and progress files written into the target repository",
+      "canonical_data": "Plan, spec, and progress Markdown under `process/` in the target repository, which the kit's own validators read back, plus per-session state its hooks write and archive under the host agent's directory",
       "deployment": [
         "local_cli"
       ],
@@ -11854,25 +11855,25 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1127,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1128,
+      "stars_verified_at": "2026-09-15",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
         "task_reliability": 5.5,
-        "tool_use": 6.0,
+        "tool_use": 7.5,
         "autonomy": 7.5,
         "human_control": 5.5,
-        "observability_recovery": 7.0,
+        "observability_recovery": 7.5,
         "data_sovereignty": 8.5,
         "interoperability": 8.0,
         "maturity": 4.5,
-        "overall": 6.38
+        "overall": 6.65
       },
       "strengths": [
         "A coherent seven-gated RIPER-5 workflow (research through update-process), not a loose prompt collection, with 36 mechanical validators guarding the kit's own structure",
         "Runs entirely against the user's own local repository across many coding-agent hosts (Claude Code, Codex, Cursor, Windsurf, Copilot)",
-        "A resumable run-until-done token lets an autopilot run survive a fresh session"
+        "It ships tooling rather than instructions alone: a snapshot-based browser-automation command line, a documentation fetcher, and session-state hooks that archive each session, alongside a resumable run-until-done token that lets an autopilot run survive a fresh session"
       ],
       "weaknesses": [
         "No commits, releases, or version bumps in the roughly three months before this review despite an actively marketed autopilot workflow",
@@ -11880,8 +11881,8 @@
         "Reliability, cost-estimate, and self-healing claims are vendor-authored marketing copy with no independent benchmark or test evidence in the bundle"
       ],
       "why_it_matters": "Shows a heavily gated, self-healing prompt-and-validator workflow can be layered onto an existing coding agent instead of requiring a new agent runtime.",
-      "research_confidence": "medium",
-      "verified_at": "2026-09-12",
+      "research_confidence": "high",
+      "verified_at": "2026-09-15",
       "github_detected_license": "MIT",
       "agent_interfaces": [
         "terminal"
@@ -11891,8 +11892,11 @@
       ],
       "agent_capabilities": [
         "code_editing",
-        "workflows",
-        "multi_agent"
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
       ],
       "forks": 233,
       "open_issues": 20,
