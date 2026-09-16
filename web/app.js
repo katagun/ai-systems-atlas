@@ -15,14 +15,14 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], taxonomy: null,
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], taxonomy: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
   directoryCollection: "all", directoryRoles: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
-  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1 },
+  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1 },
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -165,9 +165,10 @@ async function bootstrap() {
   // needed, so it stays a direct read of the endpoint. Everything else arrives
   // on demand: a record's detail when a dialog or comparison needs it, a search
   // index when a search box takes focus, logos.json off the critical path.
-  const [systems, inference, runtimes, specifications, models, taxonomy] = await Promise.all([
+  const [systems, inference, runtimes, specifications, models, taxonomy, packs] = await Promise.all([
     loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
-    loadJSON("app/specifications.json"), loadJSON("app/models.json"), loadJSON("taxonomy.json")
+    loadJSON("app/specifications.json"), loadJSON("app/models.json"), loadJSON("taxonomy.json"),
+    loadJSON("app/packs.json")
   ]);
   state.projects = systems.systems;
   state.inferenceServices = inference.inference;
@@ -177,7 +178,8 @@ async function bootstrap() {
   state.reviewedModelCount = models.reviewed_count;
   state.modelSourceCount = models.source_record_count;
   state.taxonomy = taxonomy;
-  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at]
+  state.packs = packs.packs;
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -419,6 +421,15 @@ const COLLECTION_FILTERS = {
     ],
     licenseFilter: "#model-license-filter",
   },
+  packs: {
+    records: () => state.packs,
+    groups: [
+      ["pack_types", "#pack-type-filter", item => [item.pack_type]],
+      ["pack_hosts", "#pack-host-filter", item => item.hosts],
+      ["pack_install_mechanisms", "#pack-install-filter", item => [item.install_mechanism]],
+    ],
+    licenseFilter: "#pack-license-filter",
+  },
 };
 
 function populateCollectionFilters() {
@@ -483,8 +494,8 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length;
-  $("#hero-kicker").textContent = `${total} systems, source models, services, and runtimes`;
+  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length;
+  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, and packs`;
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#memory-collection-count").textContent = memories;
@@ -493,6 +504,7 @@ function renderStats() {
   $("#inference-collection-count").textContent = state.inferenceServices.length;
   $("#runtime-collection-count").textContent = state.localRuntimes.length;
   $("#model-collection-count").textContent = state.models.length;
+  $("#pack-collection-count").textContent = state.packs.length;
 }
 
 function syncCollectionSwitcher() {
@@ -517,7 +529,7 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes"].includes(collection) ? collection : "all";
+  const selected = ["all", "systems", "inference", "runtimes", "packs"].includes(collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime");
@@ -528,15 +540,17 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   $("#systems-directory-panel").hidden = selected !== "systems";
   $("#inference-directory-panel").hidden = selected !== "inference";
   $("#runtimes-directory-panel").hidden = selected !== "runtimes";
+  $("#packs-directory-panel").hidden = selected !== "packs";
   const renderers = {
     all: renderAllDirectoryEntries,
     systems: renderProjects,
     inference: renderInferenceServices,
     runtimes: renderLocalRuntimes,
+    packs: renderPacks,
   };
   for (const [name, grid] of [
     ["all", "#all-directory-grid"], ["systems", "#project-grid"],
-    ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"],
+    ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
   ]) {
     if (name !== selected) $(grid).innerHTML = "";
   }
@@ -551,12 +565,14 @@ const PAGE_CONTAINERS = {
   runtimes: "#runtime-pager",
   models: "#model-pager",
   specifications: "#specification-pager",
+  packs: "#pack-pager",
 };
 
 function pageRenderer(key) {
   return {
     all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
     runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
+    packs: renderPacks,
   }[key];
 }
 
@@ -607,6 +623,21 @@ function badgeRow(badges) {
   return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
+function packHosts(pack) {
+  return pack.hosts.map(item => taxonomyName("pack_hosts", item)).join(" · ");
+}
+
+function packCard(pack, { mixed = false } = {}) {
+  const typeLabel = taxonomyName("pack_types", pack.pack_type);
+  return `<article class="project-card agent-pack-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMark(pack)}<div><p class="family-label">${mixed ? "Agent pack · " : ""}${escapeHTML(typeLabel)}</p><h2>${escapeHTML(pack.name)}</h2><div class="repo">${escapeHTML(pack.steward)}</div></div></div></div>
+    <span class="role-badge">${escapeHTML(packHosts(pack))}</span>
+    <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+    <p>${escapeHTML(pack.description)}</p>
+    <div class="card-footer"><span>${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+  </article>`;
+}
+
 // Modality and family on a reviewed-model card come from models.dev, not from
 // Atlas review, so they carry attributed plain text instead of badges.
 function modelSourceMeta(model) {
@@ -631,7 +662,7 @@ function importedModelCard(model, { mixed = false } = {}) {
 }
 
 function renderAllDirectoryEntries() {
-  // The mixed directory searches four collections, so it reads four index
+  // The mixed directory searches five collections, so it reads five index
   // namespaces; each is absent until that collection's index lands, and the
   // filter falls back to the boot record for whichever is still missing.
   const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
@@ -640,7 +671,8 @@ function renderAllDirectoryEntries() {
     serviceSearchIndex: searchIndexes.inference,
     runtimeSearchIndex: searchIndexes.runtimes,
     modelSearchIndex: searchIndexes.models,
-  });
+    packSearchIndex: searchIndexes.packs,
+  }, state.packs);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
@@ -656,6 +688,7 @@ function renderAllDirectoryEntries() {
         <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
+    if (kind === "pack") return packCard(record, { mixed: true });
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -683,11 +716,12 @@ function renderAllDirectoryEntries() {
       ${badgeRow(AtlasCore.cardBadges("system", record))}
       <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
     </article>`;
-  }).join("") || '<div class="notice">No systems, model releases, inference services, or local runtimes match this search.</div>';
+  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, or agent packs match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
+  $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   renderPager("all", paged);
 }
 
@@ -843,6 +877,25 @@ const COLLECTIONS = {
     <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
   </article>`,
   },
+  packs: {
+    grid: "#pack-grid",
+    resultCount: "#pack-result-count",
+    pageKey: "packs",
+    dataset: "pack",
+    noun: ["pack", "packs"],
+    empty: "No agent packs match these filters.",
+    open: id => openPack(id),
+    context: () => ({ suffix: " · Unscored", comparable: false }),
+    records: () => AtlasCore.filterPacks(state.packs, {
+      term: $("#pack-search").value,
+      searchIndex: searchIndexes.packs,
+      type: $("#pack-type-filter").value,
+      host: $("#pack-host-filter").value,
+      install: $("#pack-install-filter").value,
+      license: $("#pack-license-filter").value,
+    }),
+    card: pack => packCard(pack),
+  },
   models: {
     grid: "#model-grid",
     resultCount: "#model-result-count",
@@ -907,6 +960,7 @@ const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
+const renderPacks = () => renderCollection("packs");
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
@@ -915,6 +969,7 @@ function renderSearchSurfaces() {
   const renderers = {
     all: renderAllDirectoryEntries, systems: renderProjects,
     inference: renderInferenceServices, runtimes: renderLocalRuntimes,
+    packs: renderPacks,
   };
   renderers[state.directoryCollection]?.();
   // Specifications and Models are sibling views rather than directory
@@ -1224,6 +1279,8 @@ function renderTaxonomy() {
     ["Model-access score", state.taxonomy.model_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
+    ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
+    ["Pack install mechanisms", state.taxonomy.pack_install_mechanisms],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
@@ -1289,6 +1346,22 @@ function specificationDialogMarkup(specification) {
       <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(specification.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
       <section class="detail-block"><h3>Related artifacts</h3>${related.length ? `<p>${related.map(item => escapeHTML(item.short_name)).join(" · ")}</p>` : "<p>None recorded.</p>"}<p class="unscored-note">Specifications are classified, not scored. Their value depends on the integration boundary you need.</p></section>
+    </div>`;
+}
+
+function packDialogMarkup(pack) {
+  const formats = (pack.packaging_formats || []).map(id => state.specifications.find(item => item.id === id)).filter(Boolean);
+  const relatedPacks = (pack.related_packs || []).map(id => state.packs.find(item => item.id === id)).filter(Boolean);
+  const relatedSystems = (pack.related_systems || []).map(id => state.projects.find(item => item.id === id)).filter(Boolean);
+  return `<p class="eyebrow">Agent pack · ${escapeHTML(taxonomyName("pack_types", pack.pack_type))} · Unscored</p><h1>${escapeHTML(pack.name)}</h1><p>${escapeHTML(pack.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Pack identity</h3><p><strong>Steward:</strong> ${escapeHTML(pack.steward)}</p><p><strong>Status:</strong> ${escapeHTML(label(pack.status))}</p><p><strong>Hosts:</strong> ${escapeHTML(packHosts(pack))}</p><p><strong>Install:</strong> ${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}</p><p><a href="${escapeHTML(pack.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p><p><a href="https://github.com/${escapeHTML(pack.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p></section>
+      <section class="detail-block"><h3>What it installs</h3><p>${detailText(pack.installs)}</p>${pack.distribution_machinery ? `<p><strong>Distribution machinery:</strong> ${escapeHTML(pack.distribution_machinery)}</p>` : ""}</section>
+      <section class="detail-block"><h3>Why it is not a scored system</h3><p>${detailText(pack.not_a_system)}</p><p class="unscored-note">Packs are recorded for what they install, never for what they do. A pack that owns state or does enforced work is a scored system instead (ADR 031, ADR 032).</p></section>
+      <section class="detail-block"><h3>Packaging formats</h3>${formats.length ? `<p>${formats.map(item => `<button type="button" class="ghost-button" data-open-spec="${escapeHTML(item.id)}">${escapeHTML(item.short_name)}</button>`).join(" ")}</p>` : "<p>No packaging format recorded; the pack installs by script or clone.</p>"}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(pack.license_note)}</p>${(pack.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(pack.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
+      <section class="detail-block"><h3>Related records</h3>${relatedPacks.length || relatedSystems.length ? `<p>${[...relatedPacks.map(item => `<button type="button" class="ghost-button" data-open-pack="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
     </div>`;
 }
 
@@ -1544,6 +1617,17 @@ const RECORD_DIALOGS = {
     find: id => state.localRuntimes.find(item => item.id === id),
     markup: runtimeDialogMarkup,
   },
+  pack: {
+    dialog: "#pack-dialog",
+    content: "#pack-dialog-content",
+    find: id => state.packs.find(item => item.id === id),
+    markup: packDialogMarkup,
+    afterRender: () => {
+      $$('[data-open-spec]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#pack-dialog").close(); openSpecification(button.dataset.openSpec); activateView("specifications"); }));
+      $$('[data-open-pack]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.openPack)));
+      $$('[data-open-project]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#pack-dialog").close(); openProject(button.dataset.openProject); }));
+    },
+  },
   model: {
     dialog: "#model-dialog",
     content: "#model-dialog-content",
@@ -1586,6 +1670,7 @@ function openProject(id) { return openRecordDialog("system", id); }
 function openSpecification(id) { return openRecordDialog("spec", id); }
 function openInferenceService(id) { return openRecordDialog("inference", id); }
 function openLocalRuntime(id) { return openRecordDialog("runtime", id); }
+function openPack(id) { return openRecordDialog("pack", id); }
 function openModel(id) { return openRecordDialog("model", id); }
 
 
@@ -1617,7 +1702,7 @@ function runtimeLicenseEvidenceLink(item) {
 // `record=kind:id` URL, so the address bar always links to what is on screen.
 // Dispatch is static, as with comparisons, because the kind comes from the URL.
 const RECORD_DIALOG_SELECTORS = [
-  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#model-dialog",
+  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#pack-dialog", "#model-dialog",
 ];
 const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">Copy link shares a preview page for this record.</span></p>';
 
@@ -1626,6 +1711,7 @@ function openRecord(kind, id) {
   if (kind === "spec") return openSpecification(id);
   if (kind === "inference") return openInferenceService(id);
   if (kind === "runtime") return openLocalRuntime(id);
+  if (kind === "pack") return openPack(id);
   if (kind === "model") return openModel(id);
   return false;
 }
@@ -1914,8 +2000,8 @@ function restoreViewFromURL() {
 }
 
 function activateView(id) {
-  if (id === "inference-services" || id === "local-runtimes") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : "runtimes");
+  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs") {
+    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : "packs");
     id = "directory";
   }
   const comparisonFitsView = (id === "models" && state.comparison.kind === "model")
@@ -1940,8 +2026,8 @@ function activateView(id) {
 const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
-  "#model-search": ["models"],
-  "#all-directory-search": ["systems", "inference", "runtimes", "models"],
+  "#model-search": ["models"], "#pack-search": ["packs"],
+  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs"],
 };
 
 function bindEvents() {
@@ -1954,7 +2040,7 @@ function bindEvents() {
   }));
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
-  // narrow ones. The All view searches four collections, so it loads four.
+  // narrow ones. The All view searches five collections, so it loads five.
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
     const input = $(selector);
     const loadIndexes = () => {
@@ -1985,6 +2071,7 @@ function bindEvents() {
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
   ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
   ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
+  ["#pack-search", "#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -2024,6 +2111,15 @@ function bindEvents() {
     $("#model-sort-filter").value = "score";
     state.page.models = 1;
     renderModels();
+  });
+  $("#reset-pack-filters").addEventListener("click", () => {
+    $("#pack-search").value = "";
+    $("#pack-type-filter").value = "";
+    $("#pack-host-filter").value = "";
+    $("#pack-install-filter").value = "";
+    $("#pack-license-filter").value = "";
+    state.page.packs = 1;
+    renderPacks();
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
@@ -2087,6 +2183,8 @@ function bindEvents() {
   $("#inference-dialog").addEventListener("click", event => { if (event.target === $("#inference-dialog")) $("#inference-dialog").close(); });
   $("#runtime-dialog .dialog-close").addEventListener("click", () => $("#runtime-dialog").close());
   $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
+  $("#pack-dialog .dialog-close").addEventListener("click", () => $("#pack-dialog").close());
+  $("#pack-dialog").addEventListener("click", event => { if (event.target === $("#pack-dialog")) $("#pack-dialog").close(); });
   $("#model-dialog .dialog-close").addEventListener("click", () => $("#model-dialog").close());
   $("#model-dialog").addEventListener("click", event => { if (event.target === $("#model-dialog")) $("#model-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
