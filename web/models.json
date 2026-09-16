@@ -5185,6 +5185,439 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-openai-gpt-5-pro",
+      "source_id": "openai/gpt-5-pro",
+      "name": "GPT-5 Pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5-pro",
+      "description": "The precision GPT-5 tier with more test-time compute for demanding reasoning tasks, exposed as the gpt-5-pro alias over the gpt-5-pro-2025-10-06 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5 Pro",
+        "description": "Higher-accuracy GPT-5 tier for tough analysis, coding reviews, and planning",
+        "family": "gpt-pro",
+        "release_date": "2025-10-06",
+        "last_updated": "2025-10-06",
+        "knowledge_cutoff": "2024-09-30",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 272000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5 Pro as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5 Pro model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5 Pro release whose API page identifies gpt-5-pro-2025-10-06 as the fixed snapshot behind the gpt-5-pro alias; OpenAI's deprecation page lists that snapshot for shutdown on 2026-12-11 with gpt-5.6-sol in pro reasoning mode as the recommended replacement. ChatGPT, the GPT-5, GPT-5 Mini, GPT-5 Nano, and later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API and Azure Foundry, whose reasoning-models page names gpt-5-pro with dated feature support"
+      ],
+      "tradeoffs": [
+        "Serving is narrower than the base model: Responses API only, with fixed high reasoning effort and no code interpreter",
+        "The only documented snapshot is already scheduled for shutdown on 2026-12-11, with migration directed at gpt-5.6-sol in pro reasoning mode"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5 Pro model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5-pro",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5-pro",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5-pro.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-1",
+      "source_id": "openai/gpt-5.1",
+      "name": "GPT-5.1",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.1",
+      "description": "The GPT-5.1 flagship line for coding and agentic work with configurable reasoning effort, exposed as the gpt-5.1 alias over the gpt-5.1-2025-11-13 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.1",
+        "description": "Sharper GPT-5 generation for coding, product work, and tool-assisted tasks",
+        "family": "gpt",
+        "release_date": "2025-11-13",
+        "last_updated": "2025-11-13",
+        "knowledge_cutoff": "2024-09-30",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.1 as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.1 model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.1 release whose API page identifies gpt-5.1-2025-11-13 as the fixed snapshot behind the gpt-5.1 alias; the API deprecation page carries no retirement entry for this base line as of review, while its chat-latest and codex variant endpoints shut down in July and August 2026. ChatGPT, the retired 5.1 chat and codex variants, the GPT-5.1 Mini/Nano siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with chat, responses, and batch endpoints, and Azure Foundry, whose reasoning-models page names gpt-5.1 with dated feature support"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "The generation's chat-latest and codex variant endpoints already shut down in July and August 2026, leaving the base API line as the surviving 5.1 surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.1 model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.1",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.1",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.1.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-2",
+      "source_id": "openai/gpt-5.2",
+      "name": "GPT-5.2",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.2",
+      "description": "The previous GPT-5 flagship generation for professional work with configurable reasoning effort, exposed as the gpt-5.2 alias over the gpt-5.2-2025-12-11 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.2",
+        "description": "Reliable GPT generation for broad coding, writing, and tool-assisted product work",
+        "family": "gpt",
+        "release_date": "2025-12-11",
+        "last_updated": "2025-12-11",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.2 as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.2 model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.2 release whose API page identifies gpt-5.2-2025-12-11 as the fixed snapshot behind the gpt-5.2 alias; the API deprecation page carries no retirement entry for this base line as of review, while its chat-latest and codex variant endpoints shut down in July and August 2026. ChatGPT, the retired 5.2 chat and codex variants, later GPT releases including GPT-6 Astra, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with chat, responses, and batch endpoints, and Azure Foundry, whose reasoning-models page names gpt-5.2"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "OpenAI's own page positions GPT-5.2 as the previous flagship and recommends GPT-6 Astra for new work, while the generation's chat and codex variants already shut down"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.2 model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.2",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.2",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.2.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-4",
+      "source_id": "openai/gpt-5.4",
+      "name": "GPT-5.4",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4",
+      "description": "The GPT-5.4 flagship line for professional work with a 1M-token context window, exposed as the gpt-5.4 alias over the gpt-5.4-2026-03-05 snapshot through OpenAI's managed developer API and Azure Foundry, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.4",
+        "description": "Agent-ready GPT for coding and computer-use workflows at a lower cost",
+        "family": "gpt",
+        "release_date": "2026-03-05",
+        "last_updated": "2026-03-05",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.4 as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.4 model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.4 release whose API page identifies gpt-5.4-2026-03-05 as the fixed snapshot behind the gpt-5.4 alias; the API deprecation page carries no retirement entry for this base line as of review. ChatGPT, the GPT-5.4 Mini, Nano, Pro, and invite-only Cyber siblings, later GPT releases, fine-tuned derivatives, and the OpenAI API platform itself are separate service, application, or model boundaries.",
+      "strengths": [
+        "OpenAI documents a dated snapshot that applications can pin instead of relying only on the alias",
+        "Two managed serving paths: the first-party developer API with a 1M-token context window and computer-use tool support, and Azure Foundry, whose reasoning-models page names gpt-5.4"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation or independent deployment",
+        "Access, quotas, and lifecycle remain controlled by the managed APIs rather than the model operator"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.4 model, snapshot, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.4",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official OpenAI model deprecation schedule",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.4",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.4.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-openai-gpt-5-5",
       "source_id": "openai/gpt-5.5",
       "name": "GPT-5.5",
@@ -5539,6 +5972,369 @@
       ],
       "metadata_verified_at": "2026-09-12",
       "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-openai-gpt-5-6-luna",
+      "source_id": "openai/gpt-5.6-luna",
+      "name": "GPT-5.6 Luna",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "description": "The cost-efficient GPT-5.6 tier for high-volume work, exposed as the gpt-5.6-luna tier name over OpenAI's managed developer API and Azure Foundry with no documented fixed dated snapshot and no downloadable weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.6 Luna",
+        "description": "Cost-efficient GPT-5.6 model for fast, high-volume workloads",
+        "family": "gpt-luna",
+        "release_date": "2026-07-09",
+        "last_updated": "2026-07-09",
+        "knowledge_cutoff": "2026-02-16",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.6 Luna as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.6 Luna model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.6 Luna tier launched July 9, 2026: the official model page lists both the default snapshot and the snapshot inventory as gpt-5.6-luna with no documented fixed dated snapshot, so applications cannot pin a dated revision; OpenAI defines the tiers as durable capabilities that advance on their own cadence. The Sol and Terra sibling tiers, ChatGPT and Codex application surfaces, fine-tuned derivatives, and later generations are separate service, application, or model boundaries.",
+      "strengths": [
+        "The July 2026 launch announcement pins the release date and the cost-efficient-tier positioning, and Azure documents gpt-5.6-luna availability as a second managed path",
+        "The first-party model page documents modalities, knowledge cutoff, endpoints, and rate limits from the developer"
+      ],
+      "tradeoffs": [
+        "No documented fixed dated snapshot exists, so the record cannot pin behavior the way dated-snapshot records can",
+        "No developer-published weights are available for self-operation or independent deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 4.68
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 Luna model, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 launch announcement (July 9, 2026)",
+          "url": "https://openai.com/index/gpt-5-6/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.6-luna",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-5.6-luna retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.6-luna.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-6-sol",
+      "source_id": "openai/gpt-5.6-sol",
+      "name": "GPT-5.6 Sol",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+      "description": "The flagship tier of the July 2026 GPT-5.6 generation for professional work, exposed as the gpt-5.6-sol tier name over OpenAI's managed developer API and Azure Foundry with no documented fixed dated snapshot and no downloadable weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.6 Sol",
+        "description": "Frontier GPT-5.6 model for complex professional work, coding, and agentic workflows",
+        "family": "gpt-sol",
+        "release_date": "2026-07-09",
+        "last_updated": "2026-07-09",
+        "knowledge_cutoff": "2026-02-16",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.6 Sol as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.6 Sol model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.6 Sol tier launched July 9, 2026: the official model page lists both the default snapshot and the snapshot inventory as gpt-5.6-sol with no documented fixed dated snapshot, so applications cannot pin a dated revision; OpenAI defines Sol, Terra, and Luna as durable capability tiers that advance on their own cadence. The Terra and Luna sibling tiers, the gpt-5.6 umbrella alias routing to Sol, ChatGPT and Codex application surfaces including the Sol Pro chat selection, fine-tuned derivatives, and later generations are separate service, application, or model boundaries.",
+      "strengths": [
+        "The July 2026 launch announcement pins the release date and the flagship tier positioning, and Azure documents gpt-5.6-sol availability as a second managed path",
+        "The first-party model page documents modalities, knowledge cutoff, endpoints, and rate limits from the developer"
+      ],
+      "tradeoffs": [
+        "No documented fixed dated snapshot exists, so the record cannot pin behavior the way dated-snapshot records can",
+        "No developer-published weights are available for self-operation or independent deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 4.68
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 Sol model, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 launch announcement (July 9, 2026)",
+          "url": "https://openai.com/index/gpt-5-6/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.6-sol",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-5.6-sol retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.6-sol.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-openai-gpt-5-6-terra",
+      "source_id": "openai/gpt-5.6-terra",
+      "name": "GPT-5.6 Terra",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+      "description": "The balanced GPT-5.6 tier for everyday work, exposed as the gpt-5.6-terra tier name over OpenAI's managed developer API and Azure Foundry with no documented fixed dated snapshot and no downloadable weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.6 Terra",
+        "description": "Balanced GPT-5.6 model for capable, cost-efficient everyday work",
+        "family": "gpt-terra",
+        "release_date": "2026-07-09",
+        "last_updated": "2026-07-09",
+        "knowledge_cutoff": "2026-02-16",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1050000,
+          "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.6 Terra as an API service governed by the OpenAI Services Agreement and the OpenAI Policies it incorporates by reference. Those terms grant a non-exclusive right to use the Services, prohibit reverse engineering, and do not license model weights or implementation for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "scope": "Business and developer access to the GPT-5.6 Terra model through OpenAI API Services and incorporated OpenAI Policies",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.6 Terra tier launched July 9, 2026: the official model page lists both the default snapshot and the snapshot inventory as gpt-5.6-terra with no documented fixed dated snapshot, so applications cannot pin a dated revision; OpenAI defines the tiers as durable capabilities that advance on their own cadence. The Sol and Luna sibling tiers, ChatGPT and Codex application surfaces, fine-tuned derivatives, and later generations are separate service, application, or model boundaries.",
+      "strengths": [
+        "The July 2026 launch announcement pins the release date and the balanced-tier positioning, and Azure documents gpt-5.6-terra availability as a second managed path",
+        "The first-party model page documents modalities, knowledge cutoff, endpoints, and rate limits from the developer"
+      ],
+      "tradeoffs": [
+        "No documented fixed dated snapshot exists, so the record cannot pin behavior the way dated-snapshot records can",
+        "No developer-published weights are available for self-operation or independent deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 4.68
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 Terra model, modality, and endpoint documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.6 launch announcement (July 9, 2026)",
+          "url": "https://openai.com/index/gpt-5-6/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI Services Agreement",
+          "url": "https://openai.com/policies/services-agreement/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Azure Foundry reasoning-models page naming gpt-5.6-terra",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official deprecation page checked: no gpt-5.6-terra retirement notice",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.6-terra.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
     },
     {
       "id": "model-openai-gpt-6-astra",
