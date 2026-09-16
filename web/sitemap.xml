@@ -112,7 +112,11 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-4-maverick-17b-instruct/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-4-scout-17b-instruct/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-microsoft-phi-4-mini/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-1/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-5/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-7/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m3/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-devstral-small-2507/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-magistral-small-2506/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-medium-2604/</loc><lastmod>2026-09-11</lastmod></url>
@@ -126,11 +130,18 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-1/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-2/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-4/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-5-instant/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-5-pro/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-5/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-6-luna/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-6-sol/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-6-terra/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-nano/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-pro/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-6-astra/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-120b/</loc><lastmod>2026-09-11</lastmod></url>
@@ -229,6 +240,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/gemini-cli/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gemini-enterprise-agent-platform/</loc><lastmod>2026-08-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/genkit/</loc><lastmod>2026-08-29</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/gentle-ai/</loc><lastmod>2026-09-15</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gitnexus/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/google-adk/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/goose/</loc><lastmod>2026-08-23</lastmod></url>
@@ -353,7 +365,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/vanna/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/venice-ai/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/vibe-kanban/</loc><lastmod>2026-09-02</lastmod></url>
-  <url><loc>https://peacefulcoexistance.com/records/systems/vibecode-pro-max-kit/</loc><lastmod>2026-09-12</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/vibecode-pro-max-kit/</loc><lastmod>2026-09-15</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/warp/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/watsonx-orchestrate/</loc><lastmod>2026-08-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/weaviate/</loc><lastmod>2026-08-23</lastmod></url>

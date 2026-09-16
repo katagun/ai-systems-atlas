@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-12",
+  "updated_at": "2026-09-16",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -211,6 +211,24 @@
       "disposition": "held",
       "reason": "No first-party model page in xAI's catalogue, so no authoritative identity or boundary can be established. Documented replacement Grok 4.6 is reviewed. Held in case first-party documentation appears.",
       "decided_at": "2026-09-11"
+    },
+    {
+      "source_id": "minimax/MiniMax-M2.5-highspeed",
+      "disposition": "excluded",
+      "reason": "API speed-tier alias of the reviewed MiniMax-M2.5 line with no weights, license, repository, or fixed release identity of its own; the platform documents it as the same performance at higher throughput.",
+      "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "minimax/MiniMax-M2.7-highspeed",
+      "disposition": "excluded",
+      "reason": "API speed-tier alias of the reviewed MiniMax-M2.7 line with no weights, license, repository, or fixed release identity of its own; the platform documents it as the same performance at higher throughput.",
+      "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "minimax/MiniMax-M2-Her",
+      "disposition": "held",
+      "reason": "API-only dialogue endpoint with no published weights, license, or pinned release; held in case MiniMax publishes a fixed release with governing terms.",
+      "decided_at": "2026-09-16"
     }
   ]
 }
