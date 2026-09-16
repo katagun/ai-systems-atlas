@@ -142,7 +142,7 @@ print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
 ```
 
-Expected: 53.2 KB gzipped with the complete models.dev source catalog. Anything over 60 KB requires checking whether source growth or a detail-only field reached a boot payload.
+Expected: 68.3 KB gzipped with the complete models.dev source catalog and the unscored packs collection. Anything over 60 KB requires checking whether source growth or a detail-only field reached a boot payload.
 
 Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 
