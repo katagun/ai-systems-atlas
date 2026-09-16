@@ -42,4 +42,8 @@ Packs are never scored, sorted by popularity, or assigned a system family.
 
 ## Current coverage
 
-The collection opens with the six repositories ADR 031's first application excluded and this boundary admits: Superpowers and claude-code-tresor as process kits, agent-toolkit and Build with Claude as marketplaces, Second Brain Starter and obsidian-claude-pkm as vault bundles. `NVIDIA/skills` and `AI-Research-SKILLs` remain excluded as mirrors, `knowledge-garden` as a personal snapshot. Use [`COVERAGE.md`](COVERAGE.md) and [`BACKLOG.md`](../BACKLOG.md) for the next pass.
+The collection opens with five of the six repositories ADR 031's first application excluded: claude-code-tresor as a process kit, agent-toolkit and Build with Claude as marketplaces, Second Brain Starter and obsidian-claude-pkm as vault bundles. `NVIDIA/skills` and `AI-Research-SKILLs` remain excluded as mirrors, `knowledge-garden` as a personal snapshot.
+
+Superpowers was reviewed for this collection and stays excluded. ADR 032 anticipated only its session hook, which does print a skill document and nothing more; the tree also ships `skills/brainstorming/scripts/server.cjs` with `start-server.sh`, an HTTP and WebSocket server the skill tells the host to launch, which opens the user's browser on a generated screen and writes the user's selections into a state directory the skill reads back on its next turn. That is a program the pack ships doing runtime work, so boundary test 4 sends it to ADR 031, where it is not this collection's to decide. Re-review it there rather than admitting it here.
+
+Use [`COVERAGE.md`](COVERAGE.md) and [`BACKLOG.md`](../BACKLOG.md) for the next pass.
