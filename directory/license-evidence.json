@@ -3336,6 +3336,21 @@
           "immutable_url": "https://api.github.com/repos/Roznoshchik/Lurnby/git/blobs/0b0b67212bb61467de665bda0caa86354a510691"
         }
       ]
+    },
+    {
+      "project_id": "gentle-ai",
+      "repo": "Gentleman-Programming/gentle-ai",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the README's trademark notice reserves the Gentle AI and Engram names without altering the code licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Gentleman-Programming/gentle-ai/blob/main/LICENSE",
+          "blob_sha": "3f361df0f623aebd8be1de6f838ee808c23484de",
+          "immutable_url": "https://api.github.com/repos/Gentleman-Programming/gentle-ai/git/blobs/3f361df0f623aebd8be1de6f838ee808c23484de"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-13"
