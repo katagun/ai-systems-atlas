@@ -121,9 +121,9 @@
         },
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "Microsoft 365 online-service product terms and offering-specific use rights",
+          "scope": "Microsoft 365 online-service product terms and offering-specific use rights, as published for the Enterprise Agreement and Enrollment for Education Solutions programs",
           "kind": "web_terms",
-          "url": "https://www.microsoft.com/licensing/terms/productoffering/Microsoft365/all",
+          "url": "https://www.microsoft.com/licensing/terms/productoffering/Microsoft365/EAEAS",
           "verified_at": "2026-09-15"
         },
         {
@@ -2579,9 +2579,9 @@
         },
         {
           "license_id": "LicenseRef-Commercial",
-          "scope": "The agent server this project pins for production self-hosting, published under the Elastic License 2.0 and requiring a licence key; that licence has no identifier in the vocabulary, and this reference stands for it",
+          "scope": "The agent server this project pins for production self-hosting, langgraph-api, whose PyPI metadata publishes it under the Elastic License 2.0 and whose licence key the project's install docs require; that licence has no identifier in the vocabulary, and this reference stands for its text",
           "kind": "web_terms",
-          "url": "https://pypi.org/project/langgraph-api/",
+          "url": "https://www.elastic.co/licensing/elastic-license",
           "verified_at": "2026-09-15"
         }
       ]
