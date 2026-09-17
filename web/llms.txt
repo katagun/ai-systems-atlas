@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-> A directory of reviewed agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes, plus a complete attributed models.dev source snapshot. Imported source metadata remains distinct from human conclusions.
+> A directory of reviewed agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, self-operated local runtimes, and unscored agent packs a host agent installs, plus a complete attributed models.dev source snapshot. Imported source metadata remains distinct from human conclusions.
 
 ## Data
 

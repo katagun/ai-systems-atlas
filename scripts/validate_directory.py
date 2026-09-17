@@ -1103,6 +1103,7 @@ def validate_packs(
         item.get("id") for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
+    pack_repos_seen: set[str] = set()
     for pack in packs_value:
         if not isinstance(pack, dict):
             errors.append("packs.json: every pack must be an object")
@@ -1130,8 +1131,12 @@ def validate_packs(
         if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo):
             errors.append(f"{prefix}: invalid GitHub repository")
             repo = None
-        elif repo.lower() in index.repos:
-            errors.append(f"{prefix}: {repo} cannot be both a system and a pack")
+        else:
+            if repo.lower() in index.repos:
+                errors.append(f"{prefix}: {repo} cannot be both a system and a pack")
+            if repo.lower() in pack_repos_seen:
+                errors.append(f"{prefix}: duplicate pack repository {repo}")
+            pack_repos_seen.add(repo.lower())
         if pack.get("pack_type") not in enum_ids["pack_types"]:
             errors.append(f"{prefix}: unknown pack type")
         if pack.get("install_mechanism") not in enum_ids["pack_install_mechanisms"]:
@@ -2108,6 +2113,8 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
+    if overlap := candidate_repos & pack_repos:
+        errors.append(f"repositories cannot be both candidates and packs: {sorted(overlap)}")
     validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     dispositioned_ids = validate_model_dispositions(
         catalog["model-dispositions.json"], models_value, source_models_value, errors,

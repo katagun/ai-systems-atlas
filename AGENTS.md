@@ -1,6 +1,6 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory, agent, and assistant systems plus provider-independent model releases, unscored interoperability specifications, managed inference services, and self-operated local runtimes, and unscored agent packs a host agent installs. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+This repository is a curated directory of operational memory, agent, and assistant systems plus provider-independent model releases, unscored interoperability specifications, managed inference services, self-operated local runtimes, and unscored agent packs a host agent installs. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
 
 ## Just-in-time context
 
@@ -65,7 +65,7 @@ npm run test:e2e
 uv run python -m http.server 8765 --directory web
 ```
 
-Run synchronization and share-page generation after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, model, specification, inference-service, and local-runtime search/filters, cross-profile score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all five dialogs in a browser.
+Run synchronization and share-page generation after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, model, specification, inference-service, local-runtime, and agent-pack search/filters, cross-profile score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all six dialogs in a browser.
 
 ## Hard rules
 

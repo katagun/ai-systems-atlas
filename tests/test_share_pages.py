@@ -65,6 +65,14 @@ class SharePageTests(unittest.TestCase):
         self.assertIn("Coding agent", page)
         self.assertNotIn("score", page.lower().replace("score profile", ""))
 
+    def test_pack_page_does_not_double_the_repository_link(self) -> None:
+        page = self.pages["records/packs/claude-code-tresor/index.html"]
+        self.assertEqual(1, page.count('<a href="https://github.com/alirezarezvani/claude-code-tresor"'))
+
+    def test_runtime_page_still_carries_its_repository_link(self) -> None:
+        page = self.pages["records/local-runtimes/ollama/index.html"]
+        self.assertIn('<a href="https://github.com/ollama/ollama" rel="noreferrer">Repository ↗</a>', page)
+
     def test_pages_follow_the_os_colour_scheme(self) -> None:
         page = self.pages["records/systems/kilo-code/index.html"]
         self.assertIn("color-scheme: light dark", page)

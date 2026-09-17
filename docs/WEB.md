@@ -142,7 +142,7 @@ print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
 ```
 
-Expected: 68.3 KB gzipped with the complete models.dev source catalog and the unscored packs collection. Anything over 60 KB requires checking whether source growth or a detail-only field reached a boot payload.
+Expected: 68.3 KB gzipped, measured 2026-09-16. The 60 KB check threshold stands: anything over it requires checking whether source growth or a detail-only field reached a boot payload. The current overage predates the Agent packs collection (66.8 KB at that branch's merge base, of which `app/packs.json` adds 0.7 KB) and is tracked in `BACKLOG.md`.
 
 Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 

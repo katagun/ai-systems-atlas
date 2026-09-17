@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-16",
+  "verified_at": "2026-09-17",
   "packs": [
     {
       "id": "agent-toolkit",
@@ -10,10 +10,10 @@
       "url": "https://github.com/softaworks/agent-toolkit",
       "description": "A Claude Code marketplace manifest through which one steward's skills, agents, and slash commands are each installed separately.",
       "pack_type": "marketplace",
-      "hosts": ["claude_code", "codex", "cursor"],
+      "hosts": ["claude_code"],
       "packaging_formats": ["agent-skills", "claude-code-plugins"],
       "install_mechanism": "host_marketplace",
-      "installs": "A Claude Code marketplace manifest at .claude-plugin/marketplace.json, registered with /plugin marketplace add and then installed entry by entry with /plugin install <name>@agent-toolkit; each entry names a source directory under dist/plugins/, which scripts/build_plugins.py generates from the repository's skills/, agents/, and commands/ trees. The README also documents npx skills add softaworks/agent-toolkit for Agent Skills hosts and cp -r skills/<name> ~/.claude/skills/ by hand. This record pins the manifest and does not list, count, or review its entries.",
+      "installs": "A Claude Code marketplace manifest at .claude-plugin/marketplace.json, registered with /plugin marketplace add and then installed entry by entry with /plugin install <name>@agent-toolkit; each entry names a source directory under dist/plugins/, which scripts/build_plugins.py generates from the repository's skills/, agents/, and commands/ trees. The README also documents npx skills add softaworks/agent-toolkit for Agent Skills hosts and cp -r skills/<name> ~/.claude/skills/ by hand. The README says the skills-installer path also works with Codex, Cursor, and other agents, but documents an install only for Claude Code, so only Claude Code is recorded as a host. This record pins the manifest and does not list, count, or review its entries.",
       "distribution_machinery": "scripts/build_plugins.py generates the dist/plugins/ tree the manifest resolves against, and scripts/bump_version.py raises the manifest version. Neither is installed into a host; both operate on the repository's own files.",
       "not_a_system": "A marketplace manifest that lists other packs for installation; it is an install source, not a system, and this record never lists, counts, or reviews its entries.",
       "status": "active",
@@ -23,9 +23,10 @@
         {"license_id": "MIT", "scope": "Repository-wide license file", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/softaworks/agent-toolkit/blob/main/LICENSE", "blob_sha": "fc473440ee9ae27aa3d774bcd3888496ef0fad2d", "immutable_url": "https://api.github.com/repos/softaworks/agent-toolkit/git/blobs/fc473440ee9ae27aa3d774bcd3888496ef0fad2d"}
       ],
       "evidence": [
-        {"kind": "git_blob", "label": "Marketplace manifest", "path": ".claude-plugin/marketplace.json", "url": "https://github.com/softaworks/agent-toolkit/blob/main/.claude-plugin/marketplace.json", "blob_sha": "28a812435f7e3f88e911dd0ed99e53050dd08ebe", "immutable_url": "https://api.github.com/repos/softaworks/agent-toolkit/git/blobs/28a812435f7e3f88e911dd0ed99e53050dd08ebe"}
+        {"kind": "git_blob", "label": "Marketplace manifest", "path": ".claude-plugin/marketplace.json", "url": "https://github.com/softaworks/agent-toolkit/blob/main/.claude-plugin/marketplace.json", "blob_sha": "28a812435f7e3f88e911dd0ed99e53050dd08ebe", "immutable_url": "https://api.github.com/repos/softaworks/agent-toolkit/git/blobs/28a812435f7e3f88e911dd0ed99e53050dd08ebe"},
+        {"kind": "web", "label": "README install documentation", "url": "https://github.com/softaworks/agent-toolkit#readme", "verified_at": "2026-09-17"}
       ],
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-17"
     },
     {
       "id": "buildwithclaude",

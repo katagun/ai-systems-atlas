@@ -122,6 +122,8 @@ No candidate schema change. A candidate bound for the packs collection carries a
 
 Six repositories are re-reviewed **from their trees**, not from their exclusion text, and their `exclusions.json` entries are removed in the same change. Proposed types, subject to what the tree shows:
 
+*Superseded in implementation: four of these six were published; `obra/superpowers` and `ballred/obsidian-claude-pkm` were routed to the candidate queue for an ADR 031 review because their trees ship running code. See ADR 032, Consequences.*
+
 | repo | proposed type | note |
 |---|---|---|
 | `obra/superpowers` | `process_kit` | skills plus a SessionStart hook that prints a document; manifests for several hosts |

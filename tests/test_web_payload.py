@@ -129,6 +129,7 @@ class WebPayloadTests(unittest.TestCase):
     def test_packs_are_unscored_and_boot_carries_only_card_fields(self) -> None:
         boot = json.loads(self.payloads["app/packs.json"])
         self.assertIn("packs", boot)
+        self.assertTrue(boot["packs"], "the collection has published records")
         for entry in boot["packs"]:
             self.assertNotIn("score", entry)
             self.assertNotIn("installs", entry, "installs is detail-only prose")

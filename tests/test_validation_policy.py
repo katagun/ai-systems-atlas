@@ -444,6 +444,27 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_pack(mutate)
         self.assertTrue(any("appears in more than one collection" in e for e in errors), errors)
 
+    def test_pack_repo_cannot_also_be_a_candidate(self) -> None:
+        def mutate(pack, root):
+            candidates = json.loads((root / "directory" / "candidates.json").read_text(encoding="utf-8"))
+            pack["repo"] = candidates["candidates"][0]["repo"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("cannot be both candidates and packs" in e for e in errors), errors)
+
+    def test_two_packs_cannot_share_a_repo(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        packs_path = root / "directory" / "packs.json"
+        document = json.loads(packs_path.read_text(encoding="utf-8"))
+        first = json.loads(json.dumps(self.SAMPLE_PACK))
+        second = json.loads(json.dumps(self.SAMPLE_PACK))
+        second["id"] = "sample-pack-two"
+        document["packs"] = [first, second]
+        self.write_json(packs_path, document)
+        self.write_json(root / "web" / "packs.json", document)
+        errors = validate(root)
+        self.assertTrue(any("duplicate pack repository" in e for e in errors), errors)
+
     def test_packs_must_be_published_to_web(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)

@@ -193,7 +193,11 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
     json_ld_script = json.dumps(json_ld, ensure_ascii=False).replace("<", "\\u003c")
     escaped_facts = [(label, value if label == "Superseded by" else html.escape(value)) for label, value in facts]
     facts_html = "".join(f"<dt>{html.escape(label)}</dt><dd>{value}</dd>" for label, value in escaped_facts)
-    repo_link = f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>' if record.get("repo") and kind != "system" else ""
+    repo_link = (
+        f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>'
+        if record.get("repo") and kind != "system" and record.get("url") != f'https://github.com/{record["repo"]}'
+        else ""
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>

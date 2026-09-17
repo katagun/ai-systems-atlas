@@ -39,6 +39,8 @@ Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and Di
 
 The Agent packs collection under [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md) opens with four records: claude-code-tresor as a process kit, agent-toolkit and Build with Claude as marketplaces, and Second Brain Starter as a vault bundle. Two of the six repositories reviewed for the collection failed its boundary test 4 from their trees and left `exclusions.json` for `candidates.json`, held for a scored review under [ADR 031](adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md): Superpowers, which ships a brainstorming companion server with a state directory and a browser launcher plus plugin code for three hosts, and obsidian-claude-pkm, whose vault template ships a hook that commits the user's vault after every edit and a hook that reads the weekly-review document back into the session. `NVIDIA/skills` and `AI-Research-SKILLs` stay excluded as mirrors, and `knowledge-garden` stays excluded as a personal snapshot. Coverage here is opened, not surveyed; the class is admitted from the queue on the same significance judgement as any other.
 
+### Systems by role
+
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 7 | 7 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
