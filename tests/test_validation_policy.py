@@ -558,10 +558,15 @@ class ValidationPolicyTests(unittest.TestCase):
     def test_model_queue_must_not_contain_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
+        queue = json.loads((root / "directory" / "model-candidates.json").read_text(encoding="utf-8"))
         path = root / "directory" / "model-dispositions.json"
         document = json.loads(path.read_text(encoding="utf-8"))
+        decided = {item["source_id"] for item in document["dispositions"]}
+        source_id = next(
+            item["source_id"] for item in queue["candidates"] if item["source_id"] not in decided
+        )
         document["dispositions"].append({
-            "source_id": "alibaba/qwen-flash",
+            "source_id": source_id,
             "disposition": "held",
             "reason": "Still queued; the importer must filter it first.",
             "decided_at": "2026-09-11",
@@ -570,7 +575,7 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("alibaba/qwen-flash" in error and "must not remain queued" in error for error in errors), errors)
+        self.assertTrue(any(source_id in error and "must not remain queued" in error for error in errors), errors)
 
     def test_model_eligible_count_covers_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()

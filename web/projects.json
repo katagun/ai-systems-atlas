@@ -17941,6 +17941,88 @@
       "why_it_matters": "Shows a workflow layer can hold durable state of its own — a ledger of what each change claimed and evidenced — while leaving execution to whichever coding agent the developer already runs.",
       "research_confidence": "high",
       "verified_at": "2026-09-15"
+    },
+    {
+      "id": "engram",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Engram",
+      "repo": "Gentleman-Programming/engram",
+      "url": "https://github.com/Gentleman-Programming/engram",
+      "description": "Agent-agnostic memory service: a Go binary that keeps observations in a local SQLite database with full-text search, reached through MCP tools, an HTTP API, a command line, and a terminal UI.",
+      "primary_role": "agent_memory_service",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "relational_db",
+        "full_text"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "supersession",
+        "versioned",
+        "decay"
+      ],
+      "canonical_data": "A local SQLite database at `~/.engram/engram.db` holding observations, sessions, prompts, and relations, with FTS5 indexes beside them",
+      "deployment": [
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6628,
+      "stars_verified_at": "2026-09-15",
+      "historical_stars": null,
+      "current_repo_note": "Installed and health-probed by the published Gentle-AI workflow command line, but a separate operational boundary: its own repository, releases, and install path, and agent-agnostic by design.",
+      "score": {
+        "second_brain_fit": 6.0,
+        "data_sovereignty": 9.0,
+        "interoperability": 8.5,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 8.5,
+        "maturity": 6.5,
+        "overall": 7.4
+      },
+      "strengths": [
+        "One agent-agnostic store reachable four ways — MCP tools, an HTTP API, a command line, and a terminal UI — so the same memory serves whichever coding agent a developer runs",
+        "Local SQLite is authoritative and the documentation says so plainly, with cloud features scoped to optional replication and shared access",
+        "Memory management is modelled rather than left to the model: duplicate counts, revision counts on a shared topic key, a supersession chain between entries, soft deletion, and review-and-expiry columns"
+      ],
+      "weaknesses": [
+        "Retrieval is lexical only: FTS5 with bm25 plus pinned, recency, and stability boosts, while the embedding columns in the schema are a reservation no query uses",
+        "Current releases are pre-1.0 candidates, so the interface a deployer builds against is still moving",
+        "Cloud replication and shared access are the project's own service, so using them moves the boundary off the local database the rest of the design protects"
+      ],
+      "why_it_matters": "Shows an agent's long-term memory can be an ordinary local database a person can read, edit, export, and re-import, rather than a hosted service the agent alone can reach.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-15"
     }
   ]
 }

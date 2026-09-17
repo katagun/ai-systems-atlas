@@ -305,6 +305,8 @@ test("focusing the model search loads the models index and widens the results", 
 
   // "retirement" appears only in the reviewed prose the index carries, never in
   // a boot record, so a match here proves the index is doing the widening.
+  // Past the default 24: high-scoring reviewed records share the term.
+  await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
   await page.locator("#model-search").fill("retirement");
   await expect(page.locator('#model-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
 });
