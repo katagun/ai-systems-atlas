@@ -183,4 +183,6 @@ Choose small batches with one coherent boundary question:
 
 59. **Model queue batch fifteen — the Cohere Command A variants:** five publishes and no new licence identifiers. Command A+ and North Mini Code break the family pattern with declared Apache-2.0 grants (no LICENSE file ships, so both records rest on concordant card and docs declarations); Reasoning, Translate, and Vision repeat CC-BY-NC-4.0 with the Labs addendum. The reviewed Models collection moves from one hundred seven to one hundred twelve and the queue from 214 to 209. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
 
+60. **Model queue batch sixteen — the Mistral dated flagships:** six publishes and one new licence identifier. Large 2411 and Ministral 8B carry the research-only Mistral Research License; Large 2512 and the two Smalls are card-only Apache-2.0; Medium 2505 is API-only with no weights license at all. The reviewed Models collection moves from one hundred twelve to one hundred eighteen and the queue from 209 to 203. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
+
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.
