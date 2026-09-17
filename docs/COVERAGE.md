@@ -35,6 +35,12 @@ Execution now reaches past the desktop and the single server: phones, embedded b
 
 Accelerator coverage now spans CPU, CUDA, ROCm, Metal, Vulkan, SYCL, NPU, and DirectML paths, and format coverage includes ONNX alongside GGUF, safetensors, MLX, and the quantized schemes. Coverage is representative of material execution choices rather than exhaustive. Text Generation Inference was screened and excluded because its repository is archived. Hugging Face Transformers was screened and excluded as substrate: it is the model-definition framework the published engines load their model implementations from, and its own documentation sends production serving to vLLM or SGLang with a Transformers model as the backend, so `transformers serve` does not make it the dedicated serving product ADR 015 admits on separate terms. Jan was screened and routed to the candidate queue as an assistant, because conversations, projects, assistants, agents, and connectors place it on the assistant side of the ADR 015 runtime test.
 
+### Agent packs
+
+The Agent packs collection under [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md) opens with four records: claude-code-tresor as a process kit, agent-toolkit and Build with Claude as marketplaces, and Second Brain Starter as a vault bundle. Two of the six repositories reviewed for the collection failed its boundary test 4 from their trees and left `exclusions.json` for `candidates.json`, held for a scored review under [ADR 031](adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md): Superpowers, which ships a brainstorming companion server with a state directory and a browser launcher plus plugin code for three hosts, and obsidian-claude-pkm, whose vault template ships a hook that commits the user's vault after every edit and a hook that reads the weekly-review document back into the session. `NVIDIA/skills` and `AI-Research-SKILLs` stay excluded as mirrors, and `knowledge-garden` stays excluded as a personal snapshot. Coverage here is opened, not surveyed; the class is admitted from the queue on the same significance judgement as any other.
+
+### Systems by role
+
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 7 | 7 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |

@@ -38,12 +38,6 @@
       "useful_lesson": "A survey's taxonomy can read like a system's architecture, and the repository title will not say which it is. Count the source files before reading the readme."
     },
     {
-      "name": "agent-toolkit",
-      "repo": "softaworks/agent-toolkit",
-      "reason": "MIT licensed. The README describes \"opinionated skills shared by @leonardocouy for improving daily work efficiency with Claude Code,\" distributed as roughly forty independent, unrelated SKILL.md/README.md bundles spanning AI-tool wrappers (codex, gemini, perplexity), documentation helpers, frontend patterns, planning aids, professional-communication guides, and utilities, plus a handful of Claude Code sub-agents and slash commands — each installed separately (`/plugin install <skill>@agent-toolkit`) with no shared engine, runtime, or persistence layer tying them together. This is the same shape as other skills-catalog repositories: a mirrored or aggregated collection of independent instruction bundles, not one maintained operational product with its own claimed behavior.",
-      "useful_lesson": "An aggregated catalog of independent instruction bundles is not one product. Where each entry installs separately and no shared engine ties them together, there is no single operational system to review."
-    },
-    {
       "name": "Agentic Memory notebook",
       "repo": "ALucek/agentic-memory",
       "reason": "No LICENSE file could be fetched (HTTP 404) and the README claims none. The README is eighteen lines pointing at a single notebook that models working, episodic, semantic, and procedural memory inside a simple RAG agent, citing the Cognitive Architectures for Language Agents paper. There is no installable package, no service, and no adoptable boundary, so the rules for tutorials and non-operational research inputs apply, as they did for Agent Memory Techniques.",
@@ -170,12 +164,6 @@
       "useful_lesson": "This is what it looks like when licences genuinely do not decide inclusion. The most permissive record in a cluster and the most restricted one are excluded by the same sentence of the same rule, and a reader can check that the Atlas applies ADR 007 symmetrically rather than only when the restrictive answer is convenient."
     },
     {
-      "name": "Build with Claude",
-      "repo": "davepoon/buildwithclaude",
-      "reason": "MIT licensed (\"Copyright (c) 2025 davepoon\"). The README describes \"A plugin marketplace and discovery platform for\" Claude Code, where a reader can \"Browse curated plugins, discover community contributions, and extend your Claude Code workflows.\" What the repository maintains is a catalog of agent, command, hook, and skill definitions written as Markdown with frontmatter, installed through Claude Code's own marketplace or by copying the files into its directories, and its web surface indexes other people's plugins and marketplaces besides. Claude Code runs everything here. Under ADR 031 the repository owns no state it reads back and does no enforced work, which is the disposition already recorded for the agent-toolkit and claude-code-tresor catalogs.",
-      "useful_lesson": "A marketplace is a directory of systems rather than one of them. The entries it lists are each reviewable on their own evidence, and indexing them adds no operational boundary of its own."
-    },
-    {
       "name": "Bullet",
       "repo": "bulletphysics/bullet3",
       "reason": "Bullet is a general-purpose real-time collision-detection and multi-physics simulation SDK used across games, visual effects, robotics, and machine learning, most commonly accessed through the PyBullet Python bindings; its README documents no model, language-driven decision loop, or conversational component, only physics simulation demos and an example browser. Inclusion-gate condition 2 in docs/CURATION.md fails because a general physics-simulation library is not materially relevant to any family in directory/taxonomy.json, for the same reason MuJoCo fails it. No dedicated serving product built on Bullet was reviewed separately, unlike MuJoCo's more extensive first-party binding ecosystem; PyBullet remains a language binding onto the same engine rather than a distinct serving product.",
@@ -186,12 +174,6 @@
       "repo": "anthropics/claude-agent-sdk-typescript",
       "reason": "Anthropic presents the Python and TypeScript libraries as language bindings for one Claude Agent SDK product; the Atlas represents that product through the canonical Python repository rather than duplicating the same operational system.",
       "useful_lesson": "Language bindings can differ in implementation visibility and license terms even when they expose one product boundary."
-    },
-    {
-      "name": "claude-code-tresor",
-      "repo": "alirezarezvani/claude-code-tresor",
-      "reason": "MIT licensed. The README calls it \"the ultimate collection of professional-grade utilities for Claude Code users\": 133 subagent definitions, prompt templates, and slash commands distributed as markdown and YAML that Claude Code's own engine reads and executes. The repository ships no independent runtime, retrieval system, or execution engine of its own beyond an install script that copies files into `~/.claude/`. It also cross-promotes two sibling repositories (\"Skill Factory,\" \"Skills Library\") that package the same kind of prompt and template content. This is a prompt and template collection, not an operational product with its own claimed behavior to assess.",
-      "useful_lesson": "A repository that ships only instruction files a host agent reads has no claimed behavior of its own to assess. The test is whether an engine, retrieval path, or persistence layer exists outside what the host agent already provides."
     },
     {
       "name": "claude-squad",
@@ -422,12 +404,6 @@
       "useful_lesson": "Analysis scripts beside a paper list serve the survey's own figures; a run path exists for the reader of the paper, not for an operator."
     },
     {
-      "name": "obsidian-claude-pkm",
-      "repo": "ballred/obsidian-claude-pkm",
-      "reason": "MIT licensed. The README frames it as \"an execution system that connects your 3-year vision to what you do today,\" but the entire mechanism is Claude Code slash-command markdown files, four agent-definition markdown files, and PostToolUse/session hooks; the README states outright, \"Zero dependencies. Everything runs on bash and markdown.\" No independent engine, retrieval system, or persistence layer exists outside what Claude Code itself already provides — this is a vault template plus a set of prompt and command definitions, not an operational product with its own claimed behavior.",
-      "useful_lesson": "A repository that ships only instruction files a host agent reads has no claimed behavior of its own to assess. The test is whether an engine, retrieval path, or persistence layer exists outside what the host agent already provides."
-    },
-    {
       "name": "OpenFold",
       "repo": "aqlaboratory/openfold",
       "reason": "The best-known open reproduction of AlphaFold 2, described by its own readme as 'a faithful but trainable PyTorch reproduction' and shipping both an inference script and a real training path. It is out for the same reason its upstream is: a model implementation with a runner and a trainer is a research input, and the training half moves it further from the operational systems the Atlas scores rather than closer. The reproduction is a genuine contribution — a trainable, permissively licensed AlphaFold 2 where the original released weights but not a training path — and the Atlas has no collection in which that contribution is the thing being compared. ColabFold, Chai-1, and the ESM line are the same shape and are screened under this entry rather than recorded individually.",
@@ -482,12 +458,6 @@
       "useful_lesson": "A shared repository name is not lineage. ADR 020 asks what a reader would be choosing, and two projects can carry one name while one is a self-hosted agent and the other is a folder of instructions for somebody else's."
     },
     {
-      "name": "Second Brain Starter",
-      "repo": "coleam00/second-brain-starter",
-      "reason": "No licence is served at any usual path — LICENSE, LICENSE.md, and LICENSE.txt all return 404 — and the README claims none, so no source model could be established. The repository ships one skill document, six Markdown memory templates, an architecture reference, and two images; it contains no code. Its README says it is \"A skill for Claude Code that generates a personalized Product Requirements Document (PRD) for building your own AI second brain\", so what a reader adopts is a blueprint the host agent writes from a filled-in template. Under ADR 031 it owns no state it reads back and does no enforced work.",
-      "useful_lesson": "A pack whose output is a plan for a system is not that system. Seed templates become someone's memory only once they build the thing the plan describes, and the repository never reads them again."
-    },
-    {
       "name": "Second-Brain",
       "repo": "KasperZutterman/Second-Brain",
       "reason": "The repository is a table of links to other people's public knowledge gardens, one row per person with an address and a social handle. Three files comprise it: the readme, a licence, and a link checker that validates the list. There is nothing to install and nothing to run, and the personal knowledge role asks for a system whose canonical workflow is a person writing and linking knowledge, not an index of strangers who have one.",
@@ -516,12 +486,6 @@
       "repo": "stanford-oval/storm",
       "reason": "The reviewed repository is a paper implementation rather than an operational system. Its readme presents a research preview and states the system cannot produce publication-ready articles; it ships no tests at all, its only continuous integration is a formatting check, its package still declares alpha status, its last substantive code change predates this review by more than a year, and it hard-pins a two-year-old version of the framework its own documentation calls its core. Nothing here distinguishes its outcome from a published research agent either.",
       "useful_lesson": "A laboratory release can be genuine executable code with real entry points and still be a research input. The tell is not whether code exists but whether any correctness gate does, and whether the dependency floor is frozen at the paper's date."
-    },
-    {
-      "name": "Superpowers",
-      "repo": "obra/superpowers",
-      "reason": "The repository describes itself as a software development methodology built on composable skills, and it ships no agent machinery: the package declares no executable and no dependencies, and its session hook only reads a skill document and prints it as additional context. Its subagent workflow is prose instructing a host agent to call the host's own tools, so nothing runs when the host harness is removed. The curation rules keep prompt templates and other non-operational research inputs outside the scored catalog.",
-      "useful_lesson": "Adoption does not establish an operational boundary: at 280,000 stars this was the most-starred candidate in the sweep and still resolves to documentation that a host agent executes."
     },
     {
       "name": "SWE-2",

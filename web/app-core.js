@@ -164,6 +164,23 @@
     },
   };
 
+  // Packs are unscored (ADR 032): the shared collection filter is reused for its
+  // facets and search, and the sort is pinned to name so no caller can ask for a
+  // score order that does not exist.
+  const PACK_VIEW = {
+    searchFields: ["id", "name", "short_name", "steward", "repo", "description"],
+    facets: {
+      type: "pack_type",
+      host: "hosts",
+      install: "install_mechanism",
+      license: "licenses",
+    },
+  };
+
+  function filterPacks(packs, filters = {}) {
+    return filterScoredCollection(packs, { ...filters, sort: "name" }, PACK_VIEW);
+  }
+
   function filterInferenceServices(services, filters = {}) {
     return filterScoredCollection(services, filters, INFERENCE_SERVICE_VIEW);
   }
@@ -204,17 +221,18 @@
   // Each collection in the unified directory keeps its own index namespace:
   // filters.searchIndex covers systems (the same shape filterAndSortProjects
   // takes), filters.serviceSearchIndex covers inference services,
-  // filters.runtimeSearchIndex covers local runtimes, and
-  // filters.modelSearchIndex covers model releases. Each is supplied
-  // independently, so a missing one only narrows that collection to the
-  // searchable fields present in its boot records.
-  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}) {
+  // filters.runtimeSearchIndex covers local runtimes, filters.modelSearchIndex
+  // covers model releases, and filters.packSearchIndex covers agent packs.
+  // Each is supplied independently, so a missing one only narrows that
+  // collection to the searchable fields present in its boot records.
+  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = []) {
     const term = (filters.term || "").trim().toLowerCase();
     const entries = [
       ...projects.filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex)).map(record => ({ kind: "system", record })),
       ...filterInferenceServices(services, { term, sort: "name", searchIndex: filters.serviceSearchIndex }).map(record => ({ kind: "inference", record })),
       ...filterLocalRuntimes(runtimes, { term, sort: "name", searchIndex: filters.runtimeSearchIndex }).map(record => ({ kind: "runtime", record })),
       ...filterModels(models, { term, sort: "name", searchIndex: filters.modelSearchIndex }).map(record => ({ kind: "model", record })),
+      ...filterPacks(packs, { term, searchIndex: filters.packSearchIndex }).map(record => ({ kind: "pack", record })),
     ];
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
@@ -244,7 +262,7 @@
   // Record references come from the URL. The kind is checked against a static
   // list on purpose: a lookup keyed on user input could resolve inherited names
   // such as "constructor", and an id is a plain slug or it is nothing.
-  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model"];
+  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model", "pack"];
   const RECORD_ID = /^[\w.-]+$/;
   function parseRecordReference(raw) {
     if (typeof raw !== "string") return null;
@@ -272,6 +290,7 @@
     if (kind === "inference") return `records/inference-services/${id}/`;
     if (kind === "runtime") return `records/local-runtimes/${id}/`;
     if (kind === "model") return `records/models/${id}/`;
+    if (kind === "pack") return `records/packs/${id}/`;
     return null;
   }
 
@@ -444,6 +463,7 @@
     filterInferenceServices,
     filterLocalRuntimes,
     filterModels,
+    filterPacks,
     filterScoredCollection,
     filterSpecifications,
     matchesProject,

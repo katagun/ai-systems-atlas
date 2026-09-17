@@ -1,6 +1,6 @@
 # ADR 031: Skill packs earn records by owned state or enforced work
 
-**Status:** Accepted
+**Status:** Accepted. Amended by [ADR 032](032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
 
 ## Context
 
@@ -14,7 +14,7 @@ Five candidates wait on it: `browser-use/video-use`, `coleam00/second-brain-star
 
 ## Decision
 
-A pack earns a scored record when it **owns state** or **does enforced work**. Otherwise it is a document collection executed by the host, and it belongs in `directory/exclusions.json`.
+A pack earns a scored record when it **owns state** or **does enforced work**. Otherwise it is a document collection executed by the host, and it is reviewed for the unscored Agent packs collection under [ADR 032](032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
 
 **Owned state.** The pack maintains a durable artifact that it reads back to change its own later behavior: a memory it rewrites, an index it queries, an append-only ledger. Where the file lives does not decide this. A vault of Markdown in the user's own directory counts when the pack maintains and re-reads it, and a file inside the pack's own directory does not count when nothing but a host agent ever reads it.
 

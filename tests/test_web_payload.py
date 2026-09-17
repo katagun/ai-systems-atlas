@@ -53,7 +53,7 @@ class WebPayloadTests(unittest.TestCase):
     def test_boot_carries_the_dates_the_page_prints(self) -> None:
         """bootstrap() derives the 'Data updated' line from these envelope keys."""
         self.assertIn("generated_at", json.loads(self.payloads["app/systems.json"]))
-        for collection in ("inference", "runtimes", "specifications", "models"):
+        for collection in ("inference", "runtimes", "specifications", "models", "packs"):
             self.assertIn("verified_at", json.loads(self.payloads[f"app/{collection}.json"]))
 
     def test_search_index_covers_every_record(self) -> None:
@@ -121,9 +121,19 @@ class WebPayloadTests(unittest.TestCase):
                 ("local-runtimes.json", "runtimes"),
                 ("specifications.json", "specifications"),
                 ("models.json", "models"),
+                ("packs.json", "packs"),
             )
         )
         self.assertEqual(records, len(detail))
+
+    def test_packs_are_unscored_and_boot_carries_only_card_fields(self) -> None:
+        boot = json.loads(self.payloads["app/packs.json"])
+        self.assertIn("packs", boot)
+        self.assertTrue(boot["packs"], "the collection has published records")
+        for entry in boot["packs"]:
+            self.assertNotIn("score", entry)
+            self.assertNotIn("installs", entry, "installs is detail-only prose")
+            self.assertIn("pack_type", entry)
 
     def test_trust_records_are_detail_only_and_never_searched(self) -> None:
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""

@@ -8,6 +8,7 @@ Loaded on demand from [SKILL.md](SKILL.md) when a query needs a field the summar
 - `specifications.json`: `{version, verified_at, specifications: [...]}`
 - `inference-services.json`: `{version, verified_at, services: [...], generated_at}`
 - `local-runtimes.json`: `{version, verified_at, runtimes: [...]}`
+- `packs.json`: `{version, verified_at, packs: [...]}`
 - `models.json`: `{version, verified_at, source: {...}, models: [...]}`
 - `models-dev.json`: `{version, updated_at, source_record_count, source: {...}, models: [...]}`
 - `taxonomy.json`: `{version, principle, <enum and score-profile groups, listed below>}`
@@ -24,6 +25,12 @@ Loaded on demand from [SKILL.md](SKILL.md) when a query needs a field the summar
 `id, name, short_name, specification_type, scope, status, current_version, stewards, repo, url, description, standardizes, does_not_standardize, licenses, license_note, related_specifications, evidence, license_evidence, verified_at`
 
 Never scored. `specification_type` is one of `protocol`, `metadata_schema`, `instruction_convention`, `capability_format`, `package_format`. See [docs/SPECIFICATIONS.md](../../docs/SPECIFICATIONS.md).
+
+## `packs.json` record fields
+
+`id, name, short_name, steward, repo, url, description, pack_type, hosts, packaging_formats, install_mechanism, installs, distribution_machinery, not_a_system, status, licenses, license_note, license_evidence, related_packs, related_systems, evidence, verified_at`
+
+Never scored and never carrying stars. `pack_type` is one of `skills_bundle`, `plugin`, `process_kit`, `vault_bundle`, `marketplace`; `hosts` and `install_mechanism` use the `pack_hosts` and `pack_install_mechanisms` taxonomy groups; `packaging_formats` names `specifications.json` records. `installs` states what the pack places in the host, counted from its pinned tree; `not_a_system` states why it is not a scored record. A marketplace record never lists, counts, or reviews its entries. See [docs/PACKS.md](../../docs/PACKS.md).
 
 ## `inference-services.json` record fields
 

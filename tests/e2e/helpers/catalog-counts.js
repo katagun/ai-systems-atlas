@@ -13,14 +13,15 @@ function read(name) {
 const projects = read("projects.json").projects;
 const inferenceServices = read("inference-services.json").services;
 const localRuntimes = read("local-runtimes.json").runtimes;
+const packs = read("packs.json").packs;
 const reviewedModels = read("models.json").models;
 const sourceModels = read("models-dev.json").models;
 const sourceModelIds = new Set(sourceModels.map(model => model.source_id));
 const models = sourceModels.length + reviewedModels.filter(model => !sourceModelIds.has(model.source_id)).length;
 
-// The All view unions the four scored collections; specifications are their
-// own unscored collection and are not counted here.
-const allDirectoryEntries = projects.length + inferenceServices.length + localRuntimes.length + models;
+// The All view unions the four scored collections plus unscored agent packs;
+// specifications are their own unscored collection and are not counted here.
+const allDirectoryEntries = projects.length + inferenceServices.length + localRuntimes.length + models + packs.length;
 
 function projectsInFamily(family) {
   return projects.filter(project => project.system_family === family).length;
@@ -78,6 +79,7 @@ module.exports = {
   projects: projects.length,
   inferenceServices: inferenceServices.length,
   localRuntimes: localRuntimes.length,
+  packs: packs.length,
   models,
   reviewedModels: reviewedModels.length,
   allDirectoryEntries,

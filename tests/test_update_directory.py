@@ -566,6 +566,7 @@ class UpdateDirectoryTests(unittest.TestCase):
             update_directory.DISCOVERY_SOURCES_PATH: source_document,
             update_directory.CANDIDATES_PATH: {"candidates": []},
             update_directory.LICENSE_REVIEW_PATH: {"entries": []},
+            update_directory.PACKS_PATH: {"packs": []},
         }
 
         with (
@@ -607,6 +608,14 @@ class KnownUrlTests(unittest.TestCase):
     def test_a_malformed_exclusion_entry_does_not_crash(self) -> None:
         known = update_directory.known_urls_from([], {"entries": ["not-an-object", None]})
         self.assertEqual(known, set())
+
+    def test_a_pack_url_and_repo_join_the_known_sets(self) -> None:
+        """A pack is a decided record; discovery must not re-queue it as a candidate."""
+        packs = [{"repo": "Obra/Superpowers", "url": "https://github.com/obra/superpowers"}]
+        known = update_directory.known_urls_from([], {"entries": []}, packs)
+        self.assertIn("https://github.com/obra/superpowers", known)
+        repos = update_directory.known_repos_from([], {"entries": []}, packs)
+        self.assertEqual({"obra/superpowers"}, repos)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,8 @@ Add an artifact to `directory/specifications.json` when it defines a reusable co
 
 Do not add a general transport, serialization format, or API description language solely because an agent uses it. Do not list a product feature with no reusable contract. Vendor-specific conventions may be included when users must understand them, but label them `vendor_specific` rather than implying open governance.
 
+A skills bundle, plugin, or marketplace is an instance of a format, not a format; it belongs in the Agent packs collection ([`PACKS.md`](PACKS.md)).
+
 For instruction conventions, curate the current primary format rather than every compatibility filename. Record legacy paths in the current convention when the same steward and product still interpret them. Keep similarly named products separate when discovery, precedence, or activation semantics differ. Examples include `.cursor/rules/*.mdc` as Cursor's current format and legacy Windsurf paths as compatibility behavior under Devin Desktop Rules.
 
 ## Classification order

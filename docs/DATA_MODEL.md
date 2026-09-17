@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of nine files:
+`directory/` is canonical. The browser consumes synchronized copies of ten files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -17,6 +17,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `local-runtimes.json` | Reviewed self-operated inference runtimes, dedicated runtime scores, and evidence | Yes |
 | `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
+| `packs.json` | Reviewed, unscored agent packs recorded for what a host installs | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
@@ -154,6 +155,21 @@ Specification records are intentionally independent from project records. They c
 - **Review:** authoritative `evidence` plus human-owned `verified_at`.
 
 Evidence is either an immutable Git blob or a dated authoritative web source. Every listed license must have one scoped evidence item. `LicenseRef-Unclear` is valid when the artifact is documented but no standalone reusable format license can be established; it must not be rewritten as open source by inference.
+
+## Pack record
+
+Pack records are independent from project records. They contain no `system_family`, role, score profile, score, or popularity metric, and the validator rejects each if present.
+
+- **Identity:** `id`, `name`, optional `short_name`, one `steward`, GitHub `repo`, authoritative `url`, and `description`.
+- **Classification:** taxonomy-backed `pack_type`, non-empty `hosts` (`pack_hosts`), `install_mechanism` (`pack_install_mechanisms`), and `packaging_formats` naming `specifications.json` records (may be empty).
+- **Composition:** `installs`, a paragraph counting what the pack places in the host from its pinned manifest and tree; optional `distribution_machinery` naming shipped install, sync, or validation scripts.
+- **Boundary:** `not_a_system` states why the pack is unscored in ADR 031's terms, or that a marketplace lists packs rather than being one.
+- **Lifecycle:** `status` from `project_statuses`.
+- **Licensing:** complete `licenses`, `license_note`, and scoped `license_evidence`; `LicenseRef-Unclear` when no licence file is served.
+- **Relationships:** optional `related_packs` and `related_systems` reference records by id without implying compatibility.
+- **Review:** pinned `evidence` (manifest or skill frontmatter as a Git blob, plus dated web sources) and human-owned `verified_at`. A marketplace's `verified_at` dates its pinned manifest, never the catalogue behind it.
+
+A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
 
 ## Inference service record
 

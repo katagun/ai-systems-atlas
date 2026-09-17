@@ -583,3 +583,60 @@ test("systems pagination navigates pages, resets on filter change, and applies a
   await page.reload();
   await expect(page.locator("#project-pager select")).toHaveValue("48");
 });
+
+test("the agent packs scope filters, opens its own dialog, and never scores or compares", async ({ page }) => {
+  await page.goto("/?collection=packs");
+
+  await expect(page.getByRole("button", { name: /^Agent packs / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#pack-result-count")).toContainText(`${catalogCounts.packs} packs · Unscored`);
+  await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
+  await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
+  await expect(page.locator("#pack-sort-filter")).toHaveCount(0);
+
+  await page.locator("#pack-type-filter").selectOption("marketplace");
+  const names = page.locator("#pack-grid .project-card h2");
+  await expect(names).toHaveText(["Build with Claude", "agent-toolkit"].sort((a, b) => a.localeCompare(b)));
+
+  await page.locator("#reset-pack-filters").click();
+  await page.locator("#pack-search").fill("tresor");
+  await expect(names).toHaveText(["claude-code-tresor"]);
+  await page.locator('#pack-grid [data-pack="claude-code-tresor"]').click();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(page.locator("#pack-dialog-content .eyebrow")).toContainText("Unscored");
+  await expect(page.locator("#pack-dialog-content")).toContainText("What it installs");
+  await expect(page).toHaveURL(/record=pack(%3A|:)claude-code-tresor/);
+
+  await page.reload();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#pack-dialog")).toBeHidden();
+});
+
+test("mixed browsing surfaces agent packs without scores or comparison", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#all-directory-search").fill("tresor");
+  const card = page.locator('#all-directory-grid .agent-pack-card:has([data-pack="claude-code-tresor"])');
+  await expect(card).toHaveCount(1);
+  await expect(card.locator(".family-label")).toContainText("Agent pack · Process kit");
+  await expect(card.locator(".score-ring")).toHaveCount(0);
+  await expect(card.locator(".compare-toggle")).toHaveCount(0);
+});
+
+test("a packaging-format link in a pack dialog opens the specification", async ({ page }) => {
+  await page.goto("/?record=pack:claude-code-tresor");
+  await page.locator('#pack-dialog-content [data-open-spec="agent-skills"]').click();
+  await expect(page.locator("#specification-dialog")).toBeVisible();
+  await expect(page.locator("#specification-dialog-content h1")).toHaveText("Agent Skills");
+  // The pack dialog's queued close event must not strip the successor's record URL.
+  await expect(page).toHaveURL(/record=spec(%3A|:)agent-skills/);
+  await expect(page).not.toHaveURL(/record=pack/);
+});
+
+test("taxonomy documents every pack group", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Taxonomy" }).click();
+  for (const group of ["Pack types", "Pack hosts", "Pack install mechanisms"]) {
+    await expect(page.locator("#taxonomy-content h2", { hasText: group })).toHaveCount(1);
+  }
+  await expect(page.locator("#taxonomy-content")).toContainText("Marketplace");
+});

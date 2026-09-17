@@ -37,10 +37,11 @@ COLLECTIONS = {
     "inference": ("inference-services", "services"),
     "runtime": ("local-runtimes", "runtimes"),
     "model": ("models", "models"),
+    "pack": ("packs", "packs"),
 }
 COLLECTION_LABELS = {
     "system": "System", "spec": "Specification", "inference": "Inference service",
-    "runtime": "Local runtime", "model": "Model",
+    "runtime": "Local runtime", "model": "Model", "pack": "Agent pack",
 }
 
 
@@ -78,6 +79,7 @@ def load_catalog(root: Path = ROOT) -> dict:
         "services": read("inference-services.json")["services"],
         "runtimes": read("local-runtimes.json")["runtimes"],
         "models": read("models.json")["models"],
+        "packs": read("packs.json")["packs"],
         "taxonomy": read("taxonomy.json"),
     }
 
@@ -141,6 +143,17 @@ def _facts_for(kind: str, record: dict, taxonomy: dict, by_id: dict) -> tuple[st
             ("Boundary", record["access_boundary"]),
         ]
         return eyebrow, record["description"], facts, "SoftwareSourceCode", "Open official model page"
+    if kind == "pack":
+        eyebrow = f"Agent pack · {taxonomy_name(taxonomy, 'pack_types', record['pack_type'])}"
+        facts = [
+            ("Steward", record["steward"]),
+            ("Hosts", names(taxonomy, "pack_hosts", record["hosts"])),
+            ("Install", taxonomy_name(taxonomy, "pack_install_mechanisms", record["install_mechanism"])),
+            ("Licenses", names(taxonomy, "licenses", record["licenses"])),
+            ("Status", humanize(record["status"])),
+            ("Installs", record["installs"]),
+        ]
+        return eyebrow, record["description"], facts, "CreativeWork", "Open repository"
     eyebrow = f"Local runtime · {taxonomy_name(taxonomy, 'local_runtime_types', record['runtime_type'])}"
     facts = [
         ("Maintainer", record["maintainer"]),
@@ -180,7 +193,11 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
     json_ld_script = json.dumps(json_ld, ensure_ascii=False).replace("<", "\\u003c")
     escaped_facts = [(label, value if label == "Superseded by" else html.escape(value)) for label, value in facts]
     facts_html = "".join(f"<dt>{html.escape(label)}</dt><dd>{value}</dd>" for label, value in escaped_facts)
-    repo_link = f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>' if record.get("repo") and kind != "system" else ""
+    repo_link = (
+        f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>'
+        if record.get("repo") and kind != "system" and record.get("url") != f'https://github.com/{record["repo"]}'
+        else ""
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>

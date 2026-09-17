@@ -23,6 +23,7 @@ COLLECTIONS = (
     ("runtimes", "local-runtimes.json", "runtimes", "runtime"),
     ("specifications", "specifications.json", "specifications", "spec"),
     ("models", "models.json", "models", "model"),
+    ("packs", "packs.json", "packs", "pack"),
 )
 
 # What a card, a filter, a sort, and the finder read before anything is clicked.
@@ -59,6 +60,10 @@ BOOT_FIELDS = {
         "licenses", "distribution_modes", "score_profile", "source_metadata", "review_status",
         "source_url",
     ),
+    "packs": (
+        "id", "name", "short_name", "steward", "repo", "url", "description", "pack_type",
+        "hosts", "install_mechanism", "packaging_formats", "licenses", "status",
+    ),
 }
 
 # Exactly the fields each filter in web/app-core.js searches today.
@@ -79,6 +84,9 @@ SEARCH_FIELDS = {
     "models": (
         "id", "source_id", "name", "developer", "description", "access_boundary",
         "strengths", "tradeoffs",
+    ),
+    "packs": (
+        "id", "name", "short_name", "steward", "repo", "description", "installs", "not_a_system",
     ),
 }
 
