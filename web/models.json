@@ -3084,6 +3084,458 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-cohere-command-a-plus-05-2026",
+      "source_id": "cohere/command-a-plus-05-2026",
+      "name": "Command A Plus",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/command-a-plus-05-2026-w4a4",
+      "description": "Cohere's 218-billion-parameter Mixture-of-Experts Command A+ release with 25B active parameters, published as ungated Apache-2.0 weights in three precisions with managed API and Azure hosting.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Command A Plus",
+        "description": "Cohere's stronger command model for multilingual agents and enterprise workflows",
+        "family": "command-a",
+        "release_date": "2026-05-20",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2025-04-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card, launch announcement, and docs page declare Command A+ available under the Apache 2.0 license with no acceptable-use addendum or noncommercial cap, unlike the CC-BY-NC Command A line. No LICENSE file ships in the weight repositories, so the grant rests on those concordant first-party declarations pointing at the standard Apache-2.0 text.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Command A+ weights as declared on the official model card and docs page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the May 2026 Command A+ release across its three published precisions (bf16, fp8, w4a4), together with the hosted command-a-plus-05-2026 API model and the Azure w4a4 hosting. The Command A base line, other Command variants, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights in three published precisions under a declared Apache-2.0 grant with per-quant serving minima",
+        "First-party API plus a documented Azure AI Foundry hosting entry for the exact w4a4 artifact"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card, blog, and docs declarations",
+        "218B total parameters need accelerator-class serving outside the W4A4 path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 8.34
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card declaring the Apache-2.0 grant",
+          "url": "https://huggingface.co/CohereLabs/command-a-plus-05-2026-w4a4",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command A+ docs page declaring the Apache-2.0 grant",
+          "url": "https://docs.cohere.com/docs/command-a-plus",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Cohere model documentation with the Azure hosting entry",
+          "url": "https://docs.cohere.com/docs/models",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-a-plus-05-2026.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-a-reasoning-08-2025",
+      "source_id": "cohere/command-a-reasoning-08-2025",
+      "name": "Command A Reasoning",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/command-a-reasoning-08-2025",
+      "description": "Cohere's 111-billion-parameter Command A Reasoning release with a reasoning toggle, published as gated weights under CC-BY-NC-4.0 with a hosted Chat API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command A Reasoning",
+        "description": "Cohere reasoning model for multilingual enterprise agents, tools, and complex workflows",
+        "family": "command-a",
+        "release_date": "2025-08-21",
+        "last_updated": "2025-08-21",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-a-reasoning-08-2025"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs command-a-reasoning-08-2025 weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/command-a-reasoning-08-2025 weight release of August 2025, a distinct reasoning line rather than a mode of the base Command A release, together with the hosted command-a-reasoning-08-2025 Chat API model. Other Command A variants, Cohere's hosted API platform, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 111B reasoning weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's docs serve command-a-reasoning-08-2025 on the Chat API with a 256K context window"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact model; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.56
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/command-a-reasoning-08-2025",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command A Reasoning documentation",
+          "url": "https://docs.cohere.com/docs/command-a-reasoning",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-a-reasoning-08-2025.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-a-translate-08-2025",
+      "source_id": "cohere/command-a-translate-08-2025",
+      "name": "Command A Translate",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/command-a-translate-08-2025",
+      "description": "Cohere's 111-billion-parameter translation-specialized Command A release across 23 languages, published as gated weights under CC-BY-NC-4.0 with a hosted Chat API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command A Translate",
+        "description": "Translation model for multilingual conversion, localization, and cross-language workflows",
+        "family": "command-a",
+        "release_date": "2025-08-28",
+        "last_updated": "2025-08-28",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-a-translate-08-2025"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs command-a-translate-08-2025 weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/command-a-translate-08-2025 weight release of August 2025, a distinct translation-specialized line, together with the hosted command-a-translate-08-2025 Chat API model. Other Command A variants, Cohere's hosted API platform, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 111B translation weight release under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's docs serve command-a-translate-08-2025 on the Chat API across 23 languages"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact model; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.56
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/command-a-translate-08-2025",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command A Translate documentation",
+          "url": "https://docs.cohere.com/docs/command-a-translate",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-a-translate-08-2025.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-command-a-vision-07-2025",
+      "source_id": "cohere/command-a-vision-07-2025",
+      "name": "Command A Vision",
+      "developer": "Cohere",
+      "url": "https://huggingface.co/CohereLabs/command-a-vision-07-2025",
+      "description": "Cohere's 112-billion-parameter multimodal Command A release accepting image and text input, published as gated weights under CC-BY-NC-4.0 with a hosted Chat API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Command A Vision",
+        "description": "Cohere vision model for multilingual document analysis, OCR, and image understanding",
+        "family": "command-a",
+        "release_date": "2025-07-31",
+        "last_updated": "2025-07-31",
+        "knowledge_cutoff": "2024-06-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/c4ai-command-a-vision-07-2025"
+          }
+        ]
+      },
+      "licenses": [
+        "CC-BY-NC-4.0",
+        "LicenseRef-Cohere-Labs-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The official model card releases these weights under CC-BY-NC-4.0 and requires compliance with the Cohere Labs Acceptable Use Policy, which the license incorporates by reference. The noncommercial limit and the use restrictions mean the public weights are not an open-source distribution; commercial use goes through separate Cohere API terms.",
+      "license_evidence": [
+        {
+          "license_id": "CC-BY-NC-4.0",
+          "scope": "CohereLabs command-a-vision-07-2025 weights and model release under Cohere's CC-BY-NC 4.0 license with acceptable-use addendum",
+          "kind": "web_terms",
+          "url": "https://cohere.com/cohere-labs-cc-by-nc-license",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "license_id": "LicenseRef-Cohere-Labs-AUP",
+          "scope": "Mandatory acceptable-use restrictions incorporated by reference into the CC-BY-NC license and named on the official model card",
+          "kind": "web_terms",
+          "url": "https://docs.cohere.com/docs/cohere-labs-acceptable-use-policy",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the CohereLabs/command-a-vision-07-2025 weight release of July 2025 with image and text input and text output, together with the hosted command-a-vision-07-2025 Chat API model. Other Command A variants, Cohere's hosted API platform, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Gated 112B vision-language weights under explicit CC-BY-NC-4.0 plus acceptable-use terms",
+        "Cohere's docs serve command-a-vision-07-2025 on the Chat API with image input"
+      ],
+      "tradeoffs": [
+        "Gated access and noncommercial-only weights keep this out of open-source distribution",
+        "No third-party host documents this exact model; serving beyond Cohere is self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 7,
+        "overall": 6.42
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/CohereLabs/command-a-vision-07-2025",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Command A Vision documentation",
+          "url": "https://docs.cohere.com/docs/command-a-vision",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/command-a-vision-07-2025.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-cohere-command-r-08-2024",
       "source_id": "cohere/command-r-08-2024",
       "name": "Command R",
@@ -3983,6 +4435,107 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/c4ai-aya-vision-8b.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-cohere-north-mini-code-1-0",
+      "source_id": "cohere/north-mini-code-1-0",
+      "name": "North Mini Code",
+      "developer": "Cohere Labs",
+      "url": "https://huggingface.co/CohereLabs/North-Mini-Code-1.0",
+      "description": "Cohere Labs' 30-billion-parameter Mixture-of-Experts coding release with 3B active parameters, published as ungated Apache-2.0 weights with managed API and Model Vault serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "North Mini Code",
+        "description": "Cohere coding model for practical software engineering and agentic edits",
+        "family": "north",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2025-09-23",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card and docs page declare North Mini Code released under Apache 2.0 and suitable for local deployment, with no acceptable-use addendum or noncommercial cap, unlike the CC-BY-NC Command lines. No LICENSE file ships in the weight repository, so the grant rests on those concordant first-party declarations pointing at the standard Apache-2.0 text.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "North Mini Code weights as declared on the official model card and docs page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the June 2026 North-Mini-Code-1.0 release, the inaugural member of Cohere's North family of code models, together with its Chat API and Model Vault serving. The North enterprise platform, later North family members, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated 30B MoE coding weights under a declared Apache-2.0 grant",
+        "First-party Chat API and Model Vault production serving for the exact model ID"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card and docs declarations",
+        "A three-month-old line with no retirement posture yet"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card declaring the Apache-2.0 grant",
+          "url": "https://huggingface.co/CohereLabs/North-Mini-Code-1.0",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official North Mini Code docs page declaring the Apache-2.0 grant",
+          "url": "https://docs.cohere.com/docs/north-mini-code-1.0",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/cohere/north-mini-code-1-0.toml",
           "verified_at": "2026-09-16"
         }
       ],
