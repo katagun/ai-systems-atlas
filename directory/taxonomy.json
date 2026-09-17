@@ -390,6 +390,7 @@
     {"id": "LicenseRef-Qwen3.8-Max", "name": "Qwen3.8-Max License", "kind": "restricted"},
     {"id": "LicenseRef-Kimi-K3-License", "name": "Kimi K3 License", "kind": "restricted"},
     {"id": "LicenseRef-Mistral-Modified-MIT", "name": "Mistral Modified MIT License", "kind": "restricted"},
+    {"id": "LicenseRef-Mistral-Research-License", "name": "Mistral Research License", "kind": "restricted"},
     {"id": "LicenseRef-GLM-5.3", "name": "GLM-5.3 License", "kind": "restricted"},
     {"id": "LicenseRef-Qwen-Community-1.0", "name": "Qwen Community License 1.0", "kind": "restricted"},
     {"id": "LicenseRef-Qwen-License-Agreement", "name": "Qwen License Agreement", "kind": "restricted"},

@@ -7307,6 +7307,433 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-mistral-ministral-8b-instruct-2410",
+      "source_id": "mistral/ministral-8b-instruct-2410",
+      "name": "Ministral 8B Instruct",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Ministral-8B-Instruct-2410",
+      "description": "Mistral AI's 8-billion-parameter Ministral edge release, published as gated weights under the Mistral Research License with a now-retired managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ministral 8B Instruct",
+        "description": "Efficient open Mistral edge model for on-device chat and function calling",
+        "family": "ministral",
+        "release_date": "2024-10-16",
+        "last_updated": "2024-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": "Mistral Research License",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Ministral-8B-Instruct-2410"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Mistral-Research-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the gated card links the Mistral Research License as the governing terms. The MRL grants use, copying, modification, and distribution but limits all use of the model, derivatives, and outputs to non-profit, non-commercial research purposes, with commercial use requiring a separate license from Mistral AI, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mistral-Research-License",
+          "scope": "Ministral-8B-Instruct-2410 weights and derivatives, linked from the gated model card",
+          "kind": "web_terms",
+          "url": "https://mistral.ai/licenses/MRL-0.1.md",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the October 2024 Ministral-8B-Instruct-2410 weight release at Hugging Face commit 2f494a194c5b980dfb9772cb92d26cbb671fce5a (last modified 2025-07-31). Its ministral-8b-2410 API line retired on December 31, 2025 with migration directed at Ministral 3 8B. The Ministral 3B sibling, later Ministral lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Gated 8B edge checkpoint under explicit research-only terms, runnable on 24 GB single-GPU setups",
+        "Release, retirement, and replacement all dated across first-party card, news, and docs"
+      ],
+      "tradeoffs": [
+        "Research-only grant forces any commercial use onto a separate Mistral commercial license",
+        "The managed API is retired, leaving gated self-operation as the supported path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 7,
+        "deployment_portability": 5,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 5.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/mistralai/Ministral-8B-Instruct-2410",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral launch announcement (October 2024)",
+          "url": "https://mistral.ai/news/ministraux/",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/ministral-8b-instruct-2410.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-mistral-mistral-large-2411",
+      "source_id": "mistral/mistral-large-2411",
+      "name": "Mistral Large 2.1",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Large-Instruct-2411",
+      "description": "Mistral AI's 123-billion-parameter dense Large release for research use, published as gated weights under the Mistral Research License with managed API and cloud hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Mistral Large 2.1",
+        "description": "Flagship Mistral model for advanced reasoning, coding, and multilingual work",
+        "family": "mistral-large",
+        "release_date": "2024-11-18",
+        "last_updated": "2024-11-18",
+        "knowledge_cutoff": "2024-11",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Large-Instruct-2411"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Mistral-Research-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the gated card links the Mistral Research License as the governing terms. The MRL grants use, copying, modification, and distribution but limits all use of the model, derivatives, and outputs to non-profit, non-commercial research purposes, with commercial use requiring a separate license from Mistral AI, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mistral-Research-License",
+          "scope": "Mistral-Large-Instruct-2411 weights and derivatives, linked from the gated model card",
+          "kind": "web_terms",
+          "url": "https://mistral.ai/licenses/MRL-0.1.md",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Mistral-Large-Instruct-2411 weight release of November 2024 at Hugging Face commit ba78820945ae22361b0274cf0ae6d696c967c1a4 (last modified 2025-07-28), together with the mistral-large-2411 API model and its Vertex AI and GitHub Models hosting. Later Large generations, the Pixtral releases of the same announcement, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Gated 123B dense checkpoint under explicit research-only terms with a 128K context window",
+        "First-party API plus documented Vertex AI and GitHub Models hosting"
+      ],
+      "tradeoffs": [
+        "Research-only grant forces any commercial use onto a separate Mistral commercial license",
+        "The line is deprecated with migration directed at Mistral Medium 3.5"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and gated weight release",
+          "url": "https://huggingface.co/mistralai/Mistral-Large-Instruct-2411",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 2.1 docs: release date, API ID, and deprecation",
+          "url": "https://docs.mistral.ai/models/mistral-large-2-1-24-11",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Google Cloud announcement of Mistral Large 24.11 on Vertex AI",
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-new-mistral-large-model-on-vertex-ai",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-large-2411.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-mistral-mistral-large-2512",
+      "source_id": "mistral/mistral-large-2512",
+      "name": "Mistral Large 3",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512",
+      "description": "Mistral AI's 675-billion-parameter granular Mixture-of-Experts multimodal flagship with 41B active parameters, published as Apache-2.0 weights with managed API and cloud hosting.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Mistral Large 3",
+        "description": "Mistral's largest general model for enterprise agents, coding, and multilingual reasoning",
+        "family": "mistral-large",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": "2024-11",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the model card frontmatter, badge, and prose declare the Apache 2.0 license, and the GA docs page badges the release Apache 2.0, with no use restrictions attached — the same card-only pattern as the reviewed Small 4 record.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Mistral Large 3 weights as declared on the official model card and GA docs page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the December 2025 Mistral Large 3 release at Hugging Face commit 383ffea2c7d60dfd44ca960e8e691709d4fdb9cd (last modified 2026-07-15), covering the FP8, NVFP4, and BF16 checkpoints, together with the mistral-large-2512 API model and its Azure and Bedrock hosting. Earlier Large generations, the base weights, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 675B MoE checkpoints in three precisions under a declared Apache-2.0 grant",
+        "GA developer API plus documented Azure and Bedrock hosting with a 256K context window"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card and docs declarations",
+        "675B total parameters need single-node 8-GPU-class serving even in FP8"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.6
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 3 docs: GA status, Apache-2.0 badge, and API ID",
+          "url": "https://docs.mistral.ai/models/mistral-large-3-25-12",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Microsoft announcement of Mistral Large 3 on Azure",
+          "url": "https://azure.microsoft.com/en-us/blog/introducing-mistral-large-3-in-microsoft-foundry-open-capable-and-ready-for-production-workloads",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-large-2512.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-mistral-mistral-medium-2505",
+      "source_id": "mistral/mistral-medium-2505",
+      "name": "Mistral Medium 3",
+      "developer": "Mistral AI",
+      "url": "https://docs.mistral.ai/models/mistral-medium-3-25-05",
+      "description": "Mistral AI's May 2025 frontier multimodal line, served as the mistral-medium-2505 API model with no downloadable weights and no public weights license.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Mistral Medium 3",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral-medium",
+        "release_date": "2025-05-07",
+        "last_updated": "2025-05-07",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No public weights license exists for this API-only line: no weight repository carries a license file, and the docs page shows no license badge. Use is governed by Mistral commercial and API terms, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of mistral-medium-2505 with no public weights license",
+          "kind": "web_terms",
+          "url": "https://docs.mistral.ai/models/mistral-medium-3-25-05",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the May 2025 Mistral Medium line served as the mistral-medium-2505 API model, deprecated with migration directed at Mistral Medium 3.5. No weight repository exists under any Mistral ID for this line. The Medium 3.5 successor, other Mistral lines, and the Mistral API platform itself are separate boundaries.",
+      "strengths": [
+        "First-party docs pin the May 2025 release with a deprecation date and named replacement",
+        "Managed API serving with multimodal input at 128K context"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; commercial terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 2,
+        "deployment_portability": 5,
+        "serving_reach": 6,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 7,
+        "overall": 5.02
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Mistral Medium docs: release date, API ID, and deprecation",
+          "url": "https://docs.mistral.ai/models/mistral-medium-3-25-05",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-medium-2505.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
       "id": "model-mistral-mistral-medium-2604",
       "source_id": "mistral/mistral-medium-2604",
       "name": "Mistral Medium 3.5",
@@ -7419,6 +7846,219 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-mistral-mistral-small-3-1-24b-instruct-2503",
+      "source_id": "mistral/mistral-small-3-1-24b-instruct-2503",
+      "name": "Mistral Small 3.1 24B",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "description": "Mistral AI's 24-billion-parameter Small 3.1 multimodal release with vision understanding, published as Apache-2.0 weights with a now-retired managed API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Mistral Small 3.1 24B",
+        "description": "Efficient multimodal model for instruction following, coding, reasoning, and function calling",
+        "family": "mistral-small",
+        "release_date": "2025-03-17",
+        "last_updated": "2025-03-17",
+        "knowledge_cutoff": "2024-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the model card frontmatter and prose both state the Apache 2.0 license, and the docs page badges the release Apache 2.0, with no use restrictions attached — the same card-only pattern as the reviewed Small 4 record.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Mistral Small 3.1 weights as declared on the official model card and docs page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the March 2025 Mistral Small 3.1 release at Hugging Face commit 68faf511d618ef198fef186659617cfd2eb8e33a (last modified 2025-12-22). Its mistral-small-2503 API line retired on November 30, 2025 with migration directed at Mistral Small 4. The Small 3.2 successor, other Mistral lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 24B multimodal checkpoint under a declared Apache-2.0 grant with vision examples",
+        "Release, retirement, and replacement all dated on first-party docs"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card and docs declarations",
+        "The managed API is retired, leaving self-operation as the supported path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.58
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Small 3.1 docs: release date, retirement, and replacement",
+          "url": "https://docs.mistral.ai/models/mistral-small-3-1-25-03",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-small-3-1-24b-instruct-2503.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-mistral-mistral-small-2506",
+      "source_id": "mistral/mistral-small-2506",
+      "name": "Mistral Small 3.2",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "description": "Mistral AI's 24-billion-parameter Small 3.2 multimodal release, published as Apache-2.0 weights with a managed API now deprecated toward Small 4.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Mistral Small 3.2",
+        "description": "Efficient Mistral model for fast chat, extraction, and production assistants",
+        "family": "mistral-small",
+        "release_date": "2025-06-20",
+        "last_updated": "2025-06-20",
+        "knowledge_cutoff": "2025-03",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the model card frontmatter declares Apache-2.0 and its prose inherits the Small 3.1 card's Apache-2.0 statement, and the docs page badges the release Apache 2.0, with no use restrictions attached — the same card-only pattern as the reviewed Small 4 record.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Mistral Small 3.2 weights as declared on the official model card and docs page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "access_boundary": "This record represents the June 2025 Mistral Small 3.2 release at Hugging Face commit 95a6d26c4bfb886c58daf9d3f7332c857cb27b43 (last modified 2025-12-22), together with the mistral-small-2506 API model, deprecated with migration directed at Mistral Small 4. The Small 3.1 predecessor, Small 4, other Mistral lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 24B multimodal checkpoint under a declared Apache-2.0 grant with tokenizer and system prompt",
+        "First-party API with documented vLLM and Transformers serving paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card and docs declarations",
+        "The API line is deprecated with migration directed at Mistral Small 4"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.72
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Small 3.2 docs: release date, API ID, and deprecation",
+          "url": "https://docs.mistral.ai/models/mistral-small-3-2-25-06",
+          "verified_at": "2026-09-16"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-small-2506.toml",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "metadata_verified_at": "2026-09-16",
+      "verified_at": "2026-09-16"
     },
     {
       "id": "model-mistral-mistral-small-2603",
