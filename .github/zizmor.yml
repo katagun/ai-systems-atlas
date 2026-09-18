@@ -1,0 +1,11 @@
+# Zizmor configuration for AI Systems Atlas.
+# See docs/OPERATIONS.md "GitHub Pages" and the header of deploy-pages.yml:
+# the workflow_run trigger is load-bearing (a workflow-opened PR would never
+# trigger the required verify check), and it is fenced by an exact
+# head_repository match plus a checkout pinned to workflow_run.head_sha.
+
+rules:
+  dangerous-triggers:
+    ignore:
+      # workflow_run on deploy-pages.yml: mitigated as described above.
+      - deploy-pages.yml:3

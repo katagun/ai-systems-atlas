@@ -60,11 +60,13 @@ class PromoteModelCandidateTests(unittest.TestCase):
         queue["eligible_record_count"] = len(models["models"]) + 1
         queue["candidates"] = [deepcopy(self.candidate)]
         source_models = {
-            "models": [{
-                "id": self.candidate["id"],
-                "source_id": self.candidate["source_id"],
-                "source_metadata": deepcopy(self.candidate["source_metadata"]),
-            }],
+            "models": [
+                {
+                    "id": self.candidate["id"],
+                    "source_id": self.candidate["source_id"],
+                    "source_metadata": deepcopy(self.candidate["source_metadata"]),
+                }
+            ],
         }
 
         write_json(directory / "taxonomy.json", taxonomy)
@@ -113,7 +115,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
         original_models = models_path.read_bytes()
         original_candidates = candidates_path.read_bytes()
 
-        proposed_models, proposed_candidates = preflight_promotion(self.root, self.record)
+        proposed_models, proposed_candidates = preflight_promotion(
+            self.root, self.record
+        )
 
         self.assertIn(self.record, proposed_models["models"])
         self.assertEqual([], proposed_candidates["candidates"])
@@ -131,7 +135,10 @@ class PromoteModelCandidateTests(unittest.TestCase):
         self.assertEqual(self.record["id"], model_id)
         self.assertEqual(
             1,
-            sum(model["source_id"] == self.record["source_id"] for model in models["models"]),
+            sum(
+                model["source_id"] == self.record["source_id"]
+                for model in models["models"]
+            ),
         )
         self.assertEqual([], candidates["candidates"])
         self.assertEqual(self.queue["updated_at"], candidates["updated_at"])
@@ -139,16 +146,21 @@ class PromoteModelCandidateTests(unittest.TestCase):
         self.assertEqual(0o644, stat.S_IMODE(candidates_path.stat().st_mode))
 
     def test_dispositioned_candidate_is_rejected_until_lifted(self) -> None:
-        write_json(self.root / "directory" / "model-dispositions.json", {
-            "version": "1.0",
-            "updated_at": "2026-09-04",
-            "dispositions": [{
-                "source_id": self.record["source_id"],
-                "disposition": "held",
-                "reason": "Awaiting first-party documentation.",
-                "decided_at": "2026-09-04",
-            }],
-        })
+        write_json(
+            self.root / "directory" / "model-dispositions.json",
+            {
+                "version": "1.0",
+                "updated_at": "2026-09-04",
+                "dispositions": [
+                    {
+                        "source_id": self.record["source_id"],
+                        "disposition": "held",
+                        "reason": "Awaiting first-party documentation.",
+                        "decided_at": "2026-09-04",
+                    }
+                ],
+            },
+        )
 
         with self.assertRaisesRegex(PromotionError, "lift the disposition"):
             preflight_promotion(self.root, self.record)
@@ -157,7 +169,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
         record = deepcopy(self.record)
         record["source_metadata"]["limits"]["context"] += 1
 
-        with self.assertRaisesRegex(PromotionError, "preserve candidate source_metadata"):
+        with self.assertRaisesRegex(
+            PromotionError, "preserve candidate source_metadata"
+        ):
             preflight_promotion(self.root, record)
 
     def test_candidate_metadata_must_match_complete_source_snapshot(self) -> None:
@@ -166,7 +180,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
         source_models["models"][0]["source_metadata"]["limits"]["context"] += 1
         write_json(path, source_models)
 
-        with self.assertRaisesRegex(PromotionError, "complete models.dev source snapshot"):
+        with self.assertRaisesRegex(
+            PromotionError, "complete models.dev source snapshot"
+        ):
             preflight_promotion(self.root, self.record)
 
     def test_missing_authoritative_model_evidence_is_rejected(self) -> None:
@@ -183,10 +199,13 @@ class PromoteModelCandidateTests(unittest.TestCase):
         for evidence in record["evidence"]:
             if "github.com/anomalyco/models.dev/blob/" in evidence["url"]:
                 evidence["url"] = evidence["url"].replace(
-                    self.queue["source"]["commit"], "0" * 40,
+                    self.queue["source"]["commit"],
+                    "0" * 40,
                 )
 
-        with self.assertRaisesRegex(PromotionError, "exact pinned models.dev source URL"):
+        with self.assertRaisesRegex(
+            PromotionError, "exact pinned models.dev source URL"
+        ):
             preflight_promotion(self.root, record)
 
     def test_unverified_license_or_incorrect_score_is_rejected(self) -> None:
@@ -197,13 +216,17 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
         wrong_score = deepcopy(self.record)
         wrong_score["score"]["overall"] = 0
-        with self.assertRaisesRegex(PromotionError, "overall 0 does not match weighted"):
+        with self.assertRaisesRegex(
+            PromotionError, "overall 0 does not match weighted"
+        ):
             preflight_promotion(self.root, wrong_score)
 
     def test_review_dates_cannot_predate_source_or_each_other(self) -> None:
         record = deepcopy(self.record)
         record["metadata_verified_at"] = "2026-09-03"
-        with self.assertRaisesRegex(PromotionError, "predates the imported candidate snapshot"):
+        with self.assertRaisesRegex(
+            PromotionError, "predates the imported candidate snapshot"
+        ):
             preflight_promotion(self.root, record)
 
         record = deepcopy(self.record)
@@ -223,7 +246,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
         specifications["specifications"].append({"id": self.record["id"]})
         write_json(path, specifications)
 
-        with self.assertRaisesRegex(PromotionError, "appears in more than one collection"):
+        with self.assertRaisesRegex(
+            PromotionError, "appears in more than one collection"
+        ):
             preflight_promotion(self.root, self.record)
 
     def test_draft_creation_refuses_to_overwrite_work(self) -> None:

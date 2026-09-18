@@ -17,14 +17,23 @@ from scripts import run_hn_signals
 
 def document(**overrides) -> str:
     signal = {
-        "story_id": "49616354", "story_url": "https://news.ycombinator.com/item?id=49616354",
-        "title": "Mercury 2.5", "url": "https://vendor.example/launch", "points": 231,
-        "num_comments": 88, "submitted_at": "2026-09-08T20:14:52Z", "page_status": "readable",
-        "content_sha256": "b" * 64, "fetched_at": "2026-09-09T00:00:00Z",
-        "status": "provisional", "discovered_at": "2026-09-09",
+        "story_id": "49616354",
+        "story_url": "https://news.ycombinator.com/item?id=49616354",
+        "title": "Mercury 2.5",
+        "url": "https://vendor.example/launch",
+        "points": 231,
+        "num_comments": 88,
+        "submitted_at": "2026-09-08T20:14:52Z",
+        "page_status": "readable",
+        "content_sha256": "b" * 64,
+        "fetched_at": "2026-09-09T00:00:00Z",
+        "status": "provisional",
+        "discovered_at": "2026-09-09",
     }
     signal.update(overrides)
-    return json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]})
+    return json.dumps(
+        {"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}
+    )
 
 
 class FieldGuardTests(unittest.TestCase):
@@ -33,18 +42,28 @@ class FieldGuardTests(unittest.TestCase):
         self.assertEqual(run_hn_signals.unexpected_field_changes(document(), after), [])
 
     def test_changing_provenance_is_rejected(self) -> None:
-        problems = run_hn_signals.unexpected_field_changes(document(), document(points=999))
+        problems = run_hn_signals.unexpected_field_changes(
+            document(), document(points=999)
+        )
         self.assertTrue(any("points" in problem for problem in problems), problems)
 
     def test_adding_a_signal_is_rejected(self) -> None:
-        before = json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []})
+        before = json.dumps(
+            {"version": "1.0", "updated_at": "x", "source": None, "signals": []}
+        )
         problems = run_hn_signals.unexpected_field_changes(before, document())
-        self.assertTrue(any("only the sweep adds" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("only the sweep adds" in problem for problem in problems), problems
+        )
 
     def test_removing_a_signal_is_rejected(self) -> None:
-        after = json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []})
+        after = json.dumps(
+            {"version": "1.0", "updated_at": "x", "source": None, "signals": []}
+        )
         problems = run_hn_signals.unexpected_field_changes(document(), after)
-        self.assertTrue(any("only a human resolves" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("only a human resolves" in problem for problem in problems), problems
+        )
 
     def test_overwriting_an_existing_assessment_is_rejected(self) -> None:
         before = document(assessment={"verdict": "worth_review"})
@@ -70,30 +89,52 @@ class VerifierTests(unittest.TestCase):
         path = Path(directory.name) / "hn-signals.json"
         digest = hashlib.sha256(page_text.encode("utf-8")).hexdigest()
         signal = {
-            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
-            "title": "A launch", "url": "https://vendor.example/launch", "points": 50,
-            "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
-            "content_sha256": digest, "fetched_at": "2026-09-09T00:00:00Z",
-            "status": "provisional", "discovered_at": "2026-09-09",
+            "story_id": "1",
+            "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "A launch",
+            "url": "https://vendor.example/launch",
+            "points": 50,
+            "num_comments": 4,
+            "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable",
+            "content_sha256": digest,
+            "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional",
+            "discovered_at": "2026-09-09",
             "assessment": {"verdict": "worth_review"},
         }
         path.write_text(
-            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}),
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "updated_at": "x",
+                    "source": None,
+                    "signals": [signal],
+                }
+            ),
             encoding="utf-8",
         )
         return path, digest
 
-    def test_a_page_that_no_longer_hashes_to_the_recorded_digest_is_reported_as_drift(self) -> None:
+    def test_a_page_that_no_longer_hashes_to_the_recorded_digest_is_reported_as_drift(
+        self,
+    ) -> None:
         from scripts import verify_signal_pages
 
         path, _digest = self.signals_document("the original vendor page text")
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: "the page changed since the sweep",
-            signals_path=path, baseline=[],
+            refresh=False,
+            fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path,
+            baseline=[],
         )
-        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("changed since the sweep" in problem for problem in problems), problems
+        )
 
-    def test_a_page_that_still_matches_the_recorded_digest_is_not_reported(self) -> None:
+    def test_a_page_that_still_matches_the_recorded_digest_is_not_reported(
+        self,
+    ) -> None:
         from scripts import verify_signal_pages
 
         original = "the original vendor page text"
@@ -114,10 +155,16 @@ class VerifierTests(unittest.TestCase):
             + "<script>var buildId = 'changes-every-deploy';</script></body></html>"
         )
         document = sweep_hackernews.build_document(
-            [{
-                "objectID": "1", "title": "A launch", "url": "https://vendor.example/launch",
-                "points": 50, "num_comments": 4, "created_at": "2026-09-08T00:00:00Z",
-            }],
+            [
+                {
+                    "objectID": "1",
+                    "title": "A launch",
+                    "url": "https://vendor.example/launch",
+                    "points": 50,
+                    "num_comments": 4,
+                    "created_at": "2026-09-08T00:00:00Z",
+                }
+            ],
             window_start="2026-09-07T00:00:00Z",
             window_end="2026-09-08T00:00:00Z",
             points_floor=10,
@@ -155,18 +202,32 @@ class BundleCapTests(unittest.TestCase):
         path = Path(directory.name) / "hn-signals.json"
         digest = hashlib.sha256(page_text.encode("utf-8")).hexdigest()
         signal = {
-            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
-            "title": "A launch", "url": "https://vendor.example/launch", "points": 50,
-            "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
-            "content_sha256": digest, "fetched_at": "2026-09-09T00:00:00Z",
-            "status": "provisional", "discovered_at": "2026-09-09",
+            "story_id": "1",
+            "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "A launch",
+            "url": "https://vendor.example/launch",
+            "points": 50,
+            "num_comments": 4,
+            "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable",
+            "content_sha256": digest,
+            "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional",
+            "discovered_at": "2026-09-09",
             # A `refresh=False` call below now scopes to signals with an assessment new
             # against the (empty) baseline it passes; harmless for `refreshed_bundle`'s
             # `refresh=True` calls, which check every readable signal regardless.
             "assessment": {"verdict": "worth_review"},
         }
         path.write_text(
-            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": [signal]}),
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "updated_at": "x",
+                    "source": None,
+                    "signals": [signal],
+                }
+            ),
             encoding="utf-8",
         )
         return path, digest
@@ -178,15 +239,21 @@ class BundleCapTests(unittest.TestCase):
         from scripts import verify_signal_pages
 
         path, _digest = self.signals_document(page_text)
-        bundle_dir = Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
-        self.enterContext(mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir))
+        bundle_dir = (
+            Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
+        )
+        self.enterContext(
+            mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir)
+        )
         problems = verify_signal_pages.verify(
             refresh=True, fetcher=lambda url: page_text, signals_path=path
         )
         self.assertEqual(problems, [])
         return json.loads((bundle_dir / "bundle.json").read_text(encoding="utf-8"))
 
-    def test_a_page_longer_than_the_cap_is_truncated_and_carries_the_marker(self) -> None:
+    def test_a_page_longer_than_the_cap_is_truncated_and_carries_the_marker(
+        self,
+    ) -> None:
         from scripts import verify_signal_pages
 
         page = "x" * (verify_signal_pages.MAX_BUNDLE_CHARS + 500)
@@ -196,13 +263,17 @@ class BundleCapTests(unittest.TestCase):
         self.assertIn("truncated", bundled)
         self.assertIn("https://vendor.example/launch", bundled)
 
-    def test_a_page_shorter_than_the_cap_is_untouched_and_carries_no_marker(self) -> None:
+    def test_a_page_shorter_than_the_cap_is_untouched_and_carries_no_marker(
+        self,
+    ) -> None:
         page = "a short vendor page, well under the cap"
         bundled = self.refreshed_bundle(page)["1"]
         self.assertEqual(bundled, page)
         self.assertNotIn("truncated", bundled)
 
-    def test_the_hash_is_computed_over_the_full_text_not_the_truncated_text(self) -> None:
+    def test_the_hash_is_computed_over_the_full_text_not_the_truncated_text(
+        self,
+    ) -> None:
         """The digest that gates drift detection must be taken over the page BEFORE
         MAX_BUNDLE_CHARS ever applies. A page far longer than the cap still verifies
         clean against a digest recorded over its full text, even though only the first
@@ -231,13 +302,18 @@ class BundleCapTests(unittest.TestCase):
         original = "x" * (verify_signal_pages.MAX_BUNDLE_CHARS + 5000)
         path, _digest = self.signals_document(original)
         changed = original[:-1] + "y"  # differs only at the very end, past the cap
-        self.assertEqual(changed[: verify_signal_pages.MAX_BUNDLE_CHARS], original[: verify_signal_pages.MAX_BUNDLE_CHARS])
+        self.assertEqual(
+            changed[: verify_signal_pages.MAX_BUNDLE_CHARS],
+            original[: verify_signal_pages.MAX_BUNDLE_CHARS],
+        )
 
         problems = verify_signal_pages.verify(
             refresh=False, fetcher=lambda url: changed, signals_path=path, baseline=[]
         )
 
-        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("changed since the sweep" in problem for problem in problems), problems
+        )
 
 
 class RecheckScopeTests(unittest.TestCase):
@@ -249,11 +325,18 @@ class RecheckScopeTests(unittest.TestCase):
 
     def signal(self, **overrides) -> dict:
         signal = {
-            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
-            "title": "A launch", "url": "https://vendor.example/launch", "points": 50,
-            "num_comments": 4, "submitted_at": "2026-09-08T00:00:00Z", "page_status": "readable",
-            "content_sha256": "a" * 64, "fetched_at": "2026-09-09T00:00:00Z",
-            "status": "provisional", "discovered_at": "2026-09-09",
+            "story_id": "1",
+            "story_url": "https://news.ycombinator.com/item?id=1",
+            "title": "A launch",
+            "url": "https://vendor.example/launch",
+            "points": 50,
+            "num_comments": 4,
+            "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable",
+            "content_sha256": "a" * 64,
+            "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional",
+            "discovered_at": "2026-09-09",
         }
         signal.update(overrides)
         return signal
@@ -263,7 +346,14 @@ class RecheckScopeTests(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         path = Path(directory.name) / "hn-signals.json"
         path.write_text(
-            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": signals}),
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "updated_at": "x",
+                    "source": None,
+                    "signals": signals,
+                }
+            ),
             encoding="utf-8",
         )
         return path
@@ -289,12 +379,18 @@ class RecheckScopeTests(unittest.TestCase):
             [self.signal(story_id="1", assessment={"verdict": "worth_review"})]
         )
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: "the page changed since the sweep",
-            signals_path=path, baseline=[],
+            refresh=False,
+            fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path,
+            baseline=[],
         )
-        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("changed since the sweep" in problem for problem in problems), problems
+        )
 
-    def test_an_assessment_already_in_the_baseline_does_not_refail_on_later_drift(self) -> None:
+    def test_an_assessment_already_in_the_baseline_does_not_refail_on_later_drift(
+        self,
+    ) -> None:
         """An assessment on the baseline was verified when it was introduced; a run that
         merely inherits it — and did not cite it — must not be failed by drift since."""
         from scripts import verify_signal_pages
@@ -304,10 +400,15 @@ class RecheckScopeTests(unittest.TestCase):
         baseline = [self.signal(story_id="1", assessment=dict(assessment))]
 
         def unexpected_fetch(_url: str) -> str:
-            raise AssertionError("an assessment already on the baseline must not be re-fetched")
+            raise AssertionError(
+                "an assessment already on the baseline must not be re-fetched"
+            )
 
         problems = verify_signal_pages.verify(
-            refresh=False, fetcher=unexpected_fetch, signals_path=path, baseline=baseline
+            refresh=False,
+            fetcher=unexpected_fetch,
+            signals_path=path,
+            baseline=baseline,
         )
         self.assertEqual(problems, [])
 
@@ -317,46 +418,85 @@ class RecheckScopeTests(unittest.TestCase):
         triage routine's identical guard."""
         from scripts import verify_signal_pages
 
-        path = self.queue_path([self.signal(story_id="1", assessment={
-            "verdict": "worth_review", "proposed_at": "2020-01-01", "proposer": "human",
-        })])
-        problems = verify_signal_pages.verify(
-            refresh=False, fetcher=lambda url: "the page changed since the sweep",
-            signals_path=path, baseline=[],
+        path = self.queue_path(
+            [
+                self.signal(
+                    story_id="1",
+                    assessment={
+                        "verdict": "worth_review",
+                        "proposed_at": "2020-01-01",
+                        "proposer": "human",
+                    },
+                )
+            ]
         )
-        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+        problems = verify_signal_pages.verify(
+            refresh=False,
+            fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path,
+            baseline=[],
+        )
+        self.assertTrue(
+            any("changed since the sweep" in problem for problem in problems), problems
+        )
 
     def test_assessed_story_ids_ignores_proposed_at_and_proposer_directly(self) -> None:
         from scripts import verify_signal_pages
 
         baseline = [{"story_id": "1"}]
-        signals = [{
-            "story_id": "1",
-            "assessment": {"verdict": "worth_review", "proposed_at": "2020-01-01", "proposer": "human"},
-        }]
-        self.assertEqual({"1"}, verify_signal_pages.assessed_story_ids(signals, baseline))
+        signals = [
+            {
+                "story_id": "1",
+                "assessment": {
+                    "verdict": "worth_review",
+                    "proposed_at": "2020-01-01",
+                    "proposer": "human",
+                },
+            }
+        ]
+        self.assertEqual(
+            {"1"}, verify_signal_pages.assessed_story_ids(signals, baseline)
+        )
 
-    def test_assessed_story_ids_excludes_an_unchanged_baselined_assessment(self) -> None:
+    def test_assessed_story_ids_excludes_an_unchanged_baselined_assessment(
+        self,
+    ) -> None:
         from scripts import verify_signal_pages
 
-        assessment = {"verdict": "worth_review", "proposed_at": "2026-09-01", "proposer": "hn-signals"}
+        assessment = {
+            "verdict": "worth_review",
+            "proposed_at": "2026-09-01",
+            "proposer": "hn-signals",
+        }
         baseline = [{"story_id": "1", "assessment": dict(assessment)}]
         signals = [{"story_id": "1", "assessment": dict(assessment)}]
-        self.assertEqual(set(), verify_signal_pages.assessed_story_ids(signals, baseline))
+        self.assertEqual(
+            set(), verify_signal_pages.assessed_story_ids(signals, baseline)
+        )
 
-    def test_refresh_still_checks_every_readable_signal_regardless_of_assessment(self) -> None:
+    def test_refresh_still_checks_every_readable_signal_regardless_of_assessment(
+        self,
+    ) -> None:
         """`--refresh` behaviour is unchanged: `prepare` must keep checking broadly, not
         just the signals an assessment happens to cite (there are none yet — `prepare`
         runs before the model writes any)."""
         from scripts import verify_signal_pages
 
-        bundle_dir = Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
-        self.enterContext(mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir))
+        bundle_dir = (
+            Path(self.enterContext(tempfile.TemporaryDirectory())) / ".hn-signal-bundle"
+        )
+        self.enterContext(
+            mock.patch.object(verify_signal_pages, "BUNDLE_DIR", bundle_dir)
+        )
         path = self.queue_path([self.signal(story_id="1")])  # no assessment at all
         problems = verify_signal_pages.verify(
-            refresh=True, fetcher=lambda url: "the page changed since the sweep", signals_path=path
+            refresh=True,
+            fetcher=lambda url: "the page changed since the sweep",
+            signals_path=path,
         )
-        self.assertTrue(any("changed since the sweep" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("changed since the sweep" in problem for problem in problems), problems
+        )
 
 
 class BaselineQueueSignalsTests(unittest.TestCase):
@@ -369,10 +509,13 @@ class BaselineQueueSignalsTests(unittest.TestCase):
         from scripts import verify_signal_pages
 
         def failing_run(command, **_kwargs):
-            return subprocess.CompletedProcess(command, 1, stdout="", stderr="fatal: bad revision")
+            return subprocess.CompletedProcess(
+                command, 1, stdout="", stderr="fatal: bad revision"
+            )
 
         self.assertEqual(
-            [], verify_signal_pages.baseline_queue_signals("no-such-ref", run=failing_run)
+            [],
+            verify_signal_pages.baseline_queue_signals("no-such-ref", run=failing_run),
         )
 
     def test_a_resolvable_ref_returns_its_signals(self) -> None:
@@ -381,7 +524,9 @@ class BaselineQueueSignalsTests(unittest.TestCase):
         document = json.dumps({"signals": [{"story_id": "1"}]})
 
         def fake_run(command, **_kwargs):
-            self.assertEqual(["git", "show", "abc123:directory/hn-signals.json"], command)
+            self.assertEqual(
+                ["git", "show", "abc123:directory/hn-signals.json"], command
+            )
             return subprocess.CompletedProcess(command, 0, stdout=document, stderr="")
 
         self.assertEqual(
@@ -403,7 +548,9 @@ class BaselineQueueSignalsTests(unittest.TestCase):
         from scripts import verify_signal_pages
 
         def fake_run(command, **_kwargs):
-            return subprocess.CompletedProcess(command, 0, stdout='{"signals": "not-a-list"}', stderr="")
+            return subprocess.CompletedProcess(
+                command, 0, stdout='{"signals": "not-a-list"}', stderr=""
+            )
 
         self.assertEqual(
             [], verify_signal_pages.baseline_queue_signals("abc123", run=fake_run)
@@ -417,7 +564,11 @@ class BundleDriftTests(unittest.TestCase):
         {"story_id": "1", "page_status": "readable"},
         {"story_id": "2", "page_status": "readable"},
         {"story_id": "3", "page_status": "failed"},
-        {"story_id": "4", "page_status": "readable", "assessment": {"verdict": "unreadable"}},
+        {
+            "story_id": "4",
+            "page_status": "readable",
+            "assessment": {"verdict": "unreadable"},
+        },
     ]
 
     def test_a_readable_page_missing_from_the_bundle_is_drift(self) -> None:
@@ -427,14 +578,18 @@ class BundleDriftTests(unittest.TestCase):
 
     def test_an_unfetchable_page_is_not_drift(self) -> None:
         """`failed` carries no digest to re-check; it is dispositioned `unreadable`."""
-        self.assertNotIn("3", run_hn_signals.drifted_story_ids(self.SIGNALS, {"1", "2", "4"}))
+        self.assertNotIn(
+            "3", run_hn_signals.drifted_story_ids(self.SIGNALS, {"1", "2", "4"})
+        )
 
     def test_pending_excludes_a_drifted_page_but_keeps_an_unfetchable_one(self) -> None:
         pending = run_hn_signals.pending_story_ids(self.SIGNALS, ["2"], 40)
         self.assertEqual(pending, ["1", "3"])
 
     def test_pending_honours_the_limit(self) -> None:
-        self.assertEqual(run_hn_signals.pending_story_ids(self.SIGNALS, [], 2), ["1", "2"])
+        self.assertEqual(
+            run_hn_signals.pending_story_ids(self.SIGNALS, [], 2), ["1", "2"]
+        )
 
     def test_a_missing_bundle_verifies_nothing(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -448,17 +603,25 @@ class PrepareDriftTests(unittest.TestCase):
         worktree = Path(directory.name)
         (worktree / "directory").mkdir()
         (worktree / run_hn_signals.QUEUE).write_text(
-            json.dumps({"signals": [
-                {"story_id": "1", "page_status": "readable"},
-                {"story_id": "2", "page_status": "readable"},
-            ]}),
+            json.dumps(
+                {
+                    "signals": [
+                        {"story_id": "1", "page_status": "readable"},
+                        {"story_id": "2", "page_status": "readable"},
+                    ]
+                }
+            ),
             encoding="utf-8",
         )
         (worktree / ".hn-signal-bundle").mkdir()
-        (worktree / run_hn_signals.BUNDLE).write_text(json.dumps(bundle), encoding="utf-8")
+        (worktree / run_hn_signals.BUNDLE).write_text(
+            json.dumps(bundle), encoding="utf-8"
+        )
         installed = worktree / "SKILL.md"
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
-        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed)
+        )
         # ROOT is where `prepare` writes BASE_REF. Left unpatched, `prepare` here would
         # plant `.hn-signal-bundle/base-ref.json` in this repository's own live checkout —
         # exactly the failure this routine exists to prevent developers from causing.
@@ -494,7 +657,9 @@ class BoundGuardTests(unittest.TestCase):
     is not shared is which queue and which prompt this routine is bound to."""
 
     def test_the_signal_queue_is_the_only_file_the_run_may_touch(self) -> None:
-        self.assertEqual([], run_hn_signals.unexpected_changes(" M directory/hn-signals.json\n"))
+        self.assertEqual(
+            [], run_hn_signals.unexpected_changes(" M directory/hn-signals.json\n")
+        )
         self.assertEqual(
             ["directory/candidates.json"],
             run_hn_signals.unexpected_changes(" M directory/candidates.json\n"),
@@ -508,7 +673,9 @@ class BoundGuardTests(unittest.TestCase):
             ),
         )
 
-    def test_drift_is_reported_against_this_routines_prompt_not_the_other_one(self) -> None:
+    def test_drift_is_reported_against_this_routines_prompt_not_the_other_one(
+        self,
+    ) -> None:
         """Verifying the triage prompt here would pass while checking the wrong file."""
         drift = run_hn_signals.prompt_drift("body", "different body")
         self.assertIn("docs/routines/hn-signals.md", str(drift))
@@ -526,10 +693,16 @@ class PromptInstallTests(unittest.TestCase):
         return Path(self.enterContext(tempfile.TemporaryDirectory()))
 
     def test_drift_accepts_only_the_prompt_rendered_for_this_checkout(self) -> None:
-        self.enterContext(mock.patch.object(run_hn_signals, "ROOT", Path("/machine/atlas")))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "ROOT", Path("/machine/atlas"))
+        )
         reviewed = f"cd {self.PLACEHOLDER}\nbody\n"
-        self.assertIsNone(run_hn_signals.prompt_drift(reviewed, "cd /machine/atlas\nbody\n"))
-        self.assertIsNotNone(run_hn_signals.prompt_drift(reviewed, "cd /elsewhere/atlas\nbody\n"))
+        self.assertIsNone(
+            run_hn_signals.prompt_drift(reviewed, "cd /machine/atlas\nbody\n")
+        )
+        self.assertIsNotNone(
+            run_hn_signals.prompt_drift(reviewed, "cd /elsewhere/atlas\nbody\n")
+        )
         self.assertIsNotNone(run_hn_signals.prompt_drift(reviewed, reviewed))
         self.assertIsNotNone(
             run_hn_signals.prompt_drift(reviewed, "cd /machine/atlas\nbody\nand more\n")
@@ -542,14 +715,19 @@ class PromptInstallTests(unittest.TestCase):
         installed = scratch / "scheduled-tasks" / "hn-signals" / "SKILL.md"
         checkout = scratch / "checkout"
         self.enterContext(mock.patch.object(run_hn_signals, "PROMPT", prompt))
-        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed)
+        )
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", checkout))
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(0, run_hn_signals.main(["install-prompt"]))
-        self.assertEqual(f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8"))
+        self.assertEqual(
+            f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8")
+        )
         self.assertIsNone(
             run_hn_signals.prompt_drift(
-                prompt.read_text(encoding="utf-8"), installed.read_text(encoding="utf-8")
+                prompt.read_text(encoding="utf-8"),
+                installed.read_text(encoding="utf-8"),
             )
         )
 
@@ -564,7 +742,9 @@ class PromptInstallTests(unittest.TestCase):
         (tasks / "hn-signals").symlink_to(elsewhere)
         installed = tasks / "hn-signals" / "SKILL.md"
         self.enterContext(mock.patch.object(run_hn_signals, "PROMPT", prompt))
-        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed)
+        )
         with contextlib.redirect_stderr(io.StringIO()) as stderr:
             self.assertEqual(1, run_hn_signals.main(["install-prompt"]))
         self.assertIn("symlink", stderr.getvalue())
@@ -577,21 +757,31 @@ class IsRemoteTrackingRefTests(unittest.TestCase):
         return 0, "origin\n"
 
     def test_a_remote_tracking_ref_is_detected(self) -> None:
-        self.assertTrue(run_hn_signals.is_remote_tracking_ref("origin/main", self.remotes_run))
+        self.assertTrue(
+            run_hn_signals.is_remote_tracking_ref("origin/main", self.remotes_run)
+        )
 
     def test_a_local_ref_is_not_remote_tracking(self) -> None:
         self.assertFalse(
-            run_hn_signals.is_remote_tracking_ref("my-local-sweep-branch", self.remotes_run)
+            run_hn_signals.is_remote_tracking_ref(
+                "my-local-sweep-branch", self.remotes_run
+            )
         )
 
-    def test_a_ref_named_exactly_like_a_remote_is_treated_as_remote_tracking(self) -> None:
+    def test_a_ref_named_exactly_like_a_remote_is_treated_as_remote_tracking(
+        self,
+    ) -> None:
         """`origin` alone (no branch) is an edge case, not one --from-ref needs to support
         well — the important property is that an unrelated local branch name isn't caught."""
-        self.assertTrue(run_hn_signals.is_remote_tracking_ref("origin", self.remotes_run))
+        self.assertTrue(
+            run_hn_signals.is_remote_tracking_ref("origin", self.remotes_run)
+        )
 
     def test_git_remote_failing_is_treated_as_not_remote_tracking(self) -> None:
         self.assertFalse(
-            run_hn_signals.is_remote_tracking_ref("origin/main", lambda *_a, **_k: (1, "error"))
+            run_hn_signals.is_remote_tracking_ref(
+                "origin/main", lambda *_a, **_k: (1, "error")
+            )
         )
 
     @staticmethod
@@ -602,13 +792,17 @@ class IsRemoteTrackingRefTests(unittest.TestCase):
             return 0, "refs/remotes/origin/main\n"
         return 1, ""
 
-    def test_a_canonically_spelled_remote_ref_is_treated_as_remote_tracking(self) -> None:
-        """"refs/remotes/origin/main" is "origin/main" spelled canonically. Splitting the
+    def test_a_canonically_spelled_remote_ref_is_treated_as_remote_tracking(
+        self,
+    ) -> None:
+        """ "refs/remotes/origin/main" is "origin/main" spelled canonically. Splitting the
         literal string on "/" yields the prefix "refs", which matches no remote — the bug
         this guards: that spelling must classify the same as the shorthand, not tolerate
         a fetch failure the shorthand would treat as fatal."""
         self.assertTrue(
-            run_hn_signals.is_remote_tracking_ref("refs/remotes/origin/main", self.canonical_run)
+            run_hn_signals.is_remote_tracking_ref(
+                "refs/remotes/origin/main", self.canonical_run
+            )
         )
 
     def test_a_ref_resolving_to_a_local_branch_is_not_remote_tracking(self) -> None:
@@ -619,7 +813,9 @@ class IsRemoteTrackingRefTests(unittest.TestCase):
                 return 0, "refs/heads/my-local-sweep-branch\n"
             return 1, ""
 
-        self.assertFalse(run_hn_signals.is_remote_tracking_ref("my-local-sweep-branch", run))
+        self.assertFalse(
+            run_hn_signals.is_remote_tracking_ref("my-local-sweep-branch", run)
+        )
 
 
 class PrepareFromRefTests(unittest.TestCase):
@@ -636,7 +832,9 @@ class PrepareFromRefTests(unittest.TestCase):
         )
         installed = worktree / "SKILL.md"
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
-        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed)
+        )
         # ROOT is where BASE_REF is written now — never WORKTREE, the model's own
         # directory. Pointed at a scratch dir so the test never touches this repo's own
         # (git-ignored) .hn-signal-bundle/.
@@ -654,7 +852,10 @@ class PrepareFromRefTests(unittest.TestCase):
 
     @staticmethod
     def fake_run(
-        calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "a" * 40,
+        calls: list[list[str]],
+        *,
+        fetch_code: int = 0,
+        resolved_sha: str = "a" * 40,
         remotes: str = "origin\n",
     ):
         def run(command: list[str], _cwd=None) -> tuple[int, str]:
@@ -670,6 +871,7 @@ class PrepareFromRefTests(unittest.TestCase):
             if command[:2] == ["git", "worktree"]:
                 return 0, ""
             return 0, ""  # verify_signal_pages.py --refresh
+
         return run
 
     def test_default_from_ref_resolves_origin_main(self) -> None:
@@ -684,13 +886,18 @@ class PrepareFromRefTests(unittest.TestCase):
         calls: list[list[str]] = []
         code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls, fetch_code=1))
         self.assertEqual(1, code)
-        self.assertNotIn(["git", "worktree", "remove", "--force", str(run_hn_signals.WORKTREE)], calls)
+        self.assertNotIn(
+            ["git", "worktree", "remove", "--force", str(run_hn_signals.WORKTREE)],
+            calls,
+        )
 
     def test_a_fetch_failure_on_a_local_ref_is_tolerated(self) -> None:
         self.prepared_worktree()
         calls: list[list[str]] = []
         code = run_hn_signals.prepare(
-            limit=5, run=self.fake_run(calls, fetch_code=1), from_ref="local-sweep-branch"
+            limit=5,
+            run=self.fake_run(calls, fetch_code=1),
+            from_ref="local-sweep-branch",
         )
         self.assertEqual(0, code)
 
@@ -699,7 +906,9 @@ class PrepareFromRefTests(unittest.TestCase):
         calls: list[list[str]] = []
         sha = "b" * 40
         code = run_hn_signals.prepare(
-            limit=5, run=self.fake_run(calls, resolved_sha=sha), from_ref="local-sweep-branch"
+            limit=5,
+            run=self.fake_run(calls, resolved_sha=sha),
+            from_ref="local-sweep-branch",
         )
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", "--verify", "local-sweep-branch"], calls)
@@ -713,7 +922,9 @@ class PrepareFromRefTests(unittest.TestCase):
         worktree = self.prepared_worktree()
         calls: list[list[str]] = []
         sha = "c" * 40
-        code = run_hn_signals.prepare(limit=5, run=self.fake_run(calls, resolved_sha=sha))
+        code = run_hn_signals.prepare(
+            limit=5, run=self.fake_run(calls, resolved_sha=sha)
+        )
         self.assertEqual(0, code)
         recorded = json.loads(
             (run_hn_signals.ROOT / run_hn_signals.BASE_REF).read_text(encoding="utf-8")
@@ -757,22 +968,31 @@ class PreparedBaseRefTests(unittest.TestCase):
         self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(missing))
 
     def test_a_malformed_bundle_falls_back_to_origin_main(self) -> None:
-        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(lambda _p: "not json"))
+        self.assertEqual(
+            "origin/main", run_hn_signals.prepared_base_ref(lambda _p: "not json")
+        )
 
-    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(self) -> None:
+    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(
+        self,
+    ) -> None:
         """A recorded "sha" reaches `git` argv unchecked everywhere below — as a
         base ref in `git rev-parse`/`git diff`/`git show`. Without this check, a forged
         value like an option flag becomes an arbitrary-argv-injection primitive rather
         than a rejected record."""
+
         def forged(_path: str) -> str:
             return json.dumps({"sha": "--output=/tmp/pwn_probe"})
 
         self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(forged))
 
     def test_reads_from_root_by_default_not_the_worktree(self) -> None:
-        self.assertEqual(run_hn_signals.root_text, run_hn_signals.prepared_base_ref.__defaults__[0])
+        self.assertEqual(
+            run_hn_signals.root_text, run_hn_signals.prepared_base_ref.__defaults__[0]
+        )
 
-    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(self) -> None:
+    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(
+        self,
+    ) -> None:
         """`$` in Python's `re` matches immediately before a trailing "\\n", so a `match`
         against a `$`-anchored pattern would accept `"<40 hex>\\n"` and pass a value
         carrying a newline straight to `git` argv. `fullmatch` against an unanchored
@@ -790,17 +1010,29 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
     it otherwise falls back to origin/main: the head-moved comparison, the committed-diff
     blast-radius check, and the `git show <base>:<queue>` field-guard baseline."""
 
-    QUEUE_DOC: ClassVar[str] = json.dumps({
-        "version": "1.0", "updated_at": "x", "source": None,
-        "signals": [{
-            "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
-            "title": "t", "url": "https://vendor.example/x", "points": 10,
-            "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
-            "page_status": "readable", "content_sha256": "a" * 64,
-            "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
-            "discovered_at": "2026-09-09",
-        }],
-    })
+    QUEUE_DOC: ClassVar[str] = json.dumps(
+        {
+            "version": "1.0",
+            "updated_at": "x",
+            "source": None,
+            "signals": [
+                {
+                    "story_id": "1",
+                    "story_url": "https://news.ycombinator.com/item?id=1",
+                    "title": "t",
+                    "url": "https://vendor.example/x",
+                    "points": 10,
+                    "num_comments": 1,
+                    "submitted_at": "2026-09-08T00:00:00Z",
+                    "page_status": "readable",
+                    "content_sha256": "a" * 64,
+                    "fetched_at": "2026-09-09T00:00:00Z",
+                    "status": "provisional",
+                    "discovered_at": "2026-09-09",
+                }
+            ],
+        }
+    )
 
     def responder(self, calls: list[list[str]], *, base_sha: str, head: str = "1111"):
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
@@ -817,21 +1049,26 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
                 self.assertNotIn("origin/main", command)
                 return 0, run_hn_signals.QUEUE
             return 0, ""
+
         return fake_run
 
     def base_read(self, base_sha: str):
         """Stands in for `root_text`: must be consulted for BASE_REF only, never QUEUE —
         `finish` must never read the security decision out of the worktree."""
+
         def _read(path: str) -> str:
             self.assertEqual(run_hn_signals.BASE_REF, path)
             return json.dumps({"sha": base_sha, "from_ref": "local-sweep-branch"})
+
         return _read
 
     def queue_read(self):
         """Stands in for `worktree_text`: must be consulted for QUEUE only."""
+
         def _read(path: str) -> str:
             self.assertEqual(run_hn_signals.QUEUE, path)
             return self.QUEUE_DOC
+
         return _read
 
     def test_finish_uses_the_recorded_sha_in_place_of_origin_main(self) -> None:
@@ -865,7 +1102,9 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
             raise OSError("no bundle")
 
         code = run_hn_signals.finish(
-            run=fake_run, read=self.queue_read(), base_read=base_read_without_a_recorded_base
+            run=fake_run,
+            read=self.queue_read(),
+            base_read=base_read_without_a_recorded_base,
         )
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", "origin/main"], calls)
@@ -875,7 +1114,9 @@ class GuardFiresAgainstALocalBaseTests(unittest.TestCase):
     """`unexpected_field_changes` must reject a run that adds a signal exactly the same
     way whether the base it compares against is origin/main or a local ref's commit."""
 
-    BEFORE = json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []})
+    BEFORE = json.dumps(
+        {"version": "1.0", "updated_at": "x", "source": None, "signals": []}
+    )
 
     def test_an_added_signal_is_rejected_when_the_base_is_a_local_commit(self) -> None:
         base_sha = "f" * 40
@@ -902,7 +1143,9 @@ class GuardFiresAgainstALocalBaseTests(unittest.TestCase):
 
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
-            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
+            code = run_hn_signals.finish(
+                run=fake_run, read=fake_read, base_read=fake_base_read
+            )
         self.assertEqual(1, code)
         self.assertIn("only the sweep adds", stderr.getvalue())
         self.assertNotIn(["git", "commit", "-m"], [call[:2] for call in calls])
@@ -914,10 +1157,17 @@ class FinishLabelsBaseSideProblemsWithTheRecordedShaTests(unittest.TestCase):
     assertion elsewhere in the suite stays green, because they check exit codes and argv,
     not this message text."""
 
-    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(self) -> None:
+    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(
+        self,
+    ) -> None:
         base_sha = "7" * 40
         malformed_base = json.dumps(
-            {"version": "1.0", "updated_at": "x", "source": None, "signals": "not-a-list"}
+            {
+                "version": "1.0",
+                "updated_at": "x",
+                "source": None,
+                "signals": "not-a-list",
+            }
         )
         after = document()
 
@@ -943,7 +1193,9 @@ class FinishLabelsBaseSideProblemsWithTheRecordedShaTests(unittest.TestCase):
 
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
-            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
+            code = run_hn_signals.finish(
+                run=fake_run, read=fake_read, base_read=fake_base_read
+            )
         self.assertEqual(1, code)
         self.assertIn(base_sha, stderr.getvalue())
         self.assertNotIn("origin/main", stderr.getvalue())
@@ -982,7 +1234,9 @@ class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
 
         stderr = io.StringIO()
         with contextlib.redirect_stderr(stderr):
-            code = run_hn_signals.finish(run=fake_run, read=fake_read, base_read=fake_base_read)
+            code = run_hn_signals.finish(
+                run=fake_run, read=fake_read, base_read=fake_base_read
+            )
         self.assertEqual(1, code)
         self.assertIn("changed after the field guard read it", stderr.getvalue())
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
@@ -1006,11 +1260,17 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
 
         text = verify_signal_pages.extract_visible_text(self.page(story_id))
         signal = {
-            "story_id": story_id, "story_url": f"https://news.ycombinator.com/item?id={story_id}",
-            "title": "t", "url": f"https://vendor.example/{story_id}", "points": 10,
-            "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
-            "page_status": "readable", "content_sha256": verify_signal_pages.content_hash(text),
-            "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
+            "story_id": story_id,
+            "story_url": f"https://news.ycombinator.com/item?id={story_id}",
+            "title": "t",
+            "url": f"https://vendor.example/{story_id}",
+            "points": 10,
+            "num_comments": 1,
+            "submitted_at": "2026-09-08T00:00:00Z",
+            "page_status": "readable",
+            "content_sha256": verify_signal_pages.content_hash(text),
+            "fetched_at": "2026-09-09T00:00:00Z",
+            "status": "provisional",
             "discovered_at": "2026-09-09",
         }
         signal.update(overrides)
@@ -1018,24 +1278,36 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
 
     @staticmethod
     def queue(signals: list[dict]) -> str:
-        return json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": signals})
+        return json.dumps(
+            {"version": "1.0", "updated_at": "x", "source": None, "signals": signals}
+        )
 
     def fetcher(self, fetched: list[str], *, drifted: frozenset[str] = frozenset()):
         def fetch(url: str) -> str:
             fetched.append(url)
             story_id = url.rsplit("/", 1)[1]
             return self.page(story_id + (" edited" if story_id in drifted else ""))
+
         return fetch
 
-    def run_finish(self, base: str, run_queue: str, fetch, *, head: str = "1111",
-                   recheck: tuple[int, str] = (0, "")):
+    def run_finish(
+        self,
+        base: str,
+        run_queue: str,
+        fetch,
+        *,
+        head: str = "1111",
+        recheck: tuple[int, str] = (0, ""),
+    ):
         state = {"queue": run_queue, "writes": 0, "writes_before_recheck": None}
         calls: list[list[str]] = []
 
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
             if command[:3] == ["git", "status", "--porcelain"]:
-                return 0, (" M directory/hn-signals.json\n" if state["queue"] != base else "")
+                return 0, (
+                    " M directory/hn-signals.json\n" if state["queue"] != base else ""
+                )
             if command[:2] == ["git", "rev-parse"]:
                 return 0, (head if command[2] == "HEAD" else self.BASE_SHA) + "\n"
             if command[:2] == ["git", "show"]:
@@ -1063,8 +1335,11 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
         stdout, stderr = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
             code = run_hn_signals.finish(
-                run=fake_run, read=fake_read, base_read=fake_base_read,
-                write=fake_write, fetcher=fetch,
+                run=fake_run,
+                read=fake_read,
+                base_read=fake_base_read,
+                write=fake_write,
+                fetcher=fetch,
             )
         return code, state, calls, stdout.getvalue(), stderr.getvalue()
 
@@ -1072,12 +1347,16 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
     def commits(calls: list[list[str]]) -> list[list[str]]:
         return [call for call in calls if call[:2] == ["git", "commit"]]
 
-    def test_a_drifted_page_drops_only_its_own_assessment_and_the_rest_commits(self) -> None:
+    def test_a_drifted_page_drops_only_its_own_assessment_and_the_rest_commits(
+        self,
+    ) -> None:
         base = self.queue([self.signal("1"), self.signal("2")])
-        run_queue = self.queue([
-            self.signal("1", assessment={"verdict": "worth_review"}),
-            self.signal("2", assessment={"verdict": "out_of_scope"}),
-        ])
+        run_queue = self.queue(
+            [
+                self.signal("1", assessment={"verdict": "worth_review"}),
+                self.signal("2", assessment={"verdict": "out_of_scope"}),
+            ]
+        )
         code, state, calls, _, stderr = self.run_finish(
             base, run_queue, self.fetcher([], drifted=frozenset({"2"}))
         )
@@ -1089,11 +1368,15 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
         # CHECKS, including the strict recheck, saw the dropped queue, not the original.
         self.assertEqual(1, state["writes_before_recheck"])
         [commit] = self.commits(calls)
-        self.assertIn("Dropped assessments whose page changed since the sweep: 2", commit[-1])
+        self.assertIn(
+            "Dropped assessments whose page changed since the sweep: 2", commit[-1]
+        )
 
     def test_a_page_that_cannot_be_fetched_aborts_instead_of_dropping(self) -> None:
         base = self.queue([self.signal("1")])
-        run_queue = self.queue([self.signal("1", assessment={"verdict": "worth_review"})])
+        run_queue = self.queue(
+            [self.signal("1", assessment={"verdict": "worth_review"})]
+        )
 
         def unreachable(_url: str) -> str:
             raise OSError("timed out")
@@ -1109,12 +1392,16 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
         """Every page verifies in `finish`'s own fetch, but the worktree's recheck claims
         drift. That claim can only fail the run; it must never remove an assessment."""
         base = self.queue([self.signal("1"), self.signal("2")])
-        run_queue = self.queue([
-            self.signal("1", assessment={"verdict": "worth_review"}),
-            self.signal("2", assessment={"verdict": "out_of_scope"}),
-        ])
+        run_queue = self.queue(
+            [
+                self.signal("1", assessment={"verdict": "worth_review"}),
+                self.signal("2", assessment={"verdict": "out_of_scope"}),
+            ]
+        )
         code, state, calls, _, _ = self.run_finish(
-            base, run_queue, self.fetcher([]),
+            base,
+            run_queue,
+            self.fetcher([]),
             recheck=(1, "error: signal 2: page changed since the sweep recorded it"),
         )
         self.assertEqual(1, code)
@@ -1122,13 +1409,17 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
         self.assertEqual(run_queue, state["queue"])
         self.assertEqual([], self.commits(calls))
 
-    def test_an_assessment_already_on_the_base_is_never_refetched_or_dropped(self) -> None:
+    def test_an_assessment_already_on_the_base_is_never_refetched_or_dropped(
+        self,
+    ) -> None:
         held = {"verdict": "out_of_scope", "proposer": "human"}
         base = self.queue([self.signal("1", assessment=dict(held)), self.signal("2")])
-        run_queue = self.queue([
-            self.signal("1", assessment=dict(held)),
-            self.signal("2", assessment={"verdict": "worth_review"}),
-        ])
+        run_queue = self.queue(
+            [
+                self.signal("1", assessment=dict(held)),
+                self.signal("2", assessment={"verdict": "worth_review"}),
+            ]
+        )
         fetched: list[str] = []
         code, state, _, _, stderr = self.run_finish(
             base, run_queue, self.fetcher(fetched, drifted=frozenset({"1"}))
@@ -1141,11 +1432,19 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
         """The drop runs before the field guard, so a url the run rewrote must not reach
         the fetcher; the field guard then rejects the rewrite."""
         base = self.queue([self.signal("1")])
-        run_queue = self.queue([self.signal(
-            "1", url="https://attacker.example/1", assessment={"verdict": "worth_review"},
-        )])
+        run_queue = self.queue(
+            [
+                self.signal(
+                    "1",
+                    url="https://attacker.example/1",
+                    assessment={"verdict": "worth_review"},
+                )
+            ]
+        )
         fetched: list[str] = []
-        code, _, calls, _, stderr = self.run_finish(base, run_queue, self.fetcher(fetched))
+        code, _, calls, _, stderr = self.run_finish(
+            base, run_queue, self.fetcher(fetched)
+        )
         self.assertEqual(["https://vendor.example/1"], fetched)
         self.assertEqual(1, code)
         self.assertIn("'url'", stderr)
@@ -1153,9 +1452,14 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
 
     def test_dropping_every_new_assessment_leaves_nothing_to_commit(self) -> None:
         base = self.queue([self.signal("1")])
-        run_queue = self.queue([self.signal("1", assessment={"verdict": "worth_review"})])
+        run_queue = self.queue(
+            [self.signal("1", assessment={"verdict": "worth_review"})]
+        )
         code, state, calls, stdout, stderr = self.run_finish(
-            base, run_queue, self.fetcher([], drifted=frozenset({"1"})), head=self.BASE_SHA
+            base,
+            run_queue,
+            self.fetcher([], drifted=frozenset({"1"})),
+            head=self.BASE_SHA,
         )
         self.assertEqual(0, code, stderr)
         self.assertEqual(base, state["queue"])
@@ -1165,7 +1469,9 @@ class FinishDropsDriftedAssessmentsTests(unittest.TestCase):
 
 class CLIFromRefWiringTests(unittest.TestCase):
     def test_main_passes_from_ref_through_to_prepare(self) -> None:
-        with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
+        with mock.patch.object(
+            run_hn_signals, "prepare", return_value=0
+        ) as prepare_mock:
             code = run_hn_signals.main(
                 ["prepare", "--from-ref", "local-sweep-branch", "--limit", "7"]
             )
@@ -1173,7 +1479,9 @@ class CLIFromRefWiringTests(unittest.TestCase):
         prepare_mock.assert_called_once_with(limit=7, from_ref="local-sweep-branch")
 
     def test_main_defaults_from_ref_to_origin_main(self) -> None:
-        with mock.patch.object(run_hn_signals, "prepare", return_value=0) as prepare_mock:
+        with mock.patch.object(
+            run_hn_signals, "prepare", return_value=0
+        ) as prepare_mock:
             run_hn_signals.main(["prepare"])
         prepare_mock.assert_called_once_with(limit=40, from_ref="origin/main")
 
@@ -1192,8 +1500,13 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         root = scratch / "root"
         root.mkdir()
         subprocess.run(["git", "init", "-q", str(root)], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.email", "test@example.com"],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.name", "Test"], check=True
+        )
         (root / "directory").mkdir()
         # Matches this repository's own `.gitignore`: `.hn-signal-bundle/` (where
         # `verify_signal_pages.py --refresh` writes its bundle, in a real run) is ignored
@@ -1204,24 +1517,40 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         # than because the directory is actually ignored.
         (root / ".gitignore").write_text(".hn-signal-bundle/\n", encoding="utf-8")
         (root / run_hn_signals.QUEUE).write_text(
-            json.dumps({
-                "version": "1.0", "updated_at": "x", "source": None,
-                "signals": [{
-                    "story_id": "1", "story_url": "https://news.ycombinator.com/item?id=1",
-                    "title": "t", "url": "https://vendor.example/x", "points": 10,
-                    "num_comments": 1, "submitted_at": "2026-09-08T00:00:00Z",
-                    # unreadable, not readable: sidesteps the page-drift bundle check,
-                    # which is orthogonal to what this test drives.
-                    "page_status": "unreadable", "content_sha256": "a" * 64,
-                    "fetched_at": "2026-09-09T00:00:00Z", "status": "provisional",
-                    "discovered_at": "2026-09-09",
-                }],
-            }),
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "updated_at": "x",
+                    "source": None,
+                    "signals": [
+                        {
+                            "story_id": "1",
+                            "story_url": "https://news.ycombinator.com/item?id=1",
+                            "title": "t",
+                            "url": "https://vendor.example/x",
+                            "points": 10,
+                            "num_comments": 1,
+                            "submitted_at": "2026-09-08T00:00:00Z",
+                            # unreadable, not readable: sidesteps the page-drift bundle check,
+                            # which is orthogonal to what this test drives.
+                            "page_status": "unreadable",
+                            "content_sha256": "a" * 64,
+                            "fetched_at": "2026-09-09T00:00:00Z",
+                            "status": "provisional",
+                            "discovered_at": "2026-09-09",
+                        }
+                    ],
+                }
+            ),
             encoding="utf-8",
         )
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
-        subprocess.run(["git", "-C", str(root), "branch", "-M", "local-sweep-branch"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True
+        )
+        subprocess.run(
+            ["git", "-C", str(root), "branch", "-M", "local-sweep-branch"], check=True
+        )
 
         worktree = scratch / "worktree"
         installed = scratch / "SKILL.md"
@@ -1236,7 +1565,9 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.enterContext(mock.patch.object(run_hn_signals, "WORKTREE", worktree))
-        self.enterContext(mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed))
+        self.enterContext(
+            mock.patch.object(run_hn_signals, "INSTALLED_PROMPT", installed)
+        )
         self.root = root
         self.worktree = worktree
 
@@ -1247,7 +1578,9 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         return 0, ""  # every "uv run ..." quality check, stubbed to succeed
 
     def test_an_assessment_only_edit_commits(self) -> None:
-        code = run_hn_signals.prepare(limit=5, run=self.hybrid_run, from_ref="local-sweep-branch")
+        code = run_hn_signals.prepare(
+            limit=5, run=self.hybrid_run, from_ref="local-sweep-branch"
+        )
         self.assertEqual(0, code)
 
         queue_path = self.worktree / run_hn_signals.QUEUE
@@ -1263,15 +1596,20 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         )
         self.assertEqual(0, branch_code)
         diff_code, changed = run_hn_signals.shell(
-            ["git", "diff", "--name-only", "local-sweep-branch", branch_sha.strip()], self.root
+            ["git", "diff", "--name-only", "local-sweep-branch", branch_sha.strip()],
+            self.root,
         )
         self.assertEqual(0, diff_code)
         self.assertEqual(run_hn_signals.QUEUE, changed.strip())
 
     def test_a_forbidden_edit_is_rejected(self) -> None:
-        code = run_hn_signals.prepare(limit=5, run=self.hybrid_run, from_ref="local-sweep-branch")
+        code = run_hn_signals.prepare(
+            limit=5, run=self.hybrid_run, from_ref="local-sweep-branch"
+        )
         self.assertEqual(0, code)
-        _, head_before = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, head_before = run_hn_signals.shell(
+            ["git", "rev-parse", "HEAD"], self.worktree
+        )
 
         (self.worktree / "other.txt").write_text("not the queue", encoding="utf-8")
 
@@ -1281,7 +1619,9 @@ class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
         self.assertEqual(1, code)
         self.assertIn("other.txt", stderr.getvalue())
 
-        _, head_after = run_hn_signals.shell(["git", "rev-parse", "HEAD"], self.worktree)
+        _, head_after = run_hn_signals.shell(
+            ["git", "rev-parse", "HEAD"], self.worktree
+        )
         self.assertEqual(head_before, head_after)
         branch_code, _ = run_hn_signals.shell(
             ["git", "rev-parse", "--verify", "hn-signals/pending"], self.worktree
@@ -1300,24 +1640,45 @@ class ReplaceRefGuardTests(unittest.TestCase):
         root = scratch / "root"
         root.mkdir()
         subprocess.run(["git", "init", "-q", str(root)], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.email", "test@example.com"],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.name", "Test"], check=True
+        )
         (root / "directory").mkdir()
         (root / ".gitignore").write_text(".hn-signal-bundle/\n", encoding="utf-8")
         (root / run_hn_signals.QUEUE).write_text(
-            json.dumps({"version": "1.0", "updated_at": "x", "source": None, "signals": []}),
+            json.dumps(
+                {"version": "1.0", "updated_at": "x", "source": None, "signals": []}
+            ),
             encoding="utf-8",
         )
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True
+        )
         # A second commit gives `git replace` a distinct object to swap the first one for.
         (root / "other.txt").write_text("second commit\n", encoding="utf-8")
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True
+        )
 
         worktree = scratch / "worktree"
         subprocess.run(
-            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach", str(worktree), "HEAD"],
+            [
+                "git",
+                "-C",
+                str(root),
+                "worktree",
+                "add",
+                "--quiet",
+                "--detach",
+                str(worktree),
+                "HEAD",
+            ],
             check=True,
         )
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
@@ -1357,10 +1718,15 @@ class ReplaceRefGuardTests(unittest.TestCase):
         # variable, so a bare `subprocess.run` here inherits it from the parent and the
         # diff is never blinded -- the assertion below then fails whenever the suite runs
         # as part of a real routine run, which is the only time it matters.
-        plain_env = {k: v for k, v in os.environ.items() if k != "GIT_NO_REPLACE_OBJECTS"}
+        plain_env = {
+            k: v for k, v in os.environ.items() if k != "GIT_NO_REPLACE_OBJECTS"
+        }
         blinded = subprocess.run(
             ["git", "diff", "--name-only", parent.strip(), head.strip()],
-            capture_output=True, text=True, cwd=self.worktree, env=plain_env,
+            capture_output=True,
+            text=True,
+            cwd=self.worktree,
+            env=plain_env,
         )
         self.assertEqual("", blinded.stdout.strip())
 
@@ -1370,7 +1736,9 @@ class ReplaceRefGuardTests(unittest.TestCase):
         self.assertEqual(0, immune_code)
         self.assertIn("other.txt", immune_output)
 
-    def test_shell_sets_git_no_replace_objects_in_the_subprocess_environment(self) -> None:
+    def test_shell_sets_git_no_replace_objects_in_the_subprocess_environment(
+        self,
+    ) -> None:
         """Direct environment assertion, independent of observed git behavior above."""
         captured: dict[str, dict] = {}
         real_run = subprocess.run
@@ -1394,14 +1762,18 @@ class SymlinkedBaseRecordTests(unittest.TestCase):
         root = Path(directory.name)
         (root / ".hn-signal-bundle").mkdir()
         forged = root / "forged.json"
-        forged.write_text(json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8")
+        forged.write_text(
+            json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8"
+        )
         (root / run_hn_signals.BASE_REF).symlink_to(forged)
         # Without this, `root_text` reads ROOT as still pointed at the real checkout, so
         # the assertion below passes whether or not the symlink refusal fires — the same
         # forgot-to-patch-ROOT defect PrepareDriftTests had.
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
 
-        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text))
+        self.assertEqual(
+            "origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text)
+        )
 
     def test_root_text_raises_rather_than_follows_a_symlink(self) -> None:
         directory = tempfile.TemporaryDirectory()
@@ -1432,7 +1804,9 @@ class SymlinkedBaseRecordTests(unittest.TestCase):
         (root / ".hn-signal-bundle").symlink_to(forged_dir)
         self.enterContext(mock.patch.object(run_hn_signals, "ROOT", root))
 
-        self.assertEqual("origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text))
+        self.assertEqual(
+            "origin/main", run_hn_signals.prepared_base_ref(run_hn_signals.root_text)
+        )
 
 
 class NoStrayBundleInTheRealCheckoutTests(unittest.TestCase):
@@ -1441,7 +1815,9 @@ class NoStrayBundleInTheRealCheckoutTests(unittest.TestCase):
     repository's own live checkout. Every test above now patches ROOT to a temp
     directory, so nothing in this run should have touched the real one."""
 
-    def test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout(self) -> None:
+    def test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout(
+        self,
+    ) -> None:
         real_root = Path(__file__).resolve().parents[1]
         self.assertFalse((real_root / run_hn_signals.BASE_REF).exists())
 

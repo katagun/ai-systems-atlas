@@ -1,0 +1,150 @@
+# Pre-commit gates for AI Systems Atlas.
+#
+# Install once per checkout:  pre-commit install
+# Run everything (what CI runs):  pre-commit run --all-files
+#
+# Fast checks (ruff, eslint, secrets on staged files) run on `git commit`.
+# The full unit suite, e2e, and generated-file freshness stay in
+# .github/workflows/verify.yml: they are minutes long and need browsers.
+# Complexity is enforced through ruff C901 (Python, max 50) and the eslint
+# complexity rule (JS, max 30); both are ratchets documented in
+# pyproject.toml and eslint.config.mjs, tightened by refactor, never by noqa.
+
+repos:
+  # Generic file hygiene, language-independent. check-merge-conflict is the
+  # backstop for leftover conflict markers; no-commit-to-branch keeps commits
+  # off main (branch protection requires PRs anyway); check-added-large-files
+  # guards the ~672K catalog JSON files with a 1000K ceiling.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: detect-private-key
+      - id: forbid-new-submodules
+      - id: no-commit-to-branch
+        args: [-b, main]
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+
+  # Secrets on staged changes (fast). The full-history `gitleaks detect` scan
+  # runs in CI; known-safe test fixtures live in .gitleaks.toml.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+        args: [protect, --staged, --redact, --verbose, --config, .gitleaks.toml]
+
+  # Python lint + format, pinned to the ruff in the pyproject.toml dev group.
+  # types_or is narrowed to Python sources on purpose: ruff would otherwise
+  # also reformat ```python snippets inside Markdown (e.g. the frozen
+  # docs/superpowers planning archive), which are historical records, not code.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.6
+    hooks:
+      - id: ruff-check
+        types_or: [python, pyi]
+        args: [--fix]
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  # Project-specific checks run with the repo's own toolchain (uvx / npm) so
+  # versions stay in uv cache and package-lock.json instead of drifting in
+  # hook revs. Pinned versions are in each entry; bump them deliberately.
+  - repo: local
+    hooks:
+      # Security: bug and hardening scan at medium severity and above. Low
+      # findings (git-subprocess plumbing) are noise here; the five medium
+      # sites carry `# nosec` with their allowlist justification inline.
+      - id: bandit
+        language: system
+        name: bandit (medium+ severity)
+        entry: uvx bandit@1.9.4
+        args: [-ll, -q]
+        types: [python]
+
+      # Spelling across sources and the human-curated catalog. Generated
+      # copies (web/records, web/app, web/blog, web/fonts, synced web/*.json,
+      # sitemap), machine files (locks, vendored deps), and transient or
+      # upstream-imported queues are excluded: they mirror checked sources.
+      # The ignore list holds product names and house spellings (Slite, Asure,
+      # the peacefulcoexistance wordmark fragment nce); real typos get fixed.
+      # assertin covers unittest's assertIn API used across the test suite.
+      - id: codespell
+        language: system
+        name: codespell typo scan
+        entry: uvx codespell@2.3.0
+        args: [-L, "slite,asure,unparseable,nce,newyorker,commitable,ake,assertin,assertIn"]
+        types: [text]
+        exclude: |
+          (?x)^(
+            node_modules/|\.venv/|
+            uv\.lock|package-lock\.json|
+            web/(records|app|blog|fonts)/|
+            web/[^/]*\.json|web/sitemap\.xml|web/robots\.txt|
+            directory/(hn-signals|model-candidates|models-dev)\.json
+          )
+
+      # YAML workflows and routines against .yamllint.yml.
+      - id: yamllint
+        language: system
+        name: yamllint
+        entry: uvx yamllint@1.37.1
+        args: [-c, .yamllint.yml]
+        types: [yaml]
+
+      # Markdown prose against .markdownlint-cli2.jsonc (globs live there;
+      # the frozen docs/superpowers planning archive is out of scope).
+      # Resolved from node_modules (see package.json); --yes keeps CI
+      # non-interactive should the local install ever be missing.
+      - id: markdownlint
+        language: system
+        name: markdownlint-cli2
+        entry: npx --yes markdownlint-cli2
+        pass_filenames: false
+
+      # Static HTML source (generated share pages under web/records and the
+      # generated blog under web/blog are owned by their builders).
+      - id: htmlhint
+        language: system
+        name: htmlhint
+        entry: npx --yes htmlhint
+        args: [--config, .htmlhintrc]
+        types: [html]
+        exclude: ^web/(records|blog)/
+
+      # Stylesheets (web/fonts.css is vendored by scripts/build_fonts.mjs).
+      - id: stylelint
+        language: system
+        name: stylelint
+        entry: npx --yes stylelint
+        types: [css]
+        exclude: ^web/fonts\.css$
+
+      # Browser bundle, build scripts, and Node tests through the repo's own
+      # eslint flat config (which already ignores generated trees).
+      - id: eslint
+        language: system
+        name: eslint (repo config)
+        entry: npm run lint:js
+        args: [--, --max-warnings=0]
+        types: [javascript]
+        pass_filenames: false
+
+      # GitHub Actions security audit; findings suppressed with justification
+      # in .github/zizmor.yml, never inline.
+      - id: zizmor
+        language: system
+        name: zizmor workflow audit
+        entry: uvx zizmor@1.11.0
+        args: [--no-progress, --format, plain]
+        files: ^\.github/workflows/

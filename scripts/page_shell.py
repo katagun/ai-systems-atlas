@@ -7,6 +7,7 @@ share-page module needs the blog's URLs for the sitemap it owns. Two real
 dependencies pointing opposite ways, which is a cycle unless what they share
 lives in a third place.
 """
+
 from __future__ import annotations
 
 SITE_URL = "https://peacefulcoexistance.com/"

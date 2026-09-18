@@ -1,4 +1,5 @@
 """Shared validation and identity helpers for official discovery sources."""
+
 from __future__ import annotations
 
 import ipaddress
@@ -15,7 +16,11 @@ def valid_public_hostname(value: object) -> bool:
     """Return whether value is an exact, public-looking lowercase DNS name."""
     if not isinstance(value, str) or value != value.lower() or value.endswith("."):
         return False
-    if len(value) > 253 or "." not in value or any(character.isspace() for character in value):
+    if (
+        len(value) > 253
+        or "." not in value
+        or any(character.isspace() for character in value)
+    ):
         return False
     try:
         ipaddress.ip_address(value)
@@ -98,7 +103,9 @@ def validate_discovery_sources(document: object) -> list[str]:
         for field in ("hub_url", "feed_url"):
             host = https_url_host(source[field])
             if host is None:
-                errors.append(f"{prefix}: {field} must be an HTTPS URL on a public DNS host")
+                errors.append(
+                    f"{prefix}: {field} must be an HTTPS URL on a public DNS host"
+                )
             elif hosts_valid and host not in allowed_hosts:
                 errors.append(f"{prefix}: {field} host must appear in item_hosts")
 
@@ -123,7 +130,9 @@ def canonical_url_key(value: object) -> str:
 
     scheme = parsed.scheme.lower()
     host = hostname.lower()
-    default_port = (scheme == "https" and port == 443) or (scheme == "http" and port == 80)
+    default_port = (scheme == "https" and port == 443) or (
+        scheme == "http" and port == 80
+    )
     netloc = host if port is None or default_port else f"{host}:{port}"
     path = parsed.path or "/"
     if path != "/":

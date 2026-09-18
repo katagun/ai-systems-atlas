@@ -31,7 +31,15 @@ select = [
     "B",    # bugbear: likely bugs and footguns
     "SIM",  # simplifiable constructs
     "RUF",  # ruff's own checks
+    "C901", # mccabe: cyclomatic complexity ratchet (see mccabe below)
 ]
 # E501 is deliberately absent, matching ruff's own default. The catalog
 # validators carry long quoted error messages, and rewrapping them to satisfy a
 # column limit would hurt the diffs without catching a single defect.
+
+[tool.ruff.lint.mccabe]
+# Complexity ratchet, not a target: 50 passes today (the current maximum is 46
+# in validate_hn_signals) and fails any new function worse than the worst one
+# already carried. Tighten toward 10 as the validators are decomposed; every
+# reduction must come with the refactor, never with a noqa.
+max-complexity = 50

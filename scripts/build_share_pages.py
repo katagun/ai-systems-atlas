@@ -11,6 +11,7 @@ profile, which is the application's job.
 Run it after any published data change and commit the result. ``--check`` rebuilds in
 memory and fails when the committed files differ from what the data would produce.
 """
+
 from __future__ import annotations
 
 import html
@@ -40,10 +41,13 @@ COLLECTIONS = {
     "pack": ("packs", "packs"),
 }
 COLLECTION_LABELS = {
-    "system": "System", "spec": "Specification", "inference": "Inference service",
-    "runtime": "Local runtime", "model": "Model", "pack": "Agent pack",
+    "system": "System",
+    "spec": "Specification",
+    "inference": "Inference service",
+    "runtime": "Local runtime",
+    "model": "Model",
+    "pack": "Agent pack",
 }
-
 
 
 def share_page_path(kind: str, record_id: str) -> str:
@@ -70,6 +74,7 @@ def preview_description(text: str, limit: int = 160) -> str:
 
 def load_catalog(root: Path = ROOT) -> dict:
     directory = root / "directory"
+
     def read(name: str) -> dict:
         return json.loads((directory / name).read_text(encoding="utf-8"))
 
@@ -99,56 +104,119 @@ def names(taxonomy: dict, group: str, values: list[str]) -> str:
     return " · ".join(taxonomy_name(taxonomy, group, value) for value in values)
 
 
-def _facts_for(kind: str, record: dict, taxonomy: dict, by_id: dict) -> tuple[str, str, list[tuple[str, str]], str, str]:
+def _facts_for(
+    kind: str, record: dict, taxonomy: dict, by_id: dict
+) -> tuple[str, str, list[tuple[str, str]], str, str]:
     """Return (eyebrow, lead, facts, about_type, official_label)."""
     if kind == "system":
         eyebrow = f"{taxonomy_name(taxonomy, 'system_families', record['system_family'])} · {taxonomy_name(taxonomy, 'primary_roles', record['primary_role'])}"
         facts = [
-            ("Source model", taxonomy_name(taxonomy, "source_models", record["source_model"])),
+            (
+                "Source model",
+                taxonomy_name(taxonomy, "source_models", record["source_model"]),
+            ),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
             ("Deployment", " · ".join(humanize(item) for item in record["deployment"])),
             ("Status", humanize(record["status"])),
         ]
         successor = by_id.get(record.get("superseded_by") or "")
         if record.get("status") == "superseded" and successor:
-            facts.append(("Superseded by", f'<a href="../{html.escape(successor["id"])}/">{html.escape(successor["name"])}</a>'))
-        return eyebrow, record["why_it_matters"], facts, "SoftwareApplication", "Open repository" if record.get("repo") else "Open official product"
+            facts.append(
+                (
+                    "Superseded by",
+                    f'<a href="../{html.escape(successor["id"])}/">{html.escape(successor["name"])}</a>',
+                )
+            )
+        return (
+            eyebrow,
+            record["why_it_matters"],
+            facts,
+            "SoftwareApplication",
+            "Open repository" if record.get("repo") else "Open official product",
+        )
     if kind == "spec":
         eyebrow = f"{taxonomy_name(taxonomy, 'specification_types', record['specification_type'])} · {taxonomy_name(taxonomy, 'specification_scopes', record['scope'])}"
         facts = [
-            ("Status", taxonomy_name(taxonomy, "specification_statuses", record["status"])),
+            (
+                "Status",
+                taxonomy_name(taxonomy, "specification_statuses", record["status"]),
+            ),
             ("Version", record.get("current_version") or "Rolling / unversioned"),
             ("Steward", " · ".join(record["stewards"])),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
             ("Standardizes", record["standardizes"]),
         ]
-        return eyebrow, record["description"], facts, "CreativeWork", "Open official specification"
+        return (
+            eyebrow,
+            record["description"],
+            facts,
+            "CreativeWork",
+            "Open official specification",
+        )
     if kind == "inference":
         eyebrow = f"Inference service · {taxonomy_name(taxonomy, 'inference_service_types', record['service_type'])}"
         facts = [
             ("Operator", record["operator"]),
-            ("Delivery", names(taxonomy, "inference_delivery_modes", record["delivery_modes"])),
-            ("Model sources", names(taxonomy, "inference_model_sources", record["model_sources"])),
-            ("API styles", names(taxonomy, "inference_api_styles", record["api_styles"])),
+            (
+                "Delivery",
+                names(taxonomy, "inference_delivery_modes", record["delivery_modes"]),
+            ),
+            (
+                "Model sources",
+                names(taxonomy, "inference_model_sources", record["model_sources"]),
+            ),
+            (
+                "API styles",
+                names(taxonomy, "inference_api_styles", record["api_styles"]),
+            ),
             ("Boundary", record["service_boundary"]),
         ]
-        return eyebrow, record["description"], facts, "Service", "Open official service documentation"
+        return (
+            eyebrow,
+            record["description"],
+            facts,
+            "Service",
+            "Open official service documentation",
+        )
     if kind == "model":
-        eyebrow = f"Model · {taxonomy_name(taxonomy, 'model_types', record['model_type'])}"
+        eyebrow = (
+            f"Model · {taxonomy_name(taxonomy, 'model_types', record['model_type'])}"
+        )
         facts = [
             ("Developer", record["developer"]),
-            ("Distribution", names(taxonomy, "model_distribution_modes", record["distribution_modes"])),
-            ("Source model", taxonomy_name(taxonomy, "source_models", record["source_model"])),
+            (
+                "Distribution",
+                names(
+                    taxonomy, "model_distribution_modes", record["distribution_modes"]
+                ),
+            ),
+            (
+                "Source model",
+                taxonomy_name(taxonomy, "source_models", record["source_model"]),
+            ),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
             ("Boundary", record["access_boundary"]),
         ]
-        return eyebrow, record["description"], facts, "SoftwareSourceCode", "Open official model page"
+        return (
+            eyebrow,
+            record["description"],
+            facts,
+            "SoftwareSourceCode",
+            "Open official model page",
+        )
     if kind == "pack":
-        eyebrow = f"Agent pack · {taxonomy_name(taxonomy, 'pack_types', record['pack_type'])}"
+        eyebrow = (
+            f"Agent pack · {taxonomy_name(taxonomy, 'pack_types', record['pack_type'])}"
+        )
         facts = [
             ("Steward", record["steward"]),
             ("Hosts", names(taxonomy, "pack_hosts", record["hosts"])),
-            ("Install", taxonomy_name(taxonomy, "pack_install_mechanisms", record["install_mechanism"])),
+            (
+                "Install",
+                taxonomy_name(
+                    taxonomy, "pack_install_mechanisms", record["install_mechanism"]
+                ),
+            ),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
             ("Status", humanize(record["status"])),
             ("Installs", record["installs"]),
@@ -157,20 +225,42 @@ def _facts_for(kind: str, record: dict, taxonomy: dict, by_id: dict) -> tuple[st
     eyebrow = f"Local runtime · {taxonomy_name(taxonomy, 'local_runtime_types', record['runtime_type'])}"
     facts = [
         ("Maintainer", record["maintainer"]),
-        ("Accelerators", names(taxonomy, "runtime_accelerators", record["accelerators"])),
-        ("Model formats", names(taxonomy, "runtime_model_formats", record["model_formats"])),
-        ("Source model", taxonomy_name(taxonomy, "source_models", record["source_model"])),
+        (
+            "Accelerators",
+            names(taxonomy, "runtime_accelerators", record["accelerators"]),
+        ),
+        (
+            "Model formats",
+            names(taxonomy, "runtime_model_formats", record["model_formats"]),
+        ),
+        (
+            "Source model",
+            taxonomy_name(taxonomy, "source_models", record["source_model"]),
+        ),
         ("Licenses", names(taxonomy, "licenses", record["licenses"])),
         ("Boundary", record["runtime_boundary"]),
     ]
-    return eyebrow, record["description"], facts, "SoftwareApplication", "Open official documentation"
+    return (
+        eyebrow,
+        record["description"],
+        facts,
+        "SoftwareApplication",
+        "Open official documentation",
+    )
 
 
 def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
-    eyebrow, lead, facts, about_type, official_label = _facts_for(kind, record, taxonomy, by_id)
+    eyebrow, lead, facts, about_type, official_label = _facts_for(
+        kind, record, taxonomy, by_id
+    )
     name, url = record["name"], share_page_url(kind, record["id"])
     description = preview_description(record["description"])
-    about: dict = {"@type": about_type, "name": name, "url": record["url"], "description": description}
+    about: dict = {
+        "@type": about_type,
+        "name": name,
+        "url": record["url"],
+        "description": description,
+    }
     if kind == "inference":
         about["provider"] = {"@type": "Organization", "name": record["operator"]}
     if kind == "model":
@@ -184,18 +274,31 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
         "description": description,
         "url": url,
         "dateModified": record["verified_at"],
-        "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "alternateName": SITE_TAGLINE, "url": SITE_URL},
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": SITE_NAME,
+            "alternateName": SITE_TAGLINE,
+            "url": SITE_URL,
+        },
         "about": about,
     }
     # Escaping "<" keeps the JSON-LD payload from closing its own <script> element.
     # It stays outside the f-string: a backslash in an f-string expression is a
     # syntax error before Python 3.12, and this project supports 3.11.
     json_ld_script = json.dumps(json_ld, ensure_ascii=False).replace("<", "\\u003c")
-    escaped_facts = [(label, value if label == "Superseded by" else html.escape(value)) for label, value in facts]
-    facts_html = "".join(f"<dt>{html.escape(label)}</dt><dd>{value}</dd>" for label, value in escaped_facts)
+    escaped_facts = [
+        (label, value if label == "Superseded by" else html.escape(value))
+        for label, value in facts
+    ]
+    facts_html = "".join(
+        f"<dt>{html.escape(label)}</dt><dd>{value}</dd>"
+        for label, value in escaped_facts
+    )
     repo_link = (
         f' <a href="https://github.com/{html.escape(record["repo"])}" rel="noreferrer">Repository ↗</a>'
-        if record.get("repo") and kind != "system" and record.get("url") != f'https://github.com/{record["repo"]}'
+        if record.get("repo")
+        and kind != "system"
+        and record.get("url") != f"https://github.com/{record['repo']}"
         else ""
     )
     return f"""<!doctype html>
@@ -249,7 +352,10 @@ def build_pages(catalog: dict) -> dict[str, str]:
     # rather than duplicating any knowledge of where posts live.
     entries.extend(blog_sitemap_entries(ROOT))
     entries.sort()
-    locs = "".join(f"  <url><loc>{html.escape(loc)}</loc><lastmod>{html.escape(lastmod)}</lastmod></url>\n" for loc, lastmod in entries)
+    locs = "".join(
+        f"  <url><loc>{html.escape(loc)}</loc><lastmod>{html.escape(lastmod)}</lastmod></url>\n"
+        for loc, lastmod in entries
+    )
     pages["sitemap.xml"] = (
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f"  <url><loc>{SITE_URL}</loc></url>\n{locs}</urlset>\n"
@@ -262,15 +368,39 @@ def main(argv: list[str]) -> int:
     pages = build_pages(load_catalog(ROOT))
     web = ROOT / "web"
     if "--check" in argv:
-        problems = [f"web/{path} is missing or stale" for path, content in pages.items()
-                    if not (web / path).exists() or (web / path).read_text(encoding="utf-8") != content]
+        problems = [
+            f"web/{path} is missing or stale"
+            for path, content in pages.items()
+            if not (web / path).exists()
+            or (web / path).read_text(encoding="utf-8") != content
+        ]
         records_dir = web / "records"
         if records_dir.exists():
-            committed = {str(path.relative_to(web)) for path in records_dir.rglob("*") if path.is_file()}
-            problems += [f"web/{path} is not produced by the catalog" for path in sorted(committed - set(pages))]
+            committed = {
+                str(path.relative_to(web))
+                for path in records_dir.rglob("*")
+                if path.is_file()
+            }
+            problems += [
+                f"web/{path} is not produced by the catalog"
+                for path in sorted(committed - set(pages))
+            ]
         if problems:
-            print("\n".join(problems[:20] + ([f"… and {len(problems) - 20} more"] if len(problems) > 20 else [])), file=sys.stderr)
-            print("Run `uv run python scripts/build_share_pages.py` and commit the result.", file=sys.stderr)
+            print(
+                "\n".join(
+                    problems[:20]
+                    + (
+                        [f"… and {len(problems) - 20} more"]
+                        if len(problems) > 20
+                        else []
+                    )
+                ),
+                file=sys.stderr,
+            )
+            print(
+                "Run `uv run python scripts/build_share_pages.py` and commit the result.",
+                file=sys.stderr,
+            )
             return 1
         print(f"{len(pages)} share files are up to date.")
         return 0
