@@ -13822,6 +13822,520 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-stepfun-step-3-5-flash",
+      "source_id": "stepfun/step-3.5-flash",
+      "name": "Step 3.5 Flash",
+      "developer": "StepFun",
+      "url": "https://huggingface.co/stepfun-ai/Step-3.5-Flash",
+      "description": "StepFun's 196-billion-parameter sparse MoE flagship reasoning release with 11B active parameters, published as Apache-declared open weights with a managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Step 3.5 Flash",
+        "description": "StepFun flash lane for quick multimodal reasoning and coding assistance",
+        "family": null,
+        "release_date": "2026-01-29",
+        "last_updated": "2026-02-13",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": 256000,
+          "output": 256000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/stepfun-ai/Step-3.5-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the model card frontmatter, badge, and footer declare the Apache 2.0 license with no use restrictions attached. The grant rests on those concordant first-party declarations pointing at the standard Apache-2.0 text.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Step-3.5-Flash weights as declared on the official model card, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the February 2026 Step-3.5-Flash release at Hugging Face commit ab446a3de5e171ea341227e24bb1f090e1b771f7 (last modified 2026-03-17), together with the step-3.5-flash API model. The 2603 agent-optimized variant, the 3.7 successor, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 196B MoE checkpoint with Base, FP8, and GGUF siblings under a declared Apache-2.0 grant",
+        "First-party API with 256K context plus vLLM, SGLang, and Transformers recipes"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card declarations",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 9,
+        "overall": 7.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint declaring the Apache-2.0 grant",
+          "url": "https://huggingface.co/stepfun-ai/Step-3.5-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official StepFun step-3.5-flash API documentation",
+          "url": "https://platform.stepfun.ai/docs/en/guides/models/step-3.5-flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/stepfun/step-3.5-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-stepfun-step-3-7-flash",
+      "source_id": "stepfun/step-3.7-flash",
+      "name": "Step 3.7 Flash",
+      "developer": "StepFun",
+      "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash",
+      "description": "StepFun's 198-billion-parameter multimodal flagship with a vision encoder for native image and video understanding, published as Apache-declared open weights with a managed API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Step 3.7 Flash",
+        "description": "Newer StepFun flash model for faster agents, coding, and multimodal prompts",
+        "family": null,
+        "release_date": "2026-05-29",
+        "last_updated": "2026-05-29",
+        "knowledge_cutoff": "2026-03-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": 256000,
+          "output": 256000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the model card frontmatter, badge, and footer declare the Apache 2.0 license with no use restrictions attached. The grant rests on those concordant first-party declarations pointing at the standard Apache-2.0 text.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Step-3.7-Flash weights as declared on the official model card, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the May 2026 Step-3.7-Flash release at Hugging Face commit 5f6244077ac62e04eec3f320501ff8c2b293373a (last modified 2026-06-03), a distinct multimodal line rather than a 3.5 snapshot, together with the step-3.7-flash API model. The 3.5 generation, later StepFun lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 198B multimodal checkpoint with FP8, NVFP4, and GGUF variants under a declared Apache-2.0 grant",
+        "First-party API with native image and video understanding plus three reasoning effort levels"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on card declarations",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 9,
+        "overall": 7.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint declaring the Apache-2.0 grant",
+          "url": "https://huggingface.co/stepfun-ai/Step-3.7-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official StepFun step-3.7-flash API documentation",
+          "url": "https://platform.stepfun.ai/docs/en/guides/models/step-3.7-flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/stepfun/step-3.7-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-upstage-solar-pro2",
+      "source_id": "upstage/solar-pro2",
+      "name": "Solar Pro 2",
+      "developer": "Upstage",
+      "url": "https://console.upstage.ai/docs/models/solar-pro-2",
+      "description": "Upstage's 31-billion-parameter Solar Pro 2 release, served as dated snapshot API models with a tokenizer-only public artifact.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Solar Pro 2",
+        "description": "Flagship model for demanding analysis, coding, and production agent workflows",
+        "family": "solar-pro",
+        "release_date": "2025-05-20",
+        "last_updated": "2025-05-20",
+        "knowledge_cutoff": "2025-03",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model-weight license exists: no weights are published, only a tokenizer, and use is governed by the Upstage Terms of Use, which grant a non-transferable limited service license and reserve all intellectual property. The release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of solar-pro2 snapshots with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.upstage.ai/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the July 2025 Solar Pro 2 line served as dated snapshots (250710, 250909, 251215) with a tokenizer-only public artifact. The Solar Pro 3 successor, other Upstage lines, and the Upstage platform itself are separate boundaries.",
+      "strengths": [
+        "Console docs pin three dated snapshots with changelogs for the exact model IDs",
+        "First-party Console serving with AWS Marketplace and on-premise paths"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 2,
+        "deployment_portability": 6,
+        "serving_reach": 6,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 5.58
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 2 docs with dated snapshots",
+          "url": "https://console.upstage.ai/docs/models/solar-pro-2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 2 launch announcement (July 2025)",
+          "url": "https://www.upstage.ai/news/solar-pro-2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/upstage/solar-pro2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-upstage-solar-pro3",
+      "source_id": "upstage/solar-pro3",
+      "name": "Solar Pro 3",
+      "developer": "Upstage",
+      "url": "https://console.upstage.ai/docs/models/solar-pro-3",
+      "description": "Upstage's 102-billion-parameter Mixture-of-Experts Solar Pro 3 release with 12B active parameters, served as dated snapshot API models with a tokenizer-only public artifact.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Solar Pro 3",
+        "description": "Flagship model for demanding analysis, coding, and production agent workflows",
+        "family": "solar-pro",
+        "release_date": "2026-01",
+        "last_updated": "2026-01",
+        "knowledge_cutoff": "2025-03",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model-weight license exists: no weights are published, only a tokenizer whose own Solar license is artifact-scoped and does not grant model rights. Use is governed by the Upstage Terms of Use, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of solar-pro3 snapshots with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.upstage.ai/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the January 2026 Solar Pro 3 line served as dated snapshots (260126, 260323) with a tokenizer-only public artifact. The Solar Pro 2 predecessor, the Pro 4 successor, other Upstage lines, and the platform itself are separate boundaries.",
+      "strengths": [
+        "Console docs pin two dated snapshots with a deprecation pointer for the exact model IDs",
+        "First-party Console serving with dated launch announcements"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 2,
+        "deployment_portability": 4,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 3 docs with dated snapshots",
+          "url": "https://console.upstage.ai/docs/models/solar-pro-3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 3 launch announcement (January 2026)",
+          "url": "https://www.upstage.ai/blog/en/solar-pro-3-0127",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/upstage/solar-pro3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-upstage-solar-pro4",
+      "source_id": "upstage/solar-pro4",
+      "name": "Solar Pro 4",
+      "developer": "Upstage",
+      "url": "https://console.upstage.ai/docs/models/solar-pro-4",
+      "description": "Upstage's August 2026 Solar Pro 4 agentic release with 512K context, served as a managed API with no public artifact of any kind.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Solar Pro 4",
+        "description": "Upstage's flagship model, specialized for agentic use",
+        "family": "solar-pro",
+        "release_date": "2026-08-06",
+        "last_updated": "2026-08-06",
+        "knowledge_cutoff": "2026-02",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 524288,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No license of any kind is published for this closed commercial line: no weights, no tokenizer, no model terms beyond the Upstage Terms of Use. The release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of solar-pro4 with no published license",
+          "kind": "web_terms",
+          "url": "https://www.upstage.ai/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the August 2026 Solar Pro 4 line served as the solar-pro4 API model with 512K context and 128K max output. Earlier Solar generations, other Upstage lines, and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dated August 2026 launch pins the line with full specs and Console serving",
+        "512K context with reasoning traces plus Studio, SolarChat, and on-premise surfaces"
+      ],
+      "tradeoffs": [
+        "No downloadable artifact of any kind exists first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 1,
+        "deployment_portability": 5,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 5.1
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 4 docs with specs and serving",
+          "url": "https://console.upstage.ai/docs/models/solar-pro-4",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Solar Pro 4 launch announcement (August 2026)",
+          "url": "https://www.upstage.ai/blog/en/solar-pro-4",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/upstage/solar-pro4.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-xai-grok-4-6",
       "source_id": "xai/grok-4.6",
       "name": "Grok 4.6",
