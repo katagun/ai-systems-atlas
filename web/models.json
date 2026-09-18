@@ -12953,6 +12953,543 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-xiaomi-mimo-v2-flash",
+      "source_id": "xiaomi/mimo-v2-flash",
+      "name": "MiMo-V2-Flash",
+      "developer": "Xiaomi",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash",
+      "description": "Xiaomi's 309-billion-parameter Mixture-of-Experts release with 15B active parameters for efficient inference, published as MIT-claimed open weights with a launch-era managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2-Flash",
+        "description": "MiMo flash model for fast multimodal assistance and agent workflows",
+        "family": "mimo",
+        "release_date": "2025-12-16",
+        "last_updated": "2026-02-04",
+        "knowledge_cutoff": "2024-12-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The weight repository carries no LICENSE file; the MIT grant rests on concordant first-party declarations that the weights and inference code are fully open-sourced under the MIT license, with no use restrictions attached. The missing file caps clarity below a pinned-license grant.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "MiMo-V2-Flash weights and inference code as declared in the official release announcement",
+          "kind": "web_terms",
+          "url": "https://mimo.mi.com/docs/en-US/news/previous-news/news20251216",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the December 2025 MiMo-V2-Flash release at Hugging Face commit 1afd314a2406c282e0956375c34a676501c78649 (last modified 2026-07-09), with three dated 2026 update notes. The Flash-Base sibling, the V2 Pro and Omni lines, later MiMo generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 309B MoE checkpoint with Base sibling and MTP weights, all MIT-claimed",
+        "Release announcement pins the December 2025 launch with API pricing and weight links"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on announcement prose and tags",
+        "The launch-era free API period has long lapsed"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiMo-V2-Flash release announcement (December 2025)",
+          "url": "https://mimo.mi.com/docs/en-US/news/previous-news/news20251216",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xiaomi/mimo-v2-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-omni",
+      "source_id": "xiaomi/mimo-v2-omni",
+      "name": "MiMo-V2-Omni",
+      "developer": "Xiaomi",
+      "url": "https://mimo.xiaomi.com/mimo-v2-omni",
+      "description": "Xiaomi's all-modal V2 release fusing text, vision, and speech encoders, served as the mimo-v2-omni API model with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2-Omni",
+        "description": "MiMo omni model for text, image, video, audio, and agents",
+        "family": "mimo",
+        "release_date": "2026-03-18",
+        "last_updated": "2026-03-18",
+        "knowledge_cutoff": "2024-12",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No license of any kind is published for this API-only line: no weight repository exists under any Xiaomi ID, and neither launch nor docs page states license terms. Use is governed by Xiaomi platform API terms, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of mimo-v2-omni with no published license",
+          "kind": "web_terms",
+          "url": "https://mimo.xiaomi.com/mimo-v2-omni",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the March 2026 mimo-v2-omni line with native text, image, video, and audio input and text output, served through Xiaomi's API platform. The Pro and Flash V2 siblings, later omni-modal generations, and the Xiaomi platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party launch and docs pages detail per-modality input including 10-hour audio",
+        "Managed API serving with published input and output pricing"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 3.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official mimo-v2-omni launch page (March 2026)",
+          "url": "https://mimo.xiaomi.com/mimo-v2-omni",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official mimo-v2-omni release announcement",
+          "url": "https://mimo.mi.com/docs/en-US/news/previous-news/v2-omni-release",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xiaomi/mimo-v2-omni.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-pro",
+      "source_id": "xiaomi/mimo-v2-pro",
+      "name": "MiMo-V2-Pro",
+      "developer": "Xiaomi",
+      "url": "https://mimo.xiaomi.com/mimo-v2-pro",
+      "description": "Xiaomi's trillion-parameter flagship for agentic workloads with 42B active parameters and 1M context, served as the mimo-v2-pro API model with no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2-Pro",
+        "description": "Earlier MiMo Pro model for multimodal agents, reasoning, and code tasks",
+        "family": "mimo",
+        "release_date": "2026-03-18",
+        "last_updated": "2026-03-18",
+        "knowledge_cutoff": "2024-12",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No license of any kind is published for this API-only line: no weight repository exists under any Xiaomi ID, and neither launch nor docs page states license terms. Use is governed by Xiaomi platform API terms, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of mimo-v2-pro with no published license",
+          "kind": "web_terms",
+          "url": "https://mimo.xiaomi.com/mimo-v2-pro",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the March 2026 mimo-v2-pro flagship line (1T total, 42B active, 1M context) served through Xiaomi's API platform. The Flash and Omni V2 siblings, later MiMo generations, and the Xiaomi platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party launch and docs pages pin the March 2026 release with API pricing",
+        "Trillion-parameter scale with 1M context documented for agentic workflows"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 3.64
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official mimo-v2-pro launch page (March 2026)",
+          "url": "https://mimo.xiaomi.com/mimo-v2-pro",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official mimo-v2-pro release announcement with API pricing",
+          "url": "https://mimo.mi.com/docs/en-US/news/previous-news/v2-pro-release",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xiaomi/mimo-v2-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-5",
+      "source_id": "xiaomi/mimo-v2.5",
+      "name": "MiMo-V2.5",
+      "developer": "Xiaomi",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5",
+      "description": "Xiaomi's 310-billion-parameter native omni-modal release with 15B active parameters, published as MIT-claimed open weights with managed API, Studio, and Token Plan serving.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2.5",
+        "description": "Open MiMo model for multimodal coding agents and long-context automation",
+        "family": "mimo",
+        "release_date": "2026-04-22",
+        "last_updated": "2026-04-22",
+        "knowledge_cutoff": "2024-12",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The weight repositories carry no LICENSE file; the MIT grant rests on the official open-sourcing announcement, which states both models including Base are fully open-sourced under the permissive MIT license with free commercial use and no additional authorization. The missing file caps clarity below a pinned-license grant.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "MiMo-V2.5 and Base weights as declared in the official open-sourcing announcement",
+          "kind": "web_terms",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2.5-open-sourced",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 MiMo-V2.5 release at Hugging Face commit 63651580ca774f8504f676040460aed3e1244ac1 (last modified 2026-07-09), with native text, image, video, and audio input and 1M context, together with its API Platform, AI Studio, and Token Plan serving. The Base sibling, the V2.5-Pro line, later MiMo generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 310B omni-modal checkpoint with Base sibling, all MIT-claimed with commercial use allowed",
+        "First-party API Platform, AI Studio, and Token Plan serving for the exact model ID"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on announcement prose and tags",
+        "310B total parameters need multi-GPU serving for self-operation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiMo-V2.5 open-sourcing announcement with the MIT grant",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2.5-open-sourced",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiMo-V2.5 launch page (April 2026)",
+          "url": "https://mimo.xiaomi.com/mimo-v2-5/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xiaomi/mimo-v2.5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-5-pro",
+      "source_id": "xiaomi/mimo-v2.5-pro",
+      "name": "MiMo-V2.5-Pro",
+      "developer": "Xiaomi",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro",
+      "description": "Xiaomi's 1.02-trillion-parameter text release with 42B active parameters, published as MIT-claimed open weights with managed API serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2.5-Pro",
+        "description": "Stronger MiMo Pro tier for multimodal reasoning and coding-agent execution",
+        "family": "mimo",
+        "release_date": "2026-04-22",
+        "last_updated": "2026-04-22",
+        "knowledge_cutoff": "2024-12",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The weight repositories carry no LICENSE file; the MIT grant rests on the official open-sourcing announcement covering both V2.5 models including Base. The missing file caps clarity below a pinned-license grant.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "MiMo-V2.5-Pro and Base weights as declared in the official open-sourcing announcement",
+          "kind": "web_terms",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2.5-open-sourced",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 MiMo-V2.5-Pro release at Hugging Face commit 21d1ecfecd7bd70f31be25ca49d7edd21f003659 (last modified 2026-07-09), a distinct 1.02T/42B line from MiMo-V2.5, together with its API Platform serving. The Base sibling, the FP4-DFlash serving checkpoint, the UltraSpeed experience mode, later MiMo generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated trillion-parameter checkpoint with Base sibling, all MIT-claimed with commercial use allowed",
+        "First-party API Platform and AI Studio serving for the exact model ID"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on announcement prose and tags",
+        "1T total parameters need multi-node serving for self-operation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 5,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.98
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiMo-V2.5 open-sourcing announcement with the MIT grant",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2.5-open-sourced",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official MiMo-V2.5-Pro launch page (April 2026)",
+          "url": "https://mimo.xiaomi.com/mimo-v2-5-pro/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xiaomi/mimo-v2.5-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-zhipuai-glm-4-5",
       "source_id": "zhipuai/glm-4.5",
       "name": "GLM-4.5",
