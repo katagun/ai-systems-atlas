@@ -46,5 +46,10 @@ jobs:
       # secrets, complexity, catalog validation, unit tests with coverage,
       # syntax and web behavior checks, generated-file freshness, and e2e.
       # This job is environment setup plus that one command.
+      # no-commit-to-branch is skipped: it guards local commits off main, and
+      # a push-triggered run on main always sits on main, so the hook would
+      # fail every post-merge verification. Branch protection is the guard.
       - name: Run pre-commit on all files
+        env:
+          SKIP: no-commit-to-branch
         run: pre-commit run --all-files --show-diff-on-failure

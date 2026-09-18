@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14",
+  "generated_at": "2026-09-18",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -18198,6 +18198,97 @@
       "why_it_matters": "Shows an agent's long-term memory can be an ordinary local database a person can read, edit, export, and re-import, rather than a hosted service the agent alone can reach.",
       "research_confidence": "high",
       "verified_at": "2026-09-15"
+    },
+    {
+      "id": "paper2agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Paper2Agent",
+      "repo": "jmiao24/Paper2Agent",
+      "url": "https://github.com/jmiao24/Paper2Agent",
+      "description": "Skill package that turns a research paper and its codebase into a tested MCP server any agent can query, installed into a coding agent such as Claude Code or Codex; published in Nature on 2026-09-16.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "canonical_data": "skill documents, role definitions, and the generated paper MCP server files in the user’s workspace",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3012,
+      "stars_verified_at": "2026-09-18",
+      "historical_stars": null,
+      "current_repo_note": "The repository ships as a skill package rather than a standalone product: role documents and stage prompts the host coding agent executes, plus helper scripts that do the enforced verification work. The host, not this repository, runs the coordination loop; the skill’s own orchestration document states that a role description alone is not a running agent. A legacy-cli tag preserves an earlier shell-based CLI that the current tree no longer ships.",
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 8.0,
+        "autonomy": 6.8,
+        "human_control": 7.6,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 6.0,
+        "interoperability": 8.8,
+        "maturity": 5.0,
+        "overall": 7.09
+      },
+      "strengths": [
+        "Enforced verification rather than assertion: verify_workflow.py checks phase order, agent separation, and hashes, and verify_mcp_server.py launches the built server and verifies tool inventory, schemas, and acceptance calls, so a failing build stops instead of being described",
+        "Peer-reviewed and Nature-published with open access, and the evaluation is concrete: 593 of 599 generated tools passed validation and 91.2 percent of 300 benchmark questions were answered correctly",
+        "The output is portable by design: every paper becomes an MCP server any compatible agent or LLM can connect to, demonstrated by three running Spaces (AlphaGenome, Scanpy, TISSUE)"
+      ],
+      "weaknesses": [
+        "No continuous integration, no releases, and a single test file; the verification gates execute only inside a host-agent run, so nothing independently validates the skill’s own code",
+        "The headline evaluation claims are paper-attested, not repository-verifiable: only three of the reported seventy-four-agent corpus are published as Spaces, and the benchmark figures live in the paper, not in a reproducible harness in the repository",
+        "It is a workflow for a host, not a standalone system: without Claude Code, Codex, or another skill-reading agent, the repository ships prompts and helper scripts that run nothing on their own"
+      ],
+      "why_it_matters": "The first peer-reviewed system that turns a paper itself into an executable artifact: a paper and its codebase become a validated MCP server any agent can query, with results checked against the paper’s own outputs before the server ships.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-18",
+      "github_detected_license": "MIT",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "mcp",
+        "workflows"
+      ],
+      "pushed_at": "2026-09-17T16:56:07Z",
+      "forks": 431,
+      "open_issues": 0,
+      "metadata_verified_at": "2026-09-18"
     }
   ]
 }

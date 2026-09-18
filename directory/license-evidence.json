@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-17",
+  "verified_at": "2026-09-18",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3396,7 +3396,22 @@
           "immutable_url": "https://api.github.com/repos/obra/superpowers/git/blobs/abf0390320aa14406af7a520b9b0739fdda9bf08"
         }
       ]
+    },
+    {
+      "project_id": "paper2agent",
+      "repo": "jmiao24/Paper2Agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/jmiao24/Paper2Agent/blob/main/LICENSE",
+          "blob_sha": "27024f609b93371a212cca734fc3a95b7b7e9de5",
+          "immutable_url": "https://api.github.com/repos/jmiao24/Paper2Agent/git/blobs/27024f609b93371a212cca734fc3a95b7b7e9de5"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-13"
+  "generated_at": "2026-09-18"
 }
