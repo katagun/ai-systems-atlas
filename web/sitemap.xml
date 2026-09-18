@@ -147,6 +147,9 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-7/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m3/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-codestral-22b-v0-1/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-devstral-2512/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-devstral-medium-2507/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-devstral-small-2507/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-magistral-small-2506/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-ministral-8b-instruct-2410/</loc><lastmod>2026-09-16</lastmod></url>
@@ -154,6 +157,7 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-large-2512/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-medium-2505/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-medium-2604/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-nemo/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-small-2506/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-small-2603/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-mistral-small-3-1-24b-instruct-2503/</loc><lastmod>2026-09-16</lastmod></url>
@@ -288,6 +292,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/exo-harness/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/flowise/</loc><lastmod>2026-08-31</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/foam/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/fx/</loc><lastmod>2026-09-17</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gajae-code/</loc><lastmod>2026-08-31</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gbrain/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gemini-apps/</loc><lastmod>2026-08-26</lastmod></url>

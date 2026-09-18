@@ -3821,6 +3821,103 @@
       "source_model": "open_core"
     },
     {
+      "id": "fx",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "fx",
+      "repo": "vercel-labs/fx",
+      "url": "https://github.com/vercel-labs/fx",
+      "description": "Vercel Labs' small native coding agent in Zig: a shell-like terminal agent with permission review, saved sessions, skills, MCP, and subagents that also runs as an ACP server and embeds through the libfx SDK.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "vercel_ai_gateway",
+        "openai",
+        "x_ai"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "versioned",
+        "consolidation"
+      ],
+      "canonical_data": "the working tree, saved session files and settings under the user's fx directory, workspace project configuration and AGENTS.md files, skill directories, and per-workspace MCP trust decisions",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 3041,
+      "stars_verified_at": "2026-09-17",
+      "historical_stars": null,
+      "current_repo_note": "Vercel's separate AI SDK harness adapter launches fx inside a Vercel sandbox over ACP; that adapter belongs to the AI SDK and is not part of this record.",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 8.2,
+        "autonomy": 7.6,
+        "human_control": 8.0,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.4,
+        "maturity": 4.5,
+        "overall": 7.3
+      },
+      "strengths": [
+        "A single static Zig binary with no runtime to install exposes file, shell with background process handles, web search and fetch, vision, skill, subagent, and MCP tools behind one policy check",
+        "Three permission modes, wildcard allow and deny rules per workspace or user, per-server trust prompts for project MCP configuration, and session-only grants give fine control, and subagents cannot exceed the parent's permissions",
+        "The same agent runs as an Agent Client Protocol server for editors, reads skills from other agents' directories and Claude-compatible MCP files, and ships as an npm SDK that runs natively or as WebAssembly"
+      ],
+      "weaknesses": [
+        "Released builds authenticate only through Vercel AI Gateway or ChatGPT and Grok subscriptions; local and OpenAI-compatible endpoints are documented as a preview that needs an unmerged build",
+        "The default auto permission mode replaces human approval with a second model's review of the pending action, and that reviewer is a paid request that can hold or clear a call the user never sees",
+        "The README labels the project experimental, the first public release is from August 2026, and the changelog records breaking changes between 0.0.x releases"
+      ],
+      "why_it_matters": "A vendor-backed coding agent built to be embedded rather than to be a platform: one small native binary that speaks ACP, reads the skill and MCP conventions of other agents, and loads into a browser or server as a library.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-17",
+      "pushed_at": "2026-09-18T00:18:39Z",
+      "forks": 350,
+      "open_issues": 237,
+      "metadata_verified_at": "2026-09-17",
+      "github_detected_license": "Apache-2.0",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
       "system_family": "agent_system",
       "score_profile": "agent",
       "secondary_roles": [],
