@@ -3899,7 +3899,7 @@
         "The same agent runs as an Agent Client Protocol server for editors, reads skills from other agents' directories and Claude-compatible MCP files, and ships as an npm SDK that runs natively or as WebAssembly"
       ],
       "weaknesses": [
-        "Released builds authenticate only through Vercel AI Gateway or ChatGPT and Grok subscriptions; local and OpenAI-compatible endpoints are documented as a preview that needs an unmerged build",
+        "Released builds authenticate only through Vercel AI Gateway or ChatGPT and Grok subscriptions; the configurable local and OpenAI-compatible connections merged upstream on 2026-09-15 sit 61 commits past the latest tag, and their guide still tells readers to build from source",
         "The default auto permission mode replaces human approval with a second model's review of the pending action, and that reviewer is a paid request that can hold or clear a call the user never sees",
         "The README labels the project experimental, the first public release is from August 2026, and the changelog records breaking changes between 0.0.x releases"
       ],
