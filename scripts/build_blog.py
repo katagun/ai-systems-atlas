@@ -21,7 +21,7 @@ import html
 import ipaddress
 import re
 import sys
-from datetime import date
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parents[1]
 POSTS = "blog"
 REQUIRED_KEYS = {"title", "date", "summary", "author"}
 FILENAME = re.compile(r"(\d{4}-\d{2}-\d{2})-(?P<slug>[a-z0-9][a-z0-9-]*)\.md")
-ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2})?")
 SUPPORTED = (
     "headings, paragraphs, bold, italic, inline code, links, unordered lists, "
     "blockquotes, fenced code blocks and horizontal rules"
@@ -126,9 +126,11 @@ def parse_frontmatter(text: str, name: str) -> tuple[dict[str, str], str, int]:
     if unknown:
         raise PostError(f"{name}: frontmatter has unknown keys {unknown}")
     if not ISO_DATE.fullmatch(meta["date"]):
-        raise PostError(f"{name}: date must be an ISO date, got {meta['date']!r}")
+        raise PostError(
+            f"{name}: date must be an ISO date, optionally with a time, got {meta['date']!r}"
+        )
     try:
-        date.fromisoformat(meta["date"])
+        datetime.fromisoformat(meta["date"].replace(" ", "T"))
     except ValueError:
         raise PostError(f"{name}: date {meta['date']!r} is not a real date") from None
     return meta, "\n".join(lines[end + 1 :]), end + 2
@@ -274,6 +276,12 @@ def render_markdown(body: str, name: str, first_line: int = 1) -> str:
     return "\n".join(out)
 
 
+def _sortable(post: dict[str, Any]) -> tuple:
+    """(date, time-or-earliest, slug) so same-day posts order by their stated time."""
+    date_, _, time_ = post["date"].partition(" ")
+    return (date_, time_ or "00:00", post["slug"])
+
+
 def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
     """Every post, newest first."""
     directory = root / POSTS
@@ -288,7 +296,7 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
                 **meta,
             }
         )
-    posts.sort(key=lambda post: (post["date"], post["slug"]), reverse=True)
+    posts.sort(key=_sortable, reverse=True)
     return posts
 
 
@@ -407,12 +415,19 @@ def _document(
     root: str,
     footer: str,
     versions: dict[str, str],
+    sidebar: str = "",
 ) -> str:
     """One page. ``root`` is the relative path back to the site root; ``footer`` its links."""
     blog = "./" if root == "../" else root[3:]
     stylesheets = "\n".join(
         f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">'
         for name in ASSETS
+    )
+    main = (
+        f'<main id="main" class="writing-layout">\n{sidebar}\n'
+        f'<div class="writing">\n{body}\n</div>\n</main>'
+        if sidebar
+        else f'<main id="main" class="writing">\n{body}\n</main>'
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -434,9 +449,7 @@ def _document(
 </head>
 <body class="writing-page">
 {render_header(root, blog)}
-<main id="main" class="writing">
-{body}
-</main>
+{main}
 <footer>{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
 </body>
 </html>
@@ -444,11 +457,40 @@ def _document(
 
 
 def byline(post: dict[str, Any]) -> str:
-    date_ = html.escape(post["date"])
-    return f'<p class="byline">{html.escape(post["author"])} · <time datetime="{date_}">{date_}</time></p>'
+    raw = post["date"]
+    display, _, time_ = raw.partition(" ")
+    label = f"{display} · {time_}" if time_ else display
+    iso = raw.replace(" ", "T") if time_ else raw
+    escaped = html.escape(label)
+    return (
+        f'<p class="byline">{html.escape(post["author"])} · '
+        f'<time datetime="{html.escape(iso)}">{escaped}</time></p>'
+    )
 
 
-def render_post_page(post: dict[str, Any], versions: dict[str, str]) -> str:
+def post_nav(posts: list[dict[str, Any]], current_slug: str) -> str:
+    """The left column on a post page: every post, newest first, the open one marked."""
+    items = "\n".join(
+        '<li class="'
+        + ("current" if post["slug"] == current_slug else "")
+        + '"><a href="../'
+        + post["slug"]
+        + '/"'
+        + (' aria-current="page"' if post["slug"] == current_slug else "")
+        + f">{html.escape(post['title'])}</a>"
+        + f'<span class="post-nav-date">{html.escape(post["date"][:10])}</span></li>'
+        for post in posts
+    )
+    return (
+        '<aside class="post-nav" aria-label="All posts">\n'
+        '<p class="post-nav-heading">All writing</p>\n'
+        f'<ol class="post-nav-list">\n{items}\n</ol>\n</aside>'
+    )
+
+
+def render_post_page(
+    post: dict[str, Any], posts: list[dict[str, Any]], versions: dict[str, str]
+) -> str:
     body = (
         '<p class="eyebrow">Editorial writing · not a catalog record</p>\n'
         f"<h1>{html.escape(post['title'])}</h1>\n"
@@ -465,6 +507,7 @@ def render_post_page(post: dict[str, Any], versions: dict[str, str]) -> str:
         "../../",
         footer,
         versions,
+        sidebar=post_nav(posts, post["slug"]),
     )
 
 
@@ -496,7 +539,7 @@ def build_pages(root: Path = ROOT) -> dict[str, str]:
     posts = load_posts(root)
     versions = asset_versions(root)
     pages = {
-        f"{POSTS}/{post['slug']}/index.html": render_post_page(post, versions)
+        f"{POSTS}/{post['slug']}/index.html": render_post_page(post, posts, versions)
         for post in posts
     }
     pages[f"{POSTS}/index.html"] = render_index_page(posts, versions)
@@ -506,9 +549,9 @@ def build_pages(root: Path = ROOT) -> dict[str, str]:
 def blog_sitemap_entries(root: Path = ROOT) -> list[tuple[str, str]]:
     """(url, lastmod) for the index and every post, for the sitemap owner to fold in."""
     posts = load_posts(root)
-    entries = [(post_url(post["slug"]), post["date"]) for post in posts]
+    entries = [(post_url(post["slug"]), post["date"][:10]) for post in posts]
     if posts:
-        entries.insert(0, (f"{SITE_URL}{POSTS}/", posts[0]["date"]))
+        entries.insert(0, (f"{SITE_URL}{POSTS}/", posts[0]["date"][:10]))
     return entries
 
 

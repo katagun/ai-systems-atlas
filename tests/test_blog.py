@@ -203,6 +203,51 @@ class BuildTests(PostFixture):
         posts = build_blog.load_posts(self.two_posts())
         self.assertEqual(["newer", "older"], [post["slug"] for post in posts])
 
+    def test_same_day_posts_order_by_stated_time_not_slug(self) -> None:
+        root = self.root_with(
+            **{
+                "2026-09-05-early.md": POST.replace("A Post", "Early").replace(
+                    "2026-09-05", "2026-09-05 08:15"
+                ),
+                "2026-09-05-late.md": POST.replace("A Post", "Late").replace(
+                    "2026-09-05", "2026-09-05 20:40"
+                ),
+            }
+        )
+        posts = build_blog.load_posts(root)
+        self.assertEqual(["late", "early"], [post["slug"] for post in posts])
+
+    def test_a_same_day_post_renders_its_time_in_the_byline(self) -> None:
+        root = self.root_with(
+            **{
+                "2026-09-05-early.md": POST.replace("A Post", "Early").replace(
+                    "2026-09-05", "2026-09-05 08:15"
+                )
+            }
+        )
+        page = build_blog.build_pages(root)["blog/early/index.html"]
+        self.assertIn(
+            '<time datetime="2026-09-05T08:15">2026-09-05 · 08:15</time>', page
+        )
+
+    def test_every_post_page_carries_a_nav_of_all_posts_marking_the_open_one(
+        self,
+    ) -> None:
+        pages = build_blog.build_pages(self.two_posts())
+        newer = pages["blog/newer/index.html"]
+        self.assertIn('class="post-nav"', newer)
+        self.assertIn('href="../older/"', newer)
+        self.assertIn('aria-current="page"', newer)
+        self.assertIn("Newer", newer)
+        older = pages["blog/older/index.html"]
+        self.assertIn('href="../newer/"', older)
+        self.assertIn('aria-current="page"', older)
+        self.assertIn("Older", older)
+
+    def test_the_index_page_has_no_post_nav(self) -> None:
+        index = build_blog.build_pages(self.two_posts())["blog/index.html"]
+        self.assertNotIn("post-nav", index)
+
     def test_every_post_gets_a_page_and_an_index_exists(self) -> None:
         pages = build_blog.build_pages(self.two_posts())
         self.assertIn("blog/index.html", pages)

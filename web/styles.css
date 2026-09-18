@@ -1261,7 +1261,17 @@ footer #data-date, footer .footer-meta {
 .record-link-status { color: var(--muted); font: .72rem var(--font-mono); }
 
 /* Blog pages share this shell and its tokens; they trade the catalog grid for a reading measure. */
-.writing-page main, .writing-page footer { width: min(46rem, calc(100% - 3rem)); }
+.writing-page footer { width: min(46rem, calc(100% - 3rem)); }
+.writing-page main { width: min(72rem, calc(100% - 3rem)); }
+.writing-layout { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 46rem); gap: clamp(1.5rem, 3vw, 3rem); justify-content: center; align-items: start; }
+.post-nav { position: sticky; top: 1.2rem; padding-top: clamp(2.6rem, 5vw, 4.5rem); }
+.post-nav-heading { margin: 0 0 .9rem; font: 600 .68rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.post-nav-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
+.post-nav-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .6rem; }
+.post-nav-list a { padding: .35rem .5rem; border-radius: var(--radius-chip); color: var(--text); text-decoration: none; font-size: .95rem; line-height: 1.35; }
+.post-nav-list a:hover { background: var(--chip-bg); color: var(--cyan); }
+.post-nav-list li.current a { background: var(--chip-bg); color: var(--cyan); }
+.post-nav-list .post-nav-date { color: var(--muted); font: .68rem var(--font-mono); }
 .writing { padding: clamp(2.6rem, 5vw, 4.5rem) 0 3rem; }
 .writing h1 { max-width: none; margin: 0 0 1rem; font-size: clamp(2.3rem, 5vw, 3.6rem); letter-spacing: -.045em; line-height: 1; text-wrap: balance; }
 .writing .lead { margin: 0 0 1.1rem; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.6; text-wrap: pretty; }
@@ -1289,4 +1299,7 @@ footer #data-date, footer .footer-meta {
 .footer-meta a { color: inherit; }
 @media (max-width: 720px) {
   .writing-page main, .writing-page footer { width: min(100% - 1.5rem, 46rem); }
+  .writing-layout { grid-template-columns: 1fr; }
+  .post-nav { position: static; padding-top: 0; }
+  .post-nav-list { grid-template-columns: 1fr; }
 }
