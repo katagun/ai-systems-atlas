@@ -2969,6 +2969,403 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-bytedance-seed-seed-1-6",
+      "source_id": "bytedance-seed/seed-1-6",
+      "name": "Seed 1.6",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/blog/introduction-to-techniques-used-in-seed1-6",
+      "description": "ByteDance's 230-billion-parameter Mixture-of-Experts release with 23B active parameters and 256K context, served as the doubao-seed-1-6 API snapshots with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 1.6",
+        "description": "ByteDance Seed model for long-context reasoning, instruction following, and tool-assisted tasks",
+        "family": "seed",
+        "release_date": "2025-10-15",
+        "last_updated": "2025-10-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of doubao-seed-1-6 snapshots with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the June 2025 Seed 1.6 line served as dated doubao-seed-1-6 API snapshots (250615, 251015) on Volcano Engine and BytePlus ModelArk. The Flash, Vision, and 1.8 lines, thinking variants, and both platforms themselves are separate boundaries.",
+      "strengths": [
+        "Dated API snapshots with a signed Seed technical report and 256K context",
+        "Two first-party serving platforms: Volcano Engine and BytePlus ModelArk"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 2,
+        "deployment_portability": 1,
+        "serving_reach": 8,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 1.6 techniques blog (June 2025)",
+          "url": "https://seed.bytedance.com/blog/introduction-to-techniques-used-in-seed1-6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Volcano Engine model list with the dated seed-1-6 snapshots",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-1-6.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-1-6-flash",
+      "source_id": "bytedance-seed/seed-1-6-flash",
+      "name": "Seed 1.6 Flash",
+      "developer": "ByteDance Seed",
+      "url": "https://www.volcengine.com/docs/82379/1330310",
+      "description": "ByteDance's speed-optimized Seed 1.6 line served as dated doubao-seed-1-6-flash API snapshots with 256K context and no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 1.6 Flash",
+        "description": "Low-latency ByteDance Seed model for high-throughput chat, extraction, and lightweight tool use",
+        "family": "seed",
+        "release_date": "2025-08-28",
+        "last_updated": "2025-08-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of doubao-seed-1-6-flash snapshots with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the Seed 1.6 Flash line served as dated doubao-seed-1-6-flash API snapshots (250615, 250828) on Volcano Engine. The base 1.6, Vision, and 1.8 lines and the platform itself are separate boundaries.",
+      "strengths": [
+        "Two dated API snapshots document the line as a distinct speed tier rather than an alias",
+        "256K context with tool calling and structured output on first-party endpoints"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 2,
+        "deployment_portability": 1,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 3.9
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Volcano Engine model list with the dated flash snapshots",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-1-6-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-1-6-vision",
+      "source_id": "bytedance-seed/seed-1-6-vision",
+      "name": "Seed 1.6 Vision",
+      "developer": "ByteDance Seed",
+      "url": "https://www.volcengine.com/docs/82379/1330310",
+      "description": "ByteDance's vision-specialized Seed 1.6 line for multimodal understanding and GUI tasks, served as dated API snapshots with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 1.6 Vision",
+        "description": "ByteDance Seed multimodal model for image understanding, visual reasoning, and tool-assisted tasks",
+        "family": "seed",
+        "release_date": "2025-08-15",
+        "last_updated": "2025-08-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of doubao-seed-1-6-vision snapshots with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the Seed 1.6 Vision line served as the dated doubao-seed-1-6-vision-250815 API snapshot on Volcano Engine. The base 1.6, Flash, and 1.8 lines and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dated API snapshot documents the line as a distinct vision specialization with GUI task handling",
+        "Multimodal understanding across text, image, and video inputs"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 2,
+        "deployment_portability": 1,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 3.9
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Volcano Engine model list with the dated vision snapshot",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-1-6-vision.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-1-8",
+      "source_id": "bytedance-seed/seed-1-8",
+      "name": "Seed 1.8",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/blog/official-release-of-seed1-8-a-generalized-agentic-model",
+      "description": "ByteDance's December 2025 generalized agentic release with text and image input, served as the doubao-seed-1-8-251228 API snapshot with cookbook code and no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 1.8",
+        "description": "ByteDance Seed model for multimodal reasoning, long-context analysis, and agent workflows",
+        "family": "seed",
+        "release_date": "2025-12-28",
+        "last_updated": "2025-12-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model-weight license exists: no weights were released, and the cookbook repository's Apache-2.0 file covers code samples only. Use of the model is governed by platform API terms, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of doubao-seed-1-8-251228 with no published model-weight license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the December 2025 Seed 1.8 line served as the doubao-seed-1-8-251228 API snapshot on Volcano Engine, with the Apache-2.0 cookbook repository as its only published artifact. Earlier Seed lines and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dated launch announcement pins the December 2025 release with text and image input",
+        "Apache-2.0 cookbook repository documents the release, pinned to its init commit"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No model-weight license of any kind; the Apache file covers code samples only"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 4,
+        "deployment_portability": 3,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 5.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 1.8 launch announcement (December 2025)",
+          "url": "https://seed.bytedance.com/blog/official-release-of-seed1-8-a-generalized-agentic-model",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Volcano Engine model list with the dated 1.8 snapshot",
+          "url": "https://www.volcengine.com/docs/82379/1330310",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-1-8.toml",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Apache-2.0 cookbook repository (code samples only, pinned init commit)",
+          "url": "https://github.com/ByteDance-Seed/Seed-1.8",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-cohere-command-a-03-2025",
       "source_id": "cohere/command-a-03-2025",
       "name": "Command A",

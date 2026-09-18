@@ -379,6 +379,18 @@
       "disposition": "excluded",
       "reason": "API-only limited-time experience mode of the reviewed MiMo-V2.5-Pro line with no weight repository, license, or fixed release identity of its own; the underlying artifact is the FP4-DFlash checkpoint.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "bytedance-seed/seed-character",
+      "disposition": "excluded",
+      "reason": "Undated role-model alias resolving to dated snapshots (doubao-seed-character-251128, 260628) with no weight repository or fixed identity of its own.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "bytedance-seed/seed-evolving",
+      "disposition": "excluded",
+      "reason": "Rolling weekly-iteration API tier served under one model ID that always resolves to the latest version, with no weight repository, license, or fixed release identity of its own.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
