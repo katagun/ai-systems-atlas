@@ -7307,6 +7307,54 @@
         "documentation_transparency": 8.5,
         "overall": 6.36
       },
+      "trust": {
+        "verified_at": "2026-09-18",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism by which a client verifies that a response arrived unaltered from the upstream model appears in the API reference or the security documentation: the X-Orca-* response headers report routing decisions (\"X-Orca-* headers that tell you how your request was routed\"), and the Ed25519-signed compliance reports are audit artifacts generated on request, not per-response verification.",
+            "url": "https://docs.orcarouter.ai/routing/response-headers.md",
+            "scope": "OrcaRouter response-headers documentation, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy names the parties that receive request plaintext: the subprocessor table lists \"Upstream LLM providers — OpenAI, Anthropic, Google, Together AI, Groq, and others — Processing prompts you route to them\". The data-handling guide states: \"When you send a request, we forward it to the upstream provider (OpenAI, Anthropic, Google, etc.) under their own terms and privacy policy.\"",
+            "url": "https://www.orcarouter.ai/privacy-policy",
+            "scope": "OrcaRouter privacy policy, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "credential_handling": {
+            "status": "documented_yes",
+            "note": "The BYOK guide states customer-supplied provider keys are never shown again after saving (\"The raw secret is never returned after you save it. The console only ever shows a masked label.\") and that a stored secret can fail only by becoming undecryptable, the documented trigger for auto-disabling a key: \"the stored secret can no longer be decrypted\". The console states the storage directly: \"Keys are encrypted at rest and only decrypted in memory at request time.\"",
+            "url": "https://docs.orcarouter.ai/operations/byok.md",
+            "scope": "OrcaRouter bring-your-own-key guide, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The session-affinity guide states what the provider's prompt cache is keyed on — \"the same upstream deployment and API key\" — and that conversation pins \"never cross[ ] accounts. Two accounts sending the same head get separate pins.\" BYOK traffic therefore caches under the customer's own provider account, but no page states whose upstream credentials platform-credentialed traffic runs under, so whether provider caches pool across customers on shared credentials is not established.",
+            "url": "https://docs.orcarouter.ai/routing/session-affinity.md",
+            "scope": "OrcaRouter session-affinity guide, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@orcarouter.ai\"), a policy link (\"Policy: https://www.orcarouter.ai/trust#disclosure\"), and an expiry in 2027; the trust centre's Report a vulnerability section states: \"If you have found a security issue in OrcaRouter, we want to hear about it.\"",
+            "url": "https://www.orcarouter.ai/.well-known/security.txt",
+            "scope": "OrcaRouter security.txt, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The trust centre's Certifications and commitments section names SOC 2 (\"Independent audit of our security, availability and confidentiality controls against the AICPA Trust Services Criteria.\", pill \"Type II report\") and ISO (\"Certified information security management system covering the platform and the organisation that operates it.\", pill \"Certified\") for OrcaRouter, with Auditor, Period, and Valid-until fields. The reports and certificates are available to customers and prospects under NDA, so the attestation is recorded as an operator claim.",
+            "url": "https://www.orcarouter.ai/trust",
+            "scope": "OrcaRouter trust centre, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          }
+        },
+        "findings": []
+      },
       "terms": {
         "kind": "web_terms",
         "label": "OrcaRouter Terms of Service",

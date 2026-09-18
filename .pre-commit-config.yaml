@@ -82,13 +82,14 @@ repos:
       # sitemap), machine files (locks, vendored deps), and transient or
       # upstream-imported queues are excluded: they mirror checked sources.
       # The ignore list holds product names and house spellings (Slite, Asure,
-      # the peacefulcoexistance wordmark fragment nce); real typos get fixed.
+      # the peacefulcoexistance wordmark fragment nce, and coexistance itself
+      # in prose about the brand); real typos get fixed.
       # assertin covers unittest's assertIn API used across the test suite.
       - id: codespell
         language: system
         name: codespell typo scan
         entry: uvx codespell@2.3.0
-        args: [-L, "slite,asure,unparseable,nce,newyorker,commitable,ake,assertin,assertIn"]
+        args: [-L, "slite,asure,unparseable,nce,coexistance,newyorker,commitable,ake,assertin,assertIn"]
         types: [text]
         exclude: |
           (?x)^(
