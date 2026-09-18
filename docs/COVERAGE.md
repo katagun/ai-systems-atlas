@@ -191,4 +191,6 @@ Choose small batches with one coherent boundary question:
 
 60. **Model queue batch sixteen — the Mistral dated flagships:** six publishes and one new licence identifier. Large 2411 and Ministral 8B carry the research-only Mistral Research License; Large 2512 and the two Smalls are card-only Apache-2.0; Medium 2505 is API-only with no weights license at all. The reviewed Models collection moves from one hundred twelve to one hundred eighteen and the queue from 209 to 203. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
 
+61. **Model queue batch seventeen — Codestral, Devstral, and Nemo:** four publishes and one new licence identifier. Codestral carries the non-production MNPL with its license file deleted from the repo; Devstral 2 a Modified MIT file; Nemo a four-surface declared Apache-2.0; Devstral Medium is API-only with no weights at all. The reviewed Models collection moves from one hundred eighteen to one hundred twenty-two and the queue from 203 to 199. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
+
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

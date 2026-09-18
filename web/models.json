@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-16",
+  "verified_at": "2026-09-18",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -7097,6 +7097,323 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-mistral-codestral-22b-v0-1",
+      "source_id": "mistral/codestral-22b-v0.1",
+      "name": "Codestral-22B-v0.1",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
+      "description": "Mistral AI's 22-billion-parameter coding release with fill-in-the-middle support, published as ungated weights under the non-production MNPL with a now-retired managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Codestral-22B-v0.1",
+        "description": "Open Mistral code model for fill-in-the-middle and 80+ programming languages",
+        "family": "codestral",
+        "release_date": "2024-05-29",
+        "last_updated": "2024-05-29",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": "Mistral AI Non-Production License",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Mistral-Non-Production-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repository; the file was deleted in May 2024, so the governing terms are the Mistral AI Non-Production License linked from the model card, news post, and docs page. The MNPL limits all use to testing, research, personal, or evaluation purposes in non-production environments and bars commercial supply, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mistral-Non-Production-License",
+          "scope": "Codestral-22B-v0.1 weights and derivatives, linked from the model card, news post, and docs page",
+          "kind": "web_terms",
+          "url": "https://mistral.ai/static/licenses/MNPL-0.1.md",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Codestral-22B-v0.1 weight release of May 2024 at Hugging Face commit 28b1c1a51dabe9d86ca8c41420ada1984632498f (last modified 2025-07-24). Its codestral-2405 API line retired on June 16, 2025. Later Codestral lines, other Mistral code models, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 22B coding checkpoint with tokenizer, params, and fill-in-the-middle support",
+        "Release, retirement, and replacement all dated across first-party card, news, and docs"
+      ],
+      "tradeoffs": [
+        "Non-production-only grant bars any commercial use without a separate Mistral license",
+        "The managed API is retired, leaving self-operation as the supported path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 6.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Codestral docs: release date, retirement, and MNPL badge",
+          "url": "https://docs.mistral.ai/models/codestral-24-05",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Codestral launch announcement (May 2024)",
+          "url": "https://mistral.ai/news/codestral",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/codestral-22b-v0.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-devstral-2512",
+      "source_id": "mistral/devstral-2512",
+      "name": "Devstral 2",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512",
+      "description": "Mistral AI's 123-billion-parameter dense Devstral 2 coding release, published as ungated weights under a Modified MIT license with a managed API now deprecated toward Medium 3.5.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Devstral 2",
+        "description": "Mistral's coding-agent model for repository work, terminal tasks, and software fixes",
+        "family": "devstral",
+        "release_date": "2025-12-09",
+        "last_updated": "2025-12-09",
+        "knowledge_cutoff": "2025-12",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Mistral-Modified-MIT"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the Modified MIT text with a $20-million monthly-revenue gate on exercising any rights, matching the reviewed Medium 3.5 terms. Commercial users above that line need a separate Mistral commercial license or the hosted service, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mistral-Modified-MIT",
+          "scope": "Devstral-2-123B-Instruct-2512 model weights and derivatives beside the weights",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512/blob/1613bf01adb5e1c6fdc196b46e6b173eae75eb4a/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Devstral-2-123B-Instruct-2512 weight release of December 2025 at Hugging Face commit 1613bf01adb5e1c6fdc196b46e6b173eae75eb4a, together with the devstral-2512 API model, deprecated with migration directed at Mistral Medium 3.5. The Small 2 sibling line, Devstral Medium, other Mistral lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 123B dense checkpoint carrying its Modified MIT license file beside the weights",
+        "First-party API with a 256K context window and dated deprecation plus replacement"
+      ],
+      "tradeoffs": [
+        "The revenue gate forces larger commercial users onto a separate license or the hosted service",
+        "123B dense parameters need datacenter-class multi-GPU serving"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 4,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 6.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Devstral 2 docs: release date, API ID, and deprecation",
+          "url": "https://docs.mistral.ai/models/devstral-2-25-12",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/devstral-2512.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-devstral-medium-2507",
+      "source_id": "mistral/devstral-medium-2507",
+      "name": "Devstral Medium",
+      "developer": "Mistral AI",
+      "url": "https://docs.mistral.ai/models/devstral-medium-1-0-25-07",
+      "description": "Mistral AI's July 2025 Devstral Medium enterprise coding line, served as the devstral-medium-2507 API model with no public weights and no weights license.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Devstral Medium",
+        "description": "Mistral coding agent model for repository tasks and software engineering workflows",
+        "family": "devstral",
+        "release_date": "2025-07-10",
+        "last_updated": "2025-07-10",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No public weights license exists for this API-only line: no weight repository is published under any Mistral ID, and the docs page badges it Premier commercial. Use is governed by Mistral commercial and API terms, so the release is proprietary.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only commercial distribution of devstral-medium-2507 with no public weights license",
+          "kind": "web_terms",
+          "url": "https://docs.mistral.ai/models/devstral-medium-1-0-25-07",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the July 2025 Devstral Medium line served as the devstral-medium-2507 API model, deprecated with migration away from the Premier tier. No weight repository exists for this line. The Devstral 2 and Small 2 weight lines, other Mistral lines, and the Mistral API platform itself are separate boundaries.",
+      "strengths": [
+        "First-party docs pin the July 2025 release with a deprecation date and Premier commercial terms",
+        "Managed API plus Mistral Code and finetuning surfaces for enterprise deployment"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; commercial terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 2,
+        "deployment_portability": 4,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.98
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Devstral Medium docs: release date, API ID, and deprecation",
+          "url": "https://docs.mistral.ai/models/devstral-medium-1-0-25-07",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Devstral launch announcement (July 2025)",
+          "url": "https://mistral.ai/news/devstral-2507/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/devstral-medium-2507.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-mistral-devstral-small-2507",
       "source_id": "mistral/devstral-small-2507",
       "name": "Devstral Small",
@@ -7846,6 +8163,125 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-mistral-mistral-nemo",
+      "source_id": "mistral/mistral-nemo",
+      "name": "Mistral Nemo",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407",
+      "description": "Mistral AI and NVIDIA's 12-billion-parameter multilingual release, published as ungated Apache-2.0 weights with managed API and NIM hosting, now deprecated toward Ministral 3 8B.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Mistral Nemo",
+        "description": "Efficient Mistral-NVIDIA open model for multilingual chat and local deployment",
+        "family": "mistral-nemo",
+        "release_date": "2024-07-01",
+        "last_updated": "2024-07-01",
+        "knowledge_cutoff": "2024-07",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "No LICENSE file ships in the weight repositories; the launch announcement, model card, docs badge, and NVIDIA NIM page concordantly declare the Apache 2.0 license with no use restrictions attached — the same card-only pattern as the reviewed Small 4 record.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Mistral Nemo weights as declared on the official model card, launch announcement, docs badge, and NIM page, pointing at the standard Apache-2.0 text",
+          "kind": "web_terms",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the July 2024 Mistral Nemo 12B (24.07) release across its base and instruct weight repositories at commits a4477a2f977929a969745b69bbd62e03043551a5 and 04d8a90549d23fc6bd7f642064003592df51e9b3 (both last modified 2025-07-28), together with the open-mistral-nemo-2407 API model and its NIM container. The FP8 quantization, NVIDIA's NeMo-format repackaging, and later Ministral lines remain separate boundaries.",
+      "strengths": [
+        "Ungated 12B base and instruct checkpoints under a four-surface declared Apache-2.0 grant",
+        "First-party API plus exact-model NVIDIA NIM hosting with a 128K context window"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on announcement, card, docs, and host declarations",
+        "The managed API is deprecated and retired with migration directed at Ministral 3 8B"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Nemo launch announcement (July 2024)",
+          "url": "https://mistral.ai/news/mistral-nemo/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Nemo docs: API ID, deprecation, and replacement",
+          "url": "https://docs.mistral.ai/models/mistral-nemo-12b-24-07",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA NIM page for the exact mistral-nemo-12b-instruct model",
+          "url": "https://build.nvidia.com/nv-mistralai/mistral-nemo-12b-instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/mistral-nemo.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-mistral-mistral-small-3-1-24b-instruct-2503",
