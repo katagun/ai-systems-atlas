@@ -8,6 +8,7 @@ model classification, licence conclusion, score, prose, evidence, or editorial
 verification date. Published model records are removed from the candidate view
 but otherwise untouched.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -58,7 +59,9 @@ def load_json(path: Path, default: dict[str, Any]) -> dict[str, Any]:
 
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def get_json(url: str, token: str | None) -> tuple[Any, bytes]:
@@ -82,7 +85,9 @@ def get_json(url: str, token: str | None) -> tuple[Any, bytes]:
     if token and is_api_url:
         headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(request, timeout=30) as response:
+    # Bandit B310: url is restricted to the fixed api.github.com /
+    # raw.githubusercontent.com allowlist validated above.
+    with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
         body = response.read(MAX_SOURCE_BYTES + 1)
         if len(body) > MAX_SOURCE_BYTES:
             raise ValueError("models.dev source exceeds the configured size limit")
@@ -102,7 +107,9 @@ def get_bytes(url: str, token: str | None) -> bytes:
     if token:
         headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(request, timeout=30) as response:
+    # Bandit B310: url is restricted to the fixed codeload.github.com
+    # archive allowlist validated above.
+    with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
         body = response.read(MAX_SOURCE_BYTES + 1)
         if len(body) > MAX_SOURCE_BYTES:
             raise ValueError("models.dev source exceeds the configured size limit")
@@ -116,20 +123,32 @@ def catalog_from_archive(body: bytes, commit: str) -> dict[str, dict[str, Any]]:
     try:
         with tarfile.open(fileobj=io.BytesIO(body), mode="r:gz") as archive:
             for member in archive.getmembers():
-                if not member.isfile() or not member.name.startswith(prefix) or not member.name.endswith(".toml"):
+                if (
+                    not member.isfile()
+                    or not member.name.startswith(prefix)
+                    or not member.name.endswith(".toml")
+                ):
                     continue
                 if member.size > 256 * 1024:
-                    raise ValueError(f"models.dev model metadata file is unexpectedly large: {member.name}")
-                relative = member.name[len(prefix):-5]
+                    raise ValueError(
+                        f"models.dev model metadata file is unexpectedly large: {member.name}"
+                    )
+                relative = member.name[len(prefix) : -5]
                 if not SOURCE_ID.fullmatch(relative) or relative in catalog:
-                    raise ValueError(f"models.dev archive contains an invalid or duplicate model path: {relative!r}")
+                    raise ValueError(
+                        f"models.dev archive contains an invalid or duplicate model path: {relative!r}"
+                    )
                 extracted = archive.extractfile(member)
                 if extracted is None:
-                    raise ValueError(f"models.dev archive member could not be read: {member.name}")
+                    raise ValueError(
+                        f"models.dev archive member could not be read: {member.name}"
+                    )
                 try:
                     record = tomllib.loads(extracted.read().decode("utf-8"))
                 except (UnicodeDecodeError, tomllib.TOMLDecodeError) as error:
-                    raise ValueError(f"models.dev metadata is invalid TOML: {member.name}") from error
+                    raise ValueError(
+                        f"models.dev metadata is invalid TOML: {member.name}"
+                    ) from error
                 record["id"] = relative
                 catalog[relative] = record
     except tarfile.TarError as error:
@@ -160,17 +179,33 @@ def optional_bool(value: object, field: str, source_id: str) -> bool | None:
     return value
 
 
-def clean_links(items: object, source_id: str, *, weights: bool = False) -> list[dict[str, str]]:
+def clean_links(
+    items: object, source_id: str, *, weights: bool = False
+) -> list[dict[str, str]]:
     if items is None:
         return []
     if not isinstance(items, list):
-        raise ValueError(f"{source_id}: {'weights' if weights else 'links'} must be a list")
+        raise ValueError(
+            f"{source_id}: {'weights' if weights else 'links'} must be a list"
+        )
     result: list[dict[str, str]] = []
-    allowed = {"label", "url", "format", "quantization"} if weights else {"label", "url", "type"}
+    allowed = (
+        {"label", "url", "format", "quantization"}
+        if weights
+        else {"label", "url", "type"}
+    )
     for item in items:
-        if not isinstance(item, dict) or not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+        if (
+            not isinstance(item, dict)
+            or not isinstance(item.get("url"), str)
+            or not item["url"].startswith("https://")
+        ):
             raise ValueError(f"{source_id}: source links require HTTPS URLs")
-        cleaned = {key: value for key, value in item.items() if key in allowed and isinstance(value, str)}
+        cleaned = {
+            key: value
+            for key, value in item.items()
+            if key in allowed and isinstance(value, str)
+        }
         result.append(cleaned)
     return result
 
@@ -182,8 +217,12 @@ def source_metadata(source_id: str, record: dict[str, Any]) -> dict[str, Any]:
     description = record.get("description")
     if not isinstance(name, str) or not name.strip():
         raise ValueError(f"{source_id}: name is required")
-    if description is not None and (not isinstance(description, str) or not description.strip()):
-        raise ValueError(f"{source_id}: description must be a non-empty string when present")
+    if description is not None and (
+        not isinstance(description, str) or not description.strip()
+    ):
+        raise ValueError(
+            f"{source_id}: description must be a non-empty string when present"
+        )
     modalities = record.get("modalities")
     if not isinstance(modalities, dict):
         raise ValueError(f"{source_id}: modalities must be an object")
@@ -199,8 +238,12 @@ def source_metadata(source_id: str, record: dict[str, Any]) -> dict[str, Any]:
     cleaned_limits: dict[str, int | None] = {}
     for field in ("context", "input", "output"):
         value = limits.get(field)
-        if value is not None and (not isinstance(value, int) or isinstance(value, bool) or value < 0):
-            raise ValueError(f"{source_id}: limit.{field} must be a non-negative integer")
+        if value is not None and (
+            not isinstance(value, int) or isinstance(value, bool) or value < 0
+        ):
+            raise ValueError(
+                f"{source_id}: limit.{field} must be a non-negative integer"
+            )
         cleaned_limits[field] = value
     family = record.get("family")
     license_name = record.get("license")
@@ -212,16 +255,30 @@ def source_metadata(source_id: str, record: dict[str, Any]) -> dict[str, Any]:
         "name": name,
         "description": description,
         "family": family,
-        "release_date": optional_date(record.get("release_date"), "release_date", source_id),
-        "last_updated": optional_date(record.get("last_updated"), "last_updated", source_id),
-        "knowledge_cutoff": optional_date(record.get("knowledge"), "knowledge", source_id),
+        "release_date": optional_date(
+            record.get("release_date"), "release_date", source_id
+        ),
+        "last_updated": optional_date(
+            record.get("last_updated"), "last_updated", source_id
+        ),
+        "knowledge_cutoff": optional_date(
+            record.get("knowledge"), "knowledge", source_id
+        ),
         "modalities": {"input": inputs, "output": outputs},
         "capabilities": {
             field: optional_bool(record.get(field), field, source_id)
-            for field in ("attachment", "reasoning", "tool_call", "structured_output", "temperature")
+            for field in (
+                "attachment",
+                "reasoning",
+                "tool_call",
+                "structured_output",
+                "temperature",
+            )
         },
         "limits": cleaned_limits,
-        "reported_open_weights": optional_bool(record.get("open_weights"), "open_weights", source_id),
+        "reported_open_weights": optional_bool(
+            record.get("open_weights"), "open_weights", source_id
+        ),
         "reported_license": license_name,
         "links": clean_links(record.get("links"), source_id),
         "weights": clean_links(record.get("weights"), source_id, weights=True),
@@ -240,7 +297,9 @@ def normalize_catalog(
     if not isinstance(catalog, dict):
         raise ValueError("models.dev catalog must be an object keyed by source id")
     if not minimum_records <= len(catalog) <= MAX_SOURCE_RECORDS:
-        raise ValueError("models.dev source record count is outside the fail-closed bounds")
+        raise ValueError(
+            "models.dev source record count is outside the fail-closed bounds"
+        )
     previous = {
         item.get("source_id"): item
         for item in (existing or {}).get("candidates", [])
@@ -252,36 +311,46 @@ def normalize_catalog(
     ids: dict[str, str] = {}
     eligible = 0
     for source_id, record in catalog.items():
-        if not isinstance(source_id, str) or not SOURCE_ID.fullmatch(source_id) or not isinstance(record, dict):
-            raise ValueError("models.dev records require path-style ids and object values")
+        if (
+            not isinstance(source_id, str)
+            or not SOURCE_ID.fullmatch(source_id)
+            or not isinstance(record, dict)
+        ):
+            raise ValueError(
+                "models.dev records require path-style ids and object values"
+            )
         metadata = source_metadata(source_id, record)
         if "text" not in metadata["modalities"]["output"]:
             continue
         eligible += 1
         record_id = stable_model_id(source_id)
         if record_id in ids and ids[record_id] != source_id:
-            raise ValueError(f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}")
+            raise ValueError(
+                f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}"
+            )
         ids[record_id] = source_id
         if source_id in published_source_ids:
             continue
         if source_id in dispositioned_source_ids:
             continue
         prior = previous.get(source_id, {})
-        candidates.append({
-            "id": record_id,
-            "source_id": source_id,
-            "source_metadata": metadata,
-            "status": "provisional",
-            "discovered_at": prior.get("discovered_at", observed_at),
-            "last_seen_at": observed_at,
-            "review_required": [
-                "official_identity",
-                "model_boundary",
-                "license_evidence",
-                "source_model",
-                "model_access_score",
-            ],
-        })
+        candidates.append(
+            {
+                "id": record_id,
+                "source_id": source_id,
+                "source_metadata": metadata,
+                "status": "provisional",
+                "discovered_at": prior.get("discovered_at", observed_at),
+                "last_seen_at": observed_at,
+                "review_required": [
+                    "official_identity",
+                    "model_boundary",
+                    "license_evidence",
+                    "source_model",
+                    "model_access_score",
+                ],
+            }
+        )
     candidates.sort(key=lambda item: item["source_id"])
     return candidates, eligible
 
@@ -295,21 +364,33 @@ def normalize_source_catalog(
     if not isinstance(catalog, dict):
         raise ValueError("models.dev catalog must be an object keyed by source id")
     if not minimum_records <= len(catalog) <= MAX_SOURCE_RECORDS:
-        raise ValueError("models.dev source record count is outside the fail-closed bounds")
+        raise ValueError(
+            "models.dev source record count is outside the fail-closed bounds"
+        )
     records: list[dict[str, Any]] = []
     ids: dict[str, str] = {}
     for source_id, record in catalog.items():
-        if not isinstance(source_id, str) or not SOURCE_ID.fullmatch(source_id) or not isinstance(record, dict):
-            raise ValueError("models.dev records require path-style ids and object values")
+        if (
+            not isinstance(source_id, str)
+            or not SOURCE_ID.fullmatch(source_id)
+            or not isinstance(record, dict)
+        ):
+            raise ValueError(
+                "models.dev records require path-style ids and object values"
+            )
         record_id = stable_model_id(source_id)
         if record_id in ids and ids[record_id] != source_id:
-            raise ValueError(f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}")
+            raise ValueError(
+                f"models.dev ids {ids[record_id]!r} and {source_id!r} collide as {record_id!r}"
+            )
         ids[record_id] = source_id
-        records.append({
-            "id": record_id,
-            "source_id": source_id,
-            "source_metadata": source_metadata(source_id, record),
-        })
+        records.append(
+            {
+                "id": record_id,
+                "source_id": source_id,
+                "source_metadata": source_metadata(source_id, record),
+            }
+        )
     records.sort(key=lambda item: item["source_id"])
     return records
 
@@ -365,8 +446,13 @@ def build_document(
         minimum_records=minimum_records,
     )
     previous_count = existing.get("eligible_record_count")
-    if isinstance(previous_count, int) and eligible < previous_count * MIN_PREVIOUS_RATIO:
-        raise ValueError("models.dev eligible record count shrank beyond the fail-closed threshold")
+    if (
+        isinstance(previous_count, int)
+        and eligible < previous_count * MIN_PREVIOUS_RATIO
+    ):
+        raise ValueError(
+            "models.dev eligible record count shrank beyond the fail-closed threshold"
+        )
     return {
         "version": "1.0",
         "updated_at": observed_at,
@@ -388,7 +474,9 @@ def run(
     commit_document, _ = getter(
         f"https://api.github.com/repos/{UPSTREAM_REPO}/commits/{UPSTREAM_REF}", token
     )
-    if not isinstance(commit_document, dict) or not re.fullmatch(r"[0-9a-f]{40}", str(commit_document.get("sha", ""))):
+    if not isinstance(commit_document, dict) or not re.fullmatch(
+        r"[0-9a-f]{40}", str(commit_document.get("sha", ""))
+    ):
         raise ValueError("models.dev commit lookup did not return a full Git SHA")
     commit = commit_document["sha"]
     archive_url = f"https://codeload.github.com/{UPSTREAM_REPO}/tar.gz/{commit}"
@@ -397,12 +485,14 @@ def run(
     existing = load_json(CANDIDATES_PATH, {"candidates": []})
     published = load_json(MODELS_PATH, {"models": []})
     published_source_ids = {
-        item.get("source_id") for item in published.get("models", [])
+        item.get("source_id")
+        for item in published.get("models", [])
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     dispositions = load_json(DISPOSITIONS_PATH, {"dispositions": []})
     dispositioned_source_ids = {
-        item.get("source_id") for item in dispositions.get("dispositions", [])
+        item.get("source_id")
+        for item in dispositions.get("dispositions", [])
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     document = build_document(
@@ -429,7 +519,10 @@ def main() -> int:
     try:
         document = run()
     except (OSError, ValueError, json.JSONDecodeError, urllib.error.URLError) as exc:
-        print(f"models.dev import failed without changing the queue: {exc}", file=sys.stderr)
+        print(
+            f"models.dev import failed without changing the queue: {exc}",
+            file=sys.stderr,
+        )
         return 1
     print(
         f"staged {len(document['candidates'])} model candidates from "

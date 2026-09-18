@@ -13,6 +13,10 @@ const shared = {
   eqeqeq: ["error", "always", { null: "ignore" }],
   "no-implied-eval": "error",
   "no-console": "off",
+  // Complexity ratchet, not a target: 40 passes today (recommendationReasons
+  // peaks at 39) and fails any new function worse than the worst one already
+  // carried. Tighten as the finder helpers are decomposed.
+  complexity: ["error", 40],
   // Both empty catches in this repo are deliberate: a browser refusing storage
   // and an absent generated file are normal, and there is nothing to record.
   "no-empty": ["error", { allowEmptyCatch: true }],

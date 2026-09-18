@@ -21,6 +21,32 @@ Synchronization and share-page generation are write operations; the remaining co
 
 `ruff` is pinned in the `dev` dependency group and installed by `uv sync`. Its rule set is configured in `pyproject.toml`; `eslint.config.mjs` covers the browser bundle, the build scripts, and the test suites. Both run in `verify.yml`. Ruff enforces the `requires-python` floor, which matters because CI only ever runs one Python version.
 
+## Pre-commit
+
+Install once per checkout with `pre-commit install`. The whole `verify.yml` gate lives in `.pre-commit-config.yaml`: CI is environment setup plus `pre-commit run --all-files`, and every commit runs the same hooks. Commit-time cost is ~1-2 minutes, dominated by the unit suite and e2e; bypass one check with `SKIP=<hook-id>`, or all of them with `git commit --no-verify` (CI still gates the merge).
+
+No code reaches the remote green-unverified: `pre-commit install --hook-type pre-push` adds the same gate to `git push`, so a push that would fail CI never leaves the checkout. GitHub workflows are a backstop, not the gate.
+
+```bash
+pre-commit install
+pre-commit run --all-files
+```
+
+What runs, and where it is configured:
+
+- Generic hygiene from `pre-commit-hooks`: trailing whitespace, final newlines, LF endings, case conflicts, merge-conflict markers, YAML/JSON/TOML/XML syntax, private keys, no new submodules, no commits to `main`, and a 1000K ceiling on added files (the catalog JSON files peak at ~672K).
+- Secrets as one identical check on commit and in CI: a full-history `gitleaks git` scan (seconds at this repo size) rather than a staged-only scan, so the local gate and the `verify.yml` gate can never disagree. The checkout in `verify.yml` uses `fetch-depth: 0` so the history is there to scan. Known-safe fixtures are allowlisted in `.gitleaks.toml`, never inline.
+- Python: `ruff check --fix` and `ruff format` (pinned to the `pyproject.toml` dev group), plus `bandit` at medium severity and above. Low bandit findings are git-subprocess plumbing noise; the five medium sites carry `# nosec` with their allowlist justification on the preceding lines. Never add a bare `# nosec` without that justification.
+- Complexity as ratchets, not targets: `C901` at 50 in `pyproject.toml` (today's maximum is 46 in `validate_hn_signals`) and the eslint `complexity` rule at 40 (today's maximum is 39 in `recommendationReasons`). Both fail any new function worse than the worst one already carried. Tighten them by refactoring, never with a `noqa` or an eslint-disable.
+- Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
+- JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
+- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it before the pre-commit step).
+- Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
+
+There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
+
+Bump a pinned hook version deliberately, one tool at a time, running `pre-commit run --all-files` and the full verification after each bump. Never run `pre-commit autoupdate` blindly across all hooks: a new codespell dictionary or a stricter default can turn a passing tree red for reasons unrelated to any change under review.
+
 ## Review age
 
 ```bash
@@ -777,7 +803,6 @@ eight addresses `_validated_web_endpoint` permits; one redirected across hosts. 
 signals are recorded `page_status: "failed"` and carry no digest, so the routine may only
 give them the `unreadable` verdict and a human opens the link directly. A vendor that
 blocks the fetcher is not a defect to route around by weakening the fetch guards.
-
 
 ## App payloads
 

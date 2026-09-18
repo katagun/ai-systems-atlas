@@ -5,6 +5,7 @@ The command scaffolds review work but never invents editorial conclusions. Its
 apply path writes only after the complete proposed model collection and the
 remaining candidate queue pass validation together.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -54,13 +55,15 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def candidate_for(
-    candidates_data: dict[str, Any], identifier: str,
+    candidates_data: dict[str, Any],
+    identifier: str,
 ) -> dict[str, Any]:
     candidates = candidates_data.get("candidates")
     if not isinstance(candidates, list):
         raise PromotionError("model-candidates.json does not contain a candidate list")
     matches = [
-        item for item in candidates
+        item
+        for item in candidates
         if isinstance(item, dict)
         and identifier in {item.get("id"), item.get("source_id")}
     ]
@@ -71,7 +74,9 @@ def candidate_for(
     return matches[0]
 
 
-def models_dev_evidence_url(candidate: dict[str, Any], candidates_data: dict[str, Any]) -> str:
+def models_dev_evidence_url(
+    candidate: dict[str, Any], candidates_data: dict[str, Any]
+) -> str:
     source = candidates_data.get("source")
     commit = source.get("commit") if isinstance(source, dict) else None
     source_id = candidate.get("source_id")
@@ -81,11 +86,14 @@ def models_dev_evidence_url(candidate: dict[str, Any], candidates_data: dict[str
 
 
 def build_draft(
-    candidate: dict[str, Any], candidates_data: dict[str, Any],
+    candidate: dict[str, Any],
+    candidates_data: dict[str, Any],
 ) -> dict[str, Any]:
     """Create an intentionally incomplete full-schema review draft."""
     source_metadata = deepcopy(candidate.get("source_metadata"))
-    reported_name = source_metadata.get("name") if isinstance(source_metadata, dict) else None
+    reported_name = (
+        source_metadata.get("name") if isinstance(source_metadata, dict) else None
+    )
     return {
         "id": candidate.get("id"),
         "source_id": candidate.get("source_id"),
@@ -150,14 +158,24 @@ def _promotion_specific_errors(
             errors.append(f"review record must preserve candidate {field} exactly")
 
     source_models = source_models_data.get("models")
-    source_matches = [
-        item for item in source_models or []
-        if isinstance(item, dict) and item.get("source_id") == candidate.get("source_id")
-    ] if isinstance(source_models, list) else []
+    source_matches = (
+        [
+            item
+            for item in source_models or []
+            if isinstance(item, dict)
+            and item.get("source_id") == candidate.get("source_id")
+        ]
+        if isinstance(source_models, list)
+        else []
+    )
     if len(source_matches) != 1:
-        errors.append("candidate must appear exactly once in the complete models.dev source snapshot")
+        errors.append(
+            "candidate must appear exactly once in the complete models.dev source snapshot"
+        )
     elif source_matches[0].get("source_metadata") != candidate.get("source_metadata"):
-        errors.append("candidate metadata differs from the complete models.dev source snapshot")
+        errors.append(
+            "candidate metadata differs from the complete models.dev source snapshot"
+        )
 
     models = models_data.get("models")
     if not isinstance(models, list):
@@ -169,22 +187,28 @@ def _promotion_specific_errors(
         if model.get("id") == record.get("id"):
             errors.append(f"model id is already published: {record.get('id')}")
         if model.get("source_id") == record.get("source_id"):
-            errors.append(f"models.dev source_id is already published: {record.get('source_id')}")
+            errors.append(
+                f"models.dev source_id is already published: {record.get('source_id')}"
+            )
 
     if record.get("license_review_status") != "verified":
         errors.append("license_review_status must be verified before promotion")
 
     evidence = record.get("evidence")
-    evidence_urls = {
-        item.get("url") for item in evidence or [] if isinstance(item, dict)
-    } if isinstance(evidence, list) else set()
+    evidence_urls = (
+        {item.get("url") for item in evidence or [] if isinstance(item, dict)}
+        if isinstance(evidence, list)
+        else set()
+    )
     try:
         expected_source_url = models_dev_evidence_url(candidate, candidates_data)
     except PromotionError as error:
         errors.append(str(error))
     else:
         if expected_source_url not in evidence_urls:
-            errors.append("evidence must include the exact pinned models.dev source URL")
+            errors.append(
+                "evidence must include the exact pinned models.dev source URL"
+            )
     if record.get("url") not in evidence_urls:
         errors.append("evidence must include the authoritative model URL")
 
@@ -204,7 +228,8 @@ def _promotion_specific_errors(
 
 
 def preflight_promotion(
-    root: Path, record: dict[str, Any],
+    root: Path,
+    record: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return complete proposed documents or raise without writing anything."""
     directory = root / "directory"
@@ -233,17 +258,23 @@ def preflight_promotion(
     candidate = candidate_for(candidates_data, source_id)
 
     errors = _promotion_specific_errors(
-        record, candidate, candidates_data, models_data, source_models_data,
+        record,
+        candidate,
+        candidates_data,
+        models_data,
+        source_models_data,
     )
     proposed_models = deepcopy(models_data)
     proposed_candidates = deepcopy(candidates_data)
     if isinstance(proposed_models.get("models"), list):
         proposed_models["models"].append(deepcopy(record))
-        proposed_models["models"].sort(key=lambda item: (
-            str(item.get("developer", "")).casefold(),
-            str(item.get("name", "")).casefold(),
-            str(item.get("id", "")),
-        ))
+        proposed_models["models"].sort(
+            key=lambda item: (
+                str(item.get("developer", "")).casefold(),
+                str(item.get("name", "")).casefold(),
+                str(item.get("id", "")),
+            )
+        )
     record_date = _valid_date(record.get("verified_at"))
     collection_date = _valid_date(proposed_models.get("verified_at"))
     if record_date and (collection_date is None or record_date > collection_date):
@@ -252,7 +283,8 @@ def preflight_promotion(
     remaining = proposed_candidates.get("candidates")
     if isinstance(remaining, list):
         proposed_candidates["candidates"] = [
-            item for item in remaining
+            item
+            for item in remaining
             if not isinstance(item, dict) or item.get("source_id") != source_id
         ]
     taxonomy_errors: list[str] = []
@@ -267,20 +299,29 @@ def preflight_promotion(
         local_runtimes_data.get("runtimes", []),
         published_models if isinstance(published_models, list) else [],
         errors,
-        packs_value=packs_data.get("packs") if isinstance(packs_data.get("packs"), list) else [],
+        packs_value=packs_data.get("packs")
+        if isinstance(packs_data.get("packs"), list)
+        else [],
     )
     validate_model_candidates(
         proposed_candidates,
         published_models if isinstance(published_models, list) else [],
-        source_models_data.get("models", []) if isinstance(source_models_data.get("models"), list) else [],
+        source_models_data.get("models", [])
+        if isinstance(source_models_data.get("models"), list)
+        else [],
         taxonomy,
         errors,
-        {entry.get("source_id") for entry in dispositions_data.get("dispositions", [])
-         if isinstance(entry, dict) and isinstance(entry.get("source_id"), str)},
+        {
+            entry.get("source_id")
+            for entry in dispositions_data.get("dispositions", [])
+            if isinstance(entry, dict) and isinstance(entry.get("source_id"), str)
+        },
     )
     if errors:
         formatted = "\n".join(f"- {error}" for error in errors)
-        raise PromotionError(f"model candidate is not ready for promotion:\n{formatted}")
+        raise PromotionError(
+            f"model candidate is not ready for promotion:\n{formatted}"
+        )
     return proposed_models, proposed_candidates
 
 
@@ -335,14 +376,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     init = commands.add_parser("init", help="write an incomplete human-review draft")
     init.add_argument("candidate", help="models.dev source_id or Atlas candidate id")
-    init.add_argument("--output", type=Path, required=True, help="new JSON review-draft path")
+    init.add_argument(
+        "--output", type=Path, required=True, help="new JSON review-draft path"
+    )
 
     for name, help_text in (
         ("check", "validate a completed review draft without writing"),
         ("apply", "promote a completed review draft into the canonical catalog"),
     ):
         command = commands.add_parser(name, help=help_text)
-        command.add_argument("record", type=Path, help="completed JSON review-draft path")
+        command.add_argument(
+            "record", type=Path, help="completed JSON review-draft path"
+        )
     return parser
 
 
@@ -355,7 +400,9 @@ def main(argv: list[str] | None = None) -> int:
             candidate = candidate_for(candidates_data, args.candidate)
             output = args.output.resolve()
             write_draft(output, build_draft(candidate, candidates_data))
-            print(f"wrote incomplete review draft for {candidate['source_id']} to {output}")
+            print(
+                f"wrote incomplete review draft for {candidate['source_id']} to {output}"
+            )
             print("complete every editorial field, then run the check command")
             return 0
 
@@ -369,8 +416,12 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         remaining, model_id = apply_promotion(root, record)
-        print(f"promoted {record['source_id']} as {model_id}; {remaining} candidates remain")
-        print("next: synchronize web data, regenerate share pages, and run full verification")
+        print(
+            f"promoted {record['source_id']} as {model_id}; {remaining} candidates remain"
+        )
+        print(
+            "next: synchronize web data, regenerate share pages, and run full verification"
+        )
         return 0
     except (OSError, PromotionError) as error:
         print(f"error: {error}", file=sys.stderr)

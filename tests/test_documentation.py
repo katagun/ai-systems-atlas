@@ -8,7 +8,14 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
-GENERATED_DIRECTORIES = {".git", ".superpowers", ".venv", "node_modules", "playwright-report", "test-results"}
+GENERATED_DIRECTORIES = {
+    ".git",
+    ".superpowers",
+    ".venv",
+    "node_modules",
+    "playwright-report",
+    "test-results",
+}
 
 
 class DocumentationTests(unittest.TestCase):
@@ -32,7 +39,9 @@ class DocumentationTests(unittest.TestCase):
         Drift between this file and the installed copy is checked by
         scripts/run_candidate_triage.py prepare, which runs where ~/.claude exists.
         """
-        prompt = (ROOT / "docs" / "routines" / "candidate-triage.md").read_text(encoding="utf-8")
+        prompt = (ROOT / "docs" / "routines" / "candidate-triage.md").read_text(
+            encoding="utf-8"
+        )
         for required in (
             "directory/candidates.json",
             "run_candidate_triage.py prepare",
@@ -44,10 +53,15 @@ class DocumentationTests(unittest.TestCase):
 
     def test_the_signal_routine_prompt_states_its_boundary(self) -> None:
         """Mirrors test_the_routine_prompt_states_its_boundary for the attention-source routine."""
-        text = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        text = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(
+            encoding="utf-8"
+        )
         for needle in (
-            "directory/hn-signals.json", "run_hn_signals.py prepare",
-            "run_hn_signals.py finish", "NEVER FETCH", "028",
+            "directory/hn-signals.json",
+            "run_hn_signals.py prepare",
+            "run_hn_signals.py finish",
+            "NEVER FETCH",
+            "028",
         ):
             self.assertIn(needle, text)
 
@@ -58,7 +72,9 @@ class DocumentationTests(unittest.TestCase):
         for name in ("candidate-triage.md", "hn-signals.md"):
             text = (ROOT / "docs" / "routines" / name).read_text(encoding="utf-8")
             self.assertIn(placeholder, text, name)
-        signals = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(encoding="utf-8")
+        signals = (ROOT / "docs" / "routines" / "hn-signals.md").read_text(
+            encoding="utf-8"
+        )
         self.assertIn("run_hn_signals.py prepare --from-ref local/hn-signals", signals)
 
     def test_task_routing_documents_exist(self) -> None:
@@ -123,9 +139,15 @@ class DocumentationTests(unittest.TestCase):
                 if target.startswith(("http://", "https://", "mailto:", "#")):
                     continue
                 path = (document.parent / unquote(target.split("#", 1)[0])).resolve()
-                if path.is_relative_to(ROOT) and path.is_file() and path.suffix == ".md":
+                if (
+                    path.is_relative_to(ROOT)
+                    and path.is_file()
+                    and path.suffix == ".md"
+                ):
                     pending.append(path)
-        manifest = re.findall(r'"((?:docs/|)[A-Za-z0-9_./-]+\.md)"', self.routing_manifest_source())
+        manifest = re.findall(
+            r'"((?:docs/|)[A-Za-z0-9_./-]+\.md)"', self.routing_manifest_source()
+        )
         unreachable = sorted(set(manifest) - reachable)
         self.assertEqual([], unreachable)
 
@@ -135,7 +157,9 @@ class DocumentationTests(unittest.TestCase):
         end = source.index("self.assertTrue((ROOT / relative).is_file()", start)
         return source[start:end]
 
-    def test_the_local_refresh_stages_every_directory_file_except_the_signal_queue(self) -> None:
+    def test_the_local_refresh_stages_every_directory_file_except_the_signal_queue(
+        self,
+    ) -> None:
         """The runner's explicit staging list is what stops a new catalog file being silently
 
         left out of every refresh (see `scripts/run_directory_refresh.py`,
@@ -144,18 +168,31 @@ class DocumentationTests(unittest.TestCase):
         """
         from scripts import run_directory_refresh
 
-        self.assertNotIn("hn-signals.json", run_directory_refresh.STAGED_DIRECTORY_FILES)
-        on_disk = {p.name for p in (ROOT / "directory").glob("*.json")} - {"hn-signals.json"}
-        staged = {path.split("/", 1)[1] for path in run_directory_refresh.STAGED_DIRECTORY_FILES}
+        self.assertNotIn(
+            "hn-signals.json", run_directory_refresh.STAGED_DIRECTORY_FILES
+        )
+        on_disk = {p.name for p in (ROOT / "directory").glob("*.json")} - {
+            "hn-signals.json"
+        }
+        staged = {
+            path.split("/", 1)[1]
+            for path in run_directory_refresh.STAGED_DIRECTORY_FILES
+        }
         self.assertEqual(on_disk, staged)
 
     def test_every_path_has_a_code_owner(self) -> None:
         owners = (ROOT / ".github" / "CODEOWNERS").read_text(encoding="utf-8")
-        rules = [line.split() for line in owners.splitlines() if line.strip() and not line.startswith("#")]
+        rules = [
+            line.split()
+            for line in owners.splitlines()
+            if line.strip() and not line.startswith("#")
+        ]
         self.assertTrue(any(rule[0] == "*" and len(rule) > 1 for rule in rules), owners)
 
     def test_pages_deploy_accepts_only_trusted_main_verification(self) -> None:
-        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
+            encoding="utf-8"
+        )
         match = re.search(r"(?m)^  build:\n    if: >-\n((?:      .*\n)+)", workflow)
         self.assertIsNotNone(match)
         condition = " ".join(line.strip() for line in match.group(1).splitlines())
@@ -174,7 +211,9 @@ class DocumentationTests(unittest.TestCase):
 
         Redeploying goes through a re-run of the push-triggered verify run instead.
         """
-        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
+            encoding="utf-8"
+        )
         self.assertNotIn("workflow_dispatch", workflow)
 
 

@@ -15,7 +15,7 @@ Twelve of the fifty-five real candidates have no GitHub repository — Obsidian,
 
 I want to be precise about how that reviewer found it, because the method is the whole point of this post. It did not reason about the code. It loaded `directory/candidates.json`, ran my selection function against the real fifty-five records with a stub that returned perfect responses, and pasted the output:
 
-```
+```text
 error: https://docs.aws.amazon.com/.../what-is.html:
   ['candidate has no GitHub repository']
 run_build exit code with a perfectly healthy GitHub: 1
@@ -43,7 +43,7 @@ The tests would not have caught a subtle change. They assert on error message su
 
 So the refactor was verified differently. I kept a copy of the original implementation, then generated forty-two catalogs: the real one, plus forty-one mutations each designed to trip a different rule — a taxonomy group that is not a list, a project whose score does not match its weighted dimensions, evidence citing a blob SHA that does not match its immutable URL, a candidate already curated, a web copy out of sync. Both implementations ran against all forty-two. The harness compared the complete result: every error string, **in order**, and any exception raised.
 
-```
+```text
 42 catalogs compared, 0 divergence(s)
 ```
 
@@ -57,7 +57,7 @@ The same problem, in a different shape: the web application had four near-identi
 
 So before touching it, a browser harness captured every rendered surface of the live page: all five grids, all twenty-five filter option lists, and all 269 record dialogs, opened one by one. About 1.4 MB of HTML. Then the refactor. Then the same capture again.
 
-```
+```text
 299 surfaces compared — BYTE-IDENTICAL
 ```
 

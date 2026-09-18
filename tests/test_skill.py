@@ -32,8 +32,13 @@ class SkillTests(unittest.TestCase):
     def test_skill_manifest_has_required_frontmatter(self) -> None:
         text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
         fields = parse_frontmatter(text)
-        self.assertTrue(fields.get("name"), "SKILL.md frontmatter is missing a non-empty name")
-        self.assertTrue(fields.get("description"), "SKILL.md frontmatter is missing a non-empty description")
+        self.assertTrue(
+            fields.get("name"), "SKILL.md frontmatter is missing a non-empty name"
+        )
+        self.assertTrue(
+            fields.get("description"),
+            "SKILL.md frontmatter is missing a non-empty description",
+        )
 
     def test_reference_file_exists(self) -> None:
         self.assertTrue((SKILL_DIR / "reference.md").is_file())

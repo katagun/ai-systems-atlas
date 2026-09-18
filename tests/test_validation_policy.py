@@ -23,9 +23,12 @@ class ValidationPolicyTests(unittest.TestCase):
             f"directory/{name}": (ROOT / "directory" / name).read_bytes()
             for name in CATALOG_DOCUMENTS
         }
-        cls._catalog.update({
-            f"web/{name}": (ROOT / "web" / name).read_bytes() for name in PUBLISHED_DATA
-        })
+        cls._catalog.update(
+            {
+                f"web/{name}": (ROOT / "web" / name).read_bytes()
+                for name in PUBLISHED_DATA
+            }
+        )
 
     def temporary_catalog(self) -> tuple[tempfile.TemporaryDirectory, Path]:
         temporary = tempfile.TemporaryDirectory()
@@ -37,7 +40,9 @@ class ValidationPolicyTests(unittest.TestCase):
         return temporary, root
 
     def write_json(self, path: Path, value: dict) -> None:
-        path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        path.write_text(
+            json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
 
     SAMPLE_RUNTIME: ClassVar[dict] = {
         "id": "sample-runtime",
@@ -61,18 +66,20 @@ class ValidationPolicyTests(unittest.TestCase):
         "licenses": ["Apache-2.0"],
         "source_model": "open_source",
         "license_note": "Repository-wide Apache-2.0 license.",
-        "license_evidence": [{
-            "license_id": "Apache-2.0",
-            "scope": "Repository-wide license file",
-            "kind": "git_blob",
-            "path": "LICENSE",
-            "url": "https://github.com/sample/runtime/blob/main/LICENSE",
-            "blob_sha": "0123456789abcdef0123456789abcdef01234567",
-            "immutable_url": (
-                "https://api.github.com/repos/sample/runtime/git/blobs/"
-                "0123456789abcdef0123456789abcdef01234567"
-            ),
-        }],
+        "license_evidence": [
+            {
+                "license_id": "Apache-2.0",
+                "scope": "Repository-wide license file",
+                "kind": "git_blob",
+                "path": "LICENSE",
+                "url": "https://github.com/sample/runtime/blob/main/LICENSE",
+                "blob_sha": "0123456789abcdef0123456789abcdef01234567",
+                "immutable_url": (
+                    "https://api.github.com/repos/sample/runtime/git/blobs/"
+                    "0123456789abcdef0123456789abcdef01234567"
+                ),
+            }
+        ],
         "score_profile": "local_runtime",
         "score": {
             "hardware_accelerator_coverage": 5.0,
@@ -85,12 +92,14 @@ class ValidationPolicyTests(unittest.TestCase):
             "documentation_transparency": 5.0,
             "overall": 5.0,
         },
-        "evidence": [{
-            "kind": "web",
-            "label": "Documentation",
-            "url": "https://example.com/docs",
-            "verified_at": "2026-08-29",
-        }],
+        "evidence": [
+            {
+                "kind": "web",
+                "label": "Documentation",
+                "url": "https://example.com/docs",
+                "verified_at": "2026-08-29",
+            }
+        ],
         "verified_at": "2026-08-29",
     }
 
@@ -105,8 +114,12 @@ class ValidationPolicyTests(unittest.TestCase):
                 "verified_at": "2026-09-02",
             }
             for name in (
-                "response_integrity", "upstream_disclosure", "credential_handling",
-                "cache_isolation", "vulnerability_disclosure", "independent_audit",
+                "response_integrity",
+                "upstream_disclosure",
+                "credential_handling",
+                "cache_isolation",
+                "vulnerability_disclosure",
+                "independent_audit",
             )
         },
         "findings": [
@@ -147,51 +160,123 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_trust_rejects_a_field_outside_its_schema(self) -> None:
         errors = self.catalog_with_trust(lambda trust: trust.update({"score": 7}))
-        self.assertTrue(any("trust fields differ from schema" in error and "score" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "trust fields differ from schema" in error and "score" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_trust_properties_must_be_exactly_the_six(self) -> None:
-        errors = self.catalog_with_trust(lambda trust: trust["properties"].pop("cache_isolation"))
-        self.assertTrue(any("trust properties must be exactly" in error for error in errors), errors)
+        errors = self.catalog_with_trust(
+            lambda trust: trust["properties"].pop("cache_isolation")
+        )
+        self.assertTrue(
+            any("trust properties must be exactly" in error for error in errors), errors
+        )
 
     def test_trust_status_must_come_from_the_taxonomy(self) -> None:
         errors = self.catalog_with_trust(
-            lambda trust: trust["properties"]["cache_isolation"].update({"status": "safe"})
+            lambda trust: trust["properties"]["cache_isolation"].update(
+                {"status": "safe"}
+            )
         )
-        self.assertTrue(any("unknown trust status 'safe'" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown trust status 'safe'" in error for error in errors), errors
+        )
 
     def test_trust_property_requires_note_scope_and_public_https_url(self) -> None:
         def mutate(trust: dict) -> None:
-            trust["properties"]["independent_audit"].update({"note": "", "scope": " ", "url": "https://"})
+            trust["properties"]["independent_audit"].update(
+                {"note": "", "scope": " ", "url": "https://"}
+            )
+
         errors = self.catalog_with_trust(mutate)
-        for needle in ("note must be a non-empty string", "scope must be a non-empty string", "url must be an HTTPS URL on a public DNS host"):
-            self.assertTrue(any("trust independent_audit" in error and needle in error for error in errors), errors)
+        for needle in (
+            "note must be a non-empty string",
+            "scope must be a non-empty string",
+            "url must be an HTTPS URL on a public DNS host",
+        ):
+            self.assertTrue(
+                any(
+                    "trust independent_audit" in error and needle in error
+                    for error in errors
+                ),
+                errors,
+            )
 
     def test_trust_finding_source_must_be_a_pinned_third_party_page(self) -> None:
         def mutate(trust: dict) -> None:
-            trust["findings"][0]["source"].update({"kind": "web", "content_sha256": "abc"})
+            trust["findings"][0]["source"].update(
+                {"kind": "web", "content_sha256": "abc"}
+            )
+
         errors = self.catalog_with_trust(mutate)
-        self.assertTrue(any("source kind must be third_party" in error for error in errors), errors)
-        self.assertTrue(any("source requires a content_sha256" in error for error in errors), errors)
+        self.assertTrue(
+            any("source kind must be third_party" in error for error in errors), errors
+        )
+        self.assertTrue(
+            any("source requires a content_sha256" in error for error in errors), errors
+        )
 
     def test_trust_dates_cannot_postdate_the_review(self) -> None:
         def mutate(trust: dict) -> None:
             trust["properties"]["response_integrity"]["verified_at"] = "2026-09-04"
             trust["findings"][0]["source"]["fetched_at"] = "2026-09-04"
             trust["findings"][0]["published_at"] = "2026-09-05"
+
         errors = self.catalog_with_trust(mutate)
-        self.assertTrue(any("trust response_integrity: verified_at must not be after the trust verified_at" in error for error in errors), errors)
-        self.assertTrue(any("source fetched_at must not be after the trust verified_at" in error for error in errors), errors)
-        self.assertTrue(any("published_at must not be after the source fetched_at" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "trust response_integrity: verified_at must not be after the trust verified_at"
+                in error
+                for error in errors
+            ),
+            errors,
+        )
+        self.assertTrue(
+            any(
+                "source fetched_at must not be after the trust verified_at" in error
+                for error in errors
+            ),
+            errors,
+        )
+        self.assertTrue(
+            any(
+                "published_at must not be after the source fetched_at" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_trust_review_cannot_postdate_the_collection(self) -> None:
-        errors = self.catalog_with_trust(lambda trust: trust.update({"verified_at": "2099-01-01"}))
-        self.assertTrue(any("trust verified_at must not be after the collection verified_at" in error for error in errors), errors)
+        errors = self.catalog_with_trust(
+            lambda trust: trust.update({"verified_at": "2099-01-01"})
+        )
+        self.assertTrue(
+            any(
+                "trust verified_at must not be after the collection verified_at"
+                in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_trust_operator_response_is_null_or_complete(self) -> None:
         def mutate(trust: dict) -> None:
-            trust["findings"][0]["operator_response"] = {"url": "https://example.com/statement"}
+            trust["findings"][0]["operator_response"] = {
+                "url": "https://example.com/statement"
+            }
+
         errors = self.catalog_with_trust(mutate)
-        self.assertTrue(any("operator_response must be null or have exactly" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "operator_response must be null or have exactly" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_trust_response_dates_cannot_postdate_the_review(self) -> None:
         def mutate(trust: dict) -> None:
@@ -200,12 +285,25 @@ class ValidationPolicyTests(unittest.TestCase):
                 "verified_at": "2026-09-04",
                 "summary": "s",
             }
+
         errors = self.catalog_with_trust(mutate)
-        self.assertTrue(any("operator_response verified_at must not be after the trust verified_at" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "operator_response verified_at must not be after the trust verified_at"
+                in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_trust_closure_carries_a_dated_first_party_source(self) -> None:
         def mutate(trust: dict) -> None:
-            trust["findings"][0]["resolved"] = {"url": "https://example.com/fix", "verified_at": "2026-09-02", "summary": "Caches are now scoped per API key."}
+            trust["findings"][0]["resolved"] = {
+                "url": "https://example.com/fix",
+                "verified_at": "2026-09-02",
+                "summary": "Caches are now scoped per API key.",
+            }
+
         self.assertEqual([], self.catalog_with_trust(mutate))
 
     def catalog_with_runtime(self, mutate=None) -> list[str]:
@@ -224,21 +322,27 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_valid_local_runtime_passes_validation(self) -> None:
         errors = self.catalog_with_runtime()
-        self.assertFalse([error for error in errors if "sample-runtime" in error], errors)
+        self.assertFalse(
+            [error for error in errors if "sample-runtime" in error], errors
+        )
 
     def test_local_runtime_overall_must_match_weighted_score(self) -> None:
         def mutate(runtime, root):
             runtime["score"]["overall"] = 9.99
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertTrue(any("does not match weighted" in error for error in errors), errors)
+        self.assertTrue(
+            any("does not match weighted" in error for error in errors), errors
+        )
 
     def test_local_runtime_rejects_unknown_accelerator(self) -> None:
         def mutate(runtime, root):
             runtime["accelerators"] = ["quantum"]
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertTrue(any("unknown accelerators" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown accelerators" in error for error in errors), errors
+        )
 
     def test_local_runtime_license_evidence_must_cover_every_license(self) -> None:
         def mutate(runtime, root):
@@ -246,7 +350,10 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = self.catalog_with_runtime(mutate)
         self.assertTrue(
-            any("license evidence does not match licenses" in error for error in errors), errors
+            any(
+                "license evidence does not match licenses" in error for error in errors
+            ),
+            errors,
         )
 
     def test_local_runtime_rejects_mismatched_immutable_license_url(self) -> None:
@@ -258,7 +365,10 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = self.catalog_with_runtime(mutate)
         self.assertTrue(
-            any("immutable license URL must address the blob SHA" in error for error in errors),
+            any(
+                "immutable license URL must address the blob SHA" in error
+                for error in errors
+            ),
             errors,
         )
 
@@ -268,7 +378,9 @@ class ValidationPolicyTests(unittest.TestCase):
             runtime["stars_verified_at"] = "2026-08-30"
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertFalse([error for error in errors if "sample-runtime" in error], errors)
+        self.assertFalse(
+            [error for error in errors if "sample-runtime" in error], errors
+        )
 
     def test_local_runtime_rejects_negative_stars(self) -> None:
         def mutate(runtime, root):
@@ -276,21 +388,34 @@ class ValidationPolicyTests(unittest.TestCase):
             runtime["stars_verified_at"] = "2026-08-30"
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertTrue(any("stars must be a non-negative integer or null" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "stars must be a non-negative integer or null" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_local_runtime_populated_stars_require_stars_verified_at(self) -> None:
         def mutate(runtime, root):
             runtime["stars"] = 42
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertTrue(any("populated stars require stars_verified_at" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "populated stars require stars_verified_at" in error for error in errors
+            ),
+            errors,
+        )
 
     def test_local_runtime_still_rejects_unknown_fields(self) -> None:
         def mutate(runtime, root):
             runtime["throughput_tokens_per_second"] = 500
 
         errors = self.catalog_with_runtime(mutate)
-        self.assertTrue(any("fields differ from schema" in error for error in errors), errors)
+        self.assertTrue(
+            any("fields differ from schema" in error for error in errors), errors
+        )
 
     def test_ids_must_be_unique_across_collections(self) -> None:
         def mutate(runtime, root):
@@ -300,7 +425,8 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = self.catalog_with_runtime(mutate)
         self.assertTrue(
-            any("appears in more than one collection" in error for error in errors), errors
+            any("appears in more than one collection" in error for error in errors),
+            errors,
         )
 
     def test_local_runtimes_must_be_published_to_web(self) -> None:
@@ -315,7 +441,11 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = validate(root)
 
         self.assertTrue(
-            any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
+            any(
+                "web/local-runtimes.json is not synchronized" in error
+                for error in errors
+            ),
+            errors,
         )
 
     SAMPLE_PACK: ClassVar[dict] = {
@@ -334,29 +464,33 @@ class ValidationPolicyTests(unittest.TestCase):
         "status": "active",
         "licenses": ["MIT"],
         "license_note": "Repository-wide MIT license.",
-        "license_evidence": [{
-            "license_id": "MIT",
-            "scope": "Repository-wide license file",
-            "kind": "git_blob",
-            "path": "LICENSE",
-            "url": "https://github.com/sample/pack/blob/main/LICENSE",
-            "blob_sha": "0123456789abcdef0123456789abcdef01234567",
-            "immutable_url": (
-                "https://api.github.com/repos/sample/pack/git/blobs/"
-                "0123456789abcdef0123456789abcdef01234567"
-            ),
-        }],
-        "evidence": [{
-            "kind": "git_blob",
-            "label": "Top-level skill manifest",
-            "path": "skills/sample/SKILL.md",
-            "url": "https://github.com/sample/pack/blob/main/skills/sample/SKILL.md",
-            "blob_sha": "89abcdef0123456789abcdef0123456789abcdef",
-            "immutable_url": (
-                "https://api.github.com/repos/sample/pack/git/blobs/"
-                "89abcdef0123456789abcdef0123456789abcdef"
-            ),
-        }],
+        "license_evidence": [
+            {
+                "license_id": "MIT",
+                "scope": "Repository-wide license file",
+                "kind": "git_blob",
+                "path": "LICENSE",
+                "url": "https://github.com/sample/pack/blob/main/LICENSE",
+                "blob_sha": "0123456789abcdef0123456789abcdef01234567",
+                "immutable_url": (
+                    "https://api.github.com/repos/sample/pack/git/blobs/"
+                    "0123456789abcdef0123456789abcdef01234567"
+                ),
+            }
+        ],
+        "evidence": [
+            {
+                "kind": "git_blob",
+                "label": "Top-level skill manifest",
+                "path": "skills/sample/SKILL.md",
+                "url": "https://github.com/sample/pack/blob/main/skills/sample/SKILL.md",
+                "blob_sha": "89abcdef0123456789abcdef0123456789abcdef",
+                "immutable_url": (
+                    "https://api.github.com/repos/sample/pack/git/blobs/"
+                    "89abcdef0123456789abcdef0123456789abcdef"
+                ),
+            }
+        ],
         "verified_at": "2026-09-16",
     }
 
@@ -380,15 +514,23 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_pack_rejects_every_scoring_and_popularity_field(self) -> None:
         for field, value in (
-            ("stars", 10), ("stars_verified_at", "2026-09-16"), ("score", {"overall": 5}),
-            ("score_profile", "agent_system"), ("system_family", "agent_system"),
+            ("stars", 10),
+            ("stars_verified_at", "2026-09-16"),
+            ("score", {"overall": 5}),
+            ("score_profile", "agent_system"),
+            ("system_family", "agent_system"),
             ("primary_role", "coding_agent_workflow"),
         ):
             with self.subTest(field=field):
+
                 def mutate(pack, root, field=field, value=value):
                     pack[field] = value
+
                 errors = self.catalog_with_pack(mutate)
-                self.assertTrue(any(f"{field} is never recorded on a pack" in e for e in errors), errors)
+                self.assertTrue(
+                    any(f"{field} is never recorded on a pack" in e for e in errors),
+                    errors,
+                )
 
     def test_pack_rejects_unknown_type_host_and_install_mechanism(self) -> None:
         for field, value, message in (
@@ -398,58 +540,91 @@ class ValidationPolicyTests(unittest.TestCase):
             ("status", "beta", "unknown status"),
         ):
             with self.subTest(field=field):
+
                 def mutate(pack, root, field=field, value=value):
                     pack[field] = value
+
                 errors = self.catalog_with_pack(mutate)
                 self.assertTrue(any(message in e for e in errors), errors)
 
     def test_pack_packaging_formats_must_name_specification_records(self) -> None:
         def mutate(pack, root):
             pack["packaging_formats"] = ["not-a-spec"]
+
         errors = self.catalog_with_pack(mutate)
         self.assertTrue(any("unknown packaging_formats" in e for e in errors), errors)
 
     def test_pack_license_evidence_must_cover_every_license(self) -> None:
         def mutate(pack, root):
             pack["licenses"] = ["MIT", "Apache-2.0"]
+
         errors = self.catalog_with_pack(mutate)
-        self.assertTrue(any("license evidence does not match licenses" in e for e in errors), errors)
+        self.assertTrue(
+            any("license evidence does not match licenses" in e for e in errors), errors
+        )
 
     def test_pack_installs_and_not_a_system_are_required_prose(self) -> None:
         for field in ("installs", "not_a_system"):
             with self.subTest(field=field):
+
                 def mutate(pack, root, field=field):
                     pack[field] = ""
+
                 errors = self.catalog_with_pack(mutate)
-                self.assertTrue(any(f"{field} must be a non-empty string" in e for e in errors), errors)
+                self.assertTrue(
+                    any(f"{field} must be a non-empty string" in e for e in errors),
+                    errors,
+                )
 
     def test_pack_repo_cannot_also_be_a_published_system(self) -> None:
         def mutate(pack, root):
-            projects = json.loads((root / "directory" / "projects.json").read_text(encoding="utf-8"))
-            pack["repo"] = next(p["repo"] for p in projects["projects"] if p.get("repo"))
+            projects = json.loads(
+                (root / "directory" / "projects.json").read_text(encoding="utf-8")
+            )
+            pack["repo"] = next(
+                p["repo"] for p in projects["projects"] if p.get("repo")
+            )
+
         errors = self.catalog_with_pack(mutate)
-        self.assertTrue(any("cannot be both a system and a pack" in e for e in errors), errors)
+        self.assertTrue(
+            any("cannot be both a system and a pack" in e for e in errors), errors
+        )
 
     def test_pack_repo_cannot_also_be_excluded(self) -> None:
         def mutate(pack, root):
-            exclusions = json.loads((root / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+            exclusions = json.loads(
+                (root / "directory" / "exclusions.json").read_text(encoding="utf-8")
+            )
             pack["repo"] = exclusions["entries"][0]["repo"]
+
         errors = self.catalog_with_pack(mutate)
-        self.assertTrue(any("cannot be both included and excluded" in e for e in errors), errors)
+        self.assertTrue(
+            any("cannot be both included and excluded" in e for e in errors), errors
+        )
 
     def test_pack_ids_must_be_unique_across_collections(self) -> None:
         def mutate(pack, root):
-            specs = json.loads((root / "directory" / "specifications.json").read_text(encoding="utf-8"))
+            specs = json.loads(
+                (root / "directory" / "specifications.json").read_text(encoding="utf-8")
+            )
             pack["id"] = specs["specifications"][0]["id"]
+
         errors = self.catalog_with_pack(mutate)
-        self.assertTrue(any("appears in more than one collection" in e for e in errors), errors)
+        self.assertTrue(
+            any("appears in more than one collection" in e for e in errors), errors
+        )
 
     def test_pack_repo_cannot_also_be_a_candidate(self) -> None:
         def mutate(pack, root):
-            candidates = json.loads((root / "directory" / "candidates.json").read_text(encoding="utf-8"))
+            candidates = json.loads(
+                (root / "directory" / "candidates.json").read_text(encoding="utf-8")
+            )
             pack["repo"] = candidates["candidates"][0]["repo"]
+
         errors = self.catalog_with_pack(mutate)
-        self.assertTrue(any("cannot be both candidates and packs" in e for e in errors), errors)
+        self.assertTrue(
+            any("cannot be both candidates and packs" in e for e in errors), errors
+        )
 
     def test_two_packs_cannot_share_a_repo(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -468,13 +643,20 @@ class ValidationPolicyTests(unittest.TestCase):
     def test_packs_must_be_published_to_web(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
-        document = json.loads((root / "directory" / "packs.json").read_text(encoding="utf-8"))
+        document = json.loads(
+            (root / "directory" / "packs.json").read_text(encoding="utf-8")
+        )
         document["verified_at"] = "2026-01-01"
         self.write_json(root / "directory" / "packs.json", document)
         errors = validate(root)
-        self.assertTrue(any("web/packs.json is not synchronized" in error for error in errors), errors)
+        self.assertTrue(
+            any("web/packs.json is not synchronized" in error for error in errors),
+            errors,
+        )
 
-    def catalog_with_malformed_record(self, document: str, key: str, entry: object) -> list[str]:
+    def catalog_with_malformed_record(
+        self, document: str, key: str, entry: object
+    ) -> list[str]:
         """Validate a temporary catalog whose collection holds a non-object entry."""
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
@@ -485,22 +667,34 @@ class ValidationPolicyTests(unittest.TestCase):
         self.write_json(root / "web" / document, value)
         return validate(root)
 
-    def test_a_non_object_project_is_reported_rather_than_crashing_the_run(self) -> None:
+    def test_a_non_object_project_is_reported_rather_than_crashing_the_run(
+        self,
+    ) -> None:
         """A malformed entry must not deny the operator every other error in the catalog."""
-        errors = self.catalog_with_malformed_record("projects.json", "projects", "not a project")
-        self.assertTrue(any("every project must be an object" in error for error in errors), errors)
+        errors = self.catalog_with_malformed_record(
+            "projects.json", "projects", "not a project"
+        )
+        self.assertTrue(
+            any("every project must be an object" in error for error in errors), errors
+        )
 
     def test_a_non_object_record_never_crashes_any_collection(self) -> None:
         for document, key, message in (
             ("projects.json", "projects", "every project must be an object"),
-            ("specifications.json", "specifications", "every specification must be an object"),
+            (
+                "specifications.json",
+                "specifications",
+                "every specification must be an object",
+            ),
             ("inference-services.json", "services", "every service must be an object"),
             ("local-runtimes.json", "runtimes", "every runtime must be an object"),
             ("models.json", "models", "every model must be an object"),
             ("packs.json", "packs", "every pack must be an object"),
         ):
             with self.subTest(document=document):
-                errors = self.catalog_with_malformed_record(document, key, ["not", "a", "record"])
+                errors = self.catalog_with_malformed_record(
+                    document, key, ["not", "a", "record"]
+                )
                 self.assertTrue(any(message in error for error in errors), errors)
 
     def test_model_candidates_must_not_be_published(self) -> None:
@@ -510,7 +704,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("provisional model candidates must not be published" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "provisional model candidates must not be published" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_model_dispositions_must_not_be_published(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -519,63 +719,99 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("model hold and exclusion decisions must not be published" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "model hold and exclusion decisions must not be published" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_model_dispositions_reject_unknown_source_ids(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "model-dispositions.json"
         document = json.loads(path.read_text(encoding="utf-8"))
-        document["dispositions"].append({
-            "source_id": "acme/ghost",
-            "disposition": "held",
-            "reason": "No such upstream record.",
-            "decided_at": "2026-09-11",
-        })
+        document["dispositions"].append(
+            {
+                "source_id": "acme/ghost",
+                "disposition": "held",
+                "reason": "No such upstream record.",
+                "decided_at": "2026-09-11",
+            }
+        )
         self.write_json(path, document)
 
         errors = validate(root)
 
-        self.assertTrue(any("acme/ghost" in error and "missing from the complete models.dev source snapshot" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "acme/ghost" in error
+                and "missing from the complete models.dev source snapshot" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_model_dispositions_reject_reviewed_source_ids(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "model-dispositions.json"
         document = json.loads(path.read_text(encoding="utf-8"))
-        document["dispositions"].append({
-            "source_id": "openai/gpt-4.1",
-            "disposition": "held",
-            "reason": "Already reviewed; the disposition must be lifted, not duplicated.",
-            "decided_at": "2026-09-11",
-        })
+        document["dispositions"].append(
+            {
+                "source_id": "openai/gpt-4.1",
+                "disposition": "held",
+                "reason": "Already reviewed; the disposition must be lifted, not duplicated.",
+                "decided_at": "2026-09-11",
+            }
+        )
         self.write_json(path, document)
 
         errors = validate(root)
 
-        self.assertTrue(any("openai/gpt-4.1" in error and "already exists in the reviewed collection" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "openai/gpt-4.1" in error
+                and "already exists in the reviewed collection" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_model_queue_must_not_contain_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
-        queue = json.loads((root / "directory" / "model-candidates.json").read_text(encoding="utf-8"))
+        queue = json.loads(
+            (root / "directory" / "model-candidates.json").read_text(encoding="utf-8")
+        )
         path = root / "directory" / "model-dispositions.json"
         document = json.loads(path.read_text(encoding="utf-8"))
         decided = {item["source_id"] for item in document["dispositions"]}
         source_id = next(
-            item["source_id"] for item in queue["candidates"] if item["source_id"] not in decided
+            item["source_id"]
+            for item in queue["candidates"]
+            if item["source_id"] not in decided
         )
-        document["dispositions"].append({
-            "source_id": source_id,
-            "disposition": "held",
-            "reason": "Still queued; the importer must filter it first.",
-            "decided_at": "2026-09-11",
-        })
+        document["dispositions"].append(
+            {
+                "source_id": source_id,
+                "disposition": "held",
+                "reason": "Still queued; the importer must filter it first.",
+                "decided_at": "2026-09-11",
+            }
+        )
         self.write_json(path, document)
 
         errors = validate(root)
 
-        self.assertTrue(any(source_id in error and "must not remain queued" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                source_id in error and "must not remain queued" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_model_eligible_count_covers_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -587,7 +823,14 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("eligible count must equal queued plus reviewed plus dispositioned" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "eligible count must equal queued plus reviewed plus dispositioned"
+                in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def catalog_with_superseded(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose first project is marked superseded."""
@@ -596,7 +839,9 @@ class ValidationPolicyTests(unittest.TestCase):
         projects_path = root / "directory" / "projects.json"
         projects = json.loads(projects_path.read_text(encoding="utf-8"))
         project = projects["projects"][0]
-        successor = next(item for item in projects["projects"] if item["id"] != project["id"])
+        successor = next(
+            item for item in projects["projects"] if item["id"] != project["id"]
+        )
         project["status"] = "superseded"
         project["superseded_by"] = successor["id"]
         if mutate is not None:
@@ -607,31 +852,47 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_superseded_project_is_valid_with_a_resolvable_successor(self) -> None:
         errors = self.catalog_with_superseded()
-        self.assertFalse([error for error in errors if "supersed" in error], errors)
+        self.assertFalse([error for error in errors if "superseded" in error], errors)
 
     def test_superseded_project_requires_a_successor(self) -> None:
-        errors = self.catalog_with_superseded(lambda project, _: project.pop("superseded_by"))
-        self.assertTrue(any("requires superseded_by" in error for error in errors), errors)
+        errors = self.catalog_with_superseded(
+            lambda project, _: project.pop("superseded_by")
+        )
+        self.assertTrue(
+            any("requires superseded_by" in error for error in errors), errors
+        )
 
     def test_superseded_by_must_reference_an_existing_project(self) -> None:
         errors = self.catalog_with_superseded(
             lambda project, _: project.update({"superseded_by": "no-such-project"})
         )
-        self.assertTrue(any("unknown superseded_by" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown superseded_by" in error for error in errors), errors
+        )
 
     def test_superseded_by_cannot_reference_itself(self) -> None:
         errors = self.catalog_with_superseded(
             lambda project, _: project.update({"superseded_by": project["id"]})
         )
-        self.assertTrue(any("cannot supersede itself" in error for error in errors), errors)
-
-    def test_active_project_cannot_declare_a_successor(self) -> None:
-        errors = self.catalog_with_superseded(lambda project, _: project.update({"status": "active"}))
         self.assertTrue(
-            any("superseded_by requires the superseded status" in error for error in errors), errors
+            any("cannot supersede itself" in error for error in errors), errors
         )
 
-    def test_restricted_license_is_valid_when_source_model_and_evidence_agree(self) -> None:
+    def test_active_project_cannot_declare_a_successor(self) -> None:
+        errors = self.catalog_with_superseded(
+            lambda project, _: project.update({"status": "active"})
+        )
+        self.assertTrue(
+            any(
+                "superseded_by requires the superseded status" in error
+                for error in errors
+            ),
+            errors,
+        )
+
+    def test_restricted_license_is_valid_when_source_model_and_evidence_agree(
+        self,
+    ) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         projects_path = root / "directory" / "projects.json"
@@ -642,15 +903,19 @@ class ValidationPolicyTests(unittest.TestCase):
         project["licenses"] = ["LicenseRef-Commercial"]
         project["source_model"] = "source_available"
         project_evidence = next(
-            entry for entry in evidence["entries"] if entry["project_id"] == project["id"]
+            entry
+            for entry in evidence["entries"]
+            if entry["project_id"] == project["id"]
         )
-        project_evidence["items"] = [{
-            "license_id": "LicenseRef-Commercial",
-            "scope": "operational product terms",
-            "kind": "web_terms",
-            "url": "https://example.com/terms",
-            "verified_at": "2026-08-25",
-        }]
+        project_evidence["items"] = [
+            {
+                "license_id": "LicenseRef-Commercial",
+                "scope": "operational product terms",
+                "kind": "web_terms",
+                "url": "https://example.com/terms",
+                "verified_at": "2026-08-25",
+            }
+        ]
         self.write_json(projects_path, projects)
         self.write_json(root / "web" / "projects.json", projects)
         self.write_json(evidence_path, evidence)
@@ -658,7 +923,10 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertFalse(any(project["repo"] in error and "license" in error for error in errors), errors)
+        self.assertFalse(
+            any(project["repo"] in error and "license" in error for error in errors),
+            errors,
+        )
 
     def test_proprietary_non_github_system_is_valid_with_terms_evidence(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -668,32 +936,40 @@ class ValidationPolicyTests(unittest.TestCase):
         projects = json.loads(projects_path.read_text(encoding="utf-8"))
         evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
         project = projects["projects"][0]
-        project.update({
-            "repo": None,
-            "url": "https://example.com/product",
-            "licenses": ["LicenseRef-Proprietary"],
-            "source_model": "proprietary",
-            "stars": None,
-            "stars_verified_at": None,
-            "pushed_at": None,
-            "forks": None,
-            "open_issues": None,
-            "metadata_verified_at": None,
-            "github_detected_license": None,
-        })
-        project_evidence = next(
-            entry for entry in evidence["entries"] if entry["project_id"] == project["id"]
+        project.update(
+            {
+                "repo": None,
+                "url": "https://example.com/product",
+                "licenses": ["LicenseRef-Proprietary"],
+                "source_model": "proprietary",
+                "stars": None,
+                "stars_verified_at": None,
+                "pushed_at": None,
+                "forks": None,
+                "open_issues": None,
+                "metadata_verified_at": None,
+                "github_detected_license": None,
+            }
         )
-        project_evidence.update({
-            "repo": None,
-            "items": [{
-                "license_id": "LicenseRef-Proprietary",
-                "scope": "operational product",
-                "kind": "web_terms",
-                "url": "https://example.com/terms",
-                "verified_at": "2026-08-25",
-            }],
-        })
+        project_evidence = next(
+            entry
+            for entry in evidence["entries"]
+            if entry["project_id"] == project["id"]
+        )
+        project_evidence.update(
+            {
+                "repo": None,
+                "items": [
+                    {
+                        "license_id": "LicenseRef-Proprietary",
+                        "scope": "operational product",
+                        "kind": "web_terms",
+                        "url": "https://example.com/terms",
+                        "verified_at": "2026-08-25",
+                    }
+                ],
+            }
+        )
         self.write_json(projects_path, projects)
         self.write_json(root / "web" / "projects.json", projects)
         self.write_json(evidence_path, evidence)
@@ -711,13 +987,21 @@ class ValidationPolicyTests(unittest.TestCase):
         project_id = json.loads(
             (root / "directory" / "projects.json").read_text(encoding="utf-8")
         )["projects"][0]["id"]
-        next(entry for entry in evidence["entries"] if entry["project_id"] == project_id)["items"] = []
+        next(
+            entry for entry in evidence["entries"] if entry["project_id"] == project_id
+        )["items"] = []
         self.write_json(evidence_path, evidence)
         self.write_json(root / "web" / "license-evidence.json", evidence)
 
         errors = validate(root)
 
-        self.assertTrue(any("evidence licenses do not match project licenses" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "evidence licenses do not match project licenses" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_source_model_must_match_license_kinds(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -730,7 +1014,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("source model and license kinds are inconsistent" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "source model and license kinds are inconsistent" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_unknown_retrieval_mode_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -743,7 +1033,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("unknown retrieval_modes" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown retrieval_modes" in error for error in errors), errors
+        )
 
     def test_unknown_provider_relationship_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -757,7 +1049,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("unknown provider relationship" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown provider relationship" in error for error in errors), errors
+        )
 
     def test_provider_traits_must_be_reviewed_together(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -770,7 +1064,12 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("provider traits must be supplied together" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "provider traits must be supplied together" in error for error in errors
+            ),
+            errors,
+        )
 
     def test_provider_native_requires_one_backend(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -784,14 +1083,26 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("provider_native requires exactly one model backend" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "provider_native requires exactly one model backend" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_every_family_requires_exactly_one_score_profile(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         taxonomy_path = root / "directory" / "taxonomy.json"
         taxonomy = json.loads(taxonomy_path.read_text(encoding="utf-8"))
-        duplicate = dict(next(item for item in taxonomy["score_profiles"] if item["family"] == "assistant_system"))
+        duplicate = dict(
+            next(
+                item
+                for item in taxonomy["score_profiles"]
+                if item["family"] == "assistant_system"
+            )
+        )
         duplicate["id"] = "assistant_duplicate"
         taxonomy["score_profiles"].append(duplicate)
         self.write_json(taxonomy_path, taxonomy)
@@ -799,7 +1110,10 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("requires exactly one score profile" in error for error in errors), errors)
+        self.assertTrue(
+            any("requires exactly one score profile" in error for error in errors),
+            errors,
+        )
 
     def test_secondary_roles_cannot_cross_family_boundaries(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -812,7 +1126,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("secondary roles must belong" in error for error in errors), errors)
+        self.assertTrue(
+            any("secondary roles must belong" in error for error in errors), errors
+        )
 
     def test_discovery_sources_require_https_and_lowercase_hosts(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -825,8 +1141,16 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("feed_url must be an HTTPS URL" in error for error in errors), errors)
-        self.assertTrue(any("item_hosts must be a non-empty unique list" in error for error in errors), errors)
+        self.assertTrue(
+            any("feed_url must be an HTTPS URL" in error for error in errors), errors
+        )
+        self.assertTrue(
+            any(
+                "item_hosts must be a non-empty unique list" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_discovery_sources_require_public_coherent_hosts(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -838,20 +1162,28 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("lowercase public DNS hosts" in error for error in errors), errors)
+        self.assertTrue(
+            any("lowercase public DNS hosts" in error for error in errors), errors
+        )
 
         sources["sources"][0]["item_hosts"] = ["example.com"]
         self.write_json(sources_path, sources)
         errors = validate(root)
 
-        self.assertTrue(any("host must appear in item_hosts" in error for error in errors), errors)
+        self.assertTrue(
+            any("host must appear in item_hosts" in error for error in errors), errors
+        )
 
-    def test_candidate_url_identity_normalizes_slashes_and_tracking_parameters(self) -> None:
+    def test_candidate_url_identity_normalizes_slashes_and_tracking_parameters(
+        self,
+    ) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         candidates_path = root / "directory" / "candidates.json"
         candidates = json.loads(candidates_path.read_text(encoding="utf-8"))
-        original = next(item for item in candidates["candidates"] if item["repo"] is None)
+        original = next(
+            item for item in candidates["candidates"] if item["repo"] is None
+        )
         duplicate = dict(original)
         duplicate["url"] = original["url"].rstrip("/") + "/?utm_source=test"
         candidates["candidates"].append(duplicate)
@@ -859,7 +1191,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("duplicate candidate identity" in error for error in errors), errors)
+        self.assertTrue(
+            any("duplicate candidate identity" in error for error in errors), errors
+        )
 
     def catalog_with_candidate(self, mutate=None) -> list[str]:
         """Validate a temporary catalog whose queue holds one synthetic candidate."""
@@ -880,7 +1214,12 @@ class ValidationPolicyTests(unittest.TestCase):
             "topics": ["agent"],
             "status": "provisional",
             "discovered_at": "2026-09-04",
-            "review_required": ["licensing", "classification", "traits", "editorial_score"],
+            "review_required": [
+                "licensing",
+                "classification",
+                "traits",
+                "editorial_score",
+            ],
         }
         document["candidates"] = [candidate]
         if mutate is not None:
@@ -890,23 +1229,32 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_a_candidate_without_a_triage_block_is_valid(self) -> None:
         errors = self.catalog_with_candidate()
-        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+        self.assertFalse(
+            [error for error in errors if "sample/candidate" in error], errors
+        )
 
     def test_a_candidate_rejects_a_field_outside_the_schema(self) -> None:
-        errors = self.catalog_with_candidate(lambda candidate: candidate.update({"surprise": 1}))
-        self.assertTrue(any("fields do not match candidate schema" in error for error in errors), errors)
+        errors = self.catalog_with_candidate(
+            lambda candidate: candidate.update({"surprise": 1})
+        )
+        self.assertTrue(
+            any("fields do not match candidate schema" in error for error in errors),
+            errors,
+        )
 
     TRIAGE: ClassVar[dict] = {
         "verdict": "review_ready",
         "rule": "CURATION.md § Inclusion gate — operational product is identifiable",
         "finding": "The README documents a tool-using loop over a local index.",
-        "evidence": [{
-            "label": "README",
-            "url": "https://github.com/sample/candidate/blob/main/README.md",
-            "kind": "web",
-            "content_sha256": "a" * 64,
-            "fetched_at": "2026-09-04",
-        }],
+        "evidence": [
+            {
+                "label": "README",
+                "url": "https://github.com/sample/candidate/blob/main/README.md",
+                "kind": "web",
+                "content_sha256": "a" * 64,
+                "fetched_at": "2026-09-04",
+            }
+        ],
         "proposed_at": "2026-09-04",
         "proposer": "candidate-triage",
     }
@@ -916,42 +1264,69 @@ class ValidationPolicyTests(unittest.TestCase):
             candidate["triage"] = json.loads(json.dumps(self.TRIAGE))
             if mutate is not None:
                 mutate(candidate["triage"], candidate)
+
         return self.catalog_with_candidate(apply)
 
     def test_a_valid_triage_block_passes(self) -> None:
         errors = self.candidate_with_triage()
-        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+        self.assertFalse(
+            [error for error in errors if "sample/candidate" in error], errors
+        )
 
     def test_triage_rejects_an_unknown_verdict(self) -> None:
-        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "publish"}))
-        self.assertTrue(any("unknown triage verdict" in error for error in errors), errors)
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"verdict": "publish"})
+        )
+        self.assertTrue(
+            any("unknown triage verdict" in error for error in errors), errors
+        )
 
     def test_triage_rejects_a_field_outside_its_schema(self) -> None:
-        errors = self.candidate_with_triage(lambda triage, _: triage.update({"score": 9}))
-        self.assertTrue(any("triage fields differ from schema" in error for error in errors), errors)
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"score": 9})
+        )
+        self.assertTrue(
+            any("triage fields differ from schema" in error for error in errors), errors
+        )
 
     def test_held_by_is_required_for_a_held_verdict(self) -> None:
-        errors = self.candidate_with_triage(lambda triage, _: triage.update({"verdict": "held"}))
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"verdict": "held"})
+        )
         self.assertTrue(any("held_by is required" in error for error in errors), errors)
 
     def test_held_by_is_forbidden_on_any_other_verdict(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage.update({"held_by": "BACKLOG.md — skill packs"}))
+            lambda triage, _: triage.update({"held_by": "BACKLOG.md — skill packs"})
+        )
         self.assertTrue(any("held_by is required" in error for error in errors), errors)
 
     def test_triage_evidence_requires_an_https_url(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage["evidence"][0].update({"url": "http://example.com"}))
-        self.assertTrue(any("evidence requires an authoritative HTTPS URL" in e for e in errors), errors)
+            lambda triage, _: triage["evidence"][0].update(
+                {"url": "http://example.com"}
+            )
+        )
+        self.assertTrue(
+            any("evidence requires an authoritative HTTPS URL" in e for e in errors),
+            errors,
+        )
 
     def test_triage_evidence_requires_a_content_hash(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage["evidence"][0].update({"content_sha256": "nope"}))
-        self.assertTrue(any("evidence requires a content_sha256" in e for e in errors), errors)
+            lambda triage, _: triage["evidence"][0].update({"content_sha256": "nope"})
+        )
+        self.assertTrue(
+            any("evidence requires a content_sha256" in e for e in errors), errors
+        )
 
     def test_triage_evidence_must_not_be_empty(self) -> None:
-        errors = self.candidate_with_triage(lambda triage, _: triage.update({"evidence": []}))
-        self.assertTrue(any("triage evidence must be a non-empty list" in e for e in errors), errors)
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"evidence": []})
+        )
+        self.assertTrue(
+            any("triage evidence must be a non-empty list" in e for e in errors), errors
+        )
 
     def test_git_blob_evidence_must_address_the_recorded_sha(self) -> None:
         def mutate(triage, _candidate):
@@ -960,12 +1335,19 @@ class ValidationPolicyTests(unittest.TestCase):
                 "url": "https://github.com/sample/candidate/blob/main/LICENSE",
                 "kind": "git_blob",
                 "blob_sha": "0" * 40,
-                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "1" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/"
+                + "1" * 40,
                 "content_sha256": "a" * 64,
                 "fetched_at": "2026-09-04",
             }
+
         errors = self.candidate_with_triage(mutate)
-        self.assertTrue(any("immutable evidence URL must address the blob SHA" in e for e in errors), errors)
+        self.assertTrue(
+            any(
+                "immutable evidence URL must address the blob SHA" in e for e in errors
+            ),
+            errors,
+        )
 
     def test_valid_git_blob_evidence_passes(self) -> None:
         def mutate(triage, _candidate):
@@ -974,57 +1356,92 @@ class ValidationPolicyTests(unittest.TestCase):
                 "url": "https://github.com/sample/candidate/blob/main/LICENSE",
                 "kind": "git_blob",
                 "blob_sha": "0" * 40,
-                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/" + "0" * 40,
+                "immutable_url": "https://api.github.com/repos/sample/candidate/git/blobs/"
+                + "0" * 40,
                 "content_sha256": "a" * 64,
                 "fetched_at": "2026-09-04",
             }
+
         errors = self.candidate_with_triage(mutate)
         self.assertFalse([e for e in errors if "sample/candidate" in e], errors)
 
     def test_evidence_carrying_the_bundle_content_field_is_rejected(self) -> None:
         """The harness records `content` to quote from; it is context, never a citation field."""
         errors = self.candidate_with_triage(
-            lambda triage, _: triage["evidence"][0].update({"content": "The MIT License"}))
-        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+            lambda triage, _: triage["evidence"][0].update(
+                {"content": "The MIT License"}
+            )
+        )
+        self.assertTrue(
+            any("evidence fields differ from schema" in e for e in errors), errors
+        )
 
     def test_evidence_missing_a_required_field_is_rejected(self) -> None:
         def mutate(triage, _candidate):
             del triage["evidence"][0]["fetched_at"]
+
         errors = self.candidate_with_triage(mutate)
-        self.assertTrue(any("evidence fields differ from schema" in e for e in errors), errors)
+        self.assertTrue(
+            any("evidence fields differ from schema" in e for e in errors), errors
+        )
 
     def test_a_finding_may_not_name_a_taxonomy_role(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage.update({"finding": "This is clearly a coding_agent."}))
-        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+            lambda triage, _: triage.update(
+                {"finding": "This is clearly a coding_agent."}
+            )
+        )
+        self.assertTrue(
+            any("finding must not classify" in error for error in errors), errors
+        )
 
     def test_a_finding_may_not_name_a_taxonomy_role_in_any_case(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage.update({"finding": "This is clearly a Coding_Agent."}))
-        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+            lambda triage, _: triage.update(
+                {"finding": "This is clearly a Coding_Agent."}
+            )
+        )
+        self.assertTrue(
+            any("finding must not classify" in error for error in errors), errors
+        )
 
     def test_a_finding_may_quote_prose_that_resembles_a_role(self) -> None:
         errors = self.candidate_with_triage(
-            lambda triage, _: triage.update({"finding": 'The README calls it a "coding agent".'}))
-        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+            lambda triage, _: triage.update(
+                {"finding": 'The README calls it a "coding agent".'}
+            )
+        )
+        self.assertFalse(
+            [error for error in errors if "sample/candidate" in error], errors
+        )
 
     def test_a_finding_must_be_a_non_empty_string(self) -> None:
-        errors = self.candidate_with_triage(lambda triage, _: triage.update({"finding": "  "}))
-        self.assertTrue(any("triage requires a finding" in error for error in errors), errors)
+        errors = self.candidate_with_triage(
+            lambda triage, _: triage.update({"finding": "  "})
+        )
+        self.assertTrue(
+            any("triage requires a finding" in error for error in errors), errors
+        )
 
-    def test_family_and_role_may_be_null_while_a_decision_holds_the_record(self) -> None:
+    def test_family_and_role_may_be_null_while_a_decision_holds_the_record(
+        self,
+    ) -> None:
         def mutate(triage, candidate):
             triage["verdict"] = "held"
             triage["held_by"] = "BACKLOG.md — labs whose models you serve yourself"
             candidate["proposed_system_family"] = None
             candidate["proposed_primary_role"] = None
+
         errors = self.candidate_with_triage(mutate)
-        self.assertFalse([error for error in errors if "sample/candidate" in error], errors)
+        self.assertFalse(
+            [error for error in errors if "sample/candidate" in error], errors
+        )
 
     def test_family_and_role_may_not_be_null_without_a_holding_decision(self) -> None:
         def mutate(candidate):
             candidate["proposed_system_family"] = None
             candidate["proposed_primary_role"] = None
+
         errors = self.catalog_with_candidate(mutate)
         self.assertTrue(any("may only be null" in error for error in errors), errors)
 
@@ -1039,7 +1456,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("unknown specification type" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown specification type" in error for error in errors), errors
+        )
 
     def test_specification_score_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1052,7 +1471,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("fields differ from schema" in error and "score" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "fields differ from schema" in error and "score" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_unknown_inference_service_type_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1065,7 +1490,9 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("unknown inference service type" in error for error in errors), errors)
+        self.assertTrue(
+            any("unknown inference service type" in error for error in errors), errors
+        )
 
     def test_invalid_inference_service_score_is_rejected(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1078,7 +1505,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("score dimensions must be numbers between 0 and 10" in error for error in errors), errors)
+        self.assertTrue(
+            any(
+                "score dimensions must be numbers between 0 and 10" in error
+                for error in errors
+            ),
+            errors,
+        )
 
     def test_inference_service_requires_dated_terms_and_evidence(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1092,8 +1525,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("terms require verified_at" in error for error in errors), errors)
-        self.assertTrue(any("evidence must be a non-empty list" in error for error in errors), errors)
+        self.assertTrue(
+            any("terms require verified_at" in error for error in errors), errors
+        )
+        self.assertTrue(
+            any("evidence must be a non-empty list" in error for error in errors),
+            errors,
+        )
 
     def test_an_exclusion_rejects_a_field_outside_the_schema(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1106,7 +1544,8 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = validate(root)
 
         self.assertTrue(
-            any("fields do not match exclusion schema" in error for error in errors), errors
+            any("fields do not match exclusion schema" in error for error in errors),
+            errors,
         )
 
     def test_an_exclusion_accepts_an_optional_https_url(self) -> None:
@@ -1134,8 +1573,13 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("fields do not match exclusion schema" in error for error in errors), errors)
-        self.assertTrue(any("verified_at must be an ISO date" in error for error in errors), errors)
+        self.assertTrue(
+            any("fields do not match exclusion schema" in error for error in errors),
+            errors,
+        )
+        self.assertTrue(
+            any("verified_at must be an ISO date" in error for error in errors), errors
+        )
 
     def test_an_exclusion_is_verified_no_earlier_than_it_was_excluded(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1149,7 +1593,10 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = validate(root)
 
         self.assertTrue(
-            any("verified_at must not precede excluded_at" in error for error in errors), errors
+            any(
+                "verified_at must not precede excluded_at" in error for error in errors
+            ),
+            errors,
         )
 
     def signals_document(self, **extra: str) -> dict:
@@ -1190,7 +1637,10 @@ class ValidationPolicyTests(unittest.TestCase):
         (root / "web" / "hn-signals.json").write_text("{}", encoding="utf-8")
         errors = validate(root)
         self.assertTrue(
-            any("hn-signals.json" in error and "must not be published" in error for error in errors),
+            any(
+                "hn-signals.json" in error and "must not be published" in error
+                for error in errors
+            ),
             errors,
         )
 
@@ -1198,10 +1648,13 @@ class ValidationPolicyTests(unittest.TestCase):
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "hn-signals.json"
-        path.write_text(json.dumps(self.signals_document(extra="value")), encoding="utf-8")
+        path.write_text(
+            json.dumps(self.signals_document(extra="value")), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
-            any("fields do not match signal schema" in error for error in errors), errors
+            any("fields do not match signal schema" in error for error in errors),
+            errors,
         )
 
     def test_a_signal_finding_may_not_name_a_taxonomy_id(self) -> None:
@@ -1212,15 +1665,21 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "The page describes a coding_agent for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": "https://vendor.example/launch",
-                "kind": "web", "content_sha256": "a" * 64,
-                "fetched_at": "2026-09-09T08:00:00Z",
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": "https://vendor.example/launch",
+                    "kind": "web",
+                    "content_sha256": "a" * 64,
+                    "fetched_at": "2026-09-09T08:00:00Z",
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         # Scoped: the candidate-triage validator emits "must not classify" too, so a bare
         # substring match passes on an error from an entirely different queue.
@@ -1246,11 +1705,11 @@ class ValidationPolicyTests(unittest.TestCase):
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
-        errors = validate(root)
-        self.assertTrue(
-            any("unreadable page" in error for error in errors), errors
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
         )
+        errors = validate(root)
+        self.assertTrue(any("unreadable page" in error for error in errors), errors)
 
     def test_signal_assessment_evidence_must_be_a_list(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1264,11 +1723,14 @@ class ValidationPolicyTests(unittest.TestCase):
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "assessment evidence must be a list" in error
+                "signal 49616354" in error
+                and "assessment evidence must be a list" in error
                 for error in errors
             ),
             errors,
@@ -1282,18 +1744,25 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": "https://vendor.example/launch",
-                "kind": "web", "fetched_at": "2026-09-09T08:00:00Z",
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": "https://vendor.example/launch",
+                    "kind": "web",
+                    "fetched_at": "2026-09-09T08:00:00Z",
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "evidence fields differ from schema" in error
+                "signal 49616354" in error
+                and "evidence fields differ from schema" in error
                 for error in errors
             ),
             errors,
@@ -1313,15 +1782,21 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": "https://totally-unrelated.example/nope",
-                "kind": "web", "content_sha256": "a" * 64,
-                "fetched_at": "2026-09-09T08:00:00Z",
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": "https://totally-unrelated.example/nope",
+                    "kind": "web",
+                    "content_sha256": "a" * 64,
+                    "fetched_at": "2026-09-09T08:00:00Z",
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
@@ -1342,15 +1817,21 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": signal["url"],
-                "kind": "web", "content_sha256": signal["content_sha256"],
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": signal["content_sha256"],
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertEqual([error for error in errors if "signal 49616354" in error], [])
 
@@ -1363,18 +1844,27 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": signal["url"],
-                "kind": "web", "content_sha256": "a" * 64,
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": "a" * 64,
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
-            any("evidence must cite the signal's own pinned page" in error for error in errors),
+            any(
+                "evidence must cite the signal's own pinned page" in error
+                for error in errors
+            ),
             errors,
         )
 
@@ -1390,15 +1880,21 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "out_of_scope",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Reviewed by hand: the page is a hiring post, not a launch.",
-            "evidence": [{
-                "label": "vendor page", "url": signal["url"],
-                "kind": "web", "content_sha256": signal["content_sha256"],
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": signal["content_sha256"],
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "human",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertEqual([error for error in errors if "signal 49616354" in error], [])
 
@@ -1411,18 +1907,27 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "out_of_scope",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "The page is a hiring post, not a launch.",
-            "evidence": [{
-                "label": "vendor page", "url": signal["url"],
-                "kind": "web", "content_sha256": signal["content_sha256"],
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": signal["content_sha256"],
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "some-other-routine",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
-            any("assessment proposer must be hn-signals or human" in error for error in errors),
+            any(
+                "assessment proposer must be hn-signals or human" in error
+                for error in errors
+            ),
             errors,
         )
 
@@ -1434,16 +1939,22 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": signal["url"],
-                "kind": "web", "content_sha256": signal["content_sha256"],
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": signal["content_sha256"],
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
         signal["assessment"].update(fields)
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         return validate(root)
 
     def test_a_kebab_case_taxonomy_id_does_not_evade_the_finding_check(self) -> None:
@@ -1451,7 +1962,8 @@ class ValidationPolicyTests(unittest.TestCase):
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         errors = self.signals_with_assessment(
-            root, finding="The page positions this as a coding-agent for large repositories."
+            root,
+            finding="The page positions this as a coding-agent for large repositories.",
         )
         self.assertTrue(
             any(
@@ -1468,7 +1980,8 @@ class ValidationPolicyTests(unittest.TestCase):
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         errors = self.signals_with_assessment(
-            root, finding="The page describes a coding agent that edits files in a repository."
+            root,
+            finding="The page describes a coding agent that edits files in a repository.",
         )
         self.assertEqual([error for error in errors if "signal 49616354" in error], [])
 
@@ -1481,19 +1994,26 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "coding_agent launch page", "url": signal["url"],
-                "kind": "web", "content_sha256": signal["content_sha256"],
-                "fetched_at": signal["fetched_at"],
-            }],
+            "evidence": [
+                {
+                    "label": "coding_agent launch page",
+                    "url": signal["url"],
+                    "kind": "web",
+                    "content_sha256": signal["content_sha256"],
+                    "fetched_at": signal["fetched_at"],
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "evidence label must not classify" in error
+                "signal 49616354" in error
+                and "evidence label must not classify" in error
                 for error in errors
             ),
             errors,
@@ -1508,18 +2028,25 @@ class ValidationPolicyTests(unittest.TestCase):
         candidate["triage"]["finding"] = "The README calls it a coding-agent for teams."
         path.write_text(json.dumps(document), encoding="utf-8")
         errors = validate(root)
-        self.assertTrue(any("finding must not classify" in error for error in errors), errors)
+        self.assertTrue(
+            any("finding must not classify" in error for error in errors), errors
+        )
 
     def test_a_signal_url_carrying_a_control_character_is_rejected(self) -> None:
         """urlsplit strips tabs and newlines, so the host still parses clean."""
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
-        document = self.signals_document(url="https://vendor.example/launch\n::error::spoofed")
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        document = self.signals_document(
+            url="https://vendor.example/launch\n::error::spoofed"
+        )
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "must not contain control characters" in error
+                "signal 49616354" in error
+                and "must not contain control characters" in error
                 for error in errors
             ),
             errors,
@@ -1528,12 +2055,20 @@ class ValidationPolicyTests(unittest.TestCase):
     def test_signal_timestamps_must_be_iso_8601(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
-        document = self.signals_document(submitted_at="yesterday", fetched_at="2026-13-45T99:00Z")
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        document = self.signals_document(
+            submitted_at="yesterday", fetched_at="2026-13-45T99:00Z"
+        )
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         joined = "\n".join(errors)
-        self.assertIn("signal 49616354: submitted_at must be an ISO 8601 timestamp", joined)
-        self.assertIn("signal 49616354: fetched_at must be an ISO 8601 timestamp", joined)
+        self.assertIn(
+            "signal 49616354: submitted_at must be an ISO 8601 timestamp", joined
+        )
+        self.assertIn(
+            "signal 49616354: fetched_at must be an ISO 8601 timestamp", joined
+        )
 
     def test_worth_review_verdict_requires_at_least_one_evidence_item(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -1547,11 +2082,14 @@ class ValidationPolicyTests(unittest.TestCase):
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "evidence must cite at least one source" in error
+                "signal 49616354" in error
+                and "evidence must cite at least one source" in error
                 for error in errors
             ),
             errors,
@@ -1562,11 +2100,14 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["signals"][0]["story_id"] = 49616354
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "story_id must be a numeric string" in error
+                "signal 49616354" in error
+                and "story_id must be a numeric string" in error
                 for error in errors
             ),
             errors,
@@ -1579,7 +2120,9 @@ class ValidationPolicyTests(unittest.TestCase):
         duplicate = json.loads(json.dumps(document["signals"][0]))
         duplicate["url"] = "https://vendor.example/other"
         document["signals"].append(duplicate)
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
@@ -1600,27 +2143,37 @@ class ValidationPolicyTests(unittest.TestCase):
             submitted_at="",
             fetched_at="",
         )
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         joined = "\n".join(errors)
         self.assertIn("signal 49616354: points must be a non-negative integer", joined)
-        self.assertIn("signal 49616354: num_comments must be a non-negative integer", joined)
+        self.assertIn(
+            "signal 49616354: num_comments must be a non-negative integer", joined
+        )
         self.assertIn("signal 49616354: title must be a non-empty string", joined)
         self.assertIn(
-            "signal 49616354: story_url must be an HTTPS URL on a public DNS host", joined
+            "signal 49616354: story_url must be an HTTPS URL on a public DNS host",
+            joined,
         )
-        self.assertIn("signal 49616354: submitted_at must be a non-empty string", joined)
+        self.assertIn(
+            "signal 49616354: submitted_at must be a non-empty string", joined
+        )
         self.assertIn("signal 49616354: fetched_at must be a non-empty string", joined)
 
     def test_signal_points_rejects_boolean_value(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         document = self.signals_document(points=True)
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "signal 49616354" in error and "points must be a non-negative integer" in error
+                "signal 49616354" in error
+                and "points must be a non-negative integer" in error
                 for error in errors
             ),
             errors,
@@ -1634,15 +2187,21 @@ class ValidationPolicyTests(unittest.TestCase):
             "verdict": "worth_review",
             "rule": "docs/CURATION.md coding_agent inclusion gate",
             "finding": "Ships a new assistant with agentic workflows for developers.",
-            "evidence": [{
-                "label": "vendor page", "url": "https://vendor.example/launch",
-                "kind": "web", "content_sha256": "a" * 64,
-                "fetched_at": "2026-09-09T08:00:00Z",
-            }],
+            "evidence": [
+                {
+                    "label": "vendor page",
+                    "url": "https://vendor.example/launch",
+                    "kind": "web",
+                    "content_sha256": "a" * 64,
+                    "fetched_at": "2026-09-09T08:00:00Z",
+                }
+            ],
             "proposed_at": "2026-09-09",
             "proposer": "hn-signals",
         }
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
@@ -1663,11 +2222,14 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         del document["source"]["truncated"]
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "hn-signals.json: source envelope does not match the sweep schema" in error
+                "hn-signals.json: source envelope does not match the sweep schema"
+                in error
                 for error in errors
             ),
             errors,
@@ -1678,7 +2240,9 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["truncated"] = 1
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
@@ -1693,7 +2257,9 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["truncated"] = True
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
 
@@ -1702,11 +2268,14 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         del document["source"]["suppressed"]
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "hn-signals.json: source envelope does not match the sweep schema" in error
+                "hn-signals.json: source envelope does not match the sweep schema"
+                in error
                 for error in errors
             ),
             errors,
@@ -1717,11 +2286,14 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["suppressed"] = "0"
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "hn-signals.json: source envelope suppressed must be a non-negative integer" in error
+                "hn-signals.json: source envelope suppressed must be a non-negative integer"
+                in error
                 for error in errors
             ),
             errors,
@@ -1733,11 +2305,14 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["suppressed"] = True
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertTrue(
             any(
-                "hn-signals.json: source envelope suppressed must be a non-negative integer" in error
+                "hn-signals.json: source envelope suppressed must be a non-negative integer"
+                in error
                 for error in errors
             ),
             errors,
@@ -1748,7 +2323,9 @@ class ValidationPolicyTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         document = self.signals_document()
         document["source"]["suppressed"] = 3
-        (root / "directory" / "hn-signals.json").write_text(json.dumps(document), encoding="utf-8")
+        (root / "directory" / "hn-signals.json").write_text(
+            json.dumps(document), encoding="utf-8"
+        )
         errors = validate(root)
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
 

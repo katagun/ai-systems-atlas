@@ -7,6 +7,7 @@ boot payload per collection, a lazily fetched search index, per-reviewed-record
 detail files, and one shared imported-model detail payload. See
 docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
 """
+
 from __future__ import annotations
 
 import json
@@ -29,25 +30,77 @@ COLLECTIONS = (
 # What a card, a filter, a sort, and the finder read before anything is clicked.
 BOOT_FIELDS = {
     "systems": (
-        "id", "name", "system_family", "primary_role", "secondary_roles", "score_profile",
-        "stars", "status", "source_model", "licenses", "license_review_status", "description",
-        "agent_relation", "architectures", "repo", "url", "deployment", "agent_interfaces",
-        "local_first", "superseded_by",
+        "id",
+        "name",
+        "system_family",
+        "primary_role",
+        "secondary_roles",
+        "score_profile",
+        "stars",
+        "status",
+        "source_model",
+        "licenses",
+        "license_review_status",
+        "description",
+        "agent_relation",
+        "architectures",
+        "repo",
+        "url",
+        "deployment",
+        "agent_interfaces",
+        "local_first",
+        "superseded_by",
         # Card badges test these; see CARD_BADGES in web/app-core.js.
-        "human_editable", "execution_boundaries", "agent_capabilities", "retrieval_modes",
+        "human_editable",
+        "execution_boundaries",
+        "agent_capabilities",
+        "retrieval_modes",
     ),
     "inference": (
-        "id", "name", "service_type", "operator", "url", "api_styles", "model_sources",
-        "delivery_modes", "description", "score_profile", "terms",
+        "id",
+        "name",
+        "service_type",
+        "operator",
+        "url",
+        "api_styles",
+        "model_sources",
+        "delivery_modes",
+        "description",
+        "score_profile",
+        "terms",
     ),
     "runtimes": (
-        "id", "name", "runtime_type", "maintainer", "repo", "url", "api_styles", "accelerators",
-        "model_formats", "serving_modes", "deployment_surfaces", "licenses", "source_model",
-        "stars", "description", "score_profile",
+        "id",
+        "name",
+        "runtime_type",
+        "maintainer",
+        "repo",
+        "url",
+        "api_styles",
+        "accelerators",
+        "model_formats",
+        "serving_modes",
+        "deployment_surfaces",
+        "licenses",
+        "source_model",
+        "stars",
+        "description",
+        "score_profile",
     ),
     "specifications": (
-        "id", "name", "short_name", "specification_type", "scope", "status", "current_version",
-        "repo", "url", "licenses", "description", "stewards", "related_specifications",
+        "id",
+        "name",
+        "short_name",
+        "specification_type",
+        "scope",
+        "status",
+        "current_version",
+        "repo",
+        "url",
+        "licenses",
+        "description",
+        "stewards",
+        "related_specifications",
     ),
     # source_metadata is a nested block rather than a card field, and it is here
     # for the same reason the flat ones are: the card prints the family and the
@@ -56,42 +109,111 @@ BOOT_FIELDS = {
     # collection, which is cheaper than a card that cannot paint until detail
     # lands.
     "models": (
-        "id", "name", "model_type", "developer", "description", "source_id", "source_model",
-        "licenses", "distribution_modes", "score_profile", "source_metadata", "review_status",
+        "id",
+        "name",
+        "model_type",
+        "developer",
+        "description",
+        "source_id",
+        "source_model",
+        "licenses",
+        "distribution_modes",
+        "score_profile",
+        "source_metadata",
+        "review_status",
         "source_url",
     ),
     "packs": (
-        "id", "name", "short_name", "steward", "repo", "url", "description", "pack_type",
-        "hosts", "install_mechanism", "packaging_formats", "licenses", "status",
+        "id",
+        "name",
+        "short_name",
+        "steward",
+        "repo",
+        "url",
+        "description",
+        "pack_type",
+        "hosts",
+        "install_mechanism",
+        "packaging_formats",
+        "licenses",
+        "status",
     ),
 }
 
 # Exactly the fields each filter in web/app-core.js searches today.
 SEARCH_FIELDS = {
-    "systems": ("id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"),
+    "systems": (
+        "id",
+        "name",
+        "description",
+        "repo",
+        "url",
+        "why_it_matters",
+        "strengths",
+        "weaknesses",
+    ),
     "inference": (
-        "id", "name", "operator", "description", "service_boundary", "regional_controls",
-        "retention_controls", "routing", "customization", "strengths", "tradeoffs",
+        "id",
+        "name",
+        "operator",
+        "description",
+        "service_boundary",
+        "regional_controls",
+        "retention_controls",
+        "routing",
+        "customization",
+        "strengths",
+        "tradeoffs",
     ),
     "runtimes": (
-        "id", "name", "maintainer", "description", "runtime_boundary", "model_management",
-        "hardware_requirements", "operational_controls", "strengths", "tradeoffs",
+        "id",
+        "name",
+        "maintainer",
+        "description",
+        "runtime_boundary",
+        "model_management",
+        "hardware_requirements",
+        "operational_controls",
+        "strengths",
+        "tradeoffs",
     ),
     "specifications": (
-        "id", "name", "short_name", "description", "standardizes", "does_not_standardize",
-        "repo", "stewards",
+        "id",
+        "name",
+        "short_name",
+        "description",
+        "standardizes",
+        "does_not_standardize",
+        "repo",
+        "stewards",
     ),
     "models": (
-        "id", "source_id", "name", "developer", "description", "access_boundary",
-        "strengths", "tradeoffs",
+        "id",
+        "source_id",
+        "name",
+        "developer",
+        "description",
+        "access_boundary",
+        "strengths",
+        "tradeoffs",
     ),
     "packs": (
-        "id", "name", "short_name", "steward", "repo", "description", "installs", "not_a_system",
+        "id",
+        "name",
+        "short_name",
+        "steward",
+        "repo",
+        "description",
+        "installs",
+        "not_a_system",
     ),
 }
 
 MODEL_SOURCE_CARD_METADATA = (
-    "family", "modalities", "reported_open_weights", "reported_license",
+    "family",
+    "modalities",
+    "reported_open_weights",
+    "reported_license",
 )
 
 # Envelope keys the page reads: bootstrap() prints the newest of these as "Data updated".
@@ -105,7 +227,9 @@ def load_catalog(root: Path) -> dict[str, dict]:
         name: json.loads((web / name).read_text(encoding="utf-8"))
         for _, name, _, _ in COLLECTIONS
     }
-    catalog["models-dev.json"] = json.loads((web / "models-dev.json").read_text(encoding="utf-8"))
+    catalog["models-dev.json"] = json.loads(
+        (web / "models-dev.json").read_text(encoding="utf-8")
+    )
     return catalog
 
 
@@ -124,16 +248,19 @@ def model_records(catalog: dict[str, dict]) -> list[dict]:
             combined.append(reviewed.pop(source_id))
             continue
         metadata = source_record["source_metadata"]
-        combined.append({
-            "id": source_record["id"],
-            "source_id": source_id,
-            "name": metadata["name"],
-            "developer": source_id.split("/", 1)[0],
-            "description": metadata["description"] or "No description reported by models.dev.",
-            "source_metadata": metadata,
-            "review_status": "imported",
-            "source_url": f"https://github.com/anomalyco/models.dev/blob/{commit}/models/{source_id}.toml",
-        })
+        combined.append(
+            {
+                "id": source_record["id"],
+                "source_id": source_id,
+                "name": metadata["name"],
+                "developer": source_id.split("/", 1)[0],
+                "description": metadata["description"]
+                or "No description reported by models.dev.",
+                "source_metadata": metadata,
+                "review_status": "imported",
+                "source_url": f"https://github.com/anomalyco/models.dev/blob/{commit}/models/{source_id}.toml",
+            }
+        )
     combined.extend(reviewed.values())
     return combined
 
@@ -183,24 +310,35 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
             if envelope_key in document
         }
         if collection == "models":
-            envelope.update({
-                "source_updated_at": catalog["models-dev.json"]["updated_at"],
-                "source_record_count": catalog["models-dev.json"]["source_record_count"],
-                "reviewed_count": len(document[key]),
-            })
+            envelope.update(
+                {
+                    "source_updated_at": catalog["models-dev.json"]["updated_at"],
+                    "source_record_count": catalog["models-dev.json"][
+                        "source_record_count"
+                    ],
+                    "reviewed_count": len(document[key]),
+                }
+            )
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})
 
-        payloads[f"app/search/{collection}.json"] = dumps({
-            record["id"]: " ".join(
-                searchable_text(record.get(field)) for field in SEARCH_FIELDS[collection]
-            ).lower()
-            for record in records
-        })
+        payloads[f"app/search/{collection}.json"] = dumps(
+            {
+                record["id"]: " ".join(
+                    searchable_text(record.get(field))
+                    for field in SEARCH_FIELDS[collection]
+                ).lower()
+                for record in records
+            }
+        )
 
         for record in records:
             if collection == "models" and record.get("review_status") == "imported":
                 continue
-            detail = {field: value for field, value in record.items() if field not in boot_fields}
+            detail = {
+                field: value
+                for field, value in record.items()
+                if field not in boot_fields
+            }
             if "score" in record:
                 detail["score"] = record["score"]
             payloads[f"app/detail/{kind}/{record['id']}.json"] = dumps(detail)
@@ -215,18 +353,36 @@ def main(argv: list[str]) -> int:
         problems = [
             f"web/{path} is missing or stale"
             for path, content in payloads.items()
-            if not (web / path).exists() or (web / path).read_text(encoding="utf-8") != content
+            if not (web / path).exists()
+            or (web / path).read_text(encoding="utf-8") != content
         ]
         app_dir = web / "app"
         if app_dir.exists():
-            committed = {str(path.relative_to(web)) for path in app_dir.rglob("*") if path.is_file()}
+            committed = {
+                str(path.relative_to(web))
+                for path in app_dir.rglob("*")
+                if path.is_file()
+            }
             problems += [
                 f"web/{path} is not produced by the catalog"
                 for path in sorted(committed - set(payloads))
             ]
         if problems:
-            print("\n".join(problems[:20] + ([f"… and {len(problems) - 20} more"] if len(problems) > 20 else [])), file=sys.stderr)
-            print("Run `uv run python scripts/build_web_payload.py` and commit the result.", file=sys.stderr)
+            print(
+                "\n".join(
+                    problems[:20]
+                    + (
+                        [f"… and {len(problems) - 20} more"]
+                        if len(problems) > 20
+                        else []
+                    )
+                ),
+                file=sys.stderr,
+            )
+            print(
+                "Run `uv run python scripts/build_web_payload.py` and commit the result.",
+                file=sys.stderr,
+            )
             return 1
         print(f"{len(payloads)} app payload files are up to date.")
         return 0

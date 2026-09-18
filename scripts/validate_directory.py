@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate the canonical directory, review queues, and published data copies."""
+
 from __future__ import annotations
 
 import json
@@ -24,13 +25,25 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 PUBLISHED_DATA = (
-    "projects.json", "taxonomy.json", "exclusions.json", "license-evidence.json",
-    "specifications.json", "inference-services.json", "local-runtimes.json", "models.json",
-    "models-dev.json", "packs.json",
+    "projects.json",
+    "taxonomy.json",
+    "exclusions.json",
+    "license-evidence.json",
+    "specifications.json",
+    "inference-services.json",
+    "local-runtimes.json",
+    "models.json",
+    "models-dev.json",
+    "packs.json",
 )
 CATALOG_DOCUMENTS = (
-    *PUBLISHED_DATA, "candidates.json", "model-candidates.json", "model-dispositions.json",
-    "license-review.json", "discovery-sources.json", "hn-signals.json",
+    *PUBLISHED_DATA,
+    "candidates.json",
+    "model-candidates.json",
+    "model-dispositions.json",
+    "license-review.json",
+    "discovery-sources.json",
+    "hn-signals.json",
 )
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
@@ -46,22 +59,52 @@ CONTROL_CHARACTER_PATTERN = re.compile(r"[\x00-\x1f\x7f-\x9f]")
 IDENTIFIER_SEPARATORS = re.compile(r"[^0-9a-z\s]")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
-EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson", "excluded_at", "verified_at"}
+EXCLUSION_REQUIRED = {
+    "name",
+    "reason",
+    "repo",
+    "useful_lesson",
+    "excluded_at",
+    "verified_at",
+}
 EXCLUSION_OPTIONAL = {"url"}
 SIGNAL_REQUIRED = {
-    "story_id", "story_url", "title", "url", "points", "num_comments", "submitted_at",
-    "page_status", "content_sha256", "fetched_at", "status", "discovered_at",
+    "story_id",
+    "story_url",
+    "title",
+    "url",
+    "points",
+    "num_comments",
+    "submitted_at",
+    "page_status",
+    "content_sha256",
+    "fetched_at",
+    "status",
+    "discovered_at",
 }
 SIGNAL_OPTIONAL = {"assessment"}
-ASSESSMENT_REQUIRED = {"verdict", "rule", "finding", "evidence", "proposed_at", "proposer"}
+ASSESSMENT_REQUIRED = {
+    "verdict",
+    "rule",
+    "finding",
+    "evidence",
+    "proposed_at",
+    "proposer",
+}
 ASSESSMENT_VERDICTS = {"worth_review", "out_of_scope", "unreadable"}
 # A reviewer who disagrees with a verdict edits the block in place rather than
 # deleting it, so the queue must be able to say whose disposition a block records.
 ASSESSMENT_PROPOSERS = {"hn-signals", "human"}
 PAGE_STATUSES = {"readable", "unreadable", "failed"}
 SIGNAL_ENVELOPE_REQUIRED = {
-    "endpoint", "window_start", "window_end", "points_floor", "story_count", "eligible_count",
-    "truncated", "suppressed",
+    "endpoint",
+    "window_start",
+    "window_end",
+    "points_floor",
+    "story_count",
+    "eligible_count",
+    "truncated",
+    "suppressed",
 }
 
 TAXONOMY_GROUPS = (
@@ -107,65 +150,199 @@ TAXONOMY_GROUPS = (
 )
 
 PROJECT_REQUIRED = {
-    "id", "system_family", "score_profile", "name", "repo", "url", "description",
-    "primary_role", "secondary_roles", "agent_relation", "architectures", "retrieval_modes",
-    "capture_modes", "memory_lifecycle", "canonical_data", "deployment", "local_first",
-    "human_editable", "provenance", "licenses", "source_model", "license_review_status",
-    "status", "stars",
-    "stars_verified_at", "historical_stars", "current_repo_note", "score", "strengths",
-    "weaknesses", "why_it_matters", "research_confidence", "verified_at",
+    "id",
+    "system_family",
+    "score_profile",
+    "name",
+    "repo",
+    "url",
+    "description",
+    "primary_role",
+    "secondary_roles",
+    "agent_relation",
+    "architectures",
+    "retrieval_modes",
+    "capture_modes",
+    "memory_lifecycle",
+    "canonical_data",
+    "deployment",
+    "local_first",
+    "human_editable",
+    "provenance",
+    "licenses",
+    "source_model",
+    "license_review_status",
+    "status",
+    "stars",
+    "stars_verified_at",
+    "historical_stars",
+    "current_repo_note",
+    "score",
+    "strengths",
+    "weaknesses",
+    "why_it_matters",
+    "research_confidence",
+    "verified_at",
 }
 PROJECT_OPTIONAL = {
-    "agent_interfaces", "execution_boundaries", "agent_capabilities", "pushed_at", "forks",
-    "open_issues", "metadata_verified_at", "github_detected_license", "provider_relationship",
-    "model_backends", "superseded_by",
+    "agent_interfaces",
+    "execution_boundaries",
+    "agent_capabilities",
+    "pushed_at",
+    "forks",
+    "open_issues",
+    "metadata_verified_at",
+    "github_detected_license",
+    "provider_relationship",
+    "model_backends",
+    "superseded_by",
 }
 
 SPECIFICATION_REQUIRED = {
-    "id", "name", "short_name", "specification_type", "scope", "status",
-    "current_version", "stewards", "repo", "url", "description", "standardizes",
-    "does_not_standardize", "licenses", "license_note", "related_specifications",
-    "evidence", "license_evidence", "verified_at",
+    "id",
+    "name",
+    "short_name",
+    "specification_type",
+    "scope",
+    "status",
+    "current_version",
+    "stewards",
+    "repo",
+    "url",
+    "description",
+    "standardizes",
+    "does_not_standardize",
+    "licenses",
+    "license_note",
+    "related_specifications",
+    "evidence",
+    "license_evidence",
+    "verified_at",
 }
 
 PACK_REQUIRED = {
-    "id", "name", "steward", "repo", "url", "description", "pack_type", "hosts",
-    "packaging_formats", "install_mechanism", "installs", "not_a_system", "status",
-    "licenses", "license_note", "license_evidence", "evidence", "verified_at",
+    "id",
+    "name",
+    "steward",
+    "repo",
+    "url",
+    "description",
+    "pack_type",
+    "hosts",
+    "packaging_formats",
+    "install_mechanism",
+    "installs",
+    "not_a_system",
+    "status",
+    "licenses",
+    "license_note",
+    "license_evidence",
+    "evidence",
+    "verified_at",
 }
-PACK_OPTIONAL = {"short_name", "distribution_machinery", "related_packs", "related_systems"}
+PACK_OPTIONAL = {
+    "short_name",
+    "distribution_machinery",
+    "related_packs",
+    "related_systems",
+}
 # A pack is recorded for what it installs, never ranked or scored (ADR 032).
-PACK_FORBIDDEN = {"stars", "stars_verified_at", "score", "score_profile", "system_family", "primary_role"}
+PACK_FORBIDDEN = {
+    "stars",
+    "stars_verified_at",
+    "score",
+    "score_profile",
+    "system_family",
+    "primary_role",
+}
 
 LOCAL_RUNTIME_REQUIRED = {
-    "id", "name", "maintainer", "runtime_type", "repo", "url", "description",
-    "runtime_boundary", "accelerators", "model_formats", "serving_modes", "api_styles",
-    "deployment_surfaces", "model_management", "hardware_requirements",
-    "operational_controls", "strengths", "tradeoffs", "licenses", "source_model",
-    "license_note", "license_evidence", "score_profile", "score", "evidence", "verified_at",
+    "id",
+    "name",
+    "maintainer",
+    "runtime_type",
+    "repo",
+    "url",
+    "description",
+    "runtime_boundary",
+    "accelerators",
+    "model_formats",
+    "serving_modes",
+    "api_styles",
+    "deployment_surfaces",
+    "model_management",
+    "hardware_requirements",
+    "operational_controls",
+    "strengths",
+    "tradeoffs",
+    "licenses",
+    "source_model",
+    "license_note",
+    "license_evidence",
+    "score_profile",
+    "score",
+    "evidence",
+    "verified_at",
 }
 LOCAL_RUNTIME_OPTIONAL = {"stars", "stars_verified_at"}
 
 INFERENCE_SERVICE_REQUIRED = {
-    "id", "name", "operator", "service_type", "url", "description", "service_boundary",
-    "delivery_modes", "model_sources", "api_styles", "regional_controls",
-    "retention_controls", "routing", "customization", "strengths", "tradeoffs",
-    "score_profile", "score", "terms", "evidence", "verified_at",
+    "id",
+    "name",
+    "operator",
+    "service_type",
+    "url",
+    "description",
+    "service_boundary",
+    "delivery_modes",
+    "model_sources",
+    "api_styles",
+    "regional_controls",
+    "retention_controls",
+    "routing",
+    "customization",
+    "strengths",
+    "tradeoffs",
+    "score_profile",
+    "score",
+    "terms",
+    "evidence",
+    "verified_at",
 }
 INFERENCE_SERVICE_OPTIONAL = {"trust"}
 TRUST_REQUIRED = {"verified_at", "properties", "findings"}
 TRUST_PROPERTIES = (
-    "response_integrity", "upstream_disclosure", "credential_handling",
-    "cache_isolation", "vulnerability_disclosure", "independent_audit",
+    "response_integrity",
+    "upstream_disclosure",
+    "credential_handling",
+    "cache_isolation",
+    "vulnerability_disclosure",
+    "independent_audit",
 )
 TRUST_PROPERTY_REQUIRED = {"status", "note", "url", "scope", "verified_at"}
-TRUST_FINDING_REQUIRED = {"claim", "published_at", "source", "operator_response", "resolved"}
+TRUST_FINDING_REQUIRED = {
+    "claim",
+    "published_at",
+    "source",
+    "operator_response",
+    "resolved",
+}
 TRUST_RESPONSE_REQUIRED = {"url", "verified_at", "summary"}
 
 CANDIDATE_REQUIRED = {
-    "repo", "name", "url", "description", "proposed_system_family", "proposed_primary_role",
-    "classification_confidence", "github_detected_license", "stars", "topics", "status",
-    "discovered_at", "review_required",
+    "repo",
+    "name",
+    "url",
+    "description",
+    "proposed_system_family",
+    "proposed_primary_role",
+    "classification_confidence",
+    "github_detected_license",
+    "stars",
+    "topics",
+    "status",
+    "discovered_at",
+    "review_required",
 }
 CANDIDATE_OPTIONAL = {"triage"}
 
@@ -174,23 +351,57 @@ TRIAGE_OPTIONAL = {"held_by"}
 TRIAGE_VERDICTS = {"out_of_scope", "held", "review_ready"}
 
 MODEL_REQUIRED = {
-    "id", "source_id", "name", "developer", "url", "description", "model_type",
-    "distribution_modes", "source_metadata", "licenses", "source_model",
-    "license_review_status", "license_note", "license_evidence", "access_boundary",
-    "strengths", "tradeoffs", "score_profile", "score", "evidence",
-    "metadata_verified_at", "verified_at",
+    "id",
+    "source_id",
+    "name",
+    "developer",
+    "url",
+    "description",
+    "model_type",
+    "distribution_modes",
+    "source_metadata",
+    "licenses",
+    "source_model",
+    "license_review_status",
+    "license_note",
+    "license_evidence",
+    "access_boundary",
+    "strengths",
+    "tradeoffs",
+    "score_profile",
+    "score",
+    "evidence",
+    "metadata_verified_at",
+    "verified_at",
 }
 MODEL_SOURCE_METADATA_REQUIRED = {
-    "name", "description", "family", "release_date", "last_updated", "knowledge_cutoff",
-    "modalities", "capabilities", "limits", "reported_open_weights", "reported_license",
-    "links", "weights",
+    "name",
+    "description",
+    "family",
+    "release_date",
+    "last_updated",
+    "knowledge_cutoff",
+    "modalities",
+    "capabilities",
+    "limits",
+    "reported_open_weights",
+    "reported_license",
+    "links",
+    "weights",
 }
 MODEL_CAPABILITIES = {
-    "attachment", "reasoning", "tool_call", "structured_output", "temperature",
+    "attachment",
+    "reasoning",
+    "tool_call",
+    "structured_output",
+    "temperature",
 }
 MODEL_LIMITS = {"context", "input", "output"}
 MODEL_REVIEW_REQUIRED = {
-    "official_identity", "model_boundary", "license_evidence", "source_model",
+    "official_identity",
+    "model_boundary",
+    "license_evidence",
+    "source_model",
     "model_access_score",
 }
 
@@ -283,7 +494,9 @@ def validate_string_list(
 ) -> None:
     values = project.get(field)
     if not isinstance(values, list) or (not values and not allow_empty):
-        errors.append(f"{prefix}: {field} must be {'a' if allow_empty else 'a non-empty'} list")
+        errors.append(
+            f"{prefix}: {field} must be {'a' if allow_empty else 'a non-empty'} list"
+        )
         return
     if any(not isinstance(value, str) for value in values):
         errors.append(f"{prefix}: {field} must contain only strings")
@@ -311,7 +524,8 @@ def validate_collection_envelope(
         errors.append(f"{name}: {key} must be a list")
         return []
     identifiers = {
-        item.get("id") for item in records
+        item.get("id")
+        for item in records
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
     if len(identifiers) != len(records):
@@ -346,12 +560,17 @@ def validate_score_profile(
             continue
         weight = item.get("weight")
         if not is_number(weight) or weight <= 0:
-            errors.append(f"taxonomy: {label} score dimensions require positive weights")
+            errors.append(
+                f"taxonomy: {label} score dimensions require positive weights"
+            )
             continue
         if item["id"] in weights:
             errors.append(f"taxonomy: {label} score profile has duplicate dimensions")
         weights[item["id"]] = weight
-        if not isinstance(item.get("definition"), str) or not item["definition"].strip():
+        if (
+            not isinstance(item.get("definition"), str)
+            or not item["definition"].strip()
+        ):
             errors.append(f"taxonomy: {label} score dimensions require definitions")
     if weights and abs(sum(weights.values()) - 1.0) > 1e-9:
         errors.append(f"taxonomy: {label} score profile weights do not total 1")
@@ -373,16 +592,15 @@ def validate_record_score(
     if not isinstance(score, dict) or set(score) != set(dimensions) | {"overall"}:
         errors.append(f"{prefix}: score keys must exactly match the {label} profile")
     elif any(
-        not is_number(score[key]) or not 0 <= score[key] <= 10
-        for key in dimensions
+        not is_number(score[key]) or not 0 <= score[key] <= 10 for key in dimensions
     ):
         errors.append(f"{prefix}: score dimensions must be numbers between 0 and 10")
     elif not is_number(score["overall"]):
         errors.append(f"{prefix}: score overall must be numeric")
     else:
-        calculated = round(sum(
-            score[key] * weight for key, weight in dimensions.items()
-        ), 2)
+        calculated = round(
+            sum(score[key] * weight for key, weight in dimensions.items()), 2
+        )
         if score["overall"] != calculated:
             errors.append(
                 f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
@@ -435,7 +653,13 @@ def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
         for item in taxonomy.get("licenses", [])
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
-    known_license_kinds = {"open_source", "open_content", "restricted", "proprietary", "unclear"}
+    known_license_kinds = {
+        "open_source",
+        "open_content",
+        "restricted",
+        "proprietary",
+        "unclear",
+    }
     for license_id, kind in license_kinds.items():
         if kind not in known_license_kinds:
             errors.append(f"taxonomy: license {license_id!r} has unknown kind {kind!r}")
@@ -449,14 +673,22 @@ def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
         if not isinstance(dimensions, list) or not dimensions:
             errors.append(f"taxonomy: score profile {profile_id!r} requires dimensions")
             continue
-        dimension_ids = [item.get("id") for item in dimensions if isinstance(item, dict)]
+        dimension_ids = [
+            item.get("id") for item in dimensions if isinstance(item, dict)
+        ]
         if len(dimension_ids) != len(set(dimension_ids)):
-            errors.append(f"taxonomy: score profile {profile_id!r} has duplicate dimensions")
+            errors.append(
+                f"taxonomy: score profile {profile_id!r} has duplicate dimensions"
+            )
         weights = [item.get("weight") for item in dimensions if isinstance(item, dict)]
-        if len(weights) != len(dimensions) or any(not is_number(weight) or weight <= 0 for weight in weights):
+        if len(weights) != len(dimensions) or any(
+            not is_number(weight) or weight <= 0 for weight in weights
+        ):
             errors.append(f"taxonomy: score profile {profile_id!r} has invalid weights")
         elif abs(sum(weights) - 1.0) > 1e-9:
-            errors.append(f"taxonomy: score profile {profile_id!r} weights do not total 1")
+            errors.append(
+                f"taxonomy: score profile {profile_id!r} weights do not total 1"
+            )
     for family, family_profiles in profiles_by_family.items():
         if len(family_profiles) != 1:
             errors.append(
@@ -465,13 +697,25 @@ def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
             )
 
     inference_score_dimensions = validate_score_profile(
-        taxonomy, "inference_service_score_profile", "inference_service", "inference service", errors,
+        taxonomy,
+        "inference_service_score_profile",
+        "inference_service",
+        "inference service",
+        errors,
     )
     local_runtime_score_dimensions = validate_score_profile(
-        taxonomy, "local_runtime_score_profile", "local_runtime", "local runtime", errors,
+        taxonomy,
+        "local_runtime_score_profile",
+        "local_runtime",
+        "local runtime",
+        errors,
     )
     model_score_dimensions = validate_score_profile(
-        taxonomy, "model_score_profile", "model_access", "model", errors,
+        taxonomy,
+        "model_score_profile",
+        "model_access",
+        "model",
+        errors,
     )
     return Taxonomy(
         enum_ids=enum_ids,
@@ -520,8 +764,12 @@ def validate_project_identity(
             repos.add(repo_key)
         if project.get("url") != f"https://github.com/{repo}":
             errors.append(f"{prefix}: url must be the canonical GitHub repository URL")
-    elif not isinstance(project.get("url"), str) or not project["url"].startswith("https://"):
-        errors.append(f"{prefix}: non-GitHub systems require an authoritative HTTPS URL")
+    elif not isinstance(project.get("url"), str) or not project["url"].startswith(
+        "https://"
+    ):
+        errors.append(
+            f"{prefix}: non-GitHub systems require an authoritative HTTPS URL"
+        )
     if isinstance(project.get("url"), str):
         project_url_keys.add(canonical_url_key(project["url"]))
     return repo
@@ -532,7 +780,11 @@ def validate_project_classification(
 ) -> None:
     """Validate a project's family, role, score, traits, and license classification."""
     enum_ids, families, roles, profiles, license_kinds = (
-        tax.enum_ids, tax.families, tax.roles, tax.profiles, tax.license_kinds,
+        tax.enum_ids,
+        tax.families,
+        tax.roles,
+        tax.profiles,
+        tax.license_kinds,
     )
     for field in ("name", "description", "canonical_data", "why_it_matters"):
         if not isinstance(project.get(field), str) or not project[field].strip():
@@ -548,10 +800,16 @@ def validate_project_classification(
     if role not in roles:
         errors.append(f"{prefix}: unknown role {role!r}")
     elif roles[role] != family:
-        errors.append(f"{prefix}: role {role!r} belongs to {roles[role]!r}, not {family!r}")
-    validate_string_list(project, "secondary_roles", set(roles), prefix, errors, allow_empty=True)
+        errors.append(
+            f"{prefix}: role {role!r} belongs to {roles[role]!r}, not {family!r}"
+        )
+    validate_string_list(
+        project, "secondary_roles", set(roles), prefix, errors, allow_empty=True
+    )
     if role in project.get("secondary_roles", []):
-        errors.append(f"{prefix}: primary role must not be repeated as a secondary role")
+        errors.append(
+            f"{prefix}: primary role must not be repeated as a secondary role"
+        )
     incompatible_secondary_roles = sorted(
         secondary_role
         for secondary_role in project.get("secondary_roles", [])
@@ -568,20 +826,32 @@ def validate_project_classification(
     if not profile:
         errors.append(f"{prefix}: unknown score profile {profile_id!r}")
     elif profile.get("family") != family:
-        errors.append(f"{prefix}: score profile {profile_id!r} does not match {family!r}")
+        errors.append(
+            f"{prefix}: score profile {profile_id!r} does not match {family!r}"
+        )
     else:
         dimensions = {item["id"]: item["weight"] for item in profile["dimensions"]}
         score = project.get("score")
         if not isinstance(score, dict) or set(score) != set(dimensions) | {"overall"}:
-            errors.append(f"{prefix}: score keys must exactly match profile {profile_id!r}")
-        elif any(not is_number(score[key]) or not 0 <= score[key] <= 10 for key in dimensions):
-            errors.append(f"{prefix}: score dimensions must be numbers between 0 and 10")
+            errors.append(
+                f"{prefix}: score keys must exactly match profile {profile_id!r}"
+            )
+        elif any(
+            not is_number(score[key]) or not 0 <= score[key] <= 10 for key in dimensions
+        ):
+            errors.append(
+                f"{prefix}: score dimensions must be numbers between 0 and 10"
+            )
         elif not is_number(score["overall"]):
             errors.append(f"{prefix}: score overall must be numeric")
         else:
-            calculated = round(sum(score[key] * weight for key, weight in dimensions.items()), 2)
+            calculated = round(
+                sum(score[key] * weight for key, weight in dimensions.items()), 2
+            )
             if score["overall"] != calculated:
-                errors.append(f"{prefix}: overall {score['overall']} does not match weighted {calculated}")
+                errors.append(
+                    f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
+                )
 
     for field, group in (
         ("architectures", "architectures"),
@@ -601,9 +871,16 @@ def validate_project_classification(
         relationship = project.get("provider_relationship")
         if relationship not in enum_ids["provider_relationships"]:
             errors.append(f"{prefix}: unknown provider relationship")
-        validate_string_list(project, "model_backends", enum_ids["model_backends"], prefix, errors)
-        if relationship == "provider_native" and len(project.get("model_backends", [])) != 1:
-            errors.append(f"{prefix}: provider_native requires exactly one model backend")
+        validate_string_list(
+            project, "model_backends", enum_ids["model_backends"], prefix, errors
+        )
+        if (
+            relationship == "provider_native"
+            and len(project.get("model_backends", [])) != 1
+        ):
+            errors.append(
+                f"{prefix}: provider_native requires exactly one model backend"
+            )
     if project.get("provenance") not in enum_ids["provenance_levels"]:
         errors.append(f"{prefix}: unknown provenance level")
     if project.get("research_confidence") not in enum_ids["research_confidence_levels"]:
@@ -628,7 +905,8 @@ def validate_project_classification(
             if license_id in license_kinds
         }
         coherent = {
-            "open_source": bool(project_license_kinds) and project_license_kinds <= {"open_source"},
+            "open_source": bool(project_license_kinds)
+            and project_license_kinds <= {"open_source"},
             "mixed_open_source": len(project.get("licenses", [])) >= 2
             and bool(project_license_kinds)
             and project_license_kinds <= {"open_source", "open_content"},
@@ -663,24 +941,45 @@ def validate_project_editorial_fields(
         validate_string_list(project, field, None, prefix, errors)
     if not valid_date(project.get("verified_at")):
         errors.append(f"{prefix}: verified_at must be an ISO date")
-    if project.get("stars") is not None and (not isinstance(project["stars"], int) or project["stars"] < 0):
+    if project.get("stars") is not None and (
+        not isinstance(project["stars"], int) or project["stars"] < 0
+    ):
         errors.append(f"{prefix}: stars must be a non-negative integer or null")
-    if repo and project.get("status") in {"active", "archived", "superseded"} and project.get("stars") is None:
-        errors.append(f"{prefix}: active, archived, and superseded GitHub projects require refreshed stars")
-    if project.get("stars") is not None and not valid_date(project.get("stars_verified_at")):
+    if (
+        repo
+        and project.get("status") in {"active", "archived", "superseded"}
+        and project.get("stars") is None
+    ):
+        errors.append(
+            f"{prefix}: active, archived, and superseded GitHub projects require refreshed stars"
+        )
+    if project.get("stars") is not None and not valid_date(
+        project.get("stars_verified_at")
+    ):
         errors.append(f"{prefix}: populated stars require stars_verified_at")
-    if project.get("stars_verified_at") is not None and not valid_date(project["stars_verified_at"]):
+    if project.get("stars_verified_at") is not None and not valid_date(
+        project["stars_verified_at"]
+    ):
         errors.append(f"{prefix}: stars_verified_at must be null or an ISO date")
     if project.get("historical_stars") is not None and (
-        not isinstance(project["historical_stars"], int) or project["historical_stars"] < 0
+        not isinstance(project["historical_stars"], int)
+        or project["historical_stars"] < 0
     ):
-        errors.append(f"{prefix}: historical_stars must be a non-negative integer or null")
-    if project.get("current_repo_note") is not None and not isinstance(project["current_repo_note"], str):
+        errors.append(
+            f"{prefix}: historical_stars must be a non-negative integer or null"
+        )
+    if project.get("current_repo_note") is not None and not isinstance(
+        project["current_repo_note"], str
+    ):
         errors.append(f"{prefix}: current_repo_note must be a string or null")
-    if project.get("metadata_verified_at") is not None and not valid_date(project["metadata_verified_at"]):
+    if project.get("metadata_verified_at") is not None and not valid_date(
+        project["metadata_verified_at"]
+    ):
         errors.append(f"{prefix}: metadata_verified_at must be an ISO date")
     for field in ("forks", "open_issues"):
-        if project.get(field) is not None and (not isinstance(project[field], int) or project[field] < 0):
+        if project.get(field) is not None and (
+            not isinstance(project[field], int) or project[field] < 0
+        ):
             errors.append(f"{prefix}: {field} must be a non-negative integer or null")
     for field in ("pushed_at", "github_detected_license"):
         if project.get(field) is not None and not isinstance(project[field], str):
@@ -699,7 +998,9 @@ def validate_project_record(
         errors.append("projects.json: every project must be an object")
         return
     prefix = str(project.get("repo") or project.get("id") or "unknown")
-    repo = validate_project_identity(project, prefix, ids, repos, project_url_keys, errors)
+    repo = validate_project_identity(
+        project, prefix, ids, repos, project_url_keys, errors
+    )
     validate_project_classification(project, prefix, tax, errors)
     validate_project_editorial_fields(project, prefix, repo, errors)
 
@@ -727,7 +1028,9 @@ def validate_projects(
     # cross-check. Carrying one in the index makes ProjectIndex.projects lie about
     # its own type, which is how a malformed entry used to replace the whole error
     # report with an AttributeError from the evidence pass.
-    projects: list[dict[str, Any]] = [entry for entry in entries if isinstance(entry, dict)]
+    projects: list[dict[str, Any]] = [
+        entry for entry in entries if isinstance(entry, dict)
+    ]
 
     for project in projects:
         if "superseded_by" not in project:
@@ -736,7 +1039,9 @@ def validate_projects(
         if successor != project.get("id") and successor not in ids:
             prefix = str(project.get("repo") or project.get("id") or "unknown")
             errors.append(f"{prefix}: unknown superseded_by {successor!r}")
-    return ProjectIndex(projects=projects, ids=ids, repos=repos, url_keys=project_url_keys)
+    return ProjectIndex(
+        projects=projects, ids=ids, repos=repos, url_keys=project_url_keys
+    )
 
 
 def validate_license_evidence(
@@ -746,17 +1051,25 @@ def validate_license_evidence(
     evidence_entries = evidence_data.get("entries", [])
     if not valid_date(evidence_data.get("verified_at")):
         errors.append("license-evidence.json: verified_at must be an ISO date")
-    evidence_ids = [item.get("project_id") for item in evidence_entries if isinstance(item, dict)]
-    duplicate_evidence = sorted({item for item in evidence_ids if item and evidence_ids.count(item) > 1})
+    evidence_ids = [
+        item.get("project_id") for item in evidence_entries if isinstance(item, dict)
+    ]
+    duplicate_evidence = sorted(
+        {item for item in evidence_ids if item and evidence_ids.count(item) > 1}
+    )
     if duplicate_evidence:
-        errors.append(f"license evidence has duplicate project ids: {duplicate_evidence}")
+        errors.append(
+            f"license evidence has duplicate project ids: {duplicate_evidence}"
+        )
     evidence = {
         item["project_id"]: item
         for item in evidence_entries
         if isinstance(item, dict) and isinstance(item.get("project_id"), str)
     }
     projects_by_id = {
-        project["id"]: project for project in projects if isinstance(project.get("id"), str)
+        project["id"]: project
+        for project in projects
+        if isinstance(project.get("id"), str)
     }
     if set(evidence) != set(projects_by_id):
         errors.append(
@@ -782,14 +1095,18 @@ def validate_license_evidence(
             errors.append(f"{prefix}: evidence licenses do not match project licenses")
         for item in items:
             if not isinstance(item, dict):
-                errors.append(f"{prefix}: every license evidence item must be an object")
+                errors.append(
+                    f"{prefix}: every license evidence item must be an object"
+                )
                 continue
             if not isinstance(item.get("scope"), str) or not item["scope"].strip():
                 errors.append(f"{prefix}: license evidence requires a scope")
             kind = item.get("kind")
             if kind == "git_blob":
                 if not project.get("repo"):
-                    errors.append(f"{prefix}: git-blob evidence requires a GitHub repository")
+                    errors.append(
+                        f"{prefix}: git-blob evidence requires a GitHub repository"
+                    )
                     continue
                 blob_sha = item.get("blob_sha")
                 if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
@@ -799,18 +1116,24 @@ def validate_license_evidence(
                 if not isinstance(path, str) or not path:
                     errors.append(f"{prefix}: license evidence requires a path")
                 source_prefix = f"https://github.com/{project['repo']}/blob/"
-                if not isinstance(item.get("url"), str) or not item["url"].startswith(source_prefix):
-                    errors.append(f"{prefix}: source license URL must be a GitHub blob URL")
-                expected_immutable = (
-                    f"https://api.github.com/repos/{project['repo']}/git/blobs/{blob_sha}"
-                )
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    source_prefix
+                ):
+                    errors.append(
+                        f"{prefix}: source license URL must be a GitHub blob URL"
+                    )
+                expected_immutable = f"https://api.github.com/repos/{project['repo']}/git/blobs/{blob_sha}"
                 if item.get("immutable_url") != expected_immutable:
                     errors.append(
                         f"{prefix}: immutable license URL must address the recorded blob SHA"
                     )
             elif kind == "web_terms":
-                if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
-                    errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
+                if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                    "https://"
+                ):
+                    errors.append(
+                        f"{prefix}: web terms require an authoritative HTTPS URL"
+                    )
                 if not valid_date(item.get("verified_at")):
                     errors.append(f"{prefix}: web terms require verified_at")
             else:
@@ -832,17 +1155,28 @@ def validate_scoped_license_evidence(
     if evidence_licenses != set(record.get("licenses", [])):
         errors.append(f"{prefix}: license evidence does not match licenses")
     for item in license_items:
-        if not isinstance(item, dict) or not isinstance(item.get("scope"), str) or not item["scope"].strip():
+        if (
+            not isinstance(item, dict)
+            or not isinstance(item.get("scope"), str)
+            or not item["scope"].strip()
+        ):
             errors.append(f"{prefix}: license evidence requires a scope")
             continue
         if item.get("kind") == "git_blob":
             blob_sha = item.get("blob_sha")
             if not repo:
-                errors.append(f"{prefix}: git-blob license evidence requires a repository")
+                errors.append(
+                    f"{prefix}: git-blob license evidence requires a repository"
+                )
             elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
                 errors.append(f"{prefix}: invalid license blob SHA")
-            elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
-                errors.append(f"{prefix}: immutable license URL must address the blob SHA")
+            elif (
+                item.get("immutable_url")
+                != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+            ):
+                errors.append(
+                    f"{prefix}: immutable license URL must address the blob SHA"
+                )
             if not isinstance(item.get("path"), str) or not item["path"]:
                 errors.append(f"{prefix}: git-blob license evidence requires a path")
             if not isinstance(item.get("url"), str) or not item["url"].startswith(
@@ -850,15 +1184,21 @@ def validate_scoped_license_evidence(
             ):
                 errors.append(f"{prefix}: license source must be a GitHub blob URL")
         elif item.get("kind") == "web_terms":
-            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+            if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                "https://"
+            ):
                 errors.append(f"{prefix}: web terms require an authoritative HTTPS URL")
             if not valid_date(item.get("verified_at")):
                 errors.append(f"{prefix}: web terms require verified_at")
         else:
-            errors.append(f"{prefix}: unknown license evidence kind {item.get('kind')!r}")
+            errors.append(
+                f"{prefix}: unknown license evidence kind {item.get('kind')!r}"
+            )
 
 
-def validate_web_evidence(record: dict[str, Any], prefix: str, errors: list[str]) -> None:
+def validate_web_evidence(
+    record: dict[str, Any], prefix: str, errors: list[str]
+) -> None:
     """Validate reviewed web sources. Services and runtimes cite evidence alike."""
     evidence_items = record.get("evidence")
     if not isinstance(evidence_items, list) or not evidence_items:
@@ -866,14 +1206,21 @@ def validate_web_evidence(record: dict[str, Any], prefix: str, errors: list[str]
         evidence_items = []
     evidence_urls: set[str] = set()
     for item in evidence_items:
-        if not isinstance(item, dict) or set(item) != {"kind", "label", "url", "verified_at"}:
+        if not isinstance(item, dict) or set(item) != {
+            "kind",
+            "label",
+            "url",
+            "verified_at",
+        }:
             errors.append(f"{prefix}: evidence must match the web evidence schema")
             continue
         if item.get("kind") != "web":
             errors.append(f"{prefix}: evidence kind must be web")
         if not isinstance(item.get("label"), str) or not item["label"].strip():
             errors.append(f"{prefix}: evidence requires a label")
-        if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+        if not isinstance(item.get("url"), str) or not item["url"].startswith(
+            "https://"
+        ):
             errors.append(f"{prefix}: evidence requires an authoritative HTTPS URL")
         elif item["url"] in evidence_urls:
             errors.append(f"{prefix}: evidence URLs must be unique")
@@ -884,7 +1231,11 @@ def validate_web_evidence(record: dict[str, Any], prefix: str, errors: list[str]
 
 
 def validate_trust_record(
-    trust: Any, prefix: str, statuses: set[str], collection_verified_at: object, errors: list[str]
+    trust: Any,
+    prefix: str,
+    statuses: set[str],
+    collection_verified_at: object,
+    errors: list[str],
 ) -> None:
     """Validate an unscored, human-owned trust record: documentation statuses plus pinned third-party findings.
 
@@ -898,30 +1249,48 @@ def validate_trust_record(
     if set(trust) != TRUST_REQUIRED:
         missing = sorted(TRUST_REQUIRED - set(trust))
         extra = sorted(set(trust) - TRUST_REQUIRED)
-        errors.append(f"{prefix}: trust fields differ from schema: missing={missing}, extra={extra}")
+        errors.append(
+            f"{prefix}: trust fields differ from schema: missing={missing}, extra={extra}"
+        )
         return
     reviewed_at: str | None = trust["verified_at"]
     if not valid_date(reviewed_at):
         errors.append(f"{prefix}: trust verified_at must be an ISO date")
         reviewed_at = None
     elif valid_date(collection_verified_at) and reviewed_at > collection_verified_at:
-        errors.append(f"{prefix}: trust verified_at must not be after the collection verified_at")
+        errors.append(
+            f"{prefix}: trust verified_at must not be after the collection verified_at"
+        )
     properties = trust["properties"]
     if not isinstance(properties, dict) or set(properties) != set(TRUST_PROPERTIES):
-        errors.append(f"{prefix}: trust properties must be exactly {sorted(TRUST_PROPERTIES)}")
+        errors.append(
+            f"{prefix}: trust properties must be exactly {sorted(TRUST_PROPERTIES)}"
+        )
     else:
         for name in TRUST_PROPERTIES:
-            validate_trust_property(properties[name], f"{prefix}: trust {name}", statuses, reviewed_at, errors)
+            validate_trust_property(
+                properties[name],
+                f"{prefix}: trust {name}",
+                statuses,
+                reviewed_at,
+                errors,
+            )
     findings = trust["findings"]
     if not isinstance(findings, list):
         errors.append(f"{prefix}: trust findings must be a list")
         return
     for index, finding in enumerate(findings):
-        validate_trust_finding(finding, f"{prefix}: trust finding {index}", reviewed_at, errors)
+        validate_trust_finding(
+            finding, f"{prefix}: trust finding {index}", reviewed_at, errors
+        )
 
 
 def validate_trust_property(
-    item: Any, prefix: str, statuses: set[str], reviewed_at: str | None, errors: list[str]
+    item: Any,
+    prefix: str,
+    statuses: set[str],
+    reviewed_at: str | None,
+    errors: list[str],
 ) -> None:
     """One property: a taxonomy status, a prose note, and a scoped, public, first-party URL."""
     if not isinstance(item, dict) or set(item) != TRUST_PROPERTY_REQUIRED:
@@ -962,18 +1331,24 @@ def validate_trust_finding(
         if not isinstance(source["label"], str) or not source["label"].strip():
             errors.append(f"{prefix}: source requires a label")
         if https_url_host(source["url"]) is None:
-            errors.append(f"{prefix}: source requires an HTTPS URL on a public DNS host")
-        if not isinstance(source["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
-            source["content_sha256"]
-        ):
+            errors.append(
+                f"{prefix}: source requires an HTTPS URL on a public DNS host"
+            )
+        if not isinstance(
+            source["content_sha256"], str
+        ) or not CONTENT_SHA_PATTERN.fullmatch(source["content_sha256"]):
             errors.append(f"{prefix}: source requires a content_sha256")
         if not valid_date(source["fetched_at"]):
             errors.append(f"{prefix}: source fetched_at must be an ISO date")
         else:
             if published_at is not None and published_at > source["fetched_at"]:
-                errors.append(f"{prefix}: published_at must not be after the source fetched_at")
+                errors.append(
+                    f"{prefix}: published_at must not be after the source fetched_at"
+                )
             if reviewed_at is not None and source["fetched_at"] > reviewed_at:
-                errors.append(f"{prefix}: source fetched_at must not be after the trust verified_at")
+                errors.append(
+                    f"{prefix}: source fetched_at must not be after the trust verified_at"
+                )
     for field in ("operator_response", "resolved"):
         value = finding[field]
         if value is None:
@@ -984,13 +1359,17 @@ def validate_trust_finding(
             )
             continue
         if https_url_host(value["url"]) is None:
-            errors.append(f"{prefix}: {field} url must be an HTTPS URL on a public DNS host")
+            errors.append(
+                f"{prefix}: {field} url must be an HTTPS URL on a public DNS host"
+            )
         if not isinstance(value["summary"], str) or not value["summary"].strip():
             errors.append(f"{prefix}: {field} summary must be a non-empty string")
         if not valid_date(value["verified_at"]):
             errors.append(f"{prefix}: {field} verified_at must be an ISO date")
         elif reviewed_at is not None and value["verified_at"] > reviewed_at:
-            errors.append(f"{prefix}: {field} verified_at must not be after the trust verified_at")
+            errors.append(
+                f"{prefix}: {field} verified_at must not be after the trust verified_at"
+            )
 
 
 def validate_evidence_items(
@@ -1010,8 +1389,13 @@ def validate_evidence_items(
                 errors.append(f"{prefix}: git-blob evidence requires a repository")
             elif not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
                 errors.append(f"{prefix}: invalid evidence blob SHA")
-            elif item.get("immutable_url") != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
-                errors.append(f"{prefix}: immutable evidence URL must address the blob SHA")
+            elif (
+                item.get("immutable_url")
+                != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+            ):
+                errors.append(
+                    f"{prefix}: immutable evidence URL must address the blob SHA"
+                )
             if not isinstance(item.get("path"), str) or not item["path"]:
                 errors.append(f"{prefix}: git-blob evidence requires a path")
             if not isinstance(item.get("url"), str) or not item["url"].startswith(
@@ -1019,8 +1403,12 @@ def validate_evidence_items(
             ):
                 errors.append(f"{prefix}: evidence source must be a GitHub blob URL")
         elif item.get("kind") == "web":
-            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
-                errors.append(f"{prefix}: web evidence requires an authoritative HTTPS URL")
+            if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                "https://"
+            ):
+                errors.append(
+                    f"{prefix}: web evidence requires an authoritative HTTPS URL"
+                )
             if not valid_date(item.get("verified_at")):
                 errors.append(f"{prefix}: web evidence requires verified_at")
         else:
@@ -1033,10 +1421,15 @@ def validate_specifications(
     """Validate unscored specification records and their evidence."""
     enum_ids = tax.enum_ids
     specifications_value = validate_collection_envelope(
-        specifications_data, "specifications.json", "1.0", "specifications", errors,
+        specifications_data,
+        "specifications.json",
+        "1.0",
+        "specifications",
+        errors,
     )
     specification_ids = {
-        item.get("id") for item in specifications_value
+        item.get("id")
+        for item in specifications_value
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
     for specification in specifications_value:
@@ -1047,35 +1440,60 @@ def validate_specifications(
         if set(specification) != SPECIFICATION_REQUIRED:
             missing = sorted(SPECIFICATION_REQUIRED - set(specification))
             extra = sorted(set(specification) - SPECIFICATION_REQUIRED)
-            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
         specification_id = specification.get("id")
-        if not isinstance(specification_id, str) or not ID_PATTERN.fullmatch(specification_id):
+        if not isinstance(specification_id, str) or not ID_PATTERN.fullmatch(
+            specification_id
+        ):
             errors.append(f"{prefix}: invalid id")
         for field in (
-            "name", "short_name", "url", "description", "standardizes",
-            "does_not_standardize", "license_note",
+            "name",
+            "short_name",
+            "url",
+            "description",
+            "standardizes",
+            "does_not_standardize",
+            "license_note",
         ):
-            if not isinstance(specification.get(field), str) or not specification[field].strip():
+            if (
+                not isinstance(specification.get(field), str)
+                or not specification[field].strip()
+            ):
                 errors.append(f"{prefix}: {field} must be a non-empty string")
-        if not isinstance(specification.get("url"), str) or not specification["url"].startswith("https://"):
+        if not isinstance(specification.get("url"), str) or not specification[
+            "url"
+        ].startswith("https://"):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
         repo = specification.get("repo")
-        if repo is not None and (not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)):
+        if repo is not None and (
+            not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)
+        ):
             errors.append(f"{prefix}: invalid GitHub repository")
         if specification.get("current_version") is not None and not isinstance(
             specification["current_version"], str
         ):
             errors.append(f"{prefix}: current_version must be a string or null")
-        if specification.get("specification_type") not in enum_ids["specification_types"]:
+        if (
+            specification.get("specification_type")
+            not in enum_ids["specification_types"]
+        ):
             errors.append(f"{prefix}: unknown specification type")
         if specification.get("scope") not in enum_ids["specification_scopes"]:
             errors.append(f"{prefix}: unknown specification scope")
         if specification.get("status") not in enum_ids["specification_statuses"]:
             errors.append(f"{prefix}: unknown specification status")
         validate_string_list(specification, "stewards", None, prefix, errors)
-        validate_string_list(specification, "licenses", enum_ids["licenses"], prefix, errors)
         validate_string_list(
-            specification, "related_specifications", specification_ids, prefix, errors,
+            specification, "licenses", enum_ids["licenses"], prefix, errors
+        )
+        validate_string_list(
+            specification,
+            "related_specifications",
+            specification_ids,
+            prefix,
+            errors,
             allow_empty=True,
         )
         if specification_id in specification.get("related_specifications", []):
@@ -1098,9 +1516,12 @@ def validate_packs(
 ) -> list[Any]:
     """Validate unscored agent-pack records: what a host installs, never what it does (ADR 032)."""
     enum_ids = tax.enum_ids
-    packs_value = validate_collection_envelope(packs_data, "packs.json", "1.0", "packs", errors)
+    packs_value = validate_collection_envelope(
+        packs_data, "packs.json", "1.0", "packs", errors
+    )
     pack_ids = {
-        item.get("id") for item in packs_value
+        item.get("id")
+        for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
     pack_repos_seen: set[str] = set()
@@ -1115,17 +1536,33 @@ def validate_packs(
         if PACK_REQUIRED - fields or fields - PACK_REQUIRED - PACK_OPTIONAL:
             missing = sorted(PACK_REQUIRED - fields)
             extra = sorted(fields - PACK_REQUIRED - PACK_OPTIONAL)
-            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
         pack_id = pack.get("id")
         if not isinstance(pack_id, str) or not ID_PATTERN.fullmatch(pack_id):
             errors.append(f"{prefix}: invalid id")
-        for field in ("name", "steward", "url", "description", "installs", "not_a_system", "license_note"):
+        for field in (
+            "name",
+            "steward",
+            "url",
+            "description",
+            "installs",
+            "not_a_system",
+            "license_note",
+        ):
             if not isinstance(pack.get(field), str) or not pack[field].strip():
                 errors.append(f"{prefix}: {field} must be a non-empty string")
         for field in ("short_name", "distribution_machinery"):
-            if field in pack and (not isinstance(pack[field], str) or not pack[field].strip()):
-                errors.append(f"{prefix}: {field} must be a non-empty string when present")
-        if not isinstance(pack.get("url"), str) or not pack["url"].startswith("https://"):
+            if field in pack and (
+                not isinstance(pack[field], str) or not pack[field].strip()
+            ):
+                errors.append(
+                    f"{prefix}: {field} must be a non-empty string when present"
+                )
+        if not isinstance(pack.get("url"), str) or not pack["url"].startswith(
+            "https://"
+        ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
         repo = pack.get("repo")
         if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo):
@@ -1146,14 +1583,23 @@ def validate_packs(
         validate_string_list(pack, "hosts", enum_ids["pack_hosts"], prefix, errors)
         validate_string_list(pack, "licenses", enum_ids["licenses"], prefix, errors)
         validate_string_list(
-            pack, "packaging_formats", specification_ids, prefix, errors, allow_empty=True,
+            pack,
+            "packaging_formats",
+            specification_ids,
+            prefix,
+            errors,
+            allow_empty=True,
         )
         if "related_packs" in pack:
-            validate_string_list(pack, "related_packs", pack_ids, prefix, errors, allow_empty=True)
+            validate_string_list(
+                pack, "related_packs", pack_ids, prefix, errors, allow_empty=True
+            )
             if pack_id in pack.get("related_packs", []):
                 errors.append(f"{prefix}: cannot relate to itself")
         if "related_systems" in pack:
-            validate_string_list(pack, "related_systems", index.ids, prefix, errors, allow_empty=True)
+            validate_string_list(
+                pack, "related_systems", index.ids, prefix, errors, allow_empty=True
+            )
         if not valid_date(pack.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
         validate_evidence_items(pack.get("evidence"), repo, prefix, errors)
@@ -1167,7 +1613,11 @@ def validate_inference_services(
     """Validate managed inference services against their dedicated score profile."""
     enum_ids, inference_score_dimensions = tax.enum_ids, tax.inference_dimensions
     inference_services_value = validate_collection_envelope(
-        inference_services_data, "inference-services.json", "2.0", "services", errors,
+        inference_services_data,
+        "inference-services.json",
+        "2.0",
+        "services",
+        errors,
     )
     for service in inference_services_value:
         if not isinstance(service, dict):
@@ -1175,19 +1625,32 @@ def validate_inference_services(
             continue
         prefix = f"inference service {service.get('id', 'unknown')}"
         missing = sorted(INFERENCE_SERVICE_REQUIRED - set(service))
-        extra = sorted(set(service) - INFERENCE_SERVICE_REQUIRED - INFERENCE_SERVICE_OPTIONAL)
+        extra = sorted(
+            set(service) - INFERENCE_SERVICE_REQUIRED - INFERENCE_SERVICE_OPTIONAL
+        )
         if missing or extra:
-            errors.append(f"{prefix}: fields differ from schema: missing={missing}, extra={extra}")
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
         service_id = service.get("id")
         if not isinstance(service_id, str) or not ID_PATTERN.fullmatch(service_id):
             errors.append(f"{prefix}: invalid id")
         for field in (
-            "name", "operator", "url", "description", "service_boundary",
-            "regional_controls", "retention_controls", "routing", "customization",
+            "name",
+            "operator",
+            "url",
+            "description",
+            "service_boundary",
+            "regional_controls",
+            "retention_controls",
+            "routing",
+            "customization",
         ):
             if not isinstance(service.get(field), str) or not service[field].strip():
                 errors.append(f"{prefix}: {field} must be a non-empty string")
-        if not isinstance(service.get("url"), str) or not service["url"].startswith("https://"):
+        if not isinstance(service.get("url"), str) or not service["url"].startswith(
+            "https://"
+        ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
         if service.get("service_type") not in enum_ids["inference_service_types"]:
             errors.append(f"{prefix}: unknown inference service type")
@@ -1200,14 +1663,22 @@ def validate_inference_services(
         for field in ("strengths", "tradeoffs"):
             validate_string_list(service, field, None, prefix, errors)
         validate_record_score(
-            service, inference_score_dimensions, "inference_service", "inference service", prefix, errors,
+            service,
+            inference_score_dimensions,
+            "inference_service",
+            "inference service",
+            prefix,
+            errors,
         )
         if not valid_date(service.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
 
         terms = service.get("terms")
         if not isinstance(terms, dict) or set(terms) != {
-            "kind", "label", "url", "verified_at",
+            "kind",
+            "label",
+            "url",
+            "verified_at",
         }:
             errors.append(f"{prefix}: terms must match the web-terms evidence schema")
         else:
@@ -1215,7 +1686,9 @@ def validate_inference_services(
                 errors.append(f"{prefix}: terms kind must be web_terms")
             if not isinstance(terms.get("label"), str) or not terms["label"].strip():
                 errors.append(f"{prefix}: terms require a label")
-            if not isinstance(terms.get("url"), str) or not terms["url"].startswith("https://"):
+            if not isinstance(terms.get("url"), str) or not terms["url"].startswith(
+                "https://"
+            ):
                 errors.append(f"{prefix}: terms require an authoritative HTTPS URL")
             if not valid_date(terms.get("verified_at")):
                 errors.append(f"{prefix}: terms require verified_at")
@@ -1223,8 +1696,11 @@ def validate_inference_services(
         validate_web_evidence(service, prefix, errors)
         if "trust" in service:
             validate_trust_record(
-                service["trust"], prefix, enum_ids["trust_property_statuses"],
-                inference_services_data.get("verified_at"), errors,
+                service["trust"],
+                prefix,
+                enum_ids["trust_property_statuses"],
+                inference_services_data.get("verified_at"),
+                errors,
             )
     return inference_services_value
 
@@ -1235,7 +1711,11 @@ def validate_local_runtimes(
     """Validate self-operated runtimes against their dedicated score profile."""
     enum_ids, local_runtime_score_dimensions = tax.enum_ids, tax.runtime_dimensions
     local_runtimes_value = validate_collection_envelope(
-        local_runtimes_data, "local-runtimes.json", "1.0", "runtimes", errors,
+        local_runtimes_data,
+        "local-runtimes.json",
+        "1.0",
+        "runtimes",
+        errors,
     )
     for runtime in local_runtimes_value:
         if not isinstance(runtime, dict):
@@ -1253,15 +1733,25 @@ def validate_local_runtimes(
         if not isinstance(runtime_id, str) or not ID_PATTERN.fullmatch(runtime_id):
             errors.append(f"{prefix}: invalid id")
         for field in (
-            "name", "maintainer", "description", "runtime_boundary",
-            "model_management", "hardware_requirements", "operational_controls", "license_note",
+            "name",
+            "maintainer",
+            "description",
+            "runtime_boundary",
+            "model_management",
+            "hardware_requirements",
+            "operational_controls",
+            "license_note",
         ):
             if not isinstance(runtime.get(field), str) or not runtime[field].strip():
                 errors.append(f"{prefix}: {field} must be a non-empty string")
-        if not isinstance(runtime.get("url"), str) or not runtime["url"].startswith("https://"):
+        if not isinstance(runtime.get("url"), str) or not runtime["url"].startswith(
+            "https://"
+        ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
         repo = runtime.get("repo")
-        if repo is not None and (not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)):
+        if repo is not None and (
+            not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)
+        ):
             errors.append(f"{prefix}: repo must be owner/name or null")
         if runtime.get("runtime_type") not in enum_ids["local_runtime_types"]:
             errors.append(f"{prefix}: unknown runtime type")
@@ -1279,15 +1769,26 @@ def validate_local_runtimes(
         for field in ("strengths", "tradeoffs"):
             validate_string_list(runtime, field, None, prefix, errors)
         validate_record_score(
-            runtime, local_runtime_score_dimensions, "local_runtime", "local runtime", prefix, errors,
+            runtime,
+            local_runtime_score_dimensions,
+            "local_runtime",
+            "local runtime",
+            prefix,
+            errors,
         )
         if not valid_date(runtime.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
-        if runtime.get("stars") is not None and (not isinstance(runtime["stars"], int) or runtime["stars"] < 0):
+        if runtime.get("stars") is not None and (
+            not isinstance(runtime["stars"], int) or runtime["stars"] < 0
+        ):
             errors.append(f"{prefix}: stars must be a non-negative integer or null")
-        if runtime.get("stars") is not None and not valid_date(runtime.get("stars_verified_at")):
+        if runtime.get("stars") is not None and not valid_date(
+            runtime.get("stars_verified_at")
+        ):
             errors.append(f"{prefix}: populated stars require stars_verified_at")
-        if runtime.get("stars_verified_at") is not None and not valid_date(runtime["stars_verified_at"]):
+        if runtime.get("stars_verified_at") is not None and not valid_date(
+            runtime["stars_verified_at"]
+        ):
             errors.append(f"{prefix}: stars_verified_at must be null or an ISO date")
 
         validate_web_evidence(runtime, prefix, errors)
@@ -1297,48 +1798,72 @@ def validate_local_runtimes(
 
 
 def validate_model_source_metadata(
-    metadata: object, prefix: str, tax: Taxonomy, errors: list[str], *, require_text: bool = True
+    metadata: object,
+    prefix: str,
+    tax: Taxonomy,
+    errors: list[str],
+    *,
+    require_text: bool = True,
 ) -> None:
     """Validate the models.dev-owned snapshot without treating it as editorial truth."""
-    if not isinstance(metadata, dict) or set(metadata) != MODEL_SOURCE_METADATA_REQUIRED:
+    if (
+        not isinstance(metadata, dict)
+        or set(metadata) != MODEL_SOURCE_METADATA_REQUIRED
+    ):
         errors.append(f"{prefix}: source_metadata fields differ from schema")
         return
     if not isinstance(metadata.get("name"), str) or not metadata["name"].strip():
         errors.append(f"{prefix}: source_metadata.name must be a non-empty string")
     if metadata.get("description") is not None and (
-        not isinstance(metadata["description"], str) or not metadata["description"].strip()
+        not isinstance(metadata["description"], str)
+        or not metadata["description"].strip()
     ):
-        errors.append(f"{prefix}: source_metadata.description must be null or a non-empty string")
+        errors.append(
+            f"{prefix}: source_metadata.description must be null or a non-empty string"
+        )
     for field in ("family", "reported_license"):
         if metadata.get(field) is not None and not isinstance(metadata[field], str):
             errors.append(f"{prefix}: source_metadata.{field} must be a string or null")
     for field in ("release_date", "last_updated", "knowledge_cutoff"):
         if not valid_partial_date(metadata.get(field)):
-            errors.append(f"{prefix}: source_metadata.{field} must be null, YYYY-MM, or YYYY-MM-DD")
+            errors.append(
+                f"{prefix}: source_metadata.{field} must be null, YYYY-MM, or YYYY-MM-DD"
+            )
 
     modalities = metadata.get("modalities")
     if not isinstance(modalities, dict) or set(modalities) != {"input", "output"}:
-        errors.append(f"{prefix}: source_metadata.modalities must contain input and output")
+        errors.append(
+            f"{prefix}: source_metadata.modalities must contain input and output"
+        )
     else:
         for field in ("input", "output"):
             validate_string_list(
-                modalities, field, tax.enum_ids["model_modalities"],
-                f"{prefix}: source_metadata.modalities", errors,
+                modalities,
+                field,
+                tax.enum_ids["model_modalities"],
+                f"{prefix}: source_metadata.modalities",
+                errors,
             )
         if require_text and "text" not in modalities.get("output", []):
             errors.append(f"{prefix}: model candidates must produce text")
 
     capabilities = metadata.get("capabilities")
     if not isinstance(capabilities, dict) or set(capabilities) != MODEL_CAPABILITIES:
-        errors.append(f"{prefix}: source_metadata.capabilities fields differ from schema")
-    elif any(value is not None and not isinstance(value, bool) for value in capabilities.values()):
+        errors.append(
+            f"{prefix}: source_metadata.capabilities fields differ from schema"
+        )
+    elif any(
+        value is not None and not isinstance(value, bool)
+        for value in capabilities.values()
+    ):
         errors.append(f"{prefix}: source capability values must be boolean or null")
 
     limits = metadata.get("limits")
     if not isinstance(limits, dict) or set(limits) != MODEL_LIMITS:
         errors.append(f"{prefix}: source_metadata.limits fields differ from schema")
     elif any(
-        value is not None and (not isinstance(value, int) or isinstance(value, bool) or value < 0)
+        value is not None
+        and (not isinstance(value, int) or isinstance(value, bool) or value < 0)
         for value in limits.values()
     ):
         errors.append(f"{prefix}: source limits must be non-negative integers or null")
@@ -1357,12 +1882,18 @@ def validate_model_source_metadata(
             continue
         for item in items:
             if not isinstance(item, dict) or not set(item) <= allowed_fields:
-                errors.append(f"{prefix}: source_metadata.{field} item fields differ from schema")
+                errors.append(
+                    f"{prefix}: source_metadata.{field} item fields differ from schema"
+                )
                 continue
-            if not isinstance(item.get("url"), str) or not item["url"].startswith("https://"):
+            if not isinstance(item.get("url"), str) or not item["url"].startswith(
+                "https://"
+            ):
                 errors.append(f"{prefix}: source_metadata.{field} requires HTTPS URLs")
             if any(not isinstance(value, str) for value in item.values()):
-                errors.append(f"{prefix}: source_metadata.{field} values must be strings")
+                errors.append(
+                    f"{prefix}: source_metadata.{field} values must be strings"
+                )
 
 
 def validate_models(
@@ -1374,15 +1905,27 @@ def validate_models(
     if not isinstance(source, dict) or set(source) != expected_source_fields:
         errors.append("models.json: source fields differ from schema")
     else:
-        if source.get("id") != "models-dev" or source.get("repo") != "anomalyco/models.dev":
+        if (
+            source.get("id") != "models-dev"
+            or source.get("repo") != "anomalyco/models.dev"
+        ):
             errors.append("models.json: source must identify the models.dev repository")
-        if not isinstance(source.get("commit"), str) or not SHA_PATTERN.fullmatch(source["commit"]):
+        if not isinstance(source.get("commit"), str) or not SHA_PATTERN.fullmatch(
+            source["commit"]
+        ):
             errors.append("models.json: source commit must be a full Git SHA")
-        if source.get("url") != "https://github.com/anomalyco/models.dev" or source.get("license") != "MIT":
+        if (
+            source.get("url") != "https://github.com/anomalyco/models.dev"
+            or source.get("license") != "MIT"
+        ):
             errors.append("models.json: source URL and license must match models.dev")
 
     models_value = validate_collection_envelope(
-        models_data, "models.json", "1.0", "models", errors,
+        models_data,
+        "models.json",
+        "1.0",
+        "models",
+        errors,
     )
     source_ids: set[str] = set()
     for model in models_value:
@@ -1398,30 +1941,50 @@ def validate_models(
             )
             continue
         model_id = model.get("id")
-        if not isinstance(model_id, str) or not ID_PATTERN.fullmatch(model_id) or not model_id.startswith("model-"):
+        if (
+            not isinstance(model_id, str)
+            or not ID_PATTERN.fullmatch(model_id)
+            or not model_id.startswith("model-")
+        ):
             errors.append(f"{prefix}: invalid id")
         source_id = model.get("source_id")
-        if not isinstance(source_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id):
+        if not isinstance(source_id, str) or not re.fullmatch(
+            r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id
+        ):
             errors.append(f"{prefix}: invalid models.dev source_id")
         elif source_id in source_ids:
             errors.append(f"{prefix}: duplicate models.dev source_id")
         else:
             source_ids.add(source_id)
         for field in (
-            "name", "developer", "description", "access_boundary", "license_note",
+            "name",
+            "developer",
+            "description",
+            "access_boundary",
+            "license_note",
         ):
             if not isinstance(model.get(field), str) or not model[field].strip():
                 errors.append(f"{prefix}: {field} must be a non-empty string")
-        if not isinstance(model.get("url"), str) or not model["url"].startswith("https://"):
+        if not isinstance(model.get("url"), str) or not model["url"].startswith(
+            "https://"
+        ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
         if model.get("model_type") not in tax.enum_ids["model_types"]:
             errors.append(f"{prefix}: unknown model type")
         validate_string_list(
-            model, "distribution_modes", tax.enum_ids["model_distribution_modes"], prefix, errors,
+            model,
+            "distribution_modes",
+            tax.enum_ids["model_distribution_modes"],
+            prefix,
+            errors,
         )
-        validate_model_source_metadata(model.get("source_metadata"), prefix, tax, errors)
+        validate_model_source_metadata(
+            model.get("source_metadata"), prefix, tax, errors
+        )
 
-        validate_string_list(model, "licenses", tax.enum_ids["licenses"], prefix, errors)
+        validate_string_list(
+            model, "licenses", tax.enum_ids["licenses"], prefix, errors
+        )
         source_model = model.get("source_model")
         if source_model not in tax.enum_ids["source_models"]:
             errors.append(f"{prefix}: unknown source model")
@@ -1434,7 +1997,9 @@ def validate_models(
             if source_model == "open_source":
                 coherent = bool(license_kinds) and license_kinds <= {"open_source"}
             elif source_model == "source_available":
-                coherent = "restricted" in license_kinds and "open_source" not in license_kinds
+                coherent = (
+                    "restricted" in license_kinds and "open_source" not in license_kinds
+                )
             elif source_model == "proprietary":
                 coherent = license_kinds == {"proprietary"}
             elif source_model == "unclear":
@@ -1442,15 +2007,25 @@ def validate_models(
             else:
                 coherent = True
             if not coherent:
-                errors.append(f"{prefix}: source model and license kinds are inconsistent")
-        if model.get("license_review_status") not in tax.enum_ids["license_review_statuses"]:
+                errors.append(
+                    f"{prefix}: source model and license kinds are inconsistent"
+                )
+        if (
+            model.get("license_review_status")
+            not in tax.enum_ids["license_review_statuses"]
+        ):
             errors.append(f"{prefix}: unknown license review status")
         validate_scoped_license_evidence(model, None, prefix, errors)
 
         for field in ("strengths", "tradeoffs"):
             validate_string_list(model, field, None, prefix, errors)
         validate_record_score(
-            model, tax.model_dimensions, "model_access", "model", prefix, errors,
+            model,
+            tax.model_dimensions,
+            "model_access",
+            "model",
+            prefix,
+            errors,
         )
         validate_web_evidence(model, prefix, errors)
         for field in ("metadata_verified_at", "verified_at"):
@@ -1463,7 +2038,13 @@ def validate_models_dev(
     source_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
     """Validate the complete, attributed models.dev snapshot separately from reviews."""
-    expected_fields = {"version", "updated_at", "source_record_count", "source", "models"}
+    expected_fields = {
+        "version",
+        "updated_at",
+        "source_record_count",
+        "source",
+        "models",
+    }
     if set(source_data) != expected_fields:
         errors.append("models-dev.json: document fields differ from schema")
     if source_data.get("version") != "1.0":
@@ -1471,22 +2052,44 @@ def validate_models_dev(
     if not valid_date(source_data.get("updated_at")):
         errors.append("models-dev.json: updated_at must be an ISO date")
     source = source_data.get("source")
-    source_fields = {"repo", "ref", "commit", "url", "immutable_url", "path", "license", "sha256"}
+    source_fields = {
+        "repo",
+        "ref",
+        "commit",
+        "url",
+        "immutable_url",
+        "path",
+        "license",
+        "sha256",
+    }
     if not isinstance(source, dict) or set(source) != source_fields:
         errors.append("models-dev.json: source fields differ from schema")
     else:
         commit = source.get("commit")
         if source.get("repo") != "anomalyco/models.dev" or source.get("ref") != "dev":
-            errors.append("models-dev.json: source repo and ref must identify models.dev")
+            errors.append(
+                "models-dev.json: source repo and ref must identify models.dev"
+            )
         if not isinstance(commit, str) or not SHA_PATTERN.fullmatch(commit):
             errors.append("models-dev.json: source commit must be a full Git SHA")
-        elif source.get("immutable_url") != f"https://codeload.github.com/anomalyco/models.dev/tar.gz/{commit}":
-            errors.append("models-dev.json: immutable URL must address the source commit")
+        elif (
+            source.get("immutable_url")
+            != f"https://codeload.github.com/anomalyco/models.dev/tar.gz/{commit}"
+        ):
+            errors.append(
+                "models-dev.json: immutable URL must address the source commit"
+            )
         if source.get("url") != "https://github.com/anomalyco/models.dev":
-            errors.append("models-dev.json: source URL must be the models.dev repository")
+            errors.append(
+                "models-dev.json: source URL must be the models.dev repository"
+            )
         if source.get("path") != "models/**/*.toml" or source.get("license") != "MIT":
-            errors.append("models-dev.json: source path and license must identify model TOMLs")
-        if not isinstance(source.get("sha256"), str) or not CONTENT_SHA_PATTERN.fullmatch(source["sha256"]):
+            errors.append(
+                "models-dev.json: source path and license must identify model TOMLs"
+            )
+        if not isinstance(
+            source.get("sha256"), str
+        ) or not CONTENT_SHA_PATTERN.fullmatch(source["sha256"]):
             errors.append("models-dev.json: source sha256 is invalid")
 
     records = source_data.get("models")
@@ -1494,40 +2097,64 @@ def validate_models_dev(
         errors.append("models-dev.json: models must be a list")
         return []
     if source_data.get("source_record_count") != len(records):
-        errors.append("models-dev.json: source_record_count must equal the models list length")
+        errors.append(
+            "models-dev.json: source_record_count must equal the models list length"
+        )
     ids: set[str] = set()
     source_ids: set[str] = set()
     for record in records:
         prefix = f"models.dev source {record.get('source_id', 'unknown') if isinstance(record, dict) else 'unknown'}"
-        if not isinstance(record, dict) or set(record) != {"id", "source_id", "source_metadata"}:
+        if not isinstance(record, dict) or set(record) != {
+            "id",
+            "source_id",
+            "source_metadata",
+        }:
             errors.append(f"{prefix}: fields differ from schema")
             continue
         model_id = record.get("id")
         source_id = record.get("source_id")
-        if not isinstance(model_id, str) or not ID_PATTERN.fullmatch(model_id) or not model_id.startswith("model-"):
+        if (
+            not isinstance(model_id, str)
+            or not ID_PATTERN.fullmatch(model_id)
+            or not model_id.startswith("model-")
+        ):
             errors.append(f"{prefix}: invalid id")
         elif model_id in ids:
             errors.append(f"{prefix}: duplicate id")
         else:
             ids.add(model_id)
-        if not isinstance(source_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id):
+        if not isinstance(source_id, str) or not re.fullmatch(
+            r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id
+        ):
             errors.append(f"{prefix}: invalid source_id")
         elif source_id in source_ids:
             errors.append(f"{prefix}: duplicate source_id")
         else:
             source_ids.add(source_id)
-            expected_id = "model-" + re.sub(r"[^a-z0-9]+", "-", source_id.lower()).strip("-")
+            expected_id = "model-" + re.sub(
+                r"[^a-z0-9]+", "-", source_id.lower()
+            ).strip("-")
             if model_id != expected_id:
-                errors.append(f"{prefix}: id must be the stable source-derived id {expected_id}")
+                errors.append(
+                    f"{prefix}: id must be the stable source-derived id {expected_id}"
+                )
         validate_model_source_metadata(
-            record.get("source_metadata"), prefix, tax, errors, require_text=False,
+            record.get("source_metadata"),
+            prefix,
+            tax,
+            errors,
+            require_text=False,
         )
     return records
 
 
 def validate_model_candidates(
-    candidates_data: dict[str, Any], published_models: list[Any], source_models: list[Any], tax: Taxonomy,
-    errors: list[str], dispositioned_ids: set[str] | None = None,
+    candidates_data: dict[str, Any],
+    published_models: list[Any],
+    source_models: list[Any],
+    tax: Taxonomy,
+    errors: list[str],
+    dispositioned_ids: set[str] | None = None,
 ) -> None:
     """Validate the automated models.dev queue and keep it disjoint from reviewed records."""
     dispositioned_ids = dispositioned_ids or set()
@@ -1536,25 +2163,52 @@ def validate_model_candidates(
     if not valid_date(candidates_data.get("updated_at")):
         errors.append("model-candidates.json: updated_at must be an ISO date")
     for field in ("source_record_count", "eligible_record_count"):
-        if not isinstance(candidates_data.get(field), int) or candidates_data[field] < 0:
-            errors.append(f"model-candidates.json: {field} must be a non-negative integer")
+        if (
+            not isinstance(candidates_data.get(field), int)
+            or candidates_data[field] < 0
+        ):
+            errors.append(
+                f"model-candidates.json: {field} must be a non-negative integer"
+            )
     source = candidates_data.get("source")
-    source_fields = {"repo", "ref", "commit", "url", "immutable_url", "path", "license", "sha256"}
+    source_fields = {
+        "repo",
+        "ref",
+        "commit",
+        "url",
+        "immutable_url",
+        "path",
+        "license",
+        "sha256",
+    }
     if not isinstance(source, dict) or set(source) != source_fields:
         errors.append("model-candidates.json: source fields differ from schema")
     else:
         commit = source.get("commit")
         if source.get("repo") != "anomalyco/models.dev" or source.get("ref") != "dev":
-            errors.append("model-candidates.json: source repo and ref must identify models.dev")
+            errors.append(
+                "model-candidates.json: source repo and ref must identify models.dev"
+            )
         if not isinstance(commit, str) or not SHA_PATTERN.fullmatch(commit):
             errors.append("model-candidates.json: source commit must be a full Git SHA")
-        elif source.get("immutable_url") != f"https://codeload.github.com/anomalyco/models.dev/tar.gz/{commit}":
-            errors.append("model-candidates.json: immutable URL must address the source commit")
+        elif (
+            source.get("immutable_url")
+            != f"https://codeload.github.com/anomalyco/models.dev/tar.gz/{commit}"
+        ):
+            errors.append(
+                "model-candidates.json: immutable URL must address the source commit"
+            )
         if source.get("url") != "https://github.com/anomalyco/models.dev":
-            errors.append("model-candidates.json: source URL must be the models.dev repository")
+            errors.append(
+                "model-candidates.json: source URL must be the models.dev repository"
+            )
         if source.get("path") != "models/**/*.toml" or source.get("license") != "MIT":
-            errors.append("model-candidates.json: source path and license must identify model TOMLs")
-        if not isinstance(source.get("sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", source["sha256"]):
+            errors.append(
+                "model-candidates.json: source path and license must identify model TOMLs"
+            )
+        if not isinstance(source.get("sha256"), str) or not re.fullmatch(
+            r"[0-9a-f]{64}", source["sha256"]
+        ):
             errors.append("model-candidates.json: source sha256 is invalid")
 
     candidates = candidates_data.get("candidates")
@@ -1562,7 +2216,8 @@ def validate_model_candidates(
         errors.append("model-candidates.json: candidates must be a list")
         return
     published_ids = {
-        item.get("source_id") for item in published_models
+        item.get("source_id")
+        for item in published_models
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     candidate_ids: set[str] = set()
@@ -1574,8 +2229,13 @@ def validate_model_candidates(
     for candidate in candidates:
         prefix = f"model candidate {candidate.get('source_id', 'unknown') if isinstance(candidate, dict) else 'unknown'}"
         required = {
-            "id", "source_id", "source_metadata", "status", "discovered_at",
-            "last_seen_at", "review_required",
+            "id",
+            "source_id",
+            "source_metadata",
+            "status",
+            "discovered_at",
+            "last_seen_at",
+            "review_required",
         }
         if not isinstance(candidate, dict) or set(candidate) != required:
             errors.append(f"{prefix}: fields differ from schema")
@@ -1588,7 +2248,11 @@ def validate_model_candidates(
         if source_id in published_ids:
             errors.append(f"{prefix}: already exists in the reviewed collection")
         model_id = candidate.get("id")
-        if not isinstance(model_id, str) or not ID_PATTERN.fullmatch(model_id) or not model_id.startswith("model-"):
+        if (
+            not isinstance(model_id, str)
+            or not ID_PATTERN.fullmatch(model_id)
+            or not model_id.startswith("model-")
+        ):
             errors.append(f"{prefix}: invalid id")
         if candidate.get("status") != "provisional":
             errors.append(f"{prefix}: status must be provisional")
@@ -1596,19 +2260,34 @@ def validate_model_candidates(
             if not valid_date(candidate.get(field)):
                 errors.append(f"{prefix}: {field} must be an ISO date")
         review_required = candidate.get("review_required")
-        if not isinstance(review_required, list) or set(review_required) != MODEL_REVIEW_REQUIRED:
+        if (
+            not isinstance(review_required, list)
+            or set(review_required) != MODEL_REVIEW_REQUIRED
+        ):
             errors.append(f"{prefix}: review_required is incomplete")
-        validate_model_source_metadata(candidate.get("source_metadata"), prefix, tax, errors)
+        validate_model_source_metadata(
+            candidate.get("source_metadata"), prefix, tax, errors
+        )
         source_record = source_by_id.get(source_id)
         if source_record is None:
-            errors.append(f"{prefix}: missing from the complete models.dev source snapshot")
+            errors.append(
+                f"{prefix}: missing from the complete models.dev source snapshot"
+            )
         elif source_record.get("source_metadata") != candidate.get("source_metadata"):
-            errors.append(f"{prefix}: metadata differs from the complete models.dev source snapshot")
+            errors.append(
+                f"{prefix}: metadata differs from the complete models.dev source snapshot"
+            )
     eligible_count = candidates_data.get("eligible_record_count")
-    if isinstance(eligible_count, int) and eligible_count != len(candidates) + len(published_ids) + len(dispositioned_ids):
-        errors.append("model-candidates.json: eligible count must equal queued plus reviewed plus dispositioned source ids")
+    if isinstance(eligible_count, int) and eligible_count != len(candidates) + len(
+        published_ids
+    ) + len(dispositioned_ids):
+        errors.append(
+            "model-candidates.json: eligible count must equal queued plus reviewed plus dispositioned source ids"
+        )
     for source_id in sorted(candidate_ids & dispositioned_ids):
-        errors.append(f"model candidate {source_id}: dispositioned source ids must not remain queued")
+        errors.append(
+            f"model candidate {source_id}: dispositioned source ids must not remain queued"
+        )
 
 
 def validate_model_dispositions(
@@ -1628,20 +2307,31 @@ def validate_model_dispositions(
         errors.append("model-dispositions.json: dispositions must be a list")
         return dispositioned
     published_ids = {
-        item.get("source_id") for item in published_models
+        item.get("source_id")
+        for item in published_models
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     source_ids = {
-        item.get("source_id") for item in source_models
+        item.get("source_id")
+        for item in source_models
         if isinstance(item, dict) and isinstance(item.get("source_id"), str)
     }
     for entry in dispositions:
         prefix = f"model disposition {entry.get('source_id', 'unknown') if isinstance(entry, dict) else 'unknown'}"
-        if not isinstance(entry, dict) or set(entry) != {"source_id", "disposition", "reason", "decided_at"}:
+        if not isinstance(entry, dict) or set(entry) != {
+            "source_id",
+            "disposition",
+            "reason",
+            "decided_at",
+        }:
             errors.append(f"{prefix}: fields differ from schema")
             continue
         source_id = entry.get("source_id")
-        if not isinstance(source_id, str) or not source_id or source_id in dispositioned:
+        if (
+            not isinstance(source_id, str)
+            or not source_id
+            or source_id in dispositioned
+        ):
             errors.append(f"{prefix}: source_id must be a unique non-empty string")
             continue
         dispositioned.add(source_id)
@@ -1653,9 +2343,13 @@ def validate_model_dispositions(
         if not valid_date(entry.get("decided_at")):
             errors.append(f"{prefix}: decided_at must be an ISO date")
         if source_id in published_ids:
-            errors.append(f"{prefix}: already exists in the reviewed collection; lift the disposition first")
+            errors.append(
+                f"{prefix}: already exists in the reviewed collection; lift the disposition first"
+            )
         if source_id not in source_ids:
-            errors.append(f"{prefix}: missing from the complete models.dev source snapshot; prune the stale disposition")
+            errors.append(
+                f"{prefix}: missing from the complete models.dev source snapshot; prune the stale disposition"
+            )
     return dispositioned
 
 
@@ -1712,10 +2406,14 @@ def validate_triage(
     elif "held_by" in triage and (
         not isinstance(triage["held_by"], str) or not triage["held_by"].strip()
     ):
-        errors.append(f"candidate {prefix}: held_by must name the decision that holds the record")
+        errors.append(
+            f"candidate {prefix}: held_by must name the decision that holds the record"
+        )
     for field in ("rule", "proposer"):
         if not isinstance(triage[field], str) or not triage[field].strip():
-            errors.append(f"candidate {prefix}: triage {field} must be a non-empty string")
+            errors.append(
+                f"candidate {prefix}: triage {field} must be a non-empty string"
+            )
     finding = triage["finding"]
     if not isinstance(finding, str) or not finding.strip():
         errors.append(f"candidate {prefix}: triage requires a finding")
@@ -1736,17 +2434,21 @@ def validate_triage(
         if not isinstance(item, dict):
             errors.append(f"candidate {prefix}: every evidence item must be an object")
             continue
-        allowed = EVIDENCE_REQUIRED | (BLOB_EVIDENCE_REQUIRED if item.get("kind") == "git_blob" else set())
+        allowed = EVIDENCE_REQUIRED | (
+            BLOB_EVIDENCE_REQUIRED if item.get("kind") == "git_blob" else set()
+        )
         if set(item) != allowed:
             errors.append(f"candidate {prefix}: evidence fields differ from schema")
             continue
         if not isinstance(item["label"], str) or not item["label"].strip():
             errors.append(f"candidate {prefix}: evidence requires a label")
         if not isinstance(item["url"], str) or not item["url"].startswith("https://"):
-            errors.append(f"candidate {prefix}: evidence requires an authoritative HTTPS URL")
-        if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
-            item["content_sha256"]
-        ):
+            errors.append(
+                f"candidate {prefix}: evidence requires an authoritative HTTPS URL"
+            )
+        if not isinstance(
+            item["content_sha256"], str
+        ) or not CONTENT_SHA_PATTERN.fullmatch(item["content_sha256"]):
             errors.append(f"candidate {prefix}: evidence requires a content_sha256")
         if not valid_date(item["fetched_at"]):
             errors.append(f"candidate {prefix}: evidence requires fetched_at")
@@ -1754,13 +2456,20 @@ def validate_triage(
             blob_sha = item["blob_sha"]
             if not isinstance(blob_sha, str) or not SHA_PATTERN.fullmatch(blob_sha):
                 errors.append(f"candidate {prefix}: invalid evidence blob SHA")
-            elif item["immutable_url"] != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}":
-                errors.append(f"candidate {prefix}: immutable evidence URL must address the blob SHA")
+            elif (
+                item["immutable_url"]
+                != f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+            ):
+                errors.append(
+                    f"candidate {prefix}: immutable evidence URL must address the blob SHA"
+                )
         elif item["kind"] != "web":
             errors.append(f"candidate {prefix}: unknown evidence kind {item['kind']!r}")
 
 
-def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[str]) -> None:
+def validate_hn_signals(
+    document: dict[str, Any], tax: Taxonomy, errors: list[str]
+) -> None:
     """Attention-source signals carry provenance and never a classification. See ADR 028."""
     if document.get("version") != "1.0":
         errors.append("hn-signals.json: unsupported version")
@@ -1772,22 +2481,37 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
     source = document.get("source")
     if signals:
         if not isinstance(source, dict) or set(source) != SIGNAL_ENVELOPE_REQUIRED:
-            errors.append("hn-signals.json: source envelope does not match the sweep schema")
+            errors.append(
+                "hn-signals.json: source envelope does not match the sweep schema"
+            )
         else:
             # bool is a subclass of int, so an explicit isinstance(..., bool) is
             # required here or `truncated: 1` would pass as truthy.
             if not isinstance(source["truncated"], bool):
-                errors.append("hn-signals.json: source envelope truncated must be a boolean")
+                errors.append(
+                    "hn-signals.json: source envelope truncated must be a boolean"
+                )
             suppressed = source["suppressed"]
-            if not isinstance(suppressed, int) or isinstance(suppressed, bool) or suppressed < 0:
-                errors.append("hn-signals.json: source envelope suppressed must be a non-negative integer")
+            if (
+                not isinstance(suppressed, int)
+                or isinstance(suppressed, bool)
+                or suppressed < 0
+            ):
+                errors.append(
+                    "hn-signals.json: source envelope suppressed must be a non-negative integer"
+                )
 
     seen: set[str] = set()
     classifying = tax.enum_ids["system_families"] | tax.enum_ids["primary_roles"]
     for signal in signals:
-        prefix = (signal.get("story_id") or "unknown") if isinstance(signal, dict) else "unknown"
+        prefix = (
+            (signal.get("story_id") or "unknown")
+            if isinstance(signal, dict)
+            else "unknown"
+        )
         if not isinstance(signal, dict) or (
-            SIGNAL_REQUIRED - set(signal) or set(signal) - SIGNAL_REQUIRED - SIGNAL_OPTIONAL
+            SIGNAL_REQUIRED - set(signal)
+            or set(signal) - SIGNAL_REQUIRED - SIGNAL_OPTIONAL
         ):
             errors.append(f"signal {prefix}: fields do not match signal schema")
             continue
@@ -1803,28 +2527,42 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
         if signal["page_status"] not in PAGE_STATUSES:
             errors.append(f"signal {prefix}: page_status must name a fetch outcome")
         if https_url_host(signal["url"]) is None:
-            errors.append(f"signal {prefix}: url must be an HTTPS URL on a public DNS host")
+            errors.append(
+                f"signal {prefix}: url must be an HTTPS URL on a public DNS host"
+            )
         elif CONTROL_CHARACTER_PATTERN.search(signal["url"]):
             errors.append(f"signal {prefix}: url must not contain control characters")
         readable = signal["page_status"] == "readable"
         digest = signal["content_sha256"]
-        if readable and not (isinstance(digest, str) and CONTENT_SHA_PATTERN.fullmatch(digest)):
+        if readable and not (
+            isinstance(digest, str) and CONTENT_SHA_PATTERN.fullmatch(digest)
+        ):
             errors.append(f"signal {prefix}: a readable page requires a content_sha256")
         if not readable and digest is not None:
-            errors.append(f"signal {prefix}: only a readable page carries a content_sha256")
+            errors.append(
+                f"signal {prefix}: only a readable page carries a content_sha256"
+            )
         if not valid_date(signal["discovered_at"]):
             errors.append(f"signal {prefix}: discovered_at must be an ISO date")
         points = signal["points"]
         if not isinstance(points, int) or isinstance(points, bool) or points < 0:
             errors.append(f"signal {prefix}: points must be a non-negative integer")
         num_comments = signal["num_comments"]
-        if not isinstance(num_comments, int) or isinstance(num_comments, bool) or num_comments < 0:
-            errors.append(f"signal {prefix}: num_comments must be a non-negative integer")
+        if (
+            not isinstance(num_comments, int)
+            or isinstance(num_comments, bool)
+            or num_comments < 0
+        ):
+            errors.append(
+                f"signal {prefix}: num_comments must be a non-negative integer"
+            )
         title = signal["title"]
         if not isinstance(title, str) or not title.strip():
             errors.append(f"signal {prefix}: title must be a non-empty string")
         if https_url_host(signal["story_url"]) is None:
-            errors.append(f"signal {prefix}: story_url must be an HTTPS URL on a public DNS host")
+            errors.append(
+                f"signal {prefix}: story_url must be an HTTPS URL on a public DNS host"
+            )
         for field in ("submitted_at", "fetched_at"):
             if not isinstance(signal[field], str) or not signal[field].strip():
                 errors.append(f"signal {prefix}: {field} must be a non-empty string")
@@ -1838,7 +2576,9 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
             errors.append(f"signal {prefix}: assessment fields do not match the schema")
             continue
         if assessment["verdict"] not in ASSESSMENT_VERDICTS:
-            errors.append(f"signal {prefix}: assessment verdict is not one of the three")
+            errors.append(
+                f"signal {prefix}: assessment verdict is not one of the three"
+            )
         # A page nobody could read cannot be dispositioned from its title. ADR 028.
         if not readable and assessment["verdict"] != "unreadable":
             errors.append(
@@ -1865,10 +2605,14 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
             errors.append(f"signal {prefix}: assessment evidence must be a list")
         else:
             if assessment["verdict"] != "unreadable" and not evidence:
-                errors.append(f"signal {prefix}: assessment evidence must cite at least one source")
+                errors.append(
+                    f"signal {prefix}: assessment evidence must cite at least one source"
+                )
             for item in evidence:
                 if not isinstance(item, dict) or set(item) != EVIDENCE_REQUIRED:
-                    errors.append(f"signal {prefix}: evidence fields differ from schema")
+                    errors.append(
+                        f"signal {prefix}: evidence fields differ from schema"
+                    )
                     continue
                 if item["kind"] != "web":
                     errors.append(f"signal {prefix}: evidence kind must be web")
@@ -1885,11 +2629,16 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                     errors.append(
                         f"signal {prefix}: evidence requires an HTTPS URL on a public DNS host"
                     )
-                if not isinstance(item["content_sha256"], str) or not CONTENT_SHA_PATTERN.fullmatch(
-                    item["content_sha256"]
+                if not isinstance(
+                    item["content_sha256"], str
+                ) or not CONTENT_SHA_PATTERN.fullmatch(item["content_sha256"]):
+                    errors.append(
+                        f"signal {prefix}: evidence requires a content_sha256"
+                    )
+                if (
+                    not isinstance(item["fetched_at"], str)
+                    or not item["fetched_at"].strip()
                 ):
-                    errors.append(f"signal {prefix}: evidence requires a content_sha256")
-                if not isinstance(item["fetched_at"], str) or not item["fetched_at"].strip():
                     errors.append(f"signal {prefix}: evidence requires fetched_at")
                 # The routine is handed exactly one page — the one this signal pins — so
                 # a citation to anything else is a citation nobody fetched. Shape alone
@@ -1900,7 +2649,9 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
                         f"signal {prefix}: evidence must cite the signal's own pinned page"
                     )
         if not valid_date(assessment["proposed_at"]):
-            errors.append(f"signal {prefix}: assessment proposed_at must be an ISO date")
+            errors.append(
+                f"signal {prefix}: assessment proposed_at must be an ISO date"
+            )
         if assessment["proposer"] not in ASSESSMENT_PROPOSERS:
             errors.append(
                 f"signal {prefix}: assessment proposer must be hn-signals or human"
@@ -1908,7 +2659,10 @@ def validate_hn_signals(document: dict[str, Any], tax: Taxonomy, errors: list[st
 
 
 def validate_candidates(
-    candidates_data: dict[str, Any], tax: Taxonomy, index: ProjectIndex, errors: list[str]
+    candidates_data: dict[str, Any],
+    tax: Taxonomy,
+    index: ProjectIndex,
+    errors: list[str],
 ) -> set[str]:
     """Validate the provisional discovery queue against the curated catalog."""
     families, roles = tax.families, tax.roles
@@ -1920,7 +2674,11 @@ def validate_candidates(
     candidate_repos: set[str] = set()
     candidate_keys: set[str] = set()
     for candidate in candidate_entries:
-        prefix = (candidate.get("repo") or candidate.get("url") or "unknown") if isinstance(candidate, dict) else "unknown"
+        prefix = (
+            (candidate.get("repo") or candidate.get("url") or "unknown")
+            if isinstance(candidate, dict)
+            else "unknown"
+        )
         if not isinstance(candidate, dict) or (
             CANDIDATE_REQUIRED - set(candidate)
             or set(candidate) - CANDIDATE_REQUIRED - CANDIDATE_OPTIONAL
@@ -1935,18 +2693,28 @@ def validate_candidates(
         candidate_keys.add(candidate_key)
         if repo_key:
             if repo_key in candidate_repos or repo_key in repos:
-                errors.append(f"candidate {prefix}: duplicate or already curated repository")
+                errors.append(
+                    f"candidate {prefix}: duplicate or already curated repository"
+                )
             candidate_repos.add(repo_key)
         elif candidate_key in project_url_keys:
             errors.append(f"candidate {prefix}: URL is already curated")
         if candidate["status"] != "provisional":
             errors.append(f"candidate {prefix}: status must be provisional")
-        if candidate_repo and candidate["url"] != f"https://github.com/{candidate_repo}":
-            errors.append(f"candidate {prefix}: url must be the canonical GitHub repository URL")
-        if not candidate_repo and (
-            not isinstance(candidate["url"], str) or not candidate["url"].startswith("https://")
+        if (
+            candidate_repo
+            and candidate["url"] != f"https://github.com/{candidate_repo}"
         ):
-            errors.append(f"candidate {prefix}: non-GitHub candidate requires an HTTPS URL")
+            errors.append(
+                f"candidate {prefix}: url must be the canonical GitHub repository URL"
+            )
+        if not candidate_repo and (
+            not isinstance(candidate["url"], str)
+            or not candidate["url"].startswith("https://")
+        ):
+            errors.append(
+                f"candidate {prefix}: non-GitHub candidate requires an HTTPS URL"
+            )
         family = candidate["proposed_system_family"]
         role = candidate["proposed_primary_role"]
         triage = candidate.get("triage")
@@ -1958,21 +2726,39 @@ def validate_candidates(
                     "triage.held_by names the decision that holds the record"
                 )
         elif family not in families or role not in roles or roles.get(role) != family:
-            errors.append(f"candidate {prefix}: proposed family and role are incompatible")
+            errors.append(
+                f"candidate {prefix}: proposed family and role are incompatible"
+            )
         if candidate["github_detected_license"] is not None and not isinstance(
             candidate["github_detected_license"], str
         ):
-            errors.append(f"candidate {prefix}: detected license must be a string or null")
-        if not is_number(candidate["classification_confidence"]) or not 0 <= candidate["classification_confidence"] <= 1:
-            errors.append(f"candidate {prefix}: classification confidence must be between 0 and 1")
-        if candidate["stars"] is not None and (not isinstance(candidate["stars"], int) or candidate["stars"] < 0):
-            errors.append(f"candidate {prefix}: stars must be a non-negative integer or null")
-        if not isinstance(candidate["topics"], list) or any(not isinstance(topic, str) for topic in candidate["topics"]):
+            errors.append(
+                f"candidate {prefix}: detected license must be a string or null"
+            )
+        if (
+            not is_number(candidate["classification_confidence"])
+            or not 0 <= candidate["classification_confidence"] <= 1
+        ):
+            errors.append(
+                f"candidate {prefix}: classification confidence must be between 0 and 1"
+            )
+        if candidate["stars"] is not None and (
+            not isinstance(candidate["stars"], int) or candidate["stars"] < 0
+        ):
+            errors.append(
+                f"candidate {prefix}: stars must be a non-negative integer or null"
+            )
+        if not isinstance(candidate["topics"], list) or any(
+            not isinstance(topic, str) for topic in candidate["topics"]
+        ):
             errors.append(f"candidate {prefix}: topics must be a list of strings")
         review_required = candidate["review_required"]
-        if not isinstance(review_required, list) or any(not isinstance(item, str) for item in review_required) or set(review_required) != {
-            "licensing", "classification", "traits", "editorial_score"
-        }:
+        if (
+            not isinstance(review_required, list)
+            or any(not isinstance(item, str) for item in review_required)
+            or set(review_required)
+            != {"licensing", "classification", "traits", "editorial_score"}
+        ):
             errors.append(f"candidate {prefix}: review_required is incomplete")
         if not valid_date(candidate["discovered_at"]):
             errors.append(f"candidate {prefix}: discovered_at must be an ISO date")
@@ -1982,14 +2768,18 @@ def validate_candidates(
 
 
 def validate_license_review(
-    license_review_data: dict[str, Any], projects_by_id: dict[str, Any], errors: list[str]
+    license_review_data: dict[str, Any],
+    projects_by_id: dict[str, Any],
+    errors: list[str],
 ) -> None:
     """The license-review queue and the project review statuses must agree exactly."""
     review_entries = license_review_data.get("entries")
     if not isinstance(review_entries, list):
         errors.append("license-review.json: entries must be a list")
         review_entries = []
-    review_ids = [item.get("project_id") for item in review_entries if isinstance(item, dict)]
+    review_ids = [
+        item.get("project_id") for item in review_entries if isinstance(item, dict)
+    ]
     if len(review_ids) != len(set(review_ids)):
         errors.append("license-review.json: project entries must be unique")
     review_required = {
@@ -2015,7 +2805,10 @@ def validate_license_review(
 
 
 def validate_exclusions(
-    exclusions_data: dict[str, Any], repos: set[str], candidate_repos: set[str], errors: list[str]
+    exclusions_data: dict[str, Any],
+    repos: set[str],
+    candidate_repos: set[str],
+    errors: list[str],
 ) -> None:
     """A repository is curated, a candidate, or excluded - never two of those.
 
@@ -2024,7 +2817,9 @@ def validate_exclusions(
     re-checked the reason against current sources. Automation never sets either.
     """
     for item in exclusions_data.get("entries", []):
-        prefix = (item.get("name") or "unknown") if isinstance(item, dict) else "unknown"
+        prefix = (
+            (item.get("name") or "unknown") if isinstance(item, dict) else "unknown"
+        )
         if not isinstance(item, dict) or (
             EXCLUSION_REQUIRED - set(item)
             or set(item) - EXCLUSION_REQUIRED - EXCLUSION_OPTIONAL
@@ -2032,7 +2827,9 @@ def validate_exclusions(
             errors.append(f"exclusion {prefix}: fields do not match exclusion schema")
             continue
         if "url" in item and https_url_host(item["url"]) is None:
-            errors.append(f"exclusion {prefix}: url must be an HTTPS URL on a public DNS host")
+            errors.append(
+                f"exclusion {prefix}: url must be an HTTPS URL on a public DNS host"
+            )
         for field in ("excluded_at", "verified_at"):
             if not valid_date(item[field]):
                 errors.append(f"exclusion {prefix}: {field} must be an ISO date")
@@ -2041,20 +2838,28 @@ def validate_exclusions(
             and valid_date(item["verified_at"])
             and item["verified_at"] < item["excluded_at"]
         ):
-            errors.append(f"exclusion {prefix}: verified_at must not precede excluded_at")
+            errors.append(
+                f"exclusion {prefix}: verified_at must not precede excluded_at"
+            )
     excluded_repos = {
         item["repo"].lower()
         for item in exclusions_data.get("entries", [])
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
     if overlap := excluded_repos & repos:
-        errors.append(f"repositories cannot be both included and excluded: {sorted(overlap)}")
+        errors.append(
+            f"repositories cannot be both included and excluded: {sorted(overlap)}"
+        )
     if overlap := excluded_repos & candidate_repos:
-        errors.append(f"repositories cannot be both candidates and excluded: {sorted(overlap)}")
+        errors.append(
+            f"repositories cannot be both candidates and excluded: {sorted(overlap)}"
+        )
 
 
 def validate_queue_envelopes(
-    candidates_data: dict[str, Any], license_review_data: dict[str, Any], errors: list[str]
+    candidates_data: dict[str, Any],
+    license_review_data: dict[str, Any],
+    errors: list[str],
 ) -> None:
     for queue_name, document in (
         ("candidates.json", candidates_data),
@@ -2062,14 +2867,18 @@ def validate_queue_envelopes(
     ):
         if document.get("version") != "1.0":
             errors.append(f"{queue_name}: unsupported version")
-        if document.get("updated_at") is not None and not valid_date(document["updated_at"]):
+        if document.get("updated_at") is not None and not valid_date(
+            document["updated_at"]
+        ):
             errors.append(f"{queue_name}: updated_at must be null or an ISO date")
 
 
 def validate_published_copies(root: Path, errors: list[str]) -> None:
     """web/ must be a byte-for-byte copy of the canonical directory/ files."""
     for name in PUBLISHED_DATA:
-        if (root / "directory" / name).read_bytes() != (root / "web" / name).read_bytes():
+        if (root / "directory" / name).read_bytes() != (
+            root / "web" / name
+        ).read_bytes():
             errors.append(f"web/{name} is not synchronized with directory/{name}")
 
 
@@ -2082,11 +2891,17 @@ def validate(root: Path = ROOT) -> list[str]:
 
     errors.extend(validate_discovery_sources(catalog["discovery-sources.json"]))
     if (root / "web" / "discovery-sources.json").exists():
-        errors.append("discovery-sources.json: operational discovery sources must not be published")
+        errors.append(
+            "discovery-sources.json: operational discovery sources must not be published"
+        )
     if (root / "web" / "model-candidates.json").exists():
-        errors.append("model-candidates.json: provisional model candidates must not be published")
+        errors.append(
+            "model-candidates.json: provisional model candidates must not be published"
+        )
     if (root / "web" / "model-dispositions.json").exists():
-        errors.append("model-dispositions.json: model hold and exclusion decisions must not be published")
+        errors.append(
+            "model-dispositions.json: model hold and exclusion decisions must not be published"
+        )
     if (root / "web" / "hn-signals.json").exists():
         errors.append("hn-signals.json: attention-source signals must not be published")
 
@@ -2099,50 +2914,87 @@ def validate(root: Path = ROOT) -> list[str]:
     projects_by_id = validate_license_evidence(
         catalog["license-evidence.json"], index.projects, errors
     )
-    specifications_value = validate_specifications(catalog["specifications.json"], tax, errors)
+    specifications_value = validate_specifications(
+        catalog["specifications.json"], tax, errors
+    )
     inference_services_value = validate_inference_services(
         catalog["inference-services.json"], tax, errors
     )
-    local_runtimes_value = validate_local_runtimes(catalog["local-runtimes.json"], tax, errors)
+    local_runtimes_value = validate_local_runtimes(
+        catalog["local-runtimes.json"], tax, errors
+    )
     models_value = validate_models(catalog["models.json"], tax, errors)
     source_models_value = validate_models_dev(catalog["models-dev.json"], tax, errors)
-    if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get("source"):
-        errors.append("model-candidates.json: source snapshot differs from models-dev.json")
-    if catalog["model-candidates.json"].get("source_record_count") != catalog["models-dev.json"].get("source_record_count"):
-        errors.append("model-candidates.json: source_record_count differs from models-dev.json")
+    if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get(
+        "source"
+    ):
+        errors.append(
+            "model-candidates.json: source snapshot differs from models-dev.json"
+        )
+    if catalog["model-candidates.json"].get("source_record_count") != catalog[
+        "models-dev.json"
+    ].get("source_record_count"):
+        errors.append(
+            "model-candidates.json: source_record_count differs from models-dev.json"
+        )
 
     specification_ids = {
-        item["id"] for item in specifications_value
+        item["id"]
+        for item in specifications_value
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
-    packs_value = validate_packs(catalog["packs.json"], tax, specification_ids, index, errors)
+    packs_value = validate_packs(
+        catalog["packs.json"], tax, specification_ids, index, errors
+    )
     pack_repos = {
-        item["repo"].lower() for item in packs_value
+        item["repo"].lower()
+        for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
 
     validate_unique_record_ids(
-        index.projects, specifications_value, inference_services_value, local_runtimes_value,
-        models_value, errors, packs_value=packs_value,
+        index.projects,
+        specifications_value,
+        inference_services_value,
+        local_runtimes_value,
+        models_value,
+        errors,
+        packs_value=packs_value,
     )
 
-    candidate_repos = validate_candidates(catalog["candidates.json"], tax, index, errors)
+    candidate_repos = validate_candidates(
+        catalog["candidates.json"], tax, index, errors
+    )
     if overlap := candidate_repos & pack_repos:
-        errors.append(f"repositories cannot be both candidates and packs: {sorted(overlap)}")
+        errors.append(
+            f"repositories cannot be both candidates and packs: {sorted(overlap)}"
+        )
     validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     dispositioned_ids = validate_model_dispositions(
-        catalog["model-dispositions.json"], models_value, source_models_value, errors,
+        catalog["model-dispositions.json"],
+        models_value,
+        source_models_value,
+        errors,
     )
     validate_model_candidates(
-        catalog["model-candidates.json"], models_value, source_models_value, tax, errors,
+        catalog["model-candidates.json"],
+        models_value,
+        source_models_value,
+        tax,
+        errors,
         dispositioned_ids,
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
-    validate_exclusions(catalog["exclusions.json"], index.repos | pack_repos, candidate_repos, errors)
-    validate_queue_envelopes(catalog["candidates.json"], catalog["license-review.json"], errors)
+    validate_exclusions(
+        catalog["exclusions.json"], index.repos | pack_repos, candidate_repos, errors
+    )
+    validate_queue_envelopes(
+        catalog["candidates.json"], catalog["license-review.json"], errors
+    )
     validate_published_copies(root, errors)
 
     return errors
+
 
 def main() -> int:
     errors = validate()
@@ -2150,7 +3002,10 @@ def main() -> int:
         raise SystemExit("\n".join(errors))
     data = load("projects.json")
     families = sorted({project["system_family"] for project in data["projects"]})
-    counts = {family: sum(project["system_family"] == family for project in data["projects"]) for family in families}
+    counts = {
+        family: sum(project["system_family"] == family for project in data["projects"])
+        for family in families
+    }
     specification_count = len(load("specifications.json")["specifications"])
     inference_service_count = len(load("inference-services.json")["services"])
     local_runtime_count = len(load("local-runtimes.json")["runtimes"])

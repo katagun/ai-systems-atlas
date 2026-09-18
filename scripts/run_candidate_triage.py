@@ -4,6 +4,7 @@
 The judgment between `prepare` and `finish` belongs to a human or to the routine
 described in docs/routines/candidate-triage.md. Everything here is mechanical.
 """
+
 from __future__ import annotations
 
 import json
@@ -41,8 +42,12 @@ MISSING = object()
 CHECKS = (
     ["uv", "run", "python", "scripts/validate_directory.py"],
     [
-        "uv", "run", "python", "scripts/build_candidate_evidence.py",
-        "--recheck", "--unattended",
+        "uv",
+        "run",
+        "python",
+        "scripts/build_candidate_evidence.py",
+        "--recheck",
+        "--unattended",
     ],
     ["uv", "run", "python", "-m", "unittest", "discover", "-s", "tests"],
     ["uv", "run", "ruff", "check", "scripts", "tests"],
@@ -50,7 +55,9 @@ CHECKS = (
 
 WORKTREE = ROOT.parent / "atlas-candidate-triage"
 PROMPT = ROOT / "docs" / "routines" / "candidate-triage.md"
-INSTALLED_PROMPT = Path.home() / ".claude" / "scheduled-tasks" / "candidate-triage" / "SKILL.md"
+INSTALLED_PROMPT = (
+    Path.home() / ".claude" / "scheduled-tasks" / "candidate-triage" / "SKILL.md"
+)
 
 
 def unexpected_changes(porcelain: str) -> list[str]:
@@ -63,7 +70,9 @@ def candidate_key(candidate: dict[str, Any]) -> str:
     return str(candidate.get("repo") or candidate.get("url") or "").lower()
 
 
-def index_candidates(candidates: Any, side: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
+def index_candidates(
+    candidates: Any, side: str
+) -> tuple[dict[str, dict[str, Any]], list[str]]:
     """Key a candidate list for comparison, refusing anything it cannot compare reliably."""
     if not isinstance(candidates, list):
         return {}, [f"{side}: candidates must be a list"]
@@ -71,7 +80,9 @@ def index_candidates(candidates: Any, side: str) -> tuple[dict[str, dict[str, An
     problems: list[str] = []
     for position, candidate in enumerate(candidates):
         if not isinstance(candidate, dict):
-            problems.append(f"{side}: the candidate at position {position} is not an object")
+            problems.append(
+                f"{side}: the candidate at position {position} is not an object"
+            )
             continue
         key = candidate_key(candidate)
         if not key:
@@ -85,7 +96,9 @@ def index_candidates(candidates: Any, side: str) -> tuple[dict[str, dict[str, An
     return indexed, problems
 
 
-def candidate_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) -> list[str]:
+def candidate_field_changes(
+    key: str, old: dict[str, Any], new: dict[str, Any]
+) -> list[str]:
     """Report every field of one candidate the routine changed but may not."""
     added_block = new.get("triage") if "triage" not in old else None
     held = isinstance(added_block, dict) and bool(added_block.get("held_by"))
@@ -98,11 +111,15 @@ def candidate_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) 
             continue  # adding a block to a candidate that lacks one is the routine's whole job
         if field in NULLABLE_WHEN_HELD and now is None and held:
             continue  # a held record may wait for a collection that does not exist yet
-        problems.append(f"candidate {key}: {field!r} is human review's field and the run changed it")
+        problems.append(
+            f"candidate {key}: {field!r} is human review's field and the run changed it"
+        )
     return problems
 
 
-def unexpected_field_changes(before: str, after: str, *, base_label: str = "origin/main") -> list[str]:
+def unexpected_field_changes(
+    before: str, after: str, *, base_label: str = "origin/main"
+) -> list[str]:
     """Report every change to the queue beyond the two the routine is permitted to make.
 
     Permitted: adding a `triage` block to a candidate that has none, and nulling
@@ -124,7 +141,8 @@ def unexpected_field_changes(before: str, after: str, *, base_label: str = "orig
     problems = [
         f"the run changed the document field {key!r}"
         for key in sorted(set(old_document) | set(new_document))
-        if key != "candidates" and old_document.get(key, MISSING) != new_document.get(key, MISSING)
+        if key != "candidates"
+        and old_document.get(key, MISSING) != new_document.get(key, MISSING)
     ]
     old, old_problems = index_candidates(old_document.get("candidates"), base_label)
     new, new_problems = index_candidates(new_document.get("candidates"), "the run")
@@ -163,14 +181,19 @@ shell = routine_guards.shell
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
-    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/candidate-triage.md", ROOT)
+    return routine_guards.prompt_drift(
+        repo_prompt, installed_prompt, "docs/routines/candidate-triage.md", ROOT
+    )
 
 
 def install_prompt() -> int:
     """Install the reviewed prompt, rendered for this checkout, where the scheduler reads it."""
     try:
         routine_guards.install_prompt(
-            PROMPT.read_text(encoding="utf-8"), INSTALLED_PROMPT, ROOT, INSTALLED_PROMPT.parents[1]
+            PROMPT.read_text(encoding="utf-8"),
+            INSTALLED_PROMPT,
+            ROOT,
+            INSTALLED_PROMPT.parents[1],
         )
     except OSError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -190,24 +213,36 @@ def prepared_base_ref(read=root_text) -> str:
 
 def prepare(*, limit: int, run=shell) -> int:
     """Refresh an isolated worktree from origin/main and build the evidence bundle."""
-    installed = INSTALLED_PROMPT.read_text(encoding="utf-8") if INSTALLED_PROMPT.exists() else None
+    installed = (
+        INSTALLED_PROMPT.read_text(encoding="utf-8")
+        if INSTALLED_PROMPT.exists()
+        else None
+    )
     drift = prompt_drift(PROMPT.read_text(encoding="utf-8"), installed)
     if drift:
         print(f"error: {drift}", file=sys.stderr)
         return 1
     fetch_code, fetch_output = run(["git", "fetch", "--quiet", "origin"], ROOT)
     if fetch_code != 0:
-        print(f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr)
+        print(
+            f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr
+        )
         return 1
     resolve_code, resolved = run(["git", "rev-parse", "--verify", "origin/main"], ROOT)
     if resolve_code != 0:
-        print(f"error: could not resolve 'origin/main' to a commit\n{resolved}", file=sys.stderr)
+        print(
+            f"error: could not resolve 'origin/main' to a commit\n{resolved}",
+            file=sys.stderr,
+        )
         return 1
     base_sha = resolved.strip()
     steps = (
         # Removing a worktree that does not exist is expected on a first run.
         (["git", "worktree", "remove", "--force", str(WORKTREE)], True),
-        (["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), base_sha], False),
+        (
+            ["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), base_sha],
+            False,
+        ),
     )
     for command, tolerate_failure in steps:
         code, output = run(command, ROOT)
@@ -218,10 +253,19 @@ def prepare(*, limit: int, run=shell) -> int:
     # guards against this tree rather than whatever `origin/main` has since become — see
     # `routine_guards.record_prepared_base`, shared with run_hn_signals.py.
     routine_guards.record_prepared_base(ROOT / BASE_REF, base_sha, "origin/main")
-    code, output = run([
-        "uv", "run", "python", "scripts/build_candidate_evidence.py",
-        "--limit", str(limit), "--previous-branch", "triage/pending",
-    ], WORKTREE)
+    code, output = run(
+        [
+            "uv",
+            "run",
+            "python",
+            "scripts/build_candidate_evidence.py",
+            "--limit",
+            str(limit),
+            "--previous-branch",
+            "triage/pending",
+        ],
+        WORKTREE,
+    )
     print(output)
     if code == 0:
         print(f"worktree ready: {WORKTREE}")
@@ -247,7 +291,10 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         return 1
     forbidden = unexpected_changes(porcelain)
     if forbidden:
-        print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
+        print(
+            f"error: the run changed files it may not touch: {forbidden}",
+            file=sys.stderr,
+        )
         return 1
     # The base `prepare` actually built from — a pinned SHA when it recorded one,
     # `origin/main` otherwise. Every guard below must compare against this same tree:
@@ -286,12 +333,16 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         return 1
     show_code, before = run(["git", "show", f"{base_ref}:{QUEUE}"], WORKTREE)
     if show_code != 0:
-        print(f"error: could not read {QUEUE} from {base_ref}\n{before}", file=sys.stderr)
+        print(
+            f"error: could not read {QUEUE} from {base_ref}\n{before}", file=sys.stderr
+        )
         return 1
     try:
         after = read(QUEUE)
     except OSError as exc:
-        print(f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr)
+        print(
+            f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr
+        )
         return 1
     overreach = unexpected_field_changes(before, after, base_label=base_ref)
     if overreach:
@@ -314,7 +365,10 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         try:
             just_before_add = read(QUEUE)
         except OSError as exc:
-            print(f"error: could not re-read {QUEUE} before staging: {exc}", file=sys.stderr)
+            print(
+                f"error: could not re-read {QUEUE} before staging: {exc}",
+                file=sys.stderr,
+            )
             return 1
         if just_before_add != after:
             print(
@@ -327,7 +381,12 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         commands = [
             ["git", "add", "directory/candidates.json"],
             ["git", "checkout", "-B", "triage/pending"],
-            ["git", "commit", "-m", f"Propose candidate triage for {date.today().isoformat()}"],
+            [
+                "git",
+                "commit",
+                "-m",
+                f"Propose candidate triage for {date.today().isoformat()}",
+            ],
         ]
     for command in commands:
         code, output = run(command, WORKTREE)
@@ -340,7 +399,11 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     return routine_guards.main(
-        argv, description=__doc__, prepare=prepare, finish=finish, install=install_prompt
+        argv,
+        description=__doc__,
+        prepare=prepare,
+        finish=finish,
+        install=install_prompt,
     )
 
 

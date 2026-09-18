@@ -1,0 +1,28 @@
+{
+  // Prose docs use long lines deliberately; wrapping them would hurt diffs.
+  // Tables use the compact `|---|---|` delimiter style throughout; MD060 is
+  // disabled rather than reformatting every table. Lists are often kept tight
+  // without surrounding blank lines (MD032), bold lead-ins stand in for
+  // subheadings in routines (MD036), and ordered lists use explicit `1.` steps
+  // renumbered by hand (MD029) — all deliberate, so those rules stay off.
+  // Fenced blocks must still name a language (MD040) and fences, bare URLs,
+  // and punctuation (MD031/MD034/MD026) are fixed where flagged. MD028 stays
+  // off: adjacent `>` quotes are two deliberate blockquotes, and the custom
+  // blog renderer in scripts/build_blog.py has no bare-`>` continuation line,
+  // so joining them would change rendering. MD038 stays off too: it
+  // false-positives on adjacent well-formed code spans such as
+  // "`eval()`, `random.randint()`", and its autofix deletes the legitimate
+  // space before the span, changing rendered text.
+  "config": {
+    "MD013": false,
+    "MD033": false,
+    "MD041": false,
+    "MD060": false,
+    "MD032": false,
+    "MD036": false,
+    "MD029": false,
+    "MD028": false,
+    "MD038": false
+  },
+  "globs": ["**/*.md", "!node_modules/**", "!web/records/**", "!docs/superpowers/**", "!test-results/**", "!playwright-report/**"],
+}

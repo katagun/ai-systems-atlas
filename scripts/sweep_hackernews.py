@@ -3,6 +3,7 @@
 This script owns discovery facts only. It never proposes a family, role, trait,
 score, or confidence, and never writes directory/candidates.json. See ADR 028.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -43,14 +44,41 @@ MAX_STORY_PAGES = 5
 
 # Hosts that report on systems rather than ship them. This list is the load-bearing
 # filter and is maintained by hand; a host here is never fetched.
-MEDIA_DENYLIST = frozenset({
-    "arstechnica.com", "arxiv.org", "bbc.co.uk", "bbc.com", "bloomberg.com", "cnbc.com",
-    "cnn.com", "ft.com", "medium.com", "newyorker.com", "nytimes.com", "openreview.net",
-    "politico.eu", "quantamagazine.org", "reddit.com", "reuters.com", "science.org",
-    "smithsonianmag.com", "substack.com", "techcrunch.com", "theguardian.com", "theverge.com",
-    "threads.com", "twitter.com", "en.wikipedia.org", "wired.com", "wsj.com", "x.com",
-    "youtube.com", "news.ycombinator.com", "phoronix.com",
-})
+MEDIA_DENYLIST = frozenset(
+    {
+        "arstechnica.com",
+        "arxiv.org",
+        "bbc.co.uk",
+        "bbc.com",
+        "bloomberg.com",
+        "cnbc.com",
+        "cnn.com",
+        "ft.com",
+        "medium.com",
+        "newyorker.com",
+        "nytimes.com",
+        "openreview.net",
+        "politico.eu",
+        "quantamagazine.org",
+        "reddit.com",
+        "reuters.com",
+        "science.org",
+        "smithsonianmag.com",
+        "substack.com",
+        "techcrunch.com",
+        "theguardian.com",
+        "theverge.com",
+        "threads.com",
+        "twitter.com",
+        "en.wikipedia.org",
+        "wired.com",
+        "wsj.com",
+        "x.com",
+        "youtube.com",
+        "news.ycombinator.com",
+        "phoronix.com",
+    }
+)
 
 
 def registrable_host(url: object) -> str:
@@ -119,9 +147,21 @@ def decided_url_keys(
     than raising, since not every record carries one.
     """
     raw_urls: list[Any] = [
-        *(project.get("url") for project in projects.get("projects", []) if isinstance(project, dict)),
-        *(entry.get("url") for entry in exclusions.get("entries", []) if isinstance(entry, dict)),
-        *(item.get("url") for item in candidates.get("candidates", []) if isinstance(item, dict)),
+        *(
+            project.get("url")
+            for project in projects.get("projects", [])
+            if isinstance(project, dict)
+        ),
+        *(
+            entry.get("url")
+            for entry in exclusions.get("entries", [])
+            if isinstance(entry, dict)
+        ),
+        *(
+            item.get("url")
+            for item in candidates.get("candidates", [])
+            if isinstance(item, dict)
+        ),
     ]
     return {canonical_url_key(url) for url in raw_urls if isinstance(url, str)}
 
@@ -273,20 +313,22 @@ def build_document(
                 page_status = "unreadable"
             else:
                 digest = content_hash(text)
-        signals.append({
-            "story_id": str(story["objectID"]),
-            "story_url": f"https://news.ycombinator.com/item?id={story['objectID']}",
-            "title": story["title"],
-            "url": url,
-            "points": story["points"],
-            "num_comments": story.get("num_comments") or 0,
-            "submitted_at": story["created_at"],
-            "page_status": page_status,
-            "content_sha256": digest,
-            "fetched_at": f"{discovered_at}T00:00:00Z",
-            "status": "provisional",
-            "discovered_at": discovered_at,
-        })
+        signals.append(
+            {
+                "story_id": str(story["objectID"]),
+                "story_url": f"https://news.ycombinator.com/item?id={story['objectID']}",
+                "title": story["title"],
+                "url": url,
+                "points": story["points"],
+                "num_comments": story.get("num_comments") or 0,
+                "submitted_at": story["created_at"],
+                "page_status": page_status,
+                "content_sha256": digest,
+                "fetched_at": f"{discovered_at}T00:00:00Z",
+                "status": "provisional",
+                "discovered_at": discovered_at,
+            }
+        )
     signals.sort(key=lambda item: item["story_id"])
     return {
         "version": "1.0",
@@ -305,17 +347,21 @@ def build_document(
     }
 
 
-def search_stories(window_start_epoch: int, window_end_epoch: int, getter) -> dict[str, Any]:
+def search_stories(
+    window_start_epoch: int, window_end_epoch: int, getter
+) -> dict[str, Any]:
     """Query the attention source over a settled window. One request per page, bounded."""
     hits: list[dict[str, Any]] = []
     story_count = 0
     for page in range(MAX_STORY_PAGES):
-        query = urllib.parse.urlencode({
-            "tags": "story",
-            "numericFilters": f"created_at_i>{window_start_epoch},created_at_i<{window_end_epoch}",
-            "hitsPerPage": 1000,
-            "page": page,
-        })
+        query = urllib.parse.urlencode(
+            {
+                "tags": "story",
+                "numericFilters": f"created_at_i>{window_start_epoch},created_at_i<{window_end_epoch}",
+                "hitsPerPage": 1000,
+                "page": page,
+            }
+        )
         payload = getter(f"{ENDPOINT}?{query}")
         hits.extend(payload.get("hits", []))
         story_count = payload.get("nbHits", story_count)
@@ -326,7 +372,9 @@ def search_stories(window_start_epoch: int, window_end_epoch: int, getter) -> di
 
 def get_json(url: str) -> dict[str, Any]:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=30) as response:
+    # Bandit B310: url is always ENDPOINT plus encoded query params,
+    # never caller-controlled.
+    with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
         body = response.read(MAX_RESPONSE_BYTES + 1)
     if len(body) > MAX_RESPONSE_BYTES:
         raise ValueError("attention-source response exceeds size limit")

@@ -5,6 +5,7 @@ The updater may change live metadata and safety status. It never changes human
 editorial analysis, scores, license evidence, or editorial verification dates.
 Discovered projects remain provisional in ``directory/candidates.json``.
 """
+
 from __future__ import annotations
 
 import json
@@ -66,26 +67,52 @@ DISCOVERY_QUERIES = [
     '"agent memory" in:name,description stars:>500 archived:false',
     '"personal knowledge management" in:description stars:>500 archived:false',
     '"local-first" note knowledge in:description stars:>500 archived:false',
-    'RAG personal knowledge in:description stars:>1000 archived:false',
-    'vector database AI memory in:description stars:>1000 archived:false',
-    'screen recall privacy in:description stars:>300 archived:false',
-    'coding agent skills workflow in:description stars:>500 archived:false',
-    'open source coding agent in:description stars:>1000 archived:false',
-    'research agent web in:description stars:>1000 archived:false',
-    'browser agent in:name,description stars:>1000 archived:false',
+    "RAG personal knowledge in:description stars:>1000 archived:false",
+    "vector database AI memory in:description stars:>1000 archived:false",
+    "screen recall privacy in:description stars:>300 archived:false",
+    "coding agent skills workflow in:description stars:>500 archived:false",
+    "open source coding agent in:description stars:>1000 archived:false",
+    "research agent web in:description stars:>1000 archived:false",
+    "browser agent in:name,description stars:>1000 archived:false",
     '"text-to-sql" in:name,description stars:>500 archived:false',
     '"data assistant" agent database in:description stars:>1000 archived:false',
-    'multi-agent framework in:description stars:>1000 archived:false',
+    "multi-agent framework in:description stars:>1000 archived:false",
     '"agent sdk" in:name,description stars:>500 archived:false',
     '"agent harness" in:name,description stars:>500 archived:false',
 ]
 RELEVANT = {
-    "memory", "second brain", "knowledge", "pkm", "note", "rag", "retrieval",
-    "vector", "graph", "context", "agent", "recall", "lifelog", "markdown",
-    "sql", "database", "data assistant", "text-to-sql", "text2sql", "nl2sql",
-    "scientific", "discovery", "hypothesis", "experiment",
+    "memory",
+    "second brain",
+    "knowledge",
+    "pkm",
+    "note",
+    "rag",
+    "retrieval",
+    "vector",
+    "graph",
+    "context",
+    "agent",
+    "recall",
+    "lifelog",
+    "markdown",
+    "sql",
+    "database",
+    "data assistant",
+    "text-to-sql",
+    "text2sql",
+    "nl2sql",
+    "scientific",
+    "discovery",
+    "hypothesis",
+    "experiment",
 }
-EXCLUDED = {"game", "awesome list", "interview questions", "tutorial only", "course only"}
+EXCLUDED = {
+    "game",
+    "awesome list",
+    "interview questions",
+    "tutorial only",
+    "course only",
+}
 
 GitHubGetter = Callable[[str, str | None], dict[str, Any]]
 FeedGetter = Callable[[str, set[str]], bytes]
@@ -119,7 +146,9 @@ def load_json(path: Path, default: dict[str, Any] | None = None) -> dict[str, An
 
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def github_get(
@@ -141,7 +170,9 @@ def github_get(
     request = urllib.request.Request(url, headers=headers)
     for attempt in range(attempts):
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
+            # Bandit B310: url is https://api.github.com plus a
+            # caller-supplied path, never a free-form URL.
+            with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
                 return json.load(response)
         except urllib.error.HTTPError as exc:
             if exc.code not in TRANSIENT_HTTP_CODES or attempt == attempts - 1:
@@ -210,21 +241,33 @@ def classify(text: str) -> tuple[str | None, float]:
     hits = sum(1 for term in RELEVANT if term in lowered)
     relevance = min(1.0, hits / 5)
     if any(term in lowered for term in ("text-to-sql", "text2sql", "nl2sql")) or (
-        "data assistant" in lowered and any(term in lowered for term in ("database", "sql", "analytics"))
+        "data assistant" in lowered
+        and any(term in lowered for term in ("database", "sql", "analytics"))
     ):
         return "data_analysis_agent", max(relevance, 0.84)
     if "vector database" in lowered or ("vector" in lowered and "database" in lowered):
         return "retrieval_infrastructure", max(relevance, 0.9)
-    if any(term in lowered for term in ("screen recall", "lifelog", "activity tracker", "screen history")):
+    if any(
+        term in lowered
+        for term in ("screen recall", "lifelog", "activity tracker", "screen history")
+    ):
         return "ambient_capture", max(relevance, 0.86)
-    if "coding agent" in lowered and any(term in lowered for term in ("skill", "workflow", "software factory")):
+    if "coding agent" in lowered and any(
+        term in lowered for term in ("skill", "workflow", "software factory")
+    ):
         return "coding_agent_workflow", max(relevance, 0.86)
     if "coding agent" in lowered or "ai pair programmer" in lowered:
         return "coding_agent", max(relevance, 0.82)
-    if any(term in lowered for term in (
-        "ai scientist", "ai-scientist", "autonomous discovery", "autonomous science",
-        "scientific discovery",
-    )):
+    if any(
+        term in lowered
+        for term in (
+            "ai scientist",
+            "ai-scientist",
+            "autonomous discovery",
+            "autonomous science",
+            "scientific discovery",
+        )
+    ):
         # ADR 023: autonomous scientific-discovery systems take an existing role.
         return "research_agent", max(relevance, 0.82)
     if "research agent" in lowered or "deep research" in lowered:
@@ -233,7 +276,9 @@ def classify(text: str) -> tuple[str | None, float]:
         return "browser_computer_agent", max(relevance, 0.82)
     if "multi-agent" in lowered or "multi agent" in lowered:
         return "multi_agent_orchestrator", max(relevance, 0.8)
-    if any(term in lowered for term in ("stateful agent", "agent runtime", "agent harness")):
+    if any(
+        term in lowered for term in ("stateful agent", "agent runtime", "agent harness")
+    ):
         return "stateful_agent_runtime", max(relevance, 0.83)
     if "agent framework" in lowered or "agent sdk" in lowered:
         return "agent_framework_sdk", max(relevance, 0.8)
@@ -243,17 +288,42 @@ def classify(text: str) -> tuple[str | None, float]:
         return "context_graph_engine", max(relevance, 0.82)
     if "agent" in lowered and "memory" in lowered:
         return "agent_memory_service", max(relevance, 0.8)
-    if any(term in lowered for term in (
-        "rag", "notebooklm", "chat with your docs", "chat with your documents", "document assistant",
-    )):
+    if any(
+        term in lowered
+        for term in (
+            "rag",
+            "notebooklm",
+            "chat with your docs",
+            "chat with your documents",
+            "document assistant",
+        )
+    ):
         return "ai_knowledge_app", max(relevance, 0.78)
-    if any(term in lowered for term in ("note-taking", "note taking", "personal knowledge", "pkm", "digital garden")):
+    if any(
+        term in lowered
+        for term in (
+            "note-taking",
+            "note taking",
+            "personal knowledge",
+            "pkm",
+            "digital garden",
+        )
+    ):
         return "human_pkm", max(relevance, 0.76)
-    if any(term in lowered for term in ("multi-model chat", "multi model chat", "multiple models in chat")):
+    if any(
+        term in lowered
+        for term in ("multi-model chat", "multi model chat", "multiple models in chat")
+    ):
         return "multi_model_chat_client", max(relevance, 0.8)
-    if "assistant" in lowered and any(term in lowered for term in ("enterprise", "workplace", "organization", "business")):
+    if "assistant" in lowered and any(
+        term in lowered
+        for term in ("enterprise", "workplace", "organization", "business")
+    ):
         return "enterprise_work_assistant", max(relevance, 0.78)
-    if any(term in lowered for term in ("ai assistant", "personal assistant", "chat assistant")):
+    if any(
+        term in lowered
+        for term in ("ai assistant", "personal assistant", "chat assistant")
+    ):
         return "general_ai_assistant", max(relevance, 0.76)
     return None, relevance
 
@@ -266,7 +336,8 @@ def candidate_template(
         "repo": repo["full_name"],
         "name": repo["name"],
         "url": repo["html_url"],
-        "description": repo.get("description") or "GitHub project awaiting editorial review.",
+        "description": repo.get("description")
+        or "GitHub project awaiting editorial review.",
         "proposed_system_family": family,
         "proposed_primary_role": role,
         "classification_confidence": round(confidence, 2),
@@ -367,11 +438,14 @@ def parse_official_feed(
     if len(body) > MAX_FEED_BYTES:
         raise ValueError("feed exceeds size limit")
     _reject_document_doctype(body)
-    root = ET.fromstring(body)
+    # Bandit B314: DOCTYPE is rejected above via expat and the body is
+    # size-capped at MAX_FEED_BYTES; see _reject_document_doctype.
+    root = ET.fromstring(body)  # nosec B314
     if root.tag.rsplit("}", 1)[-1].lower() not in {"rss", "feed"}:
         raise ValueError("official discovery source must be an RSS or Atom feed")
     items = [
-        element for element in root.iter()
+        element
+        for element in root.iter()
         if element.tag.rsplit("}", 1)[-1].lower() in {"item", "entry"}
     ]
     observed_date = date.fromisoformat(discovered_at)
@@ -383,7 +457,9 @@ def parse_official_feed(
         title = plain_text(_child_text(item, ("title",)))
         summary = plain_text(_child_text(item, ("description", "summary", "content")))
         url = _item_link(item)
-        published = _published_date(_child_text(item, ("pubdate", "published", "updated")))
+        published = _published_date(
+            _child_text(item, ("pubdate", "published", "updated"))
+        )
         parsed_url = urllib.parse.urlparse(url)
         if (
             not title
@@ -399,16 +475,18 @@ def parse_official_feed(
         family = role_families.get(role) if role else None
         if not role or not family or confidence < 0.75:
             continue
-        candidates.append(official_candidate_template(
-            source=source,
-            title=title,
-            url=url,
-            summary=summary,
-            family=family,
-            role=role,
-            confidence=confidence,
-            discovered_at=discovered_at,
-        ))
+        candidates.append(
+            official_candidate_template(
+                source=source,
+                title=title,
+                url=url,
+                summary=summary,
+                family=family,
+                role=role,
+                confidence=confidence,
+                discovered_at=discovered_at,
+            )
+        )
         if len(candidates) >= MAX_FEED_OBSERVATIONS:
             break
     return candidates
@@ -438,15 +516,23 @@ def refresh_projects(
                 successes += 1
                 project["status"] = "removed"
                 project["metadata_verified_at"] = refreshed_at
-                project["current_repo_note"] = f"GitHub returned {exc.code} on {refreshed_at}."
+                project["current_repo_note"] = (
+                    f"GitHub returned {exc.code} on {refreshed_at}."
+                )
                 continue
             failures.append(f"{project['repo']}: HTTP {exc.code}")
-            if project.get("license_review_status") == "review_required" and project_id in previous_reviews:
+            if (
+                project.get("license_review_status") == "review_required"
+                and project_id in previous_reviews
+            ):
                 reviews.append(previous_reviews[project_id])
             continue
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
             failures.append(f"{project['repo']}: {type(exc).__name__}: {exc}")
-            if project.get("license_review_status") == "review_required" and project_id in previous_reviews:
+            if (
+                project.get("license_review_status") == "review_required"
+                and project_id in previous_reviews
+            ):
                 reviews.append(previous_reviews[project_id])
             continue
 
@@ -459,14 +545,16 @@ def refresh_projects(
         # directions would silently revert a reviewed decision.
         if project.get("status") == "active" and metadata.get("archived"):
             project["status"] = "archived"
-        project.update({
-            "stars": metadata.get("stargazers_count"),
-            "stars_verified_at": refreshed_at,
-            "pushed_at": metadata.get("pushed_at"),
-            "forks": metadata.get("forks_count"),
-            "open_issues": metadata.get("open_issues_count"),
-            "metadata_verified_at": refreshed_at,
-        })
+        project.update(
+            {
+                "stars": metadata.get("stargazers_count"),
+                "stars_verified_at": refreshed_at,
+                "pushed_at": metadata.get("pushed_at"),
+                "forks": metadata.get("forks_count"),
+                "open_issues": metadata.get("open_issues_count"),
+                "metadata_verified_at": refreshed_at,
+            }
+        )
         detected_license = (metadata.get("license") or {}).get("spdx_id")
         project["github_detected_license"] = detected_license
         meaningful_license = detected_license not in {None, "", "NOASSERTION"}
@@ -477,26 +565,33 @@ def refresh_projects(
                 f"{', '.join(project.get('licenses', []))}."
             )
             project["current_repo_note"] = f"License review required: {reason}"
-            reviews.append({
-                "project_id": project_id,
-                "repo": project["repo"],
-                "expected_licenses": project.get("licenses", []),
-                "detected_license": detected_license,
-                "reason": reason,
-                "detected_at": refreshed_at,
-                "status": "open",
-            })
+            reviews.append(
+                {
+                    "project_id": project_id,
+                    "repo": project["repo"],
+                    "expected_licenses": project.get("licenses", []),
+                    "detected_license": detected_license,
+                    "reason": reason,
+                    "detected_at": refreshed_at,
+                    "status": "open",
+                }
+            )
         elif review_was_open:
             project["license_review_status"] = "review_required"
-            reviews.append(previous_reviews.get(project_id, {
-                "project_id": project_id,
-                "repo": project["repo"],
-                "expected_licenses": project.get("licenses", []),
-                "detected_license": detected_license,
-                "reason": "A previous license-evidence review still requires human resolution.",
-                "detected_at": refreshed_at,
-                "status": "open",
-            }))
+            reviews.append(
+                previous_reviews.get(
+                    project_id,
+                    {
+                        "project_id": project_id,
+                        "repo": project["repo"],
+                        "expected_licenses": project.get("licenses", []),
+                        "detected_license": detected_license,
+                        "reason": "A previous license-evidence review still requires human resolution.",
+                        "detected_at": refreshed_at,
+                        "status": "open",
+                    },
+                )
+            )
         sleeper(0.05)
 
     return successes, failures, reviews
@@ -520,7 +615,12 @@ def refresh_local_runtime_stars(
             continue
         try:
             metadata = getter(f"/repos/{repo}", token)
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+        except (
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            OSError,
+        ) as exc:
             failures.append(f"{repo}: {type(exc).__name__}: {exc}")
             continue
         runtime["stars"] = metadata.get("stargazers_count")
@@ -553,8 +653,16 @@ def discover_candidates(
     for query in DISCOVERY_QUERIES:
         encoded = urllib.parse.quote(query)
         try:
-            result = getter(f"/search/repositories?q={encoded}&sort=stars&order=desc&per_page=30", token)
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+            result = getter(
+                f"/search/repositories?q={encoded}&sort=stars&order=desc&per_page=30",
+                token,
+            )
+        except (
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            OSError,
+        ) as exc:
             failures.append(f"{query}: {type(exc).__name__}: {exc}")
             continue
         successful_queries += 1
@@ -567,7 +675,9 @@ def discover_candidates(
             family = role_families.get(role) if role else None
             if not role or not family or confidence < 0.75:
                 continue
-            candidates[repo_key] = candidate_template(repo, family, role, confidence, discovered_at)
+            candidates[repo_key] = candidate_template(
+                repo, family, role, confidence, discovered_at
+            )
             known.add(repo_key)
             new_count += 1
         sleeper(0.1)
@@ -602,7 +712,14 @@ def discover_official_candidates(
                 role_families,
                 discovered_at,
             )
-        except (ET.ParseError, ValueError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+        except (
+            ET.ParseError,
+            ValueError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            OSError,
+        ) as exc:
             failures.append(f"{source['id']}: {type(exc).__name__}: {exc}")
             continue
         successful_sources += 1
@@ -613,11 +730,18 @@ def discover_official_candidates(
             candidates[key] = observation
             known.add(key)
             new_count += 1
-    return sorted(candidates.values(), key=candidate_key), new_count, successful_sources, failures
+    return (
+        sorted(candidates.values(), key=candidate_key),
+        new_count,
+        successful_sources,
+        failures,
+    )
 
 
 def known_urls_from(
-    projects: list[dict[str, Any]], exclusions: dict[str, Any], packs: list[dict[str, Any]] = (),
+    projects: list[dict[str, Any]],
+    exclusions: dict[str, Any],
+    packs: list[dict[str, Any]] = (),
 ) -> set[str]:
     """Return every URL discovery should treat as already decided.
 
@@ -625,7 +749,9 @@ def known_urls_from(
     re-adds the same non-GitHub page forever; 10 of the 70 entries have no repo at
     all, so `repo` alone cannot carry the rejection. A pack is a decided record too.
     """
-    known = {project["url"] for project in projects if isinstance(project.get("url"), str)}
+    known = {
+        project["url"] for project in projects if isinstance(project.get("url"), str)
+    }
     known.update(
         item["url"]
         for item in exclusions.get("entries", [])
@@ -636,7 +762,9 @@ def known_urls_from(
 
 
 def known_repos_from(
-    projects: list[dict[str, Any]], exclusions: dict[str, Any], packs: list[dict[str, Any]] = (),
+    projects: list[dict[str, Any]],
+    exclusions: dict[str, Any],
+    packs: list[dict[str, Any]] = (),
 ) -> set[str]:
     """Return every lower-cased repository discovery should treat as already decided."""
     known = {project["repo"].lower() for project in projects if project.get("repo")}
@@ -645,7 +773,9 @@ def known_repos_from(
         for item in exclusions.get("entries", [])
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     )
-    known.update(pack["repo"].lower() for pack in packs if isinstance(pack.get("repo"), str))
+    known.update(
+        pack["repo"].lower() for pack in packs if isinstance(pack.get("repo"), str)
+    )
     return known
 
 
@@ -656,10 +786,18 @@ def main() -> int:
     taxonomy = load_json(TAXONOMY_PATH)
     exclusions = load_json(DIRECTORY / "exclusions.json")
     discovery_sources = load_json(DISCOVERY_SOURCES_PATH)
-    candidate_document = load_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []})
-    review_document = load_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []})
-    local_runtimes_document = load_json(LOCAL_RUNTIMES_PATH, {"version": "1.0", "verified_at": None, "runtimes": []})
-    packs_document = load_json(PACKS_PATH, {"version": "1.0", "verified_at": None, "packs": []})
+    candidate_document = load_json(
+        CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []}
+    )
+    review_document = load_json(
+        LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []}
+    )
+    local_runtimes_document = load_json(
+        LOCAL_RUNTIMES_PATH, {"version": "1.0", "verified_at": None, "runtimes": []}
+    )
+    packs_document = load_json(
+        PACKS_PATH, {"version": "1.0", "verified_at": None, "packs": []}
+    )
     projects = document["projects"]
     previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
 
@@ -688,30 +826,40 @@ def main() -> int:
 
     role_families = {item["id"]: item["family"] for item in taxonomy["primary_roles"]}
     known_projects = known_repos_from(projects, exclusions, packs_document["packs"])
-    candidates, new_candidates, successful_queries, discovery_failures = discover_candidates(
-        known_projects,
-        candidate_document["candidates"],
-        role_families,
-        github_get,
-        token,
-        refreshed_at,
+    candidates, new_candidates, successful_queries, discovery_failures = (
+        discover_candidates(
+            known_projects,
+            candidate_document["candidates"],
+            role_families,
+            github_get,
+            token,
+            refreshed_at,
+        )
     )
     if DISCOVERY_QUERIES and successful_queries == 0:
-        print("error: every discovery query failed; existing candidate queue was preserved", file=sys.stderr)
+        print(
+            "error: every discovery query failed; existing candidate queue was preserved",
+            file=sys.stderr,
+        )
         for failure in discovery_failures:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
     known_urls = known_urls_from(projects, exclusions, packs_document["packs"])
-    candidates, new_official_candidates, successful_sources, official_failures = discover_official_candidates(
-        candidates,
-        known_urls,
-        discovery_sources["sources"],
-        role_families,
-        refreshed_at,
+    candidates, new_official_candidates, successful_sources, official_failures = (
+        discover_official_candidates(
+            candidates,
+            known_urls,
+            discovery_sources["sources"],
+            role_families,
+            refreshed_at,
+        )
     )
     if discovery_sources["sources"] and successful_sources == 0:
-        print("error: every official discovery source failed; existing candidate queue was preserved", file=sys.stderr)
+        print(
+            "error: every official discovery source failed; existing candidate queue was preserved",
+            file=sys.stderr,
+        )
         for failure in official_failures:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
@@ -732,27 +880,40 @@ def main() -> int:
     for failure in runtime_failures:
         print(f"warning: local runtime star refresh failed: {failure}", file=sys.stderr)
 
-    projects.sort(key=lambda project: (project["system_family"], project["name"].lower()))
+    projects.sort(
+        key=lambda project: (project["system_family"], project["name"].lower())
+    )
     document["generated_at"] = refreshed_at
     write_json(PROJECTS_PATH, document)
-    write_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": refreshed_at, "candidates": candidates})
-    write_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": refreshed_at, "entries": reviews})
+    write_json(
+        CANDIDATES_PATH,
+        {"version": "1.0", "updated_at": refreshed_at, "candidates": candidates},
+    )
+    write_json(
+        LICENSE_REVIEW_PATH,
+        {"version": "1.0", "updated_at": refreshed_at, "entries": reviews},
+    )
     write_json(LOCAL_RUNTIMES_PATH, local_runtimes_document)
     sync_web_data()
     build_web_payload([])
 
-    print(json.dumps({
-        "metadata_refreshed": successes,
-        "metadata_failed": len(metadata_failures),
-        "discovery_queries_succeeded": successful_queries,
-        "official_sources_succeeded": successful_sources,
-        "new_candidates": new_candidates + new_official_candidates,
-        "candidate_queue": len(candidates),
-        "license_reviews_open": len(reviews),
-        "local_runtime_stars_refreshed": runtime_successes,
-        "local_runtime_stars_failed": len(runtime_failures),
-        "auto_added": 0,
-    }, indent=2))
+    print(
+        json.dumps(
+            {
+                "metadata_refreshed": successes,
+                "metadata_failed": len(metadata_failures),
+                "discovery_queries_succeeded": successful_queries,
+                "official_sources_succeeded": successful_sources,
+                "new_candidates": new_candidates + new_official_candidates,
+                "candidate_queue": len(candidates),
+                "license_reviews_open": len(reviews),
+                "local_runtime_stars_refreshed": runtime_successes,
+                "local_runtime_stars_failed": len(runtime_failures),
+                "auto_added": 0,
+            },
+            indent=2,
+        )
+    )
     return 0
 
 

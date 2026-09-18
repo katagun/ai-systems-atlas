@@ -4,6 +4,7 @@
 This script makes no editorial judgment. It fetches and records; a human, or a
 routine acting under docs/adr/024, decides what the evidence means.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -34,13 +35,20 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE_PATH = ROOT / ".candidate-evidence" / "bundle.json"
 CATALOG_FILES = (
-    "projects.json", "exclusions.json", "specifications.json",
-    "inference-services.json", "local-runtimes.json", "packs.json",
+    "projects.json",
+    "exclusions.json",
+    "specifications.json",
+    "inference-services.json",
+    "local-runtimes.json",
+    "packs.json",
 )
 COLLECTION_KEYS = {
-    "projects.json": "projects", "exclusions.json": "entries",
-    "specifications.json": "specifications", "inference-services.json": "services",
-    "local-runtimes.json": "runtimes", "packs.json": "packs",
+    "projects.json": "projects",
+    "exclusions.json": "entries",
+    "specifications.json": "specifications",
+    "inference-services.json": "services",
+    "local-runtimes.json": "runtimes",
+    "packs.json": "packs",
 }
 GIT_BLOB_SHA = re.compile(r"[0-9a-f]{40}")
 MAX_WEB_EVIDENCE_BYTES = 2 * 1024 * 1024
@@ -62,20 +70,28 @@ def untriageable_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, 
     transient failure to route around; it is permanently out of this harness's reach, and
     leaving it in the selection would starve the queue behind it on every future run.
     """
-    return [item for item in candidates if "triage" not in item and not item.get("repo")]
+    return [
+        item for item in candidates if "triage" not in item and not item.get("repo")
+    ]
 
 
-def select_candidates(candidates: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+def select_candidates(
+    candidates: list[dict[str, Any]], limit: int
+) -> list[dict[str, Any]]:
     """Return untriaged candidates with a repository, oldest discovery first, at most `limit`."""
     pending = [item for item in candidates if "triage" not in item and item.get("repo")]
     pending.sort(key=lambda item: str(item.get("discovered_at") or ""))
     return pending[:limit]
 
 
-def carry_forward(candidates: list[dict[str, Any]], previous: list[dict[str, Any]]) -> int:
+def carry_forward(
+    candidates: list[dict[str, Any]], previous: list[dict[str, Any]]
+) -> int:
     """Copy triage blocks from a previous unmerged run onto candidates that lack one."""
     prior = {
-        candidate_key(item): item["triage"] for item in previous if isinstance(item.get("triage"), dict)
+        candidate_key(item): item["triage"]
+        for item in previous
+        if isinstance(item.get("triage"), dict)
     }
     carried = 0
     for item in candidates:
@@ -92,7 +108,10 @@ CLASS_SIGNALS = {
     "benchmark": ("benchmark", "eval suite", "evaluation suite", "leaderboard"),
     "dataset": ("dataset", "corpus"),
     "course or tutorial": ("tutorial", "course", "learning path", "roadmap"),
-    "paper or research artifact": ("official implementation of", "paper implementation"),
+    "paper or research artifact": (
+        "official implementation of",
+        "paper implementation",
+    ),
 }
 
 
@@ -118,12 +137,18 @@ def cross_collection_hits(
 
 def class_signals(candidate: dict[str, Any]) -> list[str]:
     """Flag obvious non-operational classes visible in the queued record itself."""
-    haystack = " ".join([
-        str(candidate.get("name") or ""),
-        str(candidate.get("description") or ""),
-        " ".join(candidate.get("topics") or []),
-    ]).lower()
-    return [name for name, terms in CLASS_SIGNALS.items() if any(term in haystack for term in terms)]
+    haystack = " ".join(
+        [
+            str(candidate.get("name") or ""),
+            str(candidate.get("description") or ""),
+            " ".join(candidate.get("topics") or []),
+        ]
+    ).lower()
+    return [
+        name
+        for name, terms in CLASS_SIGNALS.items()
+        if any(term in haystack for term in terms)
+    ]
 
 
 def content_hash(text: str) -> str:
@@ -162,7 +187,9 @@ def _validated_web_endpoint(
         try:
             parsed_address = ipaddress.ip_address(address)
         except ValueError:
-            raise ValueError(f"web evidence host returned an invalid address: {address}") from None
+            raise ValueError(
+                f"web evidence host returned an invalid address: {address}"
+            ) from None
         if (
             not parsed_address.is_global
             or parsed_address.is_multicast
@@ -269,9 +296,7 @@ def fetch_web_text(
         response_context = (
             opener.open(request, timeout=30)
             if opener is not None
-            else pinned_open(
-                current_url, current_host, current_addresses, timeout=30
-            )
+            else pinned_open(current_url, current_host, current_addresses, timeout=30)
         )
         with response_context as response:
             status = response.getcode()
@@ -317,7 +342,10 @@ def fetch_candidate_evidence(
     if not repo:
         bundle["errors"].append("candidate has no GitHub repository")
         return bundle
-    for label, path in (("LICENSE", f"/repos/{repo}/license"), ("README", f"/repos/{repo}/readme")):
+    for label, path in (
+        ("LICENSE", f"/repos/{repo}/license"),
+        ("README", f"/repos/{repo}/readme"),
+    ):
         try:
             payload = getter(path, token)
         except Exception as exc:  # a missing document is data, not a failure
@@ -337,7 +365,9 @@ def fetch_candidate_evidence(
             "fetched_at": today,
         }
         document["blob_sha"] = blob_sha
-        document["immutable_url"] = f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+        document["immutable_url"] = (
+            f"https://api.github.com/repos/{repo}/git/blobs/{blob_sha}"
+        )
         bundle["documents"].append(document)
     return bundle
 
@@ -352,10 +382,13 @@ def blocks_to_recheck(
     verification entirely — the guard could be switched off by the thing it guards.
     """
     prior = {
-        candidate_key(item): item.get("triage") for item in baseline if isinstance(item, dict)
+        candidate_key(item): item.get("triage")
+        for item in baseline
+        if isinstance(item, dict)
     }
     return [
-        item for item in candidates
+        item
+        for item in candidates
         if isinstance(item.get("triage"), dict)
         and item["triage"] != prior.get(candidate_key(item))
     ]
@@ -510,7 +543,9 @@ def recheck_candidates(
                     f"{candidate_key(candidate)}: {label} content_sha256 recorded "
                     f"{item.get('content_sha256')} but re-fetched {actual}"
                 )
-            if item.get("kind") == "git_blob" and payload.get("sha") != item.get("blob_sha"):
+            if item.get("kind") == "git_blob" and payload.get("sha") != item.get(
+                "blob_sha"
+            ):
                 problems.append(
                     f"{candidate_key(candidate)}: {label} blob_sha recorded "
                     f"{item.get('blob_sha')} but re-fetched {payload.get('sha')}"
@@ -524,7 +559,9 @@ def previous_candidates(branch: str) -> list[dict[str, Any]]:
         return []
     finished = subprocess.run(
         ["git", "show", f"{branch}:directory/candidates.json"],
-        capture_output=True, text=True, cwd=ROOT,
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
     )
     if finished.returncode != 0:
         return []
@@ -550,7 +587,9 @@ def github_token(run=subprocess.run) -> str | None:
     if token:
         return token
     try:
-        finished = run(["gh", "auth", "token"], capture_output=True, text=True, timeout=15)
+        finished = run(
+            ["gh", "auth", "token"], capture_output=True, text=True, timeout=15
+        )
     except (OSError, subprocess.SubprocessError):
         return None  # gh is not installed, or not on this PATH
     if finished.returncode != 0:
@@ -567,7 +606,15 @@ def load_catalog(directory: Path) -> dict[str, list[dict[str, Any]]]:
 
 
 def run_build(
-    *, candidates, catalog, getter, token, today, limit, bundle_path, previous=(),
+    *,
+    candidates,
+    catalog,
+    getter,
+    token,
+    today,
+    limit,
+    bundle_path,
+    previous=(),
     candidates_path=None,
 ) -> int:
     """Build the evidence bundle. Returns a process exit code."""
@@ -604,7 +651,9 @@ def run_build(
         entries.append(bundle)
     if bundle_path is not None:
         bundle_path.parent.mkdir(parents=True, exist_ok=True)
-        bundle_path.write_text(json.dumps({"candidates": entries}, indent=2) + "\n", encoding="utf-8")
+        bundle_path.write_text(
+            json.dumps({"candidates": entries}, indent=2) + "\n", encoding="utf-8"
+        )
     print(f"prepared evidence for {len(entries)} candidates")
     return 0
 
@@ -614,7 +663,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int, default=40)
     parser.add_argument("--recheck", action="store_true")
     parser.add_argument(
-        "--unattended", action="store_true",
+        "--unattended",
+        action="store_true",
         help="reject generic web evidence in the unattended candidate-triage routine",
     )
     parser.add_argument("--previous-branch", default="")
@@ -641,9 +691,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"rechecked {cited} citations across {len(scoped)} candidates")
         return 1 if problems else 0
     return run_build(
-        candidates=candidates, catalog=load_catalog(directory), getter=github_get,
-        token=token, today=today, limit=args.limit, bundle_path=BUNDLE_PATH,
-        previous=previous_candidates(args.previous_branch), candidates_path=candidates_path,
+        candidates=candidates,
+        catalog=load_catalog(directory),
+        getter=github_get,
+        token=token,
+        today=today,
+        limit=args.limit,
+        bundle_path=BUNDLE_PATH,
+        previous=previous_candidates(args.previous_branch),
+        candidates_path=candidates_path,
     )
 
 

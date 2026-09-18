@@ -7,6 +7,7 @@ apply path writes only after the complete proposed `projects.json`,
 together. It mirrors `scripts/promote_model_candidate.py`; see that module and
 `docs/OPERATIONS.md` ("Review a candidate") for the workflow this automates.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -75,7 +76,8 @@ def candidate_for(candidates_data: dict[str, Any], identifier: str) -> dict[str,
     repo_key = identifier.lower().rstrip("/")
     url_key = identifier.rstrip("/")
     matches = [
-        item for item in candidates
+        item
+        for item in candidates
         if isinstance(item, dict) and _candidate_key(item) in {repo_key, url_key}
     ]
     if not matches:
@@ -88,13 +90,18 @@ def candidate_for(candidates_data: dict[str, Any], identifier: str) -> dict[str,
 def _pinned_license_blob(candidate: dict[str, Any]) -> dict[str, Any]:
     triage = candidate.get("triage")
     if not isinstance(triage, dict):
-        raise PromotionError("candidate has no triage evidence to prefill license evidence")
+        raise PromotionError(
+            "candidate has no triage evidence to prefill license evidence"
+        )
     evidence = triage.get("evidence")
     if not isinstance(evidence, list):
         raise PromotionError("candidate triage evidence is missing")
     license_blobs = [
-        item for item in evidence
-        if isinstance(item, dict) and item.get("kind") == "git_blob" and item.get("label") == "LICENSE"
+        item
+        for item in evidence
+        if isinstance(item, dict)
+        and item.get("kind") == "git_blob"
+        and item.get("label") == "LICENSE"
     ]
     if len(license_blobs) != 1:
         raise PromotionError("candidate triage must pin exactly one LICENSE git blob")
@@ -104,8 +111,10 @@ def _pinned_license_blob(candidate: dict[str, Any]) -> dict[str, Any]:
 def _blob_path(repo: str, url: object) -> str:
     prefix = f"https://github.com/{repo}/blob/"
     if not isinstance(url, str) or not url.startswith(prefix):
-        raise PromotionError("pinned LICENSE blob URL is not a GitHub blob URL for this repository")
-    _, _, path = url[len(prefix):].partition("/")
+        raise PromotionError(
+            "pinned LICENSE blob URL is not a GitHub blob URL for this repository"
+        )
+    _, _, path = url[len(prefix) :].partition("/")
     if not path:
         raise PromotionError("pinned LICENSE blob URL has no path component")
     return path
@@ -188,7 +197,8 @@ def _matches_candidate(item: dict[str, Any], candidate_key: str | None) -> bool:
 
 
 def preflight_promotion(
-    root: Path, draft: dict[str, Any],
+    root: Path,
+    draft: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     """Return complete proposed documents or raise without writing anything."""
     directory = root / "directory"
@@ -294,7 +304,9 @@ def preflight_promotion(
         local_runtimes_value if isinstance(local_runtimes_value, list) else [],
         models_value if isinstance(models_value, list) else [],
         errors,
-        packs_value=packs_data.get("packs") if isinstance(packs_data.get("packs"), list) else [],
+        packs_value=packs_data.get("packs")
+        if isinstance(packs_data.get("packs"), list)
+        else [],
     )
 
     candidate_repos = validate_candidates(proposed_candidates, tax, index, errors)
@@ -302,7 +314,9 @@ def preflight_promotion(
 
     if errors:
         formatted = "\n".join(f"- {error}" for error in errors)
-        raise PromotionError(f"system candidate is not ready for promotion:\n{formatted}")
+        raise PromotionError(
+            f"system candidate is not ready for promotion:\n{formatted}"
+        )
     return proposed_projects, proposed_license_evidence, proposed_candidates
 
 
@@ -325,8 +339,11 @@ def _write_json_atomic(path: Path, value: dict[str, Any]) -> None:
 
 def apply_promotion(root: Path, draft: dict[str, Any]) -> tuple[int, str]:
     """Apply a preflighted promotion and return remaining count plus project id."""
-    proposed_projects, proposed_license_evidence, proposed_candidates = preflight_promotion(
-        root, draft,
+    proposed_projects, proposed_license_evidence, proposed_candidates = (
+        preflight_promotion(
+            root,
+            draft,
+        )
     )
     projects_path = root / "directory" / "projects.json"
     license_evidence_path = root / "directory" / "license-evidence.json"
@@ -363,14 +380,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     init = commands.add_parser("init", help="write an incomplete human-review draft")
     init.add_argument("candidate", help="GitHub 'owner/repo' or the candidate's URL")
-    init.add_argument("--output", type=Path, required=True, help="new JSON review-draft path")
+    init.add_argument(
+        "--output", type=Path, required=True, help="new JSON review-draft path"
+    )
 
     for name, help_text in (
         ("check", "validate a completed review draft without writing"),
         ("apply", "promote a completed review draft into the canonical catalog"),
     ):
         command = commands.add_parser(name, help=help_text)
-        command.add_argument("record", type=Path, help="completed JSON review-draft path")
+        command.add_argument(
+            "record", type=Path, help="completed JSON review-draft path"
+        )
     return parser
 
 
@@ -397,8 +418,12 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         remaining, project_id = apply_promotion(root, record)
-        print(f"promoted {record.get('repo')} as {project_id}; {remaining} candidates remain")
-        print("next: synchronize web data, regenerate share pages, and run full verification")
+        print(
+            f"promoted {record.get('repo')} as {project_id}; {remaining} candidates remain"
+        )
+        print(
+            "next: synchronize web data, regenerate share pages, and run full verification"
+        )
         return 0
     except (OSError, PromotionError) as error:
         print(f"error: {error}", file=sys.stderr)
