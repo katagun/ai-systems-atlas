@@ -30,6 +30,7 @@ class SharePageTests(unittest.TestCase):
             "records/models/model-alibaba-qwen2-5-coder-0-5b/index.html",
             share_page_path("model", "model-alibaba-qwen2-5-coder-0-5b"),
         )
+        self.assertEqual("records/packs/kit/index.html", share_page_path("pack", "kit"))
         with self.assertRaises(ValueError):
             share_page_path("constructor", "ollama")
         with self.assertRaises(ValueError):
@@ -44,7 +45,7 @@ class SharePageTests(unittest.TestCase):
         self.assertNotIn("wor…", capped)
 
     def test_every_record_gets_a_page_plus_sitemap_and_robots(self) -> None:
-        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes", "models"))
+        records = sum(len(self.catalog[key]) for key in ("projects", "specifications", "services", "runtimes", "models", "packs"))
         self.assertEqual(records + 2, len(self.pages))
         self.assertIn("sitemap.xml", self.pages)
         self.assertIn("robots.txt", self.pages)
@@ -64,6 +65,14 @@ class SharePageTests(unittest.TestCase):
         self.assertIn("Coding agent", page)
         self.assertNotIn("score", page.lower().replace("score profile", ""))
 
+    def test_pack_page_does_not_double_the_repository_link(self) -> None:
+        page = self.pages["records/packs/claude-code-tresor/index.html"]
+        self.assertEqual(1, page.count('<a href="https://github.com/alirezarezvani/claude-code-tresor"'))
+
+    def test_runtime_page_still_carries_its_repository_link(self) -> None:
+        page = self.pages["records/local-runtimes/ollama/index.html"]
+        self.assertIn('<a href="https://github.com/ollama/ollama" rel="noreferrer">Repository ↗</a>', page)
+
     def test_pages_follow_the_os_colour_scheme(self) -> None:
         page = self.pages["records/systems/kilo-code/index.html"]
         self.assertIn("color-scheme: light dark", page)
@@ -79,7 +88,7 @@ class SharePageTests(unittest.TestCase):
         )
 
     def test_pages_escape_record_text_everywhere(self) -> None:
-        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes", "models")}
+        catalog = {key: [] for key in ("projects", "specifications", "services", "runtimes", "models", "packs")}
         catalog["taxonomy"] = self.catalog["taxonomy"]
         catalog["runtimes"] = [{
             **self.catalog["runtimes"][0],

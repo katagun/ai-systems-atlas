@@ -38,6 +38,7 @@ const RECORD_MARKS = {
   devin: "lobe:devin",
   "devin-desktop": "lobe:devin",
   dify: "lobe:dify",
+  fx: "lobe:vercel",
   "gemini-apps": "lobe:gemini",
   "gemini-cli": "lobe:geminicli",
   "gemini-enterprise-agent-platform": "lobe:gemini",
@@ -250,6 +251,7 @@ for (const [file, listKey] of [
   ["web/inference-services.json", "services"],
   ["web/local-runtimes.json", "runtimes"],
   ["web/models.json", "models"],
+  ["web/packs.json", "packs"],
 ]) {
   for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) recordNames.set(record.id, record.name);
 }

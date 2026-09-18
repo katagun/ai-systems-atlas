@@ -49,6 +49,7 @@ CANDIDATES_PATH = DIRECTORY / "candidates.json"
 LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
 DISCOVERY_SOURCES_PATH = DIRECTORY / "discovery-sources.json"
 LOCAL_RUNTIMES_PATH = DIRECTORY / "local-runtimes.json"
+PACKS_PATH = DIRECTORY / "packs.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 MIN_METADATA_SUCCESS_RATIO = 0.80
@@ -616,13 +617,13 @@ def discover_official_candidates(
 
 
 def known_urls_from(
-    projects: list[dict[str, Any]], exclusions: dict[str, Any]
+    projects: list[dict[str, Any]], exclusions: dict[str, Any], packs: list[dict[str, Any]] = (),
 ) -> set[str]:
     """Return every URL discovery should treat as already decided.
 
     An exclusion is a durable human rejection. Without its URL the weekly refresh
     re-adds the same non-GitHub page forever; 10 of the 70 entries have no repo at
-    all, so `repo` alone cannot carry the rejection.
+    all, so `repo` alone cannot carry the rejection. A pack is a decided record too.
     """
     known = {project["url"] for project in projects if isinstance(project.get("url"), str)}
     known.update(
@@ -630,6 +631,21 @@ def known_urls_from(
         for item in exclusions.get("entries", [])
         if isinstance(item, dict) and isinstance(item.get("url"), str)
     )
+    known.update(pack["url"] for pack in packs if isinstance(pack.get("url"), str))
+    return known
+
+
+def known_repos_from(
+    projects: list[dict[str, Any]], exclusions: dict[str, Any], packs: list[dict[str, Any]] = (),
+) -> set[str]:
+    """Return every lower-cased repository discovery should treat as already decided."""
+    known = {project["repo"].lower() for project in projects if project.get("repo")}
+    known.update(
+        item["repo"].lower()
+        for item in exclusions.get("entries", [])
+        if isinstance(item, dict) and isinstance(item.get("repo"), str)
+    )
+    known.update(pack["repo"].lower() for pack in packs if isinstance(pack.get("repo"), str))
     return known
 
 
@@ -643,6 +659,7 @@ def main() -> int:
     candidate_document = load_json(CANDIDATES_PATH, {"version": "1.0", "updated_at": None, "candidates": []})
     review_document = load_json(LICENSE_REVIEW_PATH, {"version": "1.0", "updated_at": None, "entries": []})
     local_runtimes_document = load_json(LOCAL_RUNTIMES_PATH, {"version": "1.0", "verified_at": None, "runtimes": []})
+    packs_document = load_json(PACKS_PATH, {"version": "1.0", "verified_at": None, "packs": []})
     projects = document["projects"]
     previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
 
@@ -670,12 +687,7 @@ def main() -> int:
         return 1
 
     role_families = {item["id"]: item["family"] for item in taxonomy["primary_roles"]}
-    known_projects = {project["repo"].lower() for project in projects if project.get("repo")}
-    known_projects.update(
-        item["repo"].lower()
-        for item in exclusions.get("entries", [])
-        if isinstance(item, dict) and isinstance(item.get("repo"), str)
-    )
+    known_projects = known_repos_from(projects, exclusions, packs_document["packs"])
     candidates, new_candidates, successful_queries, discovery_failures = discover_candidates(
         known_projects,
         candidate_document["candidates"],
@@ -690,7 +702,7 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
-    known_urls = known_urls_from(projects, exclusions)
+    known_urls = known_urls_from(projects, exclusions, packs_document["packs"])
     candidates, new_official_candidates, successful_sources, official_failures = discover_official_candidates(
         candidates,
         known_urls,

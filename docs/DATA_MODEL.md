@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of nine files:
+`directory/` is canonical. The browser consumes synchronized copies of ten files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -17,6 +17,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `local-runtimes.json` | Reviewed self-operated inference runtimes, dedicated runtime scores, and evidence | Yes |
 | `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
+| `packs.json` | Reviewed, unscored agent packs recorded for what a host installs | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
@@ -70,6 +71,8 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 | `stars_verified_at` | Automation | `stars` was observed on this date |
 | `generated_at` | Automation/editor | The published project document was last regenerated |
 | `trust.verified_at` | Human reviewer | The trust record's properties and findings were reviewed on this date; never automated |
+| `excluded_at` (exclusion) | Human reviewer | The exclusion decision was first recorded on this date |
+| `verified_at` (exclusion) | Human reviewer | The exclusion reason was last re-checked against current sources on this date; never automated |
 
 Automation must never update `verified_at`.
 
@@ -84,6 +87,10 @@ Each project has one evidence record keyed by `project_id`. Its `items` cover ev
 - web terms record an authoritative `url` and `verified_at`, with no claim of immutability.
 
 The evidence set may include multiple licenses for one repository. Blob identity proves content, not scope; reviewers must inspect path maps, package manifests, and relevant terms.
+
+## Exclusion record
+
+`exclusions.json` is the published record of reviewed scope-boundary decisions. Its envelope is `{"generated_at": <ISO date>, "entries": [...]}` and each entry carries exactly `name`, `repo` (owner/name or `null`), `reason`, `useful_lesson`, `excluded_at`, `verified_at`, and an optional first-party `url` for a product without a canonical repository. `excluded_at` is the date the decision was first recorded and never moves; `verified_at` is the date a human last re-read the reason against the repository or product as it stands and is bumped by every re-review, whether or not the decision changed. Validation requires both as ISO dates with `verified_at` no earlier than `excluded_at`. An entry that no longer holds leaves this file for `candidates.json`, or for `packs.json` after the complete pack review, in the same change; a repository never appears in two of `projects.json`, `packs.json`, `candidates.json`, and `exclusions.json`.
 
 ## Review queues
 
@@ -154,6 +161,21 @@ Specification records are intentionally independent from project records. They c
 - **Review:** authoritative `evidence` plus human-owned `verified_at`.
 
 Evidence is either an immutable Git blob or a dated authoritative web source. Every listed license must have one scoped evidence item. `LicenseRef-Unclear` is valid when the artifact is documented but no standalone reusable format license can be established; it must not be rewritten as open source by inference.
+
+## Pack record
+
+Pack records are independent from project records. They contain no `system_family`, role, score profile, score, or popularity metric, and the validator rejects each if present.
+
+- **Identity:** `id`, `name`, optional `short_name`, one `steward`, GitHub `repo`, authoritative `url`, and `description`.
+- **Classification:** taxonomy-backed `pack_type`, non-empty `hosts` (`pack_hosts`), `install_mechanism` (`pack_install_mechanisms`), and `packaging_formats` naming `specifications.json` records (may be empty).
+- **Composition:** `installs`, a paragraph counting what the pack places in the host from its pinned manifest and tree; optional `distribution_machinery` naming shipped install, sync, or validation scripts.
+- **Boundary:** `not_a_system` states why the pack is unscored in ADR 031's terms, or that a marketplace lists packs rather than being one.
+- **Lifecycle:** `status` from `project_statuses`.
+- **Licensing:** complete `licenses`, `license_note`, and scoped `license_evidence`; `LicenseRef-Unclear` when no licence file is served.
+- **Relationships:** optional `related_packs` and `related_systems` reference records by id without implying compatibility.
+- **Review:** pinned `evidence` (manifest or skill frontmatter as a Git blob, plus dated web sources) and human-owned `verified_at`. A marketplace's `verified_at` dates its pinned manifest, never the catalogue behind it.
+
+A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
 
 ## Inference service record
 

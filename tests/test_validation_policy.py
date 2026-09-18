@@ -318,6 +318,162 @@ class ValidationPolicyTests(unittest.TestCase):
             any("web/local-runtimes.json is not synchronized" in error for error in errors), errors
         )
 
+    SAMPLE_PACK: ClassVar[dict] = {
+        "id": "sample-pack",
+        "name": "Sample Pack",
+        "steward": "Sample Steward",
+        "repo": "sample/pack",
+        "url": "https://github.com/sample/pack",
+        "description": "A synthetic skills bundle used to exercise pack validation.",
+        "pack_type": "skills_bundle",
+        "hosts": ["claude_code", "codex"],
+        "packaging_formats": ["agent-skills"],
+        "install_mechanism": "skills_cli",
+        "installs": "Three SKILL.md skill directories under skills/, each with one reference document.",
+        "not_a_system": "Ships no program that runs at runtime and keeps no state it reads back; the host reads its documents as context.",
+        "status": "active",
+        "licenses": ["MIT"],
+        "license_note": "Repository-wide MIT license.",
+        "license_evidence": [{
+            "license_id": "MIT",
+            "scope": "Repository-wide license file",
+            "kind": "git_blob",
+            "path": "LICENSE",
+            "url": "https://github.com/sample/pack/blob/main/LICENSE",
+            "blob_sha": "0123456789abcdef0123456789abcdef01234567",
+            "immutable_url": (
+                "https://api.github.com/repos/sample/pack/git/blobs/"
+                "0123456789abcdef0123456789abcdef01234567"
+            ),
+        }],
+        "evidence": [{
+            "kind": "git_blob",
+            "label": "Top-level skill manifest",
+            "path": "skills/sample/SKILL.md",
+            "url": "https://github.com/sample/pack/blob/main/skills/sample/SKILL.md",
+            "blob_sha": "89abcdef0123456789abcdef0123456789abcdef",
+            "immutable_url": (
+                "https://api.github.com/repos/sample/pack/git/blobs/"
+                "89abcdef0123456789abcdef0123456789abcdef"
+            ),
+        }],
+        "verified_at": "2026-09-16",
+    }
+
+    def catalog_with_pack(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic agent pack."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        packs_path = root / "directory" / "packs.json"
+        document = json.loads(packs_path.read_text(encoding="utf-8"))
+        pack = json.loads(json.dumps(self.SAMPLE_PACK))
+        document["packs"] = [pack]
+        if mutate is not None:
+            mutate(pack, root)
+        self.write_json(packs_path, document)
+        self.write_json(root / "web" / "packs.json", document)
+        return validate(root)
+
+    def test_valid_pack_passes_validation(self) -> None:
+        errors = self.catalog_with_pack()
+        self.assertFalse([error for error in errors if "sample-pack" in error], errors)
+
+    def test_pack_rejects_every_scoring_and_popularity_field(self) -> None:
+        for field, value in (
+            ("stars", 10), ("stars_verified_at", "2026-09-16"), ("score", {"overall": 5}),
+            ("score_profile", "agent_system"), ("system_family", "agent_system"),
+            ("primary_role", "coding_agent_workflow"),
+        ):
+            with self.subTest(field=field):
+                def mutate(pack, root, field=field, value=value):
+                    pack[field] = value
+                errors = self.catalog_with_pack(mutate)
+                self.assertTrue(any(f"{field} is never recorded on a pack" in e for e in errors), errors)
+
+    def test_pack_rejects_unknown_type_host_and_install_mechanism(self) -> None:
+        for field, value, message in (
+            ("pack_type", "plugin_marketplace", "unknown pack type"),
+            ("hosts", ["emacs"], "unknown hosts"),
+            ("install_mechanism", "pip", "unknown install mechanism"),
+            ("status", "beta", "unknown status"),
+        ):
+            with self.subTest(field=field):
+                def mutate(pack, root, field=field, value=value):
+                    pack[field] = value
+                errors = self.catalog_with_pack(mutate)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_pack_packaging_formats_must_name_specification_records(self) -> None:
+        def mutate(pack, root):
+            pack["packaging_formats"] = ["not-a-spec"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("unknown packaging_formats" in e for e in errors), errors)
+
+    def test_pack_license_evidence_must_cover_every_license(self) -> None:
+        def mutate(pack, root):
+            pack["licenses"] = ["MIT", "Apache-2.0"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("license evidence does not match licenses" in e for e in errors), errors)
+
+    def test_pack_installs_and_not_a_system_are_required_prose(self) -> None:
+        for field in ("installs", "not_a_system"):
+            with self.subTest(field=field):
+                def mutate(pack, root, field=field):
+                    pack[field] = ""
+                errors = self.catalog_with_pack(mutate)
+                self.assertTrue(any(f"{field} must be a non-empty string" in e for e in errors), errors)
+
+    def test_pack_repo_cannot_also_be_a_published_system(self) -> None:
+        def mutate(pack, root):
+            projects = json.loads((root / "directory" / "projects.json").read_text(encoding="utf-8"))
+            pack["repo"] = next(p["repo"] for p in projects["projects"] if p.get("repo"))
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("cannot be both a system and a pack" in e for e in errors), errors)
+
+    def test_pack_repo_cannot_also_be_excluded(self) -> None:
+        def mutate(pack, root):
+            exclusions = json.loads((root / "directory" / "exclusions.json").read_text(encoding="utf-8"))
+            pack["repo"] = exclusions["entries"][0]["repo"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("cannot be both included and excluded" in e for e in errors), errors)
+
+    def test_pack_ids_must_be_unique_across_collections(self) -> None:
+        def mutate(pack, root):
+            specs = json.loads((root / "directory" / "specifications.json").read_text(encoding="utf-8"))
+            pack["id"] = specs["specifications"][0]["id"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("appears in more than one collection" in e for e in errors), errors)
+
+    def test_pack_repo_cannot_also_be_a_candidate(self) -> None:
+        def mutate(pack, root):
+            candidates = json.loads((root / "directory" / "candidates.json").read_text(encoding="utf-8"))
+            pack["repo"] = candidates["candidates"][0]["repo"]
+        errors = self.catalog_with_pack(mutate)
+        self.assertTrue(any("cannot be both candidates and packs" in e for e in errors), errors)
+
+    def test_two_packs_cannot_share_a_repo(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        packs_path = root / "directory" / "packs.json"
+        document = json.loads(packs_path.read_text(encoding="utf-8"))
+        first = json.loads(json.dumps(self.SAMPLE_PACK))
+        second = json.loads(json.dumps(self.SAMPLE_PACK))
+        second["id"] = "sample-pack-two"
+        document["packs"] = [first, second]
+        self.write_json(packs_path, document)
+        self.write_json(root / "web" / "packs.json", document)
+        errors = validate(root)
+        self.assertTrue(any("duplicate pack repository" in e for e in errors), errors)
+
+    def test_packs_must_be_published_to_web(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = json.loads((root / "directory" / "packs.json").read_text(encoding="utf-8"))
+        document["verified_at"] = "2026-01-01"
+        self.write_json(root / "directory" / "packs.json", document)
+        errors = validate(root)
+        self.assertTrue(any("web/packs.json is not synchronized" in error for error in errors), errors)
+
     def catalog_with_malformed_record(self, document: str, key: str, entry: object) -> list[str]:
         """Validate a temporary catalog whose collection holds a non-object entry."""
         temporary, root = self.temporary_catalog()
@@ -341,6 +497,7 @@ class ValidationPolicyTests(unittest.TestCase):
             ("inference-services.json", "services", "every service must be an object"),
             ("local-runtimes.json", "runtimes", "every runtime must be an object"),
             ("models.json", "models", "every model must be an object"),
+            ("packs.json", "packs", "every pack must be an object"),
         ):
             with self.subTest(document=document):
                 errors = self.catalog_with_malformed_record(document, key, ["not", "a", "record"])
@@ -401,10 +558,15 @@ class ValidationPolicyTests(unittest.TestCase):
     def test_model_queue_must_not_contain_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
+        queue = json.loads((root / "directory" / "model-candidates.json").read_text(encoding="utf-8"))
         path = root / "directory" / "model-dispositions.json"
         document = json.loads(path.read_text(encoding="utf-8"))
+        decided = {item["source_id"] for item in document["dispositions"]}
+        source_id = next(
+            item["source_id"] for item in queue["candidates"] if item["source_id"] not in decided
+        )
         document["dispositions"].append({
-            "source_id": "alibaba/qwen-flash",
+            "source_id": source_id,
             "disposition": "held",
             "reason": "Still queued; the importer must filter it first.",
             "decided_at": "2026-09-11",
@@ -413,7 +575,7 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = validate(root)
 
-        self.assertTrue(any("alibaba/qwen-flash" in error and "must not remain queued" in error for error in errors), errors)
+        self.assertTrue(any(source_id in error and "must not remain queued" in error for error in errors), errors)
 
     def test_model_eligible_count_covers_dispositioned_ids(self) -> None:
         temporary, root = self.temporary_catalog()
@@ -960,6 +1122,35 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = validate(root)
 
         self.assertEqual([error for error in errors if "exclusion" in error], [])
+
+    def test_an_exclusion_requires_both_review_dates(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        del document["entries"][0]["excluded_at"]
+        document["entries"][1]["verified_at"] = "yesterday"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(any("fields do not match exclusion schema" in error for error in errors), errors)
+        self.assertTrue(any("verified_at must be an ISO date" in error for error in errors), errors)
+
+    def test_an_exclusion_is_verified_no_earlier_than_it_was_excluded(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["excluded_at"] = "2026-09-10"
+        document["entries"][0]["verified_at"] = "2026-09-09"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any("verified_at must not precede excluded_at" in error for error in errors), errors
+        )
 
     def signals_document(self, **extra: str) -> dict:
         signal = {

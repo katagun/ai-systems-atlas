@@ -63,7 +63,7 @@ The refresh is transactional at the repository level:
 
 Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
-The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md).
+The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json` carries no stars and is never touched by this pass.
 
 models.dev discovery is a separate fail-closed import:
 
@@ -216,8 +216,8 @@ most once before making any request.
 
 Then, per candidate:
 
-- **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion and remove the
-  candidate in the same change. The `triage` block is removed with the candidate; nothing
+- **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion, with today's
+  date as both `excluded_at` and `verified_at`, and remove the candidate in the same change. The `triage` block is removed with the candidate; nothing
   separate needs deleting.
 - **Accepting `held`:** keep the candidate, keep its `triage.held_by`, and record the
   decision in `BACKLOG.md` so the open question stays visible outside the queue.
@@ -328,7 +328,8 @@ Then, per signal:
   describes a system the Atlas should carry, and, if so, create the candidate and carry it
   through review like any other discovery.
 - **Accepting `out_of_scope`:** the verdict proposes an exclusion; it is not one. Write the
-  exclusion in `directory/exclusions.json` following `CURATION.md`. When the rejected page
+  exclusion in `directory/exclusions.json` following `CURATION.md`, dating `excluded_at` and
+  `verified_at` to the day you decide it. When the rejected page
   has no GitHub repository — the ordinary case for an attention source — set the
   exclusion's optional `url` to the signal's `url`. The weekly discovery refresh folds
   every exclusion `url` into its known-URL set; without it, the same page can reappear as

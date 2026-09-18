@@ -613,6 +613,7 @@ class LoadCatalogTests(unittest.TestCase):
             "specifications.json": {"specifications": [{"id": "s"}]},
             "inference-services.json": {"services": [{"id": "i"}]},
             "local-runtimes.json": {"runtimes": [{"id": "r"}]},
+            "packs.json": {"packs": [{"id": "k"}]},
         }
         with tempfile.TemporaryDirectory() as tmp:
             directory = Path(tmp)
@@ -624,6 +625,7 @@ class LoadCatalogTests(unittest.TestCase):
         self.assertEqual([{"id": "s"}], catalog["specifications.json"])
         self.assertEqual([{"id": "i"}], catalog["inference-services.json"])
         self.assertEqual([{"id": "r"}], catalog["local-runtimes.json"])
+        self.assertEqual([{"id": "k"}], catalog["packs.json"])
 
 
 class PreviousCandidatesTests(unittest.TestCase):

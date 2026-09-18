@@ -1,0 +1,249 @@
+{
+  "version": "1.0",
+  "verified_at": "2026-09-17",
+  "packs": [
+    {
+      "id": "agent-toolkit",
+      "name": "agent-toolkit",
+      "steward": "Softaworks (softaworks)",
+      "repo": "softaworks/agent-toolkit",
+      "url": "https://github.com/softaworks/agent-toolkit",
+      "description": "A Claude Code marketplace manifest through which one steward's skills, agents, and slash commands are each installed separately.",
+      "pack_type": "marketplace",
+      "hosts": [
+        "claude_code"
+      ],
+      "packaging_formats": [
+        "agent-skills",
+        "claude-code-plugins"
+      ],
+      "install_mechanism": "host_marketplace",
+      "installs": "A Claude Code marketplace manifest at .claude-plugin/marketplace.json, registered with /plugin marketplace add and then installed entry by entry with /plugin install <name>@agent-toolkit; each entry names a source directory under dist/plugins/, which scripts/build_plugins.py generates from the repository's skills/, agents/, and commands/ trees. The README also documents npx skills add softaworks/agent-toolkit for Agent Skills hosts and cp -r skills/<name> ~/.claude/skills/ by hand. The README says the skills-installer path also works with Codex, Cursor, and other agents, but documents an install only for Claude Code, so only Claude Code is recorded as a host. This record pins the manifest and does not list, count, or review its entries.",
+      "distribution_machinery": "scripts/build_plugins.py generates the dist/plugins/ tree the manifest resolves against, and scripts/bump_version.py raises the manifest version. Neither is installed into a host; both operate on the repository's own files.",
+      "not_a_system": "A marketplace manifest that lists other packs for installation; it is an install source, not a system, and this record never lists, counts, or reviews its entries.",
+      "status": "active",
+      "licenses": [
+        "MIT"
+      ],
+      "license_note": "Repository-wide MIT license file, copyright 2026 Leonardo Flores.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/softaworks/agent-toolkit/blob/main/LICENSE",
+          "blob_sha": "fc473440ee9ae27aa3d774bcd3888496ef0fad2d",
+          "immutable_url": "https://api.github.com/repos/softaworks/agent-toolkit/git/blobs/fc473440ee9ae27aa3d774bcd3888496ef0fad2d"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Marketplace manifest",
+          "path": ".claude-plugin/marketplace.json",
+          "url": "https://github.com/softaworks/agent-toolkit/blob/main/.claude-plugin/marketplace.json",
+          "blob_sha": "28a812435f7e3f88e911dd0ed99e53050dd08ebe",
+          "immutable_url": "https://api.github.com/repos/softaworks/agent-toolkit/git/blobs/28a812435f7e3f88e911dd0ed99e53050dd08ebe"
+        },
+        {
+          "kind": "web",
+          "label": "README install documentation",
+          "url": "https://github.com/softaworks/agent-toolkit#readme",
+          "verified_at": "2026-09-17"
+        }
+      ],
+      "verified_at": "2026-09-17"
+    },
+    {
+      "id": "buildwithclaude",
+      "name": "Build with Claude",
+      "steward": "Dave Poon (davepoon)",
+      "repo": "davepoon/buildwithclaude",
+      "url": "https://github.com/davepoon/buildwithclaude",
+      "description": "A Claude Code marketplace manifest that a host registers as an install source for the plugin packages the repository ships.",
+      "pack_type": "marketplace",
+      "hosts": [
+        "claude_code"
+      ],
+      "packaging_formats": [
+        "claude-code-plugins"
+      ],
+      "install_mechanism": "host_marketplace",
+      "installs": "The repository's own Claude Code marketplace manifest at .claude-plugin/marketplace.json, declaring the marketplace schema and its owner, registered with /plugin marketplace add davepoon/buildwithclaude and then installed entry by entry with /plugin install <name>@buildwithclaude; each entry resolves to a directory under plugins/, and the README also documents copying agent and command Markdown files into ~/.claude/agents/ and ~/.claude/commands/ after a clone. This record pins the manifest and does not list, count, or review its entries.",
+      "distribution_machinery": "scripts/ holds Node tooling for the repository's own files: validate-all.js and the four per-type validators validate-subagents.js, validate-commands.js, validate-hooks.js, and validate-skills.js against four JSON schemas, generate-registry.js builds the site registry, and fetch-plugins.js with github-search-pagination.js collects external listings. web-ui/ is the project's own website. None of it is installed into a host.",
+      "not_a_system": "A marketplace manifest that lists other packs for installation; it is an install source, not a system, and this record never lists, counts, or reviews its entries.",
+      "status": "active",
+      "licenses": [
+        "MIT"
+      ],
+      "license_note": "Repository-wide MIT license file, copyright 2025 davepoon.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/davepoon/buildwithclaude/blob/main/LICENSE",
+          "blob_sha": "715e02c14fb418382ca11675ee0a1bd3f9b950b9",
+          "immutable_url": "https://api.github.com/repos/davepoon/buildwithclaude/git/blobs/715e02c14fb418382ca11675ee0a1bd3f9b950b9"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Marketplace manifest",
+          "path": ".claude-plugin/marketplace.json",
+          "url": "https://github.com/davepoon/buildwithclaude/blob/main/.claude-plugin/marketplace.json",
+          "blob_sha": "f72b42331ac1ecea9f115b205cc8867a5fd730cd",
+          "immutable_url": "https://api.github.com/repos/davepoon/buildwithclaude/git/blobs/f72b42331ac1ecea9f115b205cc8867a5fd730cd"
+        }
+      ],
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "claude-code-tresor",
+      "name": "claude-code-tresor",
+      "steward": "Alireza Rezvani (alirezarezvani)",
+      "repo": "alirezarezvani/claude-code-tresor",
+      "url": "https://github.com/alirezarezvani/claude-code-tresor",
+      "description": "A development-workflow kit of skill, agent, subagent, and slash-command documents copied into a Claude Code configuration directory.",
+      "pack_type": "process_kit",
+      "hosts": [
+        "claude_code"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "copy_files",
+      "installs": "8 SKILL.md skill directories under skills/ in three categories (development, documentation, security), 8 core agent definitions carried both as agents/<name>.md and as subagents/core/<name>/agent.md, 133 agent.md subagent definitions under subagents/ across ten category directories, 24 slash-command directories under commands/ in eight categories, and 6 prompt templates, 11 standards documents, and 10 worked examples under prompts/, standards/, and examples/. scripts/install.sh clones the repository into ~/.claude/tresor and installs from that copy into the host's discovery locations: each skills/<category>/<skill> directory holding a SKILL.md is flattened into ~/.claude/skills/<skill>; each commands/<category>/<name> directory is copied to ~/.claude/commands/<category>-<name>; each subagents/core/<name>/agent.md is rewritten into a flat ~/.claude/agents/<name>.md with the frontmatter fields Claude Code does not support stripped; the whole subagents/ tree is copied to ~/.claude/subagents/; and prompts/, standards/, examples/, README.md, and CONTRIBUTING.md are copied to ~/.claude/tresor-resources/, which the script also names in the ~/.claude/tresor.config.json it writes. The README's manual path differs: it copies agents/ rather than subagents/core/ into ~/.claude/agents/, installs no subagents, and puts the reference documents in ~/claude-code-resources/ instead.",
+      "distribution_machinery": "scripts/install.sh checks for git, creates ~/.claude/{commands,agents,skills,templates}, copies an existing ~/.claude/ to a timestamped backup when a previous install is present, clones or pulls the repository into ~/.claude/tresor, copies the pack's documents to the destinations above, and writes ~/.claude/tresor.config.json; it takes --skills-only, --commands-only, --agents-only, --orchestration, --resources-only, --update, --backup-dir, and --no-backup. scripts/update.sh refreshes an existing install. commitlint.config.js is the repository's own commit tooling and is not installed.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: everything installed is Markdown that Claude Code reads and executes with its own tools, and the only code it ships copies those files into the host's discovery directories.",
+      "status": "active",
+      "licenses": [
+        "MIT"
+      ],
+      "license_note": "Repository-wide MIT license file, copyright 2025 Alireza Rezvani.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide license file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/alirezarezvani/claude-code-tresor/blob/main/LICENSE",
+          "blob_sha": "36fe4ffb06270d5e201481240cf0173dff01a194",
+          "immutable_url": "https://api.github.com/repos/alirezarezvani/claude-code-tresor/git/blobs/36fe4ffb06270d5e201481240cf0173dff01a194"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Install script",
+          "path": "scripts/install.sh",
+          "url": "https://github.com/alirezarezvani/claude-code-tresor/blob/main/scripts/install.sh",
+          "blob_sha": "f94d97c4310413ddecbdde5056f42e7fa08117e6",
+          "immutable_url": "https://api.github.com/repos/alirezarezvani/claude-code-tresor/git/blobs/f94d97c4310413ddecbdde5056f42e7fa08117e6"
+        }
+      ],
+      "verified_at": "2026-09-16"
+    },
+    {
+      "id": "second-brain-llm-wiki",
+      "name": "Second Brain LLM Wiki",
+      "steward": "Nicholas Spisak (NicholasSpisak)",
+      "repo": "NicholasSpisak/second-brain",
+      "url": "https://github.com/NicholasSpisak/second-brain",
+      "description": "Four Agent Skills documents a coding agent reads to scaffold, fill, query, and lint an Obsidian vault it maintains as an LLM-compiled wiki.",
+      "pack_type": "skills_bundle",
+      "hosts": [
+        "claude_code",
+        "codex",
+        "cursor",
+        "gemini_cli"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "skills_cli",
+      "installs": "Four skill directories under skills/, each holding one SKILL.md: second-brain (an onboarding wizard), second-brain-ingest, second-brain-query, and second-brain-lint. The onboarding skill also bundles six reference documents under skills/second-brain/references/ (agent-config templates for Claude Code, Codex, Cursor, and Gemini CLI, a tooling guide, and the wiki schema) and one script, scripts/onboarding.sh, with a shell test beside it under tests/. The README installs the whole pack with npx skills add NicholasSpisak/second-brain and names Claude Code, Codex, Cursor, and Gemini CLI as hosts, which are the four the agent-config templates cover; it also says 40+ other Agent Skills hosts work, which is a format compatibility list rather than a documented install and is not recorded. Two further documents, docs/llm-wiki.md and docs/REQUIREMENTS.md, describe the pattern and are not installed into a host.",
+      "distribution_machinery": "skills/second-brain/scripts/onboarding.sh, which the onboarding skill tells the host to run once: it creates the vault's raw/, wiki/, and output/ directories, writes an empty wiki/index.md and wiki/log.md if they do not exist, reports whether three optional command-line tools are installed, and prints a JSON summary. It is idempotent scaffolding that reads nothing back and runs nothing at a later turn; tests/test_onboarding.sh exercises it.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: the wiki, its index, and its operation log are written and re-read by the host agent following the skill documents, and the only shipped code scaffolds the vault once at setup. The published second-brain project record is a different system with the same repository name, separated under ADR 020 by its own SQLite-backed store, terminal, web, and API surfaces, and container execution, none of which this pack has.",
+      "status": "active",
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
+      "license_note": "No LICENSE file is served at LICENSE, LICENSE.md, LICENSE.txt, or COPYING, GitHub reports none, and the README claims none; no reusable licence can be established and none is inferred.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "Repository README, which states no licence; no licence file at any usual path",
+          "kind": "web_terms",
+          "url": "https://github.com/NicholasSpisak/second-brain",
+          "verified_at": "2026-09-17"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Onboarding skill document",
+          "path": "skills/second-brain/SKILL.md",
+          "url": "https://github.com/NicholasSpisak/second-brain/blob/main/skills/second-brain/SKILL.md",
+          "blob_sha": "7f3b91abe6acc9f90fd62de13167e1422fb47654",
+          "immutable_url": "https://api.github.com/repos/NicholasSpisak/second-brain/git/blobs/7f3b91abe6acc9f90fd62de13167e1422fb47654"
+        },
+        {
+          "kind": "git_blob",
+          "label": "README install documentation",
+          "path": "README.md",
+          "url": "https://github.com/NicholasSpisak/second-brain/blob/main/README.md",
+          "blob_sha": "67c50664b09cafcd08259ea42dc643cc1560116c",
+          "immutable_url": "https://api.github.com/repos/NicholasSpisak/second-brain/git/blobs/67c50664b09cafcd08259ea42dc643cc1560116c"
+        }
+      ],
+      "verified_at": "2026-09-17"
+    },
+    {
+      "id": "second-brain-starter",
+      "name": "Second Brain Starter",
+      "steward": "Cole Medin (coleam00)",
+      "repo": "coleam00/second-brain-starter",
+      "url": "https://github.com/coleam00/second-brain-starter",
+      "description": "One skill document and a set of Markdown memory templates a coding agent reads to draft a build plan for a personal assistant.",
+      "pack_type": "vault_bundle",
+      "hosts": [
+        "claude_code"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "clone_template",
+      "installs": "One skill directory, .claude/skills/create-second-brain-prd/, holding SKILL.md, a requirements template, a filled-in example of that template, and references/architecture-reference.md, plus 6 Markdown memory templates under templates/memory/ (BOOTSTRAP, HABITS, HEARTBEAT, MEMORY, SOUL, USER) and a placeholder for a daily directory. The README installs it by cloning the repository and copying that skill directory into a project's own .claude/skills/, where Claude Code discovers it. The tree contains no executable files.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: the tree is fifteen files with no code in it, and the host agent is what reads the templates and writes the plan they describe.",
+      "status": "active",
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
+      "license_note": "No LICENSE file is served at LICENSE, LICENSE.md, or LICENSE.txt and the README claims none; no reusable licence can be established and none is inferred.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "Repository README, which states no licence; no licence file at any usual path",
+          "kind": "web_terms",
+          "url": "https://github.com/coleam00/second-brain-starter",
+          "verified_at": "2026-09-16"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Skill document",
+          "path": ".claude/skills/create-second-brain-prd/SKILL.md",
+          "url": "https://github.com/coleam00/second-brain-starter/blob/main/.claude/skills/create-second-brain-prd/SKILL.md",
+          "blob_sha": "03db644d8431d36d269cdbedc93b50e0f061738b",
+          "immutable_url": "https://api.github.com/repos/coleam00/second-brain-starter/git/blobs/03db644d8431d36d269cdbedc93b50e0f061738b"
+        }
+      ],
+      "verified_at": "2026-09-16"
+    }
+  ]
+}

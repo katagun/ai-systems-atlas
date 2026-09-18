@@ -311,6 +311,7 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
     for filename, key, collection in (
         ("local-runtimes.json", "runtimes", "local-runtimes"),
         ("models.json", "models", "models"),
+        ("packs.json", "packs", "packs"),
     ):
         document = load_json(directory / filename)
         for record in document[key]:

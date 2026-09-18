@@ -58,6 +58,7 @@
   --card-spec: linear-gradient(145deg, #fbfcff, #fff 68%);
   --card-inference: linear-gradient(145deg, #f9fdff, #fff 68%);
   --card-runtime: linear-gradient(145deg, #fffaf5, #fff 68%);
+  --card-pack: linear-gradient(145deg, #f7fdfa, #fff 68%);
   --radius: 14px;
   --radius-control: 8px;
   --radius-chip: 6px;
@@ -133,6 +134,7 @@
     --card-spec: linear-gradient(145deg, rgba(154, 167, 184, .07), var(--panel) 68%);
     --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
     --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
+    --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
   }
 }
 :root[data-theme="dark"] {
@@ -195,6 +197,7 @@
   --card-spec: linear-gradient(145deg, rgba(154, 167, 184, .07), var(--panel) 68%);
   --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
   --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
+  --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
 }
 
 * { box-sizing: border-box; }
@@ -675,6 +678,8 @@ input:focus, select:focus {
 .inference-service-card::before { background: var(--blue); }
 .local-runtime-card { min-height: 380px; background: var(--card-runtime); }
 .local-runtime-card::before { background: var(--amber); }
+.agent-pack-card { min-height: 380px; background: var(--card-pack); }
+.agent-pack-card::before { background: var(--cyan); }
 .mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);

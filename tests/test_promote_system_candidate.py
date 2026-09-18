@@ -86,7 +86,7 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         write_json(directory / "license-evidence.json", license_evidence)
         write_json(directory / "candidates.json", candidates)
         write_json(directory / "exclusions.json", exclusions)
-        for name in ("specifications.json", "inference-services.json", "local-runtimes.json", "models.json"):
+        for name in ("specifications.json", "inference-services.json", "local-runtimes.json", "models.json", "packs.json"):
             (directory / name).write_bytes((ROOT / "directory" / name).read_bytes())
 
         self.queue = candidates
@@ -289,6 +289,8 @@ class PromoteSystemCandidateTests(unittest.TestCase):
             "reason": "Test exclusion.",
             "repo": self.draft["repo"],
             "useful_lesson": "Test lesson.",
+            "excluded_at": "2026-09-01",
+            "verified_at": "2026-09-01",
         })
         write_json(exclusions_path, exclusions_doc)
 

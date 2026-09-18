@@ -52,6 +52,7 @@ STAGED_DIRECTORY_FILES = (
     "directory/inference-services.json",
     "directory/local-runtimes.json",
     "directory/specifications.json",
+    "directory/packs.json",
     "directory/taxonomy.json",
 )
 

@@ -35,12 +35,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BUNDLE_PATH = ROOT / ".candidate-evidence" / "bundle.json"
 CATALOG_FILES = (
     "projects.json", "exclusions.json", "specifications.json",
-    "inference-services.json", "local-runtimes.json",
+    "inference-services.json", "local-runtimes.json", "packs.json",
 )
 COLLECTION_KEYS = {
     "projects.json": "projects", "exclusions.json": "entries",
     "specifications.json": "specifications", "inference-services.json": "services",
-    "local-runtimes.json": "runtimes",
+    "local-runtimes.json": "runtimes", "packs.json": "packs",
 }
 GIT_BLOB_SHA = re.compile(r"[0-9a-f]{40}")
 MAX_WEB_EVIDENCE_BYTES = 2 * 1024 * 1024

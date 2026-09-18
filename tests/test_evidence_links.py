@@ -100,6 +100,11 @@ class EvidenceLinkTests(unittest.TestCase):
                     "id": "model", "url": "https://example.com/model", "verified_at": "2026-08-07",
                     "evidence": [], "license_evidence": [],
                 }]},
+                "packs.json": {"packs": [{
+                    "id": "kit", "url": "https://example.com/kit", "verified_at": "2026-08-08",
+                    "evidence": [{"kind": "git_blob", "url": "https://example.com/kit-manifest", "immutable_url": "https://api.github.com/kit-blob"}],
+                    "license_evidence": [],
+                }]},
             }
             for filename, document in documents.items():
                 (directory / filename).write_text(json.dumps(document), encoding="utf-8")
@@ -107,7 +112,7 @@ class EvidenceLinkTests(unittest.TestCase):
             targets = check_evidence_links.collect_targets(directory)
 
         by_url = {item.url: item for item in targets}
-        self.assertEqual(7, len(targets))
+        self.assertEqual(10, len(targets))
         self.assertEqual(
             ("specifications:spec:url", "systems:system:url"),
             by_url["https://example.com/shared"].references,
@@ -121,6 +126,7 @@ class EvidenceLinkTests(unittest.TestCase):
             by_url["https://example.com/terms"].review_dates,
         )
         self.assertIn("immutable_evidence", by_url["https://api.github.com/blob"].kinds)
+        self.assertEqual(("packs:kit:url",), by_url["https://example.com/kit"].references)
 
     def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:
         """A third-party page is not the Atlas's to accept changes to: check the link, hash nothing."""
@@ -132,6 +138,7 @@ class EvidenceLinkTests(unittest.TestCase):
                 "specifications.json": {"specifications": []},
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
+                "packs.json": {"packs": []},
                 "inference-services.json": {"services": [{
                     "id": "router", "url": "https://example.com/router", "verified_at": "2026-09-18",
                     "terms": {"kind": "web_terms", "url": "https://example.com/terms", "verified_at": "2026-09-18"},

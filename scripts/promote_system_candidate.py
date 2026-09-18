@@ -201,6 +201,7 @@ def preflight_promotion(
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     models_data = load_json(directory / "models.json")
+    packs_data = load_json(directory / "packs.json")
 
     repo = draft.get("repo")
     if not isinstance(repo, str) or not repo:
@@ -293,6 +294,7 @@ def preflight_promotion(
         local_runtimes_value if isinstance(local_runtimes_value, list) else [],
         models_value if isinstance(models_value, list) else [],
         errors,
+        packs_value=packs_data.get("packs") if isinstance(packs_data.get("packs"), list) else [],
     )
 
     candidate_repos = validate_candidates(proposed_candidates, tax, index, errors)

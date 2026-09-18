@@ -35,9 +35,11 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
 
   await page.locator("#reset-model-filters").click();
   await page.locator("#model-distribution-filter").selectOption("developer_api");
-  await expect(page.locator("#model-grid .project-card h2")).toHaveText(
-    catalogCounts.reviewedModelsWithDistribution("developer_api"),
-  );
+  // More than one page at 96: name page one, then page two.
+  const apiNames = catalogCounts.reviewedModelsWithDistribution("developer_api");
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(0, 96));
+  await page.locator("#model-pager [data-pager-next]").click();
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(96));
 
   await page.locator("#reset-model-filters").click();
   await page.locator(`#model-grid [data-model="${QWEN}"]`).click();
@@ -80,6 +82,9 @@ test("the Directory quick filters include Models and its complete source count",
 
 test("Models comparisons stay inside the model-access profile and restore from the URL", async ({ page }) => {
   await page.goto("/?view=models");
+
+  // Past the default 24: high-scoring new records sort above older ones.
+  await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
 
   await page.locator(`#model-grid [data-compare-id="${QWEN}"]`).click();
   await page.locator(`#model-grid [data-compare-id="${DEEPSEEK}"]`).click();
