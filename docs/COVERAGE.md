@@ -211,4 +211,6 @@ Choose small batches with one coherent boundary question:
 
 70. **Model queue batch twenty-four — Arcee Trinity:** four publishes and no new licence identifiers. All four carry OpenMDW-1.1 license files with stale Apache claims elsewhere on vendor pages: the evolving Large preview, the official Thinking release, the Mini reasoning line, and the download-only Nano preview. The reviewed Models collection moves from one hundred fifty-three to one hundred fifty-seven and the queue from 162 to 158. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
 
+71. **Model queue batch twenty-five — Tencent Hy and Sakana:** three publishes and three exclusions with one new licence identifier. Hy3 and Hy4-preview are Apache-declared open weights while Hy3-preview carries the geo-fenced community license; all three Sakana IDs are unreviewable aliases with no fixed identity or artifact. The reviewed Models collection moves from one hundred fifty-seven to one hundred sixty and the queue from 158 to 152. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
+
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

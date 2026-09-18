@@ -396,6 +396,7 @@
     {"id": "LicenseRef-GLM-5.3", "name": "GLM-5.3 License", "kind": "restricted"},
     {"id": "LicenseRef-Qwen-Community-1.0", "name": "Qwen Community License 1.0", "kind": "restricted"},
     {"id": "LicenseRef-Qwen-License-Agreement", "name": "Qwen License Agreement", "kind": "restricted"},
+    {"id": "LicenseRef-Tencent-Hy-Community-License", "name": "Tencent Hy Community License Agreement", "kind": "restricted"},
     {"id": "LicenseRef-OpenMDW-1.1", "name": "OpenMDW License Agreement 1.1", "kind": "open_source"},
     {"id": "LicenseRef-OpenAI-Services-Agreement", "name": "OpenAI Services Agreement", "kind": "proprietary"},
     {"id": "LicenseRef-Alibaba-Model-Studio-Agreement", "name": "Alibaba Cloud Model Studio Service Agreement", "kind": "proprietary"},
