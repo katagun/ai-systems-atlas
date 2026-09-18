@@ -46,7 +46,7 @@ CONTROL_CHARACTER_PATTERN = re.compile(r"[\x00-\x1f\x7f-\x9f]")
 IDENTIFIER_SEPARATORS = re.compile(r"[^0-9a-z\s]")
 EVIDENCE_REQUIRED = {"label", "url", "kind", "content_sha256", "fetched_at"}
 BLOB_EVIDENCE_REQUIRED = {"blob_sha", "immutable_url"}
-EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson"}
+EXCLUSION_REQUIRED = {"name", "reason", "repo", "useful_lesson", "excluded_at", "verified_at"}
 EXCLUSION_OPTIONAL = {"url"}
 SIGNAL_REQUIRED = {
     "story_id", "story_url", "title", "url", "points", "num_comments", "submitted_at",
@@ -2017,7 +2017,12 @@ def validate_license_review(
 def validate_exclusions(
     exclusions_data: dict[str, Any], repos: set[str], candidate_repos: set[str], errors: list[str]
 ) -> None:
-    """A repository is curated, a candidate, or excluded - never two of those."""
+    """A repository is curated, a candidate, or excluded - never two of those.
+
+    Every exclusion carries two human-owned dates: ``excluded_at``, when the
+    decision was first recorded, and ``verified_at``, when a reviewer last
+    re-checked the reason against current sources. Automation never sets either.
+    """
     for item in exclusions_data.get("entries", []):
         prefix = (item.get("name") or "unknown") if isinstance(item, dict) else "unknown"
         if not isinstance(item, dict) or (
@@ -2028,6 +2033,15 @@ def validate_exclusions(
             continue
         if "url" in item and https_url_host(item["url"]) is None:
             errors.append(f"exclusion {prefix}: url must be an HTTPS URL on a public DNS host")
+        for field in ("excluded_at", "verified_at"):
+            if not valid_date(item[field]):
+                errors.append(f"exclusion {prefix}: {field} must be an ISO date")
+        if (
+            valid_date(item["excluded_at"])
+            and valid_date(item["verified_at"])
+            and item["verified_at"] < item["excluded_at"]
+        ):
+            errors.append(f"exclusion {prefix}: verified_at must not precede excluded_at")
     excluded_repos = {
         item["repo"].lower()
         for item in exclusions_data.get("entries", [])

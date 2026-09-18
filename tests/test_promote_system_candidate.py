@@ -289,6 +289,8 @@ class PromoteSystemCandidateTests(unittest.TestCase):
             "reason": "Test exclusion.",
             "repo": self.draft["repo"],
             "useful_lesson": "Test lesson.",
+            "excluded_at": "2026-09-01",
+            "verified_at": "2026-09-01",
         })
         write_json(exclusions_path, exclusions_doc)
 
