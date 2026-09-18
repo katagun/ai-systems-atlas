@@ -209,4 +209,6 @@ Choose small batches with one coherent boundary question:
 
 69. **Model queue batch twenty-three — Sonar and Laguna:** eight publishes and one new licence identifier. Perplexity contributes four proprietary API-only search releases facing a September 2026 support date; Poolside contributes Apache-2.0 flagships and OpenMDW-1.1 mid tiers with third-party hosting. The reviewed Models collection moves from one hundred forty-five to one hundred fifty-three and the queue from 170 to 162. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
 
+70. **Model queue batch twenty-four — Arcee Trinity:** four publishes and no new licence identifiers. All four carry OpenMDW-1.1 license files with stale Apache claims elsewhere on vendor pages: the evolving Large preview, the official Thinking release, the Mini reasoning line, and the download-only Nano preview. The reviewed Models collection moves from one hundred fifty-three to one hundred fifty-seven and the queue from 162 to 158. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
+
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

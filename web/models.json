@@ -2969,6 +2969,518 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-arcee-ai-trinity-large-preview",
+      "source_id": "arcee-ai/trinity-large-preview",
+      "name": "Trinity Large Preview",
+      "developer": "Arcee AI",
+      "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview",
+      "description": "Arcee AI's 398-billion-parameter sparse MoE preview with 13B active parameters, published as OpenMDW-1.1 open weights while undergoing further post-training.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Trinity Large Preview",
+        "description": "Lightly post-trained 398B MoE chat model for creative work, long-context prompts, and tool-using agents",
+        "family": "trinity",
+        "release_date": "2026-01-27",
+        "last_updated": "2026-05-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 524288,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "OpenMDW-1.1",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://www.arcee.ai/blog/trinity-large",
+            "type": "announcement"
+          },
+          {
+            "label": "License",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview/blob/main/LICENSE",
+            "type": "license"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the OpenMDW License Agreement 1.1, which grants dealing in the model materials without restriction and imposes no obligations on outputs. Vendor blog and docs pages still carry older Apache-2.0 statements superseded by the May 2026 license migration; the file governs.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Model weights and materials in the Trinity-Large-Preview repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview/blob/d8e126719c8bf2b3ac5a3551bd1f07fcee767a90/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the January 2026 Trinity-Large-Preview release at Hugging Face commit d8e126719c8bf2b3ac5a3551bd1f07fcee767a90 (last modified 2026-05-28), a lightly post-trained checkpoint distinct from the Thinking release. The Base and TrueBase checkpoints, the Thinking release, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 398B MoE checkpoint with modeling code and five official quantization repos",
+        "First-party preview API plus exact-model OpenRouter hosting"
+      ],
+      "tradeoffs": [
+        "Explicitly an evolving preview under active post-training, not a stable line",
+        "Vendor blog and docs still carry superseded Apache-2.0 statements"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 7,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 8,
+        "overall": 6.72
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Large-Preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Trinity Large launch announcement (January 2026)",
+          "url": "https://www.arcee.ai/blog/trinity-large",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page for the exact preview model",
+          "url": "https://openrouter.ai/arcee-ai/trinity-large-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/arcee-ai/trinity-large-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-arcee-ai-trinity-large-thinking",
+      "source_id": "arcee-ai/trinity-large-thinking",
+      "name": "Trinity Large Thinking",
+      "developer": "Arcee AI",
+      "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking",
+      "description": "Arcee AI's 398-billion-parameter reasoning-optimized release with extended chain-of-thought traces, published as OpenMDW-1.1 open weights with managed API hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Trinity Large Thinking",
+        "description": "Reasoning-optimized 398B MoE agent model with extended thinking for long-horizon and multi-turn tool use",
+        "family": "trinity",
+        "release_date": "2026-04-01",
+        "last_updated": "2026-05-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 524288,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "OpenMDW-1.1",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://www.arcee.ai/blog/trinity-large-thinking",
+            "type": "announcement"
+          },
+          {
+            "label": "License",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking/blob/main/LICENSE",
+            "type": "license"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the OpenMDW License Agreement 1.1, which grants dealing in the model materials without restriction and imposes no obligations on outputs. Vendor blog and docs pages still carry older Apache-2.0 statements superseded by the May 2026 license migration; the file governs.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Model weights and materials in the Trinity-Large-Thinking repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking/blob/dc6a99b6b74202880e31491a445a94884c97890c/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 Trinity-Large-Thinking release at Hugging Face commit dc6a99b6b74202880e31491a445a94884c97890c (last modified 2026-05-28), the official reasoning successor of the Preview checkpoint. The Preview, Base, and TrueBase checkpoints, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 398B reasoning checkpoint with explicit thinking traces and four quantization repos",
+        "First-party API plus exact-model OpenRouter hosting as the official Large release"
+      ],
+      "tradeoffs": [
+        "Vendor blog and docs still carry superseded Apache-2.0 statements",
+        "398B dense-class parameters need datacenter-class multi-GPU serving"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 7.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Large-Thinking",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Trinity Large Thinking launch announcement (April 2026)",
+          "url": "https://www.arcee.ai/blog/trinity-large-thinking",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page for the exact thinking model",
+          "url": "https://openrouter.ai/arcee-ai/trinity-large-thinking",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/arcee-ai/trinity-large-thinking.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-arcee-ai-trinity-mini",
+      "source_id": "arcee-ai/trinity-mini",
+      "name": "Trinity Mini",
+      "developer": "Arcee AI",
+      "url": "https://huggingface.co/arcee-ai/Trinity-Mini",
+      "description": "Arcee AI's 26-billion-parameter MoE reasoning release with 3B active parameters, published as OpenMDW-1.1 open weights with managed API hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Trinity Mini",
+        "description": "Reasoning-tuned 26B MoE model with 3B active parameters for agents, tools, and multi-step workloads",
+        "family": "trinity",
+        "release_date": "2025-12-01",
+        "last_updated": "2026-05-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "OpenMDW-1.1",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Mini",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://www.arcee.ai/blog/the-trinity-manifesto",
+            "type": "announcement"
+          },
+          {
+            "label": "License",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Mini/blob/main/LICENSE",
+            "type": "license"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Mini",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the OpenMDW License Agreement 1.1, which grants dealing in the model materials without restriction and imposes no obligations on outputs. Vendor blog and docs pages still carry older Apache-2.0 statements superseded by the May 2026 license migration; the file governs.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Model weights and materials in the Trinity-Mini repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Mini/blob/cdb81e8130815fec299cccc8f8700004b8366e1e/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the December 2025 Trinity Mini release at Hugging Face commit cdb81e8130815fec299cccc8f8700004b8366e1e (last modified 2026-05-28), a fully post-trained reasoning line. Base and pre-anneal checkpoints, the Nano line, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 26B MoE checkpoint with GGUF, FP8, W4A16, and NVFP4 variants",
+        "First-party API with free tier plus exact-model OpenRouter hosting and 128K context"
+      ],
+      "tradeoffs": [
+        "Vendor launch blog still carries the superseded Apache-2.0 statement",
+        "Version identity rests on repository commits with planned distillations ahead"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Mini",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Trinity manifesto announcement (December 2025)",
+          "url": "https://www.arcee.ai/blog/the-trinity-manifesto",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page for the exact mini model",
+          "url": "https://openrouter.ai/arcee-ai/trinity-mini",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/arcee-ai/trinity-mini.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-arcee-ai-trinity-nano-preview",
+      "source_id": "arcee-ai/trinity-nano-preview",
+      "name": "Trinity Nano Preview",
+      "developer": "Arcee AI",
+      "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview",
+      "description": "Arcee AI's 6-billion-parameter experimental MoE preview with 1B active parameters, published as OpenMDW-1.1 download-only weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Trinity Nano Preview",
+        "description": "Experimental chat-tuned 6B MoE model with 1B active parameters for low-resource chat and instruction following",
+        "family": "trinity",
+        "release_date": "2025-12-01",
+        "last_updated": "2026-05-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "OpenMDW-1.1",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://www.arcee.ai/blog/the-trinity-manifesto",
+            "type": "announcement"
+          },
+          {
+            "label": "License",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview/blob/main/LICENSE",
+            "type": "license"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the OpenMDW License Agreement 1.1, which grants dealing in the model materials without restriction and imposes no obligations on outputs. Vendor blog and docs pages still carry older Apache-2.0 statements superseded by the May 2026 license migration; the file governs.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Model weights and materials in the Trinity-Nano-Preview repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview/blob/b576b32b8bba7f5218312c9509e494537f8d282d/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the December 2025 Trinity Nano Preview experimental release at Hugging Face commit b576b32b8bba7f5218312c9509e494537f8d282d (last modified 2026-05-28), explicitly download-only with no hosted serving. The Mini line, a future graduated Nano line, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 6B edge-class checkpoint with GGUF, MLX, FP8, W4A16, and NVFP4 variants",
+        "Runs on edge-class hardware with Transformers, vLLM, llama.cpp, and LM Studio paths"
+      ],
+      "tradeoffs": [
+        "Explicitly experimental with no hosted serving anywhere by developer statement",
+        "Vendor pages still carry superseded Apache-2.0 statements; graduation may supersede this line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 4,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 6.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/arcee-ai/Trinity-Nano-Preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Trinity manifesto announcement (December 2025)",
+          "url": "https://www.arcee.ai/blog/the-trinity-manifesto",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/arcee-ai/trinity-nano-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-bytedance-seed-seed-1-6",
       "source_id": "bytedance-seed/seed-1-6",
       "name": "Seed 1.6",
