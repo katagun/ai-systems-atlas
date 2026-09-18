@@ -109,10 +109,24 @@ class DocumentationTests(unittest.TestCase):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
     def test_routing_documents_are_reachable_from_agents(self) -> None:
-        """Every document the manifest protects must be routed to from AGENTS.md."""
-        agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        """Topic guides may disclose ADRs through links instead of bloating AGENTS.md."""
+        pending = [ROOT / "AGENTS.md"]
+        reachable: set[str] = set()
+        while pending:
+            document = pending.pop()
+            relative = document.relative_to(ROOT).as_posix()
+            if relative in reachable:
+                continue
+            reachable.add(relative)
+            text = CODE_FENCE.sub("", document.read_text(encoding="utf-8"))
+            for target in MARKDOWN_LINK.findall(text):
+                if target.startswith(("http://", "https://", "mailto:", "#")):
+                    continue
+                path = (document.parent / unquote(target.split("#", 1)[0])).resolve()
+                if path.is_relative_to(ROOT) and path.is_file() and path.suffix == ".md":
+                    pending.append(path)
         manifest = re.findall(r'"((?:docs/|)[A-Za-z0-9_./-]+\.md)"', self.routing_manifest_source())
-        unreachable = sorted({name for name in manifest if name not in agents})
+        unreachable = sorted(set(manifest) - reachable)
         self.assertEqual([], unreachable)
 
     def routing_manifest_source(self) -> str:

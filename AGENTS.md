@@ -1,92 +1,67 @@
 # AGENTS.md — AI Systems Atlas
 
-This repository is a curated directory of operational memory, agent, and assistant systems plus provider-independent model releases, unscored interoperability specifications, managed inference services, self-operated local runtimes, and unscored agent packs a host agent installs. Preserve evidence integrity and the distinction between human editorial judgment and automated metadata.
+Atlas combines a human-reviewed catalog, automated discovery metadata, and a static web app.
+`directory/` owns catalog data; `scripts/` validates and generates; `web/` serves the site.
 
-## Just-in-time context
+## Working rules
 
-Read only the documents required by the change:
+1. Read only the relevant topic below, then follow its links to specific policies or ADRs as needed. Research history (`docs/RESEARCH.md`, `docs/superpowers/`) is optional context for tasks about those decisions, not startup reading.
+2. Preserve unrelated user changes.
+3. Use `uv` for Python work; setup commands are below.
+4. Decide inclusion by the collection's relevance and operational boundary, never by license or source model.
+5. Base license classifications on authoritative, scoped license/terms evidence covering every material license; README claims and GitHub SPDX detection are insufficient.
+6. Assign exactly one compatible `system_family` and `primary_role` only to system records in `projects.json`; traits are not roles.
+7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications and agent packs are unscored; mixed discovery hides scores and comparisons.
+8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
+9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
+10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
+11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records.
+12. Publish catalog JSON only from `PUBLISHED_DATA` in `scripts/sync_web_data.py`; queues, dispositions, and discovery configuration remain unpublished.
+13. Edit canonical inputs and generators, not generated data copies, app payloads, share pages, blog output, fonts, or logos. Generator locations and asset-version dependencies are in `docs/WEB.md` and `docs/BLOG.md`.
+14. After published catalog edits, run the regeneration sequence below and commit its output; record additions also need logo regeneration per `docs/WEB.md`.
+15. Before completion, run the local validation, lint, test, syntax, and generated-file freshness checks in `.github/workflows/verify.yml`, including `build_web_payload.py --check`.
+16. For published-data or web changes, also exercise the browser verification matrix in `docs/WEB.md`: collection filters, score scopes, comparisons, URL/history restoration, Finder, taxonomy, and every record dialog.
+17. Report only checks actually run, including failures or checks that could not run.
 
-| If you are changing… | Read first |
+## Topic map
+
+| Task | Entry point |
 |---|---|
-| project inclusion, classification, prose, or scores | `docs/CURATION.md`, then `docs/TAXONOMY.md` |
-| JSON fields, enums, queues, or timestamps | `docs/DATA_MODEL.md` |
-| updater, validation, license drift, or workflows | `docs/OPERATIONS.md`, `docs/adr/005-fail-closed-license-drift.md` |
-| finder, Directory collections, filters, comparison, details, styles, or accessibility | `docs/WEB.md`, then `docs/adr/013-distinct-collections-share-one-directory-surface.md` for collection boundaries and `docs/adr/014-comparisons-are-scoped-to-one-score-profile.md` for comparison |
-| app payloads, page load cost, or the boot/detail split | `docs/WEB.md`, then `docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md` |
-| system families, primary roles, or family boundaries | `docs/TAXONOMY.md`, then `docs/adr/003-multi-axis-directory.md`, `docs/adr/004-memory-and-agent-families.md`, `docs/adr/009-assistant-systems-are-a-distinct-family.md`, and `docs/adr/011-delegated-work-agents-are-agent-systems.md`, `docs/adr/021-the-research-reference-role-is-removed.md`, `docs/adr/022-general-pattern-content-is-not-a-collection.md`, and `docs/adr/023-autonomous-science-systems-are-not-a-role.md` |
-| licenses, source models, or evidence scope | `docs/CURATION.md`, then `docs/adr/007-licenses-are-classification-not-inclusion.md` |
-| project status, archival, or a maintainer-declared successor | `docs/CURATION.md`, then `docs/adr/016-superseded-predecessors-keep-their-record.md` |
-| visual builders, authoring surface, or agent interfaces | `docs/TAXONOMY.md`, then `docs/adr/019-authoring-surface-is-a-trait-not-a-role.md` |
-| skill packs, plugins, vault bundles, marketplaces, or harness add-ons | `docs/PACKS.md`, then `docs/adr/031-skill-packs-earn-records-by-owned-state-or-enforced-work.md` and `docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md` |
-| local-first or editability traits, or their card badges | `docs/DATA_MODEL.md`, then `docs/adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md` |
-| vendor-hosted platforms, who operates a system, or deployment traits | `docs/TAXONOMY.md`, then `docs/adr/018-operating-party-is-a-trait-not-a-role.md` and `docs/adr/003-multi-axis-directory.md` |
-| provider relationships or model backends | `docs/DATA_MODEL.md`, then `docs/adr/006-provider-relationships-are-orthogonal.md` |
-| forks, ports, renames, or derivative candidates | `docs/CURATION.md`, then `docs/adr/020-derivative-records-turn-on-operational-boundary.md` for the boundary test and `docs/adr/016-superseded-predecessors-keep-their-record.md` for renames and declared successors |
-| coverage gaps or expansion batches | `docs/COVERAGE.md`, then `docs/CURATION.md` |
-| candidate triage, the queue's `triage` block, or the local triage routine | `docs/CURATION.md`, then `docs/adr/024-candidate-triage-proposals-are-unaccepted-evidence.md` and `docs/routines/candidate-triage.md` |
-| specifications, protocols, conventions, or package formats | `docs/SPECIFICATIONS.md`, then `docs/adr/008-specifications-are-unscored-artifacts.md` |
-| inference services, model APIs, managed inference, routing platforms, or service scores | `docs/INFERENCE_SERVICES.md`, then `docs/adr/010-inference-services-are-unscored-service-records.md`, `docs/adr/012-inference-services-use-a-dedicated-score-profile.md`, `docs/adr/013-distinct-collections-share-one-directory-surface.md`, and `docs/adr/029-trust-records-are-unscored-and-never-first-hand.md` for trust records |
-| local runtimes, self-hosted inference, runtime scores | `docs/LOCAL_RUNTIMES.md`, then `docs/adr/015-local-runtimes-are-self-operated-execution-records.md` for the boundary, `docs/adr/017-local-runtime-eligibility-ignores-modality.md` for eligibility and the vocabulary obligation, and `docs/adr/013-distinct-collections-share-one-directory-surface.md` |
-| language models, model releases, model access scores, or models.dev ingestion | `docs/MODELS.md`, then `docs/adr/025-model-releases-are-independent-curated-records.md` for the model boundary and `docs/adr/027-complete-models-dev-source-catalog-is-published.md` for the source/review split |
-| attention sources, Hacker News signals, or the signal-sweep routine | `docs/adr/028-attention-sources-are-pointers-not-claims.md`, then `docs/routines/hn-signals.md` |
-| agent-facing discovery docs, llms.txt, or the Atlas skill | `docs/AGENT_DOCS.md` |
-| blog posts, the markdown subset, or the writing surface | `docs/BLOG.md` |
-| direction and sequencing | `ROADMAP.md` |
-| priorities or follow-up work | `BACKLOG.md` |
+| System inclusion, licensing, prose, scores, forks, successors | [Curation](docs/CURATION.md) |
+| Families, roles, deployment, authoring surfaces, provider relationships | [Taxonomy](docs/TAXONOMY.md) |
+| Fields, enums, timestamps, local-first/editability, queues, dispositions | [Data model](docs/DATA_MODEL.md) |
+| Refresh, validation, evidence links, terms/license drift, review age, CI/deploy | [Operations](docs/OPERATIONS.md) |
+| UI, filters, comparison, details, badges, payloads, assets, accessibility | [Web](docs/WEB.md) |
+| Model releases, access scores, models.dev import and promotion | [Models](docs/MODELS.md) |
+| Protocols, conventions, packaging formats | [Specifications](docs/SPECIFICATIONS.md) |
+| Managed inference, service scores, trust records | [Inference services](docs/INFERENCE_SERVICES.md) |
+| Self-operated inference, runtime scores | [Local runtimes](docs/LOCAL_RUNTIMES.md) |
+| Skills, plugins, vault bundles, marketplaces, host-installed packs | [Agent packs](docs/PACKS.md) |
+| Candidate triage routine | [Candidate triage](docs/routines/candidate-triage.md) |
+| Hacker News attention signals and sweep routine | [HN signals](docs/routines/hn-signals.md) |
+| Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |
+| Blog content and shared page shell | [Blog](docs/BLOG.md) |
+| Coverage gaps, direction, priorities | [Coverage](docs/COVERAGE.md), [Roadmap](ROADMAP.md), [Backlog](BACKLOG.md) |
 
-Do not preload `docs/RESEARCH.md` unless the task concerns research conclusions or project lessons.
+## Command reference
 
-## Commands
-
-Use `uv` for Python work.
+Environment setup (Python 3.11+; Node dependencies and Chromium support browser checks):
 
 ```bash
 uv sync --locked
+npm ci --ignore-scripts
+npx playwright install chromium
+```
+
+Published catalog regeneration, in order:
+
+```bash
 uv run python scripts/sync_web_data.py
 uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
-uv run python scripts/build_blog.py
-node scripts/build_logos.mjs --check
-node scripts/build_fonts.mjs --check
-node scripts/build_asset_version.mjs --check
-uv run python scripts/build_share_pages.py --check
-uv run python scripts/build_blog.py --check
-uv run ruff check scripts tests
-uv run python scripts/validate_directory.py
-uv run python -m unittest discover -s tests -v
-uv run python -m compileall scripts tests
-node --check web/app-core.js
-node --check web/app.js
-node --test tests/test_web.js
-npm ci
-npx playwright install chromium
-npm run lint:js
-npm run test:e2e
-uv run python -m http.server 8765 --directory web
+node scripts/build_asset_version.mjs
 ```
 
-Run synchronization and share-page generation after changing any published `directory/*.json` file. Run all validation and tests before claiming completion. For published-data or web changes, also exercise system, model, specification, inference-service, local-runtime, and agent-pack search/filters, cross-profile score hiding, scoped comparison and URL restoration, record deep links and back-button behavior, the finder handoff, taxonomy, and all six dialogs in a browser.
-
-## Hard rules
-
-- Relevance and operational capability determine inclusion; license or source model never does.
-- Review authoritative license or terms sources and their component/path scope; README claims and GitHub SPDX detection are insufficient.
-- Record every material license and one source-model classification from `directory/taxonomy.json`.
-- A license mismatch opens a durable review incident and marks license evidence stale; it never silently hides the project or changes the human conclusion.
-- Assign exactly one `system_family` and one compatible `primary_role`.
-- Architecture, retrieval, deployment, and agent traits are not primary roles.
-- Never compare or rank scores across score profiles.
-- Never let automated refreshes change editorial prose, scores, evidence, confidence, or `verified_at`.
-- Never promote `directory/candidates.json` records without the complete curation workflow.
-- Keep specifications outside `system_family` and score profiles; classify their type, integration scope, and maturity without ranking unlike artifacts.
-- Keep agent packs outside `system_family` and every score profile; record what a pack installs from its pinned tree, never what it does; never carry stars, scores, or a marketplace's entries; and never let a repository appear in more than one of `projects.json`, `packs.json`, and `exclusions.json`.
-- Keep inference services outside `system_family` and system-family score profiles; use their dedicated service profile, curate named service boundaries rather than companies, models, or local runtimes, and never rank them with volatile prices or benchmarks.
-- Trust records on inference services are unscored, present only after human review, and carry third-party findings only as dated, pinned, bounded claims from sources that name the service; never render an empty findings list as clean, and never let automation write the block.
-- Keep local runtimes outside `system_family` and system-family score profiles; use their dedicated runtime profile, curate self-operated execution software rather than models, managed services, or client libraries, and never score them with throughput, latency, or benchmark results.
-- Keep models outside `system_family` and every service/runtime score profile; include reviewed releases in mixed Directory discovery with scores hidden, curate provider-independent releases rather than labs, APIs, hosts, runtimes, or applications, and never score model quality, benchmarks, parameter count, price, latency, or throughput.
-- Treat models.dev as automated discovery metadata only. Its complete commit-pinned source snapshot may be published when every source record is labeled unreviewed; only a model with complete identity, boundary, license, evidence, and score review becomes an Atlas-reviewed record. Automation may never promote a candidate or edit human-owned model fields.
-- Do not call a vendor convention an open standard. Pin authoritative specification and license evidence where available.
-- Keep only `projects.json`, `taxonomy.json`, `exclusions.json`, `license-evidence.json`, `specifications.json`, `inference-services.json`, `local-runtimes.json`, `models.json`, `packs.json`, and the attributed `models-dev.json` source snapshot synchronized into `web/`; candidate and license-review queues are not published. Share pages under `web/records/` and app payloads under `web/app/` are generated from those files, never edited by hand, and never published as endpoints. Share pages never show scores.
-- Never report checks as passing unless you ran them.
-
-Existing unrelated changes belong to the user. Preserve them.
+The complete check list lives in [verify.yml](.github/workflows/verify.yml).
+Browser tests (`npm run test:e2e`) start their own server. An exploratory server is available with
+`uv run python -m http.server 8765 --bind 127.0.0.1 --directory web`.
