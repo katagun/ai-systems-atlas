@@ -29,8 +29,14 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
 
   await page.locator("#reset-model-filters").click();
   await page.locator("#model-modality-filter").selectOption("image");
+  // More than one page at 96: name page one, then page two.
+  const imageNames = catalogCounts.reviewedModelsWithModality("image");
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
-    catalogCounts.reviewedModelsWithModality("image"),
+    imageNames.slice(0, 96),
+  );
+  await page.locator("#model-pager [data-pager-next]").click();
+  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+    imageNames.slice(96),
   );
 
   await page.locator("#reset-model-filters").click();

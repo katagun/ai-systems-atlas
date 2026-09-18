@@ -9277,6 +9277,470 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-meta-muse-glimmer-30b",
+      "source_id": "meta/muse-glimmer-30b",
+      "name": "Muse Glimmer 30B",
+      "developer": "Meta",
+      "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+      "description": "An open-weights 29.6B text-and-image model distilled from Muse Spark, released under Apache-2.0 with a frozen perception encoder, a 131,072-token context, and an advisory usage policy.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Muse Glimmer 30B",
+        "description": "Muse Glimmer is a 30-billion-parameter open-weight multimodal model from Meta Superintelligence Labs, distilled from Muse Spark for always-on local agents, tool use, coding, and image understanding.",
+        "family": "muse",
+        "release_date": "2026-08-10",
+        "last_updated": "2026-08-10",
+        "knowledge_cutoff": "2026-01-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model",
+            "type": "announcement"
+          },
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+            "type": "model_card"
+          },
+          {
+            "label": "Developer docs",
+            "url": "https://developer.meta.com/ai/models/muse-glimmer/",
+            "type": "docs"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships an unmodified Apache License 2.0 text at the pinned commit, and the card states \"All artifacts are released under Apache 2.0\". A separate USAGE_POLICY.md adds age and prohibited-use duties but no use restriction.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Muse-Glimmer-30B weights, tokenizer, chat template, and related artifacts in the official meta-models repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B/blob/a4e59da52a7bc87ae7251dd5545c0dd437c44b68/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the meta-models/Muse-Glimmer-30B release of August 2026 at Hugging Face commit a4e59da52a7bc87ae7251dd5545c0dd437c44b68. The GGUF and ExecuTorch companion artifacts, the DFlash drafter, the perception encoder, the Muse Spark line, quantizations, fine-tunes, and independent hosting providers remain separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights with the full license text at the pinned commit",
+        "Dated release with a model card, research announcement, developer documentation, and wide runtime coverage"
+      ],
+      "tradeoffs": [
+        "A separate acceptable-use policy adds age and prohibited-use duties",
+        "No successor or deprecation posture is published yet for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 8.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, checkpoints, and license text",
+          "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement",
+          "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official developer documentation",
+          "url": "https://dev.meta.ai/docs/muse-glimmer",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/meta/muse-glimmer-30b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-meta-muse-spark-1-1",
+      "source_id": "meta/muse-spark-1.1",
+      "name": "Muse Spark 1.1",
+      "developer": "Meta",
+      "url": "https://research.meta.ai/blog/introducing-muse-spark-meta-model-api",
+      "description": "An API-served multimodal release of the Muse Spark family with a 1,048,576-token context, available through the Meta Model API and Muse Code without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Muse Spark 1.1",
+        "description": "Muse Spark is a natively multimodal reasoning model with support for tool-use, visual chain of thought, and multi-agent orchestration.",
+        "family": "muse",
+        "release_date": "2026-04-08",
+        "last_updated": "2026-07-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Meta-Model-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Meta serves the Muse Spark family through the Meta Model API under the Meta Model API Terms of Service, which incorporate the acceptable-use and geographic-use policies by reference. The terms reserve all rights in the services, prohibit reverse engineering or distillation of the underlying models, and bar using the service to train competing models; no weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Meta-Model-API-Terms",
+          "scope": "Access to the Muse Spark checkpoint through the Meta Model API under the Terms of Service with the incorporated acceptable-use and geographic-use policies",
+          "kind": "web_terms",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the Muse Spark 1.1 named release announced July 9, 2026 and served under the Meta Model API. The base Muse Spark launch, the 1.2 and 1.3 checkpoints, Muse Code, and reseller surfaces remain separate boundaries.",
+      "strengths": [
+        "Dated named release with an announcement, evaluation report, and API documentation",
+        "Meta documents the fixed model identity and tier placement in its API terms"
+      ],
+      "tradeoffs": [
+        "No model weights are published, so the release cannot be self-operated",
+        "Preview terms are replaceable at Meta's discretion and no retirement policy is published"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Muse Spark 1.1 announcement",
+          "url": "https://research.meta.ai/blog/introducing-muse-spark-meta-model-api",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API documentation",
+          "url": "https://ai.developer.meta.com/docs/models",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API terms of service",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/meta/muse-spark-1.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-meta-muse-spark-1-2",
+      "source_id": "meta/muse-spark-1.2",
+      "name": "Muse Spark 1.2",
+      "developer": "Meta",
+      "url": "https://research.meta.ai/blog/introducing-muse-code-and-muse-spark-1-2",
+      "description": "A coding-focused API-served update to Muse Spark 1.1 with a 1,048,576-token context, available through the Meta Model API and Muse Code without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Muse Spark 1.2",
+        "description": "Muse Spark 1.2 is a coding-focused update to Muse Spark 1.1 with improvements in code generation, complex debugging, codebase understanding, and end-to-end developer workflows.",
+        "family": "muse",
+        "release_date": "2026-08-05",
+        "last_updated": "2026-08-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Meta-Model-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Meta serves the Muse Spark family through the Meta Model API under the Meta Model API Terms of Service, which incorporate the acceptable-use and geographic-use policies by reference. The terms reserve all rights in the services, prohibit reverse engineering or distillation of the underlying models, and bar using the service to train competing models; no weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Meta-Model-API-Terms",
+          "scope": "Access to the Muse Spark checkpoint through the Meta Model API under the Terms of Service with the incorporated acceptable-use and geographic-use policies",
+          "kind": "web_terms",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the Muse Spark 1.2 checkpoint announced August 5, 2026 and served under the Meta Model API. The 1.1 and 1.3 checkpoints, the contributor tier, Muse Code, and reseller surfaces remain separate boundaries.",
+      "strengths": [
+        "Dated named checkpoint with announcement, methodology report, and expanded global API access",
+        "Meta documents the checkpoint identity, tier placement, and multimodal coverage in its API terms"
+      ],
+      "tradeoffs": [
+        "No model weights are published, so the release cannot be self-operated",
+        "Preview terms are replaceable at Meta's discretion and no retirement policy is published"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Muse Spark 1.2 announcement",
+          "url": "https://research.meta.ai/blog/introducing-muse-code-and-muse-spark-1-2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Muse Spark 1.2 multimodal follow-up",
+          "url": "https://research.meta.ai/blog/multimodal-intelligence-of-muse-spark-1-2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API documentation",
+          "url": "https://ai.developer.meta.com/docs/models",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API terms of service",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/meta/muse-spark-1.2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-meta-muse-spark-1-3",
+      "source_id": "meta/muse-spark-1.3",
+      "name": "Muse Spark 1.3",
+      "developer": "Meta",
+      "url": "https://research.meta.ai/blog/introducing-muse-spark-1-3",
+      "description": "The newest API-served Muse Spark checkpoint with max reasoning, a 1,048,576-token context, and reduced token and tool-call usage, available through the Meta Model API and Muse Code without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Muse Spark 1.3",
+        "description": "Muse Spark 1.3 is a multimodal reasoning model from Meta for long-running agentic, multi-agent, and coding workflows. It improves long-horizon agent collaboration, instruction following, and coding efficiency relative to Muse Spark 1.2.",
+        "family": "muse",
+        "release_date": "2026-09-02",
+        "last_updated": "2026-09-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Meta-Model-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Meta serves the Muse Spark family through the Meta Model API under the Meta Model API Terms of Service, which incorporate the acceptable-use and geographic-use policies by reference. The terms reserve all rights in the services, prohibit reverse engineering or distillation of the underlying models, and bar using the service to train competing models; no weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Meta-Model-API-Terms",
+          "scope": "Access to the Muse Spark checkpoint through the Meta Model API under the Terms of Service with the incorporated acceptable-use and geographic-use policies",
+          "kind": "web_terms",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the Muse Spark 1.3 checkpoint announced September 2, 2026 and served under the Meta Model API. The 1.1 and 1.2 checkpoints, the contributor tier, Muse Code, and reseller surfaces remain separate boundaries.",
+      "strengths": [
+        "Dated named checkpoint with announcement, reasoning capabilities, and documented token efficiency",
+        "Meta documents the checkpoint identity and tier placement in its API terms"
+      ],
+      "tradeoffs": [
+        "No model weights are published, so the release cannot be self-operated",
+        "Preview terms are replaceable at Meta's discretion and no retirement policy is published"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Muse Spark 1.3 announcement",
+          "url": "https://research.meta.ai/blog/introducing-muse-spark-1-3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API documentation",
+          "url": "https://ai.developer.meta.com/docs/models",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Meta Model API terms of service",
+          "url": "https://ai.developer.meta.com/legal/terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/meta/muse-spark-1.3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-microsoft-phi-4-mini",
       "source_id": "microsoft/phi-4-mini",
       "name": "Phi-4-mini",
@@ -17519,6 +17983,453 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-xai-grok-4-20-0309-non-reasoning",
+      "source_id": "xai/grok-4.20-0309-non-reasoning",
+      "name": "Grok 4.20 (Non-Reasoning)",
+      "developer": "xAI",
+      "url": "https://docs.x.ai/developers/models/grok-4.20-0309-non-reasoning",
+      "description": "An API-served image-and-text Grok snapshot release with the fixed dated identity grok-4.20-0309-non-reasoning and a 1,000,000-token context, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Grok 4.20 (Non-Reasoning)",
+        "description": "Grok model for agentic tool use, reasoning, coding, and live assistance",
+        "family": "grok",
+        "release_date": "2026-03-09",
+        "last_updated": "2026-03-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 30000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "xAI provides the Grok release as a managed API service under its Terms of Service - Enterprise, which incorporate the Acceptable Use Policy by reference. The terms permit customers to build and distribute integrations on the API, while the policy prohibits reverse engineering or distilling the models and using the service or its output to develop competing models; no model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-18",
+          "scope": "Business access to the Grok release through the xAI API and related xAI services, including the right to build and distribute Bundled Services"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-18",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into the xAI Terms of Service - Enterprise"
+        }
+      ],
+      "access_boundary": "This record represents the Grok 4.20 non-reasoning snapshot release of March 9, 2026 under the fixed API model name grok-4.20-0309-non-reasoning. The reasoning variant, the multi-agent sibling, Oracle OCI and Cloudflare hosted paths, consumer apps, and later Grok releases remain separate service or product boundaries.",
+      "strengths": [
+        "xAI publishes a release-specific model page with a fixed dated model name, documented modalities, context, pricing, and regions",
+        "Oracle OCI and Cloudflare publish host documentation naming the exact model ID"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The line is already superseded by later Grok releases with no retirement notice for this snapshot"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 6,
+        "overall": 3.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Grok 4.20 0309 non-reasoning model documentation page",
+          "url": "https://docs.x.ai/developers/models/grok-4.20-0309-non-reasoning",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Oracle OCI Generative AI release notes naming the exact model",
+          "url": "https://docs.oracle.com/en-us/iaas/releasenotes/generative-ai/xAI-grok-4-20.htm",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Cloudflare AI model page for the exact model",
+          "url": "https://developers.cloudflare.com/ai/models/xai/grok-4.20-0309-non-reasoning",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xai/grok-4.20-0309-non-reasoning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xai-grok-4-20-0309-reasoning",
+      "source_id": "xai/grok-4.20-0309-reasoning",
+      "name": "Grok 4.20 (Reasoning)",
+      "developer": "xAI",
+      "url": "https://docs.x.ai/developers/models/grok-4.20-0309-reasoning",
+      "description": "An API-served image-and-text reasoning Grok snapshot release with the fixed dated identity grok-4.20-0309-reasoning and a 1,000,000-token context, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Grok 4.20 (Reasoning)",
+        "description": "Reasoning Grok for document-heavy analysis and long-horizon tool use",
+        "family": "grok",
+        "release_date": "2026-03-09",
+        "last_updated": "2026-03-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 30000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "xAI provides the Grok release as a managed API service under its Terms of Service - Enterprise, which incorporate the Acceptable Use Policy by reference. The terms permit customers to build and distribute integrations on the API, while the policy prohibits reverse engineering or distilling the models and using the service or its output to develop competing models; no model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-18",
+          "scope": "Business access to the Grok release through the xAI API and related xAI services, including the right to build and distribute Bundled Services"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-18",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into the xAI Terms of Service - Enterprise"
+        }
+      ],
+      "access_boundary": "This record represents the Grok 4.20 reasoning snapshot release of March 9, 2026 under the fixed API model name grok-4.20-0309-reasoning. The non-reasoning variant, the multi-agent sibling, Oracle OCI hosted paths, consumer apps, and later Grok releases remain separate service or product boundaries.",
+      "strengths": [
+        "xAI publishes a release-specific model page with a fixed dated model name, documented modalities, context, pricing, and regions",
+        "xAI publishes a system card and Oracle OCI publishes host documentation naming the exact model ID"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The line is already superseded by later Grok releases with no retirement notice for this snapshot"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 6,
+        "overall": 3.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Grok 4.20 0309 reasoning model documentation page",
+          "url": "https://docs.x.ai/developers/models/grok-4.20-0309-reasoning",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Grok 4.20 system card",
+          "url": "https://data.x.ai/2026-04-07-grok-4-20-model-card.pdf",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Oracle OCI Generative AI release notes naming the exact model",
+          "url": "https://docs.oracle.com/en-us/iaas/releasenotes/generative-ai/xAI-grok-4-20.htm",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xai/grok-4.20-0309-reasoning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xai-grok-4-3",
+      "source_id": "xai/grok-4.3",
+      "name": "Grok 4.3",
+      "developer": "xAI",
+      "url": "https://docs.x.ai/developers/models/grok-4.3",
+      "description": "An API-served image-and-text Grok release launched in April 2026 behind the rotating grok-4.3 and grok-4.3-latest aliases, with a 1,000,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Grok 4.3",
+        "description": "xAI's default Grok for chat, coding, agentic tools, and lower hallucination risk",
+        "family": "grok",
+        "release_date": "2026-04-17",
+        "last_updated": "2026-04-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 30000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "xAI provides the Grok release as a managed API service under its Terms of Service - Enterprise, which incorporate the Acceptable Use Policy by reference. The terms permit customers to build and distribute integrations on the API, while the policy prohibits reverse engineering or distilling the models and using the service or its output to develop competing models; no model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-18",
+          "scope": "Business access to the Grok release through the xAI API and related xAI services, including the right to build and distribute Bundled Services"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-18",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into the xAI Terms of Service - Enterprise"
+        }
+      ],
+      "access_boundary": "This record represents the Grok 4.3 release launched April 17, 2026 and served under the rotating API model names grok-4.3 and grok-4.3-latest. The 4.2 and 4.20 generations, consumer apps, Grok Build, gateway partners, and later Grok releases remain separate service or product boundaries.",
+      "strengths": [
+        "xAI publishes a release-specific model page with documented modalities, context, pricing, and three first-party regions"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "xAI publishes no dated snapshot, launch announcement, or release-notes entry for this release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 5,
+        "overall": 3.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Grok 4.3 model documentation page",
+          "url": "https://docs.x.ai/developers/models/grok-4.3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xai/grok-4.3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xai-grok-4-5",
+      "source_id": "xai/grok-4.5",
+      "name": "Grok 4.5",
+      "developer": "xAI",
+      "url": "https://docs.x.ai/developers/models/grok-4.5",
+      "description": "An API-served image-and-text Grok release launched July 2026 for coding, agentic tasks, and knowledge work, with a 500,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Grok 4.5",
+        "description": "xAI's Grok model for chat, coding, agentic tools, and lower hallucination risk",
+        "family": "grok",
+        "release_date": "2026-07-08",
+        "last_updated": "2026-07-08",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 500000,
+          "input": null,
+          "output": 500000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "xAI provides the Grok release as a managed API service under its Terms of Service - Enterprise, which incorporate the Acceptable Use Policy by reference. The terms permit customers to build and distribute integrations on the API, while the policy prohibits reverse engineering or distilling the models and using the service or its output to develop competing models; no model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-18",
+          "scope": "Business access to the Grok release through the xAI API and related xAI services, including the right to build and distribute Bundled Services"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-18",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into the xAI Terms of Service - Enterprise"
+        }
+      ],
+      "access_boundary": "This record represents the Grok 4.5 release announced July 2026 and served under the rotating API model names grok-4.5 and grok-4.5-latest. The Grok Build and Cursor integrations named in the announcement, consumer apps, and later Grok releases remain separate service or product boundaries.",
+      "strengths": [
+        "xAI publishes a release-specific model page and a dated launch announcement naming the Grok Build and Cursor integrations",
+        "Documented modalities, context, pricing, regions, and EU availability rollout"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "xAI publishes no dated snapshot ID, so the fixed identity rests on the launch documentation alone"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 4.0
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Grok 4.5 model documentation page",
+          "url": "https://docs.x.ai/developers/models/grok-4.5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official xAI Grok 4.5 release announcement",
+          "url": "https://x.ai/news/grok-4-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xai/grok-4.5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-xai-grok-4-6",
       "source_id": "xai/grok-4.6",
       "name": "Grok 4.6",
@@ -17627,6 +18538,123 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-xai-grok-build-0-1",
+      "source_id": "xai/grok-build-0.1",
+      "name": "Grok Build 0.1",
+      "developer": "xAI",
+      "url": "https://docs.x.ai/developers/models/grok-build-0.1",
+      "description": "An API-served coding model in public beta, the same model that powers Grok Build, with a 256,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Grok Build 0.1",
+        "description": "Fast Grok coding model tuned for agentic engineering and iterative edits",
+        "family": "grok-build",
+        "release_date": "2026-04-16",
+        "last_updated": "2026-04-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "xAI provides the Grok release as a managed API service under its Terms of Service - Enterprise, which incorporate the Acceptable Use Policy by reference. The terms permit customers to build and distribute integrations on the API, while the policy prohibits reverse engineering or distilling the models and using the service or its output to develop competing models; no model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-18",
+          "scope": "Business access to the Grok release through the xAI API and related xAI services, including the right to build and distribute Bundled Services"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-18",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into the xAI Terms of Service - Enterprise"
+        }
+      ],
+      "access_boundary": "This record represents the Grok Build 0.1 model released in public beta and served under the API model name grok-build-0.1. The xai-org/grok-build harness repository, Grok Build the product, the grok-code-fast aliases, gateway partners, and later Grok releases remain separate service or product boundaries.",
+      "strengths": [
+        "xAI publishes a model page and a dated announcement, and Vercel AI Gateway publishes host documentation naming the exact model",
+        "The announcement names the OpenRouter and Vercel AI Gateway availability paths"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The line carries early-access status and its aliases already point to later Grok releases"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Grok Build 0.1 model documentation page",
+          "url": "https://docs.x.ai/developers/models/grok-build-0.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official xAI Grok Build 0.1 release announcement",
+          "url": "https://x.ai/news/grok-build-0-1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Vercel AI Gateway model page for the exact model",
+          "url": "https://vercel.com/ai-gateway/models/grok-build-0.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/xai/grok-build-0.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-xiaomi-mimo-v2-flash",
