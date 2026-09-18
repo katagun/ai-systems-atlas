@@ -7321,6 +7321,226 @@
       "verified_at": "2026-09-04"
     },
     {
+      "id": "model-google-gemini-2-0-flash",
+      "source_id": "google/gemini-2.0-flash",
+      "name": "Gemini 2.0 Flash",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-2.0-flash",
+      "description": "A retired multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, shut down June 1, 2026, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 2.0 Flash",
+        "description": "Earlier Gemini Flash workhorse for responsive multimodal apps and tool use",
+        "family": "gemini-flash",
+        "release_date": "2024-12-11",
+        "last_updated": "2024-12-11",
+        "knowledge_cutoff": "2024-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provided Gemini 2.0 Flash as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the Gemini 2.0 release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 2.0 Flash line identified by the model code gemini-2.0-flash (experimental December 2024, general availability February 2025, shut down June 1, 2026). The -001 and -exp versions, the Flash-Lite variant, the Vertex AI and Gemini app products, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the full lifecycle from experimental preview to announced deprecation and executed shutdown with named replacements",
+        "The model page, deprecations table, and changelog each name the release and its shutdown date"
+      ],
+      "tradeoffs": [
+        "No developer-published weights were ever available for self-operation",
+        "The release is shut down, so new API traffic must migrate to the named successor"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 2.0 Flash model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-2.0-flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini 2.0 Flash launch announcement",
+          "url": "https://developers.googleblog.com/en/the-next-chapter-of-the-gemini-era-for-developers/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-2.0-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-2-0-flash-lite",
+      "source_id": "google/gemini-2.0-flash-lite",
+      "name": "Gemini 2.0 Flash-Lite",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-2.0-flash-lite",
+      "description": "A retired cost-efficient multimodal Gemini release served through Google's Gemini API and Vertex AI under Google's API terms, shut down June 1, 2026, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 2.0 Flash-Lite",
+        "description": "Low-latency Gemini model for high-volume multimodal and agent workloads",
+        "family": "gemini-flash-lite",
+        "release_date": "2024-12-11",
+        "last_updated": "2024-12-11",
+        "knowledge_cutoff": "2024-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provided Gemini 2.0 Flash as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the Gemini 2.0 release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 2.0 Flash-Lite line identified by the model code gemini-2.0-flash-lite (public preview February 2025, general availability February 25, 2025, shut down June 1, 2026). The -001 version, the 2.0 Flash variant, the retired Flash-Lite Preview, the Vertex AI and Gemini app products, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the full lifecycle from experimental preview to announced deprecation and executed shutdown with named replacements",
+        "The model page, deprecations table, and changelog each name the release and its shutdown date"
+      ],
+      "tradeoffs": [
+        "No developer-published weights were ever available for self-operation",
+        "The release is shut down, so new API traffic must migrate to the named successor"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 2.0 Flash-Lite model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-2.0-flash-lite",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini 2.0 Flash-Lite launch announcement",
+          "url": "https://developers.googleblog.com/en/gemini-2-family-expands/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-2.0-flash-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-google-gemini-2-5-flash",
       "source_id": "google/gemini-2.5-flash",
       "name": "Gemini 2.5 Flash",
@@ -8003,6 +8223,708 @@
       ],
       "metadata_verified_at": "2026-09-12",
       "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-google-gemma-3-12b-it",
+      "source_id": "google/gemma-3-12b-it",
+      "name": "Gemma 3 12BB IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-3-12b-it",
+      "description": "A gated 12B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Gemma 3 12B IT",
+        "description": "Open multimodal Gemma instruction model for multilingual text generation and image understanding",
+        "family": "gemma",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2024-08",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-3-12b-it"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repositories ship no LICENSE file; the gated model cards link the governing Gemma Terms of Use, whose appendix lists Gemma 3 and which incorporate the Gemma Prohibited Use Policy by reference. The terms restrict use rather than grant open source rights, so these releases are source-available, in contrast to the Gemma 4 generation's Apache-2.0 carve-out.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "scope": "Official google/gemma-3-12b-it repository, Safetensors weights, tokenizer, processor, and chat template",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "scope": "Restricted-use policy incorporated by reference into the Gemma Terms of Use",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-3-12b-it release of March 2025 at Hugging Face commit 96b6f1eccf38110c56df3a15bffe176da04bfd80. The other Gemma 3 sizes, the Gemma 4 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Dated March 2025 release with pinned repositories and a full technical report",
+        "Google documents Transformers, vLLM, SGLang, Ollama, llama.cpp, MLX, and on-device runtimes"
+      ],
+      "tradeoffs": [
+        "Artifact access is gated behind acceptance of Google's restricted Gemma Terms of Use",
+        "Google no longer documents served copies of Gemma 3 on the Gemini API and treats the line as legacy without a retirement note"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 6.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-3-12b-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Terms of Use governing the release",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Prohibited Use Policy incorporated into the terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-3-12b-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemma-3-27b-it",
+      "source_id": "google/gemma-3-27b-it",
+      "name": "Gemma 3 27BB IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-3-27b-it",
+      "description": "A gated 27B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Gemma 3 27B IT",
+        "description": "Largest open Gemma 3 instruction model for multilingual text generation and visual understanding",
+        "family": "gemma",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2024-08",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-3-27b-it"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repositories ship no LICENSE file; the gated model cards link the governing Gemma Terms of Use, whose appendix lists Gemma 3 and which incorporate the Gemma Prohibited Use Policy by reference. The terms restrict use rather than grant open source rights, so these releases are source-available, in contrast to the Gemma 4 generation's Apache-2.0 carve-out.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "scope": "Official google/gemma-3-27b-it repository, Safetensors weights, tokenizer, processor, and chat template",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "scope": "Restricted-use policy incorporated by reference into the Gemma Terms of Use",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-3-27b-it release of March 2025 at Hugging Face commit 005ad3404e59d6023443cb575daa05336842228a. The other Gemma 3 sizes, the Gemma 4 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Dated March 2025 release with pinned repositories and a full technical report",
+        "Google documents Transformers, vLLM, SGLang, Ollama, llama.cpp, MLX, and on-device runtimes"
+      ],
+      "tradeoffs": [
+        "Artifact access is gated behind acceptance of Google's restricted Gemma Terms of Use",
+        "Google no longer documents served copies of Gemma 3 on the Gemini API and treats the line as legacy without a retirement note"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 6.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-3-27b-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Terms of Use governing the release",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Prohibited Use Policy incorporated into the terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-3-27b-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemma-3-4b-it",
+      "source_id": "google/gemma-3-4b-it",
+      "name": "Gemma 3 4BB IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-3-4b-it",
+      "description": "A gated 4B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Gemma 3 4B IT",
+        "description": "Open multimodal Gemma instruction model for efficient text generation and image understanding",
+        "family": "gemma",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2024-08",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-3-4b-it"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repositories ship no LICENSE file; the gated model cards link the governing Gemma Terms of Use, whose appendix lists Gemma 3 and which incorporate the Gemma Prohibited Use Policy by reference. The terms restrict use rather than grant open source rights, so these releases are source-available, in contrast to the Gemma 4 generation's Apache-2.0 carve-out.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "scope": "Official google/gemma-3-4b-it repository, Safetensors weights, tokenizer, processor, and chat template",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "scope": "Restricted-use policy incorporated by reference into the Gemma Terms of Use",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-3-4b-it release of March 2025 at Hugging Face commit 093f9f388b31de276ce2de164bdc2081324b9767. The other Gemma 3 sizes, the Gemma 4 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Dated March 2025 release with pinned repositories and a full technical report",
+        "Google documents Transformers, vLLM, SGLang, Ollama, llama.cpp, MLX, and on-device runtimes"
+      ],
+      "tradeoffs": [
+        "Artifact access is gated behind acceptance of Google's restricted Gemma Terms of Use",
+        "Google no longer documents served copies of Gemma 3 on the Gemini API and treats the line as legacy without a retirement note"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 6.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-3-4b-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Terms of Use governing the release",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma Prohibited Use Policy incorporated into the terms",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-3-4b-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemma-4-26b-a4b-it",
+      "source_id": "google/gemma-4-26b-a4b-it",
+      "name": "Gemma 4 26B A4B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-4-26B-A4B-it",
+      "description": "An ungated 25.8B mixture-of-experts multimodal instruction model handling text and image input with a 256K-token context, released under Apache-2.0 and served on the Gemini API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemma 4 26B A4B IT",
+        "description": "Open Gemma instruction model for efficient chat and self-hosted deployments",
+        "family": "gemma",
+        "release_date": "2026-04-02",
+        "last_updated": "2026-04-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-4-26B-A4B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card and Google's Gemma 4 license page apply Apache-2.0 to the published weights, tokenizer, and chat template. The Gemma Terms of Use that govern earlier Gemma generations explicitly refer Gemma 4 to the separate Apache-2.0 license, so no use-restriction addendum applies to this release.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Official google/gemma-4-26B-A4B-it model repository, Safetensors weights, tokenizer, processor, and chat template",
+          "url": "https://huggingface.co/google/gemma-4-26B-A4B-it/blob/01e5b3ee840d3a9e0b0b493c593e85398a30ef75/README.md"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license text",
+          "url": "https://ai.google.dev/gemma/apache_2"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-4-26B-A4B-it release of April 2026 at Hugging Face commit head. The other Gemma 4 sizes, the Gemma 3 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights with the license page linked from the model card",
+        "Dated April 2026 release with a model card, Google model-card page, and technical report"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships in the repository; the grant rests on the card metadata and license page",
+        "No deprecation or update posture is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.2
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-4-26B-A4B-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma 4 Apache-2.0 license page",
+          "url": "https://ai.google.dev/gemma/apache_2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-4-26b-a4b-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemma-4-e2b-it",
+      "source_id": "google/gemma-4-E2B-it",
+      "name": "Gemma 4 E2B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-4-E2B-it",
+      "description": "An ungated on-device 5.1B multimodal instruction model handling text, image, and audio input with a 128K-token context, released under Apache-2.0.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Gemma 4 E2B IT",
+        "description": "Open Gemma instruction model for efficient chat and self-hosted deployments",
+        "family": "gemma",
+        "release_date": "2026-04-02",
+        "last_updated": "2026-04-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-4-E2B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card and Google's Gemma 4 license page apply Apache-2.0 to the published weights, tokenizer, and chat template. The Gemma Terms of Use that govern earlier Gemma generations explicitly refer Gemma 4 to the separate Apache-2.0 license, so no use-restriction addendum applies to this release.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Official google/gemma-4-E2B-it model repository, Safetensors weights, tokenizer, processor, and chat template",
+          "url": "https://huggingface.co/google/gemma-4-E2B-it/blob/179516f0c449474fdc46f08f30ead5b11e178497/README.md"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license text",
+          "url": "https://ai.google.dev/gemma/apache_2"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-4-E2B-it release of April 2026 at Hugging Face commit head. The other Gemma 4 sizes, the Gemma 3 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights with the license page linked from the model card",
+        "Dated April 2026 release with a model card, Google model-card page, and technical report"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships in the repository; the grant rests on the card metadata and license page",
+        "No deprecation or update posture is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 4,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.84
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-4-E2B-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma 4 Apache-2.0 license page",
+          "url": "https://ai.google.dev/gemma/apache_2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-4-E2B-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemma-4-e4b-it",
+      "source_id": "google/gemma-4-E4B-it",
+      "name": "Gemma 4 E4B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-4-E4B-it",
+      "description": "An ungated on-device 8B multimodal instruction model handling text, image, and audio input with a 128K-token context, released under Apache-2.0.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Gemma 4 E4B IT",
+        "description": "Open Gemma instruction model for efficient chat and self-hosted deployments",
+        "family": "gemma",
+        "release_date": "2026-04-02",
+        "last_updated": "2026-04-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-4-E4B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The official model card and Google's Gemma 4 license page apply Apache-2.0 to the published weights, tokenizer, and chat template. The Gemma Terms of Use that govern earlier Gemma generations explicitly refer Gemma 4 to the separate Apache-2.0 license, so no use-restriction addendum applies to this release.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Official google/gemma-4-E4B-it model repository, Safetensors weights, tokenizer, processor, and chat template",
+          "url": "https://huggingface.co/google/gemma-4-E4B-it/blob/fa62d88df2e6df5efa9d26ad6b3beaea2765f0cd/README.md"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license text",
+          "url": "https://ai.google.dev/gemma/apache_2"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-4-E4B-it release of April 2026 at Hugging Face commit head. The other Gemma 4 sizes, the Gemma 3 generation, quantizations, fine-tunes, and independent serving providers remain separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights with the license page linked from the model card",
+        "Dated April 2026 release with a model card, Google model-card page, and technical report"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships in the repository; the grant rests on the card metadata and license page",
+        "No deprecation or update posture is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 4,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.84
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/google/gemma-4-E4B-it",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma 4 Apache-2.0 license page",
+          "url": "https://ai.google.dev/gemma/apache_2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemma-4-E4B-it.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-google-gemma-4-31b-it",
