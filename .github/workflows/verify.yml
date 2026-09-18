@@ -36,41 +36,15 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
-      - name: Lint Python sources
-        run: uv run ruff check scripts tests
-      - name: Validate directory
-        run: uv run python scripts/validate_directory.py
-      - name: Run tests
-        run: uv run coverage run -m unittest discover -s tests -v
-      - name: Check test coverage
-        run: uv run coverage report
-      - name: Compile Python sources
-        run: uv run python -m compileall scripts tests
-      - name: Check browser JavaScript syntax
-        run: node --check web/app-core.js && node --check web/app.js
-      - name: Run web behavior tests
-        run: node --test --experimental-test-coverage tests/test_web.js
       - name: Install browser test dependencies
         run: |
           npm ci --ignore-scripts
           npm exec -- playwright install --with-deps chromium
       - name: Install pre-commit
         run: pipx install pre-commit
+      # The whole gate lives in .pre-commit-config.yaml: lint, format,
+      # secrets, complexity, catalog validation, unit tests with coverage,
+      # syntax and web behavior checks, generated-file freshness, and e2e.
+      # This job is environment setup plus that one command.
       - name: Run pre-commit on all files
         run: pre-commit run --all-files --show-diff-on-failure
-      - name: Lint browser and build JavaScript
-        run: npm run lint:js
-      - name: Check logo coverage and freshness
-        run: node scripts/build_logos.mjs --check
-      - name: Check vendored font freshness
-        run: node scripts/build_fonts.mjs --check
-      - name: Check asset versions
-        run: node scripts/build_asset_version.mjs --check
-      - name: Check share page freshness
-        run: uv run python scripts/build_share_pages.py --check
-      - name: Check app payload freshness
-        run: uv run python scripts/build_web_payload.py --check
-      - name: Check blog freshness
-        run: uv run python scripts/build_blog.py --check
-      - name: Run browser end-to-end tests
-        run: npm run test:e2e
