@@ -391,6 +391,12 @@
       "disposition": "excluded",
       "reason": "Rolling weekly-iteration API tier served under one model ID that always resolves to the latest version, with no weight repository, license, or fixed release identity of its own.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "stepfun/step-3.5-flash-2603",
+      "disposition": "held",
+      "reason": "Dated agent-optimized API variant with a platform table row but no weight repository, license text, or snapshot definition; held until StepFun publishes reviewable artifacts or terms.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
