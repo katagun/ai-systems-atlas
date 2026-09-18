@@ -8619,6 +8619,110 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-google-gemini-3-1-flash-live-preview",
+      "source_id": "google/gemini-3.1-flash-live-preview",
+      "name": "Gemini 3.1 Flash Live Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview",
+      "description": "A legacy real-time dialogue preview release served through Google's Live API under Google's API terms, with text and audio output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.1 Flash Live Preview",
+        "description": "High-quality, low-latency Live API model for real-time dialogue and voice-first AI applications",
+        "family": "gemini-flash",
+        "release_date": "2026-03-26",
+        "last_updated": "2026-03-26",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.1 Flash Live preview identified by the model code gemini-3.1-flash-live-preview, released March 2026 and still served with no committed shutdown date, marked legacy with gemini-3.8-live named as its successor. The Gemini 3.8 Live line, the translate and transcribe live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents a release-specific model page with modalities, limits, and lifecycle status",
+        "The changelog and deprecations page name the release and its family position"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.1 Flash Live Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.1-flash-live-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-google-gemini-3-1-pro-preview",
       "source_id": "google/gemini-3.1-pro-preview",
       "name": "Gemini 3.1 Pro Preview",
@@ -8936,6 +9040,213 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-flash-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-3-5-live-translate-preview",
+      "source_id": "google/gemini-3.5-live-translate-preview",
+      "name": "Gemini 3.5 Live Translate Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-live-translate-preview",
+      "description": "A real-time speech-to-speech translation preview release served through Google's Live API under Google's API terms, with audio and text transcript output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.5 Live Translate Preview",
+        "description": "Low-latency audio-to-audio model for real-time speech translation across 70+ languages",
+        "family": "gemini-pro",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "audio",
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.5 Live Translate preview identified by the model code gemini-3.5-live-translate-preview, released June 9, 2026 and still served with no shutdown date announced. The Gemini 3.1 Flash Live and 3.5 Transcribe live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents a release-specific model page with modalities, limits, and lifecycle status",
+        "The changelog and deprecations page name the release and its family position"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.5 Live Translate Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-live-translate-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-live-translate-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-3-5-transcribe-live",
+      "source_id": "google/gemini-3.5-transcribe-live",
+      "name": "Gemini 3.5 Transcribe Live",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-transcribe",
+      "description": "A low-latency streaming speech-to-text release served through Google's Live API under Google's API terms, with text output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.5 Transcribe Live",
+        "description": "Speech transcription model for accurate audio-to-text and captioning workflows",
+        "family": "gemini",
+        "release_date": "2026-08-26",
+        "last_updated": "2026-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.5 Transcribe Live variant of the Gemini 3.5 Transcribe line, generally available August 26, 2026 with no shutdown date announced and documented through the unary gemini-3.5-transcribe model page. The unary variant, the live translate and Flash Live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the model page, GA changelog entry, and a dedicated live-transcription guide",
+        "The published limit is a 10-minute audio duration per live session rather than a token context"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.5 Transcribe model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-transcribe",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini Live API transcription guide",
+          "url": "https://ai.google.dev/gemini-api/docs/live-api/live-transcribe",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-transcribe-live.toml",
           "verified_at": "2026-09-18"
         }
       ],
@@ -9371,6 +9682,115 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/deep-research-preview-04-2026.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-robotics-er-1-6-preview",
+      "source_id": "google/gemini-robotics-er-1.6-preview",
+      "name": "Gemini Robotics-ER 1.6 Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-robotics-er-1.6-preview",
+      "description": "A retired embodied-reasoning preview release served through Google's Gemini API under Google's API terms, shut down August 31, 2026, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini Robotics-ER 1.6 Preview",
+        "description": "Vision-language model for embodied reasoning: spatial understanding, task planning, and physical-world agentic robotics",
+        "family": "gemini",
+        "release_date": "2026-04-14",
+        "last_updated": "2026-04-14",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini Robotics-ER 1.6 preview identified by the model code gemini-robotics-er-1.6-preview, released April 14, 2026 and shut down August 31, 2026 with gemini-robotics-er-2-preview named as its replacement. The ER 2 line, the robotics action and model lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the release, deprecation, and shutdown dates in the changelog, deprecations table, and robotics overview",
+        "The model page documents text output for plans, tool calls, and structured outputs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is shut down and new traffic must migrate to the ER 2 preview"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini Robotics-ER 1.6 Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-robotics-er-1.6-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API changelog documenting launch and shutdown",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-robotics-er-1.6-preview.toml",
           "verified_at": "2026-09-18"
         }
       ],
