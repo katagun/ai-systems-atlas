@@ -1,5 +1,11 @@
 # AI Systems Atlas
 
+[![Verify](https://github.com/katagun/ai-systems-atlas/actions/workflows/verify.yml/badge.svg)](https://github.com/katagun/ai-systems-atlas/actions/workflows/verify.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python)](pyproject.toml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![Data: CC-BY-4.0](https://img.shields.io/badge/data-CC--BY--4.0-lightgrey)](LICENSE-DATA)
+
 AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases, the specifications that connect systems, managed inference services, runtimes you host yourself, and unscored agent packs a host agent installs. One Directory surface discovers systems, the complete models.dev source catalog, inference services, and local runtimes while preserving the distinction between attributed source metadata and Atlas-reviewed records. Models remains a specialist sibling view and Specifications remains a separate artifact view.
 
 Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/). Every reviewed record is also published as JSON with no key and no rate limit — the [API page](https://peacefulcoexistance.com/?view=api) lists each file, and [llms.txt](https://peacefulcoexistance.com/llms.txt) says the same thing for an agent.

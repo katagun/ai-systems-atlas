@@ -33,14 +33,20 @@ class PromoteSystemCandidateTests(unittest.TestCase):
 
         taxonomy = json.loads((ROOT / "directory" / "taxonomy.json").read_text())
         projects = json.loads((ROOT / "directory" / "projects.json").read_text())
-        license_evidence = json.loads((ROOT / "directory" / "license-evidence.json").read_text())
+        license_evidence = json.loads(
+            (ROOT / "directory" / "license-evidence.json").read_text()
+        )
         candidates = json.loads((ROOT / "directory" / "candidates.json").read_text())
         exclusions = json.loads((ROOT / "directory" / "exclusions.json").read_text())
 
-        project_index = next(i for i, p in enumerate(projects["projects"]) if p["id"] == "aider")
+        project_index = next(
+            i for i, p in enumerate(projects["projects"]) if p["id"] == "aider"
+        )
         self.project_record = deepcopy(projects["projects"].pop(project_index))
         evidence_index = next(
-            i for i, e in enumerate(license_evidence["entries"]) if e["project_id"] == "aider"
+            i
+            for i, e in enumerate(license_evidence["entries"])
+            if e["project_id"] == "aider"
         )
         self.license_entry = deepcopy(license_evidence["entries"].pop(evidence_index))
         pinned_license = self.license_entry["items"][0]
@@ -58,7 +64,12 @@ class PromoteSystemCandidateTests(unittest.TestCase):
             "topics": ["ai", "cli"],
             "status": "provisional",
             "discovered_at": "2026-09-04",
-            "review_required": ["licensing", "classification", "traits", "editorial_score"],
+            "review_required": [
+                "licensing",
+                "classification",
+                "traits",
+                "editorial_score",
+            ],
             "triage": {
                 "verdict": "review_ready",
                 "rule": "Review rule text.",
@@ -86,7 +97,13 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         write_json(directory / "license-evidence.json", license_evidence)
         write_json(directory / "candidates.json", candidates)
         write_json(directory / "exclusions.json", exclusions)
-        for name in ("specifications.json", "inference-services.json", "local-runtimes.json", "models.json", "packs.json"):
+        for name in (
+            "specifications.json",
+            "inference-services.json",
+            "local-runtimes.json",
+            "models.json",
+            "packs.json",
+        ):
             (directory / name).write_bytes((ROOT / "directory" / name).read_bytes())
 
         self.queue = candidates
@@ -105,25 +122,42 @@ class PromoteSystemCandidateTests(unittest.TestCase):
 
     # -- init -----------------------------------------------------------
 
-    def test_draft_prefills_identity_and_evidence_but_invents_no_classification(self) -> None:
+    def test_draft_prefills_identity_and_evidence_but_invents_no_classification(
+        self,
+    ) -> None:
         draft = build_draft(self.candidate)
 
         self.assertEqual(self.project_record["repo"], draft["repo"])
         self.assertEqual(self.project_record["name"], draft["name"])
         self.assertEqual(self.project_record["url"], draft["url"])
-        self.assertEqual(self.project_record["github_detected_license"], draft["github_detected_license"])
+        self.assertEqual(
+            self.project_record["github_detected_license"],
+            draft["github_detected_license"],
+        )
         self.assertEqual(self.project_record["stars"], draft["stars"])
 
         # The proposed classification must never be copied into the draft.
         self.assertEqual("", draft["system_family"])
         self.assertEqual("", draft["primary_role"])
-        self.assertNotEqual(self.candidate["proposed_system_family"], draft["system_family"])
-        self.assertNotEqual(self.candidate["proposed_primary_role"], draft["primary_role"])
+        self.assertNotEqual(
+            self.candidate["proposed_system_family"], draft["system_family"]
+        )
+        self.assertNotEqual(
+            self.candidate["proposed_primary_role"], draft["primary_role"]
+        )
 
         for field in (
-            "score_profile", "description", "canonical_data", "source_model",
-            "license_review_status", "status", "provenance", "research_confidence",
-            "verified_at", "stars_verified_at", "id",
+            "score_profile",
+            "description",
+            "canonical_data",
+            "source_model",
+            "license_review_status",
+            "status",
+            "provenance",
+            "research_confidence",
+            "verified_at",
+            "stars_verified_at",
+            "id",
         ):
             self.assertEqual("", draft[field])
         self.assertIsNone(draft["score"])
@@ -174,13 +208,16 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         original_candidates = candidates_path.read_bytes()
 
         proposed_projects, proposed_evidence, proposed_candidates = preflight_promotion(
-            self.root, self.draft,
+            self.root,
+            self.draft,
         )
 
         self.assertIn(self.project_record, proposed_projects["projects"])
         self.assertEqual([], proposed_candidates["candidates"])
         added_evidence = [
-            item for item in proposed_evidence["entries"] if item["project_id"] == "aider"
+            item
+            for item in proposed_evidence["entries"]
+            if item["project_id"] == "aider"
         ]
         self.assertEqual(1, len(added_evidence))
         self.assertEqual(self.license_entry["items"], added_evidence[0]["items"])
@@ -188,7 +225,9 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         self.assertEqual(original_evidence, evidence_path.read_bytes())
         self.assertEqual(original_candidates, candidates_path.read_bytes())
 
-    def test_apply_adds_one_project_and_evidence_entry_and_removes_one_candidate(self) -> None:
+    def test_apply_adds_one_project_and_evidence_entry_and_removes_one_candidate(
+        self,
+    ) -> None:
         projects_path = self.root / "directory" / "projects.json"
         evidence_path = self.root / "directory" / "license-evidence.json"
         candidates_path = self.root / "directory" / "candidates.json"
@@ -201,8 +240,12 @@ class PromoteSystemCandidateTests(unittest.TestCase):
 
         self.assertEqual(0, remaining)
         self.assertEqual("aider", project_id)
-        self.assertEqual(1, sum(project["id"] == "aider" for project in projects["projects"]))
-        self.assertEqual(1, sum(item["project_id"] == "aider" for item in evidence["entries"]))
+        self.assertEqual(
+            1, sum(project["id"] == "aider" for project in projects["projects"])
+        )
+        self.assertEqual(
+            1, sum(item["project_id"] == "aider" for item in evidence["entries"])
+        )
         self.assertEqual([], candidates["candidates"])
         self.assertEqual(self.queue["updated_at"], candidates["updated_at"])
         self.assertEqual(0o644, stat.S_IMODE(projects_path.stat().st_mode))
@@ -232,28 +275,32 @@ class PromoteSystemCandidateTests(unittest.TestCase):
             preflight_promotion(self.root, draft)
 
     def test_held_candidate_is_refused(self) -> None:
-        self._write_candidate_triage({
-            "verdict": "held",
-            "held_by": "Backlog item #7",
-            "rule": "r",
-            "finding": "f",
-            "evidence": [],
-            "proposed_at": "2026-09-04",
-            "proposer": "human",
-        })
+        self._write_candidate_triage(
+            {
+                "verdict": "held",
+                "held_by": "Backlog item #7",
+                "rule": "r",
+                "finding": "f",
+                "evidence": [],
+                "proposed_at": "2026-09-04",
+                "proposer": "human",
+            }
+        )
 
         with self.assertRaisesRegex(PromotionError, r"held \(Backlog item #7\)"):
             preflight_promotion(self.root, self.draft)
 
     def test_out_of_scope_candidate_is_refused(self) -> None:
-        self._write_candidate_triage({
-            "verdict": "out_of_scope",
-            "rule": "r",
-            "finding": "f",
-            "evidence": [],
-            "proposed_at": "2026-09-04",
-            "proposer": "human",
-        })
+        self._write_candidate_triage(
+            {
+                "verdict": "out_of_scope",
+                "rule": "r",
+                "finding": "f",
+                "evidence": [],
+                "proposed_at": "2026-09-04",
+                "proposer": "human",
+            }
+        )
 
         with self.assertRaisesRegex(PromotionError, "out_of_scope"):
             preflight_promotion(self.root, self.draft)
@@ -284,17 +331,21 @@ class PromoteSystemCandidateTests(unittest.TestCase):
     def test_excluded_repo_is_rejected(self) -> None:
         exclusions_path = self.root / "directory" / "exclusions.json"
         exclusions_doc = json.loads(exclusions_path.read_text())
-        exclusions_doc["entries"].append({
-            "name": "Aider",
-            "reason": "Test exclusion.",
-            "repo": self.draft["repo"],
-            "useful_lesson": "Test lesson.",
-            "excluded_at": "2026-09-01",
-            "verified_at": "2026-09-01",
-        })
+        exclusions_doc["entries"].append(
+            {
+                "name": "Aider",
+                "reason": "Test exclusion.",
+                "repo": self.draft["repo"],
+                "useful_lesson": "Test lesson.",
+                "excluded_at": "2026-09-01",
+                "verified_at": "2026-09-01",
+            }
+        )
         write_json(exclusions_path, exclusions_doc)
 
-        with self.assertRaisesRegex(PromotionError, "cannot be both included and excluded"):
+        with self.assertRaisesRegex(
+            PromotionError, "cannot be both included and excluded"
+        ):
             preflight_promotion(self.root, self.draft)
 
     def test_failed_write_rolls_back_every_file(self) -> None:
@@ -312,9 +363,14 @@ class PromoteSystemCandidateTests(unittest.TestCase):
                 raise OSError("simulated disk failure")
             real_write(path, value)
 
-        with mock.patch.object(
-            promote_system_candidate, "_write_json_atomic", side_effect=flaky_write,
-        ), self.assertRaises(OSError):
+        with (
+            mock.patch.object(
+                promote_system_candidate,
+                "_write_json_atomic",
+                side_effect=flaky_write,
+            ),
+            self.assertRaises(OSError),
+        ):
             apply_promotion(self.root, self.draft)
 
         self.assertEqual(original_projects, projects_path.read_bytes())

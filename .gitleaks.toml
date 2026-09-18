@@ -1,0 +1,14 @@
+# Gitleaks configuration for AI Systems Atlas.
+# The default rule set applies; this file only allowlists known-safe fixtures
+# so a full `gitleaks detect` (CI) stays green without weakening detection.
+
+title = "ai-systems-atlas"
+
+[allowlist]
+description = "Synthetic fixture tokens in automated tests (never real credentials)"
+paths = [
+  "tests/test_run_directory_refresh.py",
+]
+regexes = [
+  "gho_secret123",
+]

@@ -19,6 +19,7 @@ Usage:
     uv run python scripts/run_directory_refresh.py            # generate, verify, commit locally
     uv run python scripts/run_directory_refresh.py --publish   # also push and open/update the PR
 """
+
 from __future__ import annotations
 
 import argparse
@@ -59,18 +60,32 @@ STAGED_DIRECTORY_FILES = (
 # name, command, whether it reads GITHUB_TOKEN. Order matches the workflow exactly;
 # a failure stops the run there, just as a failed step would stop the job.
 GENERATION_STEPS = (
-    ("refresh GitHub metadata and discover candidates",
-     ("uv", "run", "python", "scripts/update_directory.py"), True),
-    ("refresh models.dev source and candidate metadata",
-     ("uv", "run", "python", "scripts/import_models_dev.py"), True),
-    ("synchronize published data after models.dev refresh",
-     ("uv", "run", "python", "scripts/sync_web_data.py"), False),
-    ("regenerate app payloads",
-     ("uv", "run", "python", "scripts/build_web_payload.py"), False),
-    ("regenerate share pages",
-     ("uv", "run", "python", "scripts/build_share_pages.py"), False),
-    ("regenerate asset versions",
-     ("node", "scripts/build_asset_version.mjs"), False),
+    (
+        "refresh GitHub metadata and discover candidates",
+        ("uv", "run", "python", "scripts/update_directory.py"),
+        True,
+    ),
+    (
+        "refresh models.dev source and candidate metadata",
+        ("uv", "run", "python", "scripts/import_models_dev.py"),
+        True,
+    ),
+    (
+        "synchronize published data after models.dev refresh",
+        ("uv", "run", "python", "scripts/sync_web_data.py"),
+        False,
+    ),
+    (
+        "regenerate app payloads",
+        ("uv", "run", "python", "scripts/build_web_payload.py"),
+        False,
+    ),
+    (
+        "regenerate share pages",
+        ("uv", "run", "python", "scripts/build_share_pages.py"),
+        False,
+    ),
+    ("regenerate asset versions", ("node", "scripts/build_asset_version.mjs"), False),
 )
 
 # name, command, whether it reads GITHUB_TOKEN. Every one of these runs even after an
@@ -78,12 +93,36 @@ GENERATION_STEPS = (
 # whitespace" check is not a fixed command (it stages first) and is appended by
 # run_checks() below, for twelve checks total.
 CHECK_COMMANDS = (
-    ("validate_directory", ("uv", "run", "python", "scripts/validate_directory.py"), False),
-    ("unittest", ("uv", "run", "python", "-m", "unittest", "discover", "-s", "tests", "-v"), False),
-    ("compileall", ("uv", "run", "python", "-m", "compileall", "scripts", "tests"), False),
-    ("evidence links and terms drift", ("uv", "run", "python", "scripts/check_evidence_links.py"), True),
-    ("share page freshness", ("uv", "run", "python", "scripts/build_share_pages.py", "--check"), False),
-    ("app payload freshness", ("uv", "run", "python", "scripts/build_web_payload.py", "--check"), False),
+    (
+        "validate_directory",
+        ("uv", "run", "python", "scripts/validate_directory.py"),
+        False,
+    ),
+    (
+        "unittest",
+        ("uv", "run", "python", "-m", "unittest", "discover", "-s", "tests", "-v"),
+        False,
+    ),
+    (
+        "compileall",
+        ("uv", "run", "python", "-m", "compileall", "scripts", "tests"),
+        False,
+    ),
+    (
+        "evidence links and terms drift",
+        ("uv", "run", "python", "scripts/check_evidence_links.py"),
+        True,
+    ),
+    (
+        "share page freshness",
+        ("uv", "run", "python", "scripts/build_share_pages.py", "--check"),
+        False,
+    ),
+    (
+        "app payload freshness",
+        ("uv", "run", "python", "scripts/build_web_payload.py", "--check"),
+        False,
+    ),
     ("asset versions", ("node", "scripts/build_asset_version.mjs", "--check"), False),
     ("app-core.js syntax", ("node", "--check", "web/app-core.js"), False),
     ("app.js syntax", ("node", "--check", "web/app.js"), False),
@@ -92,7 +131,9 @@ CHECK_COMMANDS = (
 )
 
 
-def shell(command: list[str], cwd: Path | None = None, env: dict[str, str] | None = None) -> tuple[int, str]:
+def shell(
+    command: list[str], cwd: Path | None = None, env: dict[str, str] | None = None
+) -> tuple[int, str]:
     """Run a command, capturing combined output. `env` is overlaid on the current one.
 
     Never logs `env`: it is the one place a caller may pass GITHUB_TOKEN, and the
@@ -101,7 +142,9 @@ def shell(command: list[str], cwd: Path | None = None, env: dict[str, str] | Non
     merged_env = dict(os.environ)
     if env:
         merged_env.update(env)
-    finished = subprocess.run(command, cwd=cwd, env=merged_env, capture_output=True, text=True)
+    finished = subprocess.run(
+        command, cwd=cwd, env=merged_env, capture_output=True, text=True
+    )
     return finished.returncode, finished.stdout + finished.stderr
 
 
@@ -117,11 +160,15 @@ def preflight(run=shell) -> str | None:
         return f"could not read git status:\n{porcelain}"
     if porcelain.strip():
         return "refusing to run on a dirty working tree"
-    fetch_code, fetch_output = run(["git", "fetch", "--quiet", "origin", DEFAULT_BRANCH], ROOT)
+    fetch_code, fetch_output = run(
+        ["git", "fetch", "--quiet", "origin", DEFAULT_BRANCH], ROOT
+    )
     if fetch_code != 0:
         return f"git fetch origin {DEFAULT_BRANCH} failed:\n{fetch_output}"
     head_code, head = run(["git", "rev-parse", "HEAD"], ROOT)
-    origin_code, origin_head = run(["git", "rev-parse", f"origin/{DEFAULT_BRANCH}"], ROOT)
+    origin_code, origin_head = run(
+        ["git", "rev-parse", f"origin/{DEFAULT_BRANCH}"], ROOT
+    )
     if head_code != 0 or origin_code != 0:
         return "could not resolve HEAD or origin/main"
     if head.strip() != origin_head.strip():
@@ -154,7 +201,9 @@ def token_env(needs_token: bool, token: str | None) -> dict[str, str] | None:
     return {"GITHUB_TOKEN": token} if needs_token and token else None
 
 
-def run_generation_steps(run, token: str | None) -> tuple[bool, list[tuple[str, int, str]]]:
+def run_generation_steps(
+    run, token: str | None
+) -> tuple[bool, list[tuple[str, int, str]]]:
     """Run the six generation steps in order. Stop at the first failure."""
     results: list[tuple[str, int, str]] = []
     for name, command, needs_token in GENERATION_STEPS:
@@ -171,7 +220,9 @@ def run_generation_steps(run, token: str | None) -> tuple[bool, list[tuple[str, 
 def stage_directory_files(run) -> tuple[int, str]:
     """Stage the same explicit path list the workflow staged. Never `git add -A directory`."""
     web_code, web_output = run(["git", "add", "-A", "web"], ROOT)
-    directory_code, directory_output = run(["git", "add", *STAGED_DIRECTORY_FILES], ROOT)
+    directory_code, directory_output = run(
+        ["git", "add", *STAGED_DIRECTORY_FILES], ROOT
+    )
     return (web_code or directory_code), web_output + directory_output
 
 
@@ -184,7 +235,9 @@ def run_checks(run, token: str | None) -> list[tuple[str, bool, str]]:
     stage_code, stage_output = stage_directory_files(run)
     diff_code, diff_output = run(["git", "diff", "--cached", "--check"], ROOT)
     whitespace_ok = stage_code == 0 and diff_code == 0
-    results.append(("generated diff whitespace", whitespace_ok, stage_output + diff_output))
+    results.append(
+        ("generated diff whitespace", whitespace_ok, stage_output + diff_output)
+    )
     return results
 
 
@@ -226,7 +279,14 @@ def push_and_open_pr(run, results: list[tuple[str, bool, str]]) -> int:
     check branch protection enforces on main — actually runs on it.
     """
     push_code, push_output = run(
-        ["git", "push", "--force-with-lease", "origin", f"HEAD:refs/heads/{REFRESH_BRANCH}"], ROOT
+        [
+            "git",
+            "push",
+            "--force-with-lease",
+            "origin",
+            f"HEAD:refs/heads/{REFRESH_BRANCH}",
+        ],
+        ROOT,
     )
     if push_code != 0:
         print(f"error: push failed\n{push_output}", file=sys.stderr)
@@ -239,31 +299,59 @@ def push_and_open_pr(run, results: list[tuple[str, bool, str]]) -> int:
     body = build_pr_body(results)
 
     list_code, list_output = run(
-        ["gh", "pr", "list", "--head", REFRESH_BRANCH, "--state", "open",
-         "--json", "number", "--jq", ".[0].number // empty"],
+        [
+            "gh",
+            "pr",
+            "list",
+            "--head",
+            REFRESH_BRANCH,
+            "--state",
+            "open",
+            "--json",
+            "number",
+            "--jq",
+            ".[0].number // empty",
+        ],
         ROOT,
     )
     number = list_output.strip() if list_code == 0 else ""
 
     if not number:
         command = [
-            "gh", "pr", "create", "--base", DEFAULT_BRANCH, "--head", REFRESH_BRANCH,
-            "--title", title, "--body", body,
+            "gh",
+            "pr",
+            "create",
+            "--base",
+            DEFAULT_BRANCH,
+            "--head",
+            REFRESH_BRANCH,
+            "--title",
+            title,
+            "--body",
+            body,
         ]
         if any_failed:
             command.append("--draft")
         code, output = run(command, ROOT)
     else:
-        code, output = run(["gh", "pr", "edit", number, "--title", title, "--body", body], ROOT)
+        code, output = run(
+            ["gh", "pr", "edit", number, "--title", title, "--body", body], ROOT
+        )
     if code != 0:
-        print(f"error: opening or updating the pull request failed\n{output}", file=sys.stderr)
+        print(
+            f"error: opening or updating the pull request failed\n{output}",
+            file=sys.stderr,
+        )
     return code
 
 
 def main(argv: list[str] | None = None, *, run=shell) -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
-        "--publish", action="store_true",
+        "--publish",
+        action="store_true",
         help="push automation/directory-refresh and open or update its pull request",
     )
     args = parser.parse_args(argv)

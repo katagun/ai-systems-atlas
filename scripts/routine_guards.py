@@ -14,6 +14,7 @@ Those encode what each queue's records mean — which field a routine may add, a
 belongs to human review — and merging them would let one routine's permission leak into
 the other's queue.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -59,7 +60,8 @@ def unexpected_committed_changes(name_only: str, allowed: Container[str]) -> lis
     leaves `git status` empty while the change rides on the branch the reviewer merges.
     """
     return [
-        line.strip() for line in name_only.splitlines()
+        line.strip()
+        for line in name_only.splitlines()
         if line.strip() and line.strip() not in allowed
     ]
 
@@ -84,7 +86,9 @@ def worktree_text(path: str, worktree: Path) -> str:
     node = target
     while node != worktree:
         if node.is_symlink():
-            raise OSError(f"{path} is a symlink; refusing to read it as trusted content")
+            raise OSError(
+                f"{path} is a symlink; refusing to read it as trusted content"
+            )
         node = node.parent
     return target.read_text(encoding="utf-8")
 
@@ -131,7 +135,11 @@ def prepared_base_ref(
     except (OSError, json.JSONDecodeError):
         return default_from_ref
     sha = recorded.get("sha") if isinstance(recorded, dict) else None
-    return sha if isinstance(sha, str) and BASE_REF_SHA_RE.fullmatch(sha) else default_from_ref
+    return (
+        sha
+        if isinstance(sha, str) and BASE_REF_SHA_RE.fullmatch(sha)
+        else default_from_ref
+    )
 
 
 def replace_refs_problem(run: ShellFn, cwd: Path) -> str | None:
@@ -190,7 +198,10 @@ def render_prompt(repo_prompt: str, root: Path) -> str:
 
 
 def prompt_drift(
-    repo_prompt: str, installed_prompt: str | None, document: str, root: Path | None = None
+    repo_prompt: str,
+    installed_prompt: str | None,
+    document: str,
+    root: Path | None = None,
 ) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs.
 
@@ -207,7 +218,9 @@ def prompt_drift(
     return None
 
 
-def install_prompt(repo_prompt: str, installed_path: Path, root: Path, boundary: Path) -> None:
+def install_prompt(
+    repo_prompt: str, installed_path: Path, root: Path, boundary: Path
+) -> None:
     """Write the reviewed prompt, rendered for `root`, to where the scheduler reads it.
 
     `boundary` is the scheduled-tasks directory. Refuses a symlink at the installed path
@@ -218,11 +231,15 @@ def install_prompt(repo_prompt: str, installed_path: Path, root: Path, boundary:
     docs/OPERATIONS.md.
     """
     if not installed_path.is_relative_to(boundary):
-        raise OSError(f"{installed_path} is not under {boundary}; refusing to install there")
+        raise OSError(
+            f"{installed_path} is not under {boundary}; refusing to install there"
+        )
     node = installed_path
     while True:
         if node.is_symlink():
-            raise OSError(f"{node} is a symlink; refusing to install the routine prompt through it")
+            raise OSError(
+                f"{node} is a symlink; refusing to install the routine prompt through it"
+            )
         if node == boundary:
             break
         node = node.parent

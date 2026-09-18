@@ -13,6 +13,7 @@ the build naming the line, instead of being silently mangled into something the
 author never wrote. An unrecognised input fails closed, as it does everywhere
 else in this repository.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -73,7 +74,9 @@ def _well_formed_hostname(hostname: str) -> bool:
             # Browsers reinterpret several non-canonical integer, octal, and hex
             # forms as IPv4. Accept only the canonical form parsed above.
             return False
-        if len(hostname) > 253 or not all(HOST_LABEL.fullmatch(label) for label in labels):
+        if len(hostname) > 253 or not all(
+            HOST_LABEL.fullmatch(label) for label in labels
+        ):
             return False
         for label in labels:
             if not label.lower().startswith("xn--"):
@@ -128,7 +131,7 @@ def parse_frontmatter(text: str, name: str) -> tuple[dict[str, str], str, int]:
         date.fromisoformat(meta["date"])
     except ValueError:
         raise PostError(f"{name}: date {meta['date']!r} is not a real date") from None
-    return meta, "\n".join(lines[end + 1:]), end + 2
+    return meta, "\n".join(lines[end + 1 :]), end + 2
 
 
 def _validate_link_destination(escaped_destination: str, name: str) -> None:
@@ -136,7 +139,9 @@ def _validate_link_destination(escaped_destination: str, name: str) -> None:
     # ``_inline`` receives HTML-escaped text. One unescape produces the exact
     # attribute value the HTML parser will expose to the browser's URL parser.
     destination = html.unescape(escaped_destination)
-    if any(ord(character) < 0x20 or ord(character) == 0x7F for character in destination):
+    if any(
+        ord(character) < 0x20 or ord(character) == 0x7F for character in destination
+    ):
         raise PostError(f"{name}: a link destination cannot contain control characters")
     if "\\" in destination or destination.startswith("//"):
         raise PostError(f"{name}: a link destination must not be protocol-relative")
@@ -146,7 +151,9 @@ def _validate_link_destination(escaped_destination: str, name: str) -> None:
         hostname = parsed.hostname
         _ = parsed.port  # Validate malformed and out-of-range ports too.
     except ValueError as error:
-        raise PostError(f"{name}: invalid link destination {destination!r}: {error}") from None
+        raise PostError(
+            f"{name}: invalid link destination {destination!r}: {error}"
+        ) from None
 
     if not parsed.scheme:
         if parsed.netloc:
@@ -211,7 +218,9 @@ def render_markdown(body: str, name: str, first_line: int = 1) -> str:
             out.append(f"<ul>{rendered}</ul>")
             items = []
         if quote:
-            out.append(f"<blockquote><p>{_inline(' '.join(quote), name)}</p></blockquote>")
+            out.append(
+                f"<blockquote><p>{_inline(' '.join(quote), name)}</p></blockquote>"
+            )
             quote = []
 
     for offset, line in enumerate(lines):
@@ -242,9 +251,13 @@ def render_markdown(body: str, name: str, first_line: int = 1) -> str:
         elif stripped.startswith("#"):
             level = len(stripped) - len(stripped.lstrip("#"))
             if not 1 <= level <= 6 or not stripped[level:].startswith(" "):
-                raise PostError(f"{name} line {number}: a heading is 1-6 # then a space")
+                raise PostError(
+                    f"{name} line {number}: a heading is 1-6 # then a space"
+                )
             flush()
-            out.append(f"<h{level}>{_inline(stripped[level + 1:].strip(), name)}</h{level}>")
+            out.append(
+                f"<h{level}>{_inline(stripped[level + 1 :].strip(), name)}</h{level}>"
+            )
         elif stripped.startswith("&gt; "):  # `> ` survives escaping as `&gt; `
             quote.append(stripped[5:])
         elif stripped.startswith("- "):
@@ -268,11 +281,13 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
     for path in sorted(directory.glob("*.md")) if directory.exists() else []:
         text = path.read_text(encoding="utf-8")
         meta, body, first_line = parse_frontmatter(text, path.name)
-        posts.append({
-            "slug": slug_for(path.name),
-            "html": render_markdown(body, path.name, first_line),
-            **meta,
-        })
+        posts.append(
+            {
+                "slug": slug_for(path.name),
+                "html": render_markdown(body, path.name, first_line),
+                **meta,
+            }
+        )
     posts.sort(key=lambda post: (post["date"], post["slug"]), reverse=True)
     return posts
 
@@ -280,8 +295,13 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 # The main page's header, reproduced as static markup. Its view tabs are buttons that
 # app.js wires up; here they are links to the same views through the `view` query
 # parameter the app restores on load. The theme control is driven by THEME_SCRIPT.
-VIEWS = (("finder", "Finder"), ("models", "Models"), ("specifications", "Specifications"),
-         ("taxonomy", "Taxonomy"), ("api", "API"))
+VIEWS = (
+    ("finder", "Finder"),
+    ("models", "Models"),
+    ("specifications", "Specifications"),
+    ("taxonomy", "Taxonomy"),
+    ("api", "API"),
+)
 REPOSITORY = "https://github.com/katagun/ai-systems-atlas"
 GITHUB_ICON = (
     '<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 '
@@ -355,7 +375,10 @@ def asset_versions(root: Path) -> dict[str, str]:
 
 def render_header(root: str, blog: str) -> str:
     """The site header for a page whose path to the site root is ``root``."""
-    views = "".join(f'<a class="tab-link" href="{root}?view={view}">{label}</a>' for view, label in VIEWS)
+    views = "".join(
+        f'<a class="tab-link" href="{root}?view={view}">{label}</a>'
+        for view, label in VIEWS
+    )
     return (
         '<a class="skip-link" href="#main">Skip to content</a>\n'
         '<header class="site-header">\n'
@@ -363,7 +386,7 @@ def render_header(root: str, blog: str) -> str:
         f'<span class="wordmark-name">{SITE_NAME}</span>'
         '<span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span>'
         '<span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span>'
-        f'</strong><small>{SITE_TAGLINE}</small></a></div>\n'
+        f"</strong><small>{SITE_TAGLINE}</small></a></div>\n"
         '<nav class="tabs" aria-label="Primary navigation">'
         f'<a class="tab-link" href="{root}">Directory</a>{views}'
         f'<a class="tab-link is-active" aria-current="page" href="{blog}">Blog</a></nav>\n'
@@ -377,12 +400,19 @@ def render_header(root: str, blog: str) -> str:
 
 
 def _document(
-    title: str, description: str, url: str, body: str, root: str, footer: str, versions: dict[str, str]
+    title: str,
+    description: str,
+    url: str,
+    body: str,
+    root: str,
+    footer: str,
+    versions: dict[str, str],
 ) -> str:
     """One page. ``root`` is the relative path back to the site root; ``footer`` its links."""
     blog = "./" if root == "../" else root[3:]
     stylesheets = "\n".join(
-        f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">' for name in ASSETS
+        f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">'
+        for name in ASSETS
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -421,22 +451,33 @@ def byline(post: dict[str, Any]) -> str:
 def render_post_page(post: dict[str, Any], versions: dict[str, str]) -> str:
     body = (
         '<p class="eyebrow">Editorial writing · not a catalog record</p>\n'
-        f'<h1>{html.escape(post["title"])}</h1>\n'
+        f"<h1>{html.escape(post['title'])}</h1>\n"
         f'<p class="lead">{html.escape(post["summary"])}</p>\n'
-        f'{byline(post)}\n'
-        f'{post["html"]}\n'
+        f"{byline(post)}\n"
+        f"{post['html']}\n"
     )
     footer = '<a href="../">All writing</a> · <a href="../../">Browse the directory</a>'
-    return _document(post["title"], post["summary"], post_url(post["slug"]), body, "../../", footer, versions)
+    return _document(
+        post["title"],
+        post["summary"],
+        post_url(post["slug"]),
+        body,
+        "../../",
+        footer,
+        versions,
+    )
 
 
 def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> str:
-    entries = "\n".join(
-        f'<article class="post-card"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
-        f'<p>{html.escape(post["summary"])}</p>'
-        f'{byline(post)}</article>'
-        for post in posts
-    ) or '<p class="lead">Nothing published yet.</p>'
+    entries = (
+        "\n".join(
+            f'<article class="post-card"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
+            f"<p>{html.escape(post['summary'])}</p>"
+            f"{byline(post)}</article>"
+            for post in posts
+        )
+        or '<p class="lead">Nothing published yet.</p>'
+    )
     body = (
         '<p class="eyebrow">Editorial writing · not catalog records</p>\n'
         "<h1>Writing</h1>\n"
@@ -446,13 +487,18 @@ def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> 
     description = "How the AI Systems Atlas is built, and where it has been wrong."
     # The index sits one level shallower than a post, so its relative links differ.
     footer = '<a href="../">Browse the directory</a>'
-    return _document("Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer, versions)
+    return _document(
+        "Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer, versions
+    )
 
 
 def build_pages(root: Path = ROOT) -> dict[str, str]:
     posts = load_posts(root)
     versions = asset_versions(root)
-    pages = {f"{POSTS}/{post['slug']}/index.html": render_post_page(post, versions) for post in posts}
+    pages = {
+        f"{POSTS}/{post['slug']}/index.html": render_post_page(post, versions)
+        for post in posts
+    }
     pages[f"{POSTS}/index.html"] = render_index_page(posts, versions)
     return pages
 
@@ -475,16 +521,28 @@ def main(argv: list[str], root: Path = ROOT) -> int:
     web = root / "web"
     if "--check" in argv:
         problems = [
-            f"web/{path} is missing or stale" for path, content in pages.items()
-            if not (web / path).exists() or (web / path).read_text(encoding="utf-8") != content
+            f"web/{path} is missing or stale"
+            for path, content in pages.items()
+            if not (web / path).exists()
+            or (web / path).read_text(encoding="utf-8") != content
         ]
         built = web / POSTS
         if built.exists():
-            committed = {str(path.relative_to(web)) for path in built.rglob("*") if path.is_file()}
-            problems += [f"web/{path} is not produced by a post" for path in sorted(committed - set(pages))]
+            committed = {
+                str(path.relative_to(web))
+                for path in built.rglob("*")
+                if path.is_file()
+            }
+            problems += [
+                f"web/{path} is not produced by a post"
+                for path in sorted(committed - set(pages))
+            ]
         if problems:
             print("\n".join(problems), file=sys.stderr)
-            print("Run `uv run python scripts/build_blog.py` and commit the result.", file=sys.stderr)
+            print(
+                "Run `uv run python scripts/build_blog.py` and commit the result.",
+                file=sys.stderr,
+            )
             return 1
         print(f"{len(pages)} blog files are up to date.")
         return 0

@@ -23,7 +23,9 @@ class ScriptedRun:
 
     def __call__(self, command, cwd=None, env=None):
         command = list(command)
-        self.calls.append({"command": command, "cwd": cwd, "env": dict(env) if env else None})
+        self.calls.append(
+            {"command": command, "cwd": cwd, "env": dict(env) if env else None}
+        )
         key = tuple(command)
         if key in self.exact:
             return self._resolve(self.exact[key], command, cwd, env)
@@ -49,7 +51,13 @@ ADD_WEB = ("git", "add", "-A", "web")
 ADD_DIRECTORY = ("git", "add", *refresh.STAGED_DIRECTORY_FILES)
 CHECKOUT_BRANCH = ("git", "checkout", "-B", refresh.REFRESH_BRANCH)
 REV_PARSE_SHORT = ("git", "rev-parse", "--short", "HEAD")
-PUSH = ("git", "push", "--force-with-lease", "origin", f"HEAD:refs/heads/{refresh.REFRESH_BRANCH}")
+PUSH = (
+    "git",
+    "push",
+    "--force-with-lease",
+    "origin",
+    f"HEAD:refs/heads/{refresh.REFRESH_BRANCH}",
+)
 PR_LIST = ("gh", "pr", "list")
 
 
@@ -74,7 +82,9 @@ def clean_matching_tree(overrides: dict | None = None) -> dict:
 
 class PreflightTests(unittest.TestCase):
     def test_a_dirty_tree_is_refused(self) -> None:
-        run = ScriptedRun(clean_matching_tree({STATUS: (0, " M directory/projects.json\n")}))
+        run = ScriptedRun(
+            clean_matching_tree({STATUS: (0, " M directory/projects.json\n")})
+        )
         error = refresh.preflight(run)
         self.assertIsNotNone(error)
         self.assertIn("dirty", error)
@@ -115,10 +125,20 @@ class TokenTests(unittest.TestCase):
         token = "gho_secret123"
         refresh.run_generation_steps(run, token)
         refresh.run_checks(run, token)
-        token_calls = [call for call in run.calls if call["env"] and "GITHUB_TOKEN" in call["env"]]
-        token_scripts = {call["command"][-1] for call in token_calls if call["command"][-1].endswith(".py")}
+        token_calls = [
+            call for call in run.calls if call["env"] and "GITHUB_TOKEN" in call["env"]
+        ]
+        token_scripts = {
+            call["command"][-1]
+            for call in token_calls
+            if call["command"][-1].endswith(".py")
+        }
         self.assertEqual(
-            {"scripts/update_directory.py", "scripts/import_models_dev.py", "scripts/check_evidence_links.py"},
+            {
+                "scripts/update_directory.py",
+                "scripts/import_models_dev.py",
+                "scripts/check_evidence_links.py",
+            },
             token_scripts,
         )
         for call in token_calls:
@@ -140,7 +160,9 @@ class GenerationStepsTests(unittest.TestCase):
     def test_steps_run_in_the_documented_order(self) -> None:
         run = ScriptedRun(clean_matching_tree())
         refresh.run_generation_steps(run, None)
-        expected = [list(command) for _name, command, _needs_token in refresh.GENERATION_STEPS]
+        expected = [
+            list(command) for _name, command, _needs_token in refresh.GENERATION_STEPS
+        ]
         self.assertEqual(expected, [call["command"] for call in run.calls])
 
     def test_a_failure_stops_the_run(self) -> None:
@@ -158,7 +180,9 @@ class GenerationStepsTests(unittest.TestCase):
 class ChecksTests(unittest.TestCase):
     def test_all_twelve_checks_run_even_when_one_fails(self) -> None:
         failing = ("uv", "run", "python", "-m", "compileall", "scripts", "tests")
-        run = ScriptedRun(clean_matching_tree({failing: (1, "syntax error"), DIFF_QUIET: (1, "")}))
+        run = ScriptedRun(
+            clean_matching_tree({failing: (1, "syntax error"), DIFF_QUIET: (1, "")})
+        )
         results = refresh.run_checks(run, None)
         self.assertEqual(12, len(results))
         names = [name for name, _ok, _output in results]
@@ -166,11 +190,15 @@ class ChecksTests(unittest.TestCase):
         self.assertIn("generated diff whitespace", names)
         outcomes = dict((name, ok) for name, ok, _output in results)
         self.assertFalse(outcomes["compileall"])
-        self.assertTrue(all(ok for name, ok in outcomes.items() if name != "compileall"))
+        self.assertTrue(
+            all(ok for name, ok in outcomes.items() if name != "compileall")
+        )
 
     def test_main_exits_non_zero_when_a_check_fails(self) -> None:
         failing = ("uv", "run", "python", "scripts/validate_directory.py")
-        run = ScriptedRun(clean_matching_tree({failing: (1, "invalid"), DIFF_QUIET: (1, "")}))
+        run = ScriptedRun(
+            clean_matching_tree({failing: (1, "invalid"), DIFF_QUIET: (1, "")})
+        )
         code = refresh.main([], run=run)
         self.assertNotEqual(0, code)
 
@@ -179,9 +207,15 @@ class StagingTests(unittest.TestCase):
     def test_staged_paths_match_the_explicit_list_exactly(self) -> None:
         run = ScriptedRun(clean_matching_tree())
         refresh.stage_directory_files(run)
-        add_calls = [call["command"] for call in run.calls if call["command"][:2] == ["git", "add"]]
+        add_calls = [
+            call["command"]
+            for call in run.calls
+            if call["command"][:2] == ["git", "add"]
+        ]
         self.assertIn(["git", "add", "-A", "web"], add_calls)
-        directory_calls = [call for call in add_calls if call != ["git", "add", "-A", "web"]]
+        directory_calls = [
+            call for call in add_calls if call != ["git", "add", "-A", "web"]
+        ]
         self.assertEqual(1, len(directory_calls))
         self.assertEqual(list(refresh.STAGED_DIRECTORY_FILES), directory_calls[0][2:])
         self.assertNotIn("directory/hn-signals.json", directory_calls[0])
@@ -210,11 +244,15 @@ class PublishGatingTests(unittest.TestCase):
         # Without --publish, the runner still commits locally.
         self.assertIn(list(CHECKOUT_BRANCH), commands)
 
-    def test_publish_pushes_with_force_with_lease_and_opens_a_pull_request(self) -> None:
-        overrides = clean_matching_tree({
-            DIFF_QUIET: (1, ""),
-            PUSH: (0, ""),
-        })
+    def test_publish_pushes_with_force_with_lease_and_opens_a_pull_request(
+        self,
+    ) -> None:
+        overrides = clean_matching_tree(
+            {
+                DIFF_QUIET: (1, ""),
+                PUSH: (0, ""),
+            }
+        )
         run = ScriptedRun(
             overrides,
             prefixes=[
@@ -226,15 +264,19 @@ class PublishGatingTests(unittest.TestCase):
         self.assertEqual(0, code)
         commands = [call["command"] for call in run.calls]
         self.assertIn(list(PUSH), commands)
-        self.assertTrue(any(command[:3] == ["gh", "pr", "create"] for command in commands))
+        self.assertTrue(
+            any(command[:3] == ["gh", "pr", "create"] for command in commands)
+        )
 
     def test_publish_with_a_failed_check_opens_a_draft_pull_request(self) -> None:
         failing = ("uv", "run", "python", "scripts/validate_directory.py")
-        overrides = clean_matching_tree({
-            failing: (1, "invalid"),
-            DIFF_QUIET: (1, ""),
-            PUSH: (0, ""),
-        })
+        overrides = clean_matching_tree(
+            {
+                failing: (1, "invalid"),
+                DIFF_QUIET: (1, ""),
+                PUSH: (0, ""),
+            }
+        )
         run = ScriptedRun(
             overrides,
             prefixes=[
@@ -244,7 +286,11 @@ class PublishGatingTests(unittest.TestCase):
         )
         code = refresh.main(["--publish"], run=run)
         self.assertNotEqual(0, code)
-        create_calls = [call["command"] for call in run.calls if call["command"][:3] == ["gh", "pr", "create"]]
+        create_calls = [
+            call["command"]
+            for call in run.calls
+            if call["command"][:3] == ["gh", "pr", "create"]
+        ]
         self.assertEqual(1, len(create_calls))
         self.assertIn("--draft", create_calls[0])
 
