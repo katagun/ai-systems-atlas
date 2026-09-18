@@ -409,6 +409,24 @@
       "disposition": "excluded",
       "reason": "Retired April snapshot of the reviewed DeepSeek-V4-Pro line, re-reviewed in place at the 0813 checkpoint; no independent 0423 serving identity ever existed.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/fugu",
+      "disposition": "excluded",
+      "reason": "Dateless moving default routing across undisclosed models with no pinned snapshot, weight repository, or artifact distinct from the Sakana Fugu service behavior.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/fugu-ultra",
+      "disposition": "excluded",
+      "reason": "Moving performance-tier alias resolving to versioned snapshots (v1.0, v1.1, v2.0) with no fixed identity of its own and no downloadable artifact.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/sakana-namazu",
+      "disposition": "excluded",
+      "reason": "Undated alias pointing at the versioned sakana-namazu-v1.0 line with no weight repository or fixed identity of its own.",
+      "decided_at": "2026-09-18"
     }
   ]
 }

@@ -15646,6 +15646,318 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-tencent-hy3",
+      "source_id": "tencent/hy3",
+      "name": "Hy3",
+      "developer": "Tencent",
+      "url": "https://huggingface.co/tencent/Hy3",
+      "description": "Tencent's 295-billion-parameter Mixture-of-Experts release with 21B active parameters, published as Apache-declared open weights with TokenHub API serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Hy3",
+        "description": "Tencent Hy reasoning model for coding, instruction following, and agent tasks",
+        "family": "Hy",
+        "release_date": "2026-07-06",
+        "last_updated": "2026-07-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": 192000,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/tencent/Hy3"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file declares the release licensed under Apache-2.0, matching the model card, HF tag, and July 2026 launch press release. No use restrictions accompany the declaration, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Tencent Hy3 weights as declared in the repository LICENSE file and launch press release",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/tencent/Hy3/blob/a960ebc3da325ba167f069f76c41eb62c9280d22/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the July 2026 Tencent Hy3 release at Hugging Face commit a960ebc3da325ba167f069f76c41eb62c9280d22 (last modified 2026-07-20), together with the hy3 TokenHub API model. The Hy3-preview predecessor, the Hy4 generation, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 295B MoE checkpoint under a declared Apache-2.0 grant with press corroboration",
+        "First-party TokenHub serving under the exact hy3 model ID with 256K context"
+      ],
+      "tradeoffs": [
+        "The license declaration is short-form rather than a full license text in-repo",
+        "Version identity rests on a moving main branch with no immutable tag"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 8.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/tencent/Hy3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Tencent Hy3 launch press release (July 2026)",
+          "url": "https://www.tencent.com/tencent-hunyuan-officially-releases-hy3-advancing-agent-capabilities-and-deeper-product-integration/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/tencent/hy3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-tencent-hy3-preview",
+      "source_id": "tencent/hy3-preview",
+      "name": "Hy3 preview",
+      "developer": "Tencent",
+      "url": "https://huggingface.co/tencent/Hy3-preview",
+      "description": "Tencent's 295-billion-parameter preview release, published as open weights under the geo-fenced Tencent Hy Community License with a retired managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Hy3 preview",
+        "description": "Tencent Hy reasoning model for coding, instruction following, and agent tasks",
+        "family": "Hy",
+        "release_date": "2026-04-20",
+        "last_updated": "2026-04-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/tencent/Hy3-preview"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Tencent-Hy-Community-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the Tencent Hy Community License Agreement dated April 23, 2026, which excludes the European Union, United Kingdom, and South Korea from its territory and gates commercial use above 100 million monthly active users behind a separate license, so the release is source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Tencent-Hy-Community-License",
+          "scope": "Tencent Hy3 preview weights under the in-repository community license",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/tencent/Hy3-preview/blob/549c2b3a0fd5b9a6c6059a9935bf0d59ab69d75a/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 Tencent Hy3 preview release at Hugging Face commit 549c2b3a0fd5b9a6c6059a9935bf0d59ab69d75a, frozen since launch. Its managed API retired with the line superseded by Hy3. The Hy3 successor, the Hy4 generation, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 295B preview checkpoint with its full custom license text in-repo",
+        "Frozen since April 2026 with a clean supersession line to Hy3"
+      ],
+      "tradeoffs": [
+        "Territory exclusion plus a commercial-use gate make this source-available, not open",
+        "The managed API retired, leaving self-operation as the supported path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 4,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.66
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/tencent/Hy3-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Tencent Hy3 preview launch press release (April 2026)",
+          "url": "https://www.tencent.com/tencent-unveils-hy3-preview-model-enhances-agent-capabilities-and-real-world-usability/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/tencent/hy3-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-tencent-hy4-preview",
+      "source_id": "tencent/hy4-preview",
+      "name": "Hy4 preview",
+      "developer": "Tencent",
+      "url": "https://huggingface.co/tencent/Hy4-preview",
+      "description": "Tencent's 770-billion-parameter next-generation preview with 49B active parameters and 1M context, published as Apache-declared open weights with TokenHub API serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Hy4 preview",
+        "description": "A next-generation productivity model with significantly enhanced Agent and complex task execution capabilities.",
+        "family": "Hy",
+        "release_date": "2026-08-28",
+        "last_updated": "2026-08-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1024000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file declares the release licensed under Apache-2.0, matching the model card and August 2026 launch press release. No use restrictions accompany the declaration, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Tencent Hy4 preview weights as declared in the repository LICENSE file and launch press release",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/tencent/Hy4-preview/blob/705d81ee51566a186d645b74c974d642ef2828fe/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the August 2026 Tencent Hy4 preview release at Hugging Face commit 705d81ee51566a186d645b74c974d642ef2828fe (last modified 2026-08-28), a new 770B/49B architecture rather than a Hy3 snapshot, together with the hy4-preview TokenHub API model. Earlier Hy generations and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 770B next-generation checkpoint under a declared Apache-2.0 grant",
+        "First-party TokenHub serving under the exact hy4-preview model ID with 1M context"
+      ],
+      "tradeoffs": [
+        "Self-declared early version with fast-moving commits in its first days",
+        "770B total parameters need cluster-class serving for self-operation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.22
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/tencent/Hy4-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Tencent Hy4 preview launch press release (August 2026)",
+          "url": "https://www.tencent.com/tencent-releases-and-open-sources-tencent-hy4-preview/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/tencent/hy4-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-upstage-solar-pro2",
       "source_id": "upstage/solar-pro2",
       "name": "Solar Pro 2",
