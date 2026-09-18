@@ -13915,6 +13915,807 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-perplexity-sonar",
+      "source_id": "perplexity/sonar",
+      "name": "Sonar",
+      "developer": "Perplexity",
+      "url": "https://docs.perplexity.ai/docs/sonar/models/sonar",
+      "description": "Perplexity's lightweight search release for quick grounded answers with real-time web search, served as the sonar API model with 128K context and no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Sonar",
+        "description": "Fast web-grounded Sonar for current answers, citations, and lightweight retrieval",
+        "family": "sonar",
+        "release_date": "2024-01-01",
+        "last_updated": "2025-09-01",
+        "knowledge_cutoff": "2025-09-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Perplexity provides these models as API services governed by the Perplexity API Terms of Service (January 2026), which grant a non-exclusive, non-sublicensable, non-transferable right to submit inputs and display outputs while Perplexity retains all intellectual property in the models. No weights or model license exist; the API trains on no customer content.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the sonar model with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the sonar search line served through the Perplexity Sonar API, supported until September 27, 2026 with migration to the Agent API. The Pro, Reasoning Pro, and Deep Research siblings, retired Llama-based sonar names, and the Perplexity platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party page pins the model with 128K context, citations, and search grounding",
+        "First-party API with SDKs and OpenAI-compatible access"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this model",
+        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 2,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 9,
+        "overall": 5.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Sonar model documentation with samples",
+          "url": "https://docs.perplexity.ai/docs/sonar/models/sonar",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Perplexity API Terms of Service (January 2026)",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/perplexity/sonar.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-perplexity-sonar-deep-research",
+      "source_id": "perplexity/sonar-deep-research",
+      "name": "Sonar Deep Research",
+      "developer": "Perplexity",
+      "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-deep-research",
+      "description": "Perplexity's exhaustive research release generating cited reports over hundreds of sources, served as the sonar-deep-research API model with 128K context and no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Sonar Deep Research",
+        "description": "Sonar search model for autonomous research and citation-backed long-form reports",
+        "family": "sonar",
+        "release_date": "2025-02-01",
+        "last_updated": "2025-09-01",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Perplexity provides these models as API services governed by the Perplexity API Terms of Service (January 2026), which grant a non-exclusive, non-sublicensable, non-transferable right to submit inputs and display outputs while Perplexity retains all intellectual property in the models. No weights or model license exist; the API trains on no customer content.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the sonar-deep-research model with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the sonar-deep-research line served through the Perplexity Sonar API with asynchronous execution and reasoning effort. Other Sonar siblings and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party page pins the model with citation, search-query, and reasoning billing dimensions",
+        "Asynchronous API with reasoning effort for long research runs"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this model",
+        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 2,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 9,
+        "overall": 5.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Sonar Deep Research model documentation",
+          "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-deep-research",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Perplexity API Terms of Service (January 2026)",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/perplexity/sonar-deep-research.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-perplexity-sonar-pro",
+      "source_id": "perplexity/sonar-pro",
+      "name": "Sonar Pro",
+      "developer": "Perplexity",
+      "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-pro",
+      "description": "Perplexity's advanced search release for complex multi-step questions with deeper retrieval, served as the sonar-pro API model with 200K context and no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Sonar Pro",
+        "description": "Deeper Sonar search model with broader retrieval and stronger synthesis",
+        "family": "sonar-pro",
+        "release_date": "2024-01-01",
+        "last_updated": "2025-09-01",
+        "knowledge_cutoff": "2025-09-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Perplexity provides these models as API services governed by the Perplexity API Terms of Service (January 2026), which grant a non-exclusive, non-sublicensable, non-transferable right to submit inputs and display outputs while Perplexity retains all intellectual property in the models. No weights or model license exist; the API trains on no customer content.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the sonar-pro model with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the sonar-pro search line served through the Perplexity Sonar API, supported until September 27, 2026. The Pro Search mode is a parameter of this model, not a separate release. Other Sonar siblings and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party page pins the model with 200K context and doubled search results",
+        "Pro Search mode and follow-up support on the first-party API"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this model",
+        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 2,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 9,
+        "overall": 5.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Sonar Pro model documentation",
+          "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-pro",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Perplexity API Terms of Service (January 2026)",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/perplexity/sonar-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-perplexity-sonar-reasoning-pro",
+      "source_id": "perplexity/sonar-reasoning-pro",
+      "name": "Sonar Reasoning Pro",
+      "developer": "Perplexity",
+      "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-reasoning-pro",
+      "description": "Perplexity's chain-of-thought reasoning release for complex multi-step tasks, served as the sonar-reasoning-pro API model with 128K context and no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Sonar Reasoning Pro",
+        "description": "Web-grounded Sonar for multi-step research questions that need cited reasoning",
+        "family": "sonar-reasoning",
+        "release_date": "2024-01-01",
+        "last_updated": "2025-09-01",
+        "knowledge_cutoff": "2025-09-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Perplexity provides these models as API services governed by the Perplexity API Terms of Service (January 2026), which grant a non-exclusive, non-sublicensable, non-transferable right to submit inputs and display outputs while Perplexity retains all intellectual property in the models. No weights or model license exist; the API trains on no customer content.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the sonar-reasoning-pro model with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the sonar-reasoning-pro line served through the Perplexity Sonar API, the named successor of the December 2025 deprecated sonar-reasoning model. Other Sonar siblings and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dedicated first-party page pins the model with chain-of-thought reasoning and structured outputs",
+        "Explicit predecessor-deprecation lineage on first-party docs"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this model",
+        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 2,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 9,
+        "overall": 5.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Sonar Reasoning Pro model documentation",
+          "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-reasoning-pro",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Perplexity API Terms of Service (January 2026)",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/perplexity/sonar-reasoning-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-poolside-laguna-m-1",
+      "source_id": "poolside/laguna-m.1",
+      "name": "Laguna M.1",
+      "developer": "Poolside",
+      "url": "https://huggingface.co/poolside/Laguna-M.1",
+      "description": "Poolside's 225-billion-parameter flagship release with 23B active parameters, published as Apache-2.0 open weights with managed API serving.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Laguna M.1",
+        "description": "Poolside's open-weight model for agentic coding and long-horizon work",
+        "family": "laguna",
+        "release_date": "2026-04-28",
+        "last_updated": "2026-06-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE.md file is the verbatim Apache License 2.0 text with no use restrictions attached, so the release is open source. The model card asks that use stay consistent with Poolside's Acceptable Use Policy as companion guidance.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Laguna-M.1 model weights and materials in the official repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/poolside/Laguna-M.1/blob/2bf8a4ab6d2e8e1e0d92a41318532a0fee1640d6/LICENSE.md",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 Laguna M.1 release at Hugging Face commit 2bf8a4ab6d2e8e1e0d92a41318532a0fee1640d6 (last modified 2026-07-14), covering base, BF16, FP8, and NVFP4 variants, together with the poolside/laguna-m.1 API model. Later Laguna generations, the Poolside Chat product, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 225B flagship checkpoint with base, FP8, and NVFP4 variants under Apache-2.0",
+        "First-party inference API with platform key issuance"
+      ],
+      "tradeoffs": [
+        "225B total parameters need multi-GPU serving for self-operation",
+        "Version identity rests on repository commits with base, post-trained, and quant variants to spell out"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/poolside/Laguna-M.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Laguna deeper-dive announcement",
+          "url": "https://poolside.ai/blog/laguna-a-deeper-dive",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/poolside/laguna-m.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-poolside-laguna-s-2-1",
+      "source_id": "poolside/laguna-s-2.1",
+      "name": "Laguna S 2.1",
+      "developer": "Poolside",
+      "url": "https://huggingface.co/poolside/Laguna-S-2.1",
+      "description": "Poolside's 118-billion-parameter release with 8B active parameters and 1M context, published as OpenMDW-1.1 open weights with managed API and third-party hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Laguna S 2.1",
+        "description": "Agentic coding model from Poolside in the XS size class for local deployment",
+        "family": "laguna",
+        "release_date": "2026-07-21",
+        "last_updated": "2026-07-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE.md file is the OpenMDW License Agreement 1.1, which grants dealing in the model materials without restriction and imposes no obligations on outputs, so the release is open source. The model card references Poolside's Acceptable Use Policy as companion guidance.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Laguna-S-2.1 model weights and materials in the official repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/poolside/Laguna-S-2.1/blob/0f573140834b11cfac0c2af97a101a7a69a13e22/LICENSE.md",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the July 2026 Laguna S 2.1 release at Hugging Face commit 0f573140834b11cfac0c2af97a101a7a69a13e22 (last modified 2026-08-19), together with the poolside/laguna-s-2.1 API model and its OpenRouter hosting. Other Laguna generations, the Poolside Chat product, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 118B checkpoint with BF16, FP8, NVFP4, INT4, GGUF, and DFlash variants under OpenMDW-1.1",
+        "First-party API plus exact-model OpenRouter hosting with 1M context"
+      ],
+      "tradeoffs": [
+        "Version identity rests on repository commits with no snapshot versioning",
+        "The OpenMDW identifier is new to the catalog and needs its first review cycle"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 8.1
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/poolside/Laguna-S-2.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page for the exact poolside/laguna-s-2.1 model",
+          "url": "https://openrouter.ai/poolside/laguna-s-2.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/poolside/laguna-s-2.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-poolside-laguna-xs-2-1",
+      "source_id": "poolside/laguna-xs-2.1",
+      "name": "Laguna XS 2.1",
+      "developer": "Poolside",
+      "url": "https://huggingface.co/poolside/Laguna-XS-2.1",
+      "description": "Poolside's 33-billion-parameter efficient release with 3B active parameters for local agentic coding, published as OpenMDW-1.1 open weights with managed API and third-party hosting.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Laguna XS 2.1",
+        "description": "Agentic coding model from Poolside in the XS size class for local deployment",
+        "family": "laguna",
+        "release_date": "2026-07-02",
+        "last_updated": "2026-07-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE.md file is the OpenMDW License Agreement 1.1, byte-identical to the S 2.1 grant, imposing no restrictions or output obligations, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Laguna-XS-2.1 model weights and materials in the official repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/poolside/Laguna-XS-2.1/blob/c5f36269bbdbd3f27fddc9a9f9dbae0cf2cf57db/LICENSE.md",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the June 2026 Laguna XS 2.1 release at Hugging Face commit c5f36269bbdbd3f27fddc9a9f9dbae0cf2cf57db (last modified 2026-08-19), an upgrade of the XS.2 line rather than a snapshot of it, together with its API model and OpenRouter hosting. The XS.2 predecessor, other Laguna generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 33B checkpoint under OpenMDW-1.1, compact enough for high-RAM local machines",
+        "First-party API plus exact-model OpenRouter hosting at 256K context"
+      ],
+      "tradeoffs": [
+        "The upgrade-over-XS.2 positioning must be spelled out so the similar names are not conflated",
+        "Version identity rests on repository commits with no snapshot versioning"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 9,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/poolside/Laguna-XS-2.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page for the exact poolside/laguna-xs-2.1 model",
+          "url": "https://openrouter.ai/poolside/laguna-xs-2.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/poolside/laguna-xs-2.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-poolside-laguna-xs-2",
+      "source_id": "poolside/laguna-xs.2",
+      "name": "Laguna XS.2",
+      "developer": "Poolside",
+      "url": "https://huggingface.co/poolside/Laguna-XS.2",
+      "description": "Poolside's 33-billion-parameter efficient release, published as Apache-2.0 open weights with local runtimes after its API sunset.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Laguna XS.2",
+        "description": "Agentic coding model from Poolside in the XS size class for local deployment",
+        "family": "laguna",
+        "release_date": "2026-04-28",
+        "last_updated": "2026-06-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE.md file is the verbatim Apache License 2.0 text with no use restrictions attached, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Laguna-XS.2 model weights and materials in the official repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/poolside/Laguna-XS.2/blob/69e3f4046616e40fb55ac54e0e2e6accbe5cadfe/LICENSE.md",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the April 2026 Laguna XS.2 release at Hugging Face commit 69e3f4046616e40fb55ac54e0e2e6accbe5cadfe (last modified 2026-07-14). Its API line sunset one week after the XS 2.1 launch. The XS 2.1 successor, other Laguna generations, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 33B checkpoint carrying a verbatim Apache-2.0 license file beside the weights",
+        "One-command Ollama distribution for local operation"
+      ],
+      "tradeoffs": [
+        "The managed API sunset leaves self-operation as the supported path",
+        "Version identity rests on repository commits with no stated retirement posture"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoints",
+          "url": "https://huggingface.co/poolside/Laguna-XS.2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/poolside/laguna-xs.2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-alibaba-qwen2-5-coder-0-5b",
       "source_id": "alibaba/qwen2.5-coder-0.5b",
       "name": "Qwen2.5-Coder-0.5B",

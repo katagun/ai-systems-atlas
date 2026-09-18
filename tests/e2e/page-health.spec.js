@@ -40,6 +40,8 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   expect(dialogOverflow).toBeLessThanOrEqual(0);
   await page.locator("#runtime-dialog .dialog-close").click();
   await page.getByRole("button", { name: "Models", exact: true }).click();
+  // Narrow first: high-scoring new records sort above older ones.
+  await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
   await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
   const modelDialogOverflow = await page.locator("#model-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(modelDialogOverflow).toBeLessThanOrEqual(0);
