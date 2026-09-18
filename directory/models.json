@@ -6034,6 +6034,450 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-deepreinforce-ornith-1-0-35b",
+      "source_id": "deepreinforce/ornith-1.0-35b",
+      "name": "Ornith 1.0 35B",
+      "developer": "DeepReinforce",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-35B",
+      "description": "DeepReinforce's Ornith 1.0 mid-size release, published as MIT-claimed open weights without a license file.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ornith 1.0 35B",
+        "description": "Large coding-reasoning model for agentic software tasks and RL search",
+        "family": "ornith",
+        "release_date": "2026-06-25",
+        "last_updated": "2026-06-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-35B",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://deep-reinforce.com/ornith_1_0.html",
+            "type": "announcement"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-35B"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card frontmatter claims the MIT license with a license link, but no LICENSE file ships in the weight repository, so the grant rests on that declaration pointing at the standard MIT text. No use restrictions accompany the claim.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Ornith-1.0-35B weights as declared on the official model card, pointing at the standard MIT text",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the ornith-ai/Ornith-1.0-35B weight release of June 2026 at Hugging Face commit 5df2ed3f675c7beaa490328cc70bb573b65fb660. Other Ornith generations and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated mid-size checkpoint under a declared MIT grant",
+        "Dated June 2026 release with pinned commit history"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on frontmatter declarations",
+        "No managed API serves this line anywhere"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 4,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 7.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/ornith-ai/Ornith-1.0-35B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepreinforce/ornith-1.0-35b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-deepreinforce-ornith-1-0-397b",
+      "source_id": "deepreinforce/ornith-1.0-397b",
+      "name": "Ornith 1.0 397B",
+      "developer": "DeepReinforce",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-397B",
+      "description": "DeepReinforce's Ornith 1.0 flagship release, published as MIT-claimed open weights without a license file.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ornith 1.0 397B",
+        "description": "Large coding-reasoning model for agentic software tasks and RL search",
+        "family": "ornith",
+        "release_date": "2026-06-25",
+        "last_updated": "2026-06-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://deep-reinforce.com/ornith_1_0.html",
+            "type": "announcement"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B"
+          },
+          {
+            "label": "Hugging Face (FP8)",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B-FP8",
+            "quantization": "fp8"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card frontmatter claims the MIT license with a license link, but no LICENSE file ships in the weight repository, so the grant rests on that declaration pointing at the standard MIT text. No use restrictions accompany the claim.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Ornith-1.0-397B weights as declared on the official model card, pointing at the standard MIT text",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the ornith-ai/Ornith-1.0-397B weight release of June 2026 at Hugging Face commit 5e3e761811e804c295c1d3c0ce68b21da6154209. Other Ornith generations and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated flagship checkpoint under a declared MIT grant",
+        "Dated June 2026 release with pinned commit history"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on frontmatter declarations",
+        "397B total parameters need cluster-class serving with no managed option"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 5,
+        "serving_reach": 4,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 6.72
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/ornith-ai/Ornith-1.0-397B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepreinforce/ornith-1.0-397b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-deepreinforce-ornith-1-0-9b",
+      "source_id": "deepreinforce/ornith-1.0-9b",
+      "name": "Ornith 1.0 9B",
+      "developer": "DeepReinforce",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B",
+      "description": "DeepReinforce's Ornith 1.0 small release, published as MIT-claimed open weights without a license file.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ornith 1.0 9B",
+        "description": "Open coding-reasoning model for repository tasks and self-improving agents",
+        "family": "ornith",
+        "release_date": "2026-06-25",
+        "last_updated": "2026-06-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-9B",
+            "type": "model_card"
+          },
+          {
+            "label": "Announcement",
+            "url": "https://deep-reinforce.com/ornith_1_0.html",
+            "type": "announcement"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-9B"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card frontmatter claims the MIT license with a license link, but no LICENSE file ships in the weight repository, so the grant rests on that declaration pointing at the standard MIT text. No use restrictions accompany the claim.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Ornith-1.0-9B weights as declared on the official model card, pointing at the standard MIT text",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the ornith-ai/Ornith-1.0-9B weight release of June 2026 at Hugging Face commit 83dc1f5e24ef8527af019a6b3bf66ac0f1c2c999. Other Ornith generations and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated small checkpoint under a declared MIT grant, lightest in its generation",
+        "Dated June 2026 release with pinned commit history"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on frontmatter declarations",
+        "No managed API serves this line anywhere"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 4,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 7.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepreinforce/ornith-1.0-9b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-deepreinforce-ornith-1-5-35b-a3b",
+      "source_id": "deepreinforce/ornith-1.5-35b-a3b",
+      "name": "Ornith 1.5 35B A3B",
+      "developer": "DeepReinforce",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
+      "description": "DeepReinforce's Ornith 1.5 mid-size release extending self-improvement to task generation, published as MIT-claimed open weights without a license file.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ornith 1.5 35B A3B",
+        "description": "Mixture-of-experts coding-reasoning model for agentic software tasks, tool use, and image understanding",
+        "family": "ornith",
+        "release_date": "2026-08-18",
+        "last_updated": "2026-08-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
+            "type": "model_card"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card frontmatter claims the MIT license with a license link, but no LICENSE file ships in the weight repository, so the grant rests on that declaration pointing at the standard MIT text. No use restrictions accompany the claim.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Ornith-1.5-35B-A3B weights as declared on the official model card, pointing at the standard MIT text",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the ornith-ai/Ornith-1.5-35B-A3B weight release of August 2026 at Hugging Face commit 10fbf86fed7ecee4a061f8b499a618f46001cac1, a new generation rather than a 1.0 snapshot. Other Ornith generations and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated mid-size checkpoint under a declared MIT grant with GGUF, MLX, and NVFP4 variants",
+        "Dated August 2026 release with dedicated methods announcement"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships beside the weights; the grant rests on frontmatter declarations",
+        "No managed API serves this line anywhere"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 4,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 7.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepreinforce/ornith-1.5-35b-a3b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-deepseek-deepseek-ocr-2",
       "source_id": "deepseek/deepseek-ocr-2",
       "name": "DeepSeek OCR 2",
