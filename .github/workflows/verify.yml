@@ -72,7 +72,7 @@ jobs:
       - name: Run browser end-to-end tests
         run: npm run test:e2e
 
-  secrets:
+  secret-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
