@@ -71,6 +71,8 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 | `stars_verified_at` | Automation | `stars` was observed on this date |
 | `generated_at` | Automation/editor | The published project document was last regenerated |
 | `trust.verified_at` | Human reviewer | The trust record's properties and findings were reviewed on this date; never automated |
+| `excluded_at` (exclusion) | Human reviewer | The exclusion decision was first recorded on this date |
+| `verified_at` (exclusion) | Human reviewer | The exclusion reason was last re-checked against current sources on this date; never automated |
 
 Automation must never update `verified_at`.
 
@@ -85,6 +87,10 @@ Each project has one evidence record keyed by `project_id`. Its `items` cover ev
 - web terms record an authoritative `url` and `verified_at`, with no claim of immutability.
 
 The evidence set may include multiple licenses for one repository. Blob identity proves content, not scope; reviewers must inspect path maps, package manifests, and relevant terms.
+
+## Exclusion record
+
+`exclusions.json` is the published record of reviewed scope-boundary decisions. Its envelope is `{"generated_at": <ISO date>, "entries": [...]}` and each entry carries exactly `name`, `repo` (owner/name or `null`), `reason`, `useful_lesson`, `excluded_at`, `verified_at`, and an optional first-party `url` for a product without a canonical repository. `excluded_at` is the date the decision was first recorded and never moves; `verified_at` is the date a human last re-read the reason against the repository or product as it stands and is bumped by every re-review, whether or not the decision changed. Validation requires both as ISO dates with `verified_at` no earlier than `excluded_at`. An entry that no longer holds leaves this file for `candidates.json`, or for `packs.json` after the complete pack review, in the same change; a repository never appears in two of `projects.json`, `packs.json`, `candidates.json`, and `exclusions.json`.
 
 ## Review queues
 

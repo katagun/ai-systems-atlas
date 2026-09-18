@@ -216,8 +216,8 @@ most once before making any request.
 
 Then, per candidate:
 
-- **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion and remove the
-  candidate in the same change. The `triage` block is removed with the candidate; nothing
+- **Accepting `out_of_scope`:** follow `CURATION.md` — write the exclusion, with today's
+  date as both `excluded_at` and `verified_at`, and remove the candidate in the same change. The `triage` block is removed with the candidate; nothing
   separate needs deleting.
 - **Accepting `held`:** keep the candidate, keep its `triage.held_by`, and record the
   decision in `BACKLOG.md` so the open question stays visible outside the queue.
@@ -328,7 +328,8 @@ Then, per signal:
   describes a system the Atlas should carry, and, if so, create the candidate and carry it
   through review like any other discovery.
 - **Accepting `out_of_scope`:** the verdict proposes an exclusion; it is not one. Write the
-  exclusion in `directory/exclusions.json` following `CURATION.md`. When the rejected page
+  exclusion in `directory/exclusions.json` following `CURATION.md`, dating `excluded_at` and
+  `verified_at` to the day you decide it. When the rejected page
   has no GitHub repository — the ordinary case for an attention source — set the
   exclusion's optional `url` to the signal's `url`. The weekly discovery refresh folds
   every exclusion `url` into its known-URL set; without it, the same page can reappear as
