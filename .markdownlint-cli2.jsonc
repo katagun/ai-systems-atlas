@@ -24,5 +24,5 @@
     "MD028": false,
     "MD038": false
   },
-  "globs": ["**/*.md", "!node_modules/**", "!web/records/**", "!docs/superpowers/**", "!test-results/**", "!playwright-report/**"],
+  "globs": ["**/*.md", "!**/node_modules/**", "!.claude/worktrees/**", "!web/records/**", "!docs/superpowers/**", "!test-results/**", "!playwright-report/**"],
 }
