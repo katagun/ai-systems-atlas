@@ -5522,6 +5522,101 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-deepseek-deepseek-ocr-2",
+      "source_id": "deepseek/deepseek-ocr-2",
+      "name": "DeepSeek OCR 2",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-OCR-2",
+      "description": "DeepSeek's 3-billion-parameter OCR release mapping document images to markdown, published as Apache-2.0 weights with no managed API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "DeepSeek OCR 2",
+        "description": "High-accuracy OCR model for extracting text from documents, screenshots, receipts, and natural scenes",
+        "family": null,
+        "release_date": "2026-01-27",
+        "last_updated": "2026-01-27",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE.txt file is the verbatim Apache License 2.0 text, appendix completed as Copyright 2023 DeepSeek, with no use restrictions attached. No separate model-license gate was found, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "DeepSeek-OCR-2 model weights and code in the official repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-OCR-2/blob/aaa02f3811945a91062062994c5c4a3f4c0af2b0/LICENSE.txt",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the deepseek-ai/DeepSeek-OCR-2 weight release of January 2026 at Hugging Face commit aaa02f3811945a91062062994c5c4a3f4c0af2b0 (last modified 2026-02-03), with image and text input and text output. Other DeepSeek lines and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 3B checkpoint carrying a verbatim Apache-2.0 license file beside the weights",
+        "Single-file weights with tokenizer and modeling code for document OCR"
+      ],
+      "tradeoffs": [
+        "No managed API serves this release and no inference provider deploys it",
+        "No output-limit statement accompanies the 8K native context"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-OCR-2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepseek/deepseek-ocr-2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-deepseek-deepseek-v3-2",
       "source_id": "deepseek/deepseek-v3.2",
       "name": "DeepSeek V3.2",
@@ -5737,6 +5832,101 @@
       ],
       "metadata_verified_at": "2026-09-12",
       "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-deepseek-deepseek-v4-flash-vision-exp",
+      "source_id": "deepseek/deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek V4 Flash Vision Exp",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "description": "DeepSeek's 305-billion-parameter experimental multimodal release with image input, published as MIT weights with a retired managed API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "DeepSeek V4 Flash Vision Exp",
+        "description": "Experimental multimodal DeepSeek V4 Flash model for image understanding, coding, and agentic work",
+        "family": "deepseek-flash",
+        "release_date": "2026-08-21",
+        "last_updated": "2026-08-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 384000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the verbatim MIT text, appendix completed as Copyright 2023 DeepSeek, with no use restrictions attached, so the release is open source.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "DeepSeek-V4-Flash-Vision-Exp model weights under the repository MIT license",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp/blob/6821d6ad3681a4b137b066b76094fa82ebd0a380/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the deepseek-ai/DeepSeek-V4-Flash-Vision-Exp weight release of August 2026 at Hugging Face commit 6821d6ad3681a4b137b066b76094fa82ebd0a380 (last modified 2026-09-01), a genuinely new multimodal line rather than a snapshot of the reviewed text-only Flash-0731 record. Its deepseek-v4-flash-vision-exp API name retired on September 10, 2026 routing to V4.1 Flash. The Flash-0731 line, other V4 lines, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 305B multimodal checkpoint carrying a verbatim MIT license file beside the weights",
+        "Dated August 2026 release with explicitly documented retirement and routing"
+      ],
+      "tradeoffs": [
+        "The managed API retired after three weeks, leaving self-operation as the supported path",
+        "The Exp tag leaves the support window unclear"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 10,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.38
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepseek/deepseek-v4-flash-vision-exp.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-deepseek-deepseek-v4-pro",
@@ -5967,6 +6157,113 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-deepseek-deepseek-r1-distill-qwen-32b",
+      "source_id": "deepseek/deepseek-r1-distill-qwen-32b",
+      "name": "DeepSeek-R1-Distill-Qwen-32B",
+      "developer": "DeepSeek",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+      "description": "DeepSeek's 32-billion-parameter R1 reasoning distill of Qwen2.5-32B, published as MIT weights with Qwen Apache provenance and no managed API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "DeepSeek-R1-Distill-Qwen-32B",
+        "description": "R1 reasoning distilled into Qwen 2.5 32B for efficient open-weight step-by-step problem solving",
+        "family": "deepseek-thinking",
+        "release_date": "2025-01-20",
+        "last_updated": "2025-01-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the MIT text stating the model weights are licensed under it; the card discloses the Qwen2.5 Apache-2.0 upstream the distill was finetuned from. Both grants are permissive with no use restrictions, so the release is open source with both provenances recorded.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "DeepSeek-R1-Distill-Qwen-32B model weights under the repository MIT license",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B/blob/711ad2ea6aa40cfca18895e8aca02ab92df1a746/LICENSE",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Qwen2.5 upstream provenance disclosed on the official model card",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the deepseek-ai/DeepSeek-R1-Distill-Qwen-32B weight release of January 2025 at Hugging Face commit 711ad2ea6aa40cfca18895e8aca02ab92df1a746 (last modified 2025-02-24). The full R1 line served under deepseek-reasoner, sibling distills of other sizes, and community quantizations remain separate boundaries.",
+      "strengths": [
+        "Ungated 32B reasoning distill with explicit MIT weights scope plus disclosed Qwen provenance",
+        "Standard dense architecture deployable like Qwen and Llama models"
+      ],
+      "tradeoffs": [
+        "No managed API ever served the distill lines; only the full R1 reached the API",
+        "Single release commit with the superseding R1-0528 lineage living elsewhere"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 8,
+        "overall": 7.62
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card and checkpoint",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/deepseek/deepseek-r1-distill-qwen-32b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-deepseek-deepseek-v3",
