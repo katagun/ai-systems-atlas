@@ -38,6 +38,7 @@ const RECORD_MARKS = {
   devin: "lobe:devin",
   "devin-desktop": "lobe:devin",
   dify: "lobe:dify",
+  fx: "lobe:vercel",
   "gemini-apps": "lobe:gemini",
   "gemini-cli": "lobe:geminicli",
   "gemini-enterprise-agent-platform": "lobe:gemini",

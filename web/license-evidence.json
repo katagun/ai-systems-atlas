@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-13",
+  "verified_at": "2026-09-17",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -72,6 +72,21 @@
           "kind": "web_terms",
           "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
           "verified_at": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "project_id": "fx",
+      "repo": "vercel-labs/fx",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository, including the fx binary sources and the libfx SDK package",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vercel-labs/fx/blob/main/LICENSE",
+          "blob_sha": "9b73ea8111a4d1f17e4afffb93e867401c7be597",
+          "immutable_url": "https://api.github.com/repos/vercel-labs/fx/git/blobs/9b73ea8111a4d1f17e4afffb93e867401c7be597"
         }
       ]
     },
