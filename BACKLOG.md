@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-first models.dev queue batch: Gemini flash lines (`google/gemini-2.5-flash-lite`, `gemini-2.5-computer-use-preview-10-2025`, `gemini-3.1-flash-lite`, `gemini-3.1-flash-lite-preview`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.6-flash`, `gemini-3.7-flash`). All eight are API-only under the existing Gemini API terms; the 2.5 lines are retired or deprecated and the 3.x lines are active. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The live, transcribe, translate, embedding, robotics, and music lines stay queued for later.
+- [ ] Curate the thirty-second models.dev queue batch: Google special-purpose lines (`google/gemini-3.1-flash-live-preview`, `gemini-3.5-live-translate-preview`, `gemini-3.5-transcribe-live`, `gemini-embedding-001`, `gemini-embedding-2`, `gemini-robotics-er-1.6-preview`, `lyria-3-clip-preview`, `lyria-3-pro-preview`). All are API-only under the existing Gemini API terms; the live, translate, transcribe, embedding, robotics, and music lines need eligibility and boundary care. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The NVIDIA and OpenAI clusters stay queued for later.
 
 ### Reader experience
 
