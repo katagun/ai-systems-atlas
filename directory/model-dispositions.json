@@ -427,6 +427,24 @@
       "disposition": "excluded",
       "reason": "Undated alias pointing at the versioned sakana-namazu-v1.0 line with no weight repository or fixed identity of its own.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepreinforce/ornith-1.0-31b",
+      "disposition": "held",
+      "reason": "Announced name with no weight repository, commit, license, or dates located first-party; held until DeepReinforce publishes reviewable artifacts.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sarvam/sarvam-105b",
+      "disposition": "held",
+      "reason": "Fixed release with published weights but no LICENSE text; Apache-2.0 exists only as tag and prose. Held until Sarvam publishes governing terms.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sarvam/sarvam-30b",
+      "disposition": "held",
+      "reason": "Fixed release with published weights but no LICENSE text, and its managed API is deprecated; held until Sarvam publishes governing terms.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
