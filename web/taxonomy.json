@@ -404,6 +404,7 @@
     {"id": "LicenseRef-Alibaba-Model-Studio-Agreement", "name": "Alibaba Cloud Model Studio Service Agreement", "kind": "proprietary"},
     {"id": "LicenseRef-Anthropic-Commercial-Terms", "name": "Anthropic Commercial Terms of Service", "kind": "proprietary"},
     {"id": "LicenseRef-Gemini-API-Terms", "name": "Gemini API Additional Terms of Service", "kind": "proprietary"},
+    {"id": "LicenseRef-Meta-Model-API-Terms", "name": "Meta Model API Terms of Service", "kind": "proprietary"},
     {"id": "LicenseRef-xAI-Enterprise-Terms", "name": "xAI Enterprise Terms of Service", "kind": "proprietary"},
     {"id": "LicenseRef-xAI-AUP", "name": "xAI Acceptable Use Policy", "kind": "proprietary"},
     {"id": "LicenseRef-W3C-Software-Document", "name": "W3C Software and Document License", "kind": "open_content"},

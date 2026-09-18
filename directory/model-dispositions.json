@@ -445,6 +445,12 @@
       "disposition": "held",
       "reason": "Fixed release with published weights but no LICENSE text, and its managed API is deprecated; held until Sarvam publishes governing terms.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "xai/grok-4.1-fast-reasoning",
+      "disposition": "held",
+      "reason": "No first-party model page in xAI's catalogue, so no authoritative identity or boundary can be established. Documented replacement Grok 4.6 is reviewed. Held in case first-party documentation appears.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
