@@ -3366,6 +3366,21 @@
           "immutable_url": "https://api.github.com/repos/Gentleman-Programming/engram/git/blobs/5fac9d86f341b8b16cd2bbf6f76a503d9cf26ac8"
         }
       ]
+    },
+    {
+      "project_id": "superpowers",
+      "repo": "obra/superpowers",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the one licence path in the tree, and every plugin manifest that declares terms declares MIT",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/obra/superpowers/blob/main/LICENSE",
+          "blob_sha": "abf0390320aa14406af7a520b9b0739fdda9bf08",
+          "immutable_url": "https://api.github.com/repos/obra/superpowers/git/blobs/abf0390320aa14406af7a520b9b0739fdda9bf08"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-13"

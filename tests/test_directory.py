@@ -719,9 +719,10 @@ class DirectoryTests(unittest.TestCase):
     def test_packs_are_a_separate_unscored_collection(self) -> None:
         records = self.packs["packs"]
         project_repos = {p["repo"].lower() for p in self.document["projects"] if p.get("repo")}
-        # superpowers and obsidian-claude-pkm are absent by review: both ship code that runs at
-        # runtime — a browser companion server with a state directory, and vault hooks that commit
-        # after every edit — so boundary test 4 sends them to ADR 031 rather than to this collection.
+        # superpowers and obsidian-claude-pkm are absent by review: boundary test 4 sent both to
+        # ADR 031, which published superpowers as a scored coding-agent workflow on its
+        # brainstorming companion server and excluded obsidian-claude-pkm, whose installed scripts
+        # only record and whose deny list is host configuration.
         expected = {"claude-code-tresor", "agent-toolkit", "buildwithclaude", "second-brain-starter"}
         self.assertLessEqual(expected, {record["id"] for record in records})
         for record in records:

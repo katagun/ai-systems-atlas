@@ -11137,6 +11137,83 @@
       ]
     },
     {
+      "id": "superpowers",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Superpowers",
+      "repo": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "A skills library a coding agent installs, carrying one pipeline from brainstorming through planning, test-driven implementation, subagent execution, and review, with a companion server the brainstorming skill runs to put screens in the user's browser.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "Brainstorm session directories under `<project>/.superpowers/brainstorm/` that the pack's own server maintains — screen HTML, an events file of the reader's browser selections, and the port, token, and process files it reads back on restart — plus the skill documents under `skills/` and the plan, task-brief, review-package, and ledger Markdown the host agent writes",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "multi_agent",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "partial",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 288145,
+      "stars_verified_at": "2026-09-18",
+      "historical_stars": null,
+      "current_repo_note": "The record rests on `skills/brainstorming/scripts/server.cjs`, the one program this pack runs during a session: a zero-dependency HTTP and WebSocket server the brainstorming skill tells the host to start, which serves and live-reloads screens, opens the user's browser through `child_process.execFile`, and collects the reader's selections. The port, token, process, and instance-id files under `.superpowers/brainstorm/` that the server and `stop-server.sh` read back are operational plumbing for that server, not a memory the pack keeps. The session hook and the OpenCode, Pi, and Hermes plugins register the skills directory and print the pack's own `using-superpowers` document, which is distribution machinery rather than operation.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 6.5,
+        "autonomy": 7.0,
+        "human_control": 8.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 8.5,
+        "maturity": 8.0,
+        "overall": 7.44
+      },
+      "strengths": [
+        "The brainstorming skill ships a program rather than an instruction: `skills/brainstorming/scripts/server.cjs` is a zero-dependency HTTP and WebSocket server that serves and live-reloads generated screens, launches the user's browser itself, and records the selections a reader makes between the host agent's turns",
+        "Fourteen skill directories carry one pipeline — brainstorm, plan, test-driven implementation, subagent execution, code review, finish the branch — with named gates between the steps instead of a loose collection of prompts",
+        "One skill set reaches many hosts: manifests ship for Claude Code, Codex, Cursor, Devin, Kimi, Gemini, OpenCode, Pi, and Hermes, the package declares no runtime dependencies, and every skill is Markdown a reader can open and edit before installing"
+      ],
+      "weaknesses": [
+        "The companion server is optional and narrow: the brainstorming skill asks the user before starting it, so most sessions run this pack as documents alone",
+        "Most of the repository is instruction documents the host agent executes, so delivery outcomes belong to whichever coding agent a reader points it at rather than to this pack",
+        "The subagent-driven-development ledger the skills call the workflow's memory is Markdown the host agent writes and re-reads; the shipped script only creates its directory and a `.gitignore`",
+        "The served screen hot-links a brand image from a third-party origin unless `SUPERPOWERS_DISABLE_TELEMETRY` or a related variable is set, and the server's own code calls that request telemetry"
+      ],
+      "why_it_matters": "Shows where a skills pack stops being documentation: the brainstorming companion is a server the pack runs and a browser it opens, work no host agent performs on its own, while the rest of the repository remains prose a host executes.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "swarmclaw",
       "system_family": "agent_system",
       "score_profile": "agent",
