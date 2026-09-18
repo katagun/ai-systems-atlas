@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-16",
+  "updated_at": "2026-09-18",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -373,6 +373,12 @@
       "disposition": "held",
       "reason": "No weight-scope license document in the Hugging Face repository (badge only); the code-repo Apache appendix is an uncompleted template that does not cover the weights. Held until Qwen publishes governing terms.",
       "decided_at": "2026-09-16"
+    },
+    {
+      "source_id": "xiaomi/mimo-v2.5-pro-ultraspeed",
+      "disposition": "excluded",
+      "reason": "API-only limited-time experience mode of the reviewed MiMo-V2.5-Pro line with no weight repository, license, or fixed release identity of its own; the underlying artifact is the FP4-DFlash checkpoint.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
