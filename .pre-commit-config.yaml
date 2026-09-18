@@ -36,13 +36,18 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=1000]
 
-  # Secrets on staged changes (fast). The full-history `gitleaks detect` scan
-  # runs in CI; known-safe test fixtures live in .gitleaks.toml.
+  # Secrets, scanned identically on commit and in CI: a full-history
+  # `gitleaks git` scan (seconds at this repo size) rather than a staged-only
+  # scan, so the local gate and the verify.yml gate can never disagree.
+  # The entry overrides the hook manifest (whose `--pre-commit --staged`
+  # default would be a no-op under `run --all-files` in CI).
+  # Known-safe test fixtures live in .gitleaks.toml, never inline.
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1
     hooks:
       - id: gitleaks
-        args: [protect, --staged, --redact, --verbose, --config, .gitleaks.toml]
+        entry: gitleaks git --redact --verbose
+        args: [--config, .gitleaks.toml]
 
   # Python lint + format, pinned to the ruff in the pyproject.toml dev group.
   # types_or is narrowed to Python sources on purpose: ruff would otherwise

@@ -23,6 +23,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Review dependency changes
         if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
@@ -71,19 +72,3 @@ jobs:
         run: uv run python scripts/build_blog.py --check
       - name: Run browser end-to-end tests
         run: npm run test:e2e
-
-  secret-scan:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Scan history for secrets
-        uses: gitleaks/gitleaks-action@1938557f6a58837331b99822ab17b8e536e7bef9 # v2.3.0
-        with:
-          args: detect --source . --config .gitleaks.toml --redact --verbose
