@@ -397,6 +397,18 @@
       "disposition": "held",
       "reason": "Dated agent-optimized API variant with a platform table row but no weight repository, license text, or snapshot definition; held until StepFun publishes reviewable artifacts or terms.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepseek/deepseek-v4-flash",
+      "disposition": "excluded",
+      "reason": "Preview checkpoint superseded by the reviewed DeepSeek-V4-Flash-0731 official release on the same line; the deepseek-v4-flash API name is retired and routes to V4.1 Flash.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepseek/deepseek-v4-pro-0423",
+      "disposition": "excluded",
+      "reason": "Retired April snapshot of the reviewed DeepSeek-V4-Pro line, re-reviewed in place at the 0813 checkpoint; no independent 0423 serving identity ever existed.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
