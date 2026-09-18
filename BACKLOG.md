@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-second models.dev queue batch: Google special-purpose lines (`google/gemini-3.1-flash-live-preview`, `gemini-3.5-live-translate-preview`, `gemini-3.5-transcribe-live`, `gemini-embedding-001`, `gemini-embedding-2`, `gemini-robotics-er-1.6-preview`, `lyria-3-clip-preview`, `lyria-3-pro-preview`). All are API-only under the existing Gemini API terms; the live, translate, transcribe, embedding, robotics, and music lines need eligibility and boundary care. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The NVIDIA and OpenAI clusters stay queued for later.
+- [ ] Curate the thirty-third models.dev queue batch: Nemotron open weights (`nvidia/llama-3.1-nemotron-70b-instruct`, `llama-3.1-nemotron-ultra-253b`, `llama-3.3-nemotron-super-49b-v1`, `llama-3.3-nemotron-super-49b-v1.5`, `mistral-nemotron`, `nemotron-mini-4b-instruct`, `nemotron-nano-9b-v2`, `nemotron-nano-12b-v2-vl`). All are open-weight releases under the existing NVIDIA Nemotron Open Model License. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Nemotron 3.x and special-purpose lines stay queued for later.
 
 ### Reader experience
 
