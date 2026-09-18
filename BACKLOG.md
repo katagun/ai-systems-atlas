@@ -30,6 +30,10 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 - [ ] Validate the numeric snapshot in [`docs/COVERAGE.md`](docs/COVERAGE.md) against the canonical files so count drift fails loudly; keep editorial coverage-signal review a separate human task.
 - [ ] Disable administrator bypass for the `github-pages` environment in GitHub's UI; no supported API mutation exists.
 - [ ] Bring the blocking boot payload back under the 60 KB check in [`docs/WEB.md`](docs/WEB.md). It measured 66.8 KB on 2026-09-16 before the Agent packs collection and 68.3 KB after; `app/systems.json` (24.0 KB) and `app/models.json` (19.0 KB) carry most of it, so look first for a detail-only field that reached `BOOT_FIELDS` and at source-catalog growth.
+- [ ] Add a pack case to `tests/e2e/share-pages.spec.js` and to manual check 20's Copy link round trip in [`docs/WEB.md`](docs/WEB.md); nothing automated opened a rendered pack share page, which is how a duplicated repository link survived until the whole-branch review of [#208](https://github.com/katagun/ai-systems-atlas/pull/208).
+- [ ] Remove the callerless `activateView` aliases (`inference-services`, `local-runtimes`, `agent-packs`) in `web/app.js` together, or give them a caller; the branch is a nested ternary that grows with every collection and `VIEW_IDS` never admits any of them.
+- [ ] Reconcile `SEARCH_FIELDS["packs"]` in `scripts/build_web_payload.py` with `PACK_VIEW.searchFields` in `web/app-core.js`: the comment says they match exactly, but the index adds `installs` and `not_a_system`, and the latter's boilerplate ("owns no state") matches across every pack. Decide whether `not_a_system` belongs in search at all.
+- [ ] Decide whether the published `packs.json` endpoint gets a `data-versions` stamp like the other published files in `scripts/build_asset_version.mjs`; no page fetches it today, so this is symmetry, not a cache bug.
 
 ### Editorial and taxonomy decisions
 
@@ -46,6 +50,8 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 - [ ] Add a manual model-candidate path that preserves the pinned-source invariants, then review individual Liquid AI LFM releases under [ADR 025](docs/adr/025-model-releases-are-independent-curated-records.md). Do not publish a lab umbrella or score quality, benchmarks, or parameter counts.
 - [ ] Decide whether the publishing party belongs among [ADR 020](docs/adr/020-derivative-records-turn-on-operational-boundary.md)'s operational-boundary fields. Brief a skeptic before drafting; do not fall back to repository lineage.
 - [ ] Decide whether SeekrFlow's named product boundary supports a separate inference-service record. A price-page component is insufficient unless first-party evidence establishes a service boundary distinct from the published agent runtime.
+- [ ] Settle `second-brain-starter`'s type in its own prose: its `description` reads like a skills bundle while `pack_type` is `vault_bundle`; one clause in `not_a_system` naming the memory templates (SOUL, MEMORY, HEARTBEAT, USER, `daily/`) as the vault the skill maintains would stop the next reviewer reopening it.
+- [ ] Widen `agent-toolkit`'s `hosts` beyond Claude Code only when its repository documents an install into Codex or Cursor rather than a compatibility sentence about `npx skills add`; pin that documentation as evidence when it appears.
 
 ### Coverage batches
 
@@ -71,6 +77,8 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 - [ ] Show related records and previous/next navigation inside detail dialogs using existing family, role, and successor data.
 - [ ] Surface local-runtime GitHub stars as a card footer signal and sort option; the canonical data and updater already carry `stars` and `stars_verified_at`. Keep it out of card badges: the "Card badges" contract in [`docs/WEB.md`](docs/WEB.md) excludes automated signals. Runtime card footers currently print model formats, so decide what the stars count displaces, as system cards already show stars there.
 - [ ] Stop card-badge definitions from being announced twice. Each badge carries its definition in both visually hidden text and a `title`, and Chromium exposes the `title` as a description that some screen readers read again. Keep one source of the definition for assistive technology while pointer users still get the tooltip, and cover it with the badge Playwright spec.
+- [ ] Stop share-page eyebrows repeating the collection label (`Agent pack · Agent pack · Vault bundle`, and the same for inference services, local runtimes, and models): `render_page` already prefixes `COLLECTION_LABELS[kind]`, so drop the hard-coded prefix from each `_facts_for` branch in `scripts/build_share_pages.py`.
+- [ ] Cap or drop the `installs` fact on pack share pages; `claude-code-tresor`'s is a paragraph of roughly 1.5 KB in one `<dd>`, and the design listed steward, hosts, install mechanism, and licences as the share-page facts.
 
 ## Watching
 
