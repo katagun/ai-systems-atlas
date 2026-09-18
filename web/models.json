@@ -3366,6 +3366,588 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-bytedance-seed-seed-2-0-code",
+      "source_id": "bytedance-seed/seed-2.0-code",
+      "name": "Seed 2.0 Code",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+      "description": "ByteDance's dedicated Seed 2.0 coding release served through the Doubao app, TRAE, and the Volcano Engine API with no public weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.0 Code",
+        "description": "ByteDance Seed coding model for multimodal software engineering and long-running agents",
+        "family": "seed",
+        "release_date": "2026-02-14",
+        "last_updated": "2026-02-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.0 Code line with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the February 2026 Seed 2.0 Code line served as Doubao-Seed-2.0-Code through TRAE and the Volcano Engine API. The Pro, Lite, and Mini siblings, later Seed generations, and all three platforms themselves are separate boundaries.",
+      "strengths": [
+        "Dated February 2026 launch pins the line with an exact TRAE model entry",
+        "Doubao app, TRAE, and full-series Volcano Engine API serving"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.0 launch announcement (February 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official API cookbook repository (code samples only)",
+          "url": "https://github.com/ByteDance-Seed/Seed2.0",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.0-code.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-2-0-lite",
+      "source_id": "bytedance-seed/seed-2.0-lite",
+      "name": "Seed 2.0 Lite",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+      "description": "ByteDance's omni-modal Seed 2.0 Lite release with unified text, image, video, and audio understanding, served through the Volcano Engine API with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.0 Lite",
+        "description": "Cost-efficient ByteDance Seed 2.0 model for production chat, analysis, and structured generation",
+        "family": "seed",
+        "release_date": "2026-02-14",
+        "last_updated": "2026-02-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.0 Lite line with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the February 2026 Seed 2.0 Lite line, upgraded end of April 2026 with audio input, served through the Volcano Engine API. The Pro, Mini, and Code siblings, later Seed generations, and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dated snapshots (0215, 0428) document the line's April omni-modal upgrade",
+        "Unified text, image, video, and audio understanding on first-party endpoints"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.0 launch announcement (February 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.0-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-2-0-mini",
+      "source_id": "bytedance-seed/seed-2.0-mini",
+      "name": "Seed 2.0 Mini",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+      "description": "ByteDance's throughput-optimized Seed 2.0 Mini release for high-concurrency workloads, served through the Volcano Engine API with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.0 Mini",
+        "description": "Lightweight ByteDance Seed 2.0 model for low-latency multimodal reasoning and high-volume tasks",
+        "family": "seed",
+        "release_date": "2026-02-14",
+        "last_updated": "2026-02-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.0 Mini line with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the February 2026 Seed 2.0 Mini line served through the Volcano Engine API. The Pro, Lite, and Code siblings, later Seed generations, and the platform itself are separate boundaries.",
+      "strengths": [
+        "Dated February 2026 launch pins the line with a dated 0215 deployment",
+        "Throughput-optimized serving for high-concurrency workloads"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.0 launch announcement (February 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.0-mini.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-2-0-pro",
+      "source_id": "bytedance-seed/seed-2.0-pro",
+      "name": "Seed 2.0 Pro",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+      "description": "ByteDance's Seed 2.0 flagship line for agentic work, served through Volcano Engine, BytePlus, Doubao, and TRAE with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.0 Pro",
+        "description": "Flagship ByteDance Seed 2.0 model for complex multimodal reasoning and long-horizon agent workflows",
+        "family": "seed",
+        "release_date": "2026-02-14",
+        "last_updated": "2026-02-14",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.0 Pro line with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the February 2026 Seed 2.0 Pro flagship line served as doubao-seed-2.0-pro with dated 0215 and 260328 deployments. The Lite, Mini, and Code siblings, the 2.1 successor generation, and all four platforms themselves are separate boundaries.",
+      "strengths": [
+        "Dated flagship launch with dated snapshot deployments across two platform generations",
+        "Four first-party surfaces: Volcano Engine, BytePlus, Doubao, and TRAE"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 7,
+        "overall": 4.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.0 launch announcement (February 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed-2-0-official-launch",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.0-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-2-1-pro",
+      "source_id": "bytedance-seed/seed-2.1-pro",
+      "name": "Seed 2.1 Pro",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed2-1-officially-released-advancing-ai-productivity",
+      "description": "ByteDance's June 2026 Seed 2.1 flagship line for real-world productivity, served as the doubao-seed-2-1-pro-260628 snapshot with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.1 Pro",
+        "description": "Flagship ByteDance Seed 2.1 model for complex multimodal reasoning, coding, and agents",
+        "family": "seed",
+        "release_date": "2026-06-23",
+        "last_updated": "2026-06-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.1 Pro line with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the June 2026 Seed 2.1 Pro flagship line served as doubao-seed-2-1-pro-260628 with 256K context. The Turbo sibling tier, the 2.0 predecessor generation, and all platforms themselves are separate boundaries.",
+      "strengths": [
+        "Dated June 2026 launch pins the line with a single dated snapshot and proactive eval disclosure",
+        "First-party Volcano and Doubao serving with 256K context"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this line",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.44
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.1 launch announcement (June 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed2-1-officially-released-advancing-ai-productivity",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.1-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bytedance-seed-seed-2-1-turbo",
+      "source_id": "bytedance-seed/seed-2.1-turbo",
+      "name": "Seed 2.1 Turbo",
+      "developer": "ByteDance Seed",
+      "url": "https://seed.bytedance.com/en/blog/seed2-1-officially-released-advancing-ai-productivity",
+      "description": "ByteDance's smaller Seed 2.1 tier balancing capability and cost, served as the doubao-seed-2-1-turbo-260628 snapshot with no public weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Seed 2.1 Turbo",
+        "description": "Faster ByteDance Seed 2.1 model for multimodal reasoning and latency-sensitive agent workflows",
+        "family": "seed",
+        "release_date": "2026-06-23",
+        "last_updated": "2026-06-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No model weights or license document exist for this API-only line; use is governed by the Volcano Engine and BytePlus platform terms of service, which reserve all service intellectual property to the operator.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "API-only distribution of the Seed 2.1 Turbo tier with no published model license",
+          "kind": "web_terms",
+          "url": "https://www.volcengine.com/docs/6256/64903",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the June 2026 Seed 2.1 Turbo tier served as doubao-seed-2-1-turbo-260628, a distinct smaller tier rather than an alias of Pro. The Pro sibling, the 2.0 predecessor generation, and all platforms themselves are separate boundaries.",
+      "strengths": [
+        "Dated June 2026 launch pins the tier with its own snapshot and eval column",
+        "First-party Volcano and Doubao serving for the exact turbo snapshot ID"
+      ],
+      "tradeoffs": [
+        "No downloadable weights exist anywhere first-party for this tier",
+        "No scrutable license grant of any kind; platform terms govern entirely"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 7,
+        "overall": 4.3
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Seed 2.1 launch announcement (June 2026)",
+          "url": "https://seed.bytedance.com/en/blog/seed2-1-officially-released-advancing-ai-productivity",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/bytedance-seed/seed-2.1-turbo.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-cohere-command-a-03-2025",
       "source_id": "cohere/command-a-03-2025",
       "name": "Command A",
