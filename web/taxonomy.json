@@ -374,6 +374,8 @@
     {"id": "CC-BY-NC-4.0", "name": "Creative Commons Attribution-NonCommercial 4.0", "kind": "restricted"},
     {"id": "LicenseRef-Cohere-Labs-AUP", "name": "Cohere Labs Acceptable Use Policy", "kind": "restricted"},
     {"id": "LicenseRef-DeepSeek-Model-1.0", "name": "DeepSeek Model License 1.0", "kind": "restricted"},
+    {"id": "LicenseRef-Llama-3.1-Community", "name": "Llama 3.1 Community License", "kind": "restricted"},
+    {"id": "LicenseRef-Llama-3.1-AUP", "name": "Llama 3.1 Acceptable Use Policy", "kind": "restricted"},
     {"id": "LicenseRef-Llama-3.2-Community", "name": "Llama 3.2 Community License", "kind": "restricted"},
     {"id": "LicenseRef-Llama-3.2-AUP", "name": "Llama 3.2 Acceptable Use Policy", "kind": "restricted"},
     {"id": "LicenseRef-Llama-3.3-Community", "name": "Llama 3.3 Community License", "kind": "restricted"},

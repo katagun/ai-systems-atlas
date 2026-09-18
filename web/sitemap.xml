@@ -158,10 +158,15 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemini-3-pro-preview/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-31b-it/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-ibm-granite-4-h-small/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-1-70b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-1-8b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-2-11b-vision-instruct/</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-2-1b/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-2-3b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-3-70b-instruct/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-4-maverick-17b-instruct/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-4-scout-17b-instruct/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-guard-3-8b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-microsoft-phi-4-mini/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-1/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-5/</loc><lastmod>2026-09-16</lastmod></url>
@@ -229,6 +234,8 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-poolside-laguna-xs-2/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-stepfun-step-3-5-flash/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-stepfun-step-3-7-flash/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-swiss-ai-apertus-70b/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-swiss-ai-apertus-8b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy3-preview/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy3/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy4-preview/</loc><lastmod>2026-09-18</lastmod></url>
