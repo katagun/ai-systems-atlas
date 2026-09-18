@@ -1123,6 +1123,35 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertEqual([error for error in errors if "exclusion" in error], [])
 
+    def test_an_exclusion_requires_both_review_dates(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        del document["entries"][0]["excluded_at"]
+        document["entries"][1]["verified_at"] = "yesterday"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(any("fields do not match exclusion schema" in error for error in errors), errors)
+        self.assertTrue(any("verified_at must be an ISO date" in error for error in errors), errors)
+
+    def test_an_exclusion_is_verified_no_earlier_than_it_was_excluded(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "exclusions.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["entries"][0]["excluded_at"] = "2026-09-10"
+        document["entries"][0]["verified_at"] = "2026-09-09"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any("verified_at must not precede excluded_at" in error for error in errors), errors
+        )
+
     def signals_document(self, **extra: str) -> dict:
         signal = {
             "story_id": "49616354",

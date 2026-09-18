@@ -18,7 +18,7 @@ README badges and GitHub's detected SPDX value help locate evidence but do not r
 
 An immutable blob proves the reviewed file's content, not repository-wide scope. Evidence therefore records the component or path it covers. Non-Git terms evidence is inherently mutable and must be labeled accordingly.
 
-`directory/exclusions.json` is reserved for systems that fail a family or role boundary, duplicates, non-operational research inputs, and packs that fail the Agent packs boundary in [`PACKS.md`](PACKS.md). Relevant systems awaiting full review belong in `directory/candidates.json`, never exclusions solely because of licensing.
+`directory/exclusions.json` is reserved for systems that fail a family or role boundary, duplicates, non-operational research inputs, and packs that fail the Agent packs boundary in [`PACKS.md`](PACKS.md). Relevant systems awaiting full review belong in `directory/candidates.json`, never exclusions solely because of licensing. Every exclusion records `excluded_at`, the date the decision was made, and `verified_at`, the date a reviewer last re-checked the reason against current sources; a re-review that keeps the exclusion bumps `verified_at` and amends the reason where the facts moved, and one that lifts it moves the record to the candidate queue in the same change.
 
 ## Scope boundaries
 
