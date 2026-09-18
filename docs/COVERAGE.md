@@ -207,4 +207,6 @@ Choose small batches with one coherent boundary question:
 
 68. **Model queue batch twenty-two — DeepSeek follow-ups:** three publishes and two exclusions with no new licence identifiers. OCR-2 is Apache-2.0, the R1 distill carries MIT with Qwen provenance, and Vision-Exp is its own multimodal line with a documented retirement; the flash preview and 0423 snapshot fold into reviewed lines. The reviewed Models collection moves from one hundred forty-two to one hundred forty-five and the queue from 175 to 170. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
 
+69. **Model queue batch twenty-three — Sonar and Laguna:** eight publishes and one new licence identifier. Perplexity contributes four proprietary API-only search releases facing a September 2026 support date; Poolside contributes Apache-2.0 flagships and OpenMDW-1.1 mid tiers with third-party hosting. The reviewed Models collection moves from one hundred forty-five to one hundred fifty-three and the queue from 170 to 162. No score in the batch measures output quality, benchmark rank, parameter count, price, latency, or throughput.
+
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

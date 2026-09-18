@@ -54,16 +54,16 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
 
 test("an imported models.dev record is unscored and opens attributed source details", async ({ page }) => {
   await page.goto("/?view=models");
-  await page.locator("#model-search").fill("Sonar Pro");
+  await page.locator("#model-search").fill("Sarvam 105B");
 
-  const card = page.locator("#model-grid .imported-model-card").filter({ hasText: "Sonar Pro" });
+  const card = page.locator("#model-grid .imported-model-card").filter({ hasText: "Sarvam 105B" });
   await expect(card).toContainText("Imported metadata · Not Atlas reviewed");
   await expect(card.locator(".score-ring")).toHaveCount(0);
   await expect(card.locator(".compare-toggle")).toHaveCount(0);
-  await card.locator('[data-model="model-perplexity-sonar-pro"]').click();
+  await card.locator('[data-model="model-sarvam-sarvam-105b"]').click();
 
   const dialog = page.locator("#model-dialog-content");
-  await expect(dialog.locator("h1")).toHaveText("Sonar Pro");
+  await expect(dialog.locator("h1")).toHaveText("Sarvam 105B");
   await expect(dialog).toContainText("models.dev source record · Not Atlas reviewed");
   await expect(dialog).toContainText("Atlas has not reviewed its identity boundary");
   await expect(dialog.getByRole("link", { name: "Open commit-pinned source record ↗" })).toBeVisible();
