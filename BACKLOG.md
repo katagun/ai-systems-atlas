@@ -54,7 +54,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 ### Coverage batches
 
-- [ ] Curate the thirtieth models.dev queue batch: Deep Research and Nano Banana (`google/deep-research-preview-04-2026`, `deep-research-max-preview-04-2026`, `gemini-2.5-flash-image`, `gemini-3-pro-image-preview`, `gemini-3-pro-image`, `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-image`, `gemini-3.1-flash-lite-image`). All eight are API-only under the existing Gemini API terms; the two preview lines are shut down and reviewed as retired, the Deep Research pair are active preview agents on the Interactions API, and the image models span deprecated and GA states. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The 3.1 Flash Lite and Live families stay queued for later.
+- [ ] Curate the thirty-first models.dev queue batch: Gemini flash lines (`google/gemini-2.5-flash-lite`, `gemini-2.5-computer-use-preview-10-2025`, `gemini-3.1-flash-lite`, `gemini-3.1-flash-lite-preview`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.6-flash`, `gemini-3.7-flash`). All eight are API-only under the existing Gemini API terms; the 2.5 lines are retired or deprecated and the 3.x lines are active. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The live, transcribe, translate, embedding, robotics, and music lines stay queued for later.
 
 ### Reader experience
 
