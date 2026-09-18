@@ -81,7 +81,7 @@ Do not write markdown links inside code spans; relative links to sibling ADRs ar
 - [ ] **Step 5: Amend the documents**
 
 - `AGENTS.md`: in the routing row for "skill packs, plugins, vault bundles, marketplaces, or harness add-ons", append `` and `docs/adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md` `` inside the existing backtick list (keep the row's format).
-- `docs/TAXONOMY.md`: after the paragraph beginning "Specifications, inference services, local runtimes, models, and agent packs are separate collections", add: "Installing into a host agent is a deployment mode, `host_pack`, not a collection: a scored system that ships as a skills bundle, plugin, or vault keeps its family, role, and score, and the Agent packs scope lists it beside the unscored packs. See [ADR 033](adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)."
+- `docs/TAXONOMY.md`: after the paragraph beginning "Specifications, inference services, local runtimes, models, and agent packs are separate collections", add: "Installing into a host agent is a deployment mode, `host_pack`, not a collection: a scored system that ships as a skills bundle, plugin, or vault keeps its family, role, and score, and the Agent packs scope lists it beside the unscored packs. See \[ADR 033\] (adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)."
 - `docs/DATA_MODEL.md` project-record Traits line: after "deployment" add " (including `host_pack` for systems installed into a host agent)".
 - `docs/PACKS.md`: add a section before "Current coverage":
 
@@ -91,7 +91,7 @@ Do not write markdown links inside code spans; relative links to sibling ADRs ar
 A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it under "Scored systems installed as packs" beside the unscored packs, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 033](adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md).
 ```
 
-- `docs/CURATION.md` packs paragraph (the one citing ADR 031 and ADR 032): append the sentence "A pack-shaped repository that passes the prongs is a scored system and carries the deployment mode `host_pack` so the Agent packs scope can list it; see [ADR 033](adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)."
+- `docs/CURATION.md` packs paragraph (the one citing ADR 031 and ADR 032): append the sentence "A pack-shaped repository that passes the prongs is a scored system and carries the deployment mode `host_pack` so the Agent packs scope can list it; see \[ADR 033\] (adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)."
 - `docs/COVERAGE.md` Agent packs subsection: append "Scored systems that install as packs carry the `host_pack` deployment mode and are listed in the Packs scope beside the collection; nine records carry it as of 2026-09-18."
 - `skills/ai-systems-atlas/SKILL.md` fetch table: change the packs row's question cell to "Skills bundles, plugins, process kits, vault bundles, and plugin marketplaces a host agent installs (unscored); scored systems that install as packs are in `projects.json` with `deployment` containing `host_pack`".
 

@@ -330,7 +330,8 @@
     {"id": "library", "name": "Embedded library", "definition": "A package the user embeds in an application they build, including helpers that application calls to serve its own endpoints."},
     {"id": "self_hosted", "name": "Self-hosted service", "definition": "A service the project itself ships, which the user deploys and operates on infrastructure they control."},
     {"id": "managed_cloud", "name": "Managed cloud", "definition": "The vendor operates this system and the user reaches it as a tenant rather than running it."},
-    {"id": "cloud_optional", "name": "Optional cloud services", "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."}
+    {"id": "cloud_optional", "name": "Optional cloud services", "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."},
+    {"id": "host_pack", "name": "Installed into a host agent", "definition": "A skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process."}
   ],
   "project_statuses": [
     {"id": "active", "name": "Active"},

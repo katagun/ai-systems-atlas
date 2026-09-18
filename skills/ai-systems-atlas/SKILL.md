@@ -15,7 +15,7 @@ The Atlas (https://peacefulcoexistance.com/) reviews and curates AI agent, memor
 | Protocols, metadata schemas, instruction conventions (AGENTS.md, CLAUDE.md, Agent Skills, ...), capability or package formats | `specifications.json` |
 | Managed inference APIs and hosting platforms | `inference-services.json` |
 | Self-hosted inference runtimes (Ollama, vLLM, LM Studio, ...) | `local-runtimes.json` |
-| Skills bundles, plugins, process kits, vault bundles, and plugin marketplaces a host agent installs | `packs.json` |
+| Skills bundles, plugins, process kits, vault bundles, and plugin marketplaces a host agent installs (unscored); scored systems that install as packs are in `projects.json` with `deployment` containing `host_pack` | `packs.json` |
 | Every provider-independent record present in models.dev | `models-dev.json` |
 | Atlas-reviewed language-model releases, distribution terms, evidence, and access scores | `models.json` |
 | Enum meanings, license identifiers, score-profile definitions | `taxonomy.json` |
