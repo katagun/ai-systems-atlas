@@ -59,3 +59,4 @@ The record is re-reviewed to correct what it claims this kit keeps and does, not
 - Packaging formats are unaffected: `agent-skills`, `agent-plugins`, `claude-code-plugins`, and `claude-md` remain Specifications, which describe how a pack is authored and never whether one is a system.
 - A triage proposal may cite this rule, but accepting it stays a human act under [ADR 024](024-candidate-triage-proposals-are-unaccepted-evidence.md).
 - The rule asks a reviewer to open the repository rather than read its README. That cost is the point: every case this catalog decided wrongly in this area was decided from a tagline.
+- On 2026-09-18 the repository this record's context describes as shipping no machinery, `obra/superpowers`, was found to ship a brainstorming companion server and was published under the enforced-work prong; the exclusion lesson that adoption establishes no boundary stands, because the server, not the star count, decided it.

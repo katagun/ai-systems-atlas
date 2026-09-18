@@ -56,7 +56,7 @@ The Agent packs collection under [ADR 032](adr/032-agent-packs-are-unscored-reco
 | Multi-agent orchestrator | 10 | 10 | Improved with a vendor-operated registry platform and a low-code service that escalates to people; open orchestrators remain thin |
 | Stateful agent runtime | 18 | 18 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 5 | 5 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
-| Coding-agent workflow | 8 | 7 | Improved with a third-party orchestration plugin and an agent-built demonstration; compare process and delivery discipline |
+| Coding-agent workflow | 10 | 9 | Improved with a third-party orchestration plugin and an agent-built demonstration; compare process and delivery discipline |
 | Human–agent memory bridge | 4 | 4 | Improved from a single record to four, all built on a user-owned Markdown or Obsidian vault shared across agent hosts; a bridge over a non-file workspace remains unreviewed |
 | Research agent | 6 | 6 | Now spans open, source-available, and hosted closed-core approaches, but the hosted entry's discovery claims are vendor-reported, and broader production evidence remains thin |
 | General AI assistant | 11 | 11 | Representative provider baseline now including European-governed and Meta products; add others only when their workspace, governance, or regional ecosystem is materially distinct |
