@@ -53,7 +53,7 @@ Items are grouped by the dependency they resolve. Work top to bottom within a gr
 
 ### Coverage batches
 
-- [ ] Curate the twenty-ninth models.dev queue batch: Gemma and Gemini 2.0 (`google/gemma-3-4b-it`, `gemma-3-12b-it`, `gemma-3-27b-it`, `gemma-4-E2B-it`, `gemma-4-E4B-it`, `gemma-4-26b-a4b-it`, `gemini-2.0-flash`, `gemini-2.0-flash-lite`). Gemma 3 is governed by the restricted Gemma Terms of Use with two new identifiers; the Gemma 4 sizes are Apache-2.0 like the reviewed 31B; the Gemini 2.0 pair are shut-down API-only lines under the existing Gemini API terms. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Deep Research previews stay queued for later.
+- [ ] Curate the thirtieth models.dev queue batch: Deep Research and Nano Banana (`google/deep-research-preview-04-2026`, `deep-research-max-preview-04-2026`, `gemini-2.5-flash-image`, `gemini-3-pro-image-preview`, `gemini-3-pro-image`, `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-image`, `gemini-3.1-flash-lite-image`). All eight are API-only under the existing Gemini API terms; the two preview lines are shut down and reviewed as retired, the Deep Research pair are active preview agents on the Interactions API, and the image models span deprecated and GA states. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The 3.1 Flash Lite and Live families stay queued for later.
 
 ### Reader experience
 
