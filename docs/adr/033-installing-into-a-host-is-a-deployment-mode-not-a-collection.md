@@ -18,9 +18,9 @@ A first proposal answered that by moving placement onto distribution form, which
 
 Installing into a host agent is a deployment mode. `directory/taxonomy.json` `deployment_modes` gains `host_pack`, "Installed into a host agent": a skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process.
 
-No new field, no new role, no new collection. Deployment is one of the orthogonal trait axes ADR 003 names in the founding decision, and ADR 018 already used it to carry an operational fact rather than inventing a role for one. A record may carry `host_pack` beside `local_cli`, `desktop`, or `library` when it also ships a program the user runs directly, and eight of them do.
+No new field, no new role, no new collection. Deployment is one of the orthogonal trait axes ADR 003 names in the founding decision, and ADR 018 already used it to carry an operational fact rather than inventing a role for one. A record may carry `host_pack` beside `local_cli`, `desktop`, or `library` when it also ships a program the user runs directly, and every record that carries it does.
 
-Eight records carry the mode, each from its own prose rather than from any inference about its repository: `superpowers`, `gentle-ai`, `ecc`, `gstack`, `vibecode-pro-max-kit`, `oh-my-openagent`, `claude-obsidian`, and `obsidian-second-brain`. Their `verified_at` becomes 2026-09-18, because a reviewer re-read them; nothing else on them changes. `hyperresearch` was reviewed for the mode and left without it: its description names Claude Code and a pipeline of subagents, but no field of the record says a bundle is installed into that host, and a trait is not added by inference. It gets the value when a reviewer states the fact in the record.
+Nine records carry the mode, each from its own prose rather than from any inference about its repository: `superpowers`, `gentle-ai`, `ecc`, `gstack`, `vibecode-pro-max-kit`, `oh-my-openagent`, `claude-obsidian`, `obsidian-second-brain`, and `hyperresearch`. Their `verified_at` becomes 2026-09-18, because a reviewer re-read them; nothing else on them changes, except that `hyperresearch` had recorded the fact nowhere and its `current_repo_note` gained the sentence stating it, from the README's Install section. A record whose prose does not say it installs into a host does not get the value on inference; a reviewer establishes the fact and writes it into the record first.
 
 The Agent packs scope renders a second block below the packs grid, "Scored systems installed as packs", listing the systems that carry the mode with their scores hidden, each opening its own system dialog. The Systems scope reaches the same records through the deployment filter, which is built from the taxonomy over the modes published records actually carry, so `host_pack` appears there as soon as a record has it.
 
@@ -34,8 +34,8 @@ The same obligation applies here, and it is the whole point of this record. A va
 
 - **ADR 031 and ADR 032 stand.** ADR 031 still decides which pack-shaped repositories earn a scored record, and ADR 032 still decides which are packs. `host_pack` is set at review from a record that has already passed one of those tests; it never decides inclusion, and it is not a third answer to that question.
 - **A repository still appears in exactly one collection.** The Packs scope's second block reads system records; it adds nothing to `packs.json`. Under [ADR 013](013-distinct-collections-share-one-directory-surface.md) the block is a presentation-layer union, and it merges no schema, no rubric, and no comparison.
-- **No score changes, and none is withdrawn.** The eight records keep their family, role, scores, and prose.
-- **No card badge.** The card-badge guide in `docs/WEB.md` admits a badge that separates roughly 10 to 75 per cent of its collection or family; eight of the 128 agent-system records is below that floor.
+- **No score changes, and none is withdrawn.** The nine records keep their family, role, scores, and prose.
+- **No card badge.** The card-badge guide in `docs/WEB.md` admits a badge that separates roughly 10 to 75 per cent of its collection or family; nine of the 128 agent-system records is below that floor.
 
 ## Alternatives considered
 
@@ -48,7 +48,7 @@ The same obligation applies here, and it is the whole point of this record. A va
 ## Consequences
 
 - The Agent packs scope shows scored systems beside the unscored packs, and a reader who arrives knowing a repository as a pack finds it there.
-- The Systems deployment filter gains a value, and the eight records are reachable by it.
+- The Systems deployment filter gains a value, and the nine records are reachable by it.
 - `docs/PACKS.md` carries the relationship between the two, so a reviewer meets it where pack decisions are made.
 - A future pack-shaped repository that passes ADR 031's prongs gets the mode at review, from its own prose.
 - The value is never used to decide inclusion. A proposal to read `host_pack` as a placement test is a proposal to reopen ADR 031, and belongs in a record of its own.

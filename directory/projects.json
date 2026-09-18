@@ -5389,7 +5389,8 @@
       "canonical_data": "A git-trackable vault of Markdown notes with YAML frontmatter, indexed by a fully rebuildable SQLite cache of full-text, embeddings, citations, and provenance links",
       "deployment": [
         "local_cli",
-        "cloud_optional"
+        "cloud_optional",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -5419,7 +5420,7 @@
       "stars": 3280,
       "stars_verified_at": "2026-09-14",
       "historical_stars": null,
-      "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1.",
+      "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1. The Python package's `hyperresearch install` step places the `/hyperresearch` command into Claude Code, per the README's Install section, so the pipeline runs inside that host's sessions.",
       "score": {
         "task_reliability": 8.5,
         "tool_use": 8.5,
@@ -5444,7 +5445,7 @@
       ],
       "why_it_matters": "Shows a deep-research pipeline that treats citation integrity and retraction-checking as hard gates rather than best-effort prompting, with a durable, human-readable vault instead of a one-shot report.",
       "research_confidence": "medium",
-      "verified_at": "2026-09-12",
+      "verified_at": "2026-09-18",
       "pushed_at": "2026-09-12T22:25:32Z",
       "forks": 320,
       "open_issues": 17,
