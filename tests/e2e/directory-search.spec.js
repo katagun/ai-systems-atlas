@@ -112,13 +112,13 @@ test("the local runtimes scope filters, sorts, and opens its own detail dialog",
   await expect(names.first()).toHaveText("vLLM");
 
   await page.locator("#runtime-type-filter").selectOption("desktop_runner");
-  await expect(names).toHaveCount(3);
+  await expect(names).toHaveCount(4);
   await page.locator("#runtime-accelerator-filter").selectOption("vulkan");
   await expect(names).toHaveText(["LM Studio"]);
 
   await page.locator("#reset-runtime-filters").click();
   await page.locator("#runtime-sort-filter").selectOption("name");
-  await expect(names.first()).toHaveText("GenieX");
+  await expect(names.first()).toHaveText("exo");
 
   await page.locator("#runtime-search").fill("Ollama Cloud");
   await expect(names).toHaveText(["Ollama"]);
