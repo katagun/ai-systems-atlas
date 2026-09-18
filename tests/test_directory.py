@@ -630,6 +630,7 @@ class DirectoryTests(unittest.TestCase):
             "martian",
             "chutes",
             "trustedrouter",
+            "orcarouter",
             "volcengine-ark",
             "zhipu-bigmodel",
             "siliconflow-cn",
