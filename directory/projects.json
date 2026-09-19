@@ -3459,7 +3459,8 @@
       "canonical_data": "Markdown memory documents, YAML instincts, and a local SQLite session and install state store",
       "deployment": [
         "local_cli",
-        "desktop"
+        "desktop",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -3505,7 +3506,7 @@
       ],
       "why_it_matters": "Shows that a coding-agent add-on can enforce process through blocking hooks and durable local memory rather than through prompt text alone.",
       "research_confidence": "high",
-      "verified_at": "2026-09-01",
+      "verified_at": "2026-09-18",
       "licenses": [
         "MIT"
       ],
@@ -4980,7 +4981,8 @@
       ],
       "canonical_data": "Git-versioned skills, plans, review and QA artifacts, browser evidence, and append-only learning records",
       "deployment": [
-        "local_cli"
+        "local_cli",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -5029,7 +5031,7 @@
       ],
       "why_it_matters": "Shows how structured roles, artifacts, safety gates, and verification turn general coding agents into a repeatable software-delivery system.",
       "research_confidence": "high",
-      "verified_at": "2026-08-25",
+      "verified_at": "2026-09-18",
       "pushed_at": "2026-09-11T19:40:16Z",
       "forks": 19845,
       "open_issues": 888,
@@ -5387,7 +5389,8 @@
       "canonical_data": "A git-trackable vault of Markdown notes with YAML frontmatter, indexed by a fully rebuildable SQLite cache of full-text, embeddings, citations, and provenance links",
       "deployment": [
         "local_cli",
-        "cloud_optional"
+        "cloud_optional",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -5417,7 +5420,7 @@
       "stars": 3280,
       "stars_verified_at": "2026-09-14",
       "historical_stars": null,
-      "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1.",
+      "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1. The Python package's `hyperresearch install` step places the `/hyperresearch` command into Claude Code, per the README's Install section, so the pipeline runs inside that host's sessions.",
       "score": {
         "task_reliability": 8.5,
         "tool_use": 8.5,
@@ -5442,7 +5445,7 @@
       ],
       "why_it_matters": "Shows a deep-research pipeline that treats citation integrity and retraction-checking as hard gates rather than best-effort prompting, with a durable, human-readable vault instead of a one-shot report.",
       "research_confidence": "medium",
-      "verified_at": "2026-09-12",
+      "verified_at": "2026-09-18",
       "pushed_at": "2026-09-12T22:25:32Z",
       "forks": 320,
       "open_issues": 17,
@@ -7667,7 +7670,7 @@
       "agent_relation": "agent_runtime",
       "status": "active",
       "license_review_status": "verified",
-      "verified_at": "2026-08-31",
+      "verified_at": "2026-09-18",
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
@@ -7702,7 +7705,8 @@
       "canonical_data": "project and user configuration, hierarchical instruction files, and stored plans",
       "deployment": [
         "local_cli",
-        "library"
+        "library",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -11258,7 +11262,8 @@
       ],
       "canonical_data": "Brainstorm session directories under `<project>/.superpowers/brainstorm/` that the pack's own server maintains — screen HTML, an events file of the reader's browser selections that the server clears whenever the skill pushes a new screen, and the port, token, and process files it reads back on restart — plus the skill documents under `skills/` and the plan, task-brief, review-package, and ledger Markdown the host agent writes",
       "deployment": [
-        "local_cli"
+        "local_cli",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal"
@@ -12019,7 +12024,8 @@
       ],
       "canonical_data": "Plan, spec, and progress Markdown under `process/` in the target repository, which the kit's own validators read back, plus per-session state its hooks write and archive under the host agent's directory",
       "deployment": [
-        "local_cli"
+        "local_cli",
+        "host_pack"
       ],
       "local_first": true,
       "human_editable": true,
@@ -12057,7 +12063,7 @@
       ],
       "why_it_matters": "Shows a heavily gated, self-healing prompt-and-validator workflow can be layered onto an existing coding agent instead of requiring a new agent runtime.",
       "research_confidence": "high",
-      "verified_at": "2026-09-15",
+      "verified_at": "2026-09-18",
       "github_detected_license": "MIT",
       "agent_interfaces": [
         "terminal"
@@ -14374,7 +14380,8 @@
       "canonical_data": "A normal Obsidian vault of Markdown pages plus JSON source/claim ledgers and content-addressed raw source captures.",
       "deployment": [
         "local_cli",
-        "ide_extension"
+        "ide_extension",
+        "host_pack"
       ],
       "local_first": true,
       "human_editable": true,
@@ -14412,7 +14419,7 @@
       ],
       "why_it_matters": "Demonstrates that an agent-facing memory bridge can add real provenance and transaction safety on top of a vault humans still own as plain Markdown.",
       "research_confidence": "medium",
-      "verified_at": "2026-09-12",
+      "verified_at": "2026-09-18",
       "pushed_at": "2026-09-10T17:44:23Z",
       "forks": 1479,
       "open_issues": 20,
@@ -16463,7 +16470,8 @@
       ],
       "canonical_data": "Markdown files in the user's own Obsidian vault",
       "deployment": [
-        "local_cli"
+        "local_cli",
+        "host_pack"
       ],
       "local_first": true,
       "human_editable": true,
@@ -16499,7 +16507,7 @@
       ],
       "why_it_matters": "Shows a single human-owned Markdown vault, not a hosted service, can serve as portable long-term memory across eight independent coding-agent CLIs.",
       "research_confidence": "medium",
-      "verified_at": "2026-09-12",
+      "verified_at": "2026-09-18",
       "github_detected_license": "MIT",
       "forks": 557,
       "open_issues": 13,
@@ -18065,7 +18073,8 @@
       ],
       "canonical_data": "Task and status documents under `odd/tasks/` in the user's repository, plus a per-change runtime ledger the binary writes and reads under the repository's git directory",
       "deployment": [
-        "local_cli"
+        "local_cli",
+        "host_pack"
       ],
       "agent_interfaces": [
         "terminal",
@@ -18115,7 +18124,7 @@
       ],
       "why_it_matters": "Shows a workflow layer can hold durable state of its own — a ledger of what each change claimed and evidenced — while leaving execution to whichever coding agent the developer already runs.",
       "research_confidence": "high",
-      "verified_at": "2026-09-15"
+      "verified_at": "2026-09-18"
     },
     {
       "id": "engram",

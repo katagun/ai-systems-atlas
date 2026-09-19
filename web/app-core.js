@@ -237,6 +237,18 @@
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
 
+  // Scored systems that install into a host agent as a skills bundle, plugin,
+  // or vault (deployment mode host_pack, ADR 033). The Packs scope lists them
+  // beside the unscored packs; the search term is the only filter that applies,
+  // because pack facets describe packs, not systems.
+  function packShapedSystems(projects, filters = {}) {
+    const term = (filters.term || "").trim().toLowerCase();
+    return projects
+      .filter(project => (project.deployment || []).includes("host_pack"))
+      .filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   function paginate(items, { page = 1, pageSize } = {}) {
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const clampedPage = Math.min(Math.max(1, page), pageCount);
@@ -469,6 +481,7 @@
     matchesProject,
     matchesRecordSearch,
     monogramGlyph,
+    packShapedSystems,
     paginate,
     parseRecordReference,
     parseViewId,
