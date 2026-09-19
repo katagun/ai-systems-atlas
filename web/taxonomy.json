@@ -1213,6 +1213,11 @@
       "id": "cloud_optional",
       "name": "Optional cloud services",
       "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."
+    },
+    {
+      "id": "host_pack",
+      "name": "Installed into a host agent",
+      "definition": "A skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process."
     }
   ],
   "project_statuses": [
