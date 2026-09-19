@@ -15707,6 +15707,123 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3",
+      "source_id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+      "name": "Llama 3.1 Nemotron Safety Guard 8B v3",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3",
+      "description": "An ungated 8B content-safety guard model over the Llama 3.1 8B base that emits safe/unsafe verdicts as generated text, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron Safety Guard 8B v3",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2025-10-28",
+        "last_updated": "2025-10-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable with guardrail and indemnity clauses, over the Llama 3.1 Community License base named as \"Built with Llama\".",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3.1-Nemotron-Safety-Guard-8B-v3 weights, LoRA adapter, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3 v1.0 release dated October 28, 2025 at Hugging Face commit 8fdc246ba3d56db9c469d534233b9f582d3afafa. The Llama 3.1 8B base model, the v2 and earlier guard generations, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the LoRA adapter shipping beside the full checkpoint",
+        "The model card documents the verdict JSON schema and Model Card++ subcards"
+      ],
+      "tradeoffs": [
+        "The revocable NVIDIA Open Model License carries guardrail and indemnity clauses",
+        "The guard context is limited to 8K tokens by the base-model configuration"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.82
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-safety-guard-8b-v3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-safety-guard-8b-v3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-nvidia-llama-3-1-nemotron-ultra-253b",
       "source_id": "nvidia/llama-3.1-nemotron-ultra-253b",
       "name": "Llama 3.1 Nemotron Ultra 253B",
@@ -16051,6 +16168,123 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.3-nemotron-super-49b-v1.5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-content-safety",
+      "source_id": "nvidia/nemotron-3-content-safety",
+      "name": "Nemotron 3 Content Safety",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3-Content-Safety",
+      "description": "An ungated V1.1 content-safety model merged into the Gemma-3-4B-it base that emits safe/unsafe verdicts as generated text, governed by the NVIDIA Nemotron Open Model License.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Content Safety",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-04-16",
+        "last_updated": "2026-04-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Nemotron-Open-Model",
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Nemotron Open Model License, whose grant is perpetual and irrevocable. The merged Gemma-3-4B-it base adds the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer, named on the model card.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-nemotron-open-model-license/",
+          "scope": "Nemotron-3-Content-Safety weights and bundled model code, December 2025 edition of the NVIDIA Nemotron Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/terms",
+          "scope": "Gemma Terms of Use named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "scope": "Gemma Prohibited Use Policy named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3-Content-Safety V1.1 release of March 2026 at Hugging Face commit b47f6f6c18dc7d11a786abbbca2510cba58ede20. The Gemma-3-4B-it base model, the 3.5 content-safety line, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated merged weights with Model Card++ subcards and a released training dataset",
+        "The model card documents the verdict schema and Transformers and vLLM runtimes"
+      ],
+      "tradeoffs": [
+        "The web-hosted NVIDIA license can change independently of the pinned repository",
+        "The dual Gemma base layer adds restricted-use terms to the governing instrument"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3-Content-Safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-content-safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-content-safety.toml",
           "verified_at": "2026-09-18"
         }
       ],
@@ -16465,6 +16699,108 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-nvidia-nemotron-3-5-content-safety",
+      "source_id": "nvidia/nemotron-3.5-content-safety",
+      "name": "Nemotron 3.5 Content Safety",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3.5-Content-Safety",
+      "description": "An ungated V1.2 content-safety model merged into the Gemma-3-4B-it base that emits safe/unsafe verdicts as generated text, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3.5 Content Safety",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-06-04",
+        "last_updated": "2026-06-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the OpenMDW License Agreement 1.1, a permissive instrument classified as open source in the taxonomy. The merged Gemma-3-4B-it base also carries the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer, named on the model card.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Nemotron-3.5-Content-Safety weights and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3.5-Content-Safety V1.2 release of June 2026 at Hugging Face commit 35645ed3543b7e7ffaed2e788699e57a5051497c. The Gemma-3-4B-it base model, the Nemotron 3 content-safety line, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated merged weights with the training dataset released and an Ollama Modelfile shipped",
+        "The model card documents the verdict schema with optional reasoning traces and custom-policy modes"
+      ],
+      "tradeoffs": [
+        "The merged Gemma base layer adds restricted-use terms beside the permissive OpenMDW instrument",
+        "The NVIDIA blog's stale license prose names the Open Model License while the card governs"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3.5-Content-Safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3.5-content-safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3.5-content-safety.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-nvidia-nemotron-3-5-lightning",
       "source_id": "nvidia/nemotron-3.5-lightning",
       "name": "Nemotron 3.5 Lightning 30B A3B",
@@ -16653,6 +16989,123 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-cascade-2-30b-a3b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-content-safety-reasoning-4b",
+      "source_id": "nvidia/nemotron-content-safety-reasoning-4b",
+      "name": "Nemotron Content Safety Reasoning 4B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Content-Safety-Reasoning-4B",
+      "description": "An ungated 4B content-safety model merged into the Gemma-3-4B-it base that emits harm verdicts with optional reasoning traces as generated text, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Content Safety Reasoning 4B",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-01-22",
+        "last_updated": "2026-01-22",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable with guardrail and indemnity clauses. The merged Gemma-3-4B-it base adds the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Nemotron-Content-Safety-Reasoning-4B weights and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/terms",
+          "scope": "Gemma Terms of Use named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "scope": "Gemma Prohibited Use Policy named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Content-Safety-Reasoning-4B v1.0 release of November 2025 at Hugging Face commit 29da6ec41d9c710d937afcd41f65e241ab822792. The Gemma-3-4B-it base model, the Nemotron 3 content-safety lines, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the verdict schema, reasoning traces, and three worked examples documented",
+        "The model card cites the EMNLP 2025 paper and releases dataset links"
+      ],
+      "tradeoffs": [
+        "Leftover DeepSpeed training-state files clutter the weight repository",
+        "The release dates conflict between the card (November 2025) and the trial endpoint (January 2026)"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Content-Safety-Reasoning-4B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-content-safety-reasoning-4b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-content-safety-reasoning-4b.toml",
           "verified_at": "2026-09-18"
         }
       ],
