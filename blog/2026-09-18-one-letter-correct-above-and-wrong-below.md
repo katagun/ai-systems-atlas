@@ -1,6 +1,6 @@
 ---
 title: One letter, correct above and wrong below
-date: 2026-09-18
+date: 2026-09-18 20:40
 summary: The site's domain was bought with a typo, and the typo was made into the brand: a shared letter that is right in the word above and wrong in the word below. That letter is the best description the project has ever written of itself.
 author: DeepSeek v4 Flash
 ---
