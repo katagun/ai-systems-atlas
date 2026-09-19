@@ -1507,6 +1507,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-NVIDIA-Open-Model-Agreement",
+      "name": "NVIDIA Open Model Agreement",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-OpenAI-Services-Agreement",
       "name": "OpenAI Services Agreement",
       "kind": "proprietary"

@@ -16159,6 +16159,507 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-nvidia-nemotron-3-nano-omni-30b-a3b-reasoning",
+      "source_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "name": "Nemotron 3 Nano Omni 30B A3B Reasoning",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
+      "description": "An ungated 30B multimodal reasoning model handling text, image, video, and audio input, governed by the NVIDIA Open Model Agreement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Nano Omni 30B A3B Reasoning",
+        "description": "Open Nemotron omni model combining reasoning with text, vision, and audio",
+        "family": "nemotron",
+        "release_date": "2026-04-28",
+        "last_updated": "2026-04-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model-Agreement"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card and the trial endpoint both state that use of the model is governed by the NVIDIA Open Model Agreement, a web-hosted NVIDIA document distinct from the Nemotron Open Model License and the Open Model License used by other Nemotron releases. Its grant is perpetual, worldwide, non-exclusive, no-charge, royalty-free, and irrevocable, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model-Agreement",
+          "scope": "Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-agreement/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 v1.0 release dated April 28, 2026 at Hugging Face commit e5e9932441de940c9a62185c870ea5bcd4cd24e2. The text-only Nano sibling, the FP8 and NVFP4 variants, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a consistent NVIDIA Open Model Agreement citation on card and endpoint",
+        "Dated release with video, audio, image, and text input support and a technical report"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is not an OSI-approved instrument",
+        "Reasoning is enabled by default, which raises per-request inference cost"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-super-120b-a12b",
+      "source_id": "nvidia/nemotron-3-super-120b-a12b",
+      "name": "Nemotron 3 Super 120B A12B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "description": "An ungated 120B text reasoning model with an A12B mixture-of-experts architecture, governed by the NVIDIA Nemotron Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Super 120B A12B",
+        "description": "Nemotron middle tier for collaborative agents and high-volume reasoning workloads",
+        "family": "nemotron",
+        "release_date": "2026-03-11",
+        "last_updated": "2026-03-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Nemotron-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Nemotron Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable right to reproduce, modify, and distribute the work with notice obligations, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
+          "scope": "NVIDIA-Nemotron-3-Super-120B-A12B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-nemotron-open-model-license/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 v1.0 release dated March 2026 at Hugging Face commit 2dc98e2afe4face0e4ce40972a915c45368bd34a. The Ultra and Nano siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with the governing Nemotron Open Model License cited on card and endpoint",
+        "Dated release with a technical report and reproducibility configuration"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is not an OSI-approved instrument",
+        "Frontier-scale inference needs multi-GPU serving with NVIDIA-oriented runtime documentation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-super-120b-a12b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-super-120b-a12b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-ultra-550b-a55b",
+      "source_id": "nvidia/nemotron-3-ultra-550b-a55b",
+      "name": "Nemotron 3 Ultra 550B A55B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+      "description": "An ungated 550B text reasoning model with an A55B mixture-of-experts architecture and up to 1M-token context, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Ultra 550B A55B",
+        "description": "Largest Nemotron 3 model for maximum open-weight reasoning and agent accuracy",
+        "family": "nemotron",
+        "release_date": "2026-06-04",
+        "last_updated": "2026-06-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card and the trial endpoint both state that use of the model is governed by the OpenMDW License Agreement 1.1, a permissive-style third-party instrument that imposes no use restrictions beyond notice and litigation termination clauses. It is not OSI-approved, so the record classifies it as open source consistent with the taxonomy classification of the instrument.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 v1.0 release dated June 4, 2026 at Hugging Face commit 77df655d5e9f8362164ed14dd8b48f8bce657498. The Super and Nano siblings, the NVFP4 checkpoint served by the trial endpoint, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a consistent OpenMDW-1.1 citation on card, metadata, and trial endpoint",
+        "Dated release with model dates, cutoffs, and a technical report"
+      ],
+      "tradeoffs": [
+        "Frontier-scale footprint needs eight or more B200-class or 16 H100 GPUs with multi-node orchestration",
+        "The trial endpoint serves the NVFP4 variant rather than the BF16 release under review"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.84
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-ultra-550b-a55b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-5-lightning",
+      "source_id": "nvidia/nemotron-3.5-lightning",
+      "name": "Nemotron 3.5 Lightning 30B A3B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "description": "An ungated 30B text reasoning model with an A3B mixture-of-experts architecture and up to 1M-token context, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3.5 Lightning 30B A3B",
+        "description": "Fast NVIDIA Nemotron MoE for reliable agentic tasks across enterprise workloads",
+        "family": "nemotron",
+        "release_date": "2026-08-11",
+        "last_updated": "2026-08-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships the OpenMDW License Agreement 1.1 file, and the card and trial endpoint both name it as the governing instrument. It imposes no use restrictions beyond notice and litigation termination clauses but is not OSI-approved, so the record classifies it as open source consistent with the taxonomy classification of the instrument.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 v1.0 release dated August 11, 2026 at Hugging Face commit a9904d24bcc1d289a1950fa9d2b978c47cf903b9. The NVFP4 checkpoint served by the trial endpoint, the 3.x generation, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with the OpenMDW-1.1 license file shipped in the repository",
+        "Dated GA release with model dates, validated 256K context, and technical documentation"
+      ],
+      "tradeoffs": [
+        "The permissive OpenMDW-1.1 instrument is not OSI-approved",
+        "The trial endpoint serves the NVFP4 variant rather than the BF16 release under review"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.38
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3.5-lightning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-cascade-2-30b-a3b",
+      "source_id": "nvidia/nemotron-cascade-2-30b-a3b",
+      "name": "Nemotron Cascade 2 30B A3B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Cascade-2-30B-A3B",
+      "description": "An ungated 30B text reasoning model post-trained with Cascade reinforcement learning, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Cascade 2 30B A3B",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2026-03-24",
+        "last_updated": "2026-04-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable and which adds guardrail-termination, ethics, and indemnity clauses. It is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "scope": "Nemotron-Cascade-2-30B-A3B weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Cascade-2-30B-A3B release dated March 2026 at Hugging Face commit 6327cdbcf907e1c7cec9cb29fb6e6cebdf8feaf7. The Cascade 1 generation, the Nemotron 3 siblings, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a technical report and solution assets",
+        "The model card names the governing license and the training methodology"
+      ],
+      "tradeoffs": [
+        "The revocable October 2025 edition of the NVIDIA Open Model License carries guardrail and indemnity clauses",
+        "No build.nvidia.com trial endpoint is published for this release, so reach is download-only"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Cascade-2-30B-A3B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-cascade-2-30b-a3b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-nvidia-nemotron-mini-4b-instruct",
       "source_id": "nvidia/nemotron-mini-4b-instruct",
       "name": "Nemotron Mini 4B Instruct",

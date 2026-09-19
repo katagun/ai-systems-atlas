@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-third models.dev queue batch: Nemotron open weights (`nvidia/llama-3.1-nemotron-70b-instruct`, `llama-3.1-nemotron-ultra-253b`, `llama-3.3-nemotron-super-49b-v1`, `llama-3.3-nemotron-super-49b-v1.5`, `mistral-nemotron`, `nemotron-mini-4b-instruct`, `nemotron-nano-9b-v2`, `nemotron-nano-12b-v2-vl`). All are open-weight releases under the existing NVIDIA Nemotron Open Model License. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Nemotron 3.x and special-purpose lines stay queued for later.
+- [ ] Curate the thirty-fourth models.dev queue batch: Nemotron 3.x (`nvidia/nemotron-3-super-120b-a12b`, `nemotron-3-ultra-550b-a55b`, `nemotron-3-nano-omni-30b-a3b-reasoning`, `nemotron-3.5-lightning`, `nemotron-cascade-2-30b-a3b`, `nemotron-voicechat`). All are open-weight releases under the existing NVIDIA Nemotron Open Model License. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The content-safety, embed, and rerank lines stay queued for later.
 
 ### Reader experience
 

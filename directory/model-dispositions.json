@@ -457,6 +457,12 @@
       "disposition": "held",
       "reason": "No downloadable weights are verifiable (the weight repository is gated or absent) and the governing license text cannot be confirmed from first-party sources; NVIDIA's own documentation defers to Mistral AI terms and disclaims ownership of the model. Held in case first-party documentation appears.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "nvidia/nemotron-voicechat",
+      "disposition": "held",
+      "reason": "The queued models.dev row points at a gated early-access API service rather than a weight release, and the open NemotronLabs VoiceChat 11B release of August 2026 uses a different identity and license surface. Held pending identity alignment.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
