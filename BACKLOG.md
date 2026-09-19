@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-fifth models.dev queue batch: NVIDIA safety and embed lines (`nvidia/llama-3.1-nemotron-safety-guard-8b-v3`, `nemotron-3-content-safety`, `nemotron-3.5-content-safety`, `nemotron-content-safety-reasoning-4b`, `llama-nemotron-embed-vl-1b-v2`, `llama-nemotron-rerank-vl-1b-v2`). The content-safety lines are text-output releases like the reviewed Llama Guard; the embed and rerank lines likely fall outside the language-model queue. Promote, hold, or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The OpenAI, Zhipu, Anthropic, and Mistral clusters stay queued for later.
+- [ ] Curate the thirty-seventh models.dev queue batch: GLM 4.x (`zhipuai/glm-4.5-air`, `glm-4.5v`, `glm-4.6`, `glm-4.6v`, `glm-4.6v-flash`, `glm-4.7`, `glm-4.7-flash`, `glm-4.7-flashx`). The open-weight lines carry Z.ai custom licenses that likely reuse or extend the GLM-5.3 identifier; the vision lines are multimodal. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The GLM-5 family and the 4.5 Flash API line stay queued for later.
 
 ### Reader experience
 

@@ -2303,6 +2303,224 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-anthropic-claude-fable-5",
+      "source_id": "anthropic/claude-fable-5",
+      "name": "Claude Fable 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/fable-5/overview",
+      "description": "A pinned Mythos-class Claude release in legacy status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Fable 5",
+        "description": "Claude model for creative writing, analysis, and controlled agent workflows",
+        "family": "claude-fable",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Fable 5 release identified by the dateless pinned ID claude-fable-5, the general-use safeguarded variant of the Mythos-class tier that sits above the Opus class. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, Claude Mythos 5, and later Fable releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, legacy status, and a retirement date commitment",
+        "The suspension and redeployment events of June and July 2026 are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until June 9, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/fable-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 launch announcement",
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-fable-5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-fable-5-1",
+      "source_id": "anthropic/claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+      "description": "A pinned Mythos-class Claude release in current status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Fable 5.1",
+        "description": "Claude model for demanding reasoning and long-horizon agentic work",
+        "family": "claude-fable",
+        "release_date": "2026-09-01",
+        "last_updated": "2026-09-01",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Fable 5.1 release identified by the dateless pinned ID claude-fable-5-1, the current model of the Fable line with a documented breaking-change surface against Fable 5. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, Claude Fable 5, and later releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Three documented API changes are breaking for developers migrating from Fable 5"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5.1 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5.1 release announcement",
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-fable-5-1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-anthropic-claude-haiku-4-5",
       "source_id": "anthropic/claude-haiku-4-5",
       "name": "Claude Haiku 4.5",
@@ -2404,6 +2622,442 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-anthropic-claude-mythos-5",
+      "source_id": "anthropic/claude-mythos-5",
+      "name": "Claude Mythos 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/mythos-5/overview",
+      "description": "An invite-only pinned Mythos-class Claude release with a 1M-token context, available through Anthropic's developer API under access programs and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Mythos 5",
+        "description": "Restricted Claude model for advanced cybersecurity and biology research workflows",
+        "family": "claude-mythos",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Mythos 5 release identified by the dateless pinned ID claude-mythos-5, the safeguards-lifted variant of the Mythos-class tier delivered by invitation through Project Glasswing and sharing Claude Fable 5's underlying weights. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Fable 5, Claude Mythos Preview, and later Mythos releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, invite-only status, and a retirement date commitment",
+        "The suspension and redeployment events of June and July 2026 are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access is invite-only through the trusted-access programs, gating reach to approved customers"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Mythos 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/mythos-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 and Mythos 5 launch announcement",
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-mythos-5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-5-20251101",
+      "source_id": "anthropic/claude-opus-4-5-20251101",
+      "name": "Claude Opus 4.5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-5/overview",
+      "description": "A pinned multimodal Claude release in legacy status, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.5",
+        "description": "Flagship Claude model for deep reasoning, coding, and long-horizon agents",
+        "family": "claude-opus",
+        "release_date": "2025-11-01",
+        "last_updated": "2025-11-01",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the fixed Claude Opus 4.5 snapshot identified by claude-opus-4-5-20251101, which the pre-4.6 alias claude-opus-4-5 resolves to. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and later Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until November 24, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.5 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-5-20251101.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-6",
+      "source_id": "anthropic/claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-6/overview",
+      "description": "A pinned multimodal Claude release in legacy status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.6",
+        "description": "High-end Claude for difficult coding, planning, and slower expert reasoning",
+        "family": "claude-opus",
+        "release_date": "2026-02-05",
+        "last_updated": "2026-03-13",
+        "knowledge_cutoff": "2025-05-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Opus 4.6 release identified by the dateless pinned ID claude-opus-4-6, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until February 5, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.6 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-6/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.6 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-6.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-7",
+      "source_id": "anthropic/claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-7/overview",
+      "description": "A pinned multimodal Claude release in legacy status with a 1M-token context and an updated tokenizer, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.7",
+        "description": "Stronger Opus tier for advanced software work and high-stakes reasoning",
+        "family": "claude-opus",
+        "release_date": "2026-04-16",
+        "last_updated": "2026-04-16",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Opus 4.7 release identified by the dateless pinned ID claude-opus-4-7, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until April 16, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.7 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-7/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.7 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-7.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-anthropic-claude-opus-4-8",
@@ -24061,6 +24715,755 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-zhipuai-glm-4-5-air",
+      "source_id": "zhipuai/glm-4.5-air",
+      "name": "GLM-4.5-Air",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.5-Air",
+      "description": "An ungated 110B lightweight text model with a 131,072-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.5-Air",
+        "description": "Lighter GLM-4.5 variant for fast coding assistance and cheaper agents",
+        "family": "glm-air",
+        "release_date": "2025-07-28",
+        "last_updated": "2025-07-28",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 98304
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.5-Air"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and an explicit card statement that the models are released under the MIT open-source license and can be used commercially and for secondary development. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.5-Air/blob/a24ceef6ce4f3536971efe9b778bdaa1bab18daa/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.5-Air release of July 2025 at Hugging Face commit a24ceef6ce4f3536971efe9b778bdaa1bab18daa. The GLM-4.5 flagship, the vision lines, the GLM-4.6 and later generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line",
+        "The dedicated GLM-4.5-Air API documentation page is not served"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.5-Air weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.5-Air",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.5 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.5-air.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-5v",
+      "source_id": "zhipuai/glm-4.5v",
+      "name": "GLM-4.5V",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.5V",
+      "description": "An ungated 107B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.5V",
+        "description": "GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-08-11",
+        "last_updated": "2025-08-11",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 64000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.5V"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.5V/blob/ed47433b37111465ec527affaaddceff371bca04/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.5V release of August 2025 at Hugging Face commit ed47433b37111465ec527affaaddceff371bca04. The GLM-4.5-Air base model, the text-only lines, the GLM-4.6V and later vision generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.5V weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.5V",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.5V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.5v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.5v.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6",
+      "source_id": "zhipuai/glm-4.6",
+      "name": "GLM-4.6",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6",
+      "description": "An ungated 356B text model with a 204,800-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6",
+        "description": "Late GLM-4 workhorse for coding agents, reasoning, and structured tasks",
+        "family": "glm",
+        "release_date": "2025-09-30",
+        "last_updated": "2025-09-30",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6/blob/be72194883d968d7923a07e2f61681ea9a2826d1/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6 release of September 2025 at Hugging Face commit be72194883d968d7923a07e2f61681ea9a2826d1. The GLM-4.5 generation, the vision lines, the GLM-4.7 and later generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6v",
+      "source_id": "zhipuai/glm-4.6v",
+      "name": "GLM-4.6V",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6V",
+      "description": "An ungated 107B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6V",
+        "description": "GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-12-08",
+        "last_updated": "2025-12-08",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6V"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V/blob/4e2d47eb0b41c5280d8294b17cef9e94fdcfff46/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6V release of December 2025 at Hugging Face commit 4e2d47eb0b41c5280d8294b17cef9e94fdcfff46. The 4.6V-Flash sibling, the text-only lines, the GLM-4.5V vision generation, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6V weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.6v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6v.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6v-flash",
+      "source_id": "zhipuai/glm-4.6v-flash",
+      "name": "GLM-4.6V-Flash",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash",
+      "description": "An ungated 9B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API free tier.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6V-Flash",
+        "description": "Lightweight GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-12-08",
+        "last_updated": "2025-12-08",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash/blob/411bb4d77144a3f03accbf4b780f5acb8b7cde4e/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6V-Flash release of December 2025 at Hugging Face commit 411bb4d77144a3f03accbf4b780f5acb8b7cde4e. The 4.6V flagship sibling, the text-only lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.22
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6V-Flash weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.6v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6v-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-7",
+      "source_id": "zhipuai/glm-4.7",
+      "name": "GLM-4.7",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.7",
+      "description": "An ungated 355B text model with a 204,800-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.7",
+        "description": "Mature GLM model for dependable coding, reasoning, and structured agent tasks",
+        "family": "glm",
+        "release_date": "2025-12-22",
+        "last_updated": "2025-12-22",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.7"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.7/blob/602d01efcdd332c5238ca4bcede555defbe83eb7/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.7 release of December 2025 at Hugging Face commit 602d01efcdd332c5238ca4bcede555defbe83eb7. The GLM-4.6 generation, the Flash and FlashX tiers, the vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.7 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.7 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.7.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-7-flash",
+      "source_id": "zhipuai/glm-4.7-flash",
+      "name": "GLM-4.7-Flash",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.7-Flash",
+      "description": "An ungated 30B text model with a 200,000-token context, declared MIT on the model card and served on the Z.ai API free tier.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.7-Flash",
+        "description": "Budget GLM lane for fast coding help, routing, and everyday automation",
+        "family": "glm-flash",
+        "release_date": "2026-01-19",
+        "last_updated": "2026-01-19",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.7-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.7-Flash/blob/7dd20894a642a0aa287e9827cb1a1f7f91386b67/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.7-Flash release of January 2026 at Hugging Face commit 7dd20894a642a0aa287e9827cb1a1f7f91386b67. The GLM-4.7 flagship, the FlashX variant, the vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.7-Flash weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.7-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.7 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.7-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-zhipuai-glm-5",
