@@ -15,7 +15,9 @@ from unittest import mock
 from scripts import check_evidence_links
 
 
-def target(*, reviewed_at: str = "2026-09-01", terms: bool = False) -> check_evidence_links.LinkTarget:
+def target(
+    *, reviewed_at: str = "2026-09-01", terms: bool = False
+) -> check_evidence_links.LinkTarget:
     reference = "systems:example:license:0" if terms else "systems:example:url"
     return check_evidence_links.LinkTarget(
         url="https://example.com/terms" if terms else "https://example.com/project",
@@ -26,7 +28,9 @@ def target(*, reviewed_at: str = "2026-09-01", terms: bool = False) -> check_evi
     )
 
 
-def response(body: bytes | None = None, *, status: int = 200) -> check_evidence_links.FetchResult:
+def response(
+    body: bytes | None = None, *, status: int = 200
+) -> check_evidence_links.FetchResult:
     return check_evidence_links.FetchResult(
         status=status,
         final_url="https://example.com/final",
@@ -78,36 +82,105 @@ class EvidenceLinkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             directory = Path(temp_dir)
             documents = {
-                "projects.json": {"projects": [{"id": "system", "url": "https://example.com/shared", "verified_at": "2026-08-01"}]},
-                "license-evidence.json": {"entries": [{"project_id": "system", "items": [{
-                    "kind": "web_terms", "url": "https://example.com/terms", "verified_at": "2026-08-02"
-                }]}]},
-                "specifications.json": {"specifications": [{
-                    "id": "spec", "url": "https://example.com/shared", "verified_at": "2026-08-03",
-                    "evidence": [{"kind": "git_blob", "url": "https://example.com/blob", "immutable_url": "https://api.github.com/blob"}],
-                    "license_evidence": [],
-                }]},
-                "inference-services.json": {"services": [{
-                    "id": "service", "url": "https://example.com/service", "verified_at": "2026-08-04",
-                    "terms": {"kind": "web_terms", "url": "https://example.com/terms", "verified_at": "2026-08-05"},
-                    "evidence": [],
-                }]},
-                "local-runtimes.json": {"runtimes": [{
-                    "id": "runtime", "url": "https://example.com/runtime", "verified_at": "2026-08-06",
-                    "evidence": [], "license_evidence": [],
-                }]},
-                "models.json": {"models": [{
-                    "id": "model", "url": "https://example.com/model", "verified_at": "2026-08-07",
-                    "evidence": [], "license_evidence": [],
-                }]},
-                "packs.json": {"packs": [{
-                    "id": "kit", "url": "https://example.com/kit", "verified_at": "2026-08-08",
-                    "evidence": [{"kind": "git_blob", "url": "https://example.com/kit-manifest", "immutable_url": "https://api.github.com/kit-blob"}],
-                    "license_evidence": [],
-                }]},
+                "projects.json": {
+                    "projects": [
+                        {
+                            "id": "system",
+                            "url": "https://example.com/shared",
+                            "verified_at": "2026-08-01",
+                        }
+                    ]
+                },
+                "license-evidence.json": {
+                    "entries": [
+                        {
+                            "project_id": "system",
+                            "items": [
+                                {
+                                    "kind": "web_terms",
+                                    "url": "https://example.com/terms",
+                                    "verified_at": "2026-08-02",
+                                }
+                            ],
+                        }
+                    ]
+                },
+                "specifications.json": {
+                    "specifications": [
+                        {
+                            "id": "spec",
+                            "url": "https://example.com/shared",
+                            "verified_at": "2026-08-03",
+                            "evidence": [
+                                {
+                                    "kind": "git_blob",
+                                    "url": "https://example.com/blob",
+                                    "immutable_url": "https://api.github.com/blob",
+                                }
+                            ],
+                            "license_evidence": [],
+                        }
+                    ]
+                },
+                "inference-services.json": {
+                    "services": [
+                        {
+                            "id": "service",
+                            "url": "https://example.com/service",
+                            "verified_at": "2026-08-04",
+                            "terms": {
+                                "kind": "web_terms",
+                                "url": "https://example.com/terms",
+                                "verified_at": "2026-08-05",
+                            },
+                            "evidence": [],
+                        }
+                    ]
+                },
+                "local-runtimes.json": {
+                    "runtimes": [
+                        {
+                            "id": "runtime",
+                            "url": "https://example.com/runtime",
+                            "verified_at": "2026-08-06",
+                            "evidence": [],
+                            "license_evidence": [],
+                        }
+                    ]
+                },
+                "models.json": {
+                    "models": [
+                        {
+                            "id": "model",
+                            "url": "https://example.com/model",
+                            "verified_at": "2026-08-07",
+                            "evidence": [],
+                            "license_evidence": [],
+                        }
+                    ]
+                },
+                "packs.json": {
+                    "packs": [
+                        {
+                            "id": "kit",
+                            "url": "https://example.com/kit",
+                            "verified_at": "2026-08-08",
+                            "evidence": [
+                                {
+                                    "kind": "git_blob",
+                                    "url": "https://example.com/kit-manifest",
+                                    "immutable_url": "https://api.github.com/kit-blob",
+                                }
+                            ],
+                            "license_evidence": [],
+                        }
+                    ]
+                },
             }
             for filename, document in documents.items():
-                (directory / filename).write_text(json.dumps(document), encoding="utf-8")
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
 
             targets = check_evidence_links.collect_targets(directory)
 
@@ -126,7 +199,9 @@ class EvidenceLinkTests(unittest.TestCase):
             by_url["https://example.com/terms"].review_dates,
         )
         self.assertIn("immutable_evidence", by_url["https://api.github.com/blob"].kinds)
-        self.assertEqual(("packs:kit:url",), by_url["https://example.com/kit"].references)
+        self.assertEqual(
+            ("packs:kit:url",), by_url["https://example.com/kit"].references
+        )
 
     def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:
         """A third-party page is not the Atlas's to accept changes to: check the link, hash nothing."""
@@ -139,30 +214,57 @@ class EvidenceLinkTests(unittest.TestCase):
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
                 "packs.json": {"packs": []},
-                "inference-services.json": {"services": [{
-                    "id": "router", "url": "https://example.com/router", "verified_at": "2026-09-18",
-                    "terms": {"kind": "web_terms", "url": "https://example.com/terms", "verified_at": "2026-09-18"},
-                    "evidence": [],
-                    "trust": {
-                        "verified_at": "2026-09-18",
-                        "properties": {"cache_isolation": {
-                            "status": "undocumented", "note": "n", "scope": "s",
-                            "url": "https://example.com/privacy", "verified_at": "2026-09-17",
-                        }},
-                        "findings": [{
-                            "claim": "c", "published_at": "2026-05-28",
-                            "source": {
-                                "label": "l", "url": "https://arxiv.org/abs/2605.30613v1", "kind": "third_party",
-                                "content_sha256": "0" * 64, "fetched_at": "2026-09-16",
+                "inference-services.json": {
+                    "services": [
+                        {
+                            "id": "router",
+                            "url": "https://example.com/router",
+                            "verified_at": "2026-09-18",
+                            "terms": {
+                                "kind": "web_terms",
+                                "url": "https://example.com/terms",
+                                "verified_at": "2026-09-18",
                             },
-                            "operator_response": {"url": "https://example.com/response", "verified_at": "2026-09-17", "summary": "s"},
-                            "resolved": None,
-                        }],
-                    },
-                }]},
+                            "evidence": [],
+                            "trust": {
+                                "verified_at": "2026-09-18",
+                                "properties": {
+                                    "cache_isolation": {
+                                        "status": "undocumented",
+                                        "note": "n",
+                                        "scope": "s",
+                                        "url": "https://example.com/privacy",
+                                        "verified_at": "2026-09-17",
+                                    }
+                                },
+                                "findings": [
+                                    {
+                                        "claim": "c",
+                                        "published_at": "2026-05-28",
+                                        "source": {
+                                            "label": "l",
+                                            "url": "https://arxiv.org/abs/2605.30613v1",
+                                            "kind": "third_party",
+                                            "content_sha256": "0" * 64,
+                                            "fetched_at": "2026-09-16",
+                                        },
+                                        "operator_response": {
+                                            "url": "https://example.com/response",
+                                            "verified_at": "2026-09-17",
+                                            "summary": "s",
+                                        },
+                                        "resolved": None,
+                                    }
+                                ],
+                            },
+                        }
+                    ]
+                },
             }
             for filename, document in documents.items():
-                (directory / filename).write_text(json.dumps(document), encoding="utf-8")
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
 
             targets = check_evidence_links.collect_targets(directory)
 
@@ -171,8 +273,14 @@ class EvidenceLinkTests(unittest.TestCase):
         finding = by_url["https://arxiv.org/abs/2605.30613v1"]
         self.assertFalse(finding.monitor_terms)
         self.assertIn("trust_finding", finding.kinds)
-        self.assertEqual((("inference-services:router:finding:0", "2026-09-16"),), finding.review_dates)
-        self.assertEqual(("inference-services:router:trust:cache_isolation",), by_url["https://example.com/privacy"].references)
+        self.assertEqual(
+            (("inference-services:router:finding:0", "2026-09-16"),),
+            finding.review_dates,
+        )
+        self.assertEqual(
+            ("inference-services:router:trust:cache_isolation",),
+            by_url["https://example.com/privacy"].references,
+        )
         self.assertFalse(by_url["https://example.com/privacy"].monitor_terms)
         self.assertIn("trust_response", by_url["https://example.com/response"].kinds)
         self.assertEqual(
@@ -232,7 +340,9 @@ class EvidenceLinkTests(unittest.TestCase):
             },
         }
 
-        def unexpected_fetch(_target: object, _cached: object) -> check_evidence_links.FetchResult:
+        def unexpected_fetch(
+            _target: object, _cached: object
+        ) -> check_evidence_links.FetchResult:
             raise AssertionError("fresh cache should skip the request")
 
         summary = check_evidence_links.check_targets(
@@ -259,7 +369,9 @@ class EvidenceLinkTests(unittest.TestCase):
             ),
         ]
 
-        def fail(item: check_evidence_links.LinkTarget, _cached: object) -> check_evidence_links.FetchResult:
+        def fail(
+            item: check_evidence_links.LinkTarget, _cached: object
+        ) -> check_evidence_links.FetchResult:
             if item.url.endswith("project"):
                 raise check_evidence_links.FetchFailure("HTTP 404", status=404)
             raise check_evidence_links.FetchFailure("URLError: offline")
@@ -274,7 +386,9 @@ class EvidenceLinkTests(unittest.TestCase):
 
         self.assertTrue(any("broken reviewed link" in item for item in summary.errors))
         self.assertTrue(any("minimum coverage" in item for item in summary.errors))
-        self.assertTrue(any("unchecked reviewed link" in item for item in summary.warnings))
+        self.assertTrue(
+            any("unchecked reviewed link" in item for item in summary.warnings)
+        )
 
     def test_fetch_uses_conditional_head_then_bounded_get_fallback(self) -> None:
         http_error = urllib.error.HTTPError(
@@ -291,7 +405,9 @@ class EvidenceLinkTests(unittest.TestCase):
         )
 
         self.assertEqual(200, result.status)
-        self.assertEqual(["HEAD", "GET"], [request.method for request in opener.requests])
+        self.assertEqual(
+            ["HEAD", "GET"], [request.method for request in opener.requests]
+        )
         self.assertEqual("bytes=0-0", opener.requests[1].get_header("Range"))
         self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
 
@@ -308,10 +424,16 @@ class EvidenceLinkTests(unittest.TestCase):
         ):
             opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
             check_evidence_links.fetch_target(
-                target(terms=True), cached, token=None, opener=opener, sleeper=lambda _delay: None
+                target(terms=True),
+                cached,
+                token=None,
+                opener=opener,
+                sleeper=lambda _delay: None,
             )
             self.assertIsNone(opener.requests[0].get_header("If-none-match"), cached)
-            self.assertIsNone(opener.requests[0].get_header("If-modified-since"), cached)
+            self.assertIsNone(
+                opener.requests[0].get_header("If-modified-since"), cached
+            )
 
     def test_terms_entry_holding_its_text_keeps_conditional_requests(self) -> None:
         opener = _Opener([_Response(b"<html><main>Terms A.</main></html>")])
@@ -339,7 +461,9 @@ class EvidenceLinkTests(unittest.TestCase):
         )
 
         self.assertEqual(200, result.status)
-        self.assertEqual(["HEAD", "GET"], [request.method for request in opener.requests])
+        self.assertEqual(
+            ["HEAD", "GET"], [request.method for request in opener.requests]
+        )
 
     def test_shared_terms_require_every_affected_reference_to_be_reviewed(self) -> None:
         shared = check_evidence_links.LinkTarget(
@@ -357,7 +481,9 @@ class EvidenceLinkTests(unittest.TestCase):
             "updated_at": None,
             "entries": {
                 shared.url: {
-                    "terms_sha256": check_evidence_links.content_sha256(b"Terms A", "text/plain"),
+                    "terms_sha256": check_evidence_links.content_sha256(
+                        b"Terms A", "text/plain"
+                    ),
                     "terms_reviewed_at": {
                         "systems:a:license:0": "2026-09-01",
                         "systems:b:license:0": "2026-09-01",
@@ -411,7 +537,9 @@ class EvidenceLinkTests(unittest.TestCase):
     def test_mutable_blob_terms_use_stable_raw_endpoints(self) -> None:
         self.assertEqual(
             "https://raw.githubusercontent.com/example/repo/main/LICENSE",
-            check_evidence_links._fetch_url("https://github.com/example/repo/blob/main/LICENSE"),
+            check_evidence_links._fetch_url(
+                "https://github.com/example/repo/blob/main/LICENSE"
+            ),
         )
         self.assertEqual(
             "https://huggingface.co/example/model/resolve/main/LICENSE",
@@ -470,7 +598,9 @@ class EvidenceLinkTests(unittest.TestCase):
 
         self.assertEqual(200, result.status)
         self.assertTrue(result.via_browser_fallback)
-        self.assertEqual(["HEAD", "GET", "GET"], [request.method for request in opener.requests])
+        self.assertEqual(
+            ["HEAD", "GET", "GET"], [request.method for request in opener.requests]
+        )
         user_agents = [request.get_header("User-agent") for request in opener.requests]
         self.assertEqual(check_evidence_links.BOT_USER_AGENT, user_agents[0])
         self.assertEqual(check_evidence_links.BOT_USER_AGENT, user_agents[1])
@@ -480,15 +610,17 @@ class EvidenceLinkTests(unittest.TestCase):
         bot_wall = urllib.error.HTTPError(
             "https://example.com/project", 403, "Forbidden", {}, None
         )
-        opener = _Opener([
-            urllib.error.HTTPError(
-                "https://example.com/project", 403, "Forbidden", {}, None
-            ),
-            bot_wall,
-            urllib.error.HTTPError(
-                "https://example.com/project", 403, "Forbidden", {}, None
-            ),
-        ])
+        opener = _Opener(
+            [
+                urllib.error.HTTPError(
+                    "https://example.com/project", 403, "Forbidden", {}, None
+                ),
+                bot_wall,
+                urllib.error.HTTPError(
+                    "https://example.com/project", 403, "Forbidden", {}, None
+                ),
+            ]
+        )
 
         with self.assertRaisesRegex(check_evidence_links.FetchFailure, "HTTP 403"):
             check_evidence_links.fetch_target(
@@ -544,7 +676,9 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertTrue(
             any("bot-walled reviewed link" in item for item in summary.warnings)
         )
-        self.assertTrue(cache["entries"]["https://example.com/project"]["via_browser_fallback"])
+        self.assertTrue(
+            cache["entries"]["https://example.com/project"]["via_browser_fallback"]
+        )
 
     def test_telemetry_nonce_does_not_change_the_terms_hash(self) -> None:
         first = (
@@ -553,7 +687,9 @@ class EvidenceLinkTests(unittest.TestCase):
             b"   This is the Trace Id: d0901de7db6b7a296ea95c3a74ffd750 <script>more();</script>"
             b"</body></html>"
         )
-        second = first.replace(b"d0901de7db6b7a296ea95c3a74ffd750", b"5f95e477b07e9a394f28e8460cd28633")
+        second = first.replace(
+            b"d0901de7db6b7a296ea95c3a74ffd750", b"5f95e477b07e9a394f28e8460cd28633"
+        )
 
         self.assertEqual(
             check_evidence_links.content_sha256(first, "text/html"),
@@ -581,9 +717,7 @@ class EvidenceLinkTests(unittest.TestCase):
             max_age=timedelta(0),
         )
 
-        self.assertFalse(
-            any("terms drift" in item for item in summary.errors)
-        )
+        self.assertFalse(any("terms drift" in item for item in summary.errors))
         self.assertTrue(
             any("terms content unavailable" in item for item in summary.warnings)
         )
@@ -616,7 +750,9 @@ def terms_entry(
     return entry
 
 
-def cache_of(entries: dict[str, object], *, updated_at: str | None = "2026-09-10T00:00:00Z") -> dict[str, object]:
+def cache_of(
+    entries: dict[str, object], *, updated_at: str | None = "2026-09-10T00:00:00Z"
+) -> dict[str, object]:
     return {"version": "1.0", "updated_at": updated_at, "entries": entries}
 
 
@@ -646,26 +782,41 @@ class SharedCacheTests(unittest.TestCase):
     def test_default_cache_lives_in_the_shared_git_directory(self) -> None:
         calls: list[tuple[list[str], dict[str, object]]] = []
 
-        def runner(args: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        def runner(
+            args: list[str], **kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
             calls.append((args, kwargs))
-            return subprocess.CompletedProcess(args, 0, stdout="/clone/.git\n", stderr="")
+            return subprocess.CompletedProcess(
+                args, 0, stdout="/clone/.git\n", stderr=""
+            )
 
-        path = check_evidence_links.default_cache_path(Path("/clone/worktree"), runner=runner)
+        path = check_evidence_links.default_cache_path(
+            Path("/clone/worktree"), runner=runner
+        )
         self.assertEqual(Path("/clone/.git/atlas/evidence-link-cache.json"), path)
-        self.assertEqual(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], calls[0][0])
+        self.assertEqual(
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            calls[0][0],
+        )
         self.assertEqual(Path("/clone/worktree"), calls[0][1]["cwd"])
 
     def test_default_cache_falls_back_outside_git(self) -> None:
-        def not_a_checkout(args: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        def not_a_checkout(
+            args: list[str], **_kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
             raise subprocess.CalledProcessError(128, args)
 
-        def no_git(_args: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        def no_git(
+            _args: list[str], **_kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
             raise FileNotFoundError("git")
 
         for runner in (not_a_checkout, no_git):
             self.assertEqual(
                 Path("/tarball/.evidence-link-cache.json"),
-                check_evidence_links.default_cache_path(Path("/tarball"), runner=runner),
+                check_evidence_links.default_cache_path(
+                    Path("/tarball"), runner=runner
+                ),
             )
 
     def test_a_held_lock_refuses_a_second_run(self) -> None:
@@ -686,11 +837,16 @@ class SharedCacheTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             path = Path(temp_dir) / "atlas" / "evidence-link-cache.json"
             cache = cache_of({}, updated_at=None)
-            with mock.patch("scripts.check_evidence_links.os.replace", wraps=os.replace) as replace:
+            with mock.patch(
+                "scripts.check_evidence_links.os.replace", wraps=os.replace
+            ) as replace:
                 check_evidence_links.write_cache(path, cache)
             replace.assert_called_once()
             self.assertEqual(cache, json.loads(path.read_text(encoding="utf-8")))
-            self.assertEqual(["evidence-link-cache.json"], [item.name for item in path.parent.iterdir()])
+            self.assertEqual(
+                ["evidence-link-cache.json"],
+                [item.name for item in path.parent.iterdir()],
+            )
 
     def test_a_run_keeps_entries_it_did_not_target(self) -> None:
         other = "https://example.com/terms-on-another-branch"
@@ -702,23 +858,31 @@ class SharedCacheTests(unittest.TestCase):
         self.assertIn(other, cache["entries"])
         self.assertIn(TERMS_URL, cache["entries"])
 
-    def test_new_baseline_is_recorded_for_terms_reviewed_since_the_last_run(self) -> None:
+    def test_new_baseline_is_recorded_for_terms_reviewed_since_the_last_run(
+        self,
+    ) -> None:
         cache = cache_of({}, updated_at="2026-09-01T08:00:00Z")
         summary = self.check_terms(cache, reviewed_at="2026-09-01")
         self.assertEqual([], summary.errors)
         self.assertEqual(1, summary.terms_bootstrapped)
         self.assertIn("terms_sha256", cache["entries"][TERMS_URL])
 
-    def test_missing_baseline_for_terms_reviewed_before_the_last_run_fails(self) -> None:
+    def test_missing_baseline_for_terms_reviewed_before_the_last_run_fails(
+        self,
+    ) -> None:
         cache = cache_of({}, updated_at="2026-09-03T08:00:00Z")
         summary = self.check_terms(cache, reviewed_at="2026-09-01")
         self.assertEqual(0, summary.terms_bootstrapped)
-        self.assertRegex(summary.errors[0], r"^terms baseline missing: https://example\.com/terms")
+        self.assertRegex(
+            summary.errors[0], r"^terms baseline missing: https://example\.com/terms"
+        )
         entry = cache["entries"][TERMS_URL]
         self.assertNotIn("terms_sha256", entry)
         self.assertEqual("2026-09-05", entry["terms_baseline_missing"])
 
-    def test_a_cache_without_a_previous_run_reports_every_missing_baseline(self) -> None:
+    def test_a_cache_without_a_previous_run_reports_every_missing_baseline(
+        self,
+    ) -> None:
         summary = self.check_terms(cache_of({}, updated_at=None))
         self.assertEqual(0, summary.terms_bootstrapped)
         self.assertRegex(summary.errors[0], "terms baseline missing")
@@ -727,7 +891,9 @@ class SharedCacheTests(unittest.TestCase):
         cache = cache_of({}, updated_at=None)
         self.check_terms(cache, now=datetime(2026, 9, 5, 12, tzinfo=UTC))
 
-        def unexpected_fetch(_target: object, _cached: object) -> check_evidence_links.FetchResult:
+        def unexpected_fetch(
+            _target: object, _cached: object
+        ) -> check_evidence_links.FetchResult:
             raise AssertionError("a fresh entry should be served from the cache")
 
         again = self.check_terms(
@@ -745,7 +911,10 @@ class SharedCacheTests(unittest.TestCase):
         summary = self.check_terms(cache, establish_baselines=True)
         self.assertEqual([], summary.errors)
         self.assertEqual(1, summary.terms_bootstrapped)
-        self.assertRegex(summary.warnings[0], r"^terms baseline established by request: https://example\.com/terms")
+        self.assertRegex(
+            summary.warnings[0],
+            r"^terms baseline established by request: https://example\.com/terms",
+        )
         entry = cache["entries"][TERMS_URL]
         self.assertIn("terms_sha256", entry)
         self.assertNotIn("terms_baseline_missing", entry)
@@ -754,26 +923,46 @@ class SharedCacheTests(unittest.TestCase):
         shared = cache_of({}, updated_at=None)
         report = check_evidence_links.merge_caches(
             shared,
-            [cache_of({TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})})],
+            [
+                cache_of(
+                    {
+                        TERMS_URL: terms_entry(
+                            "a", {"systems:example:license:0": "2026-09-01"}
+                        )
+                    }
+                )
+            ],
             today="2026-09-15",
         )
         self.assertEqual("a" * 64, shared["entries"][TERMS_URL]["terms_sha256"])
         self.assertEqual((1, 1), (report.sources, report.added))
         self.assertEqual("2026-09-10T00:00:00Z", shared["updated_at"])
 
-    def test_import_of_agreeing_baselines_keeps_the_latest_check_and_open_drift(self) -> None:
+    def test_import_of_agreeing_baselines_keeps_the_latest_check_and_open_drift(
+        self,
+    ) -> None:
         reviewed = {"systems:example:license:0": "2026-09-01"}
-        drifted = terms_entry("a", reviewed, checked="2026-09-05T00:00:00Z", drift="2026-09-05", observed="b")
+        drifted = terms_entry(
+            "a",
+            reviewed,
+            checked="2026-09-05T00:00:00Z",
+            drift="2026-09-05",
+            observed="b",
+        )
         later = terms_entry("a", reviewed, checked="2026-09-09T00:00:00Z")
         shared = cache_of({TERMS_URL: drifted})
-        report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: later})], today="2026-09-15")
+        report = check_evidence_links.merge_caches(
+            shared, [cache_of({TERMS_URL: later})], today="2026-09-15"
+        )
         entry = shared["entries"][TERMS_URL]
         self.assertEqual("2026-09-09T00:00:00Z", entry["checked_at"])
         self.assertEqual("2026-09-05", entry["terms_drift_detected_at"])
         self.assertEqual("b" * 64, entry["observed_terms_sha256"])
         self.assertEqual(1, report.agreed)
 
-    def test_import_prefers_the_entry_accepted_after_a_strictly_newer_review(self) -> None:
+    def test_import_prefers_the_entry_accepted_after_a_strictly_newer_review(
+        self,
+    ) -> None:
         older = terms_entry(
             "a",
             {"inference-services:deepinfra:terms:0": "2026-09-12"},
@@ -791,18 +980,24 @@ class SharedCacheTests(unittest.TestCase):
         )
         for first, second in ((older, newer), (newer, older)):
             shared = cache_of({TERMS_URL: dict(first)})
-            report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: dict(second)})], today="2026-09-15")
+            report = check_evidence_links.merge_caches(
+                shared, [cache_of({TERMS_URL: dict(second)})], today="2026-09-15"
+            )
             entry = shared["entries"][TERMS_URL]
             self.assertEqual("b" * 64, entry["terms_sha256"])
             self.assertNotIn("terms_drift_detected_at", entry)
             self.assertEqual(1, report.newer_review)
 
-    def test_import_opens_drift_when_baselines_disagree_without_a_newer_review(self) -> None:
+    def test_import_opens_drift_when_baselines_disagree_without_a_newer_review(
+        self,
+    ) -> None:
         reviewed = {"systems:example:license:0": "2026-09-12"}
         first = terms_entry("a", reviewed, checked="2026-09-12T00:00:00Z")
         second = terms_entry("b", reviewed, checked="2026-09-14T00:00:00Z")
         shared = cache_of({TERMS_URL: first})
-        report = check_evidence_links.merge_caches(shared, [cache_of({TERMS_URL: second})], today="2026-09-15")
+        report = check_evidence_links.merge_caches(
+            shared, [cache_of({TERMS_URL: second})], today="2026-09-15"
+        )
         entry = shared["entries"][TERMS_URL]
         self.assertEqual("b" * 64, entry["terms_sha256"])
         self.assertEqual("a" * 64, entry["observed_terms_sha256"])
@@ -810,10 +1005,14 @@ class SharedCacheTests(unittest.TestCase):
         self.assertEqual([TERMS_URL], report.conflict_urls)
 
         # The opened drift holds until a newer human review, like any other drift.
-        summary = self.check_terms(shared, reviewed_at="2026-09-12", now=datetime(2026, 9, 15, tzinfo=UTC))
+        summary = self.check_terms(
+            shared, reviewed_at="2026-09-12", now=datetime(2026, 9, 15, tzinfo=UTC)
+        )
         self.assertRegex(summary.errors[0], "terms drift requires review")
 
-    def test_import_cli_merges_into_the_cache_and_leaves_sources_unchanged(self) -> None:
+    def test_import_cli_merges_into_the_cache_and_leaves_sources_unchanged(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             cache_path = root / "shared" / "evidence-link-cache.json"
@@ -822,7 +1021,11 @@ class SharedCacheTests(unittest.TestCase):
             source.write_text(
                 json.dumps(
                     cache_of(
-                        {TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})},
+                        {
+                            TERMS_URL: terms_entry(
+                                "a", {"systems:example:license:0": "2026-09-01"}
+                            )
+                        },
                         updated_at="2026-09-12T16:00:00Z",
                     )
                 ),
@@ -830,20 +1033,30 @@ class SharedCacheTests(unittest.TestCase):
             )
             before = source.read_bytes()
             with mock.patch("builtins.print") as printed:
-                code = check_evidence_links.main(["--cache", str(cache_path), "--import-cache", str(source)])
+                code = check_evidence_links.main(
+                    ["--cache", str(cache_path), "--import-cache", str(source)]
+                )
             self.assertEqual(0, code)
             self.assertEqual(before, source.read_bytes())
             merged = json.loads(cache_path.read_text(encoding="utf-8"))
             self.assertEqual("a" * 64, merged["entries"][TERMS_URL]["terms_sha256"])
             self.assertEqual("2026-09-12T16:00:00Z", merged["updated_at"])
-            self.assertIn("1 URLs added", " ".join(str(call.args[0]) for call in printed.call_args_list))
+            self.assertIn(
+                "1 URLs added",
+                " ".join(str(call.args[0]) for call in printed.call_args_list),
+            )
 
     def test_import_cli_rejects_a_missing_source(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             cache_path = Path(temp_dir) / "evidence-link-cache.json"
             with mock.patch("builtins.print"):
                 code = check_evidence_links.main(
-                    ["--cache", str(cache_path), "--import-cache", str(Path(temp_dir) / "missing.json")]
+                    [
+                        "--cache",
+                        str(cache_path),
+                        "--import-cache",
+                        str(Path(temp_dir) / "missing.json"),
+                    ]
                 )
             self.assertEqual(2, code)
             self.assertFalse(cache_path.exists())
@@ -859,7 +1072,9 @@ ANCHORED_PAGE = (
 ANCHORED_SECTION = "License Use is governed by the terms. Details Sub detail."
 
 
-def anchored_target(*, reviewed_at: str = "2026-09-01") -> check_evidence_links.LinkTarget:
+def anchored_target(
+    *, reviewed_at: str = "2026-09-01"
+) -> check_evidence_links.LinkTarget:
     reference = "systems:example:license:0"
     return check_evidence_links.LinkTarget(
         url=ANCHORED_URL,
@@ -882,7 +1097,11 @@ class TermsTextTests(unittest.TestCase):
         now: datetime = datetime(2026, 9, 5, tzinfo=UTC),
     ) -> check_evidence_links.CheckSummary:
         return check_evidence_links.check_targets(
-            [link], cache, lambda _target, _cached: response(body), now=now, max_age=timedelta(0)
+            [link],
+            cache,
+            lambda _target, _cached: response(body),
+            now=now,
+            max_age=timedelta(0),
         )
 
     def test_section_of_a_heading_runs_to_the_next_same_or_higher_heading(self) -> None:
@@ -896,7 +1115,10 @@ class TermsTextTests(unittest.TestCase):
             "<div id='terms'><p>Terms apply.</p><script>track()</script>"
             "<div>Nested clause.</div></div><p>After.</p>"
         )
-        self.assertEqual("Terms apply. Nested clause.", check_evidence_links.section_text(html, "terms"))
+        self.assertEqual(
+            "Terms apply. Nested clause.",
+            check_evidence_links.section_text(html, "terms"),
+        )
 
     def test_missing_section_id_is_none(self) -> None:
         self.assertIsNone(check_evidence_links.section_text("<p>Terms.</p>", "license"))
@@ -908,33 +1130,54 @@ class TermsTextTests(unittest.TestCase):
         entry = cache["entries"][ANCHORED_URL]
         self.assertEqual("section", entry["terms_hash_scope"])
         self.assertEqual(ANCHORED_SECTION, entry["terms_text"])
-        self.assertEqual(hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"])
+        self.assertEqual(
+            hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"]
+        )
 
     def test_missing_anchor_warns_and_hashes_the_whole_page(self) -> None:
         cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
         body = b"<html><body><p>Terms without the anchor.</p></body></html>"
         summary = self.run_check(cache, anchored_target(), body)
-        self.assertRegex(summary.warnings[0], r"^terms anchor not found: https://example\.com/terms#license")
+        self.assertRegex(
+            summary.warnings[0],
+            r"^terms anchor not found: https://example\.com/terms#license",
+        )
         entry = cache["entries"][ANCHORED_URL]
         self.assertEqual("page", entry["terms_hash_scope"])
-        self.assertEqual(check_evidence_links.content_sha256(body, "text/html"), entry["terms_sha256"])
+        self.assertEqual(
+            check_evidence_links.content_sha256(body, "text/html"),
+            entry["terms_sha256"],
+        )
 
-    def test_drift_stores_both_texts_shows_a_diff_and_acceptance_moves_the_text(self) -> None:
+    def test_drift_stores_both_texts_shows_a_diff_and_acceptance_moves_the_text(
+        self,
+    ) -> None:
         cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
-        self.run_check(cache, target(terms=True), b"<html><main>Terms A. Shared clause.</main></html>")
-        self.assertEqual("Terms A. Shared clause.", cache["entries"][TERMS_URL]["terms_text"])
+        self.run_check(
+            cache,
+            target(terms=True),
+            b"<html><main>Terms A. Shared clause.</main></html>",
+        )
+        self.assertEqual(
+            "Terms A. Shared clause.", cache["entries"][TERMS_URL]["terms_text"]
+        )
 
         drifted = self.run_check(
-            cache, target(terms=True), b"<html><main>Terms B. Shared clause.</main></html>",
+            cache,
+            target(terms=True),
+            b"<html><main>Terms B. Shared clause.</main></html>",
             now=datetime(2026, 9, 6, tzinfo=UTC),
         )
         self.assertRegex(drifted.errors[0], "terms drift requires review")
         entry = cache["entries"][TERMS_URL]
         self.assertEqual("Terms B. Shared clause.", entry["observed_terms_text"])
-        self.assertEqual(["  - Terms A.", "  + Terms B."], drifted.drift_details[TERMS_URL])
+        self.assertEqual(
+            ["  - Terms A.", "  + Terms B."], drifted.drift_details[TERMS_URL]
+        )
 
         accepted = self.run_check(
-            cache, target(reviewed_at="2026-09-07", terms=True),
+            cache,
+            target(reviewed_at="2026-09-07", terms=True),
             b"<html><main>Terms B. Shared clause.</main></html>",
             now=datetime(2026, 9, 7, tzinfo=UTC),
         )
@@ -945,13 +1188,17 @@ class TermsTextTests(unittest.TestCase):
 
     def test_legacy_entry_gains_text_when_its_hash_is_unchanged(self) -> None:
         body = b"<html><main>Terms A.</main></html>"
-        cache = cache_of({
-            TERMS_URL: {
-                "checked_at": "2026-09-01T00:00:00Z",
-                "terms_sha256": check_evidence_links.content_sha256(body, "text/html"),
-                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+        cache = cache_of(
+            {
+                TERMS_URL: {
+                    "checked_at": "2026-09-01T00:00:00Z",
+                    "terms_sha256": check_evidence_links.content_sha256(
+                        body, "text/html"
+                    ),
+                    "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+                }
             }
-        })
+        )
         summary = self.run_check(cache, target(terms=True), body)
         self.assertEqual([], summary.errors)
         entry = cache["entries"][TERMS_URL]
@@ -959,45 +1206,66 @@ class TermsTextTests(unittest.TestCase):
         self.assertEqual("page", entry["terms_hash_scope"])
 
     def test_legacy_drift_says_no_baseline_text_was_stored(self) -> None:
-        cache = cache_of({TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})})
+        cache = cache_of(
+            {TERMS_URL: terms_entry("a", {"systems:example:license:0": "2026-09-01"})}
+        )
         # Checked on 2026-09-10, so the run must come later for the entry to be refetched.
         summary = self.run_check(
-            cache, target(terms=True), b"<html><main>Terms A.</main></html>",
+            cache,
+            target(terms=True),
+            b"<html><main>Terms A.</main></html>",
             now=datetime(2026, 9, 15, tzinfo=UTC),
         )
         self.assertRegex(summary.errors[0], "terms drift requires review")
-        self.assertRegex(" ".join(summary.drift_details[TERMS_URL]), "no baseline text stored")
+        self.assertRegex(
+            " ".join(summary.drift_details[TERMS_URL]), "no baseline text stored"
+        )
 
-    def test_anchored_legacy_baseline_moves_to_the_section_when_the_page_is_unchanged(self) -> None:
-        cache = cache_of({
-            ANCHORED_URL: {
-                "checked_at": "2026-09-01T00:00:00Z",
-                "terms_sha256": check_evidence_links.content_sha256(ANCHORED_PAGE, "text/html"),
-                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+    def test_anchored_legacy_baseline_moves_to_the_section_when_the_page_is_unchanged(
+        self,
+    ) -> None:
+        cache = cache_of(
+            {
+                ANCHORED_URL: {
+                    "checked_at": "2026-09-01T00:00:00Z",
+                    "terms_sha256": check_evidence_links.content_sha256(
+                        ANCHORED_PAGE, "text/html"
+                    ),
+                    "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+                }
             }
-        })
+        )
         summary = self.run_check(cache, anchored_target(), ANCHORED_PAGE)
         self.assertEqual([], summary.errors)
         self.assertEqual(0, summary.terms_accepted)
         entry = cache["entries"][ANCHORED_URL]
         self.assertEqual("section", entry["terms_hash_scope"])
-        self.assertEqual(hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"])
+        self.assertEqual(
+            hashlib.sha256(ANCHORED_SECTION.encode()).hexdigest(), entry["terms_sha256"]
+        )
         self.assertEqual(ANCHORED_SECTION, entry["terms_text"])
 
     def test_anchored_legacy_baseline_stays_drift_when_the_page_changed(self) -> None:
         older_page = ANCHORED_PAGE.replace(b"Intro.", b"Older intro.")
-        cache = cache_of({
-            ANCHORED_URL: {
-                "checked_at": "2026-09-01T00:00:00Z",
-                "terms_sha256": check_evidence_links.content_sha256(older_page, "text/html"),
-                "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+        cache = cache_of(
+            {
+                ANCHORED_URL: {
+                    "checked_at": "2026-09-01T00:00:00Z",
+                    "terms_sha256": check_evidence_links.content_sha256(
+                        older_page, "text/html"
+                    ),
+                    "terms_reviewed_at": {"systems:example:license:0": "2026-09-01"},
+                }
             }
-        })
+        )
         summary = self.run_check(cache, anchored_target(), ANCHORED_PAGE)
         self.assertRegex(summary.errors[0], "terms drift requires review")
         entry = cache["entries"][ANCHORED_URL]
         self.assertEqual("section", entry["observed_terms_hash_scope"])
-        self.assertNotIn("terms_hash_scope", {key for key, value in entry.items() if value == "section"})
+        self.assertNotIn(
+            "terms_hash_scope",
+            {key for key, value in entry.items() if value == "section"},
+        )
         self.assertRegex(" ".join(summary.drift_details[ANCHORED_URL]), "whole page")
 
     def test_drift_diff_is_bounded_and_clipped(self) -> None:
@@ -1013,18 +1281,30 @@ class TermsTextTests(unittest.TestCase):
     def test_show_drift_prints_stored_diffs_without_fetching(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             cache_path = Path(temp_dir) / "evidence-link-cache.json"
-            entry = terms_entry("a", {"systems:example:license:0": "2026-09-01"}, drift="2026-09-06", observed="b")
+            entry = terms_entry(
+                "a",
+                {"systems:example:license:0": "2026-09-01"},
+                drift="2026-09-06",
+                observed="b",
+            )
             entry["terms_text"] = "Terms A. Shared clause."
             entry["observed_terms_text"] = "Terms B. Shared clause."
             check_evidence_links.write_cache(cache_path, cache_of({TERMS_URL: entry}))
             with (
-                mock.patch("scripts.check_evidence_links.fetch_target", side_effect=AssertionError("fetched")),
+                mock.patch(
+                    "scripts.check_evidence_links.fetch_target",
+                    side_effect=AssertionError("fetched"),
+                ),
                 mock.patch("builtins.print") as printed,
             ):
-                code = check_evidence_links.main(["--cache", str(cache_path), "--show-drift"])
+                code = check_evidence_links.main(
+                    ["--cache", str(cache_path), "--show-drift"]
+                )
             output = "\n".join(str(call.args[0]) for call in printed.call_args_list)
             self.assertEqual(0, code)
-            self.assertIn("terms drift since 2026-09-06: https://example.com/terms", output)
+            self.assertIn(
+                "terms drift since 2026-09-06: https://example.com/terms", output
+            )
             self.assertIn("  - Terms A.", output)
             self.assertIn("  + Terms B.", output)
 

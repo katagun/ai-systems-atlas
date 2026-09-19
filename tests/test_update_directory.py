@@ -43,7 +43,12 @@ class UpdateDirectoryTests(unittest.TestCase):
         project = project_fixture()
 
         successes, failures, reviews = update_directory.refresh_projects(
-            [project], {}, lambda _path, _token: metadata_fixture("Apache-2.0"), None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            {},
+            lambda _path, _token: metadata_fixture("Apache-2.0"),
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual(1, successes)
@@ -57,7 +62,12 @@ class UpdateDirectoryTests(unittest.TestCase):
         project = project_fixture()
 
         update_directory.refresh_projects(
-            [project], {}, lambda _path, _token: metadata_fixture(), None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            {},
+            lambda _path, _token: metadata_fixture(),
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual("2025-01-15", project["verified_at"])
@@ -70,7 +80,9 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertNotIn("inference-services", source)
         self.assertNotIn("inference_services", source)
 
-    def test_transport_failure_is_reported_without_destroying_existing_metadata(self) -> None:
+    def test_transport_failure_is_reported_without_destroying_existing_metadata(
+        self,
+    ) -> None:
         project = project_fixture()
         before = copy.deepcopy(project)
 
@@ -103,7 +115,12 @@ class UpdateDirectoryTests(unittest.TestCase):
             raise urllib.error.URLError("offline")
 
         _, _, reviews = update_directory.refresh_projects(
-            [project], {"tool": previous_entry}, unavailable, None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            {"tool": previous_entry},
+            unavailable,
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual([previous_entry], reviews)
@@ -113,10 +130,17 @@ class UpdateDirectoryTests(unittest.TestCase):
         project["repo"] = None
 
         def unexpected_request(_path: str, _token: str | None) -> dict:
-            raise AssertionError("non-GitHub project should not be refreshed through GitHub")
+            raise AssertionError(
+                "non-GitHub project should not be refreshed through GitHub"
+            )
 
         successes, failures, reviews = update_directory.refresh_projects(
-            [project], {}, unexpected_request, None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            {},
+            unexpected_request,
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual((0, [], []), (successes, failures, reviews))
@@ -137,7 +161,12 @@ class UpdateDirectoryTests(unittest.TestCase):
         }
 
         _, _, reviews = update_directory.refresh_projects(
-            [project], previous, lambda _path, _token: metadata_fixture("MIT"), None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            previous,
+            lambda _path, _token: metadata_fixture("MIT"),
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual("active", project["status"])
@@ -169,12 +198,19 @@ class UpdateDirectoryTests(unittest.TestCase):
             return metadata
 
         update_directory.refresh_projects(
-            [project], {}, archived_metadata, None, "2026-08-25", sleeper=lambda _delay: None
+            [project],
+            {},
+            archived_metadata,
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual("archived", project["status"])
 
-    def test_local_runtime_stars_refresh_updates_descriptive_metadata_only(self) -> None:
+    def test_local_runtime_stars_refresh_updates_descriptive_metadata_only(
+        self,
+    ) -> None:
         runtime = {
             "id": "sample-runtime",
             "repo": "sample/runtime",
@@ -185,7 +221,11 @@ class UpdateDirectoryTests(unittest.TestCase):
         }
 
         successes, failures = update_directory.refresh_local_runtime_stars(
-            [runtime], lambda _path, _token: {"stargazers_count": 42}, None, "2026-08-25", sleeper=lambda _delay: None
+            [runtime],
+            lambda _path, _token: {"stargazers_count": 42},
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual((1, []), (successes, failures))
@@ -194,8 +234,15 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("2025-01-15", runtime["verified_at"])
         self.assertEqual({"overall": 5.0}, runtime["score"])
 
-    def test_local_runtime_star_refresh_transport_failure_preserves_existing_value(self) -> None:
-        runtime = {"id": "sample-runtime", "repo": "sample/runtime", "stars": 10, "stars_verified_at": "2025-01-15"}
+    def test_local_runtime_star_refresh_transport_failure_preserves_existing_value(
+        self,
+    ) -> None:
+        runtime = {
+            "id": "sample-runtime",
+            "repo": "sample/runtime",
+            "stars": 10,
+            "stars_verified_at": "2025-01-15",
+        }
         before = copy.deepcopy(runtime)
 
         def unavailable(_path: str, _token: str | None) -> dict:
@@ -210,13 +257,24 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual(before, runtime)
 
     def test_local_runtime_without_a_repo_is_not_sent_to_github(self) -> None:
-        runtime = {"id": "lm-studio", "repo": None, "stars": None, "stars_verified_at": None}
+        runtime = {
+            "id": "lm-studio",
+            "repo": None,
+            "stars": None,
+            "stars_verified_at": None,
+        }
 
         def unexpected_request(_path: str, _token: str | None) -> dict:
-            raise AssertionError("repo-less local runtime should not be refreshed through GitHub")
+            raise AssertionError(
+                "repo-less local runtime should not be refreshed through GitHub"
+            )
 
         successes, failures = update_directory.refresh_local_runtime_stars(
-            [runtime], unexpected_request, None, "2026-08-25", sleeper=lambda _delay: None
+            [runtime],
+            unexpected_request,
+            None,
+            "2026-08-25",
+            sleeper=lambda _delay: None,
         )
 
         self.assertEqual((0, []), (successes, failures))
@@ -333,16 +391,20 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual("agent_system", candidate["proposed_system_family"])
 
     def test_discovery_preserves_non_github_candidates(self) -> None:
-        previous = [{"repo": None, "url": "https://example.com/system", "name": "External"}]
+        previous = [
+            {"repo": None, "url": "https://example.com/system", "name": "External"}
+        ]
 
-        candidates, new_count, successful_queries, failures = update_directory.discover_candidates(
-            set(),
-            previous,
-            {"coding_agent": "agent_system"},
-            lambda _path, _token: {"items": []},
-            None,
-            "2026-08-25",
-            sleeper=lambda _seconds: None,
+        candidates, new_count, successful_queries, failures = (
+            update_directory.discover_candidates(
+                set(),
+                previous,
+                {"coding_agent": "agent_system"},
+                lambda _path, _token: {"items": []},
+                None,
+                "2026-08-25",
+                sleeper=lambda _seconds: None,
+            )
         )
 
         self.assertEqual(previous, candidates)
@@ -350,7 +412,9 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertGreater(successful_queries, 0)
         self.assertEqual([], failures)
 
-    def test_official_rss_discovery_creates_only_a_provisional_observation(self) -> None:
+    def test_official_rss_discovery_creates_only_a_provisional_observation(
+        self,
+    ) -> None:
         source = {
             "id": "vendor-ai",
             "name": "Vendor AI",
@@ -365,21 +429,31 @@ class UpdateDirectoryTests(unittest.TestCase):
           <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
         </item></channel></rss>"""
 
-        candidates, new_count, successes, failures = update_directory.discover_official_candidates(
-            [],
-            set(),
-            [source],
-            {"enterprise_work_assistant": "assistant_system"},
-            "2026-08-26",
-            getter=lambda _url, _hosts: body,
+        candidates, new_count, successes, failures = (
+            update_directory.discover_official_candidates(
+                [],
+                set(),
+                [source],
+                {"enterprise_work_assistant": "assistant_system"},
+                "2026-08-26",
+                getter=lambda _url, _hosts: body,
+            )
         )
 
         self.assertEqual((1, 1, []), (new_count, successes, failures))
         candidate = candidates[0]
         self.assertEqual("assistant_system", candidate["proposed_system_family"])
-        self.assertEqual("enterprise_work_assistant", candidate["proposed_primary_role"])
+        self.assertEqual(
+            "enterprise_work_assistant", candidate["proposed_primary_role"]
+        )
         self.assertEqual(["official-announcement", "vendor-ai"], candidate["topics"])
-        for editorial_field in ("score", "verified_at", "licenses", "source_model", "provider_relationship"):
+        for editorial_field in (
+            "score",
+            "verified_at",
+            "licenses",
+            "source_model",
+            "provider_relationship",
+        ):
             self.assertNotIn(editorial_field, candidate)
 
     def test_official_discovery_rejects_external_hosts_and_unsafe_xml(self) -> None:
@@ -397,9 +471,15 @@ class UpdateDirectoryTests(unittest.TestCase):
           <updated>2026-08-26T12:00:00Z</updated>
         </entry></feed>"""
 
-        self.assertEqual([], update_directory.parse_official_feed(
-            external, source, {"general_ai_assistant": "assistant_system"}, "2026-08-26"
-        ))
+        self.assertEqual(
+            [],
+            update_directory.parse_official_feed(
+                external,
+                source,
+                {"general_ai_assistant": "assistant_system"},
+                "2026-08-26",
+            ),
+        )
         with self.assertRaisesRegex(ValueError, "DOCTYPE"):
             update_directory.parse_official_feed(
                 b"<!DOCTYPE rss><rss/>", source, {}, "2026-08-26"
@@ -407,7 +487,9 @@ class UpdateDirectoryTests(unittest.TestCase):
 
         utf16_doctype = """<?xml version="1.0" encoding="UTF-16"?>
           <!DOCTYPE rss [<!ENTITY title "Introducing an AI assistant">]>
-          <rss><channel><item><title>&title;</title></item></channel></rss>""".encode("utf-16")
+          <rss><channel><item><title>&title;</title></item></channel></rss>""".encode(
+            "utf-16"
+        )
         with self.assertRaisesRegex(ValueError, "DOCTYPE"):
             update_directory.parse_official_feed(
                 utf16_doctype, source, {}, "2026-08-26"
@@ -434,7 +516,9 @@ class UpdateDirectoryTests(unittest.TestCase):
 
         self.assertEqual(1, len(candidates))
 
-    def test_official_feed_bounds_observations_without_rejecting_large_feeds(self) -> None:
+    def test_official_feed_bounds_observations_without_rejecting_large_feeds(
+        self,
+    ) -> None:
         source = {
             "id": "vendor-ai",
             "name": "Vendor AI",
@@ -490,11 +574,13 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertEqual([], candidates)
 
     def test_official_discovery_preserves_existing_candidate_by_url(self) -> None:
-        previous = [{
-            "repo": None,
-            "url": "https://vendor.example/news/assistant/?utm_source=manual",
-            "name": "Manual review",
-        }]
+        previous = [
+            {
+                "repo": None,
+                "url": "https://vendor.example/news/assistant/?utm_source=manual",
+                "name": "Manual review",
+            }
+        ]
         source = {
             "id": "vendor-ai",
             "name": "Vendor AI",
@@ -508,13 +594,15 @@ class UpdateDirectoryTests(unittest.TestCase):
           <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
         </item></channel></rss>"""
 
-        candidates, new_count, successes, failures = update_directory.discover_official_candidates(
-            previous,
-            set(),
-            [source],
-            {"general_ai_assistant": "assistant_system"},
-            "2026-08-26",
-            getter=lambda _url, _hosts: body,
+        candidates, new_count, successes, failures = (
+            update_directory.discover_official_candidates(
+                previous,
+                set(),
+                [source],
+                {"general_ai_assistant": "assistant_system"},
+                "2026-08-26",
+                getter=lambda _url, _hosts: body,
+            )
         )
 
         self.assertEqual(previous, candidates)
@@ -530,7 +618,9 @@ class UpdateDirectoryTests(unittest.TestCase):
             key,
         )
 
-    def test_feed_get_rejects_initial_and_redirect_hosts_outside_allowlist(self) -> None:
+    def test_feed_get_rejects_initial_and_redirect_hosts_outside_allowlist(
+        self,
+    ) -> None:
         with self.assertRaisesRegex(ValueError, "outside"):
             update_directory.feed_get(
                 "https://untrusted.example/feed.xml", {"vendor.example"}, attempts=1
@@ -550,18 +640,27 @@ class UpdateDirectoryTests(unittest.TestCase):
     def test_all_official_source_failures_abort_before_writes(self) -> None:
         source_document = {
             "version": "1.0",
-            "sources": [{
-                "id": "vendor-ai",
-                "name": "Vendor AI",
-                "hub_url": "https://vendor.example/news",
-                "feed_url": "https://vendor.example/feed.xml",
-                "item_hosts": ["vendor.example"],
-            }],
+            "sources": [
+                {
+                    "id": "vendor-ai",
+                    "name": "Vendor AI",
+                    "hub_url": "https://vendor.example/news",
+                    "feed_url": "https://vendor.example/feed.xml",
+                    "item_hosts": ["vendor.example"],
+                }
+            ],
         }
-        project_document = {"generated_at": "2026-08-25", "projects": [{"repo": "example/tool", "url": "https://github.com/example/tool"}]}
+        project_document = {
+            "generated_at": "2026-08-25",
+            "projects": [
+                {"repo": "example/tool", "url": "https://github.com/example/tool"}
+            ],
+        }
         documents = {
             update_directory.PROJECTS_PATH: project_document,
-            update_directory.TAXONOMY_PATH: {"primary_roles": [{"id": "coding_agent", "family": "agent_system"}]},
+            update_directory.TAXONOMY_PATH: {
+                "primary_roles": [{"id": "coding_agent", "family": "agent_system"}]
+            },
             update_directory.DIRECTORY / "exclusions.json": {"entries": []},
             update_directory.DISCOVERY_SOURCES_PATH: source_document,
             update_directory.CANDIDATES_PATH: {"candidates": []},
@@ -570,10 +669,22 @@ class UpdateDirectoryTests(unittest.TestCase):
         }
 
         with (
-            mock.patch.object(update_directory, "load_json", side_effect=lambda path, default=None: documents.get(path, default)),
-            mock.patch.object(update_directory, "refresh_projects", return_value=(1, [], [])),
-            mock.patch.object(update_directory, "discover_candidates", return_value=([], 0, 1, [])),
-            mock.patch.object(update_directory, "discover_official_candidates", return_value=([], 0, 0, ["offline"])),
+            mock.patch.object(
+                update_directory,
+                "load_json",
+                side_effect=lambda path, default=None: documents.get(path, default),
+            ),
+            mock.patch.object(
+                update_directory, "refresh_projects", return_value=(1, [], [])
+            ),
+            mock.patch.object(
+                update_directory, "discover_candidates", return_value=([], 0, 1, [])
+            ),
+            mock.patch.object(
+                update_directory,
+                "discover_official_candidates",
+                return_value=([], 0, 0, ["offline"]),
+            ),
             mock.patch.object(update_directory, "write_json") as write_json,
             mock.patch.object(update_directory, "sync_web_data") as synchronize,
         ):
@@ -589,10 +700,17 @@ class KnownUrlTests(unittest.TestCase):
         """An exclusion is a durable rejection; without its URL the refresh re-adds it."""
         known = update_directory.known_urls_from(
             [{"url": "https://project.example/a"}],
-            {"entries": [
-                {"name": "Rejected", "repo": None, "reason": "r", "useful_lesson": "l",
-                 "url": "https://vendor.example/launch"},
-            ]},
+            {
+                "entries": [
+                    {
+                        "name": "Rejected",
+                        "repo": None,
+                        "reason": "r",
+                        "useful_lesson": "l",
+                        "url": "https://vendor.example/launch",
+                    },
+                ]
+            },
         )
         self.assertIn("https://vendor.example/launch", known)
         self.assertIn("https://project.example/a", known)
@@ -601,17 +719,25 @@ class KnownUrlTests(unittest.TestCase):
         """All 70 existing entries lack a url; the helper must tolerate that."""
         known = update_directory.known_urls_from(
             [{"url": "https://project.example/a"}],
-            {"entries": [{"name": "Old", "repo": "a/b", "reason": "r", "useful_lesson": "l"}]},
+            {
+                "entries": [
+                    {"name": "Old", "repo": "a/b", "reason": "r", "useful_lesson": "l"}
+                ]
+            },
         )
         self.assertEqual(known, {"https://project.example/a"})
 
     def test_a_malformed_exclusion_entry_does_not_crash(self) -> None:
-        known = update_directory.known_urls_from([], {"entries": ["not-an-object", None]})
+        known = update_directory.known_urls_from(
+            [], {"entries": ["not-an-object", None]}
+        )
         self.assertEqual(known, set())
 
     def test_a_pack_url_and_repo_join_the_known_sets(self) -> None:
         """A pack is a decided record; discovery must not re-queue it as a candidate."""
-        packs = [{"repo": "Obra/Superpowers", "url": "https://github.com/obra/superpowers"}]
+        packs = [
+            {"repo": "Obra/Superpowers", "url": "https://github.com/obra/superpowers"}
+        ]
         known = update_directory.known_urls_from([], {"entries": []}, packs)
         self.assertIn("https://github.com/obra/superpowers", known)
         repos = update_directory.known_repos_from([], {"entries": []}, packs)

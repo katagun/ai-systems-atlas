@@ -64,7 +64,9 @@ class FrontmatterTests(PostFixture):
 
 class SlugTests(PostFixture):
     def test_the_slug_drops_the_date_prefix(self) -> None:
-        self.assertEqual("building-an-atlas", build_blog.slug_for("2026-09-05-building-an-atlas.md"))
+        self.assertEqual(
+            "building-an-atlas", build_blog.slug_for("2026-09-05-building-an-atlas.md")
+        )
 
     def test_a_filename_without_a_date_prefix_is_rejected(self) -> None:
         with self.assertRaises(build_blog.PostError):
@@ -89,8 +91,16 @@ class RenderTests(PostFixture):
     def test_links_allow_https_and_same_site_relative_destinations(self) -> None:
         cases = (
             ("absolute HTTPS", "https://example.com/docs", "https://example.com/docs"),
-            ("mixed-case HTTPS", "HTTPS://example.com/docs", "HTTPS://example.com/docs"),
-            ("punycode HTTPS", "https://xn--bcher-kva.example/", "https://xn--bcher-kva.example/"),
+            (
+                "mixed-case HTTPS",
+                "HTTPS://example.com/docs",
+                "HTTPS://example.com/docs",
+            ),
+            (
+                "punycode HTTPS",
+                "https://xn--bcher-kva.example/",
+                "https://xn--bcher-kva.example/",
+            ),
             ("IPv6 HTTPS", "https://[2001:db8::1]/", "https://[2001:db8::1]/"),
             ("root-relative", "/docs/page", "/docs/page"),
             ("path-relative", "../page", "../page"),
@@ -121,8 +131,9 @@ class RenderTests(PostFixture):
             "\x7fjavascript:document.body.textContent=owned",
         )
         for destination in destinations:
-            with self.subTest(destination=repr(destination)), self.assertRaises(
-                build_blog.PostError
+            with (
+                self.subTest(destination=repr(destination)),
+                self.assertRaises(build_blog.PostError),
             ):
                 self.render(f"[unsafe]({destination})")
 
@@ -143,7 +154,10 @@ class RenderTests(PostFixture):
             "https://example.com:not-a-port/path",
         )
         for destination in destinations:
-            with self.subTest(destination=destination), self.assertRaises(build_blog.PostError):
+            with (
+                self.subTest(destination=destination),
+                self.assertRaises(build_blog.PostError),
+            ):
                 self.render(f"[unsafe]({destination})")
 
     def test_the_supported_subset_renders(self) -> None:
@@ -151,8 +165,17 @@ class RenderTests(PostFixture):
             "## Heading\n\nA **bold** and *italic* and `code` word.\n\n"
             "- one\n- two\n\n> quoted\n\n```\nliteral\n```\n\n---\n"
         )
-        for fragment in ("<h2>", "<strong>", "<em>", "<code>", "<ul>", "<li>",
-                         "<blockquote>", "<pre>", "<hr"):
+        for fragment in (
+            "<h2>",
+            "<strong>",
+            "<em>",
+            "<code>",
+            "<ul>",
+            "<li>",
+            "<blockquote>",
+            "<pre>",
+            "<hr",
+        ):
             self.assertIn(fragment, html, fragment)
 
     def test_an_unsupported_construct_fails_with_its_line(self) -> None:
@@ -167,14 +190,63 @@ class RenderTests(PostFixture):
 
 class BuildTests(PostFixture):
     def two_posts(self) -> Path:
-        return self.root_with(**{
-            "2026-09-01-older.md": POST.replace("A Post", "Older").replace("2026-09-05", "2026-09-01"),
-            "2026-09-05-newer.md": POST.replace("A Post", "Newer"),
-        })
+        return self.root_with(
+            **{
+                "2026-09-01-older.md": POST.replace("A Post", "Older").replace(
+                    "2026-09-05", "2026-09-01"
+                ),
+                "2026-09-05-newer.md": POST.replace("A Post", "Newer"),
+            }
+        )
 
     def test_the_index_lists_newest_first(self) -> None:
         posts = build_blog.load_posts(self.two_posts())
         self.assertEqual(["newer", "older"], [post["slug"] for post in posts])
+
+    def test_same_day_posts_order_by_stated_time_not_slug(self) -> None:
+        root = self.root_with(
+            **{
+                "2026-09-05-early.md": POST.replace("A Post", "Early").replace(
+                    "2026-09-05", "2026-09-05 08:15"
+                ),
+                "2026-09-05-late.md": POST.replace("A Post", "Late").replace(
+                    "2026-09-05", "2026-09-05 20:40"
+                ),
+            }
+        )
+        posts = build_blog.load_posts(root)
+        self.assertEqual(["late", "early"], [post["slug"] for post in posts])
+
+    def test_a_same_day_post_renders_its_time_in_the_byline(self) -> None:
+        root = self.root_with(
+            **{
+                "2026-09-05-early.md": POST.replace("A Post", "Early").replace(
+                    "2026-09-05", "2026-09-05 08:15"
+                )
+            }
+        )
+        page = build_blog.build_pages(root)["blog/early/index.html"]
+        self.assertIn(
+            '<time datetime="2026-09-05T08:15">2026-09-05 · 08:15</time>', page
+        )
+
+    def test_every_post_page_carries_a_nav_of_all_posts_marking_the_open_one(
+        self,
+    ) -> None:
+        pages = build_blog.build_pages(self.two_posts())
+        newer = pages["blog/newer/index.html"]
+        self.assertIn('class="post-nav"', newer)
+        self.assertIn('href="../older/"', newer)
+        self.assertIn('aria-current="page"', newer)
+        self.assertIn("Newer", newer)
+        older = pages["blog/older/index.html"]
+        self.assertIn('href="../newer/"', older)
+        self.assertIn('aria-current="page"', older)
+        self.assertIn("Older", older)
+
+    def test_the_index_page_has_no_post_nav(self) -> None:
+        index = build_blog.build_pages(self.two_posts())["blog/index.html"]
+        self.assertNotIn("post-nav", index)
 
     def test_every_post_gets_a_page_and_an_index_exists(self) -> None:
         pages = build_blog.build_pages(self.two_posts())
@@ -197,18 +269,32 @@ class HeaderTests(PostFixture):
     """Every blog page is the site's own shell: its header, stylesheet, fonts, and theme."""
 
     def pages(self) -> dict[str, str]:
-        return build_blog.build_pages(self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")}))
+        return build_blog.build_pages(
+            self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")})
+        )
 
     def test_the_index_and_posts_carry_the_site_header_before_main(self) -> None:
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertLess(html.index('<header class="site-header">'), html.index('<main id="main"'))
-                self.assertIn('<nav class="tabs" aria-label="Primary navigation">', html)
-                self.assertIn('<span class="wordmark-name">peacefulcoexistance</span>', html)
+                self.assertLess(
+                    html.index('<header class="site-header">'),
+                    html.index('<main id="main"'),
+                )
+                self.assertIn(
+                    '<nav class="tabs" aria-label="Primary navigation">', html
+                )
+                self.assertIn(
+                    '<span class="wordmark-name">peacefulcoexistance</span>', html
+                )
 
-    def test_view_links_point_at_the_directory_page_relative_to_each_depth(self) -> None:
+    def test_view_links_point_at_the_directory_page_relative_to_each_depth(
+        self,
+    ) -> None:
         pages = self.pages()
-        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+        for path, root in (
+            ("blog/index.html", "../"),
+            ("blog/newer/index.html", "../../"),
+        ):
             with self.subTest(path):
                 html = pages[path]
                 self.assertIn(f'<a class="tab-link" href="{root}">Directory</a>', html)
@@ -217,23 +303,43 @@ class HeaderTests(PostFixture):
 
     def test_the_blog_link_is_marked_current(self) -> None:
         pages = self.pages()
-        self.assertIn('<a class="tab-link is-active" aria-current="page" href="./">Blog</a>', pages["blog/index.html"])
-        self.assertIn('<a class="tab-link is-active" aria-current="page" href="../">Blog</a>', pages["blog/newer/index.html"])
+        self.assertIn(
+            '<a class="tab-link is-active" aria-current="page" href="./">Blog</a>',
+            pages["blog/index.html"],
+        )
+        self.assertIn(
+            '<a class="tab-link is-active" aria-current="page" href="../">Blog</a>',
+            pages["blog/newer/index.html"],
+        )
 
-    def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(self) -> None:
+    def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(
+        self,
+    ) -> None:
         """The same stamp build_asset_version.mjs gives index.html, so a cached
         stylesheet from before a change can never be paired with a newer page."""
         import hashlib
+
         stamp = hashlib.sha256(STYLESHEET.encode("utf-8")).hexdigest()[:12]
         pages = self.pages()
-        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+        for path, root in (
+            ("blog/index.html", "../"),
+            ("blog/newer/index.html", "../../"),
+        ):
             with self.subTest(path):
-                self.assertIn(f'<link rel="stylesheet" href="{root}styles.css?v={stamp}">', pages[path])
-                self.assertRegex(pages[path], rf'<link rel="stylesheet" href="{re.escape(root)}fonts\.css\?v=[0-9a-f]{{12}}">')
+                self.assertIn(
+                    f'<link rel="stylesheet" href="{root}styles.css?v={stamp}">',
+                    pages[path],
+                )
+                self.assertRegex(
+                    pages[path],
+                    rf'<link rel="stylesheet" href="{re.escape(root)}fonts\.css\?v=[0-9a-f]{{12}}">',
+                )
                 self.assertNotIn("<style>", pages[path])
 
     def test_a_missing_stylesheet_stops_the_build(self) -> None:
-        root = self.root_with(**{"2026-09-05-newer.md": POST.replace("A Post", "Newer")})
+        root = self.root_with(
+            **{"2026-09-05-newer.md": POST.replace("A Post", "Newer")}
+        )
         (root / "web" / "styles.css").unlink()
         with self.assertRaises(build_blog.PostError) as caught:
             build_blog.build_pages(root)
@@ -246,14 +352,26 @@ class HeaderTests(PostFixture):
                 self.assertNotIn("<script src", html)
                 self.assertEqual(1, html.count("<script>"))
                 self.assertIn('var KEY = "theme"', html)
-                self.assertLess(html.index("<script>"), html.index('<link rel="stylesheet"'))
-                self.assertIn('<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system"', html)
-                self.assertLess(html.index('class="suggest-link"'), html.index('id="theme-toggle"'))
-                self.assertLess(html.index('id="theme-toggle"'), html.index('class="github-link"'))
+                self.assertLess(
+                    html.index("<script>"), html.index('<link rel="stylesheet"')
+                )
+                self.assertIn(
+                    '<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system"',
+                    html,
+                )
+                self.assertLess(
+                    html.index('class="suggest-link"'), html.index('id="theme-toggle"')
+                )
+                self.assertLess(
+                    html.index('id="theme-toggle"'), html.index('class="github-link"')
+                )
 
     def test_footers_keep_their_depth_specific_links(self) -> None:
         pages = self.pages()
-        self.assertIn('<span class="footer-meta"><a href="../">Browse the directory</a></span>', pages["blog/index.html"])
+        self.assertIn(
+            '<span class="footer-meta"><a href="../">Browse the directory</a></span>',
+            pages["blog/index.html"],
+        )
         self.assertIn(
             '<span class="footer-meta"><a href="../">All writing</a> · <a href="../../">Browse the directory</a></span>',
             pages["blog/newer/index.html"],
@@ -262,11 +380,15 @@ class HeaderTests(PostFixture):
     def test_footers_carry_the_directory_page_notices_verbatim(self) -> None:
         """The published index.html is the reference, so the two footers cannot drift apart."""
         index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
-        match = re.search(r"<footer>(.*?)<span id=\"data-date\"></span></footer>", index)
+        match = re.search(
+            r"<footer>(.*?)<span id=\"data-date\"></span></footer>", index
+        )
         self.assertIsNotNone(match)
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertIn(f"<footer>{match.group(1)}<span class=\"footer-meta\">", html)
+                self.assertIn(
+                    f'<footer>{match.group(1)}<span class="footer-meta">', html
+                )
 
 
 class CheckTests(PostFixture):
@@ -281,7 +403,9 @@ class CheckTests(PostFixture):
     def test_check_fails_when_a_page_is_stale(self) -> None:
         root = self.two_posts_root()
         self.build(root)
-        (root / "web" / "blog" / "newer" / "index.html").write_text("stale", encoding="utf-8")
+        (root / "web" / "blog" / "newer" / "index.html").write_text(
+            "stale", encoding="utf-8"
+        )
         self.assertEqual(1, build_blog.main(["--check"], root=root))
 
     def test_check_fails_on_a_page_no_post_produces(self) -> None:
@@ -293,10 +417,14 @@ class CheckTests(PostFixture):
         self.assertEqual(1, build_blog.main(["--check"], root=root))
 
     def two_posts_root(self) -> Path:
-        return self.root_with(**{
-            "2026-09-01-older.md": POST.replace("A Post", "Older").replace("2026-09-05", "2026-09-01"),
-            "2026-09-05-newer.md": POST.replace("A Post", "Newer"),
-        })
+        return self.root_with(
+            **{
+                "2026-09-01-older.md": POST.replace("A Post", "Older").replace(
+                    "2026-09-05", "2026-09-01"
+                ),
+                "2026-09-05-newer.md": POST.replace("A Post", "Newer"),
+            }
+        )
 
 
 if __name__ == "__main__":

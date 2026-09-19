@@ -6,6 +6,7 @@ described in docs/routines/hn-signals.md. Everything here is mechanical. See ADR
 a signal is a pointer, never a claim, and this routine may add an assessment of one but
 may never write a classification.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -41,7 +42,9 @@ DEFAULT_FROM_REF = routine_guards.DEFAULT_BASE_REF
 ALLOWED_CHANGES = {QUEUE}
 WORKTREE = ROOT.parent / "atlas-hn-signals"
 PROMPT = ROOT / "docs" / "routines" / "hn-signals.md"
-INSTALLED_PROMPT = Path.home() / ".claude" / "scheduled-tasks" / "hn-signals" / "SKILL.md"
+INSTALLED_PROMPT = (
+    Path.home() / ".claude" / "scheduled-tasks" / "hn-signals" / "SKILL.md"
+)
 
 MISSING = object()
 
@@ -57,7 +60,15 @@ def checks(base_ref: str) -> tuple[list[str], ...]:
     """
     return (
         ["uv", "run", "python", "scripts/validate_directory.py"],
-        ["uv", "run", "python", "scripts/verify_signal_pages.py", "--recheck", "--base-ref", base_ref],
+        [
+            "uv",
+            "run",
+            "python",
+            "scripts/verify_signal_pages.py",
+            "--recheck",
+            "--base-ref",
+            base_ref,
+        ],
         ["uv", "run", "python", "-m", "unittest", "discover", "-s", "tests"],
         ["uv", "run", "ruff", "check", "scripts", "tests"],
     )
@@ -68,7 +79,9 @@ def unexpected_changes(porcelain: str) -> list[str]:
     return routine_guards.unexpected_changes(porcelain, ALLOWED_CHANGES)
 
 
-def signal_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) -> list[str]:
+def signal_field_changes(
+    key: str, old: dict[str, Any], new: dict[str, Any]
+) -> list[str]:
     """Permit exactly one change per signal: adding an assessment where none existed."""
     problems: list[str] = []
     for field in sorted(set(old) | set(new)):
@@ -86,7 +99,9 @@ def signal_field_changes(key: str, old: dict[str, Any], new: dict[str, Any]) -> 
     return problems
 
 
-def index_signals(signals: Any, side: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
+def index_signals(
+    signals: Any, side: str
+) -> tuple[dict[str, dict[str, Any]], list[str]]:
     indexed: dict[str, dict[str, Any]] = {}
     problems: list[str] = []
     if not isinstance(signals, list):
@@ -101,7 +116,9 @@ def index_signals(signals: Any, side: str) -> tuple[dict[str, dict[str, Any]], l
     return indexed, problems
 
 
-def unexpected_field_changes(before: str, after: str, *, base_label: str = "origin/main") -> list[str]:
+def unexpected_field_changes(
+    before: str, after: str, *, base_label: str = "origin/main"
+) -> list[str]:
     """Compare two revisions of the queue and report every change the routine may not make.
 
     `base_label` names the revision `before` was read from, for diagnostics only. It
@@ -120,7 +137,8 @@ def unexpected_field_changes(before: str, after: str, *, base_label: str = "orig
     problems.extend(
         f"the run changed the document field {key!r}"
         for key in sorted(set(old_document) | set(new_document))
-        if key != "signals" and old_document.get(key, MISSING) != new_document.get(key, MISSING)
+        if key != "signals"
+        and old_document.get(key, MISSING) != new_document.get(key, MISSING)
     )
     old, old_problems = index_signals(old_document.get("signals"), base_label)
     new, new_problems = index_signals(new_document.get("signals"), "the run")
@@ -229,14 +247,19 @@ shell = routine_guards.shell
 
 def prompt_drift(repo_prompt: str, installed_prompt: str | None) -> str | None:
     """Report drift between the reviewed prompt and the one that actually runs."""
-    return routine_guards.prompt_drift(repo_prompt, installed_prompt, "docs/routines/hn-signals.md", ROOT)
+    return routine_guards.prompt_drift(
+        repo_prompt, installed_prompt, "docs/routines/hn-signals.md", ROOT
+    )
 
 
 def install_prompt() -> int:
     """Install the reviewed prompt, rendered for this checkout, where the scheduler reads it."""
     try:
         routine_guards.install_prompt(
-            PROMPT.read_text(encoding="utf-8"), INSTALLED_PROMPT, ROOT, INSTALLED_PROMPT.parents[1]
+            PROMPT.read_text(encoding="utf-8"),
+            INSTALLED_PROMPT,
+            ROOT,
+            INSTALLED_PROMPT.parents[1],
         )
     except OSError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -268,11 +291,14 @@ def drifted_story_ids(signals: list[dict[str, Any]], bundled: set[str]) -> list[
     return sorted(
         str(signal.get("story_id"))
         for signal in signals
-        if signal.get("page_status") == "readable" and str(signal.get("story_id")) not in bundled
+        if signal.get("page_status") == "readable"
+        and str(signal.get("story_id")) not in bundled
     )
 
 
-def pending_story_ids(signals: list[dict[str, Any]], drifted: list[str], limit: int) -> list[str]:
+def pending_story_ids(
+    signals: list[dict[str, Any]], drifted: list[str], limit: int
+) -> list[str]:
     """Signals awaiting an assessment, minus the ones nothing can be said about.
 
     A drifted page is both unreadable to the routine and barred from the `unreadable`
@@ -282,7 +308,8 @@ def pending_story_ids(signals: list[dict[str, Any]], drifted: list[str], limit: 
     return [
         str(signal.get("story_id"))
         for signal in signals
-        if "assessment" not in signal and str(signal.get("story_id")) not in set(drifted)
+        if "assessment" not in signal
+        and str(signal.get("story_id")) not in set(drifted)
     ][:limit]
 
 
@@ -303,17 +330,23 @@ def remote_for_ref(ref: str, run=shell) -> str | None:
     for a ref (like a bare "origin") that resolution alone would not classify.
     """
     code, remotes = run(["git", "remote"], ROOT)
-    names = {line.strip() for line in remotes.splitlines() if line.strip()} if code == 0 else set()
+    names = (
+        {line.strip() for line in remotes.splitlines() if line.strip()}
+        if code == 0
+        else set()
+    )
     prefix = ref.split("/", 1)[0]
     if prefix in names:
         return prefix
-    symbolic_code, symbolic = run(["git", "rev-parse", "--symbolic-full-name", ref], ROOT)
+    symbolic_code, symbolic = run(
+        ["git", "rev-parse", "--symbolic-full-name", ref], ROOT
+    )
     if symbolic_code != 0:
         return None
     full = symbolic.strip()
     if not full.startswith("refs/remotes/"):
         return None
-    remote = full[len("refs/remotes/"):].split("/", 1)[0]
+    remote = full[len("refs/remotes/") :].split("/", 1)[0]
     return remote if remote in names else None
 
 
@@ -324,7 +357,11 @@ def is_remote_tracking_ref(ref: str, run=shell) -> bool:
 
 def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> int:
     """Refresh an isolated worktree from `from_ref` and build the signal-page bundle."""
-    installed = INSTALLED_PROMPT.read_text(encoding="utf-8") if INSTALLED_PROMPT.exists() else None
+    installed = (
+        INSTALLED_PROMPT.read_text(encoding="utf-8")
+        if INSTALLED_PROMPT.exists()
+        else None
+    )
     drift = prompt_drift(PROMPT.read_text(encoding="utf-8"), installed)
     if drift:
         print(f"error: {drift}", file=sys.stderr)
@@ -346,17 +383,25 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
     fetch_is_fatal = remote is not None
     fetch_code, fetch_output = run(["git", "fetch", "--quiet", "origin"], ROOT)
     if fetch_code != 0 and fetch_is_fatal:
-        print(f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr)
+        print(
+            f"error: git fetch --quiet origin failed\n{fetch_output}", file=sys.stderr
+        )
         return 1
     resolve_code, resolved = run(["git", "rev-parse", "--verify", from_ref], ROOT)
     if resolve_code != 0:
-        print(f"error: could not resolve {from_ref!r} to a commit\n{resolved}", file=sys.stderr)
+        print(
+            f"error: could not resolve {from_ref!r} to a commit\n{resolved}",
+            file=sys.stderr,
+        )
         return 1
     base_sha = resolved.strip()
     steps = (
         # Removing a worktree that does not exist is expected on a first run.
         (["git", "worktree", "remove", "--force", str(WORKTREE)], True),
-        (["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), base_sha], False),
+        (
+            ["git", "worktree", "add", "--quiet", "--detach", str(WORKTREE), base_sha],
+            False,
+        ),
     )
     for command, tolerate_failure in steps:
         code, output = run(command, ROOT)
@@ -375,9 +420,13 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
     try:
         document = json.loads((WORKTREE / QUEUE).read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
-        print(f"error: could not read {QUEUE} from the worktree: {error}", file=sys.stderr)
+        print(
+            f"error: could not read {QUEUE} from the worktree: {error}", file=sys.stderr
+        )
         return 1
-    signals = [signal for signal in document.get("signals", []) if isinstance(signal, dict)]
+    signals = [
+        signal for signal in document.get("signals", []) if isinstance(signal, dict)
+    ]
     bundled = bundled_story_ids(WORKTREE)
     drifted = drifted_story_ids(signals, bundled)
     # A day's batch is not all-or-nothing. `verify_signal_pages` exits non-zero when any
@@ -424,7 +473,11 @@ def prepared_base_ref(read=root_text) -> str:
 
 
 def finish(
-    *, run=shell, read=worktree_text, base_read=root_text, write=worktree_write,
+    *,
+    run=shell,
+    read=worktree_text,
+    base_read=root_text,
+    write=worktree_write,
     fetcher=verify_signal_pages.fetch_web_text,
 ) -> int:
     """Run every guard, then commit. Any failure aborts before the commit."""
@@ -440,7 +493,10 @@ def finish(
         return 1
     forbidden = unexpected_changes(porcelain)
     if forbidden:
-        print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
+        print(
+            f"error: the run changed files it may not touch: {forbidden}",
+            file=sys.stderr,
+        )
         return 1
     # The base `prepare` actually built from — a pinned SHA when it recorded one,
     # `origin/main` otherwise. Every guard below must compare against this same tree:
@@ -480,12 +536,16 @@ def finish(
         return 1
     show_code, before = run(["git", "show", f"{base_ref}:{QUEUE}"], WORKTREE)
     if show_code != 0:
-        print(f"error: could not read {QUEUE} from {base_ref}\n{before}", file=sys.stderr)
+        print(
+            f"error: could not read {QUEUE} from {base_ref}\n{before}", file=sys.stderr
+        )
         return 1
     try:
         after = read(QUEUE)
     except OSError as exc:
-        print(f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr)
+        print(
+            f"error: could not read {QUEUE} from the worktree: {exc}", file=sys.stderr
+        )
         return 1
     # Before any guard judges the queue: a page that changed since the sweep pinned it
     # can no longer back the assessment citing it, so that one assessment is dropped here
@@ -507,7 +567,10 @@ def finish(
         try:
             write(QUEUE, after)
         except OSError as exc:
-            print(f"error: could not write {QUEUE} to the worktree: {exc}", file=sys.stderr)
+            print(
+                f"error: could not write {QUEUE} to the worktree: {exc}",
+                file=sys.stderr,
+            )
             return 1
         status_code, porcelain = run(["git", "status", "--porcelain"], WORKTREE)
         if status_code != 0:
@@ -515,7 +578,10 @@ def finish(
             return 1
         forbidden = unexpected_changes(porcelain)
         if forbidden:
-            print(f"error: the run changed files it may not touch: {forbidden}", file=sys.stderr)
+            print(
+                f"error: the run changed files it may not touch: {forbidden}",
+                file=sys.stderr,
+            )
             return 1
         dirty = bool(porcelain.strip())
         if not dirty and head.strip() == base.strip():
@@ -542,7 +608,10 @@ def finish(
         try:
             just_before_add = read(QUEUE)
         except OSError as exc:
-            print(f"error: could not re-read {QUEUE} before staging: {exc}", file=sys.stderr)
+            print(
+                f"error: could not re-read {QUEUE} before staging: {exc}",
+                file=sys.stderr,
+            )
             return 1
         if just_before_add != after:
             print(
@@ -553,7 +622,8 @@ def finish(
     message = f"Propose signal review for {date.today().isoformat()}"
     if dropped:
         message += (
-            "\n\nDropped assessments whose page changed since the sweep: " + ", ".join(dropped)
+            "\n\nDropped assessments whose page changed since the sweep: "
+            + ", ".join(dropped)
         )
     commands = [["git", "checkout", "-B", "hn-signals/pending"]]
     if dirty:

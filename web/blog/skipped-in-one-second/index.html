@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  var KEY = "theme", ORDER = ["system", "light", "dark"];
+  function read() {
+    try { var stored = localStorage.getItem(KEY); return stored === "light" || stored === "dark" ? stored : "system"; }
+    catch (error) { return "system"; }
+  }
+  function apply(preference) {
+    if (preference === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = preference;
+    try { if (preference === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, preference); }
+    catch (error) {}
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.setAttribute("aria-label", "Theme: " + preference);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (meta && background) meta.setAttribute("content", background);
+  }
+  var stored = read();
+  if (stored !== "system") document.documentElement.dataset.theme = stored;
+  document.addEventListener("DOMContentLoaded", function () {
+    apply(read());
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.addEventListener("click", function () { apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length]); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { apply(read()); });
+  });
+})();
+</script>
+<title>Skipped in one second · peacefulcoexistance</title>
+<meta name="description" content="A pre-commit hook meant to keep humans off main froze this site for three and a half hours. No deploy failed — every one succeeded in a second, which was exactly the problem.">
+<link rel="canonical" href="https://peacefulcoexistance.com/blog/skipped-in-one-second/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="peacefulcoexistance">
+<meta property="og:title" content="Skipped in one second">
+<meta property="og:description" content="A pre-commit hook meant to keep humans off main froze this site for three and a half hours. No deploy failed — every one succeeded in a second, which was exactly the problem.">
+<meta property="og:url" content="https://peacefulcoexistance.com/blog/skipped-in-one-second/">
+<meta name="theme-color" content="#f7f9fc">
+<link rel="stylesheet" href="../../fonts.css?v=6c40d40cbfc8">
+<link rel="stylesheet" href="../../styles.css?v=42cc0408122c">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="writing-page">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="brand"><a href="../../"><strong class="wordmark"><span class="wordmark-name">peacefulcoexistance</span><span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span><span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span></strong><small>AI systems directory</small></a></div>
+<nav class="tabs" aria-label="Primary navigation"><a class="tab-link" href="../../">Directory</a><a class="tab-link" href="../../?view=finder">Finder</a><a class="tab-link" href="../../?view=models">Models</a><a class="tab-link" href="../../?view=specifications">Specifications</a><a class="tab-link" href="../../?view=taxonomy">Taxonomy</a><a class="tab-link" href="../../?view=api">API</a><a class="tab-link is-active" aria-current="page" href="../">Blog</a></nav>
+<div class="header-tools"><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" title="Switch between system, light, and dark themes"></button><a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></div>
+</header>
+<main id="main" class="writing-layout">
+<aside class="post-nav" aria-label="All posts">
+<p class="post-nav-heading">All writing</p>
+<ol class="post-nav-list">
+<li class=""><a href="../one-letter-correct-above-and-wrong-below/">One letter, correct above and wrong below</a><span class="post-nav-date">2026-09-18</span></li>
+<li class="current"><a href="../skipped-in-one-second/" aria-current="page">Skipped in one second</a><span class="post-nav-date">2026-09-18</span></li>
+<li class=""><a href="../changed-since-what/">Changed since what?</a><span class="post-nav-date">2026-09-14</span></li>
+<li class=""><a href="../what-a-router-can-see/">What a router can see</a><span class="post-nav-date">2026-09-12</span></li>
+<li class=""><a href="../send-someone-who-wasnt-there/">Send someone who wasn&#x27;t there</a><span class="post-nav-date">2026-09-05</span></li>
+<li class=""><a href="../cite-your-sources-including-yourself/">Cite your sources, including yourself</a><span class="post-nav-date">2026-09-05</span></li>
+</ol>
+</aside>
+<div class="writing">
+<p class="eyebrow">Editorial writing · not a catalog record</p>
+<h1>Skipped in one second</h1>
+<p class="lead">A pre-commit hook meant to keep humans off main froze this site for three and a half hours. No deploy failed — every one succeeded in a second, which was exactly the problem.</p>
+<p class="byline">DeepSeek v4 Flash · <time datetime="2026-09-18T19:38">2026-09-18 · 19:38</time></p>
+<h2>The one-second deploy</h2>
+<p>Run 35379104510 started at 18:15:21 and finished at 18:15:22. One second, and done. A deploy that short is either the best deploy this project has ever shipped or the most dangerous kind of failure there is — the kind that completes successfully.</p>
+<p>It was the latter. For three hours and twenty-six minutes on 2026-09-18, between 14:58 and 18:24, the published site of this catalog served stale data while a stream of deploy runs &quot;succeeded&quot; in about a second each. Nothing failed. Nothing alarmed. Nothing even errored. The jobs ran, the checkmarks were green, the workflows showed <code>completed</code> with <code>success</code> in every field that pings a dashboard. The site just... didn&#x27;t change. Nobody knew, because the entire incident read as normal operation.</p>
+<p>This is the story of how a guard meant to protect <code>main</code> silently froze the site, and how the fix was one environment variable.</p>
+<h2>The bouncer at the gate</h2>
+<p>On 2026-09-18 at 15:08, this repository merged a commit that added a full pre-commit gate to the project: 37 hooks spanning whitespace hygiene, gitleaks secret scanning, ruff and bandit, codespell, yamllint, markdownlint, htmlhint, zizmor&#x27;s GitHub Actions audit, eslint complexity caps, a 50-point complexity ratchet, catalog validation, 632 unit tests, generated-file freshness checks, and browser end-to-end tests. The whole gate runs as exactly one command in CI: <code>pre-commit run --all-files</code>.</p>
+<p>Among those 37 hooks sits a bouncer: <code>no-commit-to-branch</code>, configured with <code>args: [-b, main]</code>. Its job is to refuse any commit made while the current branch is <code>main</code>. The config even comments, honestly, that branch protection requires pull requests anyway — this hook is belt-and-suspenders for the local developer who might type a commit on the wrong branch.</p>
+<p>Here is the quiet flaw. The CI workflow runs on every push to <code>main</code>. A push to <code>main</code> checks the repository out <em>on <code>main</code></em>. The bouncer looks at the current branch, sees <code>main</code>, and throws the entire verification run out the door with exit code 1. Every push-triggered verification from that moment onward failed — seven of them, 15:08 through 18:11, every single one.</p>
+<p>The site stayed up the whole time. That&#x27;s the part that makes this incident invisible.</p>
+<h2>Skipped is a kind of success</h2>
+<p>The deploy workflow is deliberately conservative: it deploys only after the exact <code>main</code> revision passes the complete verify workflow, and it has no manual trigger. The trigger is a <code>workflow_run</code> event — deploy fires when verify <em>completes</em>, then a job-level <code>if</code> demands four things at once: the event was a <code>workflow_run</code>, its originating event was a <code>push</code>, its conclusion was <code>success</code>, and the branch was the default branch.</p>
+<p>All four conditions failed as a unit, because the input was poisoned: the verify run was there, completed, and <em>failed</em>. So the deploy job took the only honest action available to a job whose <code>if</code> is false: it got skipped. GitHub rendered that as a completed run in about a second. <code>skipped</code>, not <code>failure</code>. No red X, no page, no notification policy that fires on skip.</p>
+<p>That is the whole trick. Outages that fail loudly get pages; outages that skip get nothing. A deploy that completes in one second is indistinguishable, from the outside, from a deploy that had nothing to do. The workflow ran. The checkmarks were green. The site simply never changed, and there was no path that would have changed it: the only way to redeploy was to push to <code>main</code> again, and pushing to <code>main</code> again produced another failed verify, and another skipped deploy, forever. The machine had deadlocked itself: to deploy you must pass verification; to pass verification you must not be on <code>main</code>; and you can only deploy from <code>main</code>.</p>
+<h2>The fix that was always one line</h2>
+<p>The fix, once a human actually looked at the run list, was embarrassingly small. The bouncer exists to keep <em>humans</em> off <code>main</code>; branch protection is the real guard, and it was already on. So CI now runs the gate with <code>SKIP: no-commit-to-branch</code>, one environment variable on one step, with a comment that reads like a scar: &quot;a push-triggered run on main always sits on main, so the hook would fail every post-merge verification.&quot;</p>
+<p>The hook stays in the config, still guarding local commits, still doing its one job. It just no longer runs where its job doesn&#x27;t exist.</p>
+<p>The lesson isn&#x27;t &quot;don&#x27;t add hooks.&quot; It&#x27;s that a guard&#x27;s scope is part of its correctness. A check that is true for humans and false for machines needs to know which one it&#x27;s talking to. Ours didn&#x27;t, and the cost was a site that silently went stale for three and a half hours on a day when the catalog was publishing new work every hour.</p>
+<h2>The catalog has been thinking about trust this whole time</h2>
+<p>None of this is out of character for the project. Its operating principle is that trust must be earned record by record, and that automation may prepare evidence but never conclude. The model ingestion pipeline pulls its source corpus from models.dev — 395 records of machine-written text, every one published with an explicit <code>unreviewed</code> label that survives all the way to the web payloads. The importer fails closed: wrong host, over an 8 MiB archive, fewer than 100 or more than 20,000 records, or more than 20% of records dropping — any of those aborts the sync. And promotion of a model from that text-output queue to a reviewed record is a guarded three-step ritual that automation may start but never finish: license, evidence, scores, and <code>verified_at</code> are human-owned fields, and no script touches them.</p>
+<p>The same instinct caught this incident, in the end. Nothing in the CI system was designed to notice a one-second skip, so the detection came from a person reading a list of runs and asking why six deploys in a row had done nothing. The catalog&#x27;s core belief — that a label like <code>unreviewed</code> or <code>skipped</code> is information, not a verdict — is what made the fix look obvious once the question was asked.</p>
+<h2>What else was publishing that day</h2>
+<p>The hours the site was frozen happened to be the hours the catalog was at its most alive. The thirty-first models.dev queue batch landed, then a local runtime record for exo, then a record for Paper2Agent — a Stanford framework, published in <em>Nature</em> the day before, that reads an AI-systems paper and its codebase and converts them into a verified MCP server any agent can query. A system that turns papers into queryable systems, added to a catalog that just drafted its first proposal for a papers collection — ADR 033, the first ADR in the repository ever merged in <code>Proposed</code> status, its boundary decision politely left open for later.</p>
+<p>There is a pleasing recursion in a catalog documenting a tool that documents papers, and a certain justice in the fact that the day&#x27;s most interesting technical story wasn&#x27;t any of the curated records. It was the one-second run in the deploy list.</p>
+<p>The dangerous kind of success is the one that completes in a second. The quietest outage is the one whose checkmarks are all green. The machine cannot see either of those; only a human looking at a run list can — which is, not coincidentally, the exact reason this catalog keeps a human in the loop everywhere else, too.</p>
+<hr>
+<p>This post was written by DeepSeek v4 Flash, directed by the repository&#x27;s editor. The incident it describes is a catalog record of operational history, not a scored entry; the run numbers, timestamps, and hook configuration it cites are pinned in the repository&#x27;s history.</p>
+
+</div>
+</main>
+<footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span class="footer-meta"><a href="../">All writing</a> · <a href="../../">Browse the directory</a></span></footer>
+</body>
+</html>

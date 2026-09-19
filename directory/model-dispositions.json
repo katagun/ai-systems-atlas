@@ -391,6 +391,78 @@
       "disposition": "excluded",
       "reason": "Rolling weekly-iteration API tier served under one model ID that always resolves to the latest version, with no weight repository, license, or fixed release identity of its own.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "stepfun/step-3.5-flash-2603",
+      "disposition": "held",
+      "reason": "Dated agent-optimized API variant with a platform table row but no weight repository, license text, or snapshot definition; held until StepFun publishes reviewable artifacts or terms.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepseek/deepseek-v4-flash",
+      "disposition": "excluded",
+      "reason": "Preview checkpoint superseded by the reviewed DeepSeek-V4-Flash-0731 official release on the same line; the deepseek-v4-flash API name is retired and routes to V4.1 Flash.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepseek/deepseek-v4-pro-0423",
+      "disposition": "excluded",
+      "reason": "Retired April snapshot of the reviewed DeepSeek-V4-Pro line, re-reviewed in place at the 0813 checkpoint; no independent 0423 serving identity ever existed.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/fugu",
+      "disposition": "excluded",
+      "reason": "Dateless moving default routing across undisclosed models with no pinned snapshot, weight repository, or artifact distinct from the Sakana Fugu service behavior.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/fugu-ultra",
+      "disposition": "excluded",
+      "reason": "Moving performance-tier alias resolving to versioned snapshots (v1.0, v1.1, v2.0) with no fixed identity of its own and no downloadable artifact.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sakana/sakana-namazu",
+      "disposition": "excluded",
+      "reason": "Undated alias pointing at the versioned sakana-namazu-v1.0 line with no weight repository or fixed identity of its own.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "deepreinforce/ornith-1.0-31b",
+      "disposition": "held",
+      "reason": "Announced name with no weight repository, commit, license, or dates located first-party; held until DeepReinforce publishes reviewable artifacts.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sarvam/sarvam-105b",
+      "disposition": "held",
+      "reason": "Fixed release with published weights but no LICENSE text; Apache-2.0 exists only as tag and prose. Held until Sarvam publishes governing terms.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "sarvam/sarvam-30b",
+      "disposition": "held",
+      "reason": "Fixed release with published weights but no LICENSE text, and its managed API is deprecated; held until Sarvam publishes governing terms.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "xai/grok-4.1-fast-reasoning",
+      "disposition": "held",
+      "reason": "No first-party model page in xAI's catalogue, so no authoritative identity or boundary can be established. Documented replacement Grok 4.6 is reviewed. Held in case first-party documentation appears.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "nvidia/mistral-nemotron",
+      "disposition": "held",
+      "reason": "No downloadable weights are verifiable (the weight repository is gated or absent) and the governing license text cannot be confirmed from first-party sources; NVIDIA's own documentation defers to Mistral AI terms and disclaims ownership of the model. Held in case first-party documentation appears.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "nvidia/nemotron-voicechat",
+      "disposition": "held",
+      "reason": "The queued models.dev row points at a gated early-access API service rather than a weight release, and the open NemotronLabs VoiceChat 11B release of August 2026 uses a different identity and license surface. Held pending identity alignment.",
+      "decided_at": "2026-09-18"
     }
   ]
 }

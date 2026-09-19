@@ -19,35 +19,59 @@ from scripts import run_candidate_triage as runner
 
 
 def candidate(repo: str, discovered_at: str = "2026-09-01", **extra) -> dict:
-    return {"repo": repo, "url": f"https://github.com/{repo}", "discovered_at": discovered_at, **extra}
+    return {
+        "repo": repo,
+        "url": f"https://github.com/{repo}",
+        "discovered_at": discovered_at,
+        **extra,
+    }
 
 
 class SelectionTests(unittest.TestCase):
     def test_selection_skips_candidates_that_already_carry_a_triage_block(self) -> None:
         queue = [candidate("a/one", triage={"verdict": "held"}), candidate("b/two")]
-        self.assertEqual(["b/two"], [item["repo"] for item in harness.select_candidates(queue, 10)])
+        self.assertEqual(
+            ["b/two"], [item["repo"] for item in harness.select_candidates(queue, 10)]
+        )
 
     def test_selection_takes_the_oldest_first(self) -> None:
         queue = [candidate("a/new", "2026-09-03"), candidate("b/old", "2026-08-25")]
-        self.assertEqual(["b/old"], [item["repo"] for item in harness.select_candidates(queue, 1)])
+        self.assertEqual(
+            ["b/old"], [item["repo"] for item in harness.select_candidates(queue, 1)]
+        )
 
     def test_selection_skips_a_candidate_with_no_repository(self) -> None:
-        queue = [{"url": "https://example.com/x", "discovered_at": "2026-08-01"}, candidate("b/two")]
-        self.assertEqual(["b/two"], [item["repo"] for item in harness.select_candidates(queue, 10)])
+        queue = [
+            {"url": "https://example.com/x", "discovered_at": "2026-08-01"},
+            candidate("b/two"),
+        ]
+        self.assertEqual(
+            ["b/two"], [item["repo"] for item in harness.select_candidates(queue, 10)]
+        )
 
     def test_a_repo_less_candidate_never_consumes_a_limit_slot(self) -> None:
-        queue = [{"url": "https://example.com/x", "discovered_at": "2026-08-01"}, candidate("b/two")]
-        self.assertEqual(["b/two"], [item["repo"] for item in harness.select_candidates(queue, 1)])
+        queue = [
+            {"url": "https://example.com/x", "discovered_at": "2026-08-01"},
+            candidate("b/two"),
+        ]
+        self.assertEqual(
+            ["b/two"], [item["repo"] for item in harness.select_candidates(queue, 1)]
+        )
 
     def test_untriageable_candidates_are_reported_so_they_stay_visible(self) -> None:
         queue = [
             {"url": "https://example.com/x", "discovered_at": "2026-08-01"},
             candidate("b/two"),
-            {"url": "https://example.com/y", "discovered_at": "2026-08-02",
-             "triage": {"verdict": "held"}},
+            {
+                "url": "https://example.com/y",
+                "discovered_at": "2026-08-02",
+                "triage": {"verdict": "held"},
+            },
         ]
         unreachable = harness.untriageable_candidates(queue)
-        self.assertEqual(["https://example.com/x"], [item["url"] for item in unreachable])
+        self.assertEqual(
+            ["https://example.com/x"], [item["url"] for item in unreachable]
+        )
 
     def test_carry_forward_restores_prior_work_by_repo(self) -> None:
         queue = [candidate("a/one")]
@@ -61,9 +85,16 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(0, harness.carry_forward(queue, previous))
         self.assertEqual("review_ready", queue[0]["triage"]["verdict"])
 
-    def test_carry_forward_does_not_collapse_two_keyless_candidates_onto_each_other(self) -> None:
+    def test_carry_forward_does_not_collapse_two_keyless_candidates_onto_each_other(
+        self,
+    ) -> None:
         queue = [{"discovered_at": "2026-09-01"}]
-        previous = [{"discovered_at": "2026-08-01", "triage": {"verdict": "held", "held_by": "x"}}]
+        previous = [
+            {
+                "discovered_at": "2026-08-01",
+                "triage": {"verdict": "held", "held_by": "x"},
+            }
+        ]
         self.assertEqual(0, harness.carry_forward(queue, previous))
         self.assertNotIn("triage", queue[0])
 
@@ -75,27 +106,41 @@ class CrossCheckTests(unittest.TestCase):
         self.assertTrue(any("exclusions.json" in hit for hit in hits), hits)
 
     def test_a_repo_already_published_is_reported(self) -> None:
-        catalog = {"projects.json": [{"repo": "a/one", "id": "one"}], "exclusions.json": []}
+        catalog = {
+            "projects.json": [{"repo": "a/one", "id": "one"}],
+            "exclusions.json": [],
+        }
         hits = harness.cross_collection_hits(candidate("a/one"), catalog)
         self.assertTrue(any("projects.json" in hit for hit in hits), hits)
 
     def test_a_clean_candidate_reports_nothing(self) -> None:
-        catalog = {"projects.json": [{"repo": "b/two", "id": "two"}], "exclusions.json": []}
+        catalog = {
+            "projects.json": [{"repo": "b/two", "id": "two"}],
+            "exclusions.json": [],
+        }
         self.assertEqual([], harness.cross_collection_hits(candidate("a/one"), catalog))
 
 
 class ClassSignalTests(unittest.TestCase):
     def test_an_awesome_list_is_flagged(self) -> None:
-        item = candidate("aristoapp/awesome-second-brain", name="awesome-second-brain",
-                         description="A curated list of tools.", topics=[])
+        item = candidate(
+            "aristoapp/awesome-second-brain",
+            name="awesome-second-brain",
+            description="A curated list of tools.",
+            topics=[],
+        )
         self.assertIn("awesome list", harness.class_signals(item))
 
     def test_a_benchmark_topic_is_flagged(self) -> None:
-        item = candidate("x/y", name="y", description="An evaluation suite.", topics=["benchmark"])
+        item = candidate(
+            "x/y", name="y", description="An evaluation suite.", topics=["benchmark"]
+        )
         self.assertIn("benchmark", harness.class_signals(item))
 
     def test_an_ordinary_candidate_is_not_flagged(self) -> None:
-        item = candidate("x/y", name="y", description="An agent runtime.", topics=["agents"])
+        item = candidate(
+            "x/y", name="y", description="An agent runtime.", topics=["agents"]
+        )
         self.assertEqual([], harness.class_signals(item))
 
 
@@ -108,7 +153,13 @@ class FetchTests(unittest.TestCase):
                 return license_payload
             if path.endswith("/readme"):
                 return readme_payload or {}
-            return {"full_name": "a/one", "description": "d", "topics": [], "archived": False}
+            return {
+                "full_name": "a/one",
+                "description": "d",
+                "topics": [],
+                "archived": False,
+            }
+
         return getter
 
     def test_license_evidence_pins_the_blob_sha_the_api_returns(self) -> None:
@@ -120,21 +171,27 @@ class FetchTests(unittest.TestCase):
             "encoding": "base64",
         }
         bundle = harness.fetch_candidate_evidence(
-            candidate("a/one"), self.responses(payload), None, "2026-09-04")
+            candidate("a/one"), self.responses(payload), None, "2026-09-04"
+        )
         licence = next(d for d in bundle["documents"] if d["label"] == "LICENSE")
         self.assertEqual("git_blob", licence["kind"])
         self.assertEqual("0" * 40, licence["blob_sha"])
         self.assertEqual(
-            "https://api.github.com/repos/a/one/git/blobs/" + "0" * 40, licence["immutable_url"])
+            "https://api.github.com/repos/a/one/git/blobs/" + "0" * 40,
+            licence["immutable_url"],
+        )
         self.assertEqual(harness.content_hash("MIT"), licence["content_sha256"])
 
     def test_a_missing_license_is_recorded_as_an_error_not_a_crash(self) -> None:
         bundle = harness.fetch_candidate_evidence(
-            candidate("a/one"), self.responses(None), None, "2026-09-04")
+            candidate("a/one"), self.responses(None), None, "2026-09-04"
+        )
         self.assertTrue(bundle["errors"])
         self.assertFalse([d for d in bundle["documents"] if d["label"] == "LICENSE"])
 
-    def test_a_github_document_without_a_blob_sha_is_never_downgraded_to_web(self) -> None:
+    def test_a_github_document_without_a_blob_sha_is_never_downgraded_to_web(
+        self,
+    ) -> None:
         payload = {
             "html_url": "https://github.com/a/one/blob/main/README.md",
             "content": base64.b64encode(b"read me").decode(),
@@ -154,27 +211,38 @@ class FetchTests(unittest.TestCase):
 
 class RecheckTests(unittest.TestCase):
     def triaged(self, content_sha256: str) -> list[dict]:
-        return [candidate("a/one", triage={
-            "verdict": "review_ready",
-            "rule": "r",
-            "finding": "f",
-            "evidence": [{
-                "label": "LICENSE",
-                "url": "https://github.com/a/one/blob/main/LICENSE",
-                "kind": "git_blob",
-                "blob_sha": "0" * 40,
-                "immutable_url": "https://api.github.com/repos/a/one/git/blobs/" + "0" * 40,
-                "content_sha256": content_sha256,
-                "fetched_at": "2026-09-04",
-            }],
-            "proposed_at": "2026-09-04",
-            "proposer": "candidate-triage",
-        })]
+        return [
+            candidate(
+                "a/one",
+                triage={
+                    "verdict": "review_ready",
+                    "rule": "r",
+                    "finding": "f",
+                    "evidence": [
+                        {
+                            "label": "LICENSE",
+                            "url": "https://github.com/a/one/blob/main/LICENSE",
+                            "kind": "git_blob",
+                            "blob_sha": "0" * 40,
+                            "immutable_url": "https://api.github.com/repos/a/one/git/blobs/"
+                            + "0" * 40,
+                            "content_sha256": content_sha256,
+                            "fetched_at": "2026-09-04",
+                        }
+                    ],
+                    "proposed_at": "2026-09-04",
+                    "proposer": "candidate-triage",
+                },
+            )
+        ]
 
     def getter(self, path: str, _token):
-        return {"sha": "0" * 40, "encoding": "base64",
-                "content": base64.b64encode(b"MIT").decode(),
-                "html_url": "https://github.com/a/one/blob/main/LICENSE"}
+        return {
+            "sha": "0" * 40,
+            "encoding": "base64",
+            "content": base64.b64encode(b"MIT").decode(),
+            "html_url": "https://github.com/a/one/blob/main/LICENSE",
+        }
 
     def test_a_block_identical_to_the_baseline_is_not_refetched(self) -> None:
         """An accepted block describes a document as it stood when a human accepted it."""
@@ -190,7 +258,9 @@ class RecheckTests(unittest.TestCase):
         queue = self.triaged("a" * 64)
         baseline = [candidate("a/one")]
         problems = harness.recheck_candidates(queue, self.getter, None, baseline)
-        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("content_sha256" in problem for problem in problems), problems
+        )
 
     def test_a_back_dated_block_is_still_refetched(self) -> None:
         """proposed_at is written by the agent, so it can never decide what gets verified."""
@@ -198,30 +268,50 @@ class RecheckTests(unittest.TestCase):
         queue[0]["triage"]["proposed_at"] = "2020-01-01"
         baseline = [candidate("a/one")]
         problems = harness.recheck_candidates(queue, self.getter, None, baseline)
-        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("content_sha256" in problem for problem in problems), problems
+        )
 
-    def test_an_edited_block_is_refetched_even_though_the_candidate_had_one(self) -> None:
+    def test_an_edited_block_is_refetched_even_though_the_candidate_had_one(
+        self,
+    ) -> None:
         queue = self.triaged("a" * 64)
         baseline = json.loads(json.dumps(queue))
         baseline[0]["triage"]["evidence"][0]["content_sha256"] = "b" * 64
         problems = harness.recheck_candidates(queue, self.getter, None, baseline)
-        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("content_sha256" in problem for problem in problems), problems
+        )
 
     def test_matching_evidence_rechecks_clean(self) -> None:
-        self.assertEqual([], harness.recheck_candidates(
-            self.triaged(harness.content_hash("MIT")), self.getter, None, "2026-09-04"))
+        self.assertEqual(
+            [],
+            harness.recheck_candidates(
+                self.triaged(harness.content_hash("MIT")),
+                self.getter,
+                None,
+                "2026-09-04",
+            ),
+        )
 
     def test_a_wrong_content_hash_is_reported(self) -> None:
         problems = harness.recheck_candidates(
-            self.triaged("a" * 64), self.getter, None, "2026-09-04")
-        self.assertTrue(any("content_sha256" in problem for problem in problems), problems)
+            self.triaged("a" * 64), self.getter, None, "2026-09-04"
+        )
+        self.assertTrue(
+            any("content_sha256" in problem for problem in problems), problems
+        )
 
     def test_an_unreachable_citation_is_reported(self) -> None:
         def failing(_path, _token):
             raise OSError("404")
+
         problems = harness.recheck_candidates(
-            self.triaged(harness.content_hash("MIT")), failing, None, "2026-09-04")
-        self.assertTrue(any("could not be re-fetched" in problem for problem in problems), problems)
+            self.triaged(harness.content_hash("MIT")), failing, None, "2026-09-04"
+        )
+        self.assertTrue(
+            any("could not be re-fetched" in problem for problem in problems), problems
+        )
 
     def test_an_unknown_evidence_label_is_reported_not_guessed(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
@@ -231,7 +321,9 @@ class RecheckTests(unittest.TestCase):
             self.fail("an unknown label must never be turned into a fetch")
 
         problems = harness.recheck_candidates(queue, unexpected, None, "2026-09-04")
-        self.assertTrue(any("unknown evidence label" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("unknown evidence label" in problem for problem in problems), problems
+        )
 
     def test_an_unknown_evidence_kind_is_rejected_before_any_fetch(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
@@ -239,19 +331,21 @@ class RecheckTests(unittest.TestCase):
         getter = mock.Mock()
         problems = harness.recheck_candidates(queue, getter, None, [])
         getter.assert_not_called()
-        self.assertTrue(any("unknown evidence kind" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("unknown evidence kind" in problem for problem in problems), problems
+        )
 
     def test_unattended_duplicate_evidence_is_rejected_before_any_fetch(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
         item = queue[0]["triage"]["evidence"][0]
         queue[0]["triage"]["evidence"] = [item, dict(item), dict(item)]
         getter = mock.Mock()
-        problems = harness.recheck_candidates(
-            queue, getter, None, [], unattended=True
-        )
+        problems = harness.recheck_candidates(queue, getter, None, [], unattended=True)
         getter.assert_not_called()
         self.assertTrue(any("one or two" in problem for problem in problems), problems)
-        self.assertTrue(any("duplicate LICENSE" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("duplicate LICENSE" in problem for problem in problems), problems
+        )
 
     def test_unattended_preflights_every_candidate_before_any_fetch(self) -> None:
         first = self.triaged(harness.content_hash("MIT"))[0]
@@ -266,7 +360,9 @@ class RecheckTests(unittest.TestCase):
         )
 
         getter.assert_not_called()
-        self.assertTrue(any("duplicate LICENSE" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("duplicate LICENSE" in problem for problem in problems), problems
+        )
 
     def test_a_fabricated_url_is_reported_even_when_the_hash_matches(self) -> None:
         """A hash proves a document reads this way, never that the citation points at it."""
@@ -274,20 +370,28 @@ class RecheckTests(unittest.TestCase):
         queue[0]["triage"]["evidence"][0]["url"] = "https://example.com/invented"
         problems = harness.recheck_candidates(queue, self.getter, None, "2026-09-04")
         self.assertTrue(any("invented" in problem for problem in problems), problems)
-        self.assertFalse(any("content_sha256" in problem for problem in problems), problems)
+        self.assertFalse(
+            any("content_sha256" in problem for problem in problems), problems
+        )
 
     def test_a_non_list_evidence_is_reported_not_raised(self) -> None:
         queue = self.triaged(harness.content_hash("MIT"))
         queue[0]["triage"]["evidence"] = "not-a-list"
         problems = harness.recheck_candidates(queue, self.getter, None, "2026-09-04")
-        self.assertTrue(any("evidence must be a list" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("evidence must be a list" in problem for problem in problems), problems
+        )
 
 
 def candidate_with(evidence: list[dict]) -> dict:
     return {
         "repo": None,
         "url": "https://example.invalid/product",
-        "triage": {"verdict": "held", "held_by": "robotics scope decision", "evidence": evidence},
+        "triage": {
+            "verdict": "held",
+            "held_by": "robotics scope decision",
+            "evidence": evidence,
+        },
     }
 
 
@@ -301,8 +405,12 @@ class WebCitationRecheckTests(unittest.TestCase):
             "content_sha256": harness.content_hash(body),
             "fetched_at": "2026-09-04",
         }
-        with mock.patch("scripts.build_candidate_evidence.fetch_web_text", return_value=body):
-            problems = harness.recheck_candidates([candidate_with([item])], lambda *a, **k: {}, None, [])
+        with mock.patch(
+            "scripts.build_candidate_evidence.fetch_web_text", return_value=body
+        ):
+            problems = harness.recheck_candidates(
+                [candidate_with([item])], lambda *a, **k: {}, None, []
+            )
         self.assertEqual([], problems)
 
     def test_a_web_citation_that_drifted_is_reported(self) -> None:
@@ -313,8 +421,12 @@ class WebCitationRecheckTests(unittest.TestCase):
             "content_sha256": harness.content_hash("original"),
             "fetched_at": "2026-09-04",
         }
-        with mock.patch("scripts.build_candidate_evidence.fetch_web_text", return_value="rewritten"):
-            problems = harness.recheck_candidates([candidate_with([item])], lambda *a, **k: {}, None, [])
+        with mock.patch(
+            "scripts.build_candidate_evidence.fetch_web_text", return_value="rewritten"
+        ):
+            problems = harness.recheck_candidates(
+                [candidate_with([item])], lambda *a, **k: {}, None, []
+            )
         self.assertEqual(1, len(problems), problems)
         self.assertIn("Product terms", problems[0])
 
@@ -326,35 +438,55 @@ class WebCitationRecheckTests(unittest.TestCase):
             "content_sha256": harness.content_hash("original"),
             "fetched_at": "2026-09-04",
         }
-        record = candidate("a/one", triage={
-            "verdict": "held",
-            "held_by": "a decision",
-            "proposer": "candidate-triage",
-            "evidence": [item],
-        })
+        record = candidate(
+            "a/one",
+            triage={
+                "verdict": "held",
+                "held_by": "a decision",
+                "proposer": "candidate-triage",
+                "evidence": [item],
+            },
+        )
         with mock.patch("scripts.build_candidate_evidence.fetch_web_text") as fetch:
             problems = harness.recheck_candidates(
                 [record], lambda *a, **k: {}, None, [], unattended=True
             )
         fetch.assert_not_called()
-        self.assertTrue(any("only GitHub blob" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("only GitHub blob" in problem for problem in problems), problems
+        )
 
-    def test_unattended_triage_requires_the_routine_proposer_before_fetching(self) -> None:
-        record = candidate("a/one", triage={
-            "verdict": "review_ready",
-            "proposer": "something else",
-            "evidence": [{"kind": "git_blob", "label": "README"}],
-        })
+    def test_unattended_triage_requires_the_routine_proposer_before_fetching(
+        self,
+    ) -> None:
+        record = candidate(
+            "a/one",
+            triage={
+                "verdict": "review_ready",
+                "proposer": "something else",
+                "evidence": [{"kind": "git_blob", "label": "README"}],
+            },
+        )
         getter = mock.Mock()
         problems = harness.recheck_candidates(
             [record], getter, None, [], unattended=True
         )
         getter.assert_not_called()
-        self.assertTrue(any("requires proposer" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("requires proposer" in problem for problem in problems), problems
+        )
 
 
 def public_resolver(host: str, port: int, **_kwargs):
-    return [(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", ("93.184.216.34", port))]
+    return [
+        (
+            socket.AF_INET,
+            socket.SOCK_STREAM,
+            socket.IPPROTO_TCP,
+            "",
+            ("93.184.216.34", port),
+        )
+    ]
 
 
 class FakeWebResponse:
@@ -413,7 +545,9 @@ class WebFetchBoundaryTests(unittest.TestCase):
             timeout=30,
         )
 
-    def test_the_pinned_connection_uses_the_ip_but_keeps_tls_hostname_verification(self) -> None:
+    def test_the_pinned_connection_uses_the_ip_but_keeps_tls_hostname_verification(
+        self,
+    ) -> None:
         context = mock.Mock()
         wrapped = mock.Mock()
         context.wrap_socket.return_value = wrapped
@@ -433,7 +567,9 @@ class WebFetchBoundaryTests(unittest.TestCase):
         )
         self.assertIs(wrapped, connection.sock)
 
-    def test_non_https_credentials_ports_and_non_dns_hosts_fail_before_open(self) -> None:
+    def test_non_https_credentials_ports_and_non_dns_hosts_fail_before_open(
+        self,
+    ) -> None:
         unsafe = (
             "http://example.com/terms",
             "file:///etc/hosts",
@@ -472,12 +608,11 @@ class WebFetchBoundaryTests(unittest.TestCase):
             (socket.AF_INET6, "fec0::1"),
         ):
             with self.subTest(address=address):
+
                 def resolver(
                     _host, port, *, _family=family, _address=address, **_kwargs
                 ):
-                    return [
-                        (_family, socket.SOCK_STREAM, 6, "", (_address, port))
-                    ]
+                    return [(_family, socket.SOCK_STREAM, 6, "", (_address, port))]
 
                 pinned_open = mock.Mock()
                 with self.assertRaisesRegex(ValueError, "non-public-unicast"):
@@ -519,14 +654,18 @@ class WebFetchBoundaryTests(unittest.TestCase):
         self.assertEqual([], redirect.read_amounts)
         self.assertEqual(["https://example.com/terms"], opener.urls)
 
-    def test_a_same_host_redirect_is_followed_without_reading_redirect_body(self) -> None:
+    def test_a_same_host_redirect_is_followed_without_reading_redirect_body(
+        self,
+    ) -> None:
         redirect = FakeWebResponse(
             302,
             "https://example.com/old",
             body=b"must not be consumed",
             headers={"Location": "/current"},
         )
-        final = FakeWebResponse(200, "https://example.com/current", body=b"current terms")
+        final = FakeWebResponse(
+            200, "https://example.com/current", body=b"current terms"
+        )
         opener = FakeWebOpener(redirect, final)
         text = harness.fetch_web_text(
             "https://example.com/old", resolver=public_resolver, opener=opener
@@ -572,18 +711,26 @@ class TokenTests(unittest.TestCase):
     """Unauthenticated GitHub allows 60 requests an hour; a default run issues 80."""
 
     def completed(self, returncode: int, stdout: str):
-        return subprocess.CompletedProcess(["gh", "auth", "token"], returncode, stdout, "")
+        return subprocess.CompletedProcess(
+            ["gh", "auth", "token"], returncode, stdout, ""
+        )
 
     def test_the_environment_token_wins_and_gh_is_never_run(self) -> None:
         def fail_if_called(*_args, **_kwargs):
             self.fail("gh must not run when GITHUB_TOKEN is set")
 
         with mock.patch.dict(os.environ, {"GITHUB_TOKEN": "from-the-environment"}):
-            self.assertEqual("from-the-environment", harness.github_token(fail_if_called))
+            self.assertEqual(
+                "from-the-environment", harness.github_token(fail_if_called)
+            )
 
-    def test_gh_auth_token_supplies_the_token_when_the_environment_has_none(self) -> None:
+    def test_gh_auth_token_supplies_the_token_when_the_environment_has_none(
+        self,
+    ) -> None:
         with mock.patch.dict(os.environ, {}, clear=True):
-            token = harness.github_token(lambda *a, **k: self.completed(0, "gho_fromgh\n"))
+            token = harness.github_token(
+                lambda *a, **k: self.completed(0, "gho_fromgh\n")
+            )
         self.assertEqual("gho_fromgh", token)
 
     def test_a_missing_gh_is_tolerated(self) -> None:
@@ -595,7 +742,9 @@ class TokenTests(unittest.TestCase):
 
     def test_an_unauthenticated_gh_is_tolerated(self) -> None:
         with mock.patch.dict(os.environ, {}, clear=True):
-            self.assertIsNone(harness.github_token(lambda *a, **k: self.completed(1, "")))
+            self.assertIsNone(
+                harness.github_token(lambda *a, **k: self.completed(1, ""))
+            )
 
     def test_a_timeout_is_tolerated(self) -> None:
         def slow(*_args, **_kwargs):
@@ -632,7 +781,9 @@ class PreviousCandidatesTests(unittest.TestCase):
     def test_a_nonexistent_branch_returns_no_candidates(self) -> None:
         self.assertEqual([], harness.previous_candidates("no-such-branch-xyz"))
 
-    def test_an_empty_branch_name_returns_no_candidates_without_running_git(self) -> None:
+    def test_an_empty_branch_name_returns_no_candidates_without_running_git(
+        self,
+    ) -> None:
         self.assertEqual([], harness.previous_candidates(""))
 
 
@@ -640,16 +791,29 @@ class MainTests(unittest.TestCase):
     def test_an_unreachable_github_fails_before_any_agent_work(self) -> None:
         def failing(_path, _token):
             raise OSError("network down")
-        self.assertEqual(1, harness.run_build(
-            candidates=[candidate("a/one")], catalog={}, getter=failing,
-            token=None, today="2026-09-04", limit=5, bundle_path=None))
+
+        self.assertEqual(
+            1,
+            harness.run_build(
+                candidates=[candidate("a/one")],
+                catalog={},
+                getter=failing,
+                token=None,
+                today="2026-09-04",
+                limit=5,
+                bundle_path=None,
+            ),
+        )
 
     def test_a_partial_fetch_still_succeeds_but_warns_on_stderr(self) -> None:
         def license_only(path: str, _token):
             if path.endswith("/license"):
-                return {"sha": "0" * 40, "encoding": "base64",
-                         "content": base64.b64encode(b"MIT").decode(),
-                         "html_url": "https://github.com/a/one/blob/main/LICENSE"}
+                return {
+                    "sha": "0" * 40,
+                    "encoding": "base64",
+                    "content": base64.b64encode(b"MIT").decode(),
+                    "html_url": "https://github.com/a/one/blob/main/LICENSE",
+                }
             raise OSError("readme unreachable")
 
         import contextlib
@@ -658,29 +822,50 @@ class MainTests(unittest.TestCase):
         captured = io.StringIO()
         with contextlib.redirect_stderr(captured):
             code = harness.run_build(
-                candidates=[candidate("a/one")], catalog={}, getter=license_only,
-                token=None, today="2026-09-04", limit=5, bundle_path=None)
+                candidates=[candidate("a/one")],
+                catalog={},
+                getter=license_only,
+                token=None,
+                today="2026-09-04",
+                limit=5,
+                bundle_path=None,
+            )
         self.assertEqual(0, code)
         self.assertIn("a/one", captured.getvalue())
         self.assertIn("warning", captured.getvalue())
-
 
     def test_a_carried_forward_block_is_written_back_to_the_queue(self) -> None:
         block = {"verdict": "held", "held_by": "BACKLOG.md — skill packs"}
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "candidates.json"
-            path.write_text(json.dumps({
-                "version": 1, "updated_at": "2026-09-01", "candidates": [candidate("a/one")],
-            }), encoding="utf-8")
+            path.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "updated_at": "2026-09-01",
+                        "candidates": [candidate("a/one")],
+                    }
+                ),
+                encoding="utf-8",
+            )
             queue = json.loads(path.read_text(encoding="utf-8"))["candidates"]
             code = harness.run_build(
-                candidates=queue, catalog={}, getter=self.fail_if_fetched,
-                token=None, today="2026-09-04", limit=5, bundle_path=None,
-                previous=[candidate("a/one", triage=block)], candidates_path=path)
+                candidates=queue,
+                catalog={},
+                getter=self.fail_if_fetched,
+                token=None,
+                today="2026-09-04",
+                limit=5,
+                bundle_path=None,
+                previous=[candidate("a/one", triage=block)],
+                candidates_path=path,
+            )
             written = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(0, code)
         self.assertEqual(block, written["candidates"][0]["triage"])
-        self.assertEqual(1, written["version"], "other document keys must survive the write")
+        self.assertEqual(
+            1, written["version"], "other document keys must survive the write"
+        )
 
     def test_nothing_is_written_back_when_no_block_is_carried(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -689,9 +874,16 @@ class MainTests(unittest.TestCase):
             path.write_text(original, encoding="utf-8")
             queue = json.loads(original)["candidates"]
             harness.run_build(
-                candidates=queue, catalog={}, getter=self.fail_if_fetched,
-                token=None, today="2026-09-04", limit=0, bundle_path=None,
-                previous=[], candidates_path=path)
+                candidates=queue,
+                catalog={},
+                getter=self.fail_if_fetched,
+                token=None,
+                today="2026-09-04",
+                limit=0,
+                bundle_path=None,
+                previous=[],
+                candidates_path=path,
+            )
             self.assertEqual(original, path.read_text(encoding="utf-8"))
 
     def test_run_build_reports_the_candidates_it_cannot_reach(self) -> None:
@@ -702,23 +894,37 @@ class MainTests(unittest.TestCase):
         captured = io.StringIO()
         with contextlib.redirect_stdout(captured):
             code = harness.run_build(
-                candidates=queue, catalog={}, getter=self.fail_if_fetched,
-                token=None, today="2026-09-04", limit=5, bundle_path=None)
+                candidates=queue,
+                catalog={},
+                getter=self.fail_if_fetched,
+                token=None,
+                today="2026-09-04",
+                limit=5,
+                bundle_path=None,
+            )
         self.assertEqual(0, code)
-        self.assertIn("skipped 1 candidates with no GitHub repository", captured.getvalue())
+        self.assertIn(
+            "skipped 1 candidates with no GitHub repository", captured.getvalue()
+        )
         self.assertIn("https://example.com/x", captured.getvalue())
 
     def fail_if_fetched(self, _path, _token):
-        self.fail("a candidate with a carried block or no repository must never be fetched")
+        self.fail(
+            "a candidate with a carried block or no repository must never be fetched"
+        )
 
 
 class BlastRadiusTests(unittest.TestCase):
     def test_only_candidates_json_is_allowed_to_change(self) -> None:
-        self.assertEqual([], runner.unexpected_changes(" M directory/candidates.json\n"))
+        self.assertEqual(
+            [], runner.unexpected_changes(" M directory/candidates.json\n")
+        )
 
     def test_an_edit_to_projects_json_is_reported(self) -> None:
         porcelain = " M directory/candidates.json\n M directory/projects.json\n"
-        self.assertEqual(["directory/projects.json"], runner.unexpected_changes(porcelain))
+        self.assertEqual(
+            ["directory/projects.json"], runner.unexpected_changes(porcelain)
+        )
 
     def test_an_untracked_file_is_reported(self) -> None:
         self.assertEqual(["scratch.txt"], runner.unexpected_changes("?? scratch.txt\n"))
@@ -733,74 +939,115 @@ class BlastRadiusTests(unittest.TestCase):
     def test_a_rename_into_the_allowed_path_is_reported(self) -> None:
         """A rename has two ends, and the forbidden one is the source here."""
         porcelain = "R  directory/projects.json -> directory/candidates.json\n"
-        self.assertEqual(["directory/projects.json"], runner.unexpected_changes(porcelain))
+        self.assertEqual(
+            ["directory/projects.json"], runner.unexpected_changes(porcelain)
+        )
 
     def test_a_rename_between_two_forbidden_paths_reports_both_ends(self) -> None:
         porcelain = "R  directory/projects.json -> directory/exclusions.json\n"
         self.assertEqual(
             ["directory/projects.json", "directory/exclusions.json"],
-            runner.unexpected_changes(porcelain))
+            runner.unexpected_changes(porcelain),
+        )
 
     def test_a_staged_and_modified_allowed_path_is_clean(self) -> None:
-        self.assertEqual([], runner.unexpected_changes("MM directory/candidates.json\n"))
+        self.assertEqual(
+            [], runner.unexpected_changes("MM directory/candidates.json\n")
+        )
 
     def test_a_path_containing_spaces_is_reported(self) -> None:
         porcelain = " M directory/my file.json\n"
-        self.assertEqual(["directory/my file.json"], runner.unexpected_changes(porcelain))
+        self.assertEqual(
+            ["directory/my file.json"], runner.unexpected_changes(porcelain)
+        )
 
 
 class FieldGuardTests(unittest.TestCase):
     """The automation boundary is a field boundary; only these two writes are the run's."""
 
     def queue(self, *candidates, **document) -> str:
-        return json.dumps({"version": 1, "updated_at": "2026-09-01",
-                           "candidates": list(candidates), **document})
+        return json.dumps(
+            {
+                "version": 1,
+                "updated_at": "2026-09-01",
+                "candidates": list(candidates),
+                **document,
+            }
+        )
 
     def record(self, **overrides) -> dict:
         return {
-            "repo": "a/one", "url": "https://github.com/a/one", "name": "one",
+            "repo": "a/one",
+            "url": "https://github.com/a/one",
+            "name": "one",
             "proposed_system_family": "memory_system",
             "proposed_primary_role": "agent_memory_service",
-            "classification_confidence": 0.8, "status": "provisional",
+            "classification_confidence": 0.8,
+            "status": "provisional",
             **overrides,
         }
 
     BLOCK: ClassVar[dict] = {
-        "verdict": "review_ready", "rule": "r", "finding": "f",
-        "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
-        "proposer": "candidate-triage"}
+        "verdict": "review_ready",
+        "rule": "r",
+        "finding": "f",
+        "evidence": [{"label": "README"}],
+        "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage",
+    }
     HELD_BLOCK: ClassVar[dict] = {
-        **BLOCK, "verdict": "held", "held_by": "BACKLOG.md — skill packs"}
+        **BLOCK,
+        "verdict": "held",
+        "held_by": "BACKLOG.md — skill packs",
+    }
 
     def test_adding_a_triage_block_is_accepted(self) -> None:
         before = self.queue(self.record())
         after = self.queue(self.record(triage=self.BLOCK))
         self.assertEqual([], runner.unexpected_field_changes(before, after))
 
-    def test_nulling_family_and_role_is_accepted_when_the_new_block_is_held(self) -> None:
+    def test_nulling_family_and_role_is_accepted_when_the_new_block_is_held(
+        self,
+    ) -> None:
         before = self.queue(self.record())
-        after = self.queue(self.record(
-            triage=self.HELD_BLOCK, proposed_system_family=None, proposed_primary_role=None))
+        after = self.queue(
+            self.record(
+                triage=self.HELD_BLOCK,
+                proposed_system_family=None,
+                proposed_primary_role=None,
+            )
+        )
         self.assertEqual([], runner.unexpected_field_changes(before, after))
 
-    def test_nulling_family_and_role_is_rejected_without_a_holding_decision(self) -> None:
+    def test_nulling_family_and_role_is_rejected_without_a_holding_decision(
+        self,
+    ) -> None:
         before = self.queue(self.record())
         after = self.queue(self.record(triage=self.BLOCK, proposed_system_family=None))
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("proposed_system_family" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("proposed_system_family" in problem for problem in problems), problems
+        )
 
     def test_a_changed_classification_confidence_is_rejected(self) -> None:
         before = self.queue(self.record())
-        after = self.queue(self.record(triage=self.BLOCK, classification_confidence=0.99))
+        after = self.queue(
+            self.record(triage=self.BLOCK, classification_confidence=0.99)
+        )
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("classification_confidence" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("classification_confidence" in problem for problem in problems),
+            problems,
+        )
         self.assertTrue(any("a/one" in problem for problem in problems), problems)
 
     def test_a_rewritten_proposed_family_is_rejected(self) -> None:
         before = self.queue(self.record())
         after = self.queue(self.record(proposed_system_family="agent_system"))
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("proposed_system_family" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("proposed_system_family" in problem for problem in problems), problems
+        )
 
     def test_a_changed_status_is_rejected(self) -> None:
         before = self.queue(self.record())
@@ -809,21 +1056,31 @@ class FieldGuardTests(unittest.TestCase):
         self.assertTrue(any("status" in problem for problem in problems), problems)
 
     def test_a_deleted_candidate_is_rejected(self) -> None:
-        before = self.queue(self.record(), self.record(repo="b/two", url="https://github.com/b/two"))
+        before = self.queue(
+            self.record(), self.record(repo="b/two", url="https://github.com/b/two")
+        )
         after = self.queue(self.record())
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("removed the candidate" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("removed the candidate" in problem for problem in problems), problems
+        )
         self.assertTrue(any("b/two" in problem for problem in problems), problems)
 
     def test_an_added_candidate_is_rejected(self) -> None:
         before = self.queue(self.record())
-        after = self.queue(self.record(), self.record(repo="b/two", url="https://github.com/b/two"))
+        after = self.queue(
+            self.record(), self.record(repo="b/two", url="https://github.com/b/two")
+        )
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("added the candidate" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("added the candidate" in problem for problem in problems), problems
+        )
 
     def test_overwriting_an_existing_triage_block_is_rejected(self) -> None:
         before = self.queue(self.record(triage=self.BLOCK))
-        after = self.queue(self.record(triage={**self.BLOCK, "verdict": "out_of_scope"}))
+        after = self.queue(
+            self.record(triage={**self.BLOCK, "verdict": "out_of_scope"})
+        )
         problems = runner.unexpected_field_changes(before, after)
         self.assertTrue(any("triage" in problem for problem in problems), problems)
 
@@ -833,7 +1090,10 @@ class FieldGuardTests(unittest.TestCase):
         after_document = json.loads(after)
         del after_document["candidates"][0]["classification_confidence"]
         problems = runner.unexpected_field_changes(before, json.dumps(after_document))
-        self.assertTrue(any("classification_confidence" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("classification_confidence" in problem for problem in problems),
+            problems,
+        )
 
     def test_a_changed_document_field_is_rejected(self) -> None:
         before = self.queue(self.record())
@@ -843,29 +1103,43 @@ class FieldGuardTests(unittest.TestCase):
 
     def test_an_unparseable_queue_is_rejected_not_raised(self) -> None:
         problems = runner.unexpected_field_changes(self.queue(self.record()), "{oops")
-        self.assertTrue(any("not valid JSON" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("not valid JSON" in problem for problem in problems), problems
+        )
 
     def test_a_candidate_with_no_key_is_rejected_rather_than_compared(self) -> None:
         before = self.queue(self.record())
         after = self.queue(self.record(), {"name": "keyless"})
         problems = runner.unexpected_field_changes(before, after)
-        self.assertTrue(any("neither a repo nor a url" in problem for problem in problems), problems)
+        self.assertTrue(
+            any("neither a repo nor a url" in problem for problem in problems), problems
+        )
 
 
 class FinishTests(unittest.TestCase):
-    MAIN_QUEUE = json.dumps({
-        "version": 1,
-        "candidates": [{
-            "repo": "a/one", "url": "https://github.com/a/one",
-            "proposed_system_family": "memory_system",
-            "proposed_primary_role": "agent_memory_service",
-            "classification_confidence": 0.8, "status": "provisional",
-        }],
-    })
+    MAIN_QUEUE = json.dumps(
+        {
+            "version": 1,
+            "candidates": [
+                {
+                    "repo": "a/one",
+                    "url": "https://github.com/a/one",
+                    "proposed_system_family": "memory_system",
+                    "proposed_primary_role": "agent_memory_service",
+                    "classification_confidence": 0.8,
+                    "status": "provisional",
+                }
+            ],
+        }
+    )
     BLOCK: ClassVar[dict] = {
-        "verdict": "review_ready", "rule": "r", "finding": "f",
-        "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
-        "proposer": "candidate-triage"}
+        "verdict": "review_ready",
+        "rule": "r",
+        "finding": "f",
+        "evidence": [{"label": "README"}],
+        "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage",
+    }
 
     def triaged(self, **overrides) -> str:
         document = json.loads(self.MAIN_QUEUE)
@@ -876,8 +1150,14 @@ class FinishTests(unittest.TestCase):
     def reader(self, text=None):
         return lambda _path: text if text is not None else self.triaged()
 
-    def responder(self, calls, porcelain=" M directory/candidates.json\n",
-                  head="1111", base="1111", fails=()):
+    def responder(
+        self,
+        calls,
+        porcelain=" M directory/candidates.json\n",
+        head="1111",
+        base="1111",
+        fails=(),
+    ):
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
             if command[:3] == ["git", "status", "--porcelain"]:
@@ -890,33 +1170,43 @@ class FinishTests(unittest.TestCase):
                 if any(marker in part for part in command):
                     return 1, f"{marker} failed"
             return 0, ""
+
         return fake_run
 
     def test_finish_refuses_when_a_forbidden_file_changed(self) -> None:
         calls: list[list[str]] = []
         code = runner.finish(
             run=self.responder(calls, porcelain=" M directory/projects.json\n"),
-            read=self.reader())
+            read=self.reader(),
+        )
         self.assertEqual(1, code)
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
 
     def test_finish_commits_when_every_check_passes(self) -> None:
         calls: list[list[str]] = []
-        self.assertEqual(0, runner.finish(run=self.responder(calls), read=self.reader()))
+        self.assertEqual(
+            0, runner.finish(run=self.responder(calls), read=self.reader())
+        )
         self.assertIn(["git", "commit"], [call[:2] for call in calls])
 
     def test_finish_validates_before_the_unattended_network_recheck(self) -> None:
         calls: list[list[str]] = []
-        self.assertEqual(0, runner.finish(run=self.responder(calls), read=self.reader()))
+        self.assertEqual(
+            0, runner.finish(run=self.responder(calls), read=self.reader())
+        )
         checks = [call for call in calls if call and call[0] == "uv"]
         self.assertTrue(any("validate_directory.py" in part for part in checks[0]))
-        self.assertTrue(any("build_candidate_evidence.py" in part for part in checks[1]))
+        self.assertTrue(
+            any("build_candidate_evidence.py" in part for part in checks[1])
+        )
         self.assertIn("--unattended", checks[1])
 
     def test_finish_reports_no_proposals_when_the_run_left_nothing_behind(self) -> None:
         """Nothing to do means a clean tree AND a HEAD that never moved off origin/main."""
         calls: list[list[str]] = []
-        code = runner.finish(run=self.responder(calls, porcelain=""), read=self.reader())
+        code = runner.finish(
+            run=self.responder(calls, porcelain=""), read=self.reader()
+        )
         self.assertEqual(0, code)
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
         self.assertNotIn(["git", "add"], [call[:2] for call in calls])
@@ -928,7 +1218,8 @@ class FinishTests(unittest.TestCase):
         calls: list[list[str]] = []
         code = runner.finish(
             run=self.responder(calls, porcelain="", head="1111", base="2222"),
-            read=self.reader())
+            read=self.reader(),
+        )
         self.assertEqual(0, code)
         for check in runner.CHECKS:
             self.assertIn(list(check), calls)
@@ -938,9 +1229,15 @@ class FinishTests(unittest.TestCase):
     def test_a_failing_guard_on_a_clean_tree_whose_head_moved_aborts(self) -> None:
         calls: list[list[str]] = []
         code = runner.finish(
-            run=self.responder(calls, porcelain="", head="1111", base="2222",
-                               fails=("validate_directory.py",)),
-            read=self.reader())
+            run=self.responder(
+                calls,
+                porcelain="",
+                head="1111",
+                base="2222",
+                fails=("validate_directory.py",),
+            ),
+            read=self.reader(),
+        )
         self.assertEqual(1, code)
         self.assertNotIn(["git", "checkout"], [call[:2] for call in calls])
 
@@ -956,7 +1253,8 @@ class FinishTests(unittest.TestCase):
         calls: list[list[str]] = []
         code = runner.finish(
             run=self.responder(calls),
-            read=self.reader(self.triaged(classification_confidence=0.99)))
+            read=self.reader(self.triaged(classification_confidence=0.99)),
+        )
         self.assertEqual(1, code)
         self.assertFalse([call for call in calls if call[0] == "uv"], calls)
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
@@ -972,11 +1270,16 @@ class FinishTests(unittest.TestCase):
         calls: list[list[str]] = []
         document = json.loads(self.MAIN_QUEUE)
         candidate_record = document["candidates"][0]
-        candidate_record["triage"] = {**self.BLOCK, "verdict": "held",
-                                      "held_by": "BACKLOG.md — skill packs"}
+        candidate_record["triage"] = {
+            **self.BLOCK,
+            "verdict": "held",
+            "held_by": "BACKLOG.md — skill packs",
+        }
         candidate_record["proposed_system_family"] = None
         candidate_record["proposed_primary_role"] = None
-        code = runner.finish(run=self.responder(calls), read=self.reader(json.dumps(document)))
+        code = runner.finish(
+            run=self.responder(calls), read=self.reader(json.dumps(document))
+        )
         self.assertEqual(0, code)
         self.assertIn(["git", "commit"], [call[:2] for call in calls])
 
@@ -994,7 +1297,8 @@ class FinishTests(unittest.TestCase):
         calls: list[list[str]] = []
         code = runner.finish(
             run=self.responder(calls, fails=("build_candidate_evidence.py",)),
-            read=self.reader())
+            read=self.reader(),
+        )
         self.assertEqual(1, code)
         self.assertNotIn(["git", "commit"], [call[:2] for call in calls])
         self.assertNotIn(["git", "add"], [call[:2] for call in calls])
@@ -1041,19 +1345,29 @@ class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
     after the field guard already read it and before `git add` stages it. See "Guard
     threat model" in docs/OPERATIONS.md."""
 
-    BASE_QUEUE = json.dumps({
-        "version": 1,
-        "candidates": [{
-            "repo": "a/one", "url": "https://github.com/a/one",
-            "proposed_system_family": "memory_system",
-            "proposed_primary_role": "agent_memory_service",
-            "classification_confidence": 0.8, "status": "provisional",
-        }],
-    })
+    BASE_QUEUE = json.dumps(
+        {
+            "version": 1,
+            "candidates": [
+                {
+                    "repo": "a/one",
+                    "url": "https://github.com/a/one",
+                    "proposed_system_family": "memory_system",
+                    "proposed_primary_role": "agent_memory_service",
+                    "classification_confidence": 0.8,
+                    "status": "provisional",
+                }
+            ],
+        }
+    )
     BLOCK: ClassVar[dict] = {
-        "verdict": "review_ready", "rule": "r", "finding": "f",
-        "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
-        "proposer": "candidate-triage"}
+        "verdict": "review_ready",
+        "rule": "r",
+        "finding": "f",
+        "evidence": [{"label": "README"}],
+        "proposed_at": "2026-09-04",
+        "proposer": "candidate-triage",
+    }
 
     def triaged(self, **overrides) -> str:
         document = json.loads(self.BASE_QUEUE)
@@ -1128,7 +1442,11 @@ class PrepareTests(unittest.TestCase):
             return 0, ""
 
         self.assertEqual(1, runner.prepare(limit=5, run=fake_run))
-        self.assertFalse(any("build_candidate_evidence.py" in part for call in calls for part in call))
+        self.assertFalse(
+            any(
+                "build_candidate_evidence.py" in part for call in calls for part in call
+            )
+        )
 
     def test_a_failed_worktree_remove_is_tolerated_and_the_run_continues(self) -> None:
         calls = []
@@ -1140,13 +1458,19 @@ class PrepareTests(unittest.TestCase):
             return 0, ""
 
         self.assertEqual(0, runner.prepare(limit=5, run=fake_run))
-        self.assertTrue(any("build_candidate_evidence.py" in part for call in calls for part in call))
+        self.assertTrue(
+            any(
+                "build_candidate_evidence.py" in part for call in calls for part in call
+            )
+        )
 
     def test_prompt_drift_aborts_before_any_git_command_runs(self) -> None:
         self.installed_path.unlink()
 
         def fail_if_called(command: list[str], _cwd=None) -> tuple[int, str]:
-            self.fail(f"no command should run once the prompt has drifted, got: {command}")
+            self.fail(
+                f"no command should run once the prompt has drifted, got: {command}"
+            )
 
         self.assertEqual(1, runner.prepare(limit=5, run=fail_if_called))
 
@@ -1155,11 +1479,15 @@ class CommittedOverreachTests(unittest.TestCase):
     def test_a_committed_edit_outside_the_queue_is_reported(self) -> None:
         self.assertEqual(
             ["directory/projects.json"],
-            runner.unexpected_committed_changes("directory/candidates.json\ndirectory/projects.json\n"),
+            runner.unexpected_committed_changes(
+                "directory/candidates.json\ndirectory/projects.json\n"
+            ),
         )
 
     def test_a_commit_touching_only_the_queue_is_allowed(self) -> None:
-        self.assertEqual([], runner.unexpected_committed_changes("directory/candidates.json\n"))
+        self.assertEqual(
+            [], runner.unexpected_committed_changes("directory/candidates.json\n")
+        )
 
     def test_finish_rejects_a_commit_that_touched_another_file(self) -> None:
         """A clean working tree is not proof: the agent may have committed its own edit."""
@@ -1191,7 +1519,9 @@ class PromptDriftTests(unittest.TestCase):
 
 
 class PromptInstallTests(unittest.TestCase):
-    def test_install_prompt_renders_the_checkout_and_passes_the_drift_check(self) -> None:
+    def test_install_prompt_renders_the_checkout_and_passes_the_drift_check(
+        self,
+    ) -> None:
         scratch = Path(self.enterContext(tempfile.TemporaryDirectory()))
         prompt = scratch / "candidate-triage.md"
         placeholder = runner.routine_guards.CHECKOUT_PLACEHOLDER
@@ -1206,9 +1536,14 @@ class PromptInstallTests(unittest.TestCase):
             self.enterContext(patcher)
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(0, runner.main(["install-prompt"]))
-        self.assertEqual(f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8"))
+        self.assertEqual(
+            f"cd {checkout}\nbody\n", installed.read_text(encoding="utf-8")
+        )
         self.assertIsNone(
-            runner.prompt_drift(prompt.read_text(encoding="utf-8"), installed.read_text(encoding="utf-8"))
+            runner.prompt_drift(
+                prompt.read_text(encoding="utf-8"),
+                installed.read_text(encoding="utf-8"),
+            )
         )
 
 
@@ -1224,21 +1559,40 @@ class ReplaceRefGuardTests(unittest.TestCase):
         root = scratch / "root"
         root.mkdir()
         subprocess.run(["git", "init", "-q", str(root)], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.email", "test@example.com"],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.name", "Test"], check=True
+        )
         (root / "directory").mkdir()
         (root / "directory" / "candidates.json").write_text(
             json.dumps({"version": 1, "candidates": []}), encoding="utf-8"
         )
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True
+        )
         (root / "other.txt").write_text("second commit\n", encoding="utf-8")
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "second"], check=True
+        )
 
         worktree = scratch / "worktree"
         subprocess.run(
-            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach", str(worktree), "HEAD"],
+            [
+                "git",
+                "-C",
+                str(root),
+                "worktree",
+                "add",
+                "--quiet",
+                "--detach",
+                str(worktree),
+                "HEAD",
+            ],
             check=True,
         )
         self.enterContext(mock.patch.object(runner, "WORKTREE", worktree))
@@ -1285,7 +1639,9 @@ class PreparedBaseRefTests(unittest.TestCase):
     def test_a_malformed_bundle_falls_back_to_origin_main(self) -> None:
         self.assertEqual("origin/main", runner.prepared_base_ref(lambda _p: "not json"))
 
-    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(self) -> None:
+    def test_a_recorded_value_that_is_not_a_commit_sha_falls_back_to_origin_main(
+        self,
+    ) -> None:
         """A recorded "sha" reaches `git` argv unchecked everywhere it is used — as a
         base ref in `git rev-parse`/`git diff`/`git show`. Without this check, a forged
         value like an option flag becomes an arbitrary-argv-injection primitive rather
@@ -1299,7 +1655,9 @@ class PreparedBaseRefTests(unittest.TestCase):
     def test_reads_from_root_by_default_not_the_worktree(self) -> None:
         self.assertEqual(runner.root_text, runner.prepared_base_ref.__defaults__[0])
 
-    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(self) -> None:
+    def test_a_sha_with_a_trailing_newline_falls_back_rather_than_hard_erroring(
+        self,
+    ) -> None:
         """`$` in Python's `re` matches immediately before a trailing "\\n", so a `match`
         against a `$`-anchored pattern would accept `"<40 hex>\\n"` and pass a value
         carrying a newline straight to `git` argv. `fullmatch` against an unanchored
@@ -1323,7 +1681,9 @@ class SymlinkedBaseRecordTests(unittest.TestCase):
         root = Path(directory.name)
         (root / ".candidate-evidence").mkdir()
         forged = root / "forged.json"
-        forged.write_text(json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8")
+        forged.write_text(
+            json.dumps({"sha": "1" * 40, "from_ref": "forged"}), encoding="utf-8"
+        )
         (root / runner.BASE_REF).symlink_to(forged)
         self.enterContext(mock.patch.object(runner, "ROOT", root))
 
@@ -1387,7 +1747,9 @@ class PrepareRecordsBaseRefTests(unittest.TestCase):
         self.worktree = worktree
 
     @staticmethod
-    def fake_run(calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "c" * 40):
+    def fake_run(
+        calls: list[list[str]], *, fetch_code: int = 0, resolved_sha: str = "c" * 40
+    ):
         def run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
             if command[:3] == ["git", "fetch", "--quiet"]:
@@ -1395,6 +1757,7 @@ class PrepareRecordsBaseRefTests(unittest.TestCase):
             if command[:3] == ["git", "rev-parse", "--verify"]:
                 return 0, resolved_sha + "\n"
             return 0, ""
+
         return run
 
     def test_prepare_records_the_resolved_sha_under_root_not_the_worktree(self) -> None:
@@ -1403,7 +1766,10 @@ class PrepareRecordsBaseRefTests(unittest.TestCase):
         code = runner.prepare(limit=5, run=self.fake_run(calls, resolved_sha=sha))
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", "--verify", "origin/main"], calls)
-        self.assertIn(["git", "worktree", "add", "--quiet", "--detach", str(self.worktree), sha], calls)
+        self.assertIn(
+            ["git", "worktree", "add", "--quiet", "--detach", str(self.worktree), sha],
+            calls,
+        )
         recorded = json.loads((self.root / runner.BASE_REF).read_text(encoding="utf-8"))
         self.assertEqual(sha, recorded["sha"])
         self.assertEqual("origin/main", recorded["from_ref"])
@@ -1413,7 +1779,9 @@ class PrepareRecordsBaseRefTests(unittest.TestCase):
         calls: list[list[str]] = []
         code = runner.prepare(limit=5, run=self.fake_run(calls, fetch_code=1))
         self.assertEqual(1, code)
-        self.assertNotIn(["git", "worktree", "remove", "--force", str(self.worktree)], calls)
+        self.assertNotIn(
+            ["git", "worktree", "remove", "--force", str(self.worktree)], calls
+        )
         self.assertFalse((self.root / runner.BASE_REF).exists())
 
     def test_an_unresolvable_origin_main_is_fatal(self) -> None:
@@ -1433,15 +1801,21 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
     baseline, and the diagnostic label `unexpected_field_changes` uses for the base
     side. Mirrors tests/test_run_hn_signals.py's identical class."""
 
-    QUEUE_DOC: ClassVar[str] = json.dumps({
-        "version": 1,
-        "candidates": [{
-            "repo": "a/one", "url": "https://github.com/a/one",
-            "proposed_system_family": "memory_system",
-            "proposed_primary_role": "agent_memory_service",
-            "classification_confidence": 0.8, "status": "provisional",
-        }],
-    })
+    QUEUE_DOC: ClassVar[str] = json.dumps(
+        {
+            "version": 1,
+            "candidates": [
+                {
+                    "repo": "a/one",
+                    "url": "https://github.com/a/one",
+                    "proposed_system_family": "memory_system",
+                    "proposed_primary_role": "agent_memory_service",
+                    "classification_confidence": 0.8,
+                    "status": "provisional",
+                }
+            ],
+        }
+    )
 
     def responder(self, calls: list[list[str]], *, base_sha: str, head: str = "1111"):
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
@@ -1458,18 +1832,21 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
                 self.assertNotIn("origin/main", command)
                 return 0, runner.QUEUE
             return 0, ""
+
         return fake_run
 
     def base_read(self, base_sha: str):
         def _read(path: str) -> str:
             self.assertEqual(runner.BASE_REF, path)
             return json.dumps({"sha": base_sha, "from_ref": "origin/main"})
+
         return _read
 
     def queue_read(self):
         def _read(path: str) -> str:
             self.assertEqual(runner.QUEUE, path)
             return self.QUEUE_DOC
+
         return _read
 
     def test_finish_uses_the_recorded_sha_in_place_of_origin_main(self) -> None:
@@ -1503,12 +1880,16 @@ class FinishUsesRecordedBaseTests(unittest.TestCase):
             raise OSError("no bundle")
 
         code = runner.finish(
-            run=fake_run, read=self.queue_read(), base_read=base_read_without_a_recorded_base
+            run=fake_run,
+            read=self.queue_read(),
+            base_read=base_read_without_a_recorded_base,
         )
         self.assertEqual(0, code)
         self.assertIn(["git", "rev-parse", "origin/main"], calls)
 
-    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(self) -> None:
+    def test_a_base_side_problem_is_labelled_with_the_recorded_sha_not_origin_main(
+        self,
+    ) -> None:
         """Mutation coverage: dropping `base_label=base_ref` at the `finish` call site
         reverts the diagnostic label to the literal default "origin/main"."""
         base_sha = "7" * 40
@@ -1545,29 +1926,44 @@ class GuardFiresWithAPinnedBaseTests(unittest.TestCase):
     must fire identically whether `finish` compares against `origin/main` or a pinned
     commit SHA — pinning the base must never weaken a guard."""
 
-    BASE_QUEUE: ClassVar[str] = json.dumps({
-        "version": 1,
-        "candidates": [{
-            "repo": "a/one", "url": "https://github.com/a/one",
-            "proposed_system_family": "memory_system",
-            "proposed_primary_role": "agent_memory_service",
-            "classification_confidence": 0.8, "status": "provisional",
-            "triage": {
-                "verdict": "review_ready", "rule": "r", "finding": "f",
-                "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
-                "proposer": "candidate-triage",
-            },
-        }],
-    })
+    BASE_QUEUE: ClassVar[str] = json.dumps(
+        {
+            "version": 1,
+            "candidates": [
+                {
+                    "repo": "a/one",
+                    "url": "https://github.com/a/one",
+                    "proposed_system_family": "memory_system",
+                    "proposed_primary_role": "agent_memory_service",
+                    "classification_confidence": 0.8,
+                    "status": "provisional",
+                    "triage": {
+                        "verdict": "review_ready",
+                        "rule": "r",
+                        "finding": "f",
+                        "evidence": [{"label": "README"}],
+                        "proposed_at": "2026-09-04",
+                        "proposer": "candidate-triage",
+                    },
+                }
+            ],
+        }
+    )
 
     def fake_base_read(self, base_sha: str):
         def _read(path: str) -> str:
             self.assertEqual(runner.BASE_REF, path)
             return json.dumps({"sha": base_sha, "from_ref": "origin/main"})
+
         return _read
 
-    def responder(self, calls: list[list[str]], *, base_sha: str,
-                  porcelain: str = " M directory/candidates.json\n"):
+    def responder(
+        self,
+        calls: list[list[str]],
+        *,
+        base_sha: str,
+        porcelain: str = " M directory/candidates.json\n",
+    ):
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
             calls.append(command)
             if command[:3] == ["git", "status", "--porcelain"]:
@@ -1579,13 +1975,16 @@ class GuardFiresWithAPinnedBaseTests(unittest.TestCase):
             if command[:2] == ["git", "diff"]:
                 return 0, runner.QUEUE
             return 0, ""
+
         return fake_run
 
     def test_a_file_outside_allowed_changes_is_rejected(self) -> None:
         base_sha = "1" * 40
         calls: list[list[str]] = []
         code = runner.finish(
-            run=self.responder(calls, base_sha=base_sha, porcelain=" M directory/projects.json\n"),
+            run=self.responder(
+                calls, base_sha=base_sha, porcelain=" M directory/projects.json\n"
+            ),
             read=lambda _p: self.BASE_QUEUE,
             base_read=self.fake_base_read(base_sha),
         )
@@ -1595,7 +1994,9 @@ class GuardFiresWithAPinnedBaseTests(unittest.TestCase):
     def test_an_added_candidate_is_rejected(self) -> None:
         base_sha = "2" * 40
         document = json.loads(self.BASE_QUEUE)
-        document["candidates"].append({"repo": "b/two", "url": "https://github.com/b/two"})
+        document["candidates"].append(
+            {"repo": "b/two", "url": "https://github.com/b/two"}
+        )
         after = json.dumps(document)
         calls: list[list[str]] = []
         stderr = io.StringIO()
@@ -1654,38 +2055,67 @@ class RealGitMovingMainTests(unittest.TestCase):
         root = scratch / "root"
         root.mkdir()
         subprocess.run(["git", "init", "-q", str(root)], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.com"], check=True)
-        subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.email", "test@example.com"],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(root), "config", "user.name", "Test"], check=True
+        )
         (root / "directory").mkdir()
         (root / ".gitignore").write_text(".candidate-evidence/\n", encoding="utf-8")
         (root / "directory" / "candidates.json").write_text(
-            json.dumps({
-                "version": 1,
-                "candidates": [{
-                    "repo": "a/one", "url": "https://github.com/a/one",
-                    "proposed_system_family": "memory_system",
-                    "proposed_primary_role": "agent_memory_service",
-                    "classification_confidence": 0.8, "status": "provisional",
-                }],
-            }),
+            json.dumps(
+                {
+                    "version": 1,
+                    "candidates": [
+                        {
+                            "repo": "a/one",
+                            "url": "https://github.com/a/one",
+                            "proposed_system_family": "memory_system",
+                            "proposed_primary_role": "agent_memory_service",
+                            "classification_confidence": 0.8,
+                            "status": "provisional",
+                        }
+                    ],
+                }
+            ),
             encoding="utf-8",
         )
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
-        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True)
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "-q", "-m", "init"], check=True
+        )
         base_code, base_sha = runner.shell(["git", "rev-parse", "HEAD"], root)
         self.assertEqual(0, base_code)
         self.base_sha = base_sha.strip()
         # A real `git fetch origin` would create this ref; forging it directly means the
         # test needs no actual network remote to exercise the guard's use of it.
         subprocess.run(
-            ["git", "-C", str(root), "update-ref", "refs/remotes/origin/main", self.base_sha],
+            [
+                "git",
+                "-C",
+                str(root),
+                "update-ref",
+                "refs/remotes/origin/main",
+                self.base_sha,
+            ],
             check=True,
         )
 
         worktree = scratch / "worktree"
         subprocess.run(
-            ["git", "-C", str(root), "worktree", "add", "--quiet", "--detach",
-             str(worktree), self.base_sha],
+            [
+                "git",
+                "-C",
+                str(root),
+                "worktree",
+                "add",
+                "--quiet",
+                "--detach",
+                str(worktree),
+                self.base_sha,
+            ],
             check=True,
         )
 
@@ -1695,7 +2125,9 @@ class RealGitMovingMainTests(unittest.TestCase):
         self.worktree = worktree
 
         # What `prepare` records: the exact commit the worktree was built from.
-        routine_guards.record_prepared_base(root / runner.BASE_REF, self.base_sha, "origin/main")
+        routine_guards.record_prepared_base(
+            root / runner.BASE_REF, self.base_sha, "origin/main"
+        )
 
     @staticmethod
     def hybrid_run(command: list[str], cwd=None) -> tuple[int, str]:
@@ -1713,18 +2145,35 @@ class RealGitMovingMainTests(unittest.TestCase):
             path.write_text("unrelated change\n", encoding="utf-8")
         subprocess.run(["git", "-C", str(self.root), "add", "-A"], check=True)
         subprocess.run(
-            ["git", "-C", str(self.root), "commit", "-q", "-m", "unrelated main commit"], check=True
+            [
+                "git",
+                "-C",
+                str(self.root),
+                "commit",
+                "-q",
+                "-m",
+                "unrelated main commit",
+            ],
+            check=True,
         )
         _, new_sha = runner.shell(["git", "rev-parse", "HEAD"], self.root)
         subprocess.run(
-            ["git", "-C", str(self.root), "update-ref", "refs/remotes/origin/main", new_sha.strip()],
+            [
+                "git",
+                "-C",
+                str(self.root),
+                "update-ref",
+                "refs/remotes/origin/main",
+                new_sha.strip(),
+            ],
             check=True,
         )
 
     def test_an_unrelated_commit_on_origin_main_is_not_reported(self) -> None:
         # The exact three files today's real failed run blamed on the routine.
         self.advance_origin_main(
-            ".github/workflows/update-directory.yml", "BACKLOG.md",
+            ".github/workflows/update-directory.yml",
+            "BACKLOG.md",
             "directory/model-candidates.json",
         )
 
@@ -1732,8 +2181,11 @@ class RealGitMovingMainTests(unittest.TestCase):
         queue_path = self.worktree / runner.QUEUE
         document = json.loads(queue_path.read_text(encoding="utf-8"))
         document["candidates"][0]["triage"] = {
-            "verdict": "review_ready", "rule": "r", "finding": "f",
-            "evidence": [{"label": "README"}], "proposed_at": "2026-09-04",
+            "verdict": "review_ready",
+            "rule": "r",
+            "finding": "f",
+            "evidence": [{"label": "README"}],
+            "proposed_at": "2026-09-04",
             "proposer": "candidate-triage",
         }
         queue_path.write_text(json.dumps(document), encoding="utf-8")
@@ -1746,17 +2198,28 @@ class RealGitMovingMainTests(unittest.TestCase):
         self.assertNotIn("BACKLOG.md", stderr.getvalue())
         self.assertNotIn("model-candidates.json", stderr.getvalue())
 
-        branch_code, _ = runner.shell(["git", "rev-parse", "--verify", "triage/pending"], self.worktree)
+        branch_code, _ = runner.shell(
+            ["git", "rev-parse", "--verify", "triage/pending"], self.worktree
+        )
         self.assertEqual(0, branch_code)
 
-    def test_without_pinning_the_same_unrelated_commit_would_have_been_blamed(self) -> None:
+    def test_without_pinning_the_same_unrelated_commit_would_have_been_blamed(
+        self,
+    ) -> None:
         """Proves the scenario is real, not just that the new code happens to pass it: a
         blast-radius check that re-resolved the literal `origin/main` ref — what `finish`
         did before this branch — would see the unrelated commit as part of the diff."""
         self.advance_origin_main("BACKLOG.md")
 
         diff_code, diff_output = runner.shell(
-            ["git", "diff", "--name-only", "--no-renames", "origin/main", self.base_sha],
+            [
+                "git",
+                "diff",
+                "--name-only",
+                "--no-renames",
+                "origin/main",
+                self.base_sha,
+            ],
             self.worktree,
         )
         self.assertEqual(0, diff_code)

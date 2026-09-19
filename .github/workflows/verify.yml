@@ -23,6 +23,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Review dependency changes
         if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
@@ -35,35 +36,20 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
-      - name: Lint Python sources
-        run: uv run ruff check scripts tests
-      - name: Validate directory
-        run: uv run python scripts/validate_directory.py
-      - name: Run tests
-        run: uv run python -m unittest discover -s tests -v
-      - name: Compile Python sources
-        run: uv run python -m compileall scripts tests
-      - name: Check browser JavaScript syntax
-        run: node --check web/app-core.js && node --check web/app.js
-      - name: Run web behavior tests
-        run: node --test tests/test_web.js
       - name: Install browser test dependencies
         run: |
           npm ci --ignore-scripts
           npm exec -- playwright install --with-deps chromium
-      - name: Lint browser and build JavaScript
-        run: npm run lint:js
-      - name: Check logo coverage and freshness
-        run: node scripts/build_logos.mjs --check
-      - name: Check vendored font freshness
-        run: node scripts/build_fonts.mjs --check
-      - name: Check asset versions
-        run: node scripts/build_asset_version.mjs --check
-      - name: Check share page freshness
-        run: uv run python scripts/build_share_pages.py --check
-      - name: Check app payload freshness
-        run: uv run python scripts/build_web_payload.py --check
-      - name: Check blog freshness
-        run: uv run python scripts/build_blog.py --check
-      - name: Run browser end-to-end tests
-        run: npm run test:e2e
+      - name: Install pre-commit
+        run: pipx install pre-commit
+      # The whole gate lives in .pre-commit-config.yaml: lint, format,
+      # secrets, complexity, catalog validation, unit tests with coverage,
+      # syntax and web behavior checks, generated-file freshness, and e2e.
+      # This job is environment setup plus that one command.
+      # no-commit-to-branch is skipped: it guards local commits off main, and
+      # a push-triggered run on main always sits on main, so the hook would
+      # fail every post-merge verification. Branch protection is the guard.
+      - name: Run pre-commit on all files
+        env:
+          SKIP: no-commit-to-branch
+        run: pre-commit run --all-files --show-diff-on-failure

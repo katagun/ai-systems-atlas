@@ -19,7 +19,7 @@ So that is the rule for this piece. Every factual assertion in it points at some
 
 Starting with the limit. The logs begin on 2026-08-29. The repository's first commit is 2026-08-23, and it reads:
 
-```
+```text
 feat: initialize Cognosaic directory and local-first second brain
 ```
 

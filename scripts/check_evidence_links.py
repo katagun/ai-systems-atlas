@@ -10,6 +10,7 @@ Pages that refuse the checker's bot user agent with 403 but serve an ordinary
 browser (observed bot walls) get one retry with browser headers; a success is
 recorded as reachable with a bot-wall warning rather than as a broken link.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -387,9 +388,10 @@ class _VisibleText(HTMLParser):
 
 def _is_html(body: bytes, content_type: str) -> bool:
     media_type = content_type.partition(";")[0].strip().lower()
-    return media_type in {"text/html", "application/xhtml+xml"} or body.lstrip().lower().startswith(
-        (b"<!doctype html", b"<html")
-    )
+    return media_type in {
+        "text/html",
+        "application/xhtml+xml",
+    } or body.lstrip().lower().startswith((b"<!doctype html", b"<html"))
 
 
 def normalized_content(body: bytes, content_type: str) -> bytes:
@@ -400,7 +402,9 @@ def normalized_content(body: bytes, content_type: str) -> bytes:
             value = json.loads(body)
         except (UnicodeDecodeError, json.JSONDecodeError):
             return body
-        return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+        return json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode()
     if _is_html(body, content_type):
         parser = _VisibleText()
         parser.feed(body.decode("utf-8", errors="replace"))
@@ -408,7 +412,9 @@ def normalized_content(body: bytes, content_type: str) -> bytes:
         # Microsoft hosts render a per-request telemetry nonce as visible text
         # beside their scripts. It is never terms substance; without this the
         # same page hashes differently on every fetch and can never clear drift.
-        text = re.sub(r"this is the trace id:\s*[0-9a-f]{32}", "", text, flags=re.IGNORECASE)
+        text = re.sub(
+            r"this is the trace id:\s*[0-9a-f]{32}", "", text, flags=re.IGNORECASE
+        )
         return " ".join(text.split()).encode()
     if media_type.startswith("text/") or media_type in {"application/xml", "text/xml"}:
         return " ".join(body.decode("utf-8", errors="replace").split()).encode()
@@ -454,7 +460,11 @@ class _SectionText(HTMLParser):
                     self.container, self.depth = tag, 1
             return
         # A heading's section ends at the next heading of the same or a higher level.
-        if self.heading_level is not None and heading and int(heading.group(1)) <= self.heading_level:
+        if (
+            self.heading_level is not None
+            and heading
+            and int(heading.group(1)) <= self.heading_level
+        ):
             self.done = True
             return
         if tag == self.container:
@@ -511,7 +521,10 @@ def terms_content(body: bytes, content_type: str, url: str) -> TermsContent | No
         section = section_text(body.decode("utf-8", errors="replace"), element_id)
         if section:
             return TermsContent(
-                section, hashlib.sha256(section.encode()).hexdigest(), "section", page_sha256
+                section,
+                hashlib.sha256(section.encode()).hexdigest(),
+                "section",
+                page_sha256,
             )
         anchor_missing = True
     try:
@@ -522,7 +535,11 @@ def terms_content(body: bytes, content_type: str, url: str) -> TermsContent | No
 
 
 def _clip(segment: str) -> str:
-    return segment if len(segment) <= MAX_SEGMENT_CHARS else segment[: MAX_SEGMENT_CHARS - 1] + "…"
+    return (
+        segment
+        if len(segment) <= MAX_SEGMENT_CHARS
+        else segment[: MAX_SEGMENT_CHARS - 1] + "…"
+    )
 
 
 def drift_diff(before: str | None, after: str | None) -> list[str]:
@@ -556,7 +573,10 @@ def _entry_drift_diff(entry: Mapping[str, Any]) -> list[str]:
             f"  (the baseline hashes the {_SCOPE_NAMES.get(baseline_scope, baseline_scope)}; "
             f"the new hash covers the {_SCOPE_NAMES.get(observed_scope, observed_scope)})"
         )
-    return [*notes, *drift_diff(entry.get("terms_text"), entry.get("observed_terms_text"))]
+    return [
+        *notes,
+        *drift_diff(entry.get("terms_text"), entry.get("observed_terms_text")),
+    ]
 
 
 def _fetch_url(url: str) -> str:
@@ -566,11 +586,15 @@ def _fetch_url(url: str) -> str:
     if parsed.hostname == "github.com" and len(parts) >= 5 and parts[2] == "blob":
         owner, repo, _blob, ref, *path = parts
         raw_path = "/".join((owner, repo, ref, *path))
-        return urllib.parse.urlunsplit(("https", "raw.githubusercontent.com", f"/{raw_path}", "", ""))
+        return urllib.parse.urlunsplit(
+            ("https", "raw.githubusercontent.com", f"/{raw_path}", "", "")
+        )
     if parsed.hostname == "huggingface.co" and len(parts) >= 5 and parts[2] == "blob":
         owner, repo, _blob, ref, *path = parts
         raw_path = "/".join((owner, repo, "resolve", ref, *path))
-        return urllib.parse.urlunsplit(("https", "huggingface.co", f"/{raw_path}", parsed.query, ""))
+        return urllib.parse.urlunsplit(
+            ("https", "huggingface.co", f"/{raw_path}", parsed.query, "")
+        )
     return url
 
 
@@ -675,7 +699,8 @@ def _needs_terms_body(target: LinkTarget, cached: Mapping[str, Any]) -> bool:
     if not target.monitor_terms or not cached.get("terms_sha256"):
         return False
     return "terms_text" not in cached or (
-        bool(cached.get("observed_terms_sha256")) and "observed_terms_text" not in cached
+        bool(cached.get("observed_terms_sha256"))
+        and "observed_terms_text" not in cached
     )
 
 
@@ -723,7 +748,9 @@ def fetch_target(
                     if target.monitor_terms:
                         body = response.read(MAX_TERMS_BYTES + 1)
                         if len(body) > MAX_TERMS_BYTES:
-                            raise FetchFailure(f"terms response exceeds {MAX_TERMS_BYTES} bytes")
+                            raise FetchFailure(
+                                f"terms response exceeds {MAX_TERMS_BYTES} bytes"
+                            )
                     elif method == "GET":
                         response.read(1)
                     return FetchResult(
@@ -742,13 +769,22 @@ def fetch_target(
                         body=None,
                         not_modified=True,
                     )
-                rate_limited = exc.code == 403 and response_headers.get("x-ratelimit-remaining") == "0"
+                rate_limited = (
+                    exc.code == 403
+                    and response_headers.get("x-ratelimit-remaining") == "0"
+                )
                 if exc.code in TRANSIENT_HTTP_CODES or rate_limited:
-                    last_failure = FetchFailure(f"HTTP {exc.code} after retries", status=exc.code)
+                    last_failure = FetchFailure(
+                        f"HTTP {exc.code} after retries", status=exc.code
+                    )
                     if attempt < attempts - 1:
                         sleeper(_rate_limit_delay(response_headers, attempt))
                         continue
-                if method == "HEAD" and exc.code in HEAD_FALLBACK_CODES and not rate_limited:
+                if (
+                    method == "HEAD"
+                    and exc.code in HEAD_FALLBACK_CODES
+                    and not rate_limited
+                ):
                     last_failure = FetchFailure(f"HTTP {exc.code}", status=exc.code)
                     break
                 if method == "GET" and exc.code == 403 and not rate_limited:
@@ -780,7 +816,10 @@ def load_cache(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {"version": CACHE_VERSION, "updated_at": None, "entries": {}}
     cache = load_json(path)
-    if set(cache) != {"version", "updated_at", "entries"} or cache.get("version") != CACHE_VERSION:
+    if (
+        set(cache) != {"version", "updated_at", "entries"}
+        or cache.get("version") != CACHE_VERSION
+    ):
         raise ValueError(f"{path}: unsupported evidence-link cache schema")
     if not isinstance(cache.get("entries"), dict):
         raise ValueError(f"{path}: cache entries must be an object")
@@ -815,7 +854,9 @@ def default_cache_path(
     except (OSError, subprocess.CalledProcessError):
         return root / LEGACY_CACHE_NAME
     common_dir = result.stdout.strip()
-    return Path(common_dir) / SHARED_CACHE_PATH if common_dir else root / LEGACY_CACHE_NAME
+    return (
+        Path(common_dir) / SHARED_CACHE_PATH if common_dir else root / LEGACY_CACHE_NAME
+    )
 
 
 class CacheLocked(RuntimeError):
@@ -846,7 +887,9 @@ def _reviewed_since_last_run(
     if last_run is None or not review_dates:
         return False
     since = last_run.date().isoformat()
-    return all(isinstance(value, str) and value >= since for value in review_dates.values())
+    return all(
+        isinstance(value, str) and value >= since for value in review_dates.values()
+    )
 
 
 def _missing_baseline_error(target: LinkTarget) -> str:
@@ -876,7 +919,9 @@ def _review_map(raw: object, keys: Iterable[str]) -> dict[str, object]:
     return {}
 
 
-def _reviewed_strictly_later(candidate: Mapping[str, Any], other: Mapping[str, Any]) -> bool:
+def _reviewed_strictly_later(
+    candidate: Mapping[str, Any], other: Mapping[str, Any]
+) -> bool:
     """True when candidate was accepted after a newer human review of every reference."""
     raw_candidate = candidate.get("terms_reviewed_at")
     raw_other = other.get("terms_reviewed_at")
@@ -934,9 +979,13 @@ def _merge_entry(
         merged = dict(_newest_checked(current, incoming))
         merged.pop("terms_drift_detected_at", None)
         merged.pop("observed_terms_sha256", None)
-        drifted = [side for side in (current, incoming) if side.get("terms_drift_detected_at")]
+        drifted = [
+            side for side in (current, incoming) if side.get("terms_drift_detected_at")
+        ]
         if drifted:
-            earliest = min(drifted, key=lambda side: str(side["terms_drift_detected_at"]))
+            earliest = min(
+                drifted, key=lambda side: str(side["terms_drift_detected_at"])
+            )
             merged["terms_drift_detected_at"] = earliest["terms_drift_detected_at"]
             if earliest.get("observed_terms_sha256"):
                 merged["observed_terms_sha256"] = earliest["observed_terms_sha256"]
@@ -985,7 +1034,9 @@ def merge_caches(
     return report
 
 
-def import_caches(cache_path: Path, sources: Iterable[Path], *, today: str) -> ImportReport:
+def import_caches(
+    cache_path: Path, sources: Iterable[Path], *, today: str
+) -> ImportReport:
     loaded = []
     for source in sources:
         if not source.is_file():
@@ -1075,7 +1126,9 @@ def check_targets(
             return exc
 
     if workers == 1:
-        fetched = {target.url: attempt((target, previous)) for target, previous in pending}
+        fetched = {
+            target.url: attempt((target, previous)) for target, previous in pending
+        }
     else:
         with ThreadPoolExecutor(max_workers=workers) as executor:
             outcomes = executor.map(attempt, pending)
@@ -1116,11 +1169,13 @@ def check_targets(
         summary.checked += 1
         summary.succeeded += 1
         entry = dict(previous)
-        entry.update({
-            "checked_at": now.isoformat().replace("+00:00", "Z"),
-            "final_url": response.final_url,
-            "status": response.status,
-        })
+        entry.update(
+            {
+                "checked_at": now.isoformat().replace("+00:00", "Z"),
+                "final_url": response.final_url,
+                "status": response.status,
+            }
+        )
         if response.headers.get("etag"):
             entry["etag"] = response.headers["etag"]
         if response.headers.get("last-modified"):
@@ -1142,7 +1197,9 @@ def check_targets(
                 current_hash = observed or entry.get("terms_sha256")
                 if observed:
                     current_text = entry.get("observed_terms_text")
-                    current_scope = entry.get("observed_terms_hash_scope", current_scope)
+                    current_scope = entry.get(
+                        "observed_terms_hash_scope", current_scope
+                    )
                 else:
                     current_text = entry.get("terms_text")
                 page_hash = current_hash if current_scope == "page" else None
@@ -1187,7 +1244,9 @@ def check_targets(
             elif baseline_hash is None:
                 reviewed_since = _reviewed_since_last_run(review_dates, last_run)
                 if reviewed_since or establish_baselines:
-                    _store_terms(entry, "terms", current_hash, current_text, current_scope)
+                    _store_terms(
+                        entry, "terms", current_hash, current_text, current_scope
+                    )
                     entry["terms_reviewed_at"] = review_dates
                     _clear_observed(entry)
                     entry.pop("terms_baseline_missing", None)
@@ -1204,12 +1263,20 @@ def check_targets(
                     summary.errors.append(_missing_baseline_error(target))
             elif current_hash != baseline_hash or entry.get("terms_drift_detected_at"):
                 if review_advanced:
-                    _store_terms(entry, "terms", current_hash, current_text, current_scope)
+                    _store_terms(
+                        entry, "terms", current_hash, current_text, current_scope
+                    )
                     entry["terms_reviewed_at"] = review_dates
                     _clear_observed(entry)
                     summary.terms_accepted += 1
                 else:
-                    _store_terms(entry, "observed_terms", current_hash, current_text, current_scope)
+                    _store_terms(
+                        entry,
+                        "observed_terms",
+                        current_hash,
+                        current_text,
+                        current_scope,
+                    )
                     entry.setdefault(
                         "terms_drift_detected_at",
                         now.date().isoformat(),
@@ -1243,7 +1310,9 @@ def _store_terms(
 ) -> None:
     """Record a terms hash with the text and scope it covers, as the baseline or the observation."""
     entry[f"{prefix}_sha256"] = sha256
-    entry["terms_hash_scope" if prefix == "terms" else "observed_terms_hash_scope"] = scope
+    entry["terms_hash_scope" if prefix == "terms" else "observed_terms_hash_scope"] = (
+        scope
+    )
     if text is None:
         entry.pop(f"{prefix}_text", None)
     else:
@@ -1328,7 +1397,9 @@ def _run_show_drift(cache_path: Path) -> int:
 
 def _run_import(cache_path: Path, sources: list[Path]) -> int:
     try:
-        report = import_caches(cache_path, sources, today=datetime.now(UTC).date().isoformat())
+        report = import_caches(
+            cache_path, sources, today=datetime.now(UTC).date().isoformat()
+        )
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
@@ -1367,7 +1438,13 @@ def _run_check(cache_path: Path, args: argparse.Namespace) -> int:
     try:
         targets = collect_targets()
         cache = load_cache(cache_path)
-    except (FileNotFoundError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+    except (
+        FileNotFoundError,
+        KeyError,
+        TypeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 

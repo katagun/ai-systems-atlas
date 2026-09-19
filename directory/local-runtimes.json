@@ -1,7 +1,109 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-03",
+  "verified_at": "2026-09-18",
   "runtimes": [
+    {
+      "id": "exo",
+      "name": "exo",
+      "maintainer": "exo labs",
+      "runtime_type": "desktop_runner",
+      "repo": "exo-explore/exo",
+      "url": "https://github.com/exo-explore/exo",
+      "description": "Device-mesh inference runtime that connects a user's own computers into a cluster, splitting models across devices by pipeline or tensor sharding and serving them through OpenAI-, Claude-, Ollama-, and Responses-compatible APIs behind a web dashboard.",
+      "runtime_boundary": "Represents the exo-explore/exo software maintained by exo labs. It is not MLX or MLX distributed, the Apple inference backend and communication layer it builds on and names in its README, and not the Hugging Face hub models it downloads, which are MLX conversions such as the mlx-community checkpoints in its examples. It is not Ollama, though it serves an Ollama-compatible API path, and not a managed cloud service. Because the product exists to run models on the user's own hardware and its dashboard chat is how that capability is exercised, it classifies as a runtime rather than an assistant under ADR 015. The record is distinct from the published Exo Harness project, an unrelated agent runtime that shares only the name.",
+      "accelerators": [
+        "cpu",
+        "metal",
+        "multi_gpu"
+      ],
+      "model_formats": [
+        "mlx"
+      ],
+      "serving_modes": [
+        "single_stream",
+        "distributed_serving"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "service_native"
+      ],
+      "deployment_surfaces": [
+        "desktop_app",
+        "local_cli"
+      ],
+      "model_management": "Models are downloaded from the Hugging Face hub, either MLX conversions such as mlx-community/Llama-3.2-1B-Instruct-4bit or user-supplied custom model IDs, into EXO_DEFAULT_MODELS_DIR -- ~/.local/share/exo/models on Linux and ~/.exo/models on macOS -- with additional writable directories through EXO_MODELS_DIRS and read-only directories such as NFS mounts through EXO_MODELS_READ_ONLY_DIRS, where models cannot be deleted. EXO_OFFLINE=true confines serving to already-downloaded models. Custom models are added through the /models/add endpoint, stored as custom model cards under ~/.local/share/exo/custom_model_cards/, and gated by a trust_remote_code setting that defaults to false; the API reference documents listing models with a downloaded-status filter, searching the Hugging Face hub, and deleting custom models. Model instances are created, awaited, and deleted through the /instance endpoints.",
+      "hardware_requirements": "Tier-1 tested and maintained support is Apple Silicon macOS only: Mac Studio M3 Ultra, Mac Mini M4 Pro, and MacBook Pro M5 and M4 Max, executing on the GPU through MLX. On Linux the README states exo currently runs on CPU only, with GPU support under development, and PLATFORMS.md lists Linux CUDA, Linux CPU, Linux Vulkan, and Windows support as planned rather than supported. The macOS app requires macOS Tahoe 26.2 or later, and RDMA over Thunderbolt 5 requires macOS 26.2 plus Thunderbolt 5 hardware with every device in the cluster cabled to every other device. Nodes discover each other over libp2p, and a coordinator-only node started with --no-worker needs no accelerator of its own.",
+      "operational_controls": "Devices discover each other automatically, and a custom libp2p namespace through EXO_LIBP2P_NAMESPACE isolates clusters on the same network. Placement is topology-aware, with a /instance/previews endpoint that previews valid placements and reports the memory delta per node, and both pipeline and tensor sharding are documented. --no-worker runs coordinator-only nodes and --legacy-daemon enables SysV-style background operation; on Linux, configuration, data, and cache paths follow the XDG base directory specification and logs rotate automatically under ~/.cache/exo/exo_log/. Distributed tracing is toggled by EXO_TRACING_ENABLED, and the bundled exo-bench tool measures prefill and generation speed across placement configurations. The API and dashboard listen on localhost:52415 with no documented authentication, and custom Hugging Face models requiring trust_remote_code must be explicitly enabled.",
+      "strengths": [
+        "The clearest documented multi-device inference cluster for consumer hardware: automatic device discovery, topology-aware pipeline and tensor sharding across hosts, and day-0 RDMA over Thunderbolt 5 support that the README describes as a 99% reduction in inter-device latency.",
+        "Four API-compatible surfaces -- OpenAI chat completions, OpenAI responses, Claude messages, and Ollama -- let existing clients and tools including OpenWebUI talk to the cluster without adaptation.",
+        "Model and storage control is explicit rather than implicit: default, additional writable, and read-only model directories, an offline mode, gated trust_remote_code for custom models, and cluster isolation through a libp2p namespace."
+      ],
+      "tradeoffs": [
+        "Accelerator coverage is narrow and platform-split: Apple Silicon Metal is the only supported GPU path, Linux runs on CPU, and CUDA, Vulkan, and Windows are roadmap items rather than reviewed support.",
+        "Model format support is confined to MLX checkpoints, so GGUF, Safetensors, and other weight formats cannot be loaded directly.",
+        "Serving is interactive and distributed rather than batched: continuous batching, parallel-request handling, and KV-cache management are not documented, and the localhost API performs no authentication.",
+        "The macOS app demands a recent OS and installs a network profile and system-level components, while RDMA additionally requires a fully cabled Thunderbolt 5 topology with exactly matching OS versions across devices."
+      ],
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_note": "The repository publishes a single Apache-2.0 license file at its root carrying the standard Apache License 2.0 text, and the README displays the same Apache-2.0 badge. No NOTICE file or additional component license files are published in the tree; MLX and other inference dependencies are fetched as packages rather than vendored, so no separate component terms alter the project's own license.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository-wide license file covering the exo runtime, dashboard, and bindings",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/exo-explore/exo/blob/main/LICENSE",
+          "blob_sha": "4db5f186e8470aeba22ef522826366364344114b",
+          "immutable_url": "https://api.github.com/repos/exo-explore/exo/git/blobs/4db5f186e8470aeba22ef522826366364344114b"
+        }
+      ],
+      "score_profile": "local_runtime",
+      "score": {
+        "hardware_accelerator_coverage": 6.0,
+        "model_format_support": 4.0,
+        "serving_concurrency": 5.5,
+        "api_interoperability": 8.0,
+        "deployment_operations": 6.0,
+        "model_lifecycle_management": 6.5,
+        "observability_control": 6.0,
+        "documentation_transparency": 7.5,
+        "overall": 6.05
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "README: features, configuration, and API usage",
+          "url": "https://github.com/exo-explore/exo/blob/main/README.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "API reference for instance, model, and inference endpoints",
+          "url": "https://github.com/exo-explore/exo/blob/main/docs/api.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Platform support tiers and roadmap",
+          "url": "https://github.com/exo-explore/exo/blob/main/PLATFORMS.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Repository license file",
+          "url": "https://github.com/exo-explore/exo/blob/main/LICENSE",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "verified_at": "2026-09-18",
+      "stars": 47501,
+      "stars_verified_at": "2026-09-18"
+    },
     {
       "id": "geniex",
       "name": "GenieX",

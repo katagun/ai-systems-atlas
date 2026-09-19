@@ -5,7 +5,7 @@ description: Query the AI Systems Atlas, a directory of reviewed agent, memory, 
 
 # AI Systems Atlas
 
-The Atlas (https://peacefulcoexistance.com/) reviews and curates AI agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes. Reviewed records carry evidence and a `verified_at` date. A separate complete models.dev snapshot is published as attributed source metadata; automation cannot turn one of those rows into an Atlas review or change Atlas prose, licenses, scores, or conclusions.
+The Atlas (<https://peacefulcoexistance.com/>) reviews and curates AI agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, and self-operated local runtimes. Reviewed records carry evidence and a `verified_at` date. A separate complete models.dev snapshot is published as attributed source metadata; automation cannot turn one of those rows into an Atlas review or change Atlas prose, licenses, scores, or conclusions.
 
 ## Fetch the right file for the question
 

@@ -7,6 +7,7 @@ carries no citation this run is staking anything on, so its drift cannot fail th
 Claude never fetches: this deterministic script does, exactly as prepare/finish do
 for the candidate-triage routine.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -52,10 +53,7 @@ def _bundle_text(text: str, *, url: str) -> str:
     """
     if len(text) <= MAX_BUNDLE_CHARS:
         return text
-    return (
-        text[:MAX_BUNDLE_CHARS]
-        + f"\n\n[truncated: the full page is at {url}]"
-    )
+    return text[:MAX_BUNDLE_CHARS] + f"\n\n[truncated: the full page is at {url}]"
 
 
 def assessed_story_ids(
@@ -87,7 +85,9 @@ def assessed_story_ids(
     }
 
 
-def baseline_queue_signals(base_ref: str, *, run=subprocess.run) -> list[dict[str, Any]]:
+def baseline_queue_signals(
+    base_ref: str, *, run=subprocess.run
+) -> list[dict[str, Any]]:
     """The signal queue as it stood at `base_ref`, or [] if it cannot be read.
 
     An unreadable or malformed baseline widens the recheck's scope rather than narrowing
@@ -109,7 +109,10 @@ def baseline_queue_signals(base_ref: str, *, run=subprocess.run) -> list[dict[st
 
 
 def verify(
-    *, refresh: bool, fetcher=fetch_web_text, signals_path: Path = SIGNALS_PATH,
+    *,
+    refresh: bool,
+    fetcher=fetch_web_text,
+    signals_path: Path = SIGNALS_PATH,
     baseline: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Re-fetch a signal's page and compare it against the recorded digest.
@@ -164,7 +167,8 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--refresh", action="store_true")
     mode.add_argument("--recheck", action="store_true")
     parser.add_argument(
-        "--base-ref", default=DEFAULT_BASE_REF,
+        "--base-ref",
+        default=DEFAULT_BASE_REF,
         help=(
             "commit --recheck diffs the queue against to find this run's own new or "
             "changed assessments (default: origin/main); ignored by --refresh, which "

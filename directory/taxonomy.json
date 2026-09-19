@@ -2,104 +2,405 @@
   "version": "4.0",
   "principle": "Operational projects belong to one system family and primary role. Models, inference services, local runtimes, specifications, and agent packs retain independent collection schemas. Scores are comparable only inside the same score profile.",
   "system_families": [
-    {"id": "memory_system", "name": "Memory systems", "definition": "Systems whose primary value is capturing, organizing, preserving, retrieving, or reasoning over durable knowledge."},
-    {"id": "agent_system", "name": "Agent systems", "definition": "Systems whose primary value is planning and taking actions through tools on a person's behalf."},
-    {"id": "assistant_system", "name": "Assistant systems", "definition": "End-user conversational systems whose primary value is helping a person reason, create, research, and optionally act across broad tasks."}
+    {
+      "id": "memory_system",
+      "name": "Memory systems",
+      "definition": "Systems whose primary value is capturing, organizing, preserving, retrieving, or reasoning over durable knowledge."
+    },
+    {
+      "id": "agent_system",
+      "name": "Agent systems",
+      "definition": "Systems whose primary value is planning and taking actions through tools on a person's behalf."
+    },
+    {
+      "id": "assistant_system",
+      "name": "Assistant systems",
+      "definition": "End-user conversational systems whose primary value is helping a person reason, create, research, and optionally act across broad tasks."
+    }
   ],
   "primary_roles": [
-    {"id": "human_pkm", "family": "memory_system", "name": "Human-first PKM / workspace", "definition": "A user-facing system whose canonical workflow is human writing, organizing, linking, and revisiting knowledge."},
-    {"id": "ai_knowledge_app", "family": "memory_system", "name": "AI knowledge app / RAG brain", "definition": "A user-facing assistant that ingests documents or connected sources and answers, searches, summarizes, or automates over them."},
-    {"id": "agent_memory_service", "family": "memory_system", "name": "External agent-memory service", "definition": "A replaceable library or service that extracts, stores, retrieves, and manages durable memories through an SDK, API, or tool protocol."},
-    {"id": "context_graph_engine", "family": "memory_system", "name": "Temporal context / knowledge-graph engine", "definition": "Infrastructure that represents entities, relationships, provenance, and changing truth over time."},
-    {"id": "memory_bridge", "family": "memory_system", "name": "Human–agent memory bridge", "definition": "A compatibility layer that exposes human-owned files or workspaces to multiple agents."},
-    {"id": "ambient_capture", "family": "memory_system", "name": "Ambient capture / lifelogging", "definition": "A passive collector that records digital activity without requiring deliberate note creation."},
-    {"id": "retrieval_infrastructure", "family": "memory_system", "name": "Retrieval / storage infrastructure", "definition": "A low-level vector, graph, lexical, or multimodal store used to build memory systems."},
-    {"id": "general_work_agent", "family": "agent_system", "name": "General work agent", "definition": "An end-user agent that accepts broad delegated outcomes and executes multi-step knowledge work across files, the web, applications, and scheduled workflows."},
-    {"id": "coding_agent", "family": "agent_system", "name": "Coding agent", "definition": "An interactive agent that reads, edits, runs, and reasons about software projects."},
-    {"id": "research_agent", "family": "agent_system", "name": "Research agent", "definition": "An agent that plans multi-step information gathering and synthesizes cited findings."},
-    {"id": "browser_computer_agent", "family": "agent_system", "name": "Browser / computer-use agent", "definition": "An agent specialized in operating browsers, desktops, or other graphical interfaces."},
-    {"id": "data_analysis_agent", "family": "agent_system", "name": "Data-analysis / text-to-SQL agent", "definition": "An agent that plans, executes, validates, and explains structured-data queries or analyses through database and analytics tools."},
-    {"id": "stateful_agent_runtime", "family": "agent_system", "name": "Stateful agent runtime / harness", "definition": "A persistent agent runtime that owns identity, durable state, skills, schedules, and memory lifecycle."},
-    {"id": "coding_agent_workflow", "family": "agent_system", "name": "Coding-agent workflow / skill stack", "definition": "Prompts, roles, tools, and process that turn coding agents into a repeatable software-delivery system."},
-    {"id": "multi_agent_orchestrator", "family": "agent_system", "name": "Multi-agent orchestrator", "definition": "A system for coordinating specialized agents, handoffs, workflows, and shared execution."},
-    {"id": "agent_framework_sdk", "family": "agent_system", "name": "Agent framework / SDK", "definition": "A developer framework or builder for creating tool-using, controllable, observable agent applications."},
-    {"id": "general_ai_assistant", "family": "assistant_system", "name": "General AI assistant", "definition": "A provider-branded conversational product spanning information, creation, files, research, personalization, and optional actions."},
-    {"id": "enterprise_work_assistant", "family": "assistant_system", "name": "Enterprise work assistant", "definition": "A tenant or workspace assistant grounded in organizational systems with connectors, governance, administration, or business actions."},
-    {"id": "multi_model_chat_client", "family": "assistant_system", "name": "Multi-model chat client", "definition": "An end-user product whose primary value is presenting or routing multiple interchangeable model backends through a persistent chat workspace."}
+    {
+      "id": "human_pkm",
+      "family": "memory_system",
+      "name": "Human-first PKM / workspace",
+      "definition": "A user-facing system whose canonical workflow is human writing, organizing, linking, and revisiting knowledge."
+    },
+    {
+      "id": "ai_knowledge_app",
+      "family": "memory_system",
+      "name": "AI knowledge app / RAG brain",
+      "definition": "A user-facing assistant that ingests documents or connected sources and answers, searches, summarizes, or automates over them."
+    },
+    {
+      "id": "agent_memory_service",
+      "family": "memory_system",
+      "name": "External agent-memory service",
+      "definition": "A replaceable library or service that extracts, stores, retrieves, and manages durable memories through an SDK, API, or tool protocol."
+    },
+    {
+      "id": "context_graph_engine",
+      "family": "memory_system",
+      "name": "Temporal context / knowledge-graph engine",
+      "definition": "Infrastructure that represents entities, relationships, provenance, and changing truth over time."
+    },
+    {
+      "id": "memory_bridge",
+      "family": "memory_system",
+      "name": "Human–agent memory bridge",
+      "definition": "A compatibility layer that exposes human-owned files or workspaces to multiple agents."
+    },
+    {
+      "id": "ambient_capture",
+      "family": "memory_system",
+      "name": "Ambient capture / lifelogging",
+      "definition": "A passive collector that records digital activity without requiring deliberate note creation."
+    },
+    {
+      "id": "retrieval_infrastructure",
+      "family": "memory_system",
+      "name": "Retrieval / storage infrastructure",
+      "definition": "A low-level vector, graph, lexical, or multimodal store used to build memory systems."
+    },
+    {
+      "id": "general_work_agent",
+      "family": "agent_system",
+      "name": "General work agent",
+      "definition": "An end-user agent that accepts broad delegated outcomes and executes multi-step knowledge work across files, the web, applications, and scheduled workflows."
+    },
+    {
+      "id": "coding_agent",
+      "family": "agent_system",
+      "name": "Coding agent",
+      "definition": "An interactive agent that reads, edits, runs, and reasons about software projects."
+    },
+    {
+      "id": "research_agent",
+      "family": "agent_system",
+      "name": "Research agent",
+      "definition": "An agent that plans multi-step information gathering and synthesizes cited findings."
+    },
+    {
+      "id": "browser_computer_agent",
+      "family": "agent_system",
+      "name": "Browser / computer-use agent",
+      "definition": "An agent specialized in operating browsers, desktops, or other graphical interfaces."
+    },
+    {
+      "id": "data_analysis_agent",
+      "family": "agent_system",
+      "name": "Data-analysis / text-to-SQL agent",
+      "definition": "An agent that plans, executes, validates, and explains structured-data queries or analyses through database and analytics tools."
+    },
+    {
+      "id": "stateful_agent_runtime",
+      "family": "agent_system",
+      "name": "Stateful agent runtime / harness",
+      "definition": "A persistent agent runtime that owns identity, durable state, skills, schedules, and memory lifecycle."
+    },
+    {
+      "id": "coding_agent_workflow",
+      "family": "agent_system",
+      "name": "Coding-agent workflow / skill stack",
+      "definition": "Prompts, roles, tools, and process that turn coding agents into a repeatable software-delivery system."
+    },
+    {
+      "id": "multi_agent_orchestrator",
+      "family": "agent_system",
+      "name": "Multi-agent orchestrator",
+      "definition": "A system for coordinating specialized agents, handoffs, workflows, and shared execution."
+    },
+    {
+      "id": "agent_framework_sdk",
+      "family": "agent_system",
+      "name": "Agent framework / SDK",
+      "definition": "A developer framework or builder for creating tool-using, controllable, observable agent applications."
+    },
+    {
+      "id": "general_ai_assistant",
+      "family": "assistant_system",
+      "name": "General AI assistant",
+      "definition": "A provider-branded conversational product spanning information, creation, files, research, personalization, and optional actions."
+    },
+    {
+      "id": "enterprise_work_assistant",
+      "family": "assistant_system",
+      "name": "Enterprise work assistant",
+      "definition": "A tenant or workspace assistant grounded in organizational systems with connectors, governance, administration, or business actions."
+    },
+    {
+      "id": "multi_model_chat_client",
+      "family": "assistant_system",
+      "name": "Multi-model chat client",
+      "definition": "An end-user product whose primary value is presenting or routing multiple interchangeable model backends through a persistent chat workspace."
+    }
   ],
   "agent_relations": [
-    {"id": "none", "name": "No agent dependency"},
-    {"id": "agent_enabled_ui", "name": "Human-facing AI application"},
-    {"id": "external_memory", "name": "External memory used by agents"},
-    {"id": "embedded_memory", "name": "Memory embedded in agent runtime"},
-    {"id": "agent_runtime", "name": "Full agent runtime"},
-    {"id": "coding_workflow", "name": "Coding-agent process layer"}
+    {
+      "id": "none",
+      "name": "No agent dependency"
+    },
+    {
+      "id": "agent_enabled_ui",
+      "name": "Human-facing AI application"
+    },
+    {
+      "id": "external_memory",
+      "name": "External memory used by agents"
+    },
+    {
+      "id": "embedded_memory",
+      "name": "Memory embedded in agent runtime"
+    },
+    {
+      "id": "agent_runtime",
+      "name": "Full agent runtime"
+    },
+    {
+      "id": "coding_workflow",
+      "name": "Coding-agent process layer"
+    }
   ],
   "provider_relationships": [
-    {"id": "provider_native", "name": "Provider-native", "definition": "The primary supported path is officially coupled to one model-provider ecosystem."},
-    {"id": "multi_provider", "name": "Multi-provider", "definition": "The project maintains first-class integrations with multiple named model backends."},
-    {"id": "provider_agnostic", "name": "Provider-agnostic", "definition": "The project exposes a substitutable backend contract rather than making one provider the primary path."}
+    {
+      "id": "provider_native",
+      "name": "Provider-native",
+      "definition": "The primary supported path is officially coupled to one model-provider ecosystem."
+    },
+    {
+      "id": "multi_provider",
+      "name": "Multi-provider",
+      "definition": "The project maintains first-class integrations with multiple named model backends."
+    },
+    {
+      "id": "provider_agnostic",
+      "name": "Provider-agnostic",
+      "definition": "The project exposes a substitutable backend contract rather than making one provider the primary path."
+    }
   ],
   "model_backends": [
-    {"id": "anthropic", "name": "Anthropic"},
-    {"id": "openai", "name": "OpenAI"},
-    {"id": "deepseek", "name": "DeepSeek"},
-    {"id": "google", "name": "Google"},
-    {"id": "meta", "name": "Meta"},
-    {"id": "mistral", "name": "Mistral AI"},
-    {"id": "moonshot_ai", "name": "Moonshot AI"},
-    {"id": "nvidia", "name": "NVIDIA"},
-    {"id": "poolside", "name": "Poolside"},
-    {"id": "openrouter", "name": "OpenRouter"},
-    {"id": "vercel_ai_gateway", "name": "Vercel AI Gateway"},
-    {"id": "openai_compatible", "name": "OpenAI-compatible endpoint"},
-    {"id": "local_runtime", "name": "Local model runtime"},
-    {"id": "perplexity", "name": "Perplexity"},
-    {"id": "x_ai", "name": "SpaceXAI / xAI"},
-    {"id": "z_ai", "name": "Z.ai"}
+    {
+      "id": "anthropic",
+      "name": "Anthropic"
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI"
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek"
+    },
+    {
+      "id": "google",
+      "name": "Google"
+    },
+    {
+      "id": "meta",
+      "name": "Meta"
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral AI"
+    },
+    {
+      "id": "moonshot_ai",
+      "name": "Moonshot AI"
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA"
+    },
+    {
+      "id": "poolside",
+      "name": "Poolside"
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter"
+    },
+    {
+      "id": "vercel_ai_gateway",
+      "name": "Vercel AI Gateway"
+    },
+    {
+      "id": "openai_compatible",
+      "name": "OpenAI-compatible endpoint"
+    },
+    {
+      "id": "local_runtime",
+      "name": "Local model runtime"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity"
+    },
+    {
+      "id": "x_ai",
+      "name": "SpaceXAI / xAI"
+    },
+    {
+      "id": "z_ai",
+      "name": "Z.ai"
+    }
   ],
   "model_types": [
-    {"id": "language_model", "name": "Language model", "definition": "A model whose documented input and output are text."},
-    {"id": "multimodal_language_model", "name": "Multimodal language model", "definition": "A model that accepts image, audio, video, or document input and produces text as a primary output."}
+    {
+      "id": "language_model",
+      "name": "Language model",
+      "definition": "A model whose documented input and output are text."
+    },
+    {
+      "id": "multimodal_language_model",
+      "name": "Multimodal language model",
+      "definition": "A model that accepts image, audio, video, or document input and produces text as a primary output."
+    }
   ],
   "model_modalities": [
-    {"id": "text", "name": "Text", "definition": "Natural-language or code tokens."},
-    {"id": "image", "name": "Image", "definition": "Still-image input or output."},
-    {"id": "audio", "name": "Audio", "definition": "Speech or other audio input or output."},
-    {"id": "video", "name": "Video", "definition": "Moving-image input or output."},
-    {"id": "pdf", "name": "PDF", "definition": "PDF document input handled as a documented model modality."}
+    {
+      "id": "text",
+      "name": "Text",
+      "definition": "Natural-language or code tokens."
+    },
+    {
+      "id": "image",
+      "name": "Image",
+      "definition": "Still-image input or output."
+    },
+    {
+      "id": "audio",
+      "name": "Audio",
+      "definition": "Speech or other audio input or output."
+    },
+    {
+      "id": "video",
+      "name": "Video",
+      "definition": "Moving-image input or output."
+    },
+    {
+      "id": "pdf",
+      "name": "PDF",
+      "definition": "PDF document input handled as a documented model modality."
+    }
   ],
   "model_distribution_modes": [
-    {"id": "downloadable_weights", "name": "Downloadable weights", "definition": "The developer publishes model weights that an operator can download and execute under the recorded terms."},
-    {"id": "developer_api", "name": "Developer API", "definition": "The model developer offers the release through a separately governed managed API."},
-    {"id": "third_party_hosting", "name": "Third-party hosting", "definition": "One or more unrelated inference operators document a hosted path for the release."}
+    {
+      "id": "downloadable_weights",
+      "name": "Downloadable weights",
+      "definition": "The developer publishes model weights that an operator can download and execute under the recorded terms."
+    },
+    {
+      "id": "developer_api",
+      "name": "Developer API",
+      "definition": "The model developer offers the release through a separately governed managed API."
+    },
+    {
+      "id": "third_party_hosting",
+      "name": "Third-party hosting",
+      "definition": "One or more unrelated inference operators document a hosted path for the release."
+    }
   ],
   "inference_service_types": [
-    {"id": "direct_model_api", "name": "Direct model API", "definition": "A model developer operates the primary API for its own model families."},
-    {"id": "cloud_model_platform", "name": "Cloud model platform", "definition": "A governed cloud platform serves models from multiple publishers alongside cloud-native deployment controls."},
-    {"id": "managed_inference_host", "name": "Managed inference host", "definition": "An infrastructure operator serves selected third-party or open-weight models through a managed API."},
-    {"id": "routing_aggregator", "name": "Routing aggregator", "definition": "A unified API selects among upstream models or inference operators using routing and fallback policy."}
+    {
+      "id": "direct_model_api",
+      "name": "Direct model API",
+      "definition": "A model developer operates the primary API for its own model families."
+    },
+    {
+      "id": "cloud_model_platform",
+      "name": "Cloud model platform",
+      "definition": "A governed cloud platform serves models from multiple publishers alongside cloud-native deployment controls."
+    },
+    {
+      "id": "managed_inference_host",
+      "name": "Managed inference host",
+      "definition": "An infrastructure operator serves selected third-party or open-weight models through a managed API."
+    },
+    {
+      "id": "routing_aggregator",
+      "name": "Routing aggregator",
+      "definition": "A unified API selects among upstream models or inference operators using routing and fallback policy."
+    }
   ],
   "inference_delivery_modes": [
-    {"id": "on_demand", "name": "On-demand", "definition": "Shared managed capacity is billed or limited by request or token use."},
-    {"id": "batch", "name": "Batch", "definition": "Asynchronous jobs trade immediate response for separate capacity or pricing."},
-    {"id": "reserved_capacity", "name": "Reserved capacity", "definition": "Customers purchase or reserve a defined throughput tier or capacity allocation."},
-    {"id": "dedicated_endpoint", "name": "Dedicated endpoint", "definition": "A customer-controlled deployment receives isolated serving resources or an endpoint."}
+    {
+      "id": "on_demand",
+      "name": "On-demand",
+      "definition": "Shared managed capacity is billed or limited by request or token use."
+    },
+    {
+      "id": "batch",
+      "name": "Batch",
+      "definition": "Asynchronous jobs trade immediate response for separate capacity or pricing."
+    },
+    {
+      "id": "reserved_capacity",
+      "name": "Reserved capacity",
+      "definition": "Customers purchase or reserve a defined throughput tier or capacity allocation."
+    },
+    {
+      "id": "dedicated_endpoint",
+      "name": "Dedicated endpoint",
+      "definition": "A customer-controlled deployment receives isolated serving resources or an endpoint."
+    }
   ],
   "inference_model_sources": [
-    {"id": "first_party", "name": "First-party models", "definition": "Models developed by the service operator."},
-    {"id": "third_party_proprietary", "name": "Third-party proprietary models", "definition": "Closed model families supplied by another publisher."},
-    {"id": "open_weight", "name": "Open-weight models", "definition": "Externally published model weights served by the operator; weight terms remain model-specific."},
-    {"id": "customer_supplied", "name": "Customer-supplied models", "definition": "Customers can import or deploy their own eligible model artifacts or weights."}
+    {
+      "id": "first_party",
+      "name": "First-party models",
+      "definition": "Models developed by the service operator."
+    },
+    {
+      "id": "third_party_proprietary",
+      "name": "Third-party proprietary models",
+      "definition": "Closed model families supplied by another publisher."
+    },
+    {
+      "id": "open_weight",
+      "name": "Open-weight models",
+      "definition": "Externally published model weights served by the operator; weight terms remain model-specific."
+    },
+    {
+      "id": "customer_supplied",
+      "name": "Customer-supplied models",
+      "definition": "Customers can import or deploy their own eligible model artifacts or weights."
+    }
   ],
   "inference_api_styles": [
-    {"id": "openai_native", "name": "OpenAI API", "definition": "OpenAI's first-party API contract."},
-    {"id": "openai_compatible", "name": "OpenAI-compatible", "definition": "A service implements a documented subset or adaptation of OpenAI API conventions."},
-    {"id": "anthropic_native", "name": "Anthropic API", "definition": "Anthropic's first-party Messages and related API contracts."},
-    {"id": "anthropic_compatible", "name": "Anthropic-compatible", "definition": "A service implements a documented subset or adaptation of Anthropic API conventions."},
-    {"id": "aws_native", "name": "AWS-native", "definition": "Amazon Bedrock APIs and AWS SDK contracts."},
-    {"id": "google_cloud_native", "name": "Google Cloud-native", "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."},
-    {"id": "service_native", "name": "Service-native", "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."}
+    {
+      "id": "openai_native",
+      "name": "OpenAI API",
+      "definition": "OpenAI's first-party API contract."
+    },
+    {
+      "id": "openai_compatible",
+      "name": "OpenAI-compatible",
+      "definition": "A service implements a documented subset or adaptation of OpenAI API conventions."
+    },
+    {
+      "id": "anthropic_native",
+      "name": "Anthropic API",
+      "definition": "Anthropic's first-party Messages and related API contracts."
+    },
+    {
+      "id": "anthropic_compatible",
+      "name": "Anthropic-compatible",
+      "definition": "A service implements a documented subset or adaptation of Anthropic API conventions."
+    },
+    {
+      "id": "aws_native",
+      "name": "AWS-native",
+      "definition": "Amazon Bedrock APIs and AWS SDK contracts."
+    },
+    {
+      "id": "google_cloud_native",
+      "name": "Google Cloud-native",
+      "definition": "Vertex AI REST, RPC, and Google Cloud SDK contracts."
+    },
+    {
+      "id": "service_native",
+      "name": "Service-native",
+      "definition": "A service-specific REST, RPC, or SDK contract not represented by another named API style."
+    }
   ],
   "trust_property_statuses": [
     {
@@ -119,340 +420,1345 @@
     }
   ],
   "local_runtime_types": [
-    {"id": "desktop_runner", "name": "Desktop runner", "definition": "A packaged application or command-line product that installs on a personal machine and manages model download, storage, and local serving as one product."},
-    {"id": "server_engine", "name": "Server engine", "definition": "An inference server built for sustained multi-request serving, batching, and deployment onto operator-controlled hardware."},
-    {"id": "embedded_library", "name": "Embedded library", "definition": "An inference implementation consumed as a library or binary that host applications embed rather than operate as a standing service."},
-    {"id": "compatibility_gateway", "name": "Compatibility gateway", "definition": "A self-hosted server that presents a compatible API surface over one or more local inference backends."}
+    {
+      "id": "desktop_runner",
+      "name": "Desktop runner",
+      "definition": "A packaged application or command-line product that installs on a personal machine and manages model download, storage, and local serving as one product."
+    },
+    {
+      "id": "server_engine",
+      "name": "Server engine",
+      "definition": "An inference server built for sustained multi-request serving, batching, and deployment onto operator-controlled hardware."
+    },
+    {
+      "id": "embedded_library",
+      "name": "Embedded library",
+      "definition": "An inference implementation consumed as a library or binary that host applications embed rather than operate as a standing service."
+    },
+    {
+      "id": "compatibility_gateway",
+      "name": "Compatibility gateway",
+      "definition": "A self-hosted server that presents a compatible API surface over one or more local inference backends."
+    }
   ],
   "runtime_accelerators": [
-    {"id": "cpu", "name": "CPU", "definition": "Documented execution on general-purpose processors without a dedicated accelerator."},
-    {"id": "cuda", "name": "NVIDIA CUDA", "definition": "Documented execution on NVIDIA GPUs through the CUDA toolchain."},
-    {"id": "rocm", "name": "AMD ROCm", "definition": "Documented execution on AMD GPUs through the ROCm toolchain."},
-    {"id": "metal", "name": "Apple Metal", "definition": "Documented execution on Apple silicon GPUs through Metal."},
-    {"id": "vulkan", "name": "Vulkan", "definition": "Documented execution through the cross-vendor Vulkan compute backend."},
-    {"id": "sycl", "name": "SYCL", "definition": "Documented execution through SYCL, covering Intel GPU targets."},
-    {"id": "opencl", "name": "OpenCL", "definition": "Documented execution through the OpenCL compute API, covering Adreno, Mali, and other cross-vendor GPU targets."},
-    {"id": "webgpu", "name": "WebGPU", "definition": "Documented execution through the WebGPU browser compute API, covering in-page and cross-platform GPU targets."},
-    {"id": "npu", "name": "NPU", "definition": "Documented execution on a dedicated neural processing unit, such as those integrated into recent client processors."},
-    {"id": "directml", "name": "DirectML", "definition": "Documented execution through Microsoft's DirectML backend, covering vendor-neutral GPU acceleration on Windows."},
-    {"id": "multi_gpu", "name": "Multi-GPU", "definition": "Documented execution across more than one accelerator on a single host or across hosts."}
+    {
+      "id": "cpu",
+      "name": "CPU",
+      "definition": "Documented execution on general-purpose processors without a dedicated accelerator."
+    },
+    {
+      "id": "cuda",
+      "name": "NVIDIA CUDA",
+      "definition": "Documented execution on NVIDIA GPUs through the CUDA toolchain."
+    },
+    {
+      "id": "rocm",
+      "name": "AMD ROCm",
+      "definition": "Documented execution on AMD GPUs through the ROCm toolchain."
+    },
+    {
+      "id": "metal",
+      "name": "Apple Metal",
+      "definition": "Documented execution on Apple silicon GPUs through Metal."
+    },
+    {
+      "id": "vulkan",
+      "name": "Vulkan",
+      "definition": "Documented execution through the cross-vendor Vulkan compute backend."
+    },
+    {
+      "id": "sycl",
+      "name": "SYCL",
+      "definition": "Documented execution through SYCL, covering Intel GPU targets."
+    },
+    {
+      "id": "opencl",
+      "name": "OpenCL",
+      "definition": "Documented execution through the OpenCL compute API, covering Adreno, Mali, and other cross-vendor GPU targets."
+    },
+    {
+      "id": "webgpu",
+      "name": "WebGPU",
+      "definition": "Documented execution through the WebGPU browser compute API, covering in-page and cross-platform GPU targets."
+    },
+    {
+      "id": "npu",
+      "name": "NPU",
+      "definition": "Documented execution on a dedicated neural processing unit, such as those integrated into recent client processors."
+    },
+    {
+      "id": "directml",
+      "name": "DirectML",
+      "definition": "Documented execution through Microsoft's DirectML backend, covering vendor-neutral GPU acceleration on Windows."
+    },
+    {
+      "id": "multi_gpu",
+      "name": "Multi-GPU",
+      "definition": "Documented execution across more than one accelerator on a single host or across hosts."
+    }
   ],
   "runtime_model_formats": [
-    {"id": "gguf", "name": "GGUF", "definition": "The quantized single-file weight format used by the llama.cpp family of runtimes."},
-    {"id": "safetensors", "name": "Safetensors", "definition": "The safe tensor serialization format used by mainstream transformer checkpoints."},
-    {"id": "pytorch", "name": "PyTorch checkpoints", "definition": "Native PyTorch weight checkpoints loaded through the framework's own serialization."},
-    {"id": "mlx", "name": "MLX", "definition": "Weights prepared for Apple's MLX array framework on Apple silicon."},
-    {"id": "awq", "name": "AWQ", "definition": "Activation-aware weight quantization checkpoints."},
-    {"id": "gptq", "name": "GPTQ", "definition": "Post-training quantized checkpoints produced by the GPTQ method."},
-    {"id": "fp8", "name": "FP8", "definition": "Eight-bit floating point weights or activations on accelerators that support them."},
-    {"id": "saved_model", "name": "TensorFlow SavedModel", "definition": "TensorFlow's SavedModel graph directory, the versioned artifact produced by exporting a trained TensorFlow model."},
-    {"id": "mlc", "name": "MLC compiled", "definition": "Weights and model libraries produced by MLC LLM's compilation pipeline for a specific target."},
-    {"id": "onnx", "name": "ONNX", "definition": "Models exported to the Open Neural Network Exchange graph format, optionally with quantized weights."}
+    {
+      "id": "gguf",
+      "name": "GGUF",
+      "definition": "The quantized single-file weight format used by the llama.cpp family of runtimes."
+    },
+    {
+      "id": "safetensors",
+      "name": "Safetensors",
+      "definition": "The safe tensor serialization format used by mainstream transformer checkpoints."
+    },
+    {
+      "id": "pytorch",
+      "name": "PyTorch checkpoints",
+      "definition": "Native PyTorch weight checkpoints loaded through the framework's own serialization."
+    },
+    {
+      "id": "mlx",
+      "name": "MLX",
+      "definition": "Weights prepared for Apple's MLX array framework on Apple silicon."
+    },
+    {
+      "id": "awq",
+      "name": "AWQ",
+      "definition": "Activation-aware weight quantization checkpoints."
+    },
+    {
+      "id": "gptq",
+      "name": "GPTQ",
+      "definition": "Post-training quantized checkpoints produced by the GPTQ method."
+    },
+    {
+      "id": "fp8",
+      "name": "FP8",
+      "definition": "Eight-bit floating point weights or activations on accelerators that support them."
+    },
+    {
+      "id": "saved_model",
+      "name": "TensorFlow SavedModel",
+      "definition": "TensorFlow's SavedModel graph directory, the versioned artifact produced by exporting a trained TensorFlow model."
+    },
+    {
+      "id": "mlc",
+      "name": "MLC compiled",
+      "definition": "Weights and model libraries produced by MLC LLM's compilation pipeline for a specific target."
+    },
+    {
+      "id": "onnx",
+      "name": "ONNX",
+      "definition": "Models exported to the Open Neural Network Exchange graph format, optionally with quantized weights."
+    }
   ],
   "runtime_serving_modes": [
-    {"id": "single_stream", "name": "Single stream", "definition": "One request served at a time, sufficient for interactive personal use."},
-    {"id": "continuous_batching", "name": "Continuous batching", "definition": "Requests joined into and retired from in-flight batches to sustain accelerator utilization."},
-    {"id": "parallel_requests", "name": "Parallel requests", "definition": "Concurrent request handling through configured workers, slots, or sequences."},
-    {"id": "distributed_serving", "name": "Distributed serving", "definition": "Model or request distribution across multiple accelerators or hosts through parallelism strategies."},
-    {"id": "speculative_decoding", "name": "Speculative decoding", "definition": "Draft-and-verify decoding that trades additional computation for reduced generation latency."}
+    {
+      "id": "single_stream",
+      "name": "Single stream",
+      "definition": "One request served at a time, sufficient for interactive personal use."
+    },
+    {
+      "id": "continuous_batching",
+      "name": "Continuous batching",
+      "definition": "Requests joined into and retired from in-flight batches to sustain accelerator utilization."
+    },
+    {
+      "id": "parallel_requests",
+      "name": "Parallel requests",
+      "definition": "Concurrent request handling through configured workers, slots, or sequences."
+    },
+    {
+      "id": "distributed_serving",
+      "name": "Distributed serving",
+      "definition": "Model or request distribution across multiple accelerators or hosts through parallelism strategies."
+    },
+    {
+      "id": "speculative_decoding",
+      "name": "Speculative decoding",
+      "definition": "Draft-and-verify decoding that trades additional computation for reduced generation latency."
+    }
   ],
   "runtime_deployment_surfaces": [
-    {"id": "desktop_app", "name": "Desktop application", "definition": "A graphical application installed on a personal operating system."},
-    {"id": "local_cli", "name": "Local CLI", "definition": "A command-line executable operated on the user's own machine."},
-    {"id": "library", "name": "Library", "definition": "An importable package or linkable binary embedded in a host application."},
-    {"id": "container", "name": "Container", "definition": "A published container image intended for containerized execution."},
-    {"id": "orchestrated_cluster", "name": "Orchestrated cluster", "definition": "Documented deployment onto an orchestrator such as Kubernetes with scaling guidance."},
-    {"id": "mobile_device", "name": "Mobile or embedded device", "definition": "Documented deployment onto phones, tablets, or embedded hardware rather than a personal computer or server."},
-    {"id": "browser", "name": "Browser", "definition": "Documented execution inside a web browser page without a separate local server process."}
+    {
+      "id": "desktop_app",
+      "name": "Desktop application",
+      "definition": "A graphical application installed on a personal operating system."
+    },
+    {
+      "id": "local_cli",
+      "name": "Local CLI",
+      "definition": "A command-line executable operated on the user's own machine."
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "definition": "An importable package or linkable binary embedded in a host application."
+    },
+    {
+      "id": "container",
+      "name": "Container",
+      "definition": "A published container image intended for containerized execution."
+    },
+    {
+      "id": "orchestrated_cluster",
+      "name": "Orchestrated cluster",
+      "definition": "Documented deployment onto an orchestrator such as Kubernetes with scaling guidance."
+    },
+    {
+      "id": "mobile_device",
+      "name": "Mobile or embedded device",
+      "definition": "Documented deployment onto phones, tablets, or embedded hardware rather than a personal computer or server."
+    },
+    {
+      "id": "browser",
+      "name": "Browser",
+      "definition": "Documented execution inside a web browser page without a separate local server process."
+    }
   ],
   "inference_service_score_profile": {
     "id": "inference_service",
     "name": "Inference-service score",
     "dimensions": [
-      {"id": "operational_maturity", "weight": 0.17, "definition": "Documented production controls, lifecycle stability, administration, support, and readiness for sustained service use; it does not infer unreported uptime or throughput."},
-      {"id": "data_governance", "weight": 0.18, "definition": "Documented retention, training-use, deletion, isolation, tenant, and privacy controls across the represented service boundary."},
-      {"id": "regional_deployment_control", "weight": 0.14, "definition": "Customer control over processing geography, network boundaries, regional endpoints, and isolated or dedicated placement."},
-      {"id": "serving_flexibility", "weight": 0.13, "definition": "Documented on-demand, batch, reserved, dedicated, and scaling paths for materially different workload shapes."},
-      {"id": "api_interoperability", "weight": 0.12, "definition": "Portability and integration quality across documented APIs, compatibility contracts, SDK conventions, and deployment interfaces."},
-      {"id": "traffic_resilience", "weight": 0.10, "definition": "Documented traffic steering, fallback, multi-region capacity, replica, priority, or recovery controls without treating raw latency as stable."},
-      {"id": "customization_lifecycle", "weight": 0.09, "definition": "Fine-tuning, customer models, version control, deployment configuration, and lifecycle management for supported model artifacts."},
-      {"id": "documentation_transparency", "weight": 0.07, "definition": "Clarity and specificity of authoritative documentation for terms, data handling, regions, limits, availability, and operational exceptions."}
+      {
+        "id": "operational_maturity",
+        "weight": 0.17,
+        "definition": "Documented production controls, lifecycle stability, administration, support, and readiness for sustained service use; it does not infer unreported uptime or throughput."
+      },
+      {
+        "id": "data_governance",
+        "weight": 0.18,
+        "definition": "Documented retention, training-use, deletion, isolation, tenant, and privacy controls across the represented service boundary."
+      },
+      {
+        "id": "regional_deployment_control",
+        "weight": 0.14,
+        "definition": "Customer control over processing geography, network boundaries, regional endpoints, and isolated or dedicated placement."
+      },
+      {
+        "id": "serving_flexibility",
+        "weight": 0.13,
+        "definition": "Documented on-demand, batch, reserved, dedicated, and scaling paths for materially different workload shapes."
+      },
+      {
+        "id": "api_interoperability",
+        "weight": 0.12,
+        "definition": "Portability and integration quality across documented APIs, compatibility contracts, SDK conventions, and deployment interfaces."
+      },
+      {
+        "id": "traffic_resilience",
+        "weight": 0.1,
+        "definition": "Documented traffic steering, fallback, multi-region capacity, replica, priority, or recovery controls without treating raw latency as stable."
+      },
+      {
+        "id": "customization_lifecycle",
+        "weight": 0.09,
+        "definition": "Fine-tuning, customer models, version control, deployment configuration, and lifecycle management for supported model artifacts."
+      },
+      {
+        "id": "documentation_transparency",
+        "weight": 0.07,
+        "definition": "Clarity and specificity of authoritative documentation for terms, data handling, regions, limits, availability, and operational exceptions."
+      }
     ]
   },
   "local_runtime_score_profile": {
     "id": "local_runtime",
     "name": "Local-runtime score",
     "dimensions": [
-      {"id": "hardware_accelerator_coverage", "weight": 0.16, "definition": "Documented and supported CPU, CUDA, ROCm, Metal, Vulkan, and multi-accelerator execution paths for the reviewed runtime itself."},
-      {"id": "model_format_support", "weight": 0.15, "definition": "Breadth of supported weight formats, quantization schemes, and model architectures the runtime can load and execute."},
-      {"id": "serving_concurrency", "weight": 0.15, "definition": "Documented batching, parallel request handling, cache management, and distributed serving capability; it does not measure throughput or latency."},
-      {"id": "api_interoperability", "weight": 0.13, "definition": "Documented native and compatible endpoints, embeddings, tool calling, and structured output, and their portability across clients."},
-      {"id": "deployment_operations", "weight": 0.13, "definition": "Install paths, container images, orchestration guidance, resource limits, authentication, and upgrade practice."},
-      {"id": "model_lifecycle_management", "weight": 0.10, "definition": "Fetching, pinning, custom model import, adapter support, storage control, and removal for local model artifacts."},
-      {"id": "observability_control", "weight": 0.10, "definition": "Metrics, health endpoints, logging, request introspection, and administrative surfaces for an operator running the software."},
-      {"id": "documentation_transparency", "weight": 0.08, "definition": "Clarity and specificity of authoritative documentation for accelerators, formats, serving, deployment, limits, and known exceptions."}
+      {
+        "id": "hardware_accelerator_coverage",
+        "weight": 0.16,
+        "definition": "Documented and supported CPU, CUDA, ROCm, Metal, Vulkan, and multi-accelerator execution paths for the reviewed runtime itself."
+      },
+      {
+        "id": "model_format_support",
+        "weight": 0.15,
+        "definition": "Breadth of supported weight formats, quantization schemes, and model architectures the runtime can load and execute."
+      },
+      {
+        "id": "serving_concurrency",
+        "weight": 0.15,
+        "definition": "Documented batching, parallel request handling, cache management, and distributed serving capability; it does not measure throughput or latency."
+      },
+      {
+        "id": "api_interoperability",
+        "weight": 0.13,
+        "definition": "Documented native and compatible endpoints, embeddings, tool calling, and structured output, and their portability across clients."
+      },
+      {
+        "id": "deployment_operations",
+        "weight": 0.13,
+        "definition": "Install paths, container images, orchestration guidance, resource limits, authentication, and upgrade practice."
+      },
+      {
+        "id": "model_lifecycle_management",
+        "weight": 0.1,
+        "definition": "Fetching, pinning, custom model import, adapter support, storage control, and removal for local model artifacts."
+      },
+      {
+        "id": "observability_control",
+        "weight": 0.1,
+        "definition": "Metrics, health endpoints, logging, request introspection, and administrative surfaces for an operator running the software."
+      },
+      {
+        "id": "documentation_transparency",
+        "weight": 0.08,
+        "definition": "Clarity and specificity of authoritative documentation for accelerators, formats, serving, deployment, limits, and known exceptions."
+      }
     ]
   },
   "model_score_profile": {
     "id": "model_access",
     "name": "Model access and deployability score",
     "dimensions": [
-      {"id": "license_clarity", "weight": 0.22, "definition": "Clarity, scope, and practical reuse of the documented model, weight, tokenizer, and accompanying terms; open weights alone do not earn this score."},
-      {"id": "artifact_availability", "weight": 0.18, "definition": "Availability of developer-published weights, manifests, checksums, formats, and versioned artifacts rather than third-party repackaging."},
-      {"id": "deployment_portability", "weight": 0.20, "definition": "Documented portability across self-operated runtimes, accelerators, formats, and deployment paths without measuring speed."},
-      {"id": "serving_reach", "weight": 0.14, "definition": "Documented availability through first-party or independent serving paths, without using price, latency, or catalog size as a proxy."},
-      {"id": "lifecycle_transparency", "weight": 0.12, "definition": "Clear release identity, versioning, update dates, deprecation posture, and distinction between base, instruct, preview, and served variants."},
-      {"id": "documentation_provenance", "weight": 0.14, "definition": "Specific first-party model cards, technical documentation, provenance statements, limitations, and links to governing artifacts."}
+      {
+        "id": "license_clarity",
+        "weight": 0.22,
+        "definition": "Clarity, scope, and practical reuse of the documented model, weight, tokenizer, and accompanying terms; open weights alone do not earn this score."
+      },
+      {
+        "id": "artifact_availability",
+        "weight": 0.18,
+        "definition": "Availability of developer-published weights, manifests, checksums, formats, and versioned artifacts rather than third-party repackaging."
+      },
+      {
+        "id": "deployment_portability",
+        "weight": 0.2,
+        "definition": "Documented portability across self-operated runtimes, accelerators, formats, and deployment paths without measuring speed."
+      },
+      {
+        "id": "serving_reach",
+        "weight": 0.14,
+        "definition": "Documented availability through first-party or independent serving paths, without using price, latency, or catalog size as a proxy."
+      },
+      {
+        "id": "lifecycle_transparency",
+        "weight": 0.12,
+        "definition": "Clear release identity, versioning, update dates, deprecation posture, and distinction between base, instruct, preview, and served variants."
+      },
+      {
+        "id": "documentation_provenance",
+        "weight": 0.14,
+        "definition": "Specific first-party model cards, technical documentation, provenance statements, limitations, and links to governing artifacts."
+      }
     ]
   },
   "specification_types": [
-    {"id": "protocol", "name": "Protocol", "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."},
-    {"id": "metadata_schema", "name": "Metadata schema", "definition": "A versioned machine-readable vocabulary for describing identity, capabilities, domains, locators, or other discoverable metadata."},
-    {"id": "instruction_convention", "name": "Instruction convention", "definition": "A file-naming and discovery convention that gives agents repository or project guidance without defining a wire protocol."},
-    {"id": "capability_format", "name": "Capability format", "definition": "A portable package format for instructions, metadata, scripts, and resources that teach an agent a reusable capability."},
-    {"id": "package_format", "name": "Package format", "definition": "A distributable bundle contract that composes capabilities, commands, agents, hooks, or integrations."}
+    {
+      "id": "protocol",
+      "name": "Protocol",
+      "definition": "A machine-readable contract for exchanging messages, capabilities, context, or events between independently implemented components."
+    },
+    {
+      "id": "metadata_schema",
+      "name": "Metadata schema",
+      "definition": "A versioned machine-readable vocabulary for describing identity, capabilities, domains, locators, or other discoverable metadata."
+    },
+    {
+      "id": "instruction_convention",
+      "name": "Instruction convention",
+      "definition": "A file-naming and discovery convention that gives agents repository or project guidance without defining a wire protocol."
+    },
+    {
+      "id": "capability_format",
+      "name": "Capability format",
+      "definition": "A portable package format for instructions, metadata, scripts, and resources that teach an agent a reusable capability."
+    },
+    {
+      "id": "package_format",
+      "name": "Package format",
+      "definition": "A distributable bundle contract that composes capabilities, commands, agents, hooks, or integrations."
+    }
   ],
   "specification_scopes": [
-    {"id": "tool_data_integration", "name": "Tool and data integration", "definition": "Connects model applications to tools, resources, prompts, and external data."},
-    {"id": "web_agent_integration", "name": "Web and agent integration", "definition": "Lets web pages expose structured, user-mediated capabilities to browser or embedded agents."},
-    {"id": "agent_interaction", "name": "Agent-to-agent interaction", "definition": "Supports discovery, task delegation, messages, artifacts, and lifecycle between independent agents."},
-    {"id": "agent_identity_discovery", "name": "Agent identity and discovery", "definition": "Describes agent identity, capabilities, endpoints, and discovery metadata across independently operated systems."},
-    {"id": "agent_user_interaction", "name": "Agent–user interaction", "definition": "Streams agent state, events, actions, and human input between a runtime and user-facing application."},
-    {"id": "agent_client_integration", "name": "Agent–client integration", "definition": "Connects coding agents to editors, IDEs, and other interactive clients."},
-    {"id": "project_instructions", "name": "Project instructions", "definition": "Supplies persistent repository or workspace guidance to compatible coding agents."},
-    {"id": "capability_packaging", "name": "Capability packaging", "definition": "Packages focused, reusable agent capabilities with progressive context loading."},
-    {"id": "plugin_packaging", "name": "Plugin packaging", "definition": "Bundles multiple agent extensions behind one installable manifest and directory layout."},
-    {"id": "agent_transactions", "name": "Agent transactions", "definition": "Coordinates commerce, authorization, checkout, payment, receipt, or order evidence between users, agents, merchants, and payment parties."}
+    {
+      "id": "tool_data_integration",
+      "name": "Tool and data integration",
+      "definition": "Connects model applications to tools, resources, prompts, and external data."
+    },
+    {
+      "id": "web_agent_integration",
+      "name": "Web and agent integration",
+      "definition": "Lets web pages expose structured, user-mediated capabilities to browser or embedded agents."
+    },
+    {
+      "id": "agent_interaction",
+      "name": "Agent-to-agent interaction",
+      "definition": "Supports discovery, task delegation, messages, artifacts, and lifecycle between independent agents."
+    },
+    {
+      "id": "agent_identity_discovery",
+      "name": "Agent identity and discovery",
+      "definition": "Describes agent identity, capabilities, endpoints, and discovery metadata across independently operated systems."
+    },
+    {
+      "id": "agent_user_interaction",
+      "name": "Agent–user interaction",
+      "definition": "Streams agent state, events, actions, and human input between a runtime and user-facing application."
+    },
+    {
+      "id": "agent_client_integration",
+      "name": "Agent–client integration",
+      "definition": "Connects coding agents to editors, IDEs, and other interactive clients."
+    },
+    {
+      "id": "project_instructions",
+      "name": "Project instructions",
+      "definition": "Supplies persistent repository or workspace guidance to compatible coding agents."
+    },
+    {
+      "id": "capability_packaging",
+      "name": "Capability packaging",
+      "definition": "Packages focused, reusable agent capabilities with progressive context loading."
+    },
+    {
+      "id": "plugin_packaging",
+      "name": "Plugin packaging",
+      "definition": "Bundles multiple agent extensions behind one installable manifest and directory layout."
+    },
+    {
+      "id": "agent_transactions",
+      "name": "Agent transactions",
+      "definition": "Coordinates commerce, authorization, checkout, payment, receipt, or order evidence between users, agents, merchants, and payment parties."
+    }
   ],
   "specification_statuses": [
-    {"id": "published", "name": "Published", "definition": "A named release or stable published specification is available."},
-    {"id": "evolving", "name": "Evolving", "definition": "The artifact is public and implementable, but its current contract is rolling or actively changing."},
-    {"id": "vendor_specific", "name": "Vendor-specific", "definition": "A documented convention owned by one product ecosystem rather than an independent open standard."},
-    {"id": "superseded", "name": "Superseded", "definition": "The artifact remains useful historically but a successor is the recommended integration path."}
+    {
+      "id": "published",
+      "name": "Published",
+      "definition": "A named release or stable published specification is available."
+    },
+    {
+      "id": "evolving",
+      "name": "Evolving",
+      "definition": "The artifact is public and implementable, but its current contract is rolling or actively changing."
+    },
+    {
+      "id": "vendor_specific",
+      "name": "Vendor-specific",
+      "definition": "A documented convention owned by one product ecosystem rather than an independent open standard."
+    },
+    {
+      "id": "superseded",
+      "name": "Superseded",
+      "definition": "The artifact remains useful historically but a successor is the recommended integration path."
+    }
   ],
   "pack_types": [
-    {"id": "skills_bundle", "name": "Skills bundle", "definition": "A set of skill documents installed together under a capability format such as Agent Skills."},
-    {"id": "plugin", "name": "Plugin", "definition": "A host plugin whose manifest declares commands, agents, skills, or hook configuration the host reads."},
-    {"id": "process_kit", "name": "Process kit", "definition": "A methodology packaged as prompts, commands, subagent definitions, and templates a host follows."},
-    {"id": "vault_bundle", "name": "Vault bundle", "definition": "A knowledge-vault template with the instructions a host reads to maintain it."},
-    {"id": "marketplace", "name": "Marketplace", "definition": "A host-consumable manifest that lists other packs for installation. Its entries are never reviewed, counted, or listed by the record."}
+    {
+      "id": "skills_bundle",
+      "name": "Skills bundle",
+      "definition": "A set of skill documents installed together under a capability format such as Agent Skills."
+    },
+    {
+      "id": "plugin",
+      "name": "Plugin",
+      "definition": "A host plugin whose manifest declares commands, agents, skills, or hook configuration the host reads."
+    },
+    {
+      "id": "process_kit",
+      "name": "Process kit",
+      "definition": "A methodology packaged as prompts, commands, subagent definitions, and templates a host follows."
+    },
+    {
+      "id": "vault_bundle",
+      "name": "Vault bundle",
+      "definition": "A knowledge-vault template with the instructions a host reads to maintain it."
+    },
+    {
+      "id": "marketplace",
+      "name": "Marketplace",
+      "definition": "A host-consumable manifest that lists other packs for installation. Its entries are never reviewed, counted, or listed by the record."
+    }
   ],
   "pack_hosts": [
-    {"id": "claude_code", "name": "Claude Code", "definition": "Installs into Anthropic's Claude Code through its plugin, skill, command, agent, or hook directories."},
-    {"id": "codex", "name": "Codex", "definition": "Installs into OpenAI Codex through its skills or configuration directories."},
-    {"id": "cursor", "name": "Cursor", "definition": "Installs into Cursor through its rules or skills directories."},
-    {"id": "gemini_cli", "name": "Gemini CLI", "definition": "Installs into Google's Gemini CLI through its extensions or configuration directories."},
-    {"id": "github_copilot", "name": "GitHub Copilot", "definition": "Installs into GitHub Copilot through its instructions, agents, or skills directories."},
-    {"id": "opencode", "name": "OpenCode", "definition": "Installs into OpenCode through its agents, commands, or skills directories."},
-    {"id": "windsurf", "name": "Windsurf", "definition": "Installs into Windsurf through its rules or workflows directories."},
-    {"id": "cline", "name": "Cline", "definition": "Installs into Cline through its rules or workflows directories."},
-    {"id": "obsidian", "name": "Obsidian", "definition": "A vault opened in Obsidian, with the host agent reading the vault's own instruction files."},
-    {"id": "any_agent_skills_host", "name": "Any Agent Skills host", "definition": "The pack documents only the Agent Skills format and names no specific host."}
+    {
+      "id": "claude_code",
+      "name": "Claude Code",
+      "definition": "Installs into Anthropic's Claude Code through its plugin, skill, command, agent, or hook directories."
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "definition": "Installs into OpenAI Codex through its skills or configuration directories."
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "definition": "Installs into Cursor through its rules or skills directories."
+    },
+    {
+      "id": "gemini_cli",
+      "name": "Gemini CLI",
+      "definition": "Installs into Google's Gemini CLI through its extensions or configuration directories."
+    },
+    {
+      "id": "github_copilot",
+      "name": "GitHub Copilot",
+      "definition": "Installs into GitHub Copilot through its instructions, agents, or skills directories."
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "definition": "Installs into OpenCode through its agents, commands, or skills directories."
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "definition": "Installs into Windsurf through its rules or workflows directories."
+    },
+    {
+      "id": "cline",
+      "name": "Cline",
+      "definition": "Installs into Cline through its rules or workflows directories."
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian",
+      "definition": "A vault opened in Obsidian, with the host agent reading the vault's own instruction files."
+    },
+    {
+      "id": "any_agent_skills_host",
+      "name": "Any Agent Skills host",
+      "definition": "The pack documents only the Agent Skills format and names no specific host."
+    }
   ],
   "pack_install_mechanisms": [
-    {"id": "host_marketplace", "name": "Host marketplace", "definition": "Installed through the host's own plugin or marketplace command from a manifest the pack ships."},
-    {"id": "skills_cli", "name": "Skills installer", "definition": "Installed by a third-party skills installer that copies the pack into a host's skills directory."},
-    {"id": "copy_files", "name": "Copy files", "definition": "The reader or an install script the pack ships copies files into the host's directories."},
-    {"id": "clone_template", "name": "Clone as template", "definition": "The reader clones or forks the repository as the starting vault or project the host then works in."}
+    {
+      "id": "host_marketplace",
+      "name": "Host marketplace",
+      "definition": "Installed through the host's own plugin or marketplace command from a manifest the pack ships."
+    },
+    {
+      "id": "skills_cli",
+      "name": "Skills installer",
+      "definition": "Installed by a third-party skills installer that copies the pack into a host's skills directory."
+    },
+    {
+      "id": "copy_files",
+      "name": "Copy files",
+      "definition": "The reader or an install script the pack ships copies files into the host's directories."
+    },
+    {
+      "id": "clone_template",
+      "name": "Clone as template",
+      "definition": "The reader clones or forks the repository as the starting vault or project the host then works in."
+    }
   ],
   "architectures": [
-    {"id": "plain_files", "name": "Plain files / Markdown", "note": "Human-readable canonical data."},
-    {"id": "relational_db", "name": "Relational database"},
-    {"id": "vector_index", "name": "Vector / embedding index", "note": "An architecture trait, not a product category."},
-    {"id": "graph_db", "name": "Graph database / knowledge graph"},
-    {"id": "full_text", "name": "Keyword / full-text index"},
-    {"id": "event_log", "name": "Append-only event log"},
-    {"id": "undisclosed_managed", "name": "Undisclosed service-managed internals", "note": "Use when authoritative product evidence establishes a managed system but does not establish its storage architecture."},
-    {"id": "raw_media", "name": "Screenshots / audio / raw media"},
-    {"id": "git_versioned", "name": "Git-versioned state"},
-    {"id": "hybrid", "name": "Multiple coordinated stores"}
+    {
+      "id": "plain_files",
+      "name": "Plain files / Markdown",
+      "note": "Human-readable canonical data."
+    },
+    {
+      "id": "relational_db",
+      "name": "Relational database"
+    },
+    {
+      "id": "vector_index",
+      "name": "Vector / embedding index",
+      "note": "An architecture trait, not a product category."
+    },
+    {
+      "id": "graph_db",
+      "name": "Graph database / knowledge graph"
+    },
+    {
+      "id": "full_text",
+      "name": "Keyword / full-text index"
+    },
+    {
+      "id": "event_log",
+      "name": "Append-only event log"
+    },
+    {
+      "id": "undisclosed_managed",
+      "name": "Undisclosed service-managed internals",
+      "note": "Use when authoritative product evidence establishes a managed system but does not establish its storage architecture."
+    },
+    {
+      "id": "raw_media",
+      "name": "Screenshots / audio / raw media"
+    },
+    {
+      "id": "git_versioned",
+      "name": "Git-versioned state"
+    },
+    {
+      "id": "hybrid",
+      "name": "Multiple coordinated stores"
+    }
   ],
   "retrieval_modes": [
-    {"id": "keyword", "name": "Keyword / BM25 / FTS"},
-    {"id": "semantic_vector", "name": "Semantic vector retrieval"},
-    {"id": "hybrid", "name": "Hybrid lexical + semantic"},
-    {"id": "graph_traversal", "name": "Graph traversal / neighborhood"},
-    {"id": "temporal", "name": "Temporal / as-of retrieval"},
-    {"id": "structured_query", "name": "SQL / Datalog / structured queries"},
-    {"id": "agentic", "name": "Iterative agent-driven retrieval"},
-    {"id": "recency_rules", "name": "Recency, rules, or deterministic ranking"}
+    {
+      "id": "keyword",
+      "name": "Keyword / BM25 / FTS"
+    },
+    {
+      "id": "semantic_vector",
+      "name": "Semantic vector retrieval"
+    },
+    {
+      "id": "hybrid",
+      "name": "Hybrid lexical + semantic"
+    },
+    {
+      "id": "graph_traversal",
+      "name": "Graph traversal / neighborhood"
+    },
+    {
+      "id": "temporal",
+      "name": "Temporal / as-of retrieval"
+    },
+    {
+      "id": "structured_query",
+      "name": "SQL / Datalog / structured queries"
+    },
+    {
+      "id": "agentic",
+      "name": "Iterative agent-driven retrieval"
+    },
+    {
+      "id": "recency_rules",
+      "name": "Recency, rules, or deterministic ranking"
+    }
   ],
   "capture_modes": [
-    {"id": "manual", "name": "Manual writing"},
-    {"id": "file_import", "name": "File/import/sync"},
-    {"id": "conversation", "name": "Conversation extraction"},
-    {"id": "connectors", "name": "API / SaaS connectors"},
-    {"id": "scheduled", "name": "Scheduled collection or research"},
-    {"id": "screen", "name": "Screen capture"},
-    {"id": "audio", "name": "Audio capture / transcription"},
-    {"id": "activity", "name": "App/window/keyboard activity"},
-    {"id": "coding_session", "name": "Coding-agent session state"}
+    {
+      "id": "manual",
+      "name": "Manual writing"
+    },
+    {
+      "id": "file_import",
+      "name": "File/import/sync"
+    },
+    {
+      "id": "conversation",
+      "name": "Conversation extraction"
+    },
+    {
+      "id": "connectors",
+      "name": "API / SaaS connectors"
+    },
+    {
+      "id": "scheduled",
+      "name": "Scheduled collection or research"
+    },
+    {
+      "id": "screen",
+      "name": "Screen capture"
+    },
+    {
+      "id": "audio",
+      "name": "Audio capture / transcription"
+    },
+    {
+      "id": "activity",
+      "name": "App/window/keyboard activity"
+    },
+    {
+      "id": "coding_session",
+      "name": "Coding-agent session state"
+    }
   ],
   "memory_lifecycle": [
-    {"id": "human_curated", "name": "Human-curated"},
-    {"id": "append_only", "name": "Append-only accumulation"},
-    {"id": "upsert_rewrite", "name": "Upsert or rewrite"},
-    {"id": "supersession", "name": "Explicit supersession with history"},
-    {"id": "versioned", "name": "Revision/version history"},
-    {"id": "consolidation", "name": "Summarization / consolidation / dreaming"},
-    {"id": "decay", "name": "Decay / forgetting"},
-    {"id": "self_editing", "name": "Agent self-edits memory or skills"}
+    {
+      "id": "human_curated",
+      "name": "Human-curated"
+    },
+    {
+      "id": "append_only",
+      "name": "Append-only accumulation"
+    },
+    {
+      "id": "upsert_rewrite",
+      "name": "Upsert or rewrite"
+    },
+    {
+      "id": "supersession",
+      "name": "Explicit supersession with history"
+    },
+    {
+      "id": "versioned",
+      "name": "Revision/version history"
+    },
+    {
+      "id": "consolidation",
+      "name": "Summarization / consolidation / dreaming"
+    },
+    {
+      "id": "decay",
+      "name": "Decay / forgetting"
+    },
+    {
+      "id": "self_editing",
+      "name": "Agent self-edits memory or skills"
+    }
   ],
   "agent_interfaces": [
-    {"id": "terminal", "name": "Terminal / CLI"},
-    {"id": "ide", "name": "IDE / editor"},
-    {"id": "web_app", "name": "Web application"},
-    {"id": "api_sdk", "name": "API / SDK"},
-    {"id": "library", "name": "Embedded library"}
+    {
+      "id": "terminal",
+      "name": "Terminal / CLI"
+    },
+    {
+      "id": "ide",
+      "name": "IDE / editor"
+    },
+    {
+      "id": "web_app",
+      "name": "Web application"
+    },
+    {
+      "id": "api_sdk",
+      "name": "API / SDK"
+    },
+    {
+      "id": "library",
+      "name": "Embedded library"
+    }
   ],
   "execution_boundaries": [
-    {"id": "host", "name": "Local host"},
-    {"id": "container", "name": "Local container"},
-    {"id": "external_sandbox", "name": "External sandbox"},
-    {"id": "remote_cloud", "name": "Remote cloud"},
-    {"id": "framework_defined", "name": "Application-defined boundary"}
+    {
+      "id": "host",
+      "name": "Local host"
+    },
+    {
+      "id": "container",
+      "name": "Local container"
+    },
+    {
+      "id": "external_sandbox",
+      "name": "External sandbox"
+    },
+    {
+      "id": "remote_cloud",
+      "name": "Remote cloud"
+    },
+    {
+      "id": "framework_defined",
+      "name": "Application-defined boundary"
+    }
   ],
   "agent_capabilities": [
-    {"id": "code_editing", "name": "Code editing"},
-    {"id": "shell_execution", "name": "Shell execution"},
-    {"id": "browser_control", "name": "Browser control"},
-    {"id": "research", "name": "Research and synthesis"},
-    {"id": "multi_agent", "name": "Multi-agent coordination"},
-    {"id": "persistent_state", "name": "Persistent state"},
-    {"id": "mcp", "name": "Model Context Protocol"},
-    {"id": "workflows", "name": "Explicit workflows / graphs"}
+    {
+      "id": "code_editing",
+      "name": "Code editing"
+    },
+    {
+      "id": "shell_execution",
+      "name": "Shell execution"
+    },
+    {
+      "id": "browser_control",
+      "name": "Browser control"
+    },
+    {
+      "id": "research",
+      "name": "Research and synthesis"
+    },
+    {
+      "id": "multi_agent",
+      "name": "Multi-agent coordination"
+    },
+    {
+      "id": "persistent_state",
+      "name": "Persistent state"
+    },
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol"
+    },
+    {
+      "id": "workflows",
+      "name": "Explicit workflows / graphs"
+    }
   ],
   "deployment_modes": [
-    {"id": "desktop", "name": "Desktop application", "definition": "A desktop application the user installs and runs."},
-    {"id": "mobile", "name": "Mobile application", "definition": "A mobile application the user installs and runs."},
-    {"id": "local_cli", "name": "Local CLI", "definition": "A command-line program the user runs on their own machine."},
-    {"id": "ide_extension", "name": "IDE extension", "definition": "An extension that runs inside an editor or IDE."},
-    {"id": "library", "name": "Embedded library", "definition": "A package the user embeds in an application they build, including helpers that application calls to serve its own endpoints."},
-    {"id": "self_hosted", "name": "Self-hosted service", "definition": "A service the project itself ships, which the user deploys and operates on infrastructure they control."},
-    {"id": "managed_cloud", "name": "Managed cloud", "definition": "The vendor operates this system and the user reaches it as a tenant rather than running it."},
-    {"id": "cloud_optional", "name": "Optional cloud services", "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."},
-    {"id": "host_pack", "name": "Installed into a host agent", "definition": "A skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process."}
+    {
+      "id": "desktop",
+      "name": "Desktop application",
+      "definition": "A desktop application the user installs and runs."
+    },
+    {
+      "id": "mobile",
+      "name": "Mobile application",
+      "definition": "A mobile application the user installs and runs."
+    },
+    {
+      "id": "local_cli",
+      "name": "Local CLI",
+      "definition": "A command-line program the user runs on their own machine."
+    },
+    {
+      "id": "ide_extension",
+      "name": "IDE extension",
+      "definition": "An extension that runs inside an editor or IDE."
+    },
+    {
+      "id": "library",
+      "name": "Embedded library",
+      "definition": "A package the user embeds in an application they build, including helpers that application calls to serve its own endpoints."
+    },
+    {
+      "id": "self_hosted",
+      "name": "Self-hosted service",
+      "definition": "A service the project itself ships, which the user deploys and operates on infrastructure they control."
+    },
+    {
+      "id": "managed_cloud",
+      "name": "Managed cloud",
+      "definition": "The vendor operates this system and the user reaches it as a tenant rather than running it."
+    },
+    {
+      "id": "cloud_optional",
+      "name": "Optional cloud services",
+      "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."
+    },
+    {
+      "id": "host_pack",
+      "name": "Installed into a host agent",
+      "definition": "A skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process."
+    }
   ],
   "project_statuses": [
-    {"id": "active", "name": "Active"},
-    {"id": "archived", "name": "Archived"},
-    {"id": "superseded", "name": "Superseded"},
-    {"id": "removed", "name": "Repository unavailable"}
+    {
+      "id": "active",
+      "name": "Active"
+    },
+    {
+      "id": "archived",
+      "name": "Archived"
+    },
+    {
+      "id": "superseded",
+      "name": "Superseded"
+    },
+    {
+      "id": "removed",
+      "name": "Repository unavailable"
+    }
   ],
   "license_review_statuses": [
-    {"id": "verified", "name": "License evidence verified"},
-    {"id": "review_required", "name": "License evidence needs review"}
+    {
+      "id": "verified",
+      "name": "License evidence verified"
+    },
+    {
+      "id": "review_required",
+      "name": "License evidence needs review"
+    }
   ],
   "provenance_levels": [
-    {"id": "limited", "name": "Limited"},
-    {"id": "partial", "name": "Partial"},
-    {"id": "moderate", "name": "Moderate"},
-    {"id": "strong", "name": "Strong"}
+    {
+      "id": "limited",
+      "name": "Limited"
+    },
+    {
+      "id": "partial",
+      "name": "Partial"
+    },
+    {
+      "id": "moderate",
+      "name": "Moderate"
+    },
+    {
+      "id": "strong",
+      "name": "Strong"
+    }
   ],
   "research_confidence_levels": [
-    {"id": "low", "name": "Low"},
-    {"id": "medium", "name": "Medium"},
-    {"id": "high", "name": "High"}
+    {
+      "id": "low",
+      "name": "Low"
+    },
+    {
+      "id": "medium",
+      "name": "Medium"
+    },
+    {
+      "id": "high",
+      "name": "High"
+    }
   ],
   "licenses": [
-    {"id": "MIT", "name": "MIT License", "kind": "open_source"},
-    {"id": "Apache-2.0", "name": "Apache License 2.0", "kind": "open_source"},
-    {"id": "AGPL-3.0", "name": "GNU Affero General Public License 3.0", "kind": "open_source"},
-    {"id": "AGPL-3.0-or-later", "name": "GNU Affero General Public License 3.0 or later", "kind": "open_source"},
-    {"id": "GPL-3.0", "name": "GNU General Public License 3.0", "kind": "open_source"},
-    {"id": "GPL-3.0-or-later", "name": "GNU General Public License 3.0 or later", "kind": "open_source"},
-    {"id": "GPL-2.0", "name": "GNU General Public License 2.0", "kind": "open_source"},
-    {"id": "GPL-2.0-or-later", "name": "GNU General Public License 2.0 or later", "kind": "open_source"},
-    {"id": "LGPL-3.0", "name": "GNU Lesser General Public License 3.0", "kind": "open_source"},
-    {"id": "BSD-3-Clause", "name": "BSD 3-Clause License", "kind": "open_source"},
-    {"id": "BSD-2-Clause", "name": "BSD 2-Clause License", "kind": "open_source"},
-    {"id": "MPL-2.0", "name": "Mozilla Public License 2.0", "kind": "open_source"},
-    {"id": "EUPL-1.2", "name": "European Union Public Licence 1.2", "kind": "open_source"},
-    {"id": "ISC", "name": "ISC License", "kind": "open_source"},
-    {"id": "Unlicense", "name": "The Unlicense", "kind": "open_source"},
-    {"id": "OFL-1.1", "name": "SIL Open Font License 1.1", "kind": "open_content"},
-    {"id": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0", "kind": "open_content"},
-    {"id": "CC-BY-NC-4.0", "name": "Creative Commons Attribution-NonCommercial 4.0", "kind": "restricted"},
-    {"id": "LicenseRef-Cohere-Labs-AUP", "name": "Cohere Labs Acceptable Use Policy", "kind": "restricted"},
-    {"id": "LicenseRef-DeepSeek-Model-1.0", "name": "DeepSeek Model License 1.0", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-3.2-Community", "name": "Llama 3.2 Community License", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-3.2-AUP", "name": "Llama 3.2 Acceptable Use Policy", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-3.3-Community", "name": "Llama 3.3 Community License", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-3.3-AUP", "name": "Llama 3.3 Acceptable Use Policy", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-4-Community", "name": "Llama 4 Community License", "kind": "restricted"},
-    {"id": "LicenseRef-Llama-4-AUP", "name": "Llama 4 Acceptable Use Policy", "kind": "restricted"},
-    {"id": "LicenseRef-NVIDIA-Nemotron-Open-Model", "name": "NVIDIA Nemotron Open Model License", "kind": "restricted"},
-    {"id": "LicenseRef-Kimi-K2-Modified-MIT", "name": "Kimi K2 Modified MIT License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M2-Modified-MIT", "name": "MiniMax M2 Modified MIT License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M2.1-Modified-MIT", "name": "MiniMax M2.1 Modified MIT License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M2.5-Model", "name": "MiniMax M2.5 Model License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M2.5-Modified-MIT", "name": "MiniMax M2.5 Modified MIT License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M2.7-License", "name": "MiniMax M2.7 License", "kind": "restricted"},
-    {"id": "LicenseRef-MiniMax-M3-Community", "name": "MiniMax M3 Community License", "kind": "restricted"},
-    {"id": "LicenseRef-Qwen3.8-Max", "name": "Qwen3.8-Max License", "kind": "restricted"},
-    {"id": "LicenseRef-Kimi-K3-License", "name": "Kimi K3 License", "kind": "restricted"},
-    {"id": "LicenseRef-Mistral-Modified-MIT", "name": "Mistral Modified MIT License", "kind": "restricted"},
-    {"id": "LicenseRef-Mistral-Research-License", "name": "Mistral Research License", "kind": "restricted"},
-    {"id": "LicenseRef-Mistral-Non-Production-License", "name": "Mistral AI Non-Production License", "kind": "restricted"},
-    {"id": "LicenseRef-GLM-5.3", "name": "GLM-5.3 License", "kind": "restricted"},
-    {"id": "LicenseRef-Qwen-Community-1.0", "name": "Qwen Community License 1.0", "kind": "restricted"},
-    {"id": "LicenseRef-Qwen-License-Agreement", "name": "Qwen License Agreement", "kind": "restricted"},
-    {"id": "LicenseRef-OpenAI-Services-Agreement", "name": "OpenAI Services Agreement", "kind": "proprietary"},
-    {"id": "LicenseRef-Alibaba-Model-Studio-Agreement", "name": "Alibaba Cloud Model Studio Service Agreement", "kind": "proprietary"},
-    {"id": "LicenseRef-Anthropic-Commercial-Terms", "name": "Anthropic Commercial Terms of Service", "kind": "proprietary"},
-    {"id": "LicenseRef-Gemini-API-Terms", "name": "Gemini API Additional Terms of Service", "kind": "proprietary"},
-    {"id": "LicenseRef-xAI-Enterprise-Terms", "name": "xAI Enterprise Terms of Service", "kind": "proprietary"},
-    {"id": "LicenseRef-xAI-AUP", "name": "xAI Acceptable Use Policy", "kind": "proprietary"},
-    {"id": "LicenseRef-W3C-Software-Document", "name": "W3C Software and Document License", "kind": "open_content"},
-    {"id": "LicenseRef-Commercial", "name": "Commercial or production-restricted terms", "kind": "restricted"},
-    {"id": "LicenseRef-Proprietary", "name": "Proprietary", "kind": "proprietary"},
-    {"id": "LicenseRef-Unclear", "name": "Unclear or unresolved terms", "kind": "unclear"}
+    {
+      "id": "AGPL-3.0",
+      "name": "GNU Affero General Public License 3.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "AGPL-3.0-or-later",
+      "name": "GNU Affero General Public License 3.0 or later",
+      "kind": "open_source"
+    },
+    {
+      "id": "Apache-2.0",
+      "name": "Apache License 2.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "BSD-2-Clause",
+      "name": "BSD 2-Clause License",
+      "kind": "open_source"
+    },
+    {
+      "id": "BSD-3-Clause",
+      "name": "BSD 3-Clause License",
+      "kind": "open_source"
+    },
+    {
+      "id": "CC-BY-4.0",
+      "name": "Creative Commons Attribution 4.0",
+      "kind": "open_content"
+    },
+    {
+      "id": "CC-BY-NC-4.0",
+      "name": "Creative Commons Attribution-NonCommercial 4.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "EUPL-1.2",
+      "name": "European Union Public Licence 1.2",
+      "kind": "open_source"
+    },
+    {
+      "id": "GPL-2.0",
+      "name": "GNU General Public License 2.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "GPL-2.0-or-later",
+      "name": "GNU General Public License 2.0 or later",
+      "kind": "open_source"
+    },
+    {
+      "id": "GPL-3.0",
+      "name": "GNU General Public License 3.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "GPL-3.0-or-later",
+      "name": "GNU General Public License 3.0 or later",
+      "kind": "open_source"
+    },
+    {
+      "id": "ISC",
+      "name": "ISC License",
+      "kind": "open_source"
+    },
+    {
+      "id": "LGPL-3.0",
+      "name": "GNU Lesser General Public License 3.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-Alibaba-Model-Studio-Agreement",
+      "name": "Alibaba Cloud Model Studio Service Agreement",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Anthropic-Commercial-Terms",
+      "name": "Anthropic Commercial Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Cohere-Labs-AUP",
+      "name": "Cohere Labs Acceptable Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Commercial",
+      "name": "Commercial or production-restricted terms",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-DeepSeek-Model-1.0",
+      "name": "DeepSeek Model License 1.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-GLM-5.3",
+      "name": "GLM-5.3 License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Gemini-API-Terms",
+      "name": "Gemini API Additional Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+      "name": "Gemma Prohibited Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Gemma-Terms-of-Use",
+      "name": "Gemma Terms of Use",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Kimi-K2-Modified-MIT",
+      "name": "Kimi K2 Modified MIT License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Kimi-K3-License",
+      "name": "Kimi K3 License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.1-AUP",
+      "name": "Llama 3.1 Acceptable Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.1-Community",
+      "name": "Llama 3.1 Community License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.2-AUP",
+      "name": "Llama 3.2 Acceptable Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.2-Community",
+      "name": "Llama 3.2 Community License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.3-AUP",
+      "name": "Llama 3.3 Acceptable Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-3.3-Community",
+      "name": "Llama 3.3 Community License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-4-AUP",
+      "name": "Llama 4 Acceptable Use Policy",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Llama-4-Community",
+      "name": "Llama 4 Community License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Meta-Model-API-Terms",
+      "name": "Meta Model API Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M2-Modified-MIT",
+      "name": "MiniMax M2 Modified MIT License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M2.1-Modified-MIT",
+      "name": "MiniMax M2.1 Modified MIT License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M2.5-Model",
+      "name": "MiniMax M2.5 Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M2.5-Modified-MIT",
+      "name": "MiniMax M2.5 Modified MIT License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M2.7-License",
+      "name": "MiniMax M2.7 License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MiniMax-M3-Community",
+      "name": "MiniMax M3 Community License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Mistral-Modified-MIT",
+      "name": "Mistral Modified MIT License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Mistral-Non-Production-License",
+      "name": "Mistral AI Non-Production License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Mistral-Research-License",
+      "name": "Mistral Research License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Community-Model-2024",
+      "name": "NVIDIA Community Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
+      "name": "NVIDIA Nemotron Open Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Open-Model",
+      "name": "NVIDIA Open Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Open-Model-Agreement",
+      "name": "NVIDIA Open Model Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-OpenAI-Services-Agreement",
+      "name": "OpenAI Services Agreement",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-OpenMDW-1.1",
+      "name": "OpenMDW License Agreement 1.1",
+      "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-Proprietary",
+      "name": "Proprietary",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Qwen-Community-1.0",
+      "name": "Qwen Community License 1.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Qwen-License-Agreement",
+      "name": "Qwen License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Qwen3.8-Max",
+      "name": "Qwen3.8-Max License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Tencent-Hy-Community-License",
+      "name": "Tencent Hy Community License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Unclear",
+      "name": "Unclear or unresolved terms",
+      "kind": "unclear"
+    },
+    {
+      "id": "LicenseRef-W3C-Software-Document",
+      "name": "W3C Software and Document License",
+      "kind": "open_content"
+    },
+    {
+      "id": "LicenseRef-xAI-AUP",
+      "name": "xAI Acceptable Use Policy",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-xAI-Enterprise-Terms",
+      "name": "xAI Enterprise Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "MIT",
+      "name": "MIT License",
+      "kind": "open_source"
+    },
+    {
+      "id": "MPL-2.0",
+      "name": "Mozilla Public License 2.0",
+      "kind": "open_source"
+    },
+    {
+      "id": "OFL-1.1",
+      "name": "SIL Open Font License 1.1",
+      "kind": "open_content"
+    },
+    {
+      "id": "Unlicense",
+      "name": "The Unlicense",
+      "kind": "open_source"
+    }
   ],
   "source_models": [
-    {"id": "open_source", "name": "Open source", "definition": "Operational code is released under one OSI-approved license."},
-    {"id": "mixed_open_source", "name": "Mixed open licenses", "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions."},
-    {"id": "mixed_source", "name": "Mixed open and proprietary", "definition": "The operational product combines reusable open-source components with a proprietary or restricted core, runtime, or distribution boundary."},
-    {"id": "open_core", "name": "Open core", "definition": "An open-source core is accompanied by restricted components or enterprise features."},
-    {"id": "source_available", "name": "Source available", "definition": "Operational source is visible but use, modification, or production deployment is restricted."},
-    {"id": "proprietary", "name": "Proprietary", "definition": "Operational implementation is not provided under reusable source terms."},
-    {"id": "unclear", "name": "Unclear", "definition": "Available evidence does not yet support a confident source-model conclusion."}
+    {
+      "id": "open_source",
+      "name": "Open source",
+      "definition": "Operational code is released under one OSI-approved license."
+    },
+    {
+      "id": "mixed_open_source",
+      "name": "Mixed open licenses",
+      "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions."
+    },
+    {
+      "id": "mixed_source",
+      "name": "Mixed open and proprietary",
+      "definition": "The operational product combines reusable open-source components with a proprietary or restricted core, runtime, or distribution boundary."
+    },
+    {
+      "id": "open_core",
+      "name": "Open core",
+      "definition": "An open-source core is accompanied by restricted components or enterprise features."
+    },
+    {
+      "id": "source_available",
+      "name": "Source available",
+      "definition": "Operational source is visible but use, modification, or production deployment is restricted."
+    },
+    {
+      "id": "proprietary",
+      "name": "Proprietary",
+      "definition": "Operational implementation is not provided under reusable source terms."
+    },
+    {
+      "id": "unclear",
+      "name": "Unclear",
+      "definition": "Available evidence does not yet support a confident source-model conclusion."
+    }
   ],
   "score_profiles": [
     {
-      "id": "memory", "family": "memory_system", "name": "Memory-system score",
+      "id": "memory",
+      "family": "memory_system",
+      "name": "Memory-system score",
       "dimensions": [
-        {"id": "second_brain_fit", "weight": 0.22, "definition": "Direct usefulness as a personal or agentic second brain."},
-        {"id": "data_sovereignty", "weight": 0.18, "definition": "Local-first behavior, exportability, privacy, and user control."},
-        {"id": "interoperability", "weight": 0.16, "definition": "Open formats, APIs, adapters, and model/provider portability."},
-        {"id": "memory_intelligence", "weight": 0.18, "definition": "Retrieval, temporal handling, provenance, consolidation, and contradiction management."},
-        {"id": "operational_simplicity", "weight": 0.12, "definition": "Setup and maintenance burden for a technically capable individual."},
-        {"id": "maturity", "weight": 0.14, "definition": "Adoption, maintenance, documentation, and production readiness."}
+        {
+          "id": "second_brain_fit",
+          "weight": 0.22,
+          "definition": "Direct usefulness as a personal or agentic second brain."
+        },
+        {
+          "id": "data_sovereignty",
+          "weight": 0.18,
+          "definition": "Local-first behavior, exportability, privacy, and user control."
+        },
+        {
+          "id": "interoperability",
+          "weight": 0.16,
+          "definition": "Open formats, APIs, adapters, and model/provider portability."
+        },
+        {
+          "id": "memory_intelligence",
+          "weight": 0.18,
+          "definition": "Retrieval, temporal handling, provenance, consolidation, and contradiction management."
+        },
+        {
+          "id": "operational_simplicity",
+          "weight": 0.12,
+          "definition": "Setup and maintenance burden for a technically capable individual."
+        },
+        {
+          "id": "maturity",
+          "weight": 0.14,
+          "definition": "Adoption, maintenance, documentation, and production readiness."
+        }
       ]
     },
     {
-      "id": "agent", "family": "agent_system", "name": "Agent-system score",
+      "id": "agent",
+      "family": "agent_system",
+      "name": "Agent-system score",
       "dimensions": [
-        {"id": "task_reliability", "weight": 0.20, "definition": "Consistency and correctness on the tasks the system claims to handle."},
-        {"id": "tool_use", "weight": 0.14, "definition": "Breadth, quality, and composability of tool invocation."},
-        {"id": "autonomy", "weight": 0.10, "definition": "Ability to plan and complete meaningful multi-step work."},
-        {"id": "human_control", "weight": 0.15, "definition": "Approvals, steering, boundaries, inspectability, and safe interruption."},
-        {"id": "observability_recovery", "weight": 0.12, "definition": "Tracing, checkpoints, error visibility, replay, and recovery."},
-        {"id": "data_sovereignty", "weight": 0.10, "definition": "Local execution, privacy, exportability, and operator control."},
-        {"id": "interoperability", "weight": 0.09, "definition": "Provider, tool, protocol, and deployment portability."},
-        {"id": "maturity", "weight": 0.10, "definition": "Adoption, maintenance, documentation, and production readiness."}
+        {
+          "id": "task_reliability",
+          "weight": 0.2,
+          "definition": "Consistency and correctness on the tasks the system claims to handle."
+        },
+        {
+          "id": "tool_use",
+          "weight": 0.14,
+          "definition": "Breadth, quality, and composability of tool invocation."
+        },
+        {
+          "id": "autonomy",
+          "weight": 0.1,
+          "definition": "Ability to plan and complete meaningful multi-step work."
+        },
+        {
+          "id": "human_control",
+          "weight": 0.15,
+          "definition": "Approvals, steering, boundaries, inspectability, and safe interruption."
+        },
+        {
+          "id": "observability_recovery",
+          "weight": 0.12,
+          "definition": "Tracing, checkpoints, error visibility, replay, and recovery."
+        },
+        {
+          "id": "data_sovereignty",
+          "weight": 0.1,
+          "definition": "Local execution, privacy, exportability, and operator control."
+        },
+        {
+          "id": "interoperability",
+          "weight": 0.09,
+          "definition": "Provider, tool, protocol, and deployment portability."
+        },
+        {
+          "id": "maturity",
+          "weight": 0.1,
+          "definition": "Adoption, maintenance, documentation, and production readiness."
+        }
       ]
     },
     {
-      "id": "assistant", "family": "assistant_system", "name": "Assistant-system score",
+      "id": "assistant",
+      "family": "assistant_system",
+      "name": "Assistant-system score",
       "dimensions": [
-        {"id": "task_reliability", "weight": 0.19, "definition": "Usefulness and consistency across the assistant's documented jobs rather than transient model benchmarks."},
-        {"id": "context_continuity", "weight": 0.14, "definition": "Conversation state, project or workspace context, memory controls, and provenance."},
-        {"id": "tools_integrations", "weight": 0.13, "definition": "Files, search, connectors, applications, and actions available through the product."},
-        {"id": "human_control", "weight": 0.13, "definition": "Consent, approvals, source visibility, correction, memory controls, and safe interruption."},
-        {"id": "data_governance", "weight": 0.13, "definition": "Retention, training controls, tenant boundaries, administration, privacy, and export or deletion controls."},
-        {"id": "interoperability", "weight": 0.10, "definition": "Model choice, data portability, APIs, protocols, and connector openness."},
-        {"id": "usability_access", "weight": 0.08, "definition": "Platform availability, accessibility, onboarding, and interaction quality."},
-        {"id": "maturity", "weight": 0.10, "definition": "Stability, support, documentation, adoption, and operational readiness."}
+        {
+          "id": "task_reliability",
+          "weight": 0.19,
+          "definition": "Usefulness and consistency across the assistant's documented jobs rather than transient model benchmarks."
+        },
+        {
+          "id": "context_continuity",
+          "weight": 0.14,
+          "definition": "Conversation state, project or workspace context, memory controls, and provenance."
+        },
+        {
+          "id": "tools_integrations",
+          "weight": 0.13,
+          "definition": "Files, search, connectors, applications, and actions available through the product."
+        },
+        {
+          "id": "human_control",
+          "weight": 0.13,
+          "definition": "Consent, approvals, source visibility, correction, memory controls, and safe interruption."
+        },
+        {
+          "id": "data_governance",
+          "weight": 0.13,
+          "definition": "Retention, training controls, tenant boundaries, administration, privacy, and export or deletion controls."
+        },
+        {
+          "id": "interoperability",
+          "weight": 0.1,
+          "definition": "Model choice, data portability, APIs, protocols, and connector openness."
+        },
+        {
+          "id": "usability_access",
+          "weight": 0.08,
+          "definition": "Platform availability, accessibility, onboarding, and interaction quality."
+        },
+        {
+          "id": "maturity",
+          "weight": 0.1,
+          "definition": "Stability, support, documentation, adoption, and operational readiness."
+        }
       ]
     }
   ]

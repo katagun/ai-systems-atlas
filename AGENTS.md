@@ -42,6 +42,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |
 | Blog content and shared page shell | [Blog](docs/BLOG.md) |
 | Coverage gaps, direction, priorities | [Coverage](docs/COVERAGE.md), [Roadmap](ROADMAP.md), [Backlog](BACKLOG.md) |
+| Linting, formatting, pre-commit hooks | [Operations](docs/OPERATIONS.md) |
 
 ## Command reference
 
@@ -51,6 +52,7 @@ Environment setup (Python 3.11+; Node dependencies and Chromium support browser 
 uv sync --locked
 npm ci --ignore-scripts
 npx playwright install chromium
+pre-commit install
 ```
 
 Published catalog regeneration, in order:
@@ -62,6 +64,7 @@ uv run python scripts/build_share_pages.py
 node scripts/build_asset_version.mjs
 ```
 
-The complete check list lives in [verify.yml](.github/workflows/verify.yml).
+The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.yaml) and runs in [verify.yml](.github/workflows/verify.yml).
+It runs on commit via pre-commit; `pre-commit run --all-files` reproduces CI exactly, browser suite included.
 Browser tests (`npm run test:e2e`) start their own server. An exploratory server is available with
 `uv run python -m http.server 8765 --bind 127.0.0.1 --directory web`.

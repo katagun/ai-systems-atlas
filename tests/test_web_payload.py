@@ -27,11 +27,15 @@ class WebPayloadTests(unittest.TestCase):
         for collection, name, key, kind in COLLECTIONS:
             boot = {
                 item["id"]: item
-                for item in json.loads(self.payloads[f"app/{collection}.json"])[collection]
+                for item in json.loads(self.payloads[f"app/{collection}.json"])[
+                    collection
+                ]
             }
             for record in self.catalog[name][key]:
                 entry = boot[record["id"]]
-                detail = json.loads(self.payloads[f"app/detail/{kind}/{record['id']}.json"])
+                detail = json.loads(
+                    self.payloads[f"app/detail/{kind}/{record['id']}.json"]
+                )
                 for field in record:
                     # A score is the one field deliberately split: boot carries
                     # the overall a card prints, detail carries every dimension.
@@ -53,13 +57,25 @@ class WebPayloadTests(unittest.TestCase):
     def test_boot_carries_the_dates_the_page_prints(self) -> None:
         """bootstrap() derives the 'Data updated' line from these envelope keys."""
         self.assertIn("generated_at", json.loads(self.payloads["app/systems.json"]))
-        for collection in ("inference", "runtimes", "specifications", "models", "packs"):
-            self.assertIn("verified_at", json.loads(self.payloads[f"app/{collection}.json"]))
+        for collection in (
+            "inference",
+            "runtimes",
+            "specifications",
+            "models",
+            "packs",
+        ):
+            self.assertIn(
+                "verified_at", json.loads(self.payloads[f"app/{collection}.json"])
+            )
 
     def test_search_index_covers_every_record(self) -> None:
         for collection, name, key, _ in COLLECTIONS:
             index = json.loads(self.payloads[f"app/search/{collection}.json"])
-            records = model_records(self.catalog) if collection == "models" else self.catalog[name][key]
+            records = (
+                model_records(self.catalog)
+                if collection == "models"
+                else self.catalog[name][key]
+            )
             ids = {record["id"] for record in records}
             self.assertEqual(ids, set(index), collection)
 
@@ -70,8 +86,14 @@ class WebPayloadTests(unittest.TestCase):
 
         self.assertEqual(source["source_record_count"], len(payload["models"]))
         self.assertEqual(len(reviewed), payload["reviewed_count"])
-        self.assertEqual(len(reviewed), sum(item["review_status"] == "reviewed" for item in payload["models"]))
-        self.assertEqual(len(payload["models"]), len({item["source_id"] for item in payload["models"]}))
+        self.assertEqual(
+            len(reviewed),
+            sum(item["review_status"] == "reviewed" for item in payload["models"]),
+        )
+        self.assertEqual(
+            len(payload["models"]),
+            len({item["source_id"] for item in payload["models"]}),
+        )
 
     def test_every_imported_model_keeps_its_complete_source_metadata(self) -> None:
         records = {item["id"]: item for item in model_records(self.catalog)}
@@ -84,8 +106,13 @@ class WebPayloadTests(unittest.TestCase):
 
         self.assertEqual(set(boot), set(details))
         for record_id, entry in boot.items():
-            self.assertEqual(records[record_id]["description"], details[record_id]["description"])
-            self.assertEqual(records[record_id]["source_metadata"], details[record_id]["source_metadata"])
+            self.assertEqual(
+                records[record_id]["description"], details[record_id]["description"]
+            )
+            self.assertEqual(
+                records[record_id]["source_metadata"],
+                details[record_id]["source_metadata"],
+            )
             self.assertEqual(
                 {"family", "modalities", "reported_open_weights", "reported_license"},
                 set(entry["source_metadata"]),
@@ -105,7 +132,9 @@ class WebPayloadTests(unittest.TestCase):
                     items = value if isinstance(value, list) else [value]
                     for item in items:
                         self.assertIn(
-                            str(item).lower(), text, f"{collection}/{record['id']}.{field}"
+                            str(item).lower(),
+                            text,
+                            f"{collection}/{record['id']}.{field}",
                         )
 
     def test_payloads_never_carry_the_published_policy_string(self) -> None:

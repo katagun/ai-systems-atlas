@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "verified_at": "2026-09-15",
+  "verified_at": "2026-09-18",
   "services": [
     {
       "id": "openai-api",
@@ -7257,6 +7257,155 @@
         },
         "findings": []
       }
+    },
+    {
+      "id": "orcarouter",
+      "name": "OrcaRouter",
+      "operator": "Continuum AI Pte. Ltd.",
+      "service_type": "routing_aggregator",
+      "url": "https://www.orcarouter.ai/",
+      "description": "OpenAI-, Anthropic-, and Gemini-compatible gateway API that routes requests across providers at the providers' published prices, with adaptive auto-routing, fallback chains, bring-your-own-key, zero data retention as the default, and workspace-scoped guardrails and agent firewall.",
+      "service_boundary": "Represents the hosted OrcaRouter routing service at api.orcarouter.ai, operated by CONTINUUM AI PTE. LTD. (Singapore). It is not the upstream providers it forwards to, which keep their own terms and retention, and not OrcaRouter-Lite, the vendor's separate MIT-licensed self-hosted gateway edition, even though a Lite deployment can register the hosted service as one provider in its routing chain. The published MCP server is an optional client tool, not this service boundary.",
+      "delivery_modes": [
+        "on_demand"
+      ],
+      "model_sources": [
+        "third_party_proprietary",
+        "open_weight",
+        "customer_supplied"
+      ],
+      "api_styles": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "service_native"
+      ],
+      "regional_controls": "No customer-selected processing geography or regional endpoint is documented. The privacy policy states the service is operated from Singapore and relies on cloud infrastructure in Singapore, the United States, and Japan, with upstream providers and payment and email subprocessors in the United States and the European Union; the upstream provider actually serving a request determines where content is processed.",
+      "retention_controls": "The privacy policy and the zero-data-retention documentation state that prompt and output content is processed in transit and never written to disk, and that content is not used for training. Per-request metadata (timestamp, key identifier, model, token counts, latency, status, truncated error, source IP) is retained for 13 months, server and security logs for 90 days, support correspondence for 24 months, and billing records for 7 years; account data is purged within 30 days of deletion. The guarantee covers OrcaRouter's own servers, not upstream providers; a BYOK key carries zero-retention traffic only after the workspace owner attests the provider account is configured for zero retention.",
+      "routing": "A per-account orcarouter/auto router picks a model per request using gated-adaptive or LinUCB strategies seeded from live traffic, alongside balanced, quality, and cheapest strategies; named routers, programmable YAML-plus-CEL routing DSLs with shadow and canary rollout, session-affinity headers, and frontier escalation are documented. Fallback chains are set via extra_body.models and health-based failover is described as best-effort in the terms. BYOK keys fall back to platform capacity by default with a per-provider pin option that forbids fallback.",
+      "customization": "Bring-your-own-key attaches upstream provider keys or custom OpenAI-compatible endpoints with model mapping to a workspace, billed as a platform fee rather than resold tokens; workspace-scoped prompt registry, guardrails content policy, and an agent firewall that evaluates tool calls and MCP dispatches with deterministic allow, deny, sanitize, hold-for-approval, or cost-cap rules are documented. No fine-tuning or deployment lifecycle for customer artifacts is offered.",
+      "strengths": [
+        "Zero-markup pass-through billing is stated in the terms and the documentation, with BYOK priced as a platform fee and even a documented fee-free configuration.",
+        "Four client surfaces in one endpoint: OpenAI chat completions and responses, Anthropic messages, and a Gemini native passthrough, with documented SDK wiring and protocol translation between them.",
+        "Zero data retention is the default rather than an opt-in flag, and the documentation is explicit that the guarantee excludes upstream providers and that BYOK ZDR requires owner attestation.",
+        "Routing depth is unusually broad for a new router: adaptive per-request model selection, programmable routing DSL, session affinity, fallback chains, and BYOK failure policies with a per-provider no-fallback pin."
+      ],
+      "tradeoffs": [
+        "The service is young (the open-source Lite repository dates from May 2026) with thin third-party adoption; at least one maintainer rejected its vendor-submitted integration PRs as a listing campaign, so ecosystem presence should not be read as independent endorsement.",
+        "Processing geography is not customer-selectable and no regional endpoints are documented; requests land in Singapore, US, or Japan infrastructure depending on the upstream chosen.",
+        "Only an on-demand path is documented: no batch, reserved capacity, or dedicated endpoint, and failover is contractually best-effort rather than guaranteed.",
+        "No independent attestations (SOC 2, ISO 27001) or status page are documented, and the service has no first-party model line of its own to fall back on."
+      ],
+      "score_profile": "inference_service",
+      "score": {
+        "operational_maturity": 4.5,
+        "data_governance": 9.0,
+        "regional_deployment_control": 3.0,
+        "serving_flexibility": 5.0,
+        "api_interoperability": 8.5,
+        "traffic_resilience": 7.0,
+        "customization_lifecycle": 6.5,
+        "documentation_transparency": 8.5,
+        "overall": 6.36
+      },
+      "trust": {
+        "verified_at": "2026-09-18",
+        "properties": {
+          "response_integrity": {
+            "status": "undocumented",
+            "note": "No signature, attestation, or equivalent mechanism by which a client verifies that a response arrived unaltered from the upstream model appears in the API reference or the security documentation: the X-Orca-* response headers report routing decisions (\"X-Orca-* headers that tell you how your request was routed\"), and the Ed25519-signed compliance reports are audit artifacts generated on request, not per-response verification.",
+            "url": "https://docs.orcarouter.ai/routing/response-headers.md",
+            "scope": "OrcaRouter response-headers documentation, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "upstream_disclosure": {
+            "status": "documented_yes",
+            "note": "The privacy policy names the parties that receive request plaintext: the subprocessor table lists \"Upstream LLM providers — OpenAI, Anthropic, Google, Together AI, Groq, and others — Processing prompts you route to them\". The data-handling guide states: \"When you send a request, we forward it to the upstream provider (OpenAI, Anthropic, Google, etc.) under their own terms and privacy policy.\"",
+            "url": "https://www.orcarouter.ai/privacy-policy",
+            "scope": "OrcaRouter privacy policy, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "credential_handling": {
+            "status": "documented_yes",
+            "note": "The BYOK guide states customer-supplied provider keys are never shown again after saving (\"The raw secret is never returned after you save it. The console only ever shows a masked label.\") and that a stored secret can fail only by becoming undecryptable, the documented trigger for auto-disabling a key: \"the stored secret can no longer be decrypted\". The console states the storage directly: \"Keys are encrypted at rest and only decrypted in memory at request time.\"",
+            "url": "https://docs.orcarouter.ai/operations/byok.md",
+            "scope": "OrcaRouter bring-your-own-key guide, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "cache_isolation": {
+            "status": "undocumented",
+            "note": "The session-affinity guide states what the provider's prompt cache is keyed on — \"the same upstream deployment and API key\" — and that conversation pins \"never cross[ ] accounts. Two accounts sending the same head get separate pins.\" BYOK traffic therefore caches under the customer's own provider account, but no page states whose upstream credentials platform-credentialed traffic runs under, so whether provider caches pool across customers on shared credentials is not established.",
+            "url": "https://docs.orcarouter.ai/routing/session-affinity.md",
+            "scope": "OrcaRouter session-affinity guide, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "vulnerability_disclosure": {
+            "status": "documented_yes",
+            "note": "A security.txt file is published with a contact address (\"Contact: mailto:security@orcarouter.ai\"), a policy link (\"Policy: https://www.orcarouter.ai/trust#disclosure\"), and an expiry in 2027; the trust centre's Report a vulnerability section states: \"If you have found a security issue in OrcaRouter, we want to hear about it.\"",
+            "url": "https://www.orcarouter.ai/.well-known/security.txt",
+            "scope": "OrcaRouter security.txt, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          },
+          "independent_audit": {
+            "status": "documented_yes",
+            "note": "The trust centre's Certifications and commitments section names SOC 2 (\"Independent audit of our security, availability and confidentiality controls against the AICPA Trust Services Criteria.\", pill \"Type II report\") and ISO (\"Certified information security management system covering the platform and the organisation that operates it.\", pill \"Certified\") for OrcaRouter, with Auditor, Period, and Valid-until fields. The reports and certificates are available to customers and prospects under NDA, so the attestation is recorded as an operator claim.",
+            "url": "https://www.orcarouter.ai/trust",
+            "scope": "OrcaRouter trust centre, for the OrcaRouter API",
+            "verified_at": "2026-09-18"
+          }
+        },
+        "findings": []
+      },
+      "terms": {
+        "kind": "web_terms",
+        "label": "OrcaRouter Terms of Service",
+        "url": "https://www.orcarouter.ai/user-agreement",
+        "verified_at": "2026-09-18"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Welcome, API surfaces, and provider catalog",
+          "url": "https://docs.orcarouter.ai/introduction.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Data handling and retention schedule",
+          "url": "https://docs.orcarouter.ai/operations/data-handling.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Zero data retention default and upstream caveat",
+          "url": "https://docs.orcarouter.ai/operations/zero-data-retention.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Bring-your-own-key, fees, and fallback policy",
+          "url": "https://docs.orcarouter.ai/operations/byok.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Auto router strategies",
+          "url": "https://docs.orcarouter.ai/routing/auto-router.md",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy",
+          "url": "https://www.orcarouter.ai/privacy-policy",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service",
+          "url": "https://www.orcarouter.ai/user-agreement",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "verified_at": "2026-09-18"
     }
   ],
   "generated_at": "2026-09-01"

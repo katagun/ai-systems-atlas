@@ -6,6 +6,7 @@ its own editorial ``verified_at``; the oldest human review date on its evidence,
 terms, and trust record; and the newest automated metadata timestamp. The report
 is read-only and never a gate: it changes no date, fetches nothing, and exits 0.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -41,7 +42,10 @@ class Dated:
     source: str
 
     def as_json(self, *, with_source: bool = True) -> dict[str, object]:
-        payload: dict[str, object] = {"date": self.on.isoformat(), "age_days": self.age_days}
+        payload: dict[str, object] = {
+            "date": self.on.isoformat(),
+            "age_days": self.age_days,
+        }
         if with_source:
             payload["source"] = self.source
         return payload
@@ -109,21 +113,40 @@ def review_rows(directory: Path, as_of: date) -> list[ReviewRow]:
     rows = []
     for collection, filename, key in COLLECTIONS:
         for record in _load(directory, filename)[key]:
-            evidence = [dated(value, as_of, location) for location, value in evidence_review_dates(record)]
+            evidence = [
+                dated(value, as_of, location)
+                for location, value in evidence_review_dates(record)
+            ]
             if collection == "systems":
-                evidence += [dated(value, as_of, location) for location, value in licenses.get(record["id"], [])]
-            metadata = [dated(record[field], as_of, field) for field in METADATA_KEYS if record.get(field)]
+                evidence += [
+                    dated(value, as_of, location)
+                    for location, value in licenses.get(record["id"], [])
+                ]
+            metadata = [
+                dated(record[field], as_of, field)
+                for field in METADATA_KEYS
+                if record.get(field)
+            ]
             rows.append(
                 ReviewRow(
                     collection=collection,
                     id=record["id"],
                     name=record["name"],
                     reviewed=dated(record["verified_at"], as_of, "verified_at"),
-                    oldest_evidence=min(evidence, key=lambda item: (item.on, item.source)) if evidence else None,
-                    metadata=max(metadata, key=lambda item: item.on) if metadata else None,
+                    oldest_evidence=min(
+                        evidence, key=lambda item: (item.on, item.source)
+                    )
+                    if evidence
+                    else None,
+                    metadata=max(metadata, key=lambda item: item.on)
+                    if metadata
+                    else None,
                 )
             )
-    return sorted(rows, key=lambda row: (-row.editorial_age, COLLECTION_ORDER[row.collection], row.id))
+    return sorted(
+        rows,
+        key=lambda row: (-row.editorial_age, COLLECTION_ORDER[row.collection], row.id),
+    )
 
 
 def filter_rows(
@@ -161,7 +184,12 @@ def render_table(rows: list[ReviewRow], as_of: date) -> str:
     ]
     lines = [header, *body]
     widths = [max(len(line[column]) for line in lines) for column in range(len(header))]
-    text = ["  ".join(cell.ljust(width) for cell, width in zip(line, widths, strict=True)).rstrip() for line in lines]
+    text = [
+        "  ".join(
+            cell.ljust(width) for cell, width in zip(line, widths, strict=True)
+        ).rstrip()
+        for line in lines
+    ]
     count = len(rows)
     without_evidence = sum(row.oldest_evidence is None for row in rows)
     without_metadata = sum(row.metadata is None for row in rows)
@@ -182,7 +210,9 @@ def render_json(rows: list[ReviewRow], as_of: date) -> str:
                 "id": row.id,
                 "name": row.name,
                 "reviewed": row.reviewed.as_json(with_source=False),
-                "oldest_evidence": row.oldest_evidence.as_json() if row.oldest_evidence else None,
+                "oldest_evidence": row.oldest_evidence.as_json()
+                if row.oldest_evidence
+                else None,
                 "metadata": row.metadata.as_json() if row.metadata else None,
             }
             for row in rows
@@ -200,7 +230,11 @@ def _non_negative_days(value: str) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    parser.add_argument("--as-of", type=date.fromisoformat, help="date to measure ages from (default: today)")
+    parser.add_argument(
+        "--as-of",
+        type=date.fromisoformat,
+        help="date to measure ages from (default: today)",
+    )
     parser.add_argument(
         "--older-than",
         type=_non_negative_days,
@@ -213,16 +247,26 @@ def build_parser() -> argparse.ArgumentParser:
         choices=list(COLLECTION_ORDER),
         help="limit to one collection; repeat for several",
     )
-    parser.add_argument("--json", action="store_true", help="print JSON instead of a table")
-    parser.add_argument("--directory", type=Path, default=ROOT / "directory", help=argparse.SUPPRESS)
+    parser.add_argument(
+        "--json", action="store_true", help="print JSON instead of a table"
+    )
+    parser.add_argument(
+        "--directory", type=Path, default=ROOT / "directory", help=argparse.SUPPRESS
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     as_of = args.as_of or date.today()
-    rows = filter_rows(review_rows(args.directory, as_of), args.older_than, set(args.collection or ()) or None)
-    sys.stdout.write(render_json(rows, as_of) if args.json else render_table(rows, as_of))
+    rows = filter_rows(
+        review_rows(args.directory, as_of),
+        args.older_than,
+        set(args.collection or ()) or None,
+    )
+    sys.stdout.write(
+        render_json(rows, as_of) if args.json else render_table(rows, as_of)
+    )
     return 0
 
 
