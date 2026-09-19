@@ -1492,8 +1492,18 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-NVIDIA-Community-Model-2024",
+      "name": "NVIDIA Community Model License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
       "name": "NVIDIA Nemotron Open Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Open-Model",
+      "name": "NVIDIA Open Model License",
       "kind": "restricted"
     },
     {

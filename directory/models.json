@@ -15590,6 +15590,474 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-nvidia-llama-3-1-nemotron-70b-instruct",
+      "source_id": "nvidia/llama-3.1-nemotron-70b-instruct",
+      "name": "Llama 3.1 Nemotron 70B Instruct",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct",
+      "description": "An ungated 70B text instruction model aligned on reward benchmarks and tool use, governed by the NVIDIA Open Model License over the Llama 3.1 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron 70B Instruct",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-04-15",
+        "last_updated": "2025-04-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.download.nvidia.com/licenses/nvidia-open-model-license-agreement-june-2024.pdf",
+          "scope": "Llama-3.1-Nemotron-70B-Instruct weights and bundled model code, June 2024 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3.1-Nemotron-70B-Instruct v1.0 release of October 2024 at Hugging Face commit a83af1f4968437064635f6726fb745e5b615e863. The Transformers-format sibling repository, the Ultra and Super variants, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the governing NVIDIA Open Model License text pinned",
+        "The model card names the base Llama 3.1 agreement and its acceptable-use policy"
+      ],
+      "tradeoffs": [
+        "The weights ship in NeMo format, so Transformers users must convert from the sibling repository",
+        "The trial endpoint cites the Llama terms rather than the NVIDIA license, a documented surface conflict"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 5.96
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-70b-instruct.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-1-nemotron-ultra-253b",
+      "source_id": "nvidia/llama-3.1-nemotron-ultra-253b",
+      "name": "Llama 3.1 Nemotron Ultra 253B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+      "description": "An ungated 253B text reasoning model with a DecILM sparse architecture, governed by the NVIDIA Open Model License over the Llama 3.1 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron Ultra 253B",
+        "description": "Flagship Nemotron model for high-throughput reasoning and complex agents",
+        "family": "nemotron",
+        "release_date": "2025-04-07",
+        "last_updated": "2025-04-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_1-Nemotron-Ultra-253B-v1 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_1-Nemotron-Ultra-253B-v1 v1.0 release dated April 7, 2025 at Hugging Face commit 5b47def5b8957142d82faeb44bfad9349d02840d. The 70B Instruct and Super siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a consistent NVIDIA Open Model License citation on card and endpoint",
+        "Dated release with a model version, trained-dates range, and build.nvidia.com documentation"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.62
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-ultra-253b-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-ultra-253b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1",
+      "source_id": "nvidia/llama-3.3-nemotron-super-49b-v1",
+      "name": "Llama 3.3 Nemotron Super 49B v1",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+      "description": "An ungated 49B text reasoning model with a DecILM sparse architecture, governed by the NVIDIA Open Model License over the Llama 3.3 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.3 Nemotron Super 49B v1",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-04-07",
+        "last_updated": "2025-04-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.3-Community",
+        "LicenseRef-Llama-3.3-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_3-Nemotron-Super-49B-v1 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/license/",
+          "scope": "Llama 3.3 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.3 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_3-Nemotron-Super-49B-v1 v1.0 release dated March 18, 2025 at Hugging Face commit 387156d8d6868c19f3472fa607aa9bfc4f662333. The v1.5 upgrade, the 70B Instruct and Ultra siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a consistent NVIDIA Open Model License citation on card and endpoint",
+        "Dated release with a model version and Transformers and vLLM runtime documentation"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.62
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_3-nemotron-super-49b-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.3-nemotron-super-49b-v1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1-5",
+      "source_id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "name": "Llama 3.3 Nemotron Super 49B v1.5",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5",
+      "description": "An ungated 49B text reasoning model upgrading the v1 release with improved instruction following and tool calling, governed by the NVIDIA Open Model License over the Llama 3.3 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.3 Nemotron Super 49B v1.5",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-07-25",
+        "last_updated": "2025-07-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.3-Community",
+        "LicenseRef-Llama-3.3-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_3-Nemotron-Super-49B-v1_5 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/license/",
+          "scope": "Llama 3.3 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.3 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_3-Nemotron-Super-49B-v1_5 v1.5 release dated July 25, 2025 at Hugging Face commit 420ba7d28211abf116b8b103ab700d92619daf98. The v1 release, the 70B Instruct and Ultra siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with dual dated release records on Hugging Face and build.nvidia.com",
+        "The model card documents the explicit upgrade relationship to the v1 release and a tool-call parser"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 6.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_3-nemotron-super-49b-v1_5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.3-nemotron-super-49b-v1.5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-nvidia-nemotron-3-nano-30b-a3b",
       "source_id": "nvidia/nemotron-3-nano-30b-a3b",
       "name": "Nemotron 3 Nano 30B A3B",
@@ -15689,6 +16157,309 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-nvidia-nemotron-mini-4b-instruct",
+      "source_id": "nvidia/nemotron-mini-4b-instruct",
+      "name": "Nemotron Mini 4B Instruct",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct",
+      "description": "An ungated 4B text instruction model for on-device and edge workloads, governed by the NVIDIA Community Model License of August 2024.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Mini 4B Instruct",
+        "description": "Compact Nemotron model for efficient reasoning and deployable AI agents",
+        "family": "nemotron",
+        "release_date": "2024-08-21",
+        "last_updated": "2024-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Community-Model-2024"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a zero-byte LICENSE placeholder beside the governing nvidia-community-model-license-aug2024.pdf, while the card front matter names the different NVIDIA Open Model License and the trial page cites the older NVIDIA AI Foundation Models Community License Agreement. The in-repo August 2024 PDF governs, with a revocable grant and a production gate on NVIDIA NIM runtimes, and the conflicting pointers open a durable license review incident.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Community-Model-2024",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct/blob/791833e92ebddb0bc2c1007f6d2b6764f886a2ae/nvidia-community-model-license-aug2024.pdf",
+          "scope": "Nemotron-Mini-4B-Instruct weights and bundled model code, NVIDIA Community Model License dated August 23, 2024"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Mini-4B-Instruct release at Hugging Face commit 791833e92ebddb0bc2c1007f6d2b6764f886a2ae. The Nemotron 3 generation, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the governing NVIDIA Community Model License pinned in the repository",
+        "The build.nvidia.com trial endpoint and NIM packaging are documented"
+      ],
+      "tradeoffs": [
+        "The license is revocable, non-sublicensable, and gates production use on an NVIDIA NIM runtime subscription",
+        "The card front matter, the trial page, and the in-repo license file point to three different instruments"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 7,
+        "deployment_portability": 5,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 6,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-mini-4b-instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-mini-4b-instruct.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-nano-12b-v2-vl",
+      "source_id": "nvidia/nemotron-nano-12b-v2-vl",
+      "name": "Nemotron Nano 12B v2 VL",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
+      "description": "An ungated 12B vision-language reasoning model handling text, image, and video input, governed by the NVIDIA Open Model License, whose trial endpoint reached end of life in August 2026.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Nano 12B v2 VL",
+        "description": "Nemotron multimodal model for visual reasoning and agentic AI workflows",
+        "family": "nemotron",
+        "release_date": "2025-10-28",
+        "last_updated": "2025-10-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "NVIDIA-Nemotron-Nano-12B-v2-VL-BF16 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16 v1.0 release dated October 28, 2025 at Hugging Face commit ca9543b126e8bf3176916d3d305ccc415f89fd4d. The FP8 and NVFP4 variants, the 9B text sibling, downstream quantizations, the retired build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a dated release, model version, and technical report",
+        "Video and image processors ship beside the weights, and NIM container packaging persists"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses",
+        "The build.nvidia.com trial endpoint returned end-of-life in August 2026, removing the hosted trial path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint documentation",
+          "url": "https://build.nvidia.com/nvidia/nemotron-nano-12b-v2-vl",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-nano-12b-v2-vl.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-nano-9b-v2",
+      "source_id": "nvidia/nemotron-nano-9b-v2",
+      "name": "Nemotron Nano 9B v2",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+      "description": "An ungated 9B text reasoning model with tool-call support, governed by the NVIDIA Open Model License, whose trial endpoint reached end of life in August 2026.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Nano 9B v2",
+        "description": "Compact Nemotron model for efficient reasoning and deployable AI agents",
+        "family": "nemotron",
+        "release_date": "2025-08-18",
+        "last_updated": "2025-08-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "NVIDIA-Nemotron-Nano-9B-v2 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-Nano-9B-v2 v1.0 release dated August 18, 2025 at Hugging Face commit 6533e8de2c68e4536bf7c411d7a3ce5734111476. The FP8 and NVFP4 variants, the 12B VL sibling, downstream quantizations, the retired build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a dated release, model version, and technical report",
+        "The trial endpoint's deprecation and end-of-life dates are documented, and NIM packaging persists"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses",
+        "The build.nvidia.com trial endpoint returned end-of-life in August 2026, removing the hosted trial path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 6.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint documentation",
+          "url": "https://build.nvidia.com/nvidia/nvidia-nemotron-nano-9b-v2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-nano-9b-v2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-openai-gpt-oss-20b",

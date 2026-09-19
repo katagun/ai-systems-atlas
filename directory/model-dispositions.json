@@ -451,6 +451,12 @@
       "disposition": "held",
       "reason": "No first-party model page in xAI's catalogue, so no authoritative identity or boundary can be established. Documented replacement Grok 4.6 is reviewed. Held in case first-party documentation appears.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "nvidia/mistral-nemotron",
+      "disposition": "held",
+      "reason": "No downloadable weights are verifiable (the weight repository is gated or absent) and the governing license text cannot be confirmed from first-party sources; NVIDIA's own documentation defers to Mistral AI terms and disclaims ownership of the model. Held in case first-party documentation appears.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
