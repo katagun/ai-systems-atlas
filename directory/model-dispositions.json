@@ -463,6 +463,36 @@
       "disposition": "held",
       "reason": "The queued models.dev row points at a gated early-access API service rather than a weight release, and the open NemotronLabs VoiceChat 11B release of August 2026 uses a different identity and license surface. Held pending identity alignment.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "anthropic/claude-3-5-haiku-20241022",
+      "disposition": "held",
+      "reason": "Retired and the model page returns 404, so no authoritative identity or boundary can be established. Not a first-generation snapshot of the reviewed line; the documented replacement is reviewed. Held in case first-party documentation returns.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "anthropic/claude-3-5-sonnet-20241022",
+      "disposition": "held",
+      "reason": "Retired and the model page returns 404, so no authoritative identity or boundary can be established. Not a first-generation snapshot of the reviewed line; the documented replacement is reviewed. Held in case first-party documentation returns.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "anthropic/claude-3-7-sonnet-20250219",
+      "disposition": "held",
+      "reason": "Retired and the model page returns 404, so no authoritative identity or boundary can be established. Not a first-generation snapshot of the reviewed line; the documented replacement is reviewed. Held in case first-party documentation returns.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "anthropic/claude-3-haiku-20240307",
+      "disposition": "excluded",
+      "reason": "Retired first-generation snapshot; the line is reviewed at the current release.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "anthropic/claude-opus-4-5",
+      "disposition": "excluded",
+      "reason": "Pre-4.6 dateless ID: a moving alias over dated snapshots rather than a pinned release, so it has no fixed identity to review.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
