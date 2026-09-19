@@ -640,3 +640,30 @@ test("taxonomy documents every pack group", async ({ page }) => {
   }
   await expect(page.locator("#taxonomy-content")).toContainText("Marketplace");
 });
+
+test("the packs scope lists scored systems installed as packs without scores and opens their system dialog", async ({ page }) => {
+  await page.goto("/?collection=packs");
+  const block = page.locator("#pack-systems-block");
+  await expect(block).toBeVisible();
+  await expect(page.locator("#pack-systems-heading")).toContainText("Scored systems installed as packs");
+  const cards = page.locator("#pack-systems-grid .project-card h2");
+  await expect(cards.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
+  await expect(page.locator("#pack-systems-grid .score-ring")).toHaveCount(0);
+  await expect(page.locator("#pack-systems-grid .compare-toggle")).toHaveCount(0);
+
+  await page.locator("#pack-search").fill("Superpowers");
+  await expect(cards).toHaveText(["Superpowers"]);
+  await expect(page.locator("#pack-grid .project-card")).toHaveCount(0);
+
+  await page.locator('#pack-systems-grid [data-project="superpowers"]').click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(page).toHaveURL(/record=system(%3A|:)superpowers/);
+});
+
+test("the systems deployment filter reaches systems installed into a host agent", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#deployment-filter").selectOption("host_pack");
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
+});
