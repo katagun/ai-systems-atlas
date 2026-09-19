@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-sixth models.dev queue batch: Anthropic (`anthropic/claude-3-5-haiku-20241022`, `claude-3-5-sonnet-20241022`, `claude-3-7-sonnet-20250219`, `claude-3-haiku-20240307`, `claude-opus-4-5`, `claude-opus-4-5-20251101`, `claude-opus-4-6`, `claude-opus-4-7`, `claude-fable-5`, `claude-fable-5-1`, `claude-mythos-5`). Six dated or pinned releases become records under the existing Anthropic commercial terms; the pre-4.6 alias and the first-generation Haiku snapshot are excluded; the three retired 3.x lines with gone pages are held. Promote, hold, or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Zhipu and Mistral clusters stay queued for later.
+- [ ] Curate the thirty-seventh models.dev queue batch: GLM 4.x (`zhipuai/glm-4.5-air`, `glm-4.5v`, `glm-4.6`, `glm-4.6v`, `glm-4.6v-flash`, `glm-4.7`, `glm-4.7-flash`, `glm-4.7-flashx`). The open-weight lines carry Z.ai custom licenses that likely reuse or extend the GLM-5.3 identifier; the vision lines are multimodal. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The GLM-5 family and the 4.5 Flash API line stay queued for later.
 
 ### Reader experience
 
