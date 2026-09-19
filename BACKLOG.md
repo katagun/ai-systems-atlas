@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-fourth models.dev queue batch: Nemotron 3.x (`nvidia/nemotron-3-super-120b-a12b`, `nemotron-3-ultra-550b-a55b`, `nemotron-3-nano-omni-30b-a3b-reasoning`, `nemotron-3.5-lightning`, `nemotron-cascade-2-30b-a3b`, `nemotron-voicechat`). All are open-weight releases under the existing NVIDIA Nemotron Open Model License. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The content-safety, embed, and rerank lines stay queued for later.
+- [ ] Curate the thirty-fifth models.dev queue batch: NVIDIA safety and embed lines (`nvidia/llama-3.1-nemotron-safety-guard-8b-v3`, `nemotron-3-content-safety`, `nemotron-3.5-content-safety`, `nemotron-content-safety-reasoning-4b`, `llama-nemotron-embed-vl-1b-v2`, `llama-nemotron-rerank-vl-1b-v2`). The content-safety lines are text-output releases like the reviewed Llama Guard; the embed and rerank lines likely fall outside the language-model queue. Promote, hold, or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The OpenAI, Zhipu, Anthropic, and Mistral clusters stay queued for later.
 
 ### Reader experience
 
