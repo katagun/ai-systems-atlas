@@ -661,6 +661,18 @@ function importedModelCard(model, { mixed = false } = {}) {
   </article>`;
 }
 
+function mixedSystemCard(record) {
+  const location = projectLocation(record);
+  return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
+      <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
+      <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <p>${escapeHTML(record.description)}</p>
+      ${badgeRow(AtlasCore.cardBadges("system", record))}
+      <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
+    </article>`;
+}
+
 function renderAllDirectoryEntries() {
   // The mixed directory searches five collections, so it reads five index
   // namespaces; each is absent until that collection's index lands, and the
@@ -707,15 +719,7 @@ function renderAllDirectoryEntries() {
         <div class="card-footer"><span>Dedicated service score</span><button data-inference-service="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
-    const location = projectLocation(record);
-    return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
-      <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
-      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
-      <p>${escapeHTML(record.description)}</p>
-      ${badgeRow(AtlasCore.cardBadges("system", record))}
-      <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
-    </article>`;
+    return mixedSystemCard(record);
   }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, or agent packs match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
@@ -960,7 +964,21 @@ const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
-const renderPacks = () => renderCollection("packs");
+function renderPackShapedSystems() {
+  const systems = AtlasCore.packShapedSystems(state.projects, {
+    term: $("#pack-search").value,
+    searchIndex: searchIndexes.systems,
+  });
+  const block = $("#pack-systems-block");
+  block.hidden = systems.length === 0;
+  $("#pack-systems-count").textContent = systems.length ? `${systems.length} ${systems.length === 1 ? "system" : "systems"}` : "";
+  const grid = $("#pack-systems-grid");
+  grid.innerHTML = systems.map(mixedSystemCard).join("");
+  $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
+  paintMarks(grid);
+}
+
+const renderPacks = () => { renderCollection("packs"); renderPackShapedSystems(); };
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
@@ -2033,7 +2051,7 @@ function activateView(id) {
 const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
-  "#model-search": ["models"], "#pack-search": ["packs"],
+  "#model-search": ["models"], "#pack-search": ["packs", "systems"],
   "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs"],
 };
 
