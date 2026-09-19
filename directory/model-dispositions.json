@@ -493,6 +493,12 @@
       "disposition": "excluded",
       "reason": "Pre-4.6 dateless ID: a moving alias over dated snapshots rather than a pinned release, so it has no fixed identity to review.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "zhipuai/glm-4.7-flashx",
+      "disposition": "held",
+      "reason": "The Hugging Face weight repository is gated and the governing license text is not accessible, so no authoritative weight identity or license evidence can be established. The line is served through the Z.ai API. Held in case the gate or license documentation opens.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
