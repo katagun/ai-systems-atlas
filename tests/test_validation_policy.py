@@ -2411,6 +2411,65 @@ class ValidationPolicyTests(unittest.TestCase):
         for source_id in ("anthropic/claude-mythos-5-1", "Acme/Big_Model.v2", "x/y--z"):
             self.assertEqual(importer_id(source_id), validator_id(source_id))
 
+    def test_reviewed_source_id_must_exist_in_the_snapshot(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = "acme/not-upstream"
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any(
+                "acme/not-upstream" in e
+                and "missing from the complete models.dev source snapshot" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_snapshot_row_id_must_not_collide_with_a_differently_linked_record(
+        self,
+    ) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        models_path = root / "directory" / "models.json"
+        document = json.loads(models_path.read_text(encoding="utf-8"))
+        source = json.loads(
+            (root / "directory" / "models-dev.json").read_text(encoding="utf-8")
+        )
+        first, second = document["models"][0], document["models"][1]
+        # A wrong-guess link: the record keeps its frozen id but points at another row.
+        first_row_id = first["id"]
+        first["source_id"], second["source_id"] = (
+            second["source_id"],
+            first["source_id"],
+        )
+        self.write_json(models_path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                first_row_id in e and "collides with models.dev row" in e
+                for e in errors
+            ),
+            errors,
+        )
+        self.assertTrue(source["models"])  # fixture sanity
+
+    def test_queued_row_for_a_null_source_record_is_reported_not_rejected(self) -> None:
+        from scripts.validate_directory import model_link_pending
+
+        models = [{"id": "model-acme-chat", "source_id": None}]
+        candidates = [
+            {"id": "model-acme-chat", "source_id": "acme/chat"},
+            {"id": "model-acme-other", "source_id": "acme/other"},
+        ]
+
+        self.assertEqual(
+            [("model-acme-chat", "acme/chat")], model_link_pending(models, candidates)
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

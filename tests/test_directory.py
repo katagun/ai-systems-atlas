@@ -44,10 +44,13 @@ class DirectoryTests(unittest.TestCase):
         self.assertEqual(
             len(source_records), len({item["source_id"] for item in source_records})
         )
+        linked = {
+            model["source_id"]
+            for model in self.models["models"]
+            if model["source_id"] is not None
+        }
         self.assertEqual(
-            {model["source_id"] for model in self.models["models"]},
-            {item["source_id"] for item in source_records}
-            & {model["source_id"] for model in self.models["models"]},
+            linked, {item["source_id"] for item in source_records} & linked
         )
         self.assertTrue(
             any(
@@ -57,7 +60,11 @@ class DirectoryTests(unittest.TestCase):
         )
 
     def test_model_collection_is_independent_and_reviewed(self) -> None:
-        source_ids = [model["source_id"] for model in self.models["models"]]
+        source_ids = [
+            model["source_id"]
+            for model in self.models["models"]
+            if model["source_id"] is not None
+        ]
         queued = json.loads(
             (ROOT / "directory" / "model-candidates.json").read_text(encoding="utf-8")
         )

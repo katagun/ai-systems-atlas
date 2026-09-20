@@ -2894,6 +2894,58 @@ def validate_published_copies(root: Path, errors: list[str]) -> None:
             errors.append(f"web/{name} is not synchronized with directory/{name}")
 
 
+def validate_model_source_links(
+    models: list[Any], source_models: list[Any], errors: list[str]
+) -> None:
+    """Check reviewed models against the snapshot they claim to come from (ADR 036)."""
+    rows_by_source = {
+        row.get("source_id"): row
+        for row in source_models
+        if isinstance(row, dict) and isinstance(row.get("source_id"), str)
+    }
+    source_by_row_id = {
+        row.get("id"): source_id for source_id, row in rows_by_source.items()
+    }
+    for model in models:
+        if not isinstance(model, dict):
+            continue
+        source_id = model.get("source_id")
+        if not isinstance(source_id, str):
+            continue
+        prefix = f"model {model.get('id', 'unknown')}"
+        if source_id not in rows_by_source:
+            errors.append(
+                f"{prefix}: source_id {source_id} is missing from the complete "
+                "models.dev source snapshot; set it to null and re-attest the "
+                "metadata if upstream removed the row"
+            )
+        colliding = source_by_row_id.get(model.get("id"))
+        if colliding is not None and colliding != source_id:
+            errors.append(
+                f"{prefix}: id collides with models.dev row {colliding} while linked "
+                f"to {source_id}; unlink to null, link to {colliding}, and exclude "
+                f"{source_id} (ADR 036)"
+            )
+
+
+def model_link_pending(
+    models: list[Any], candidates: list[Any]
+) -> list[tuple[str, str]]:
+    """Queued rows whose stable id matches a reviewed model that has no source_id yet."""
+    waiting = {
+        model.get("id")
+        for model in models
+        if isinstance(model, dict) and model.get("source_id") is None
+    }
+    return sorted(
+        (candidate["id"], candidate["source_id"])
+        for candidate in candidates
+        if isinstance(candidate, dict)
+        and candidate.get("id") in waiting
+        and isinstance(candidate.get("source_id"), str)
+    )
+
+
 def validate(root: Path = ROOT) -> list[str]:
     """Validate the canonical catalog, its review queues, and the published copies."""
     directory = root / "directory"
@@ -2937,6 +2989,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     models_value = validate_models(catalog["models.json"], tax, errors)
     source_models_value = validate_models_dev(catalog["models-dev.json"], tax, errors)
+    validate_model_source_links(models_value, source_models_value, errors)
     if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get(
         "source"
     ):
@@ -3032,6 +3085,10 @@ def main() -> int:
         f"{pack_count} unscored agent packs; "
         f"{source_model_count} attributed models.dev source records"
     )
+    for model_id, source_id in model_link_pending(
+        load("models.json")["models"], load("model-candidates.json")["candidates"]
+    ):
+        print(f"link pending: {model_id} <- {source_id}")
     return 0
 
 
