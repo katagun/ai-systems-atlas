@@ -149,7 +149,7 @@ class ModelsDevImportTests(unittest.TestCase):
     def test_row_for_a_null_source_reviewed_model_is_queued_like_any_other(
         self,
     ) -> None:
-        # ADR 036: run() builds published_source_ids from string source_ids only, so a
+        # ADR 038: run() builds published_source_ids from string source_ids only, so a
         # reviewed record with source_id null never keeps its upstream row out of the queue.
         catalog = {"acme/chat": model_record("acme/chat")}
 
@@ -164,7 +164,7 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertEqual(["model-acme-chat"], [item["id"] for item in candidates])
 
     def test_run_queues_models_dev_row_for_a_null_source_reviewed_model(self) -> None:
-        # Behavioural pin for the same ADR 036 guarantee, exercised through run()
+        # Behavioural pin for the same ADR 038 guarantee, exercised through run()
         # end to end: a reviewed model with source_id null must not suppress its
         # models.dev row, while a reviewed model with a real source_id still does.
         real_source_models_path = import_models_dev.SOURCE_MODELS_PATH

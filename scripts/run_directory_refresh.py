@@ -245,7 +245,7 @@ def link_pending_lines(results: list[tuple[str, bool, str]]) -> list[str]:
     """Every `link pending:` line any check printed, deduplicated in first-seen order.
 
     `validate_directory` prints one such line per reviewed model that models.dev now
-    lists (ADR 036); without this, the line has no reader outside a raw terminal.
+    lists (ADR 038); without this, the line has no reader outside a raw terminal.
     """
     seen: set[str] = set()
     lines: list[str] = []

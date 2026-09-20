@@ -18,8 +18,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from . import routine_guards, verify_signal_pages
+    from . import rank_signals, routine_guards, verify_signal_pages
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    import rank_signals
     import routine_guards
     import verify_signal_pages
 
@@ -355,7 +356,33 @@ def is_remote_tracking_ref(ref: str, run=shell) -> bool:
     return remote_for_ref(ref, run) is not None
 
 
-def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> int:
+def default_ranker(
+    pending: list[str], signals: list[dict[str, Any]], pages: dict[str, str]
+) -> tuple[list[str], dict[str, float]]:
+    """The ranker `main` hands to `prepare`: TypeSafe when a key exists, else no change."""
+    return rank_signals.rank_pending(
+        pending, signals, pages, key=rank_signals.load_api_key()
+    )
+
+
+def bundled_pages(worktree: Path) -> dict[str, str]:
+    """Story id to page text, as `verify_signal_pages --refresh` bundled it."""
+    try:
+        bundle = json.loads((worktree / BUNDLE).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(bundle, dict):
+        return {}
+    return {str(k): v for k, v in bundle.items() if isinstance(v, str)}
+
+
+def prepare(
+    *,
+    limit: int = 40,
+    run=shell,
+    from_ref: str = DEFAULT_FROM_REF,
+    ranker: Callable[..., tuple[list[str], dict[str, float]]] | None = None,
+) -> int:
     """Refresh an isolated worktree from `from_ref` and build the signal-page bundle."""
     installed = (
         INSTALLED_PROMPT.read_text(encoding="utf-8")
@@ -448,8 +475,27 @@ def prepare(*, limit: int = 40, run=shell, from_ref: str = DEFAULT_FROM_REF) -> 
             f"from the bundle: {drifted}",
             file=sys.stderr,
         )
-    pending = pending_story_ids(signals, drifted, limit)
+    # Rank before the cap, not after: with more pending signals than `limit`, the cap
+    # should keep the likeliest, not the lowest story ids. `ranker` is None everywhere
+    # but `main`, so no test of `prepare` can reach the network, and a ranker that
+    # raises is a lost ordering, never a lost run.
+    pending = pending_story_ids(signals, drifted, len(signals))
+    scores: dict[str, float] = {}
+    if ranker is not None:
+        try:
+            pending, scores = ranker(pending, signals, bundled_pages(WORKTREE))
+        except Exception as error:
+            print(
+                f"warning: ranking failed ({type(error).__name__}); using sweep order",
+                file=sys.stderr,
+            )
+    pending = pending[:limit]
     print(f"worktree ready: {WORKTREE}")
+    if scores:
+        print(
+            f"ranked {len(scores)} signal(s) by likelihood of being a system "
+            f"({rank_signals.MODEL}); an order to read in, never evidence"
+        )
     print(f"pending signals ({len(pending)} of up to {limit}): {pending}")
     return 0
 
@@ -660,7 +706,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     if args.command == "prepare":
-        return prepare(limit=args.limit, from_ref=args.from_ref)
+        return prepare(limit=args.limit, from_ref=args.from_ref, ranker=default_ranker)
     if args.command == "install-prompt":
         return install_prompt()
     return finish()

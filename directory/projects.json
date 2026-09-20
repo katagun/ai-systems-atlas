@@ -5007,7 +5007,7 @@
       "stars": 132952,
       "stars_verified_at": "2026-09-14",
       "historical_stars": null,
-      "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged.",
+      "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged. Its README installs the skill set by cloning the repository into `~/.claude/skills/gstack` and running its setup script, so the workflow runs inside the host agent's sessions.",
       "score": {
         "task_reliability": 8.0,
         "tool_use": 9.2,
@@ -5031,7 +5031,7 @@
       ],
       "why_it_matters": "Shows how structured roles, artifacts, safety gates, and verification turn general coding agents into a repeatable software-delivery system.",
       "research_confidence": "high",
-      "verified_at": "2026-09-18",
+      "verified_at": "2026-09-20",
       "pushed_at": "2026-09-11T19:40:16Z",
       "forks": 19845,
       "open_issues": 888,
@@ -11900,6 +11900,111 @@
         "MIT"
       ],
       "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "vercel-ai-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Vercel AI SDK",
+      "repo": "vercel/ai",
+      "url": "https://github.com/vercel/ai",
+      "description": "Provider-agnostic TypeScript toolkit for model calls, tool-loop agents, tool approvals, MCP, and chat interfaces, with an experimental harness layer that runs other vendors' coding agents in sandboxes behind the same agent interface.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "vercel_ai_gateway",
+        "openai",
+        "anthropic",
+        "google",
+        "mistral",
+        "deepseek",
+        "moonshot_ai",
+        "perplexity",
+        "x_ai",
+        "z_ai",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "application-held message histories and UI message streams, typed tool definitions and runtime context, serializable harness session resume state, and workflow step state when the durable agent is used",
+      "deployment": [
+        "library",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "stars": 26861,
+      "stars_verified_at": "2026-09-20",
+      "historical_stars": null,
+      "current_repo_note": "GitHub reports no recognised licence because the root LICENSE file is the short Apache-2.0 notice rather than the full text; all 80 package manifests declare Apache-2.0, and one vendored schema converter carries its own ISC file.",
+      "score": {
+        "task_reliability": 8.3,
+        "tool_use": 9.0,
+        "autonomy": 8.0,
+        "human_control": 8.8,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 7.6,
+        "interoperability": 9.3,
+        "maturity": 8.6,
+        "overall": 8.48
+      },
+      "strengths": [
+        "One provider specification puts more than fifty first-party model and media packages, an OpenAI-compatible adapter, an MCP client, and LangChain and LlamaIndex bridges behind the same typed calls, so the agent loop is written once and the backend swapped",
+        "Tool approval is a first-class part of the loop: per-tool or whole-call rules return approved, denied, or ask-the-user, can change per request, and can be moved out of code into Open Policy Agent policies that see the run's full message history",
+        "The harness layer runs Claude Code, Codex, Cursor, Pi, fx, and five more coding agents through the same generate and stream interface, merging their built-in tools with host-executed ones and giving sessions detach, stop, and resume states"
+      ],
+      "weaknesses": [
+        "The tool-loop agent runs wholly in memory and loses its progress on a crash; the durable agent that fixes this depends on a workflow runtime published under a beta tag",
+        "The harness packages are labelled experimental with breaking changes expected, every harness must run in a sandbox, and the only provider that can host the bridge-backed agents is Vercel's managed sandbox",
+        "Once a telemetry integration is registered, every call records prompts and outputs by default, so keeping content out of a tracing backend is an opt-out the application has to remember"
+      ],
+      "why_it_matters": "The most widely adopted TypeScript agent toolkit, and the first framework to treat other vendors' finished coding agents as swappable backends the way it already treats models.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-20",
+      "pushed_at": "2026-09-20T10:06:53Z",
+      "forks": 5160,
+      "open_issues": 1524,
+      "metadata_verified_at": "2026-09-20",
+      "github_detected_license": "NOASSERTION",
+      "licenses": [
+        "Apache-2.0",
+        "ISC"
+      ],
+      "source_model": "mixed_open_source",
       "license_review_status": "verified"
     },
     {

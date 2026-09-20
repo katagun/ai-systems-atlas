@@ -25,7 +25,7 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 # Kept equal to scripts/promote_model_candidate.py's constant of the same name; a
-# null-source record (ADR 036) may cite no evidence URL under this prefix.
+# null-source record (ADR 038) may cite no evidence URL under this prefix.
 MODELS_DEV_REPO = "https://github.com/anomalyco/models.dev"
 PUBLISHED_DATA = (
     "projects.json",
@@ -1957,7 +1957,7 @@ def validate_models(
             errors.append(f"{prefix}: invalid id")
         source_id = model.get("source_id")
         if source_id is None:
-            # ADR 036: reviewed before models.dev listed it. The id stands in for
+            # ADR 038: reviewed before models.dev listed it. The id stands in for
             # the expected upstream id, so it must have the stable slug form.
             if not isinstance(model_id, str) or not re.fullmatch(
                 r"model-[a-z0-9]+(?:-[a-z0-9]+)*", model_id
@@ -2900,7 +2900,7 @@ def validate_published_copies(root: Path, errors: list[str]) -> None:
 def validate_model_source_links(
     models: list[Any], source_models: list[Any], errors: list[str]
 ) -> None:
-    """Check reviewed models against the snapshot they claim to come from (ADR 036)."""
+    """Check reviewed models against the snapshot they claim to come from (ADR 038)."""
     rows_by_source = {
         row.get("source_id"): row
         for row in source_models
@@ -2921,7 +2921,7 @@ def validate_model_source_links(
         source_id = model.get("source_id")
         prefix = f"model {model.get('id', 'unknown')}"
         if source_id is None:
-            # ADR 036: a null-source record contains no models.dev data, so no
+            # ADR 038: a null-source record contains no models.dev data, so no
             # surface may attribute it to models.dev; a leftover pinned entry
             # from a hand repair (unlink, upstream deletion) is rejected here.
             evidence = model.get("evidence")
@@ -2934,7 +2934,7 @@ def validate_model_source_links(
                     f"{prefix}: a model without a models.dev source_id cannot cite "
                     "models.dev evidence"
                 )
-            # ADR 036: an id that matches a row already claimed by a different
+            # ADR 038: an id that matches a row already claimed by a different
             # linked record means two reviews point at one release; the row
             # a null-source record's id merely coincides with must still be
             # unclaimed, or it is not a link-pending state but a collision.
@@ -2948,7 +2948,7 @@ def validate_model_source_links(
             if other_model_id is not None:
                 errors.append(
                     f"{prefix}: id matches models.dev row {row_source_id}, which "
-                    f"{other_model_id} is already linked to (ADR 036)"
+                    f"{other_model_id} is already linked to (ADR 038)"
                 )
             continue
         if not isinstance(source_id, str):
@@ -2964,7 +2964,7 @@ def validate_model_source_links(
             errors.append(
                 f"{prefix}: id collides with models.dev row {colliding} while linked "
                 f"to {source_id}; unlink to null, link to {colliding}, and exclude "
-                f"{source_id} (ADR 036)"
+                f"{source_id} (ADR 038)"
             )
 
 

@@ -238,7 +238,7 @@
   }
 
   // Scored systems that install into a host agent as a skills bundle, plugin,
-  // or vault (deployment mode host_pack, ADR 033). The Packs scope lists them
+  // or vault (deployment mode host_pack, ADR 034). The Packs scope lists them
   // beside the unscored packs; the search term is the only filter that applies,
   // because pack facets describe packs, not systems.
   function packShapedSystems(projects, filters = {}) {
@@ -473,7 +473,7 @@
     return [...entries.values()];
   }
 
-  // ADR 036: Atlas can review a release before models.dev lists it. Such a
+  // ADR 038: Atlas can review a release before models.dev lists it. Such a
   // record has source_id null and metadata written by Atlas, so nothing on
   // the page may credit models.dev for it.
   const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";

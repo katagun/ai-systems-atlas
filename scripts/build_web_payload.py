@@ -237,7 +237,7 @@ def _overlay_models(catalog: dict[str, dict]) -> tuple[list[dict], int]:
     """Overlay reviewed Atlas models on the complete attributed source snapshot.
 
     A linked record matches its row by source_id. A record reviewed before
-    models.dev listed it has no source_id and matches by id (ADR 036), but
+    models.dev listed it has no source_id and matches by id (ADR 038), but
     only against a row no linked record has already claimed by source_id -
     the single pass below is the one place that distinction is made, so the
     combined list and the unmatched count can never drift apart.

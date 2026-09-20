@@ -4,7 +4,7 @@
 The command scaffolds review work but never invents editorial conclusions. Its
 apply path writes only after the complete proposed model collection and the
 remaining candidate queue pass validation together. A reviewed model may be
-promoted before models.dev lists it (a gap review, ADR 036) and later linked
+promoted before models.dev lists it (a gap review, ADR 038) and later linked
 to the models.dev row that names it once one appears.
 """
 
@@ -181,7 +181,7 @@ def _dispositioned(directory: Path) -> dict[str, str]:
 
 
 def _refuse_listed(directory: Path, expected_source_id: str, model_id: str) -> None:
-    """A gap review is only for releases models.dev does not list (ADR 036)."""
+    """A gap review is only for releases models.dev does not list (ADR 038)."""
     rows = load_json(directory / "models-dev.json").get("models") or []
     for row in rows:
         if not isinstance(row, dict):
@@ -379,7 +379,7 @@ def _validate_proposed_models(
 def _preflight_gap(
     directory: Path, record: dict[str, Any]
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Preflight a review of a release models.dev does not list yet (ADR 036)."""
+    """Preflight a review of a release models.dev does not list yet (ADR 038)."""
     model_id = str(record.get("id"))
     source_models_data = load_json(directory / "models-dev.json")
     rows = source_models_data.get("models") or []

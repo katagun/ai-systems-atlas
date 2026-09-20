@@ -673,6 +673,33 @@ discards nothing that matters: assessments are committed to `hn-signals/pending`
 previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
 remains recoverable for one generation.
 
+### Pre-ranking the queue
+
+`prepare` can order the pending list by how likely each page is to be a system, so the
+routine reads the likeliest signals first and the `--limit` cap keeps those rather than
+the lowest story ids. `scripts/rank_signals.py` sends one yes/no question per bundled
+page to TypeSafe's System One API, which returns a probability and no generated text.
+The order is all it produces: every signal still gets an assessment, none is skipped, and
+a rank is never evidence and never cited, exactly as ADR 028 treats points and comment
+counts.
+
+It is off until a key exists. Put `TYPESAFE_API_KEY=...` in the environment, or in an
+ignored `.env` at the root of the checkout `prepare` runs from — for the scheduled
+routine that is the sweep checkout, not the primary one. The key never belongs in the
+repository, a plist that is committed, or a workflow secret. Everything fails open: no
+key, an unreachable API, a rejected request, or a malformed answer leaves the queue in
+sweep order with a warning, and `verify` never reaches the network because only `main`
+passes `prepare` a ranker.
+
+Two things leave the machine when it is on: each pending signal's title and URL, and up
+to 8,000 characters of its page text. All three are already public, and the submitter
+chose the first two, so treat the returned number as you treat the page: data about an
+attacker-influenceable input. The model is pinned by version in `rank_signals.MODEL`;
+move it deliberately, and re-measure against recorded verdicts when you do. The
+2026-09-20 measurement — 59 judged signals, all five `worth_review` in the top eight,
+about $0.006 per 60-signal queue — rests on five positives and is recorded in
+`BACKLOG.md`.
+
 ### Running the loop locally
 
 By default `run_hn_signals.py prepare` builds its worktree from `origin/main`, which is

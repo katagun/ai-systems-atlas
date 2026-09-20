@@ -79,7 +79,7 @@ uv run python scripts/build_share_pages.py
 
 ### Releases models.dev does not list
 
-models.dev has gaps; a gap upstream is not a reason to leave a release out ([ADR 036](adr/036-reviewed-models-may-precede-their-models-dev-source-row.md)). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
+models.dev has gaps; a gap upstream is not a reason to leave a release out ([ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
 
 ```bash
 uv run python scripts/promote_model_candidate.py init-gap PROVIDER/MODEL --output model-review.json
@@ -150,4 +150,4 @@ The score asks how clearly a model can be obtained, governed, deployed, and trac
 
 The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`. `source_metadata` on a record with `source_id: null` is hand-authored Atlas material under `LICENSE-DATA`, not models.dev data.
 
-See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes, and [ADR 036](adr/036-reviewed-models-may-precede-their-models-dev-source-row.md) for releases models.dev does not list.
+See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes, and [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md) for releases models.dev does not list.

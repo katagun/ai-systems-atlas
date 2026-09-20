@@ -8,14 +8,14 @@
 
 **Tech Stack:** Python 3.11 (`uv`, `unittest`), vanilla JS (`node:test`, Playwright), static JSON.
 
-**Spec:** `docs/superpowers/specs/2026-09-20-models-without-models-dev-source-design.md` and `docs/adr/036-reviewed-models-may-precede-their-models-dev-source-row.md`. Read both before any task.
+**Spec:** `docs/superpowers/specs/2026-09-20-models-without-models-dev-source-design.md` and `docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md`. Read both before any task.
 
 ## Global Constraints
 
 - Put `/usr/local/bin` first on `PATH` in every shell (`export PATH=/usr/local/bin:$PATH`). Default `node` is v16 and silently mis-hashes the asset stamp; v22 lives in `/usr/local/bin`.
 - Python tests run with `uv run python -m unittest <module> -v`. There is no pytest.
 - Never edit generated files by hand: `web/*.json` copies, `web/app/**`, `web/records/**`, `web/asset-version*`. Regenerate with the four commands in `AGENTS.md` ("Published catalog regeneration, in order").
-- Snippets below write links as `ADR 036 {link to `path`}` because this repository link-checks plan files; in the target file, write a normal markdown link whose text is ADR 036 and whose target is exactly that path.
+- Snippets below write links as `ADR 038 {link to `path`}` because this repository link-checks plan files; in the target file, write a normal markdown link whose text is ADR 038 and whose target is exactly that path.
 - Do not add, edit, or remove any record in `directory/models.json`, `directory/model-candidates.json`, or `directory/model-dispositions.json`. This plan ships mechanism only.
 - `scripts/import_models_dev.py` must not change (Task 4 pins that with a test).
 - User-facing strings use plain language. The exact strings are: `Not yet listed on models.dev`, `Reviewed by Atlas from developer documentation`, and the kicker suffix ` · {n} not yet on models.dev`. Never show "gap", "null-source", or `null` to a reader.
@@ -98,7 +98,7 @@
 
     def test_null_source_id_still_requires_text_output(self) -> None:
         # validate_model_source_metadata already enforces this for every reviewed
-        # model (require_text defaults to True); the test pins it for ADR 036,
+        # model (require_text defaults to True); the test pins it for ADR 038,
         # because the importer's modality gate never sees a null-source record.
         def mutate(models: list[dict]) -> None:
             models[0]["source_id"] = None
@@ -140,7 +140,7 @@ In `validate_models`, replace the `source_id` block with:
 ```python
         source_id = model.get("source_id")
         if source_id is None:
-            # ADR 036: reviewed before models.dev listed it. The id stands in for
+            # ADR 038: reviewed before models.dev listed it. The id stands in for
             # the expected upstream id, so it must have the stable slug form.
             if not isinstance(model_id, str) or not re.fullmatch(
                 r"model-[a-z0-9]+(?:-[a-z0-9]+)*", model_id
@@ -261,7 +261,7 @@ Expected: FAIL (no such error text; `model_link_pending` not importable).
 def validate_model_source_links(
     models: list[Any], source_models: list[Any], errors: list[str]
 ) -> None:
-    """Check reviewed models against the snapshot they claim to come from (ADR 036)."""
+    """Check reviewed models against the snapshot they claim to come from (ADR 038)."""
     rows_by_source = {
         row.get("source_id"): row
         for row in source_models
@@ -288,7 +288,7 @@ def validate_model_source_links(
             errors.append(
                 f"{prefix}: id collides with models.dev row {colliding} while linked "
                 f"to {source_id}; unlink to null, link to {colliding}, and exclude "
-                f"{source_id} (ADR 036)"
+                f"{source_id} (ADR 038)"
             )
 
 
@@ -442,7 +442,7 @@ def model_records(catalog: dict[str, dict]) -> list[dict]:
     """Overlay reviewed Atlas models on the complete attributed source snapshot.
 
     A linked record matches its row by source_id. A record reviewed before
-    models.dev listed it has no source_id and matches by id (ADR 036).
+    models.dev listed it has no source_id and matches by id (ADR 038).
     """
     linked: dict[str, dict] = {}
     unlisted: dict[str, dict] = {}
@@ -512,7 +512,7 @@ git commit -m "Overlay null-source reviewed models by id in the Models payload"
 
 ```python
     def test_row_for_a_null_source_reviewed_model_is_queued_like_any_other(self) -> None:
-        # ADR 036: run() builds published_source_ids from string source_ids only, so a
+        # ADR 038: run() builds published_source_ids from string source_ids only, so a
         # reviewed record with source_id null never keeps its upstream row out of the queue.
         catalog = {"acme/chat": model_record("acme/chat")}
 
@@ -688,7 +688,7 @@ def _dispositioned(directory: Path) -> dict[str, str]:
 
 
 def _refuse_listed(directory: Path, expected_source_id: str, model_id: str) -> None:
-    """A gap review is only for releases models.dev does not list (ADR 036)."""
+    """A gap review is only for releases models.dev does not list (ADR 038)."""
     rows = load_json(directory / "models-dev.json").get("models") or []
     if any(
         isinstance(row, dict)
@@ -1187,7 +1187,7 @@ test("the models kicker counts reviewed models models.dev does not list", () => 
 - [ ] **Step 3: Implement the helpers** in `web/app-core.js`, above the `return {` export block, and add all four names to it in alphabetical position:
 
 ```js
-  // ADR 036: Atlas can review a release before models.dev lists it. Such a
+  // ADR 038: Atlas can review a release before models.dev lists it. Such a
   // record has source_id null and metadata written by Atlas, so nothing on
   // the page may credit models.dev for it.
   const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";
@@ -1302,13 +1302,13 @@ git commit -m "Show reviewed models that models.dev does not list yet"
 **Files:**
 - Modify: `docs/MODELS.md`, `docs/DATA_MODEL.md`, `docs/WEB.md`, `docs/OPERATIONS.md`, `docs/adr/025-…md`, `docs/adr/026-…md`, `docs/adr/027-…md`, `AGENTS.md`, `skills/ai-systems-atlas/reference.md`, `web/llms.txt`, `BACKLOG.md`, `tests/test_documentation.py`
 
-- [ ] **Step 1: Add ADR 036 to the manifest first** (the failing test). In `tests/test_documentation.py`, after the `035` line:
+- [ ] **Step 1: Add ADR 038 to the manifest first** (the failing test). In `tests/test_documentation.py`, after the `035` line:
 
 ```python
-            "docs/adr/036-reviewed-models-may-precede-their-models-dev-source-row.md",
+            "docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md",
 ```
 
-Run `uv run python -m unittest tests.test_documentation 2>&1 | tail -4`. Expected: FAIL — ADR 036 is not link-reachable from `AGENTS.md` yet.
+Run `uv run python -m unittest tests.test_documentation 2>&1 | tail -4`. Expected: FAIL — ADR 038 is not link-reachable from `AGENTS.md` yet.
 
 - [ ] **Step 2: `docs/MODELS.md`.**
   - `:17` last sentence becomes: "When a reviewed record has the same `source_id`, the UI overlays that reviewed record on the source row instead of showing a duplicate. A reviewed record whose `source_id` is `null` was reviewed before models.dev listed the release; it overlays a source row with the same `id` once one appears."
@@ -1319,7 +1319,7 @@ Run `uv run python -m unittest tests.test_documentation 2>&1 | tail -4`. Expecte
 ```markdown
 ### Releases models.dev does not list
 
-models.dev has gaps; a gap upstream is not a reason to leave a release out (ADR 036 {link to `adr/036-reviewed-models-may-precede-their-models-dev-source-row.md`}). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
+models.dev has gaps; a gap upstream is not a reason to leave a release out (ADR 038 {link to `adr/038-reviewed-models-may-precede-their-models-dev-source-row.md`}). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
 
 ```bash
 uv run python scripts/promote_model_candidate.py init-gap PROVIDER/MODEL --output model-review.json
@@ -1344,9 +1344,9 @@ Holds and exclusions still require a snapshot `source_id`, so a release models.d
 ```
 
   - Attribution paragraph: append "`source_metadata` on a record with `source_id: null` is hand-authored Atlas material under `LICENSE-DATA`, not models.dev data."
-  - Last line: add ", and ADR 036 {link to `adr/036-reviewed-models-may-precede-their-models-dev-source-row.md`} for releases models.dev does not list".
+  - Last line: add ", and ADR 038 {link to `adr/038-reviewed-models-may-precede-their-models-dev-source-row.md`} for releases models.dev does not list".
 
-- [ ] **Step 3: `docs/DATA_MODEL.md`** (`:214-230`). State: `source_id` is a models.dev ID present in the snapshot, or `null`; with `null`, `id` must be a stable slug, `source_metadata.modalities.output` must contain `text`, and `source_metadata` is authored by Atlas with `metadata_verified_at` attesting it; with a string, `source_metadata` is the models.dev copy taken at promotion or linking. Add to the validation sentence at `:222`: rejects a non-null `source_id` absent from the snapshot and a snapshot row whose `id` equals a differently linked record's `id`. At `:228-230` replace "overlays a reviewed `models.json` record with the same `source_id`" with the two-part rule. Link ADR 036.
+- [ ] **Step 3: `docs/DATA_MODEL.md`** (`:214-230`). State: `source_id` is a models.dev ID present in the snapshot, or `null`; with `null`, `id` must be a stable slug, `source_metadata.modalities.output` must contain `text`, and `source_metadata` is authored by Atlas with `metadata_verified_at` attesting it; with a string, `source_metadata` is the models.dev copy taken at promotion or linking. Add to the validation sentence at `:222`: rejects a non-null `source_id` absent from the snapshot and a snapshot row whose `id` equals a differently linked record's `id`. At `:228-230` replace "overlays a reviewed `models.json` record with the same `source_id`" with the two-part rule. Link ADR 038.
 
 - [ ] **Step 4: `docs/WEB.md`.** `:31` and `:89`: overlay rule; document `unlisted_reviewed_count` next to `reviewed_count`. In the browser verification matrix add one row: "Models: a reviewed model with `source_id: null` shows 'Not yet listed on models.dev' on the card and in the dialog, credits its metadata to Atlas, and is counted in the kicker."
 
@@ -1355,20 +1355,20 @@ Holds and exclusions still require a snapshot `source_id`, so a release models.d
 - [ ] **Step 6: ADR pointers.** Add one line directly under the `- Date:` line of ADRs 025, 026, 027:
 
 ```markdown
-- Amended by: ADR 036 {link to `036-reviewed-models-may-precede-their-models-dev-source-row.md`} (a reviewed model may have no models.dev row yet)
+- Amended by: ADR 038 {link to `038-reviewed-models-may-precede-their-models-dev-source-row.md`} (a reviewed model may have no models.dev row yet)
 ```
 
 Do not edit their Context, Decision, or Consequences.
 
-- [ ] **Step 7: `AGENTS.md` rule 11.** Append: " A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 036); its metadata is then Atlas-authored, never attributed to models.dev."
+- [ ] **Step 7: `AGENTS.md` rule 11.** Append: " A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 038); its metadata is then Atlas-authored, never attributed to models.dev."
 
 - [ ] **Step 8: Agent docs.** `skills/ai-systems-atlas/reference.md` after the field list at `:51`: "`source_id` is `null` when Atlas reviewed the release before models.dev listed it; `source_metadata` is then authored by Atlas from developer documentation rather than imported." Adjust `:53` so "imported from the pinned models.dev snapshot" is conditional on a non-null `source_id`. Apply the same one-sentence condition at `web/llms.txt:18`. Check `docs/AGENT_DOCS.md` for whether either file is generated; if a generator owns it, edit the generator input instead.
 
 - [ ] **Step 9: `BACKLOG.md`.** Add two open items in the Models section, and end the Harvey Tenet entry (`:101`) with "See the dispositions item below.":
 
 ```markdown
-- [ ] Curate Claude Mythos 5.1 as the first model reviewed without a models.dev row (ADR 036 {link to `docs/adr/036-reviewed-models-may-precede-their-models-dev-source-row.md`}): `init-gap anthropic/claude-mythos-5-1`, first-party evidence only, separate change from the mechanism.
-- [ ] Decide how to hold or exclude a release models.dev does not list. `model-dispositions.json` is keyed by snapshot `source_id`, so such a release can be reviewed (ADR 036) but not dispositioned.
+- [ ] Curate Claude Mythos 5.1 as the first model reviewed without a models.dev row (ADR 038 {link to `docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md`}): `init-gap anthropic/claude-mythos-5-1`, first-party evidence only, separate change from the mechanism.
+- [ ] Decide how to hold or exclude a release models.dev does not list. `model-dispositions.json` is keyed by snapshot `source_id`, so such a release can be reviewed (ADR 038) but not dispositioned.
 ```
 
 - [ ] **Step 10: Run.**

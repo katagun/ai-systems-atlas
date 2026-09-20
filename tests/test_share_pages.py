@@ -114,6 +114,15 @@ class SharePageTests(unittest.TestCase):
         self.assertIn("color-scheme: light dark", page)
         self.assertIn("@media (prefers-color-scheme: dark)", page)
 
+    def test_system_page_names_deployment_modes_from_the_taxonomy(self) -> None:
+        """Readers see the taxonomy's names, never an identifier with its underscores removed."""
+        page = self.pages["records/systems/superpowers/index.html"]
+        self.assertIn(
+            "<dt>Deployment</dt><dd>Local CLI · Installed into a host agent</dd>", page
+        )
+        self.assertNotIn("Host pack", page)
+        self.assertNotIn("Local cli", page)
+
     def test_other_collections_link_back_with_their_own_kind(self) -> None:
         self.assertIn(
             'href="../../../?record=spec:mcp"',

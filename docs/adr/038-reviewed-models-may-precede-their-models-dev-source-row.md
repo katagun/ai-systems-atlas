@@ -1,4 +1,4 @@
-# ADR 036: Reviewed models may precede their models.dev source row
+# ADR 038: Reviewed models may precede their models.dev source row
 
 - Status: Accepted
 - Date: 2026-09-20

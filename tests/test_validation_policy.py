@@ -2337,7 +2337,7 @@ class ValidationPolicyTests(unittest.TestCase):
     def _with_null_source_models(self, mutate) -> list[str]:
         """Turn the first reviewed model into a null-source record, apply mutate, validate.
 
-        ADR 036: a null-source record may not cite models.dev evidence (F2), so any
+        ADR 038: a null-source record may not cite models.dev evidence (F2), so any
         model `mutate` leaves with `source_id: None` has its models.dev evidence
         entries stripped here, once, instead of in every caller.
         """
@@ -2398,7 +2398,7 @@ class ValidationPolicyTests(unittest.TestCase):
 
     def test_null_source_id_still_requires_text_output(self) -> None:
         # validate_model_source_metadata already enforces this for every reviewed
-        # model (require_text defaults to True); the test pins it for ADR 036,
+        # model (require_text defaults to True); the test pins it for ADR 038,
         # because the importer's modality gate never sees a null-source record.
         def mutate(models: list[dict]) -> None:
             models[0]["source_id"] = None
@@ -2412,7 +2412,7 @@ class ValidationPolicyTests(unittest.TestCase):
         )
 
     def test_null_source_record_cannot_cite_models_dev_evidence(self) -> None:
-        """ADR 036: a null-source record contains no models.dev data, so no surface
+        """ADR 038: a null-source record contains no models.dev data, so no surface
         may attribute it to models.dev, including a leftover evidence entry left
         behind by a hand repair (unlink to null, upstream deletion)."""
 
@@ -2515,7 +2515,7 @@ class ValidationPolicyTests(unittest.TestCase):
     def test_null_source_record_whose_id_matches_a_row_claimed_by_another_is_rejected(
         self,
     ) -> None:
-        """Two reviews cannot both stand behind one models.dev row (ADR 036)."""
+        """Two reviews cannot both stand behind one models.dev row (ADR 038)."""
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         models_path = root / "directory" / "models.json"
@@ -2552,7 +2552,7 @@ class ValidationPolicyTests(unittest.TestCase):
         self,
     ) -> None:
         """A null-source id that merely coincides with an unclaimed row is the
-        normal link-pending state (ADR 036), not a collision."""
+        normal link-pending state (ADR 038), not a collision."""
 
         def mutate(models: list[dict]) -> None:
             models[0]["source_id"] = None
@@ -2560,7 +2560,7 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self._with_null_source_models(mutate)
 
         self.assertFalse(
-            [error for error in errors if "already linked to (ADR 036)" in error],
+            [error for error in errors if "already linked to (ADR 038)" in error],
             errors,
         )
 

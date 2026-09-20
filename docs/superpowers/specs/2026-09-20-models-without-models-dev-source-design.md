@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-20
 **Status:** Approved design, pending implementation plan
-**Decision record:** [ADR 036](../../adr/036-reviewed-models-may-precede-their-models-dev-source-row.md)
+**Decision record:** [ADR 038](../../adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)
 
 ## Problem
 
@@ -29,7 +29,7 @@ A first design (published `source_gap` block, importer-written `reconciliations`
 
 The Models grid sorts client-side by score or name (`web/app-core.js:123`), so the position of appended records in the payload is not visible.
 
-Validation rejects a snapshot row whose `id` equals a linked reviewed record's `id` while their `source_id` values differ, because the projection would emit that `id` twice. The repair is documented in ADR 036: unlink to `null`, link to the row whose stable ID matches, exclude the other row.
+Validation rejects a snapshot row whose `id` equals a linked reviewed record's `id` while their `source_id` values differ, because the projection would emit that `id` twice. The repair is documented in ADR 038: unlink to `null`, link to the row whose stable ID matches, exclude the other row.
 
 ### 3. The importer does not change
 
@@ -79,14 +79,14 @@ All on fixtures; no catalog record is added in this change.
 
 ### 7. Documentation
 
-- `docs/MODELS.md`: overlay wording (`:17`, `:52`); a "Releases models.dev does not list" subsection under Review workflow covering `init-gap`, link pending, `link`, wrong guess, upstream deletion; release-identity rules (`:86-101`) rephrased so they govern the release, not only "a models.dev ID"; attribution paragraph (`:126`) notes hand-authored metadata is Atlas material; link ADR 036 (`:128`).
+- `docs/MODELS.md`: overlay wording (`:17`, `:52`); a "Releases models.dev does not list" subsection under Review workflow covering `init-gap`, link pending, `link`, wrong guess, upstream deletion; release-identity rules (`:86-101`) rephrased so they govern the release, not only "a models.dev ID"; attribution paragraph (`:126`) notes hand-authored metadata is Atlas material; link ADR 038 (`:128`).
 - `docs/DATA_MODEL.md:214-230`: `source_id` nullable, `source_metadata` provenance conditional, new validation rules.
 - `docs/WEB.md:31`, `:89`: overlay by `id`; new envelope field; add the null-source card and dialog to the browser verification matrix.
 - `docs/OPERATIONS.md`: refresh review notes mention the `link pending` validator line.
-- `docs/adr/025` (`:20`), `026` (`:17`), `027` (`:18`): one-line "amended by ADR 036" pointers; decisions are not rewritten.
-- `AGENTS.md` rule 11: append that a reviewed record may exist before its models.dev row (ADR 036).
+- `docs/adr/025` (`:20`), `026` (`:17`), `027` (`:18`): one-line "amended by ADR 038" pointers; decisions are not rewritten.
+- `AGENTS.md` rule 11: append that a reviewed record may exist before its models.dev row (ADR 038).
 - `skills/ai-systems-atlas/reference.md:51-57` and the `llms.txt` generator input: `source_id` may be null; metadata provenance.
-- `tests/test_documentation.py:95-125`: add ADR 036 to the manifest; it is reachable through `docs/MODELS.md`.
+- `tests/test_documentation.py:95-125`: add ADR 038 to the manifest; it is reachable through `docs/MODELS.md`.
 - `BACKLOG.md`: new item for holds and exclusions of releases absent from models.dev; the Harvey Tenet entry (`:101`) points at it. New item to curate Claude Mythos 5.1.
 
 ## Out of scope

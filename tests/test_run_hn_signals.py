@@ -651,6 +651,57 @@ class PrepareDriftTests(unittest.TestCase):
         self.prepared_worktree({})
         self.assertEqual(1, run_hn_signals.prepare(limit=40, run=self.drifting_run))
 
+    @staticmethod
+    def quiet_run(_command: list[str], _cwd=None) -> tuple[int, str]:
+        return 0, ""
+
+    def prepare_output(self, **kwargs) -> tuple[int, str, str]:
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.prepare(run=self.quiet_run, **kwargs)
+        return code, stdout.getvalue(), stderr.getvalue()
+
+    def test_the_pending_list_is_printed_in_ranked_order(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        handed: dict[str, object] = {}
+
+        def ranker(pending, signals, pages):
+            handed.update(pending=pending, pages=pages)
+            return ["2", "1"], {"1": 0.02, "2": 0.9}
+
+        code, stdout, _ = self.prepare_output(limit=40, ranker=ranker)
+        self.assertEqual(0, code)
+        self.assertEqual(["1", "2"], handed["pending"])
+        self.assertEqual({"1": "an essay", "2": "an agent"}, handed["pages"])
+        self.assertIn("pending signals (2 of up to 40): ['2', '1']", stdout)
+        self.assertIn("never evidence", stdout)
+
+    def test_the_cap_keeps_the_likeliest_signal_not_the_lowest_id(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        code, stdout, _ = self.prepare_output(
+            limit=1, ranker=lambda *_: (["2", "1"], {"1": 0.02, "2": 0.9})
+        )
+        self.assertEqual(0, code)
+        self.assertIn("pending signals (1 of up to 1): ['2']", stdout)
+
+    def test_a_ranker_that_raises_leaves_sweep_order_and_a_passing_run(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+
+        def ranker(*_):
+            raise RuntimeError("boom")
+
+        code, stdout, stderr = self.prepare_output(limit=40, ranker=ranker)
+        self.assertEqual(0, code)
+        self.assertIn("pending signals (2 of up to 40): ['1', '2']", stdout)
+        self.assertIn("using sweep order", stderr)
+
+    def test_without_a_ranker_nothing_is_ranked(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        code, stdout, _ = self.prepare_output(limit=40)
+        self.assertEqual(0, code)
+        self.assertNotIn("ranked", stdout)
+        self.assertIn("['1', '2']", stdout)
+
 
 class BoundGuardTests(unittest.TestCase):
     """The blast-radius and prompt-drift guards are shared with candidate triage; what
@@ -1476,14 +1527,20 @@ class CLIFromRefWiringTests(unittest.TestCase):
                 ["prepare", "--from-ref", "local-sweep-branch", "--limit", "7"]
             )
         self.assertEqual(0, code)
-        prepare_mock.assert_called_once_with(limit=7, from_ref="local-sweep-branch")
+        prepare_mock.assert_called_once_with(
+            limit=7,
+            from_ref="local-sweep-branch",
+            ranker=run_hn_signals.default_ranker,
+        )
 
     def test_main_defaults_from_ref_to_origin_main(self) -> None:
         with mock.patch.object(
             run_hn_signals, "prepare", return_value=0
         ) as prepare_mock:
             run_hn_signals.main(["prepare"])
-        prepare_mock.assert_called_once_with(limit=40, from_ref="origin/main")
+        prepare_mock.assert_called_once_with(
+            limit=40, from_ref="origin/main", ranker=run_hn_signals.default_ranker
+        )
 
 
 class RealGitPrepareFinishRoundTripTests(unittest.TestCase):
