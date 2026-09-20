@@ -1352,6 +1352,11 @@
       "kind": "open_source"
     },
     {
+      "id": "LicenseRef-AWS-Service-Terms",
+      "name": "AWS Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-Alibaba-Model-Studio-Agreement",
       "name": "Alibaba Cloud Model Studio Service Agreement",
       "kind": "proprietary"
@@ -1560,6 +1565,11 @@
       "id": "LicenseRef-W3C-Software-Document",
       "name": "W3C Software and Document License",
       "kind": "open_content"
+    },
+    {
+      "id": "LicenseRef-ZAI-API-Terms",
+      "name": "Z.AI Terms of Use and API Services Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-xAI-AUP",

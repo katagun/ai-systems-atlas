@@ -238,7 +238,7 @@
   }
 
   // Scored systems that install into a host agent as a skills bundle, plugin,
-  // or vault (deployment mode host_pack, ADR 033). The Packs scope lists them
+  // or vault (deployment mode host_pack, ADR 034). The Packs scope lists them
   // beside the unscored packs; the search term is the only filter that applies,
   // because pack facets describe packs, not systems.
   function packShapedSystems(projects, filters = {}) {
