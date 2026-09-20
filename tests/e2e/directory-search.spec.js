@@ -659,6 +659,9 @@ test("the packs scope lists scored systems installed as packs inline without sco
   await page.locator('#pack-grid [data-project="superpowers"]').click();
   await expect(page.locator("#project-dialog")).toBeVisible();
   await expect(page).toHaveURL(/record=system(%3A|:)superpowers/);
+  // Deployment reads in the taxonomy's words, not a humanized identifier.
+  await expect(page.locator("#dialog-content")).toContainText("Deployment: Local CLI, Installed into a host agent");
+  await expect(page.locator("#dialog-content")).not.toContainText("Host Pack");
 });
 
 test("the systems deployment filter reaches systems installed into a host agent", async ({ page }) => {
