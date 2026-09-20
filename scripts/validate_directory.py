@@ -35,6 +35,7 @@ PUBLISHED_DATA = (
     "models.json",
     "models-dev.json",
     "packs.json",
+    "robots.json",
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA,
@@ -132,6 +133,11 @@ TAXONOMY_GROUPS = (
     "pack_types",
     "pack_hosts",
     "pack_install_mechanisms",
+    "robot_form_factors",
+    "robot_ai_bases",
+    "robot_availability",
+    "robot_model_kinds",
+    "robot_terms_kinds",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -1607,6 +1613,23 @@ def validate_packs(
     return packs_value
 
 
+def validate_robots(
+    robots_data: dict[str, Any],
+    tax: Taxonomy,
+    index: ProjectIndex,
+    errors: list[str],
+) -> list[Any]:
+    """Validate unscored robot records: what a vendor documents, never what a robot does (ADR 037)."""
+    robots_value = validate_collection_envelope(
+        robots_data, "robots.json", "1.0", "robots", errors
+    )
+    for robot in robots_value:
+        if not isinstance(robot, dict):
+            errors.append("robots.json: every robot must be an object")
+            continue
+    return robots_value
+
+
 def validate_inference_services(
     inference_services_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -2951,6 +2974,7 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
+    validate_robots(catalog["robots.json"], tax, index, errors)
 
     validate_unique_record_ids(
         index.projects,
@@ -3012,12 +3036,14 @@ def main() -> int:
     model_count = len(load("models.json")["models"])
     source_model_count = len(load("models-dev.json")["models"])
     pack_count = len(load("packs.json")["packs"])
+    robot_count = len(load("robots.json")["robots"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
         f"{inference_service_count} scored inference services; "
         f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
         f"{pack_count} unscored agent packs; "
+        f"{robot_count} unscored robots; "
         f"{source_model_count} attributed models.dev source records"
     )
     return 0

@@ -654,6 +654,131 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    SAMPLE_ROBOT: ClassVar[dict] = {
+        "id": "sample-robot",
+        "name": "Sample Robot",
+        "manufacturer": "Example Robotics",
+        "url": "https://robots.example/sample",
+        "first_party_domains": ["robots.example", "github.com/example-robotics"],
+        "description": "A humanoid whose maker documents a vision-language-action model.",
+        "form_factor": "humanoid",
+        "availability": "reservation",
+        "availability_note": "Reservations open in two regions.",
+        "ai_basis": ["vendor_named_model"],
+        "named_models": [
+            {
+                "name": "Sample-VLA",
+                "kind": "vision_language_action",
+                "role_note": "The vendor says it turns camera frames and a spoken request into arm and hand motion.",
+                "evidence_label": "Model announcement",
+            }
+        ],
+        "research_confidence": "medium",
+        "hardware": {
+            "compute": "Not published.",
+            "sensors": "Two head cameras and a depth sensor, per the spec sheet.",
+            "actuation": "Electric actuators in both arms and hands.",
+            "power": "Not published.",
+        },
+        "developer_access": "The vendor documents no SDK.",
+        "terms": ["terms_of_sale"],
+        "terms_note": "Terms of sale cover the purchase and name no software licence.",
+        "terms_evidence": [
+            {
+                "terms_kind": "terms_of_sale",
+                "scope": "Purchase terms",
+                "kind": "web_terms",
+                "url": "https://robots.example/terms",
+                "verified_at": "2026-09-20",
+            }
+        ],
+        "not_verified": "The model named here is the maker's own claim and is not verified by the Atlas; every source is a web page the maker can change.",
+        "status": "active",
+        "evidence": [
+            {
+                "kind": "web",
+                "role": "product_page",
+                "label": "Product page",
+                "url": "https://robots.example/sample",
+                "verified_at": "2026-09-20",
+            },
+            {
+                "kind": "web",
+                "role": "technical_documentation",
+                "label": "Spec sheet",
+                "url": "https://docs.robots.example/sample/specs",
+                "verified_at": "2026-09-20",
+            },
+            {
+                "kind": "web",
+                "role": "named_model",
+                "label": "Model announcement",
+                "url": "https://robots.example/news/sample-vla",
+                "verified_at": "2026-09-20",
+            },
+        ],
+        "verified_at": "2026-09-20",
+    }
+
+    def catalog_with_robot(self, mutate=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic robot."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        robots_path = root / "directory" / "robots.json"
+        document = json.loads(robots_path.read_text(encoding="utf-8"))
+        robot = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        document["robots"] = [robot]
+        if mutate is not None:
+            mutate(robot, root)
+        self.write_json(robots_path, document)
+        self.write_json(root / "web" / "robots.json", document)
+        return validate(root)
+
+    def test_the_committed_robots_collection_validates(self) -> None:
+        self.assertEqual([], validate(ROOT))
+
+    def test_robot_taxonomy_groups_exist(self) -> None:
+        taxonomy = json.loads(
+            (ROOT / "directory" / "taxonomy.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            ["humanoid", "quadruped", "arm", "mobile_manipulator", "other"],
+            [item["id"] for item in taxonomy["robot_form_factors"]],
+        )
+        self.assertEqual(
+            [
+                "orderable",
+                "reservation",
+                "enterprise_sales",
+                "research_only",
+                "announced",
+            ],
+            [item["id"] for item in taxonomy["robot_availability"]],
+        )
+        self.assertEqual(
+            [
+                "vision_language_action",
+                "language_or_vision_language",
+                "reinforcement_learning_policy",
+                "other_learned",
+            ],
+            [item["id"] for item in taxonomy["robot_model_kinds"]],
+        )
+        self.assertEqual(
+            [
+                "terms_of_sale",
+                "sdk_license",
+                "software_terms",
+                "warranty_only",
+                "none_published",
+            ],
+            [item["id"] for item in taxonomy["robot_terms_kinds"]],
+        )
+        self.assertEqual(
+            ["vendor_named_model", "open_model_interface"],
+            [item["id"] for item in taxonomy["robot_ai_bases"]],
+        )
+
     def catalog_with_malformed_record(
         self, document: str, key: str, entry: object
     ) -> list[str]:
@@ -690,6 +815,7 @@ class ValidationPolicyTests(unittest.TestCase):
             ("local-runtimes.json", "runtimes", "every runtime must be an object"),
             ("models.json", "models", "every model must be an object"),
             ("packs.json", "packs", "every pack must be an object"),
+            ("robots.json", "robots", "every robot must be an object"),
         ):
             with self.subTest(document=document):
                 errors = self.catalog_with_malformed_record(
