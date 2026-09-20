@@ -721,14 +721,19 @@ class ValidationPolicyTests(unittest.TestCase):
         "verified_at": "2026-09-20",
     }
 
-    def catalog_with_robot(self, mutate=None) -> list[str]:
-        """Validate a temporary catalog holding one synthetic robot."""
+    def catalog_with_robot(self, mutate=None, extra_robots=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic robot.
+
+        ``extra_robots`` lets a test add further robot records (e.g. to exercise
+        a duplicate repo or url across two robots) without duplicating the whole
+        fixture; ``mutate`` still only ever edits the first (primary) robot.
+        """
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         robots_path = root / "directory" / "robots.json"
         document = json.loads(robots_path.read_text(encoding="utf-8"))
         robot = json.loads(json.dumps(self.SAMPLE_ROBOT))
-        document["robots"] = [robot]
+        document["robots"] = [robot, *(extra_robots or [])]
         if mutate is not None:
             mutate(robot, root)
         self.write_json(robots_path, document)
@@ -1247,7 +1252,7 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_robot(mutate)
         self.assertTrue(any("is already a system record" in e for e in errors), errors)
 
-    def test_robot_repo_cannot_be_a_system_pack_candidate_or_exclusion(self) -> None:
+    def test_robot_repo_cannot_also_be_a_published_system(self) -> None:
         def mutate(robot, root):
             projects = json.loads(
                 (root / "directory" / "projects.json").read_text(encoding="utf-8")
@@ -1260,6 +1265,61 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertTrue(
             any("cannot be both a system and a robot" in e for e in errors), errors
         )
+
+    def test_robot_repo_cannot_also_be_a_pack(self) -> None:
+        def mutate(robot, root):
+            packs = json.loads(
+                (root / "directory" / "packs.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = packs["packs"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both a pack and a robot" in e for e in errors), errors
+        )
+
+    def test_robot_repo_cannot_also_be_a_candidate(self) -> None:
+        def mutate(robot, root):
+            candidates = json.loads(
+                (root / "directory" / "candidates.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = candidates["candidates"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both candidates and robots" in e for e in errors), errors
+        )
+
+    def test_robot_repo_cannot_also_be_excluded(self) -> None:
+        def mutate(robot, root):
+            exclusions = json.loads(
+                (root / "directory" / "exclusions.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = exclusions["entries"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both included and excluded" in e for e in errors), errors
+        )
+
+    def test_two_robots_cannot_share_a_repo(self) -> None:
+        second = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        second["id"] = "sample-robot-two"
+        second["url"] = "https://robots.example/sample-two"
+
+        def mutate(robot, root):
+            robot["repo"] = "example-robotics/sdk"
+            second["repo"] = "example-robotics/sdk"
+
+        errors = self.catalog_with_robot(mutate, extra_robots=[second])
+        self.assertTrue(any("duplicate robot repository" in e for e in errors), errors)
+
+    def test_two_robots_cannot_share_a_url(self) -> None:
+        second = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        second["id"] = "sample-robot-two"
+
+        errors = self.catalog_with_robot(extra_robots=[second])
+        self.assertTrue(any("duplicate robot url" in e for e in errors), errors)
 
     def test_robot_superseded_by_list_is_an_error_not_a_crash(self) -> None:
         def mutate(robot, root):
