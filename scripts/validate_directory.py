@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.parse
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -1660,6 +1661,233 @@ def validate_packs(
     return packs_value
 
 
+ROBOT_EVIDENCE_ROLES = (
+    "product_page",
+    "technical_documentation",
+    "named_model",
+    "model_interface",
+    "supporting",
+)
+ROBOT_BASIS_EVIDENCE_ROLE = {
+    "vendor_named_model": "named_model",
+    "open_model_interface": "model_interface",
+}
+FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+")
+FIRST_PARTY_GITHUB_ORG = re.compile(
+    r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
+)
+# Hosts many unrelated parties publish on. A bare entry would make every tenant
+# first-party, so a shared host enters only as github.com/<org>.
+MULTI_TENANT_HOSTS = frozenset(
+    {
+        "github.com",
+        "github.io",
+        "gitlab.com",
+        "huggingface.co",
+        "youtube.com",
+        "medium.com",
+        "substack.com",
+        "notion.site",
+        "x.com",
+        "twitter.com",
+        "linkedin.com",
+    }
+)
+
+
+def url_is_first_party(url: object, domains: list[str]) -> bool:
+    """True when `url` falls under a declared host, a subdomain of one, or a GitHub org."""
+    if not isinstance(url, str):
+        return False
+    parsed = urllib.parse.urlsplit(url)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme != "https" or not host:
+        return False
+    segments = [part for part in parsed.path.split("/") if part]
+    # api.github.com blob URLs are /repos/<owner>/<repo>/git/blobs/<sha>.
+    owner_position = {
+        "github.com": 0,
+        "raw.githubusercontent.com": 0,
+        "api.github.com": 1,
+    }
+    for entry in domains:
+        if "/" in entry:
+            position = owner_position.get(host)
+            if (
+                position is not None
+                and len(segments) > position
+                and segments[position].lower() == entry.split("/", 1)[1].lower()
+            ):
+                return True
+        elif host == entry or host.endswith("." + entry):
+            return True
+    return False
+
+
+def validate_robot_first_party_domains(
+    robot: dict[str, Any], prefix: str, errors: list[str]
+) -> list[str]:
+    """Validate first_party_domains and return the entries that are usable as anchors."""
+    domains = robot.get("first_party_domains")
+    if not isinstance(domains, list) or not domains:
+        errors.append(f"{prefix}: first_party_domains must be a non-empty list")
+        domains = []
+    clean_domains: list[str] = []
+    for entry in domains:
+        if (
+            isinstance(entry, str)
+            and entry in MULTI_TENANT_HOSTS
+            and entry != "github.com"
+        ):
+            errors.append(
+                f"{prefix}: first_party_domains entry {entry!r} is a shared host"
+            )
+        elif isinstance(entry, str) and (
+            FIRST_PARTY_GITHUB_ORG.fullmatch(entry)
+            or (FIRST_PARTY_HOST.fullmatch(entry) and entry != "github.com")
+        ):
+            clean_domains.append(entry)
+        else:
+            errors.append(
+                f"{prefix}: first_party_domains entries must be a bare lowercase "
+                f"host or github.com/<org>, not {entry!r}"
+            )
+    return clean_domains
+
+
+def validate_robot_evidence_roles(
+    robot: dict[str, Any],
+    ai_basis: list[str],
+    named_models: list[Any],
+    repo: Any,
+    prefix: str,
+    errors: list[str],
+) -> list[dict[str, Any]]:
+    """Validate evidence roles against ai_basis and named_models; return the clean items."""
+    evidence_value = robot.get("evidence")
+    validate_evidence_items(evidence_value, repo, prefix, errors)
+    evidence = (
+        [item for item in evidence_value if isinstance(item, dict)]
+        if isinstance(evidence_value, list)
+        else []
+    )
+    for item in evidence:
+        if item.get("role") not in ROBOT_EVIDENCE_ROLES:
+            errors.append(
+                f"{prefix}: unknown evidence role {item.get('role')!r} on "
+                f"{item.get('label')!r}"
+            )
+        # unpinnable marks a source the vendor can silently edit (a marketing page
+        # rather than a dated capture); it may only soften web evidence, and only
+        # when explicitly true, never a pinned git blob or a falsy placeholder.
+        if "unpinnable" in item and (
+            item["unpinnable"] is not True or item.get("kind") != "web"
+        ):
+            errors.append(
+                f"{prefix}: unpinnable must be true when present, "
+                "and only on web evidence"
+            )
+    present_roles = {item.get("role") for item in evidence}
+    required_roles = ["product_page"] + [
+        ROBOT_BASIS_EVIDENCE_ROLE[basis]
+        for basis in ai_basis
+        if basis in ROBOT_BASIS_EVIDENCE_ROLE
+    ]
+    missing_roles = [role for role in required_roles if role not in present_roles]
+    if missing_roles:
+        errors.append(f"{prefix}: evidence lacks required roles {missing_roles}")
+    named_model_labels = {
+        item.get("label") for item in evidence if item.get("role") == "named_model"
+    }
+    for entry in named_models:
+        if (
+            isinstance(entry, dict)
+            and entry.get("evidence_label") not in named_model_labels
+        ):
+            errors.append(
+                f"{prefix}: named model {entry.get('name')!r} evidence_label "
+                f"{entry.get('evidence_label')!r} does not name a named_model source"
+            )
+    return evidence
+
+
+def validate_robot_terms(
+    robot: dict[str, Any],
+    enum_ids: dict[str, set[str]],
+    prefix: str,
+    errors: list[str],
+) -> list[dict[str, Any]]:
+    """Validate terms and terms_evidence together; return the clean evidence items."""
+    validate_string_list(robot, "terms", enum_ids["robot_terms_kinds"], prefix, errors)
+    terms_value = robot.get("terms")
+    terms = terms_value if isinstance(terms_value, list) else []
+    if "none_published" in terms and len(terms) > 1:
+        errors.append(f"{prefix}: none_published must appear alone in terms")
+
+    terms_evidence_value = robot.get("terms_evidence")
+    if not isinstance(terms_evidence_value, list):
+        errors.append(f"{prefix}: terms_evidence must be a list")
+        terms_evidence_value = []
+
+    # The allowed key set: the five required fields, plus an optional `unpinnable`
+    # that is checked on its own below (see the comment there) so this schema check
+    # only ever reports a genuinely wrong shape.
+    terms_evidence_keys = {"terms_kind", "scope", "kind", "url", "verified_at"}
+    terms_evidence: list[dict[str, Any]] = []
+    covered: set[object] = set()
+    for item in terms_evidence_value:
+        if not isinstance(item, dict):
+            errors.append(
+                f"{prefix}: terms evidence must match the terms evidence schema"
+            )
+            continue
+        terms_evidence.append(item)
+        if set(item) - {"unpinnable"} != terms_evidence_keys:
+            errors.append(
+                f"{prefix}: terms evidence must match the terms evidence schema"
+            )
+            continue
+        if item.get("unpinnable", True) is not True:
+            errors.append(
+                f"{prefix}: terms evidence unpinnable must be true when present"
+            )
+            continue
+        covered.add(item["terms_kind"])
+        if item["kind"] != "web_terms":
+            errors.append(f"{prefix}: terms evidence kind must be web_terms")
+        if not isinstance(item["scope"], str) or not item["scope"].strip():
+            errors.append(f"{prefix}: terms evidence requires a scope")
+        if not valid_date(item["verified_at"]):
+            errors.append(f"{prefix}: terms evidence requires verified_at")
+    expected_terms = set(terms) - {"none_published"}
+    if covered != expected_terms:
+        errors.append(f"{prefix}: terms evidence does not match terms")
+    return terms_evidence
+
+
+def validate_robot_first_party_urls(
+    robot: dict[str, Any],
+    evidence: list[dict[str, Any]],
+    terms_evidence: list[dict[str, Any]],
+    clean_domains: list[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    """Every URL a robot record cites must resolve under a declared first-party domain."""
+    for label, url in (
+        [("url", robot.get("url"))]
+        + [(f"evidence {item.get('label')!r}", item.get("url")) for item in evidence]
+        + [
+            (f"evidence {item.get('label')!r} immutable_url", item["immutable_url"])
+            for item in evidence
+            if "immutable_url" in item
+        ]
+        + [("terms evidence", item.get("url")) for item in terms_evidence]
+    ):
+        if not url_is_first_party(url, clean_domains):
+            errors.append(f"{prefix}: {label} {url!r} is not first-party")
+
+
 def validate_robots(
     robots_data: dict[str, Any],
     tax: Taxonomy,
@@ -1774,6 +2002,23 @@ def validate_robots(
                     errors.append(
                         f"{prefix}: hardware.{field} must be a non-empty string"
                     )
+
+        clean_domains = validate_robot_first_party_domains(robot, prefix, errors)
+
+        repo = robot.get("repo")
+        if repo is not None and (
+            not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)
+        ):
+            errors.append(f"{prefix}: repo must be owner/name when present")
+            repo = None
+
+        evidence = validate_robot_evidence_roles(
+            robot, ai_basis, named_models, repo, prefix, errors
+        )
+        terms_evidence = validate_robot_terms(robot, enum_ids, prefix, errors)
+        validate_robot_first_party_urls(
+            robot, evidence, terms_evidence, clean_domains, prefix, errors
+        )
     return robots_value
 
 
