@@ -45,7 +45,11 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
   const apiNames = catalogCounts.reviewedModelsWithDistribution("developer_api");
   await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(0, 96));
   await page.locator("#model-pager [data-pager-next]").click();
-  await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(96));
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(96, 192));
+  if (apiNames.length > 192) {
+    await page.locator("#model-pager [data-pager-next]").click();
+    await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(192));
+  }
 
   await page.locator("#reset-model-filters").click();
   await page.locator(`#model-grid [data-model="${QWEN}"]`).click();

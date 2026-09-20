@@ -1562,6 +1562,11 @@
       "kind": "open_content"
     },
     {
+      "id": "LicenseRef-ZAI-API-Terms",
+      "name": "Z.AI Terms of Use and API Services Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-xAI-AUP",
       "name": "xAI Acceptable Use Policy",
       "kind": "proprietary"

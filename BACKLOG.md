@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-eighth models.dev queue batch: Mistral (`mistral/devstral-small-2`, `magistral-small-2509`, `ministral-3-14b-instruct-2512`, `ministral-3-8b-instruct-2512`, `ministral-3-3b-instruct-2512`, `ministral-14b`, `ministral-3b`, `pixtral-large-2502`). The weight lines carry Apache-2.0 or the Mistral research and non-production licenses; the Pixtral Large line is API-only. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Voxtral audio pair stays queued for later.
+- [ ] Curate the thirty-ninth models.dev queue batch: GLM-5 family and Voxtral (`zhipuai/glm-4.5-flash`, `glm-5-turbo`, `glm-5.1`, `glm-5.2`, `glm-5v-turbo`, `mistral/voxtral-mini-3b-2507`, `voxtral-small-24b-2507`). The GLM-5 lines carry the modified-MIT or GLM-5.3-style licenses; the Turbo lines are API-only; the Voxtral pair are audio-input weight releases. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Amazon, OpenAI, and leftover clusters stay queued for later.
 
 ### Reader experience
 
