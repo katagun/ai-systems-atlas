@@ -26,6 +26,12 @@ finding that asserts something about a page past that marker; you have not read 
 Then, for each signal in the bundle that has no `assessment` yet, add one to that signal
 in `directory/hn-signals.json` — and change nothing else, in no other file.
 
+Work through the pending signals in the order `prepare` prints them. When it says it
+ranked them, the likeliest systems come first, so a run that is cut short has done the
+signals that matter most. That order is a reading order and nothing more: assess every
+pending signal exactly as you would have, never mention a rank in a `finding`, and never
+let a late position stand in for reading the page.
+
 Finally:
 
     uv run python scripts/run_hn_signals.py finish
