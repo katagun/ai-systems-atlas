@@ -2329,6 +2329,88 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = validate(root)
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
 
+    def _with_null_source_models(self, mutate) -> list[str]:
+        """Turn the first reviewed model into a null-source record, apply mutate, validate."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        mutate(document["models"])
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models.json", document)
+        return validate(root)
+
+    def test_null_source_id_is_accepted_for_a_slug_id_with_text_output(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        # The detached upstream row now needs a queue entry or disposition, so the
+        # eligible-count error is expected; nothing may complain about the model.
+        self.assertFalse(
+            [error for error in errors if error.startswith("model ")], errors
+        )
+
+    def test_two_null_source_records_do_not_collide(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[1]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertFalse(
+            [error for error in errors if "duplicate models.dev source_id" in error],
+            errors,
+        )
+
+    def test_null_source_id_requires_a_stable_slug_id(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["id"] = "model-Not_A_Slug"
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any(
+                "without a models.dev source_id needs a stable slug id" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_null_source_id_still_requires_text_output(self) -> None:
+        # validate_model_source_metadata already enforces this for every reviewed
+        # model (require_text defaults to True); the test pins it for ADR 036,
+        # because the importer's modality gate never sees a null-source record.
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["source_metadata"]["modalities"]["output"] = ["image"]
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any("model candidates must produce text" in e for e in errors),
+            errors,
+        )
+
+    def test_empty_string_source_id_is_still_rejected(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = ""
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any("invalid models.dev source_id" in e for e in errors), errors
+        )
+
+    def test_validator_and_importer_derive_the_same_stable_id(self) -> None:
+        from scripts.import_models_dev import stable_model_id as importer_id
+        from scripts.validate_directory import stable_model_id as validator_id
+
+        for source_id in ("anthropic/claude-mythos-5-1", "Acme/Big_Model.v2", "x/y--z"):
+            self.assertEqual(importer_id(source_id), validator_id(source_id))
+
 
 if __name__ == "__main__":
     unittest.main()

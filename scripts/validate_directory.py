@@ -1896,6 +1896,11 @@ def validate_model_source_metadata(
                 )
 
 
+def stable_model_id(source_id: str) -> str:
+    """The id models.dev import derives for a source id; kept equal to the importer's."""
+    return "model-" + re.sub(r"[^a-z0-9]+", "-", source_id.lower()).strip("-")
+
+
 def validate_models(
     models_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -1948,7 +1953,16 @@ def validate_models(
         ):
             errors.append(f"{prefix}: invalid id")
         source_id = model.get("source_id")
-        if not isinstance(source_id, str) or not re.fullmatch(
+        if source_id is None:
+            # ADR 036: reviewed before models.dev listed it. The id stands in for
+            # the expected upstream id, so it must have the stable slug form.
+            if not isinstance(model_id, str) or not re.fullmatch(
+                r"model-[a-z0-9]+(?:-[a-z0-9]+)*", model_id
+            ):
+                errors.append(
+                    f"{prefix}: a model without a models.dev source_id needs a stable slug id"
+                )
+        elif not isinstance(source_id, str) or not re.fullmatch(
             r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id
         ):
             errors.append(f"{prefix}: invalid models.dev source_id")
@@ -2131,9 +2145,7 @@ def validate_models_dev(
             errors.append(f"{prefix}: duplicate source_id")
         else:
             source_ids.add(source_id)
-            expected_id = "model-" + re.sub(
-                r"[^a-z0-9]+", "-", source_id.lower()
-            ).strip("-")
+            expected_id = stable_model_id(source_id)
             if model_id != expected_id:
                 errors.append(
                     f"{prefix}: id must be the stable source-derived id {expected_id}"
