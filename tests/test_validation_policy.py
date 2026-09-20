@@ -1150,6 +1150,54 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    def test_robot_urls_accept_a_trailing_dot_fqdn(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][2]["url"] = "https://robots.example./news/sample-vla"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_non_string_terms_kind_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["terms_evidence"][0]["terms_kind"] = ["terms_of_sale"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("terms evidence terms_kind must be a string" in e for e in errors),
+            errors,
+        )
+
+    def test_robot_non_string_evidence_role_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][0]["role"] = ["product_page"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown evidence role" in e for e in errors), errors)
+
+    def test_robot_non_string_evidence_label_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][2]["label"] = {"en": "Model announcement"}
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("does not name a named_model source" in e for e in errors), errors
+        )
+
+    def test_robot_non_string_named_model_evidence_label_is_an_error_not_a_crash(
+        self,
+    ) -> None:
+        def mutate(robot, root):
+            robot["named_models"][0]["evidence_label"] = ["Model announcement"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any(
+                "named_models.evidence_label must be a non-empty string" in e
+                for e in errors
+            ),
+            errors,
+        )
+
     def catalog_with_malformed_record(
         self, document: str, key: str, entry: object
     ) -> list[str]:

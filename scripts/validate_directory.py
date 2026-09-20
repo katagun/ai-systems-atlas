@@ -1700,7 +1700,9 @@ def url_is_first_party(url: object, domains: list[str]) -> bool:
     if not isinstance(url, str):
         return False
     parsed = urllib.parse.urlsplit(url)
-    host = (parsed.hostname or "").lower()
+    # A trailing dot makes a hostname fully qualified without changing what it
+    # names, so robots.example. must anchor the same as robots.example.
+    host = (parsed.hostname or "").lower().rstrip(".")
     if parsed.scheme != "https" or not host:
         return False
     segments = [part for part in parsed.path.split("/") if part]
@@ -1787,7 +1789,12 @@ def validate_robot_evidence_roles(
                 f"{prefix}: unpinnable must be true when present, "
                 "and only on web evidence"
             )
-    present_roles = {item.get("role") for item in evidence}
+    # A role that failed the ROBOT_EVIDENCE_ROLES check above is already reported;
+    # only a string can be hashed into this set, so a list or dict role is dropped
+    # here rather than crashing the set comprehension.
+    present_roles = {
+        item.get("role") for item in evidence if isinstance(item.get("role"), str)
+    }
     required_roles = ["product_page"] + [
         ROBOT_BASIS_EVIDENCE_ROLE[basis]
         for basis in ai_basis
@@ -1797,16 +1804,21 @@ def validate_robot_evidence_roles(
     if missing_roles:
         errors.append(f"{prefix}: evidence lacks required roles {missing_roles}")
     named_model_labels = {
-        item.get("label") for item in evidence if item.get("role") == "named_model"
+        item.get("label")
+        for item in evidence
+        if item.get("role") == "named_model" and isinstance(item.get("label"), str)
     }
     for entry in named_models:
-        if (
-            isinstance(entry, dict)
-            and entry.get("evidence_label") not in named_model_labels
-        ):
+        if not isinstance(entry, dict):
+            continue
+        evidence_label = entry.get("evidence_label")
+        # A non-string evidence_label already failed the named_models schema check
+        # above (Task 3); testing it against a set of labels here would otherwise
+        # crash on an unhashable list or dict.
+        if isinstance(evidence_label, str) and evidence_label not in named_model_labels:
             errors.append(
                 f"{prefix}: named model {entry.get('name')!r} evidence_label "
-                f"{entry.get('evidence_label')!r} does not name a named_model source"
+                f"{evidence_label!r} does not name a named_model source"
             )
     return evidence
 
@@ -1852,7 +1864,14 @@ def validate_robot_terms(
                 f"{prefix}: terms evidence unpinnable must be true when present"
             )
             continue
-        covered.add(item["terms_kind"])
+        terms_kind = item["terms_kind"]
+        if isinstance(terms_kind, str):
+            # An unknown-but-real kind is left to the coverage check below, which
+            # reports it by name; only a non-string can't be hashed into `covered`
+            # at all, so it needs its own error here.
+            covered.add(terms_kind)
+        else:
+            errors.append(f"{prefix}: terms evidence terms_kind must be a string")
         if item["kind"] != "web_terms":
             errors.append(f"{prefix}: terms evidence kind must be web_terms")
         if not isinstance(item["scope"], str) or not item["scope"].strip():
