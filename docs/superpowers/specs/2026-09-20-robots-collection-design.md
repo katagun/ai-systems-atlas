@@ -42,7 +42,7 @@ Condition 3 is batch 39's untested property, exercised. It is establishable for 
 
 Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. They are listed alphabetically.
 
-The collection's weak point is stated on every record: the named-model fact is the vendor's own claim, which the Atlas cannot verify, and the evidence is mutable web content. `not_verified` carries that sentence.
+The collection's weak point is stated on every record: the named-model fact is the vendor's own claim, which the Atlas cannot verify, and the evidence is mutable web content. `not_verified` carries that sentence. The same holds of a documented model interface, which is a promise the maker publishes about its own product: the record reports the promise and nothing more, and an interface-only record's `not_verified` says so in those terms.
 
 Significance is not a gate, and the collection says what that costs, as ADR 032 did for packs: nothing refuses the tenth quadruped except the queue and the ecosystem-significance judgement `docs/COVERAGE.md` already applies to the ninth coding agent.
 
@@ -63,7 +63,7 @@ Top-level key `robots`. Validation mirrors packs: required, optional, and forbid
 | `availability_note` | The vendor's statement in prose. No price. |
 | `ai_basis` | Non-empty list from the new group `robot_ai_bases`: `vendor_named_model`, `open_model_interface`. `vendor_named_model` is present exactly when `named_models` is non-empty. |
 | `named_models` | List, empty only when `ai_basis` lacks `vendor_named_model`. Each entry: `name`, `kind` (group `robot_model_kinds`: `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`), `role_note` (what the vendor says the model does), `evidence_label` (the `label` of an entry in `evidence`). |
-| `research_confidence` | Existing `low` / `medium` / `high`, rating how well the documentation supports `named_models`. |
+| `research_confidence` | Existing `low` / `medium` / `high`, rating how well the documentation supports the recorded `ai_basis` — the named model, the model interface, or both. |
 | `hardware` | Object with prose fields `compute`, `sensors`, `actuation`, `power`. Each required; each may be `"Not published."`. |
 | `developer_access` | What the vendor documents for running the reader's own software or policy, or that it documents none. When `ai_basis` includes `open_model_interface`, this says what the interface is and what it lets a model control, in the vendor's terms. |
 | `terms` | Non-empty list from the new group `robot_terms_kinds`: `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`. `none_published` appears alone. |
