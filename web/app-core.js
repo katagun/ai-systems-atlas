@@ -249,6 +249,17 @@
       .sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  // The Packs scope lists one grid of installables: unscored packs beside
+  // scored host-installed systems (ADR 035). Both inputs arrive pre-filtered
+  // and name-sorted; the merge keeps that order with kind as tiebreak, the
+  // same rule filterDirectoryEntries uses for mixed entries.
+  function mergePackScopeEntries(packs, systems) {
+    return [
+      ...packs.map(record => ({ kind: "pack", record })),
+      ...systems.map(record => ({ kind: "system", record })),
+    ].sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
+  }
+
   function paginate(items, { page = 1, pageSize } = {}) {
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const clampedPage = Math.min(Math.max(1, page), pageCount);
@@ -480,6 +491,7 @@
     filterSpecifications,
     matchesProject,
     matchesRecordSearch,
+    mergePackScopeEntries,
     monogramGlyph,
     packShapedSystems,
     paginate,

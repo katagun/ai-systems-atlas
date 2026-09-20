@@ -661,15 +661,18 @@ function importedModelCard(model, { mixed = false } = {}) {
   </article>`;
 }
 
-function mixedSystemCard(record) {
+function mixedSystemCard(record, { hideScoreFooter = false } = {}) {
   const location = projectLocation(record);
+  const footer = hideScoreFooter
+    ? `<div class="card-footer"><button data-project="${escapeHTML(record.id)}">View details →</button></div>`
+    : `<div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>`;
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
       <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", record))}
-      <div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
+      ${footer}
     </article>`;
 }
 
@@ -881,25 +884,6 @@ const COLLECTIONS = {
     <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
   </article>`,
   },
-  packs: {
-    grid: "#pack-grid",
-    resultCount: "#pack-result-count",
-    pageKey: "packs",
-    dataset: "pack",
-    noun: ["pack", "packs"],
-    empty: "No agent packs match these filters.",
-    open: id => openPack(id),
-    context: () => ({ suffix: " · Unscored", comparable: false }),
-    records: () => AtlasCore.filterPacks(state.packs, {
-      term: $("#pack-search").value,
-      searchIndex: searchIndexes.packs,
-      type: $("#pack-type-filter").value,
-      host: $("#pack-host-filter").value,
-      install: $("#pack-install-filter").value,
-      license: $("#pack-license-filter").value,
-    }),
-    card: pack => packCard(pack),
-  },
   models: {
     grid: "#model-grid",
     resultCount: "#model-result-count",
@@ -964,21 +948,38 @@ const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
-function renderPackShapedSystems() {
+// One grid of installables: unscored packs beside scored host-installed
+// systems (ADR 035). Pack facets narrow only packs; the search term narrows
+// both. Scores stay hidden and comparison stays off, as the scope requires.
+function renderPacks() {
+  const term = $("#pack-search").value;
+  const packs = AtlasCore.filterPacks(state.packs, {
+    term,
+    searchIndex: searchIndexes.packs,
+    type: $("#pack-type-filter").value,
+    host: $("#pack-host-filter").value,
+    install: $("#pack-install-filter").value,
+    license: $("#pack-license-filter").value,
+  });
   const systems = AtlasCore.packShapedSystems(state.projects, {
-    term: $("#pack-search").value,
+    term,
     searchIndex: searchIndexes.systems,
   });
-  const block = $("#pack-systems-block");
-  block.hidden = systems.length === 0;
-  $("#pack-systems-count").textContent = systems.length ? `${systems.length} ${systems.length === 1 ? "system" : "systems"}` : "";
-  const grid = $("#pack-systems-grid");
-  grid.innerHTML = systems.map(mixedSystemCard).join("");
+  const entries = AtlasCore.mergePackScopeEntries(packs, systems);
+  const packNoun = packs.length === 1 ? "pack" : "packs";
+  const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
+  $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
+  const paged = AtlasCore.paginate(entries, { page: state.page.packs, pageSize: state.pageSize });
+  state.page.packs = paged.page;
+  const grid = $("#pack-grid");
+  grid.innerHTML = paged.items.map(({ kind, record }) =>
+    kind === "pack" ? packCard(record) : mixedSystemCard(record, { hideScoreFooter: true })).join("")
+    || '<div class="notice">No agent packs match these filters.</div>';
+  $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   paintMarks(grid);
+  renderPager("packs", paged);
 }
-
-const renderPacks = () => { renderCollection("packs"); renderPackShapedSystems(); };
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on

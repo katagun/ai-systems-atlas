@@ -1,6 +1,6 @@
-# ADR 033: Installing into a host is a deployment mode, not a collection
+# ADR 034: Installing into a host is a deployment mode, not a collection
 
-**Status:** Accepted
+**Status:** Accepted. Numbered 034 on 2026-09-20: the record was accepted as ADR 033, but `main` already carried `033-ai-systems-papers` (Proposed), so this record took the next free number. Nothing else changed.
 
 ## Context
 
