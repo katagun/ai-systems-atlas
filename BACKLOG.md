@@ -84,7 +84,7 @@ Ideas from the 2026-09-20 brainstorm on [TypeSafe](https://docs.typesafe.ai/llms
 
 ### Coverage batches
 
-- [ ] Curate the thirty-ninth models.dev queue batch: GLM-5 family and Voxtral (`zhipuai/glm-4.5-flash`, `glm-5-turbo`, `glm-5.1`, `glm-5.2`, `glm-5v-turbo`, `mistral/voxtral-mini-3b-2507`, `voxtral-small-24b-2507`). The GLM-5 lines carry the modified-MIT or GLM-5.3-style licenses; the Turbo lines are API-only; the Voxtral pair are audio-input weight releases. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Amazon, OpenAI, and leftover clusters stay queued for later.
+- [ ] Curate the fortieth models.dev queue batch: Amazon Nova (`amazon/nova-2-lite`, `nova-lite`, `nova-micro`, `nova-premier`, `nova-pro`). All five are API-only under Amazon Bedrock and the Nova model terms. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The OpenAI and leftover clusters stay queued for later.
 
 ### Reader experience
 

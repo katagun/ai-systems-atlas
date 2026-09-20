@@ -2303,6 +2303,415 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-amazon-nova-2-lite",
+      "source_id": "amazon/nova-2-lite",
+      "name": "Nova 2 Lite",
+      "developer": "Amazon",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-2-lite.html",
+      "description": "An active multimodal Nova release served through Amazon Bedrock under the AWS Service Terms, with a 1,000,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nova 2 Lite",
+        "description": "Multimodal reasoning model for visual analysis, planning, and tool use",
+        "family": "nova",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-01",
+        "knowledge_cutoff": "2025-10",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-AWS-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "AWS provides the release as a managed service under the AWS Customer Agreement and the AWS Service Terms Section 60.3 for Amazon Bedrock, which cover the Amazon Nova and Titan foundation models and grant exclusive use of customized Nova models. The terms permit customer applications and Bedrock and SageMaker customization but license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-AWS-Service-Terms",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through Amazon Bedrock under the AWS Service Terms Section 60.3 and the AWS Customer Agreement"
+        }
+      ],
+      "access_boundary": "This record represents the Amazon Nova 2 Lite release identified by the Bedrock model ID amazon.nova-2-lite-v1:0, launched December 2, 2025. The Nova 1 line, the other Nova 2 sizes, the Sonic, Canvas, and Reel lines, SageMaker and the other Bedrock surfaces, and later Nova releases remain separate service or product boundaries.",
+      "strengths": [
+        "AWS publishes a model card with launch date, lifecycle status, context limits, and the Bedrock model ID",
+        "The model card documents the global Bedrock region reach and geo-specific model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through Amazon Bedrock with no other documented host path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.8
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Amazon Nova 2 Lite model card",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-2-lite.html",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Nova 2 launch announcement",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-2-lite-a-fast-cost-effective-reasoning-model/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/amazon/nova-2-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-amazon-nova-lite",
+      "source_id": "amazon/nova-lite",
+      "name": "Nova Lite",
+      "developer": "Amazon",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-lite.html",
+      "description": "An active multimodal Nova release served through Amazon Bedrock under the AWS Service Terms, with a 300,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nova Lite",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "nova-lite",
+        "release_date": "2024-12-03",
+        "last_updated": "2024-12-03",
+        "knowledge_cutoff": "2024-10",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 300000,
+          "input": null,
+          "output": 10000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-AWS-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "AWS provides the release as a managed service under the AWS Customer Agreement and the AWS Service Terms Section 60.3 for Amazon Bedrock, which cover the Amazon Nova and Titan foundation models and grant exclusive use of customized Nova models. The terms permit customer applications and Bedrock and SageMaker customization but license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-AWS-Service-Terms",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through Amazon Bedrock under the AWS Service Terms Section 60.3 and the AWS Customer Agreement"
+        }
+      ],
+      "access_boundary": "This record represents the Amazon Nova Lite release identified by the Bedrock model ID amazon.nova-lite-v1:0, launched December 5, 2024. The Nova 2 Lite successor, the Micro and Pro siblings, the Sonic, Canvas, and Reel lines, SageMaker and the other Bedrock surfaces, and later Nova releases remain separate service or product boundaries.",
+      "strengths": [
+        "AWS publishes a model card with launch date, lifecycle status, context limits, and the Bedrock model ID",
+        "The model card documents the global Bedrock region reach and geo-specific model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through Amazon Bedrock with no other documented host path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.54
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Amazon Nova Lite model card",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-lite.html",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Nova launch announcement",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-frontier-intelligence-and-industry-leading-price-performance/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/amazon/nova-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-amazon-nova-micro",
+      "source_id": "amazon/nova-micro",
+      "name": "Nova Micro",
+      "developer": "Amazon",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-micro.html",
+      "description": "An active text-only Nova release served through Amazon Bedrock under the AWS Service Terms, with a 128,000-token context and no downloadable model weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nova Micro",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "nova-micro",
+        "release_date": "2024-12-03",
+        "last_updated": "2024-12-03",
+        "knowledge_cutoff": "2024-10",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 10000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-AWS-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "AWS provides the release as a managed service under the AWS Customer Agreement and the AWS Service Terms Section 60.3 for Amazon Bedrock, which cover the Amazon Nova and Titan foundation models and grant exclusive use of customized Nova models. The terms permit customer applications and Bedrock and SageMaker customization but license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-AWS-Service-Terms",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through Amazon Bedrock under the AWS Service Terms Section 60.3 and the AWS Customer Agreement"
+        }
+      ],
+      "access_boundary": "This record represents the Amazon Nova Micro release identified by the Bedrock model ID amazon.nova-micro-v1:0, launched December 5, 2024. The Lite and Pro siblings, the Nova 2 generation, the Sonic, Canvas, and Reel lines, SageMaker and the other Bedrock surfaces, and later Nova releases remain separate service or product boundaries.",
+      "strengths": [
+        "AWS publishes a model card with launch date, lifecycle status, context limits, and the Bedrock model ID",
+        "The model card documents the global Bedrock region reach and geo-specific model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through Amazon Bedrock with no other documented host path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.54
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Amazon Nova Micro model card",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-micro.html",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Nova launch announcement",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-frontier-intelligence-and-industry-leading-price-performance/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/amazon/nova-micro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-amazon-nova-pro",
+      "source_id": "amazon/nova-pro",
+      "name": "Nova Pro",
+      "developer": "Amazon",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-pro.html",
+      "description": "An active multimodal Nova release served through Amazon Bedrock under the AWS Service Terms, with a 300,000-token context and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nova Pro",
+        "description": "Flagship model for demanding analysis, coding, and production agent workflows",
+        "family": "nova-pro",
+        "release_date": "2024-12-03",
+        "last_updated": "2024-12-03",
+        "knowledge_cutoff": "2024-10",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 300000,
+          "input": null,
+          "output": 10000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-AWS-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "AWS provides the release as a managed service under the AWS Customer Agreement and the AWS Service Terms Section 60.3 for Amazon Bedrock, which cover the Amazon Nova and Titan foundation models and grant exclusive use of customized Nova models. The terms permit customer applications and Bedrock and SageMaker customization but license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-AWS-Service-Terms",
+          "kind": "web_terms",
+          "url": "https://aws.amazon.com/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through Amazon Bedrock under the AWS Service Terms Section 60.3 and the AWS Customer Agreement"
+        }
+      ],
+      "access_boundary": "This record represents the Amazon Nova Pro release identified by the Bedrock model ID amazon.nova-pro-v1:0, launched December 5, 2024. The Lite and Micro siblings, the Nova 2 Lite migration target, the Sonic, Canvas, and Reel lines, SageMaker and the other Bedrock surfaces, and later Nova releases remain separate service or product boundaries.",
+      "strengths": [
+        "AWS publishes a model card with launch date, lifecycle status, context limits, and the Bedrock model ID",
+        "The model card documents the global Bedrock region reach and geo-specific model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through Amazon Bedrock with no other documented host path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.54
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Amazon Nova Pro model card",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-pro.html",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Nova launch announcement",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-nova-frontier-intelligence-and-industry-leading-price-performance/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/amazon/nova-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-anthropic-claude-fable-5",
       "source_id": "anthropic/claude-fable-5",
       "name": "Claude Fable 5",
