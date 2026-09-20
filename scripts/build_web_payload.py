@@ -234,18 +234,29 @@ def load_catalog(root: Path) -> dict[str, dict]:
 
 
 def model_records(catalog: dict[str, dict]) -> list[dict]:
-    """Overlay reviewed Atlas models on the complete attributed source snapshot."""
-    reviewed = {
-        record["source_id"]: {**record, "review_status": "reviewed"}
-        for record in catalog["models.json"]["models"]
-    }
+    """Overlay reviewed Atlas models on the complete attributed source snapshot.
+
+    A linked record matches its row by source_id. A record reviewed before
+    models.dev listed it has no source_id and matches by id (ADR 036).
+    """
+    linked: dict[str, dict] = {}
+    unlisted: dict[str, dict] = {}
+    for record in catalog["models.json"]["models"]:
+        reviewed = {**record, "review_status": "reviewed"}
+        if record["source_id"] is None:
+            unlisted[record["id"]] = reviewed
+        else:
+            linked[record["source_id"]] = reviewed
     source = catalog["models-dev.json"]
     commit = source["source"]["commit"]
     combined: list[dict] = []
     for source_record in source["models"]:
         source_id = source_record["source_id"]
-        if source_id in reviewed:
-            combined.append(reviewed.pop(source_id))
+        if source_id in linked:
+            combined.append(linked.pop(source_id))
+            continue
+        if source_record["id"] in unlisted:
+            combined.append(unlisted.pop(source_record["id"]))
             continue
         metadata = source_record["source_metadata"]
         combined.append(
@@ -261,8 +272,18 @@ def model_records(catalog: dict[str, dict]) -> list[dict]:
                 "source_url": f"https://github.com/anomalyco/models.dev/blob/{commit}/models/{source_id}.toml",
             }
         )
-    combined.extend(reviewed.values())
+    combined.extend(linked.values())
+    combined.extend(unlisted.values())
     return combined
+
+
+def unlisted_model_count(catalog: dict[str, dict]) -> int:
+    """Reviewed models that no models.dev row stands behind yet."""
+    row_ids = {row["id"] for row in catalog["models-dev.json"]["models"]}
+    return sum(
+        record["source_id"] is None and record["id"] not in row_ids
+        for record in catalog["models.json"]["models"]
+    )
 
 
 def searchable_text(value) -> str:
@@ -317,6 +338,7 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                         "source_record_count"
                     ],
                     "reviewed_count": len(document[key]),
+                    "unlisted_reviewed_count": unlisted_model_count(catalog),
                 }
             )
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})
