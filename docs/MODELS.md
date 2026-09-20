@@ -53,7 +53,7 @@ Every source record is published in `models-dev.json`. Reviewed `source_id` valu
 
 ## Review workflow
 
-For one record in `directory/model-candidates.json`:
+For one record in `directory/model-candidates.json`, or for a release models.dev does not list (see [Releases models.dev does not list](#releases-modelsdev-does-not-list)):
 
 1. Confirm that the models.dev ID names one provider-independent release rather than an endpoint alias, quantization, or family umbrella.
 2. Identify the developer's authoritative model page and set the record boundary explicitly.
