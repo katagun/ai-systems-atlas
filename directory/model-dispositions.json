@@ -499,6 +499,24 @@
       "disposition": "held",
       "reason": "The Hugging Face weight repository is gated and the governing license text is not accessible, so no authoritative weight identity or license evidence can be established. The line is served through the Z.ai API. Held in case the gate or license documentation opens.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "mistral/ministral-14b",
+      "disposition": "excluded",
+      "reason": "Family and API-name alias of the ministral-3-14b-instruct-2512 release; both IDs resolve to the same repository and release, so the dated ID is the fixed identity.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "mistral/ministral-3b",
+      "disposition": "excluded",
+      "reason": "No weight release was ever published under this name; it is an API-only product under the Mistral Commercial License, so it is not a provider-independent weight release.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "mistral/pixtral-large-2502",
+      "disposition": "held",
+      "reason": "The ID names a dated API refresh of the Pixtral Large line whose reviewable identity is the line record; the 2502 snapshot has no dedicated docs page or lifecycle row. Held pending a line-level review.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
