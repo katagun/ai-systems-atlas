@@ -25,6 +25,7 @@ def write_catalog(
     models: tuple[dict, ...] = (),
     specifications: tuple[dict, ...] = (),
     packs: tuple[dict, ...] = (),
+    robots: tuple[dict, ...] = (),
 ) -> Path:
     files = {
         "projects.json": {"projects": list(systems)},
@@ -34,6 +35,7 @@ def write_catalog(
         "models.json": {"models": list(models)},
         "specifications.json": {"specifications": list(specifications)},
         "packs.json": {"packs": list(packs)},
+        "robots.json": {"robots": list(robots)},
     }
     for name, payload in files.items():
         (directory / name).write_text(json.dumps(payload), encoding="utf-8")
@@ -168,6 +170,16 @@ class ReviewAgeTests(unittest.TestCase):
         self.assertIsNone(
             row.metadata, "a pack carries no stars_verified_at, so no metadata column"
         )
+
+    def test_robots_are_reported_with_their_evidence_age(self) -> None:
+        (row,) = self.rows(
+            robots=(
+                record("bot", "2026-09-10", evidence=[{"verified_at": "2026-08-01"}]),
+            )
+        )
+        self.assertEqual("robots", row.collection)
+        self.assertEqual(date(2026, 8, 1), row.oldest_evidence.on)
+        self.assertIsNone(row.metadata)
 
     def test_rows_sort_oldest_editorial_date_first(self) -> None:
         rows = self.rows(

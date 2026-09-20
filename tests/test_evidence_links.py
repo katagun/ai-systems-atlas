@@ -176,6 +176,43 @@ class EvidenceLinkTests(unittest.TestCase):
                         }
                     ]
                 },
+                "robots.json": {
+                    "robots": [
+                        {
+                            "id": "bot",
+                            "url": "https://robots.example/bot",
+                            "verified_at": "2026-09-01",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "role": "product_page",
+                                    "url": "https://robots.example/bot",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "named_model",
+                                    "url": "https://robots.example/news/model",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "model_interface",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/sdk",
+                                    "verified_at": "2026-09-01",
+                                },
+                            ],
+                            "terms_evidence": [
+                                {
+                                    "kind": "web_terms",
+                                    "url": "https://robots.example/terms",
+                                    "verified_at": "2026-09-01",
+                                }
+                            ],
+                        }
+                    ]
+                },
             }
             for filename, document in documents.items():
                 (directory / filename).write_text(
@@ -185,7 +222,7 @@ class EvidenceLinkTests(unittest.TestCase):
             targets = check_evidence_links.collect_targets(directory)
 
         by_url = {item.url: item for item in targets}
-        self.assertEqual(10, len(targets))
+        self.assertEqual(14, len(targets))
         self.assertEqual(
             ("specifications:spec:url", "systems:system:url"),
             by_url["https://example.com/shared"].references,
@@ -202,6 +239,20 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertEqual(
             ("packs:kit:url",), by_url["https://example.com/kit"].references
         )
+        self.assertEqual(
+            ("robots:bot:evidence:0", "robots:bot:url"),
+            tuple(sorted(by_url["https://robots.example/bot"].references)),
+        )
+        self.assertFalse(by_url["https://robots.example/bot"].monitor_terms)
+        self.assertTrue(
+            by_url["https://robots.example/news/model"].monitor_terms,
+            "the named-model page is the collection's central fact and is watched for drift",
+        )
+        self.assertTrue(by_url["https://robots.example/terms"].monitor_terms)
+        self.assertFalse(
+            by_url["https://robots.example/sdk"].monitor_terms,
+            "an unpinnable page is link-checked but its hash can never settle",
+        )
 
     def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:
         """A third-party page is not the Atlas's to accept changes to: check the link, hash nothing."""
@@ -214,6 +265,7 @@ class EvidenceLinkTests(unittest.TestCase):
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
                 "packs.json": {"packs": []},
+                "robots.json": {"robots": []},
                 "inference-services.json": {
                     "services": [
                         {
