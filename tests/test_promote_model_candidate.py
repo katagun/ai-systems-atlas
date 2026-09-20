@@ -9,6 +9,7 @@ from pathlib import Path
 
 from scripts.promote_model_candidate import (
     EMPTY_SOURCE_METADATA,
+    MODELS_DEV_REPO,
     PromotionError,
     apply_link,
     apply_promotion,
@@ -446,6 +447,44 @@ class PromoteModelCandidateTests(unittest.TestCase):
             (self.root / "directory" / "model-candidates.json").read_text()
         )
         self.assertEqual([], queue["candidates"])
+
+    def test_link_replaces_a_stale_pinned_models_dev_entry_left_by_a_repair(
+        self,
+    ) -> None:
+        """The documented wrong-guess repair (unlink to null, link to the matching
+        row, exclude the other) must leave exactly one pinned models.dev entry, the
+        current one -- not the stale one from the excluded row plus the new one."""
+        twin = self.install_null_source_twin()
+        stale_url = f"{MODELS_DEV_REPO}/blob/{'0' * 40}/models/acme/wrong-guess.toml"
+        path = self.root / "directory" / "models.json"
+        models = json.loads(path.read_text())
+        record = next(m for m in models["models"] if m["id"] == twin["id"])
+        record["evidence"].append(
+            {
+                "kind": "web",
+                "label": "Pinned models.dev source metadata",
+                "url": stale_url,
+                "verified_at": "2026-09-10",
+            }
+        )
+        write_json(path, models)
+
+        apply_link(self.root, twin["id"], self.candidate["source_id"], "2026-09-20")
+
+        updated = json.loads(path.read_text())
+        linked = next(m for m in updated["models"] if m["id"] == twin["id"])
+        pinned_entries = [
+            e
+            for e in linked["evidence"]
+            if e["label"] == "Pinned models.dev source metadata"
+        ]
+        self.assertEqual(1, len(pinned_entries))
+        self.assertTrue(
+            pinned_entries[0]["url"].endswith(
+                f"/models/{self.candidate['source_id']}.toml"
+            )
+        )
+        self.assertNotEqual(stale_url, pinned_entries[0]["url"])
 
     def test_link_keeps_a_frozen_id_when_upstream_used_another_name(self) -> None:
         twin = self.install_null_source_twin(model_id="model-acme-guessed-name")

@@ -29,7 +29,9 @@ COLLECTIONS = (
 )
 COLLECTION_ORDER = {name: index for index, (name, _, _) in enumerate(COLLECTIONS)}
 
-# Automation-owned refresh timestamps. Only these feed the metadata column. The
+# Refresh timestamps that feed the metadata column. Usually automation-owned, but
+# metadata_verified_at is human-attested on a model with source_id null (ADR 036):
+# no importer ever touches that record, so a person dates the metadata by hand. The
 # editorial walk matches the key "verified_at" exactly, so neither these nor
 # upstream dates such as pushed_at or fetched_at can reach an editorial column.
 METADATA_KEYS = ("metadata_verified_at", "stars_verified_at")

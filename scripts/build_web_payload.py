@@ -312,9 +312,10 @@ def dumps(payload) -> str:
 def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
     payloads: dict[str, str] = {}
     model_source_details: dict[str, dict] = {}
+    overlaid_models, unlisted_count = _overlay_models(catalog)
     for collection, name, key, kind in COLLECTIONS:
         document = catalog[name]
-        records = model_records(catalog) if collection == "models" else document[key]
+        records = overlaid_models if collection == "models" else document[key]
         boot_fields = BOOT_FIELDS[collection]
 
         entries = []
@@ -347,7 +348,7 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                         "source_record_count"
                     ],
                     "reviewed_count": len(document[key]),
-                    "unlisted_reviewed_count": unlisted_model_count(catalog),
+                    "unlisted_reviewed_count": unlisted_count,
                 }
             )
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})

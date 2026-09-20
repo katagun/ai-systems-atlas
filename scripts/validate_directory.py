@@ -24,6 +24,9 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
+# Kept equal to scripts/promote_model_candidate.py's constant of the same name; a
+# null-source record (ADR 036) may cite no evidence URL under this prefix.
+MODELS_DEV_REPO = "https://github.com/anomalyco/models.dev"
 PUBLISHED_DATA = (
     "projects.json",
     "taxonomy.json",
@@ -2918,6 +2921,19 @@ def validate_model_source_links(
         source_id = model.get("source_id")
         prefix = f"model {model.get('id', 'unknown')}"
         if source_id is None:
+            # ADR 036: a null-source record contains no models.dev data, so no
+            # surface may attribute it to models.dev; a leftover pinned entry
+            # from a hand repair (unlink, upstream deletion) is rejected here.
+            evidence = model.get("evidence")
+            if isinstance(evidence, list) and any(
+                str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+                for item in evidence
+                if isinstance(item, dict)
+            ):
+                errors.append(
+                    f"{prefix}: a model without a models.dev source_id cannot cite "
+                    "models.dev evidence"
+                )
             # ADR 036: an id that matches a row already claimed by a different
             # linked record means two reviews point at one release; the row
             # a null-source record's id merely coincides with must still be

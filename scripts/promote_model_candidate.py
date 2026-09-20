@@ -197,6 +197,9 @@ def _refuse_listed(directory: Path, expected_source_id: str, model_id: str) -> N
                 f"models.dev already lists {row_source_id}, whose id {model_id} this "
                 "review would take; use the queue (init, or link for an existing record)"
             )
+    # Defence in depth only: validate_model_dispositions rejects a disposition whose
+    # source_id is absent from the snapshot, so in a valid catalog the loop above
+    # already raises on the snapshot row before a dispositioned id reaches this check.
     disposition = _dispositioned(directory).get(expected_source_id)
     if disposition:
         raise PromotionError(f"{expected_source_id} is dispositioned as {disposition}")
@@ -610,15 +613,22 @@ def preflight_link(
     record["source_metadata"] = deepcopy(candidate["source_metadata"])
     record["metadata_verified_at"] = metadata_verified_at
     pinned_url = models_dev_evidence_url(candidate, candidates_data)
-    if all(item.get("url") != pinned_url for item in record["evidence"]):
-        record["evidence"].append(
-            {
-                "kind": "web",
-                "label": "Pinned models.dev source metadata",
-                "url": pinned_url,
-                "verified_at": metadata_verified_at,
-            }
-        )
+    # A wrong-guess repair (unlink, re-link) leaves a stale pinned entry from the
+    # excluded row on the record; drop every existing models.dev evidence entry
+    # before appending the current one so linking never produces two.
+    record["evidence"] = [
+        item
+        for item in record["evidence"]
+        if not str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+    ]
+    record["evidence"].append(
+        {
+            "kind": "web",
+            "label": "Pinned models.dev source metadata",
+            "url": pinned_url,
+            "verified_at": metadata_verified_at,
+        }
+    )
     proposed_candidates = deepcopy(candidates_data)
     proposed_candidates["candidates"] = [
         item

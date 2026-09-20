@@ -135,7 +135,8 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
 
   await card.locator(`[data-model="${QWEN}"]`).click();
   const dialog = page.locator("#model-dialog-content");
-  await expect(dialog).toContainText("models.dev ID: Not yet listed on models.dev");
+  await expect(dialog).toContainText("Not yet listed on models.dev");
+  await expect(dialog).not.toContainText("models.dev ID:");
   await expect(dialog).toContainText("Reviewed by Atlas from developer documentation");
   await expect(dialog).not.toContainText("Source links from models.dev");
   await expect(dialog).toContainText("No source links recorded.");

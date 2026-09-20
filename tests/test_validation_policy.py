@@ -6,7 +6,12 @@ import unittest
 from pathlib import Path
 from typing import ClassVar
 
-from scripts.validate_directory import CATALOG_DOCUMENTS, PUBLISHED_DATA, validate
+from scripts.validate_directory import (
+    CATALOG_DOCUMENTS,
+    MODELS_DEV_REPO,
+    PUBLISHED_DATA,
+    validate,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -2330,12 +2335,24 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
 
     def _with_null_source_models(self, mutate) -> list[str]:
-        """Turn the first reviewed model into a null-source record, apply mutate, validate."""
+        """Turn the first reviewed model into a null-source record, apply mutate, validate.
+
+        ADR 036: a null-source record may not cite models.dev evidence (F2), so any
+        model `mutate` leaves with `source_id: None` has its models.dev evidence
+        entries stripped here, once, instead of in every caller.
+        """
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "models.json"
         document = json.loads(path.read_text(encoding="utf-8"))
         mutate(document["models"])
+        for model in document["models"]:
+            if isinstance(model, dict) and model.get("source_id") is None:
+                model["evidence"] = [
+                    item
+                    for item in model.get("evidence", [])
+                    if not str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+                ]
         self.write_json(path, document)
         self.write_json(root / "web" / "models.json", document)
         return validate(root)
@@ -2391,6 +2408,44 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertTrue(
             any("model candidates must produce text" in e for e in errors),
+            errors,
+        )
+
+    def test_null_source_record_cannot_cite_models_dev_evidence(self) -> None:
+        """ADR 036: a null-source record contains no models.dev data, so no surface
+        may attribute it to models.dev, including a leftover evidence entry left
+        behind by a hand repair (unlink to null, upstream deletion)."""
+
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            # _with_null_source_models would otherwise strip this for us; keep it
+            # here on purpose, to exercise the validator's own rejection of it.
+            models[0]["evidence"] = [
+                *models[0]["evidence"],
+                {
+                    "kind": "web",
+                    "label": "Pinned models.dev source metadata",
+                    "url": f"{MODELS_DEV_REPO}/blob/{'0' * 40}/models/acme/other.toml",
+                    "verified_at": "2026-09-16",
+                },
+            ]
+
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        mutate(document["models"])
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                "a model without a models.dev source_id cannot cite models.dev "
+                "evidence" in e
+                for e in errors
+            ),
             errors,
         )
 
@@ -2473,6 +2528,11 @@ class ValidationPolicyTests(unittest.TestCase):
         duplicate = dict(second)
         duplicate["id"] = claimed_row_id
         duplicate["source_id"] = None
+        duplicate["evidence"] = [
+            item
+            for item in duplicate["evidence"]
+            if not item["url"].startswith(MODELS_DEV_REPO)
+        ]
         document["models"].append(duplicate)
         self.write_json(models_path, document)
         self.write_json(root / "web" / "models.json", document)

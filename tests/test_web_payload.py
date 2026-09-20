@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from scripts import build_web_payload
 from scripts.build_web_payload import (
     BOOT_FIELDS,
     COLLECTIONS,
@@ -249,6 +251,17 @@ class WebPayloadTests(unittest.TestCase):
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""
         self.assertNotIn("trust", BOOT_FIELDS["inference"])
         self.assertNotIn("trust", SEARCH_FIELDS["inference"])
+
+    def test_build_payloads_runs_the_model_overlay_only_once(self) -> None:
+        """model_records() and unlisted_model_count() each run the overlay pass on
+        their own; build_payloads must run it once and reuse both results."""
+        with patch(
+            "scripts.build_web_payload._overlay_models",
+            wraps=build_web_payload._overlay_models,
+        ) as spy:
+            build_web_payload.build_payloads(self.catalog)
+
+        self.assertEqual(1, spy.call_count)
 
     def test_committed_output_matches_the_builder(self) -> None:
         """The same assertion --check makes, so a stale commit fails the suite too."""

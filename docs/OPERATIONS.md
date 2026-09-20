@@ -567,8 +567,10 @@ already accepts. A red run still opens or updates its issue-worthy signal in the
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
 signals, candidates, model candidates, and the check summary before merging any refresh pull
-request. A `link pending:` line in the validator output means models.dev now lists a release
-Atlas reviewed earlier; run the `link` command in [`MODELS.md`](MODELS.md).
+request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
+`link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
+prints the same `link pending:` lines those sections are built from.
 
 ### Tokens
 
