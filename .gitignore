@@ -9,6 +9,8 @@ node_modules/
 playwright-report/
 test-results/
 .DS_Store
+.env
+.env.*
 agent_workspace/
 .candidate-evidence/
 .evidence-link-cache.json
