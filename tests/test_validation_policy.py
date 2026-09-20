@@ -779,6 +779,144 @@ class ValidationPolicyTests(unittest.TestCase):
             [item["id"] for item in taxonomy["robot_ai_bases"]],
         )
 
+    def test_valid_robot_passes_validation(self) -> None:
+        errors = self.catalog_with_robot()
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_rejects_every_scoring_price_and_popularity_field(self) -> None:
+        for field, value in (
+            ("score", {"overall": 5}),
+            ("score_profile", "agent_system"),
+            ("system_family", "agent_system"),
+            ("primary_role", "coding_agent"),
+            ("stars", 10),
+            ("stars_verified_at", "2026-09-20"),
+            ("price", "$20,000"),
+            ("price_usd", 20000),
+            ("benchmarks", {"lift_kg": 20}),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field, value=value):
+                    robot[field] = value
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(
+                    any(f"{field} is never recorded on a robot" in e for e in errors),
+                    errors,
+                )
+
+    def test_robot_rejects_unknown_and_missing_fields(self) -> None:
+        def add_unknown(robot, root):
+            robot["payload_kg"] = 3
+
+        def drop_required(robot, root):
+            del robot["not_verified"]
+
+        for mutate, needle in (
+            (add_unknown, "extra=['payload_kg']"),
+            (drop_required, "missing=['not_verified']"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_enums_come_from_the_taxonomy(self) -> None:
+        for field, needle in (
+            ("form_factor", "unknown form factor"),
+            ("availability", "unknown availability"),
+            ("status", "unknown status"),
+            ("research_confidence", "unknown research confidence"),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field):
+                    robot[field] = "not-a-value"
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_superseded_status_names_a_successor_robot(self) -> None:
+        def missing(robot, root):
+            robot["status"] = "superseded"
+
+        def stray(robot, root):
+            robot["superseded_by"] = "sample-robot-2"
+
+        def itself(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = "sample-robot"
+
+        for mutate, needle in (
+            (missing, "superseded status requires superseded_by"),
+            (stray, "superseded_by requires the superseded status"),
+            (itself, "a robot cannot supersede itself"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_ai_basis_agrees_with_named_models(self) -> None:
+        def named_without_basis(robot, root):
+            robot["ai_basis"] = ["open_model_interface"]
+
+        def basis_without_named(robot, root):
+            robot["named_models"] = []
+
+        def unknown_basis(robot, root):
+            robot["ai_basis"] = ["autonomy"]
+
+        def no_basis(robot, root):
+            robot["ai_basis"] = []
+
+        for mutate, needle in (
+            (
+                named_without_basis,
+                "vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty",
+            ),
+            (
+                basis_without_named,
+                "vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty",
+            ),
+            (unknown_basis, "unknown ai_basis"),
+            (no_basis, "ai_basis must be a non-empty list"),
+        ):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_named_model_has_a_closed_shape_and_a_known_kind(self) -> None:
+        def extra_key(robot, root):
+            robot["named_models"][0]["parameters"] = "7B"
+
+        def bad_kind(robot, root):
+            robot["named_models"][0]["kind"] = "planner"
+
+        for mutate, needle in (
+            (extra_key, "named_models entries must carry exactly"),
+            (bad_kind, "unknown named model kind"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_hardware_is_four_prose_fields(self) -> None:
+        def numeric(robot, root):
+            robot["hardware"]["payload_kg"] = 3
+
+        def empty(robot, root):
+            robot["hardware"]["compute"] = " "
+
+        for mutate, needle in (
+            (numeric, "hardware must carry exactly"),
+            (empty, "hardware.compute must be a non-empty string"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
     def catalog_with_malformed_record(
         self, document: str, key: str, entry: object
     ) -> list[str]:

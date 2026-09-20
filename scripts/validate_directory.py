@@ -262,6 +262,53 @@ PACK_FORBIDDEN = {
     "primary_role",
 }
 
+ROBOT_REQUIRED = {
+    "id",
+    "name",
+    "manufacturer",
+    "url",
+    "first_party_domains",
+    "description",
+    "form_factor",
+    "availability",
+    "availability_note",
+    "ai_basis",
+    "named_models",
+    "research_confidence",
+    "hardware",
+    "developer_access",
+    "terms",
+    "terms_note",
+    "terms_evidence",
+    "not_verified",
+    "status",
+    "evidence",
+    "verified_at",
+}
+ROBOT_OPTIONAL = {
+    "short_name",
+    "variants",
+    "repo",
+    "superseded_by",
+    "related_systems",
+    "related_models",
+    "related_robots",
+}
+# A robot is recorded for what its maker documents, never scored, priced, or ranked (ADR 037).
+ROBOT_FORBIDDEN = {
+    "score",
+    "score_profile",
+    "system_family",
+    "primary_role",
+    "stars",
+    "stars_verified_at",
+    "price",
+    "price_usd",
+    "benchmarks",
+}
+ROBOT_HARDWARE_FIELDS = ("compute", "sensors", "actuation", "power")
+ROBOT_NAMED_MODEL_FIELDS = {"name", "kind", "role_note", "evidence_label"}
+
 LOCAL_RUNTIME_REQUIRED = {
     "id",
     "name",
@@ -1623,10 +1670,110 @@ def validate_robots(
     robots_value = validate_collection_envelope(
         robots_data, "robots.json", "1.0", "robots", errors
     )
+    enum_ids = tax.enum_ids
     for robot in robots_value:
         if not isinstance(robot, dict):
             errors.append("robots.json: every robot must be an object")
             continue
+        prefix = f"robot {robot.get('id', 'unknown')}"
+        for field in sorted(ROBOT_FORBIDDEN & set(robot)):
+            errors.append(f"{prefix}: {field} is never recorded on a robot")
+        fields = set(robot) - ROBOT_FORBIDDEN
+        if ROBOT_REQUIRED - fields or fields - ROBOT_REQUIRED - ROBOT_OPTIONAL:
+            missing = sorted(ROBOT_REQUIRED - fields)
+            extra = sorted(fields - ROBOT_REQUIRED - ROBOT_OPTIONAL)
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
+        robot_id = robot.get("id")
+        if not isinstance(robot_id, str) or not ID_PATTERN.fullmatch(robot_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name",
+            "manufacturer",
+            "description",
+            "availability_note",
+            "developer_access",
+            "terms_note",
+            "not_verified",
+        ):
+            if not isinstance(robot.get(field), str) or not robot[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        for field in ("short_name", "variants"):
+            if field in robot and (
+                not isinstance(robot[field], str) or not robot[field].strip()
+            ):
+                errors.append(
+                    f"{prefix}: {field} must be a non-empty string when present"
+                )
+        if not isinstance(robot.get("url"), str) or not robot["url"].startswith(
+            "https://"
+        ):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        if robot.get("form_factor") not in enum_ids["robot_form_factors"]:
+            errors.append(f"{prefix}: unknown form factor")
+        if robot.get("availability") not in enum_ids["robot_availability"]:
+            errors.append(f"{prefix}: unknown availability")
+        if robot.get("status") not in enum_ids["project_statuses"]:
+            errors.append(f"{prefix}: unknown status")
+        if (
+            robot.get("research_confidence")
+            not in enum_ids["research_confidence_levels"]
+        ):
+            errors.append(f"{prefix}: unknown research confidence")
+        if not valid_date(robot.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+        if robot.get("status") == "superseded":
+            if "superseded_by" not in robot:
+                errors.append(f"{prefix}: superseded status requires superseded_by")
+            elif robot["superseded_by"] == robot_id:
+                errors.append(f"{prefix}: a robot cannot supersede itself")
+        elif "superseded_by" in robot:
+            errors.append(f"{prefix}: superseded_by requires the superseded status")
+
+        validate_string_list(
+            robot, "ai_basis", enum_ids["robot_ai_bases"], prefix, errors
+        )
+        ai_basis = (
+            robot.get("ai_basis") if isinstance(robot.get("ai_basis"), list) else []
+        )
+        named_models = robot.get("named_models")
+        if not isinstance(named_models, list):
+            errors.append(f"{prefix}: named_models must be a list")
+            named_models = []
+        if ("vendor_named_model" in ai_basis) != bool(named_models):
+            errors.append(
+                f"{prefix}: vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty"
+            )
+        for entry in named_models:
+            if not isinstance(entry, dict) or set(entry) != ROBOT_NAMED_MODEL_FIELDS:
+                errors.append(
+                    f"{prefix}: named_models entries must carry exactly "
+                    f"{sorted(ROBOT_NAMED_MODEL_FIELDS)}"
+                )
+                continue
+            for field in ("name", "role_note", "evidence_label"):
+                if not isinstance(entry[field], str) or not entry[field].strip():
+                    errors.append(
+                        f"{prefix}: named_models.{field} must be a non-empty string"
+                    )
+            if entry["kind"] not in enum_ids["robot_model_kinds"]:
+                errors.append(f"{prefix}: unknown named model kind")
+
+        hardware = robot.get("hardware")
+        if not isinstance(hardware, dict) or set(hardware) != set(
+            ROBOT_HARDWARE_FIELDS
+        ):
+            errors.append(
+                f"{prefix}: hardware must carry exactly {list(ROBOT_HARDWARE_FIELDS)}"
+            )
+        else:
+            for field in ROBOT_HARDWARE_FIELDS:
+                if not isinstance(hardware[field], str) or not hardware[field].strip():
+                    errors.append(
+                        f"{prefix}: hardware.{field} must be a non-empty string"
+                    )
     return robots_value
 
 
