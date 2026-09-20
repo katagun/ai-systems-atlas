@@ -473,6 +473,38 @@
     return [...entries.values()];
   }
 
+  // ADR 038: Atlas can review a release before models.dev lists it. Such a
+  // record has source_id null and metadata written by Atlas, so nothing on
+  // the page may credit models.dev for it.
+  const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";
+  function modelSourceLabel(model) {
+    return model.source_id || UNLISTED_MODEL_LABEL;
+  }
+  function modelMetadataAttribution(model) {
+    if (model.source_id) {
+      return {
+        listed: true,
+        cardTitle: "From models.dev source metadata, not Atlas reviewed",
+        cardPrefix: "From models.dev: ",
+        capabilityNote: "These values are imported discovery metadata, not an Atlas capability test.",
+        linksHeading: "Source links from models.dev",
+        noLinksText: "No source links reported by models.dev.",
+      };
+    }
+    return {
+      listed: false,
+      cardTitle: "Reviewed by Atlas from developer documentation",
+      cardPrefix: "From developer documentation: ",
+      capabilityNote: "Reviewed by Atlas from developer documentation, not an Atlas capability test.",
+      linksHeading: "Source links",
+      noLinksText: "No source links recorded.",
+    };
+  }
+  function modelsKickerText(sourceCount, reviewedCount, unlistedCount) {
+    const base = `${sourceCount} models.dev records · ${reviewedCount} Atlas reviewed`;
+    return unlistedCount > 0 ? `${base} · ${unlistedCount} not yet on models.dev` : base;
+  }
+
   return {
     CARD_BADGES,
     CARD_BADGE_SETS,
@@ -492,6 +524,9 @@
     matchesProject,
     matchesRecordSearch,
     mergePackScopeEntries,
+    modelMetadataAttribution,
+    modelSourceLabel,
+    modelsKickerText,
     monogramGlyph,
     packShapedSystems,
     paginate,
@@ -499,6 +534,7 @@
     parseViewId,
     recordHaystack,
     shareRecordPath,
+    UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };
 });

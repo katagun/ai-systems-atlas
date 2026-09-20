@@ -295,5 +295,97 @@ class PublishGatingTests(unittest.TestCase):
         self.assertIn("--draft", create_calls[0])
 
 
+class LinkPendingTests(unittest.TestCase):
+    """The `link pending:` validator line otherwise has no reader (docs/OPERATIONS.md)."""
+
+    def test_link_pending_lines_are_pulled_from_every_result_and_deduplicated(
+        self,
+    ) -> None:
+        results = [
+            (
+                "validate_directory",
+                True,
+                "validated 3 models\nlink pending: model-acme-chat <- acme/chat\n"
+                "link pending: model-acme-other <- acme/other\n",
+            ),
+            ("unittest", True, "OK\n"),
+            (
+                "app payload freshness",
+                True,
+                # A different check that happens to also run validate_directory and
+                # print the same line must not duplicate it.
+                "link pending: model-acme-chat <- acme/chat\n",
+            ),
+        ]
+
+        self.assertEqual(
+            [
+                "link pending: model-acme-chat <- acme/chat",
+                "link pending: model-acme-other <- acme/other",
+            ],
+            refresh.link_pending_lines(results),
+        )
+
+    def test_link_pending_lines_is_empty_when_no_result_mentions_one(self) -> None:
+        results = [("validate_directory", True, "validated 3 models\n")]
+        self.assertEqual([], refresh.link_pending_lines(results))
+
+    def test_check_summary_prints_a_section_only_when_something_is_pending(
+        self,
+    ) -> None:
+        pending_results = [
+            ("validate_directory", True, "link pending: model-acme-chat <- acme/chat\n")
+        ]
+        stdout = io.StringIO()
+        with contextlib.redirect_stdout(stdout):
+            refresh.print_check_summary(pending_results)
+        self.assertIn("== Models awaiting a models.dev link ==", stdout.getvalue())
+        self.assertIn("link pending: model-acme-chat <- acme/chat", stdout.getvalue())
+
+        clean_results = [("validate_directory", True, "validated 3 models\n")]
+        stdout = io.StringIO()
+        with contextlib.redirect_stdout(stdout):
+            refresh.print_check_summary(clean_results)
+        self.assertNotIn("Models awaiting a models.dev link", stdout.getvalue())
+
+    def test_pr_body_adds_a_section_only_when_something_is_pending(self) -> None:
+        clean_results = [("validate_directory", True, "validated 3 models\n")]
+        pending_results = [
+            ("validate_directory", True, "link pending: model-acme-chat <- acme/chat\n")
+        ]
+
+        clean_body = refresh.build_pr_body(clean_results)
+        self.assertNotIn("Models awaiting a models.dev link", clean_body)
+
+        pending_body = refresh.build_pr_body(pending_results)
+        self.assertIn("## Models awaiting a models.dev link", pending_body)
+        self.assertIn("- link pending: model-acme-chat <- acme/chat", pending_body)
+        self.assertIn(
+            "models.dev now lists these reviewed releases; run the `link` command "
+            "in docs/MODELS.md.",
+            pending_body,
+        )
+
+    def test_pr_body_is_byte_identical_to_before_when_nothing_is_pending(self) -> None:
+        """Locks the exact original body so the new section never leaks in empty."""
+        results = [
+            ("validate_directory", True, "validated 3 models\n"),
+            ("unittest", False, "boom\n"),
+        ]
+        expected = "\n".join(
+            [
+                "Local metadata refresh and candidate discovery.",
+                "",
+                "## Verification",
+                "",
+                "- `validate_directory`: passed",
+                "- `unittest`: **failed**",
+                "",
+                "Review license incidents and candidate additions before merging.",
+            ]
+        )
+        self.assertEqual(expected, refresh.build_pr_body(results))
+
+
 if __name__ == "__main__":
     unittest.main()

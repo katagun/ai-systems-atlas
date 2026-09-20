@@ -436,7 +436,7 @@ Do not copy prices, rate limits, model leaderboards, or exhaustive model invento
 
 Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not a lab, model family, hosted endpoint, or repackaging—as the review unit. Verify the official identity, boundary, every governing distribution term, source model, distribution modes, evidence, and `model_access` score. Treat every models.dev field as attributed discovery metadata until first-party evidence supports the Atlas conclusion. Remove the candidate only in the same change that publishes or otherwise disposes of it, then synchronize, regenerate share pages, verify, and exercise Models search, filters, comparison, URL restoration, and details.
 
-For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md).
+For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
 Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
 
@@ -567,7 +567,10 @@ already accepts. A red run still opens or updates its issue-worthy signal in the
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
 signals, candidates, model candidates, and the check summary before merging any refresh pull
-request.
+request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
+`link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
+prints the same `link pending:` lines those sections are built from.
 
 ### Tokens
 

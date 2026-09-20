@@ -127,6 +127,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md",
             "docs/adr/036-the-agent-to-physical-world-boundary-is-in-scope.md",
             "docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md",
+            "docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
