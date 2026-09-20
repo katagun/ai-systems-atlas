@@ -19,15 +19,17 @@ A first design (published `source_gap` block, importer-written `reconciliations`
 `scripts/validate_directory.py`:
 
 - `source_id` stays in `MODEL_REQUIRED` (`:353-376`); `null` is accepted at `:1950-1958`, and the regex and uniqueness checks apply only to strings.
-- For `source_id: null`: `id` must match the stable-slug form produced by `stable_model_id` (`scripts/import_models_dev.py:159-163`), and `source_metadata.modalities.output` must contain `text`.
+- For `source_id: null`: `id` must match the stable-slug form produced by `stable_model_id` (`scripts/import_models_dev.py:159-163`), and `source_metadata.modalities.output` must contain `text`. `validate_model_source_metadata` already enforces the latter for every reviewed model (`require_text` defaults to true, `:1847`); a test pins it because the importer no longer stands in front of these records.
 - New: every non-null reviewed `source_id` must exist in `models-dev.json`. `validate_models` does not read the snapshot today, so the snapshot is passed in from the cross-file wiring (`:2926-2939`).
 - A queued candidate whose `id` equals a null-source reviewed `id` is valid. The validator summary prints one `link pending: <model id> <- <source_id>` line per such pair. The eligible-count invariant (`:2280-2286`) is unchanged because `published_ids` already ignores non-string IDs (`:2218-2222`) and the pending row is an ordinary queued candidate.
 
-### 2. The projection overlays by `id`
+### 2. The projection overlays null-source records by `id`
 
-`scripts/build_web_payload.py:236-265` `model_records`: key the reviewed map by `record["id"]` and match `source_record["id"]`. Unmatched reviewed records are still appended. The envelope (`:312-321`) gains `unlisted_reviewed_count`, the number of reviewed records with `source_id: null` and no overlaid row, so the UI total stays truthful.
+`scripts/build_web_payload.py:236-265` `model_records`: linked records still match a source row by `source_id`; null-source records match a source row by `id`. Matching every record by `id` would be wrong after a wrong-guess link, where a linked record's frozen `id` can equal the stable ID of a different, later upstream row. Unmatched reviewed records are still appended. The envelope (`:312-321`) gains `unlisted_reviewed_count`, the number of null-source reviewed records with no overlaid row, so the UI total stays truthful.
 
-Grid order is decided client-side; if appended records sort visibly last in any default view, the builder inserts them in name order instead. The implementation plan checks this first.
+The Models grid sorts client-side by score or name (`web/app-core.js:123`), so the position of appended records in the payload is not visible.
+
+Validation rejects a snapshot row whose `id` equals a linked reviewed record's `id` while their `source_id` values differ, because the projection would emit that `id` twice. The repair is documented in ADR 036: unlink to `null`, link to the row whose stable ID matches, exclude the other row.
 
 ### 3. The importer does not change
 

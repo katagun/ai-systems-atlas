@@ -22,11 +22,11 @@ A null-source record:
 - must list `text` among its output modalities, because the importer's modality gate does not see it;
 - passes the same review as any other model: authoritative developer page, scoped license evidence, classifications, and `model_access` scores. Only the commit-pinned models.dev evidence URL is not required, since none exists.
 
-The Models projection overlays a reviewed record on the source row with the same `id` rather than the same `source_id`. The two are equivalent for every linked record, and a null-source record can never produce a duplicate card or a duplicate `id` when upstream later lists the release under the expected ID.
+The Models projection overlays a linked record on the source row with the same `source_id`, as before, and a null-source record on the source row with the same `id`. A null-source record can therefore never produce a duplicate card or a duplicate `id` when upstream later lists the release under the expected ID.
 
 The importer is unchanged and still never edits a reviewed model. When models.dev lists the release, its row enters `model-candidates.json` like any other eligible row. Validation allows a queued candidate whose `id` equals a null-source reviewed `id` and reports it as link pending; the eligible-count invariant is untouched. A human then runs a guarded `link` command, which shows the hand-authored and upstream metadata side by side, sets `source_id`, replaces `source_metadata` with the models.dev copy, adds the commit-pinned evidence URL, requires a new `metadata_verified_at`, and removes the candidate. From then on models.dev is the record's metadata source, as for every other linked record.
 
-If upstream lists the release under an ID the reviewer did not predict, the row appears as an ordinary unreviewed imported card and queue entry. The reviewer links it with the record `id` kept as it is, or excludes the row as the exact snapshot a reviewed record represents. After such a link the `id` differs from the stable ID of its `source_id`; that divergence is accepted rather than breaking a published URL.
+If upstream lists the release under an ID the reviewer did not predict, the row appears as an ordinary unreviewed imported card and queue entry. The reviewer links it with the record `id` kept as it is, or excludes the row as the exact snapshot a reviewed record represents. After such a link the `id` differs from the stable ID of its `source_id`; that divergence is accepted rather than breaking a published URL. If upstream later also lists the originally expected ID (models.dev carries both dated and dateless IDs for some Claude lines), that row's derived `id` would collide with the record's frozen `id`. Validation rejects the collision, and the repair uses existing tools: set `source_id` back to `null`, link the record to the row whose stable ID matches its `id`, and exclude the other row as the exact snapshot the reviewed record represents.
 
 If upstream deletes the row behind a linked record, validation fails as it does today. The repair is to set `source_id` back to `null` and re-attest the metadata, not to delete the review.
 
@@ -35,7 +35,7 @@ A guarded `init-gap` command scaffolds a null-source review. It refuses an ID th
 ## Consequences
 
 - The Models collection can cover releases models.dev omits, starting with Claude Mythos 5.1 in a separate curation change.
-- "By `source_id`" in ADR 025, ADR 026, ADR 027, `MODELS.md`, `DATA_MODEL.md`, and `WEB.md` becomes "by `id`", and the review workflow gains a second entry path that does not start from the queue.
+- "By `source_id`" in ADR 025, ADR 026, ADR 027, `MODELS.md`, `DATA_MODEL.md`, and `WEB.md` gains the null-source rule, and the review workflow gains a second entry path that does not start from the queue.
 - Descriptions of `source_metadata` as imported from models.dev become conditional in `DATA_MODEL.md`, `MODELS.md`, `llms.txt`, and the Atlas skill reference; consumers must treat `source_id: null` as "metadata authored by Atlas".
 - The validator newly requires every non-null reviewed `source_id` to exist in the snapshot, which only a test enforced before.
 - The UI shows that a record is not yet listed on models.dev instead of printing an ID, labels its metadata as Atlas-reviewed, and counts such records in the Models total.
