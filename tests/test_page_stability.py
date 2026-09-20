@@ -58,3 +58,10 @@ class PageStabilityTests(unittest.TestCase):
         code, out = self.run_main([FetchFailure("HTTP 404")])
         self.assertEqual(2, code)
         self.assertIn("HTTP 404", out)
+
+    def test_a_none_body_is_treated_as_a_fetch_failure(self) -> None:
+        # A conditional/not-modified response can come back with no body; that is
+        # not a hashable page, so it must fail rather than crash on `None`.
+        code, out = self.run_main([None])
+        self.assertEqual(2, code)
+        self.assertIn("no body returned", out)

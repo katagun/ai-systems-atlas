@@ -208,7 +208,13 @@ class EvidenceLinkTests(unittest.TestCase):
                                     "kind": "web_terms",
                                     "url": "https://robots.example/terms",
                                     "verified_at": "2026-09-01",
-                                }
+                                },
+                                {
+                                    "kind": "web_terms",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/warranty",
+                                    "verified_at": "2026-09-01",
+                                },
                             ],
                         }
                     ]
@@ -222,7 +228,7 @@ class EvidenceLinkTests(unittest.TestCase):
             targets = check_evidence_links.collect_targets(directory)
 
         by_url = {item.url: item for item in targets}
-        self.assertEqual(14, len(targets))
+        self.assertEqual(15, len(targets))
         self.assertEqual(
             ("specifications:spec:url", "systems:system:url"),
             by_url["https://example.com/shared"].references,
@@ -252,6 +258,68 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertFalse(
             by_url["https://robots.example/sdk"].monitor_terms,
             "an unpinnable page is link-checked but its hash can never settle",
+        )
+        self.assertFalse(
+            by_url["https://robots.example/warranty"].monitor_terms,
+            "an unpinnable terms page is link-checked but never drift-monitored",
+        )
+
+    def test_unpinnable_citation_overrides_monitoring_for_the_same_url(self) -> None:
+        """One evidence item marking a URL unpinnable must veto monitoring even
+        when another citation of the same URL would otherwise turn it on."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            documents = {
+                "projects.json": {"projects": []},
+                "license-evidence.json": {"entries": []},
+                "specifications.json": {"specifications": []},
+                "inference-services.json": {"services": []},
+                "local-runtimes.json": {"runtimes": []},
+                "models.json": {"models": []},
+                "packs.json": {"packs": []},
+                "robots.json": {
+                    "robots": [
+                        {
+                            "id": "dual",
+                            "url": "https://robots.example/dual",
+                            "verified_at": "2026-09-01",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "role": "named_model",
+                                    "url": "https://robots.example/shared-basis",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "supporting",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/shared-basis",
+                                    "verified_at": "2026-09-01",
+                                },
+                            ],
+                            "terms_evidence": [],
+                        }
+                    ]
+                },
+            }
+            for filename, document in documents.items():
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
+
+            targets = check_evidence_links.collect_targets(directory)
+
+        by_url = {item.url: item for item in targets}
+        target = by_url["https://robots.example/shared-basis"]
+        self.assertEqual(
+            ("robots:dual:evidence:0", "robots:dual:evidence:1"),
+            tuple(sorted(target.references)),
+        )
+        self.assertFalse(
+            target.monitor_terms,
+            "an unpinnable citation must veto monitoring even when another "
+            "citation of the same URL would otherwise turn it on",
         )
 
     def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:

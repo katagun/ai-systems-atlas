@@ -70,6 +70,7 @@ class _TargetBuilder:
     references: set[str] = field(default_factory=set)
     review_dates: dict[str, str | None] = field(default_factory=dict)
     monitor_terms: bool = False
+    unpinnable: bool = False
 
 
 @dataclass(frozen=True)
@@ -138,6 +139,7 @@ def _add_target(
     reference: str,
     reviewed_at: object = None,
     monitor_terms: bool = False,
+    unpinnable: bool = False,
 ) -> None:
     if not isinstance(url, str) or not url.startswith("https://"):
         return
@@ -149,6 +151,7 @@ def _add_target(
         reviewed_at,
     )
     target.monitor_terms = target.monitor_terms or monitor_terms
+    target.unpinnable = target.unpinnable or unpinnable
 
 
 def _add_evidence_items(
@@ -165,11 +168,7 @@ def _add_evidence_items(
         reference = f"{collection}:{record_id}:{group}:{index}"
         is_terms = item.get("kind") == "web_terms"
         reviewed_at = item.get("verified_at", record_reviewed_at)
-        # An unpinnable page changes between fetches, so its hash can never settle:
-        # it is still link-checked, never drift-monitored.
-        is_monitored = (is_terms or item.get("role") in monitor_roles) and not item.get(
-            "unpinnable"
-        )
+        is_monitored = is_terms or item.get("role") in monitor_roles
         _add_target(
             targets,
             item.get("url"),
@@ -177,6 +176,10 @@ def _add_evidence_items(
             reference=reference,
             reviewed_at=reviewed_at,
             monitor_terms=is_monitored,
+            # An unpinnable citation changes between fetches, so its hash can
+            # never settle; it vetoes monitoring for the URL (see collect_targets),
+            # even when another citation of the same URL would monitor it.
+            unpinnable=bool(item.get("unpinnable")),
         )
         _add_target(
             targets,
@@ -384,7 +387,10 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
             kinds=tuple(sorted(item.kinds)),
             references=tuple(sorted(item.references)),
             review_dates=tuple(sorted(item.review_dates.items())),
-            monitor_terms=item.monitor_terms,
+            # Unpinnable wins per URL: any citation marking it unpinnable means the
+            # hash can never settle, so it vetoes monitoring even when another
+            # citation of the same URL would otherwise turn monitoring on.
+            monitor_terms=item.monitor_terms and not item.unpinnable,
         )
         for item in sorted(targets.values(), key=lambda target: target.url)
     ]
