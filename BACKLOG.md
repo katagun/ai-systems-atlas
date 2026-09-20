@@ -64,6 +64,10 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 - [ ] Settle `second-brain-starter`'s type in its own prose: its `description` reads like a skills bundle while `pack_type` is `vault_bundle`; one clause in `not_a_system` naming the memory templates (SOUL, MEMORY, HEARTBEAT, USER, `daily/`) as the vault the skill maintains would stop the next reviewer reopening it.
 - [ ] Widen `agent-toolkit`'s `hosts` beyond Claude Code only when its repository documents an install into Codex or Cursor rather than a compatibility sentence about `npx skills add`; pin that documentation as evidence when it appears.
 
+### Coverage batches
+
+- [ ] Curate the thirty-eighth models.dev queue batch: Mistral (`mistral/devstral-small-2`, `magistral-small-2509`, `ministral-3-14b-instruct-2512`, `ministral-3-8b-instruct-2512`, `ministral-3-3b-instruct-2512`, `ministral-14b`, `ministral-3b`, `pixtral-large-2502`). The weight lines carry Apache-2.0 or the Mistral research and non-production licenses; the Pixtral Large line is API-only. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Voxtral audio pair stays queued for later.
+
 ### Reader experience
 
 - [ ] Give share pages the site's own shell, as [#168](https://github.com/katagun/ai-systems-atlas/pull/168) gave the blog: link `web/styles.css` and `web/fonts.css` under the content stamp, carry the directory header, theme control, and footer, and retire `scripts/page_shell.py`'s private `STYLE` once nothing uses it. Share pages must still show no score and load no application script.
