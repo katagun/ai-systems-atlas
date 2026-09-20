@@ -18,10 +18,11 @@ import tempfile
 from copy import deepcopy
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 try:
     from .validate_directory import (
+        Taxonomy,
         stable_model_id,
         validate_model_candidates,
         validate_models,
@@ -30,6 +31,7 @@ try:
     )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from validate_directory import (
+        Taxonomy,
         stable_model_id,
         validate_model_candidates,
         validate_models,
@@ -179,15 +181,20 @@ def _dispositioned(directory: Path) -> dict[str, str]:
 def _refuse_listed(directory: Path, expected_source_id: str, model_id: str) -> None:
     """A gap review is only for releases models.dev does not list (ADR 036)."""
     rows = load_json(directory / "models-dev.json").get("models") or []
-    if any(
-        isinstance(row, dict)
-        and (row.get("source_id") == expected_source_id or row.get("id") == model_id)
-        for row in rows
-    ):
-        raise PromotionError(
-            f"{expected_source_id} is already in the models.dev snapshot; use the queue "
-            "(init, or link for an existing record)"
-        )
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if row.get("source_id") == expected_source_id:
+            raise PromotionError(
+                f"{expected_source_id} is already in the models.dev snapshot; use the "
+                "queue (init, or link for an existing record)"
+            )
+        if row.get("id") == model_id:
+            row_source_id = row.get("source_id")
+            raise PromotionError(
+                f"models.dev already lists {row_source_id}, whose id {model_id} this "
+                "review would take; use the queue (init, or link for an existing record)"
+            )
     disposition = _dispositioned(directory).get(expected_source_id)
     if disposition:
         raise PromotionError(f"{expected_source_id} is dispositioned as {disposition}")
@@ -325,6 +332,45 @@ def _with_record(models_data: dict[str, Any], record: dict[str, Any]) -> dict[st
     return proposed_models
 
 
+class _CrossCollectionDocuments(NamedTuple):
+    """The other record collections a promoted model's id/repo must stay unique against."""
+
+    projects: dict[str, Any]
+    specifications: dict[str, Any]
+    inference_services: dict[str, Any]
+    local_runtimes: dict[str, Any]
+    packs: dict[str, Any]
+
+
+def _validate_proposed_models(
+    proposed_models: dict[str, Any],
+    taxonomy_data: dict[str, Any],
+    cross_collection: _CrossCollectionDocuments,
+    errors: list[str],
+) -> Taxonomy:
+    """Validate a proposed models.json against the taxonomy and every other
+    collection's ids, appending problems to `errors` in place. Returns the
+    validated taxonomy, which callers that also validate the candidate queue
+    (via `validate_model_candidates`) need afterward."""
+    taxonomy_errors: list[str] = []
+    taxonomy = validate_taxonomy(taxonomy_data, taxonomy_errors)
+    errors.extend(taxonomy_errors)
+    validate_models(proposed_models, taxonomy, errors)
+    published = proposed_models.get("models")
+    validate_unique_record_ids(
+        cross_collection.projects.get("projects", []),
+        cross_collection.specifications.get("specifications", []),
+        cross_collection.inference_services.get("services", []),
+        cross_collection.local_runtimes.get("runtimes", []),
+        published if isinstance(published, list) else [],
+        errors,
+        packs_value=cross_collection.packs.get("packs")
+        if isinstance(cross_collection.packs.get("packs"), list)
+        else [],
+    )
+    return taxonomy
+
+
 def _preflight_gap(
     directory: Path, record: dict[str, Any]
 ) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -376,21 +422,17 @@ def _preflight_gap(
 
     proposed_models = _with_record(models_data, record)
 
-    taxonomy_errors: list[str] = []
-    taxonomy = validate_taxonomy(taxonomy_data, taxonomy_errors)
-    errors.extend(taxonomy_errors)
-    validate_models(proposed_models, taxonomy, errors)
-    published = proposed_models.get("models")
-    validate_unique_record_ids(
-        projects_data.get("projects", []),
-        specifications_data.get("specifications", []),
-        inference_services_data.get("services", []),
-        local_runtimes_data.get("runtimes", []),
-        published if isinstance(published, list) else [],
+    _validate_proposed_models(
+        proposed_models,
+        taxonomy_data,
+        _CrossCollectionDocuments(
+            projects_data,
+            specifications_data,
+            inference_services_data,
+            local_runtimes_data,
+            packs_data,
+        ),
         errors,
-        packs_value=packs_data.get("packs")
-        if isinstance(packs_data.get("packs"), list)
-        else [],
     )
     if errors:
         formatted = "\n".join(f"- {error}" for error in errors)
@@ -451,22 +493,19 @@ def preflight_promotion(
             for item in remaining
             if not isinstance(item, dict) or item.get("source_id") != source_id
         ]
-    taxonomy_errors: list[str] = []
-    taxonomy = validate_taxonomy(taxonomy_data, taxonomy_errors)
-    errors.extend(taxonomy_errors)
-    validate_models(proposed_models, taxonomy, errors)
-    published_models = proposed_models.get("models")
-    validate_unique_record_ids(
-        projects_data.get("projects", []),
-        specifications_data.get("specifications", []),
-        inference_services_data.get("services", []),
-        local_runtimes_data.get("runtimes", []),
-        published_models if isinstance(published_models, list) else [],
+    taxonomy = _validate_proposed_models(
+        proposed_models,
+        taxonomy_data,
+        _CrossCollectionDocuments(
+            projects_data,
+            specifications_data,
+            inference_services_data,
+            local_runtimes_data,
+            packs_data,
+        ),
         errors,
-        packs_value=packs_data.get("packs")
-        if isinstance(packs_data.get("packs"), list)
-        else [],
     )
+    published_models = proposed_models.get("models")
     validate_model_candidates(
         proposed_candidates,
         published_models if isinstance(published_models, list) else [],

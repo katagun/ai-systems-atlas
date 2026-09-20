@@ -311,6 +311,25 @@ class PromoteModelCandidateTests(unittest.TestCase):
         ):
             build_gap_draft(self.root, self.candidate["source_id"])
 
+    def test_gap_draft_refuses_an_id_models_dev_would_now_derive(self) -> None:
+        """A different source_id can still collide on the derived stable slug id."""
+        path = self.root / "directory" / "models-dev.json"
+        source_models = json.loads(path.read_text())
+        source_models["models"].append(
+            {
+                "id": "model-acme-unlisted",
+                "source_id": "acme/other-id",
+                "source_metadata": {},
+            }
+        )
+        write_json(path, source_models)
+
+        with self.assertRaisesRegex(
+            PromotionError,
+            r"models\.dev already lists acme/other-id.*use the queue",
+        ):
+            build_gap_draft(self.root, "acme/unlisted")
+
     def test_gap_draft_refuses_dispositioned_ids(self) -> None:
         write_json(
             self.root / "directory" / "model-dispositions.json",
