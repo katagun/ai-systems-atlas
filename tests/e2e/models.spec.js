@@ -119,7 +119,9 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
   await page.route("**/app/models.json*", async route => {
     const response = await route.fetch();
     const payload = await response.json();
-    const models = payload.models.map(model => model.id === QWEN ? { ...model, source_id: null } : model);
+    const models = payload.models.map(model => model.id === QWEN
+      ? { ...model, source_id: null, source_metadata: { ...model.source_metadata, links: [], weights: [] } }
+      : model);
     await route.fulfill({ response, json: { ...payload, unlisted_reviewed_count: 1, models } });
   });
   await page.goto("/?view=models");
@@ -136,5 +138,7 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
   await expect(dialog).toContainText("models.dev ID: Not yet listed on models.dev");
   await expect(dialog).toContainText("Reviewed by Atlas from developer documentation");
   await expect(dialog).not.toContainText("Source links from models.dev");
+  await expect(dialog).toContainText("No source links recorded.");
+  await expect(dialog).not.toContainText("reported by models.dev");
   await expect(dialog).not.toContainText("null");
 });

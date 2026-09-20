@@ -314,8 +314,10 @@ test("metadata attribution names Atlas when models.dev has no row", () => {
   const unlisted = modelMetadataAttribution({ ...models[0], source_id: null });
   assert.equal(listed.listed, true);
   assert.match(listed.cardTitle, /models\.dev/);
+  assert.equal(listed.noLinksText, "No source links reported by models.dev.");
   assert.equal(unlisted.listed, false);
   assert.equal(unlisted.cardTitle, "Reviewed by Atlas from developer documentation");
+  assert.equal(unlisted.noLinksText, "No source links recorded.");
   for (const text of Object.values(unlisted)) {
     if (typeof text === "string") assert.doesNotMatch(text, /models\.dev/);
   }

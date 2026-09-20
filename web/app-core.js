@@ -488,6 +488,7 @@
         cardPrefix: "From models.dev: ",
         capabilityNote: "These values are imported discovery metadata, not an Atlas capability test.",
         linksHeading: "Source links from models.dev",
+        noLinksText: "No source links reported by models.dev.",
       };
     }
     return {
@@ -496,6 +497,7 @@
       cardPrefix: "From developer documentation: ",
       capabilityNote: "Reviewed by Atlas from developer documentation, not an Atlas capability test.",
       linksHeading: "Source links",
+      noLinksText: "No source links recorded.",
     };
   }
   function modelsKickerText(sourceCount, reviewedCount, unlistedCount) {
