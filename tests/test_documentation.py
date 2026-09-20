@@ -61,6 +61,7 @@ class DocumentationTests(unittest.TestCase):
             "run_hn_signals.py prepare",
             "run_hn_signals.py finish",
             "NEVER FETCH",
+            "NOBODY IS WATCHING",
             "028",
         ):
             self.assertIn(needle, text)
