@@ -55,7 +55,8 @@ A `badge-legend` strip is fixed to the bottom of the viewport in the Directory v
 | Inference services | The `inference` set |
 | Local runtimes | The `runtime` set |
 | All (mixed) | The three families only: frame, name, meaning |
-| Models, Specifications, Agent packs, Papers | No legend |
+| Agent packs | The three families only, because host-installed systems are listed inline there ([ADR 035](../../adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md)) and keep their badges |
+| Models, Specifications, Papers, and every view other than Directory | No legend |
 
 If the Systems scope is filtered to one system family, the legend narrows to that family's set.
 
