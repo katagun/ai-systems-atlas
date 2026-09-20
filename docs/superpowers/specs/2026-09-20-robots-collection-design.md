@@ -28,13 +28,13 @@ One robot product as the manufacturer sells it — "Unitree G1", not Unitree and
 Add a robot to `directory/robots.json` when all six hold, each from first-party pages:
 
 1. **Identifiable product** from one named manufacturer.
-2. **It is a robot:** a machine with its own actuators that moves itself or manipulates objects. `form_factor` is one of `humanoid`, `quadruped`, `arm`, `mobile_manipulator` — exactly the forms ADR 036 names. A robot of another form waits for a scope decision; there is no `other`.
-3. **First-party documentation names a learned model or policy and states what it controls on the robot** — a vision-language-action model, a language or vision-language model, a reinforcement-learning policy. The record states what the documentation says, never what the robot does, the rule [ADR 029](../../adr/029-trust-records-are-unscored-and-never-first-hand.md) set for trust statuses: "Statuses record documentation, not behaviour." It is recorded in `named_models` with its evidence and a `research_confidence`, and is never scored.
-4. **A spec sheet or technical documentation exists and can be pinned.** A demo video, a press release, or a waitlist page alone fails.
+2. **It is a robot:** a machine with its own actuators that moves itself or manipulates objects. `form_factor` is one of `humanoid`, `quadruped`, `arm`, `mobile_manipulator`, `other`. `other` is for a robot whose body fits none of the named forms; it never admits a vehicle, a drone, or a component, which ADR 036 keeps out.
+3. **First-party documentation gives the robot an AI basis, in one or both of two ways.** Either it *names a learned model or policy and states what it controls on the robot* — a vision-language-action model, a language or vision-language model, a reinforcement-learning policy — or it *documents a supported way to run the reader's own model or policy on the robot*: an SDK, a policy interface, a documented control API. The record states what the documentation says, never what the robot does, the rule [ADR 029](../../adr/029-trust-records-are-unscored-and-never-first-hand.md) set for trust statuses: "Statuses record documentation, not behaviour." The basis is recorded in `ai_basis`, a named model in `named_models`, each with its evidence and a `research_confidence`, and none of it is scored. A robot whose documentation offers neither — classical autonomy only, no supported model interface — stays out.
+4. **The maker documents the hardware.** A spec sheet, technical documentation, or a first-party product page that itself states the hardware. A demo video, a press release, or a waitlist page alone fails.
 5. **The vendor states availability:** `orderable`, `reservation`, `enterprise_sales`, `research_only`, or `announced`.
 6. **Terms are recorded as found.** Terms of sale, an SDK licence, software terms, a warranty-only page, or none published. Absence is recorded, not disqualifying, and never rewritten as a classification by inference.
 
-Outside the collection: robots whose documentation names no learned model or policy, robot components, vehicles, drones, simulators, lab prototypes with no stated availability, and concept videos. ADR 036 already bounds the domain; this collection does not widen it.
+Outside the collection: robots whose documentation neither names a learned model or policy nor documents a supported way to run one, robot components, vehicles, drones, simulators, lab prototypes with no stated availability, and concept videos. ADR 036 already bounds the domain; this collection does not widen it.
 
 Condition 3 is batch 39's untested property, exercised. It is establishable for a closed system without reading source because it asks what the vendor's documentation names, not what the robot does. ADR 023 warned against a test that "convicts the inspectable and acquits the opaque"; this one reads documentation for open and closed robots alike and never reads source for either, and unequal documentation shows in `research_confidence`, as ADR 007 intends.
 
@@ -46,7 +46,7 @@ The collection's weak point is stated on every record: the named-model fact is t
 
 Significance is not a gate, and the collection says what that costs, as ADR 032 did for packs: nothing refuses the tenth quadruped except the queue and the ecosystem-significance judgement `docs/COVERAGE.md` already applies to the ninth coding agent.
 
-`docs/COVERAGE.md`'s rule — "Do not add a new family merely to fit a famous product" — applies. A famous robot that fails condition 3 or 4 stays held with its reason.
+`docs/COVERAGE.md`'s rule — "Do not add a new family merely to fit a famous product" — applies. A famous robot that fails condition 3 or 4 stays held with its reason. The gate was loosened once, by the owner on 2026-09-20, from "the vendor names a model" to either basis, from a required spec sheet to documented hardware, and from holding a robot over an unstable page to citing the page as unpinnable; the reason was that the stricter gate would have opened the collection nearly empty and shut out robots sold as platforms for the reader's own models.
 
 ### 5. Record schema
 
@@ -61,10 +61,11 @@ Top-level key `robots`. Validation mirrors packs: required, optional, and forbid
 | `form_factor` | One value from the new taxonomy group `robot_form_factors`. |
 | `availability` | One value from the new group `robot_availability`. |
 | `availability_note` | The vendor's statement in prose. No price. |
-| `named_models` | Non-empty list. Each entry: `name`, `kind` (group `robot_model_kinds`: `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`), `role_note` (what the vendor says the model does), `evidence_label` (the `label` of an entry in `evidence`). |
+| `ai_basis` | Non-empty list from the new group `robot_ai_bases`: `vendor_named_model`, `open_model_interface`. `vendor_named_model` is present exactly when `named_models` is non-empty. |
+| `named_models` | List, empty only when `ai_basis` lacks `vendor_named_model`. Each entry: `name`, `kind` (group `robot_model_kinds`: `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`), `role_note` (what the vendor says the model does), `evidence_label` (the `label` of an entry in `evidence`). |
 | `research_confidence` | Existing `low` / `medium` / `high`, rating how well the documentation supports `named_models`. |
 | `hardware` | Object with prose fields `compute`, `sensors`, `actuation`, `power`. Each required; each may be `"Not published."`. |
-| `developer_access` | What the vendor documents for running the reader's own software or policy, or that it documents none. |
+| `developer_access` | What the vendor documents for running the reader's own software or policy, or that it documents none. When `ai_basis` includes `open_model_interface`, this says what the interface is and what it lets a model control, in the vendor's terms. |
 | `terms` | Non-empty list from the new group `robot_terms_kinds`: `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`. `none_published` appears alone. |
 | `terms_note`, `terms_evidence` | Prose and scoped evidence. `terms_evidence` may be empty only when `terms` is `["none_published"]`. |
 | `not_verified` | The weak-point sentence. |
@@ -79,15 +80,15 @@ Top-level key `robots`. Validation mirrors packs: required, optional, and forbid
 ### 6. Evidence rules
 
 1. **First-party only.** Every evidence URL, and the record `url`, falls under an entry in the record's `first_party_domains`: the manufacturer's site, its documentation or support site, its own GitHub organisation. Press, reviews, video platforms, and retailers are never evidence.
-2. **Three evidence roles are required**, each an entry in `evidence` with a `role`: `product_page`, `technical_documentation`, `named_model`. Every `named_models[].evidence_label` resolves to an entry whose role is `named_model`.
+2. **Every evidence entry carries a `role`:** `product_page`, `technical_documentation`, `named_model`, `model_interface`, or `supporting`. `product_page` is always required. `named_model` is required when `ai_basis` includes `vendor_named_model`, and every `named_models[].evidence_label` resolves to an entry with that role. `model_interface` is required when `ai_basis` includes `open_model_interface`. `technical_documentation` is recorded when it exists and is not required, because condition 4 accepts a product page that states the hardware.
 3. **Kinds.** `web` for pages and PDFs; `git_blob` with a blob SHA wherever the vendor publishes an SDK or documentation repository, preferred because it is the only immutable evidence the collection can have.
 4. **Terms are drift-monitored** through `scripts/check_evidence_links.py` exactly as service terms are. Drift opens an incident that waits for a human and never hides the record.
-5. **The named-model page is drift-monitored too.** It is the collection's central fact; if the vendor rewrites the page, a human reviews the record.
-6. **The two-fetch rule.** Before a page is cited, it is fetched twice, minutes apart, and hashed with `check_evidence_links.content_sha256` — the monitor's visible-text normalisation. If the hashes differ, the page is not citable and the reviewer finds a stable first-party alternative. If none exists for a required role, the robot stays held. Both hashes are recorded in the review note.
+5. **The AI-basis pages are drift-monitored too** — every `named_model` and `model_interface` entry. They carry the collection's central fact; if the vendor rewrites one, a human reviews the record.
+6. **The two-fetch rule.** Before a page is cited, it is fetched twice, minutes apart, and hashed with `check_evidence_links.content_sha256` — the monitor's visible-text normalisation. If the hashes differ, the reviewer first looks for a stable first-party alternative. If none exists, the page may still be cited with `"unpinnable": true` on its evidence entry: the record says the page changes between fetches, the link checker still checks that it resolves, and it is left out of drift monitoring because its hash can never settle. An unpinnable page never holds a robot. Both hashes are recorded in the review note either way.
 7. **Unavailable pages.** A 404, a sales gate, or a login wall on a required evidence role fails the gate. A missing terms page does not: it is recorded as `none_published` with the observation in `terms_note`.
 8. `robots.json` joins `scripts/report_review_age.py`.
 
-Batch 39 could not pin `figure.ai` because `scripts/build_candidate_evidence.py` hashes raw fetched text, which includes a randomly seeded SVG gradient identifier. The published-record monitor hashes visible text only. This is read from the code, not yet observed against the site; rule 6 is the test.
+Batch 39 could not pin `figure.ai` because `scripts/build_candidate_evidence.py` hashes raw fetched text, which includes a randomly seeded SVG gradient identifier. The published-record monitor hashes visible text only. This is read from the code, not yet observed against the site; rule 6 is the test, and `unpinnable` is the fallback if it fails.
 
 A subagent's research is a lead, never evidence. Every URL and quotation is re-fetched by the reviewer before it lands.
 
@@ -97,8 +98,8 @@ The Agent packs pattern, with no new interface concept.
 
 - A **Robots** scope in the Directory navigation with a count, included in the All total. The entry is hidden while the collection is empty.
 - Cards show name, manufacturer, form factor, and availability, with no score and no badge. Marks come from the existing logo pipeline where a data-backed mark exists; otherwise a monogram.
-- Filters: form factor, availability, status. Search covers name, manufacturer, description, and named-model names. Alphabetical order, no sort control.
-- The record dialog and share page (`/records/robots/<id>/`) show, in order: what it is; models the vendor names, each with its `role_note` and a "vendor-stated" label; hardware; developer access; availability; terms; the `not_verified` sentence; evidence and verification date; related records.
+- Filters: form factor, AI basis ("Maker names a model", "Runs your own models"), availability, status. Search covers name, manufacturer, description, and named-model names. Alphabetical order, no sort control.
+- The record dialog and share page (`/records/robots/<id>/`) show, in order: what it is; models the vendor names, each with its `role_note` and a "vendor-stated" label, or a plain statement that the maker names none; running your own models, when the maker documents a way; hardware; developer access; availability; terms; the `not_verified` sentence; evidence and verification date; related records.
 - No comparison, no Finder goal, no score scope. In the mixed All view robots appear unscored, as packs do.
 - Reader-facing copy uses plain words — "Robots", "Models the vendor names" — and no internal vocabulary.
 
@@ -123,11 +124,11 @@ Three pull requests.
 
 ### 11. Validation
 
-`scripts/validate_directory.py` enforces: the three field sets; taxonomy membership for the four new groups; non-empty `named_models`; every `evidence_label` resolving to a `named_model`-role entry; presence of all three evidence roles; `none_published` appearing alone and only then permitting empty `terms_evidence`; every evidence, terms-evidence, and record URL falling under an entry in `first_party_domains`; uniqueness as in decision 5; and existence of every `related_*` id.
+`scripts/validate_directory.py` enforces: the three field sets; taxonomy membership for the four new groups; membership of `ai_basis` in `robot_ai_bases` and its agreement with `named_models`; every `evidence_label` resolving to a `named_model`-role entry; the evidence roles each basis requires; `unpinnable` being `true` and only on `web` or `web_terms` evidence; `none_published` appearing alone and only then permitting empty `terms_evidence`; every evidence, terms-evidence, and record URL falling under an entry in `first_party_domains`; uniqueness as in decision 5; and existence of every `related_*` id.
 
 ### 12. Testing
 
-Pull request 2 is test-driven. Validation-policy tests cover each forbidden field, empty `named_models`, a dangling `evidence_label`, a missing evidence role, `none_published` combined with another value, a repo-less record, a duplicate `url`, and an unknown related id. Payload, share-page, review-age, evidence-link, and promote-refusal tests mirror the pack tests. Web unit and end-to-end tests cover the scope, facets, search, dialog, URL and history restoration, the hidden-when-empty navigation entry, and unscored rendering in the mixed view, using fixtures. `docs/WEB.md`'s browser verification matrix gains a robots row and is exercised before pull request 2 merges. Pull request 3 is followed by a check of the live site against the merge commit.
+Pull request 2 is test-driven. Validation-policy tests cover each forbidden field, `ai_basis` disagreeing with `named_models` in both directions, a dangling `evidence_label`, a missing basis-required evidence role, a malformed `unpinnable`, `none_published` combined with another value, a repo-less record, a duplicate `url`, and an unknown related id. Payload, share-page, review-age, evidence-link, and promote-refusal tests mirror the pack tests. Web unit and end-to-end tests cover the scope, facets, search, dialog, URL and history restoration, the hidden-when-empty navigation entry, and unscored rendering in the mixed view, using fixtures. `docs/WEB.md`'s browser verification matrix gains a robots row and is exercised before pull request 2 merges. Pull request 3 is followed by a check of the live site against the merge commit.
 
 ## Out of scope
 

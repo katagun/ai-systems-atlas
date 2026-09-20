@@ -14,11 +14,12 @@
 
 - Three pull requests, in order: **PR 1** Task 1; **PR 2** Tasks 2–10; **PR 3** Task 11. Do not merge PR 2 with a robot record in it, and do not start PR 3 before PR 2 is merged and deployed.
 - Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. Forbidden record fields, verbatim from the spec: `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, `benchmarks`.
-- Taxonomy group ids, verbatim: `robot_form_factors` = `humanoid`, `quadruped`, `arm`, `mobile_manipulator` (no `other`: ADR 036 names exactly these); `robot_availability` = `orderable`, `reservation`, `enterprise_sales`, `research_only`, `announced`; `robot_model_kinds` = `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`; `robot_terms_kinds` = `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`.
-- Evidence roles, verbatim: `product_page`, `technical_documentation`, `named_model`, plus `supporting` for any further first-party page. The first three are each required at least once. (`supporting` is this plan's one addition to the spec; without it every extra citation would have to claim a required role.)
+- Taxonomy group ids, verbatim: `robot_form_factors` = `humanoid`, `quadruped`, `arm`, `mobile_manipulator`, `other`; `robot_ai_bases` = `vendor_named_model`, `open_model_interface`; `robot_availability` = `orderable`, `reservation`, `enterprise_sales`, `research_only`, `announced`; `robot_model_kinds` = `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`; `robot_terms_kinds` = `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`.
+- Evidence roles, verbatim: `product_page`, `technical_documentation`, `named_model`, `model_interface`, `supporting`. `product_page` is always required; `named_model` when `ai_basis` includes `vendor_named_model`; `model_interface` when it includes `open_model_interface`. `technical_documentation` and `supporting` are never required.
+- The gate was loosened by the owner on 2026-09-20 (spec §3–§6): a robot qualifies on either AI basis, `named_models` may be empty when the basis is `open_model_interface` alone, a product page that states the hardware satisfies condition 4, and a page that fails the two-fetch rule is cited with `"unpinnable": true` instead of holding the robot.
 - Record-reference kind is `robot`; share pages live at `records/robots/<id>/`; payloads are `app/robots.json`, `app/search/robots.json`, `app/detail/robot/<id>.json`. `web/robots.json` (the published collection) is unrelated to the existing `web/robots.txt`.
 - The Robots navigation entry is hidden while the collection has zero records.
-- Reader-facing copy uses plain words: "Robots", "Models the vendor names", "vendor-stated". No internal vocabulary ("score profile", "gate", "condition 3") in any string a reader sees.
+- Reader-facing copy uses plain words: "Robots", "Models the vendor names", "vendor-stated", "Runs your own models", "Maker names a model". No internal vocabulary ("score profile", "gate", "condition 3") in any string a reader sees.
 - Edit canonical inputs and generators only (`AGENTS.md` rule 13). After any change to `directory/*.json` or a generator, run the regeneration sequence and commit its output:
   ```bash
   uv run python scripts/sync_web_data.py
@@ -143,11 +144,11 @@ Model it on `docs/PACKS.md` (same headings, same imperative voice). Sections and
 
 1. `# Robot curation` — one paragraph: what the guide is for, link to ADR 036 and ADR 037.
 2. `## Inclusion boundary` — the six conditions from spec §3 verbatim, then the "Outside the collection" sentence.
-3. `## Classification` — choose one `form_factor` and one `availability`; record every `named_models` entry with `kind`, `role_note` in the vendor's terms, and the `evidence_label` it rests on; rate `research_confidence` (`high`: the vendor's technical documentation names the model and what it controls; `medium`: a first-party product or news page names it; `low`: named only in passing or only for a variant).
+3. `## Classification` — choose one `form_factor` and one `availability`; record `ai_basis` (`vendor_named_model` when the documentation names a model, `open_model_interface` when it documents a supported way to run the reader's own model or policy, both when both hold); record every `named_models` entry with `kind`, `role_note` in the vendor's terms, and the `evidence_label` it rests on; rate `research_confidence` (`high`: the vendor's technical documentation names the model and what it controls; `medium`: a first-party product or news page names it; `low`: named only in passing or only for a variant).
 4. `## Evidence workflow` — numbered:
    1. Establish `first_party_domains` from the product page and the manufacturer's own outbound links. Never add a domain because a search result pointed at it.
-   2. For each page you intend to cite, run the two-fetch rule: `uv run python scripts/check_page_stability.py <url>`. Cite only a page whose two hashes match; paste both hashes into the PR description.
-   3. Record the three required roles. Prefer `git_blob` evidence from the vendor's own SDK or documentation repository wherever it exists.
+   2. For each page you intend to cite, run the two-fetch rule: `uv run python scripts/check_page_stability.py <url>`. Prefer a page whose two hashes match. If no stable first-party page exists for a fact, cite the unstable one with `"unpinnable": true`; it is link-checked but not drift-monitored, and it never holds a robot. Paste both hashes into the PR description either way.
+   3. Record `product_page` always, `named_model` for every named model, and `model_interface` when the basis includes `open_model_interface`; add `technical_documentation` when a spec sheet or documentation exists. Prefer `git_blob` evidence from the vendor's own SDK or documentation repository wherever it exists.
    4. Record `terms` as found. A 404 or missing terms page is `none_published` with the observation in `terms_note`; never infer a classification.
    5. Write `hardware` as four prose fields from the spec sheet; write `"Not published."` where the vendor publishes nothing. No numbers lifted into structured fields, no price.
    6. Write `not_verified` in the record's own words: the named-model fact is the vendor's claim, and the evidence is mutable web content.
@@ -194,11 +195,11 @@ Branch: `claude/robots-collection-plumbing`, cut from `main` after PR 1 merges.
 
 **Files:**
 - Create: `directory/robots.json`
-- Modify: `directory/taxonomy.json` (four groups after `pack_install_mechanisms`), `scripts/validate_directory.py:27-38` (`PUBLISHED_DATA`), `:132-134` (`TAXONOMY_GROUPS`), `:3014-3022` (summary), `scripts/sync_web_data.py:10-21`, `scripts/run_directory_refresh.py:56`, `scripts/build_candidate_evidence.py:40-55`
+- Modify: `directory/taxonomy.json` (five groups after `pack_install_mechanisms`), `scripts/validate_directory.py:27-38` (`PUBLISHED_DATA`), `:132-134` (`TAXONOMY_GROUPS`), `:3014-3022` (summary), `scripts/sync_web_data.py:10-21`, `scripts/run_directory_refresh.py:56`, `scripts/build_candidate_evidence.py:40-55`
 - Test: `tests/test_validation_policy.py`, `tests/test_documentation.py`, `tests/test_candidate_evidence.py:757-777`
 
 **Interfaces:**
-- Produces: `directory/robots.json` with envelope `{"version": "1.0", "verified_at": "<today>", "robots": []}`; `tax.enum_ids["robot_form_factors" | "robot_availability" | "robot_model_kinds" | "robot_terms_kinds"]`; `validate_robots(robots_data, tax, index, errors) -> list[Any]` (envelope only in this task; Tasks 3–5 fill it in).
+- Produces: `directory/robots.json` with envelope `{"version": "1.0", "verified_at": "<today>", "robots": []}`; `tax.enum_ids["robot_form_factors" | "robot_availability" | "robot_model_kinds" | "robot_terms_kinds" | "robot_ai_bases"]`; `validate_robots(robots_data, tax, index, errors) -> list[Any]` (envelope only in this task; Tasks 3–5 fill it in).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -215,6 +216,7 @@ In `tests/test_validation_policy.py`, add to `ValidationPolicyTests`, after the 
         "form_factor": "humanoid",
         "availability": "reservation",
         "availability_note": "Reservations open in two regions.",
+        "ai_basis": ["vendor_named_model"],
         "named_models": [
             {
                 "name": "Sample-VLA",
@@ -292,7 +294,7 @@ In `tests/test_validation_policy.py`, add to `ValidationPolicyTests`, after the 
             (ROOT / "directory" / "taxonomy.json").read_text(encoding="utf-8")
         )
         self.assertEqual(
-            ["humanoid", "quadruped", "arm", "mobile_manipulator"],
+            ["humanoid", "quadruped", "arm", "mobile_manipulator", "other"],
             [item["id"] for item in taxonomy["robot_form_factors"]],
         )
         self.assertEqual(
@@ -312,6 +314,10 @@ In `tests/test_validation_policy.py`, add to `ValidationPolicyTests`, after the 
             ["terms_of_sale", "sdk_license", "software_terms", "warranty_only", "none_published"],
             [item["id"] for item in taxonomy["robot_terms_kinds"]],
         )
+        self.assertEqual(
+            ["vendor_named_model", "open_model_interface"],
+            [item["id"] for item in taxonomy["robot_ai_bases"]],
+        )
 ```
 
 If `ROOT` is not already imported at the top of the file, it is defined there as the repository root; check the existing imports and reuse the existing name.
@@ -325,14 +331,19 @@ Expected: FAIL — `KeyError: 'robot_form_factors'` and a missing `robots.json`.
 
 - [ ] **Step 3: Add the taxonomy groups**
 
-In `directory/taxonomy.json`, after the closing `]` of `pack_install_mechanisms`, add four groups. Every entry is `{"id", "name", "definition"}`:
+In `directory/taxonomy.json`, after the closing `]` of `pack_install_mechanisms`, add five groups. Every entry is `{"id", "name", "definition"}`:
 
 ```json
   "robot_form_factors": [
     {"id": "humanoid", "name": "Humanoid", "definition": "A robot with a torso, two arms, and legs or a wheeled base standing in for them, built to work in spaces made for people."},
     {"id": "quadruped", "name": "Quadruped", "definition": "A four-legged walking robot."},
     {"id": "arm", "name": "Arm", "definition": "A fixed or bench-mounted manipulator with no locomotion of its own."},
-    {"id": "mobile_manipulator", "name": "Mobile manipulator", "definition": "One or more arms on a wheeled or tracked base that moves itself."}
+    {"id": "mobile_manipulator", "name": "Mobile manipulator", "definition": "One or more arms on a wheeled or tracked base that moves itself."},
+    {"id": "other", "name": "Other", "definition": "A robot whose body fits none of the named forms; the record's description says what it is. Never a vehicle, a drone, or a component."}
+  ],
+  "robot_ai_bases": [
+    {"id": "vendor_named_model", "name": "Maker names a model", "definition": "The maker's own documentation names a learned model or policy and says what it controls on the robot."},
+    {"id": "open_model_interface", "name": "Runs your own models", "definition": "The maker documents a supported way to run your own model or policy on the robot, such as an SDK or a policy interface."}
   ],
   "robot_availability": [
     {"id": "orderable", "name": "Orderable", "definition": "The maker's own site takes an order or states a price and a way to buy."},
@@ -373,7 +384,7 @@ Match the file's existing indentation (expand each entry over multiple lines as 
 Use today's date. Then:
 
 - `scripts/validate_directory.py` `PUBLISHED_DATA` (`:27-38`): add `"robots.json",` after `"packs.json",`.
-- `scripts/validate_directory.py` `TAXONOMY_GROUPS` (`:132-134`): add the four group names after `"pack_install_mechanisms",`.
+- `scripts/validate_directory.py` `TAXONOMY_GROUPS` (`:132-134`): add the five group names after `"pack_install_mechanisms",`.
 - `scripts/sync_web_data.py:10-21`: add `"robots.json",` after `"packs.json",`.
 - `scripts/run_directory_refresh.py:56`: add `"directory/robots.json",` after `"directory/packs.json",`.
 - `scripts/build_candidate_evidence.py`: add `"robots.json"` to `CATALOG_FILES` and `"robots.json": "robots"` to `COLLECTION_KEYS`.
@@ -435,7 +446,7 @@ git commit -m "Register the empty Robots collection and its taxonomy groups"
 
 **Interfaces:**
 - Consumes: `validate_robots` skeleton, `SAMPLE_ROBOT`, `catalog_with_robot` from Task 2; existing helpers `validate_string_list`, `valid_date`, `ID_PATTERN`.
-- Produces: constants `ROBOT_REQUIRED`, `ROBOT_OPTIONAL`, `ROBOT_FORBIDDEN`, `ROBOT_HARDWARE_FIELDS`, `ROBOT_NAMED_MODEL_FIELDS`. Error strings other tasks and tests match on: `"<field> is never recorded on a robot"`, `"fields differ from schema"`, `"named_models must be a non-empty list"`, `"hardware must carry exactly"`.
+- Produces: constants `ROBOT_REQUIRED`, `ROBOT_OPTIONAL`, `ROBOT_FORBIDDEN`, `ROBOT_HARDWARE_FIELDS`, `ROBOT_NAMED_MODEL_FIELDS`. Error strings other tasks and tests match on: `"<field> is never recorded on a robot"`, `"fields differ from schema"`, `"vendor_named_model must be in ai_basis exactly when named_models is non-empty"`, `"hardware must carry exactly"`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -517,14 +528,28 @@ git commit -m "Register the empty Robots collection and its taxonomy groups"
                 errors = self.catalog_with_robot(mutate)
                 self.assertTrue(any(needle in e for e in errors), errors)
 
-    def test_robot_requires_at_least_one_named_model(self) -> None:
-        def mutate(robot, root):
+    def test_robot_ai_basis_agrees_with_named_models(self) -> None:
+        def named_without_basis(robot, root):
+            robot["ai_basis"] = ["open_model_interface"]
+
+        def basis_without_named(robot, root):
             robot["named_models"] = []
 
-        errors = self.catalog_with_robot(mutate)
-        self.assertTrue(
-            any("named_models must be a non-empty list" in e for e in errors), errors
-        )
+        def unknown_basis(robot, root):
+            robot["ai_basis"] = ["autonomy"]
+
+        def no_basis(robot, root):
+            robot["ai_basis"] = []
+
+        for mutate, needle in (
+            (named_without_basis, "vendor_named_model must be in ai_basis exactly when named_models is non-empty"),
+            (basis_without_named, "vendor_named_model must be in ai_basis exactly when named_models is non-empty"),
+            (unknown_basis, "unknown ai_basis"),
+            (no_basis, "ai_basis must be a non-empty list"),
+        ):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
 
     def test_robot_named_model_has_a_closed_shape_and_a_known_kind(self) -> None:
         def extra_key(robot, root):
@@ -577,6 +602,7 @@ ROBOT_REQUIRED = {
     "form_factor",
     "availability",
     "availability_note",
+    "ai_basis",
     "named_models",
     "research_confidence",
     "hardware",
@@ -675,10 +701,19 @@ Replace the loop body of `validate_robots` with:
         elif "superseded_by" in robot:
             errors.append(f"{prefix}: superseded_by requires the superseded status")
 
+        validate_string_list(
+            robot, "ai_basis", enum_ids["robot_ai_bases"], prefix, errors
+        )
+        ai_basis = robot.get("ai_basis") if isinstance(robot.get("ai_basis"), list) else []
         named_models = robot.get("named_models")
-        if not isinstance(named_models, list) or not named_models:
-            errors.append(f"{prefix}: named_models must be a non-empty list")
+        if not isinstance(named_models, list):
+            errors.append(f"{prefix}: named_models must be a list")
             named_models = []
+        if ("vendor_named_model" in ai_basis) != bool(named_models):
+            errors.append(
+                f"{prefix}: vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty"
+            )
         for entry in named_models:
             if not isinstance(entry, dict) or set(entry) != ROBOT_NAMED_MODEL_FIELDS:
                 errors.append(
@@ -707,7 +742,7 @@ Replace the loop body of `validate_robots` with:
                     )
 ```
 
-Confirm `research_confidence_levels` is in `TAXONOMY_GROUPS`; it is used by project validation, so it should be. If the project validator reads it under another name, use that name.
+Check the exact messages `validate_string_list` emits for an empty list and for an unknown value, and make the `ai_basis` test needles (`"ai_basis must be a non-empty list"`, `"unknown ai_basis"`) match them rather than changing the helper. Confirm `research_confidence_levels` is in `TAXONOMY_GROUPS`; it is used by project validation, so it should be. If the project validator reads it under another name, use that name.
 
 - [ ] **Step 4: Run the tests**
 
@@ -729,21 +764,55 @@ git commit -m "Validate the robot record schema"
 
 **Interfaces:**
 - Consumes: Task 3's `validate_robots`; existing `validate_evidence_items(evidence_items, repo, prefix, errors)` (open key set, so `role` passes through it untouched), `REPO_PATTERN`.
-- Produces: `url_is_first_party(url: str, domains: list[str]) -> bool`; constants `ROBOT_EVIDENCE_ROLES = ("product_page", "technical_documentation", "named_model", "supporting")` and `ROBOT_REQUIRED_EVIDENCE_ROLES = ROBOT_EVIDENCE_ROLES[:3]`. Task 6 imports `ROBOT_REQUIRED_EVIDENCE_ROLES`' third member by name as the monitored role: use the literal `"named_model"` there.
+- Produces: `url_is_first_party(url: str, domains: list[str]) -> bool`; constant `ROBOT_EVIDENCE_ROLES = ("product_page", "technical_documentation", "named_model", "model_interface", "supporting")` and the mapping `ROBOT_BASIS_EVIDENCE_ROLE = {"vendor_named_model": "named_model", "open_model_interface": "model_interface"}`. Task 6 monitors the two basis roles by their literal names.
 
 - [ ] **Step 1: Write the failing tests**
 
 ```python
-    def test_robot_evidence_must_cover_the_three_required_roles(self) -> None:
+    def test_robot_evidence_must_cover_the_roles_its_basis_requires(self) -> None:
+        def no_product_page(robot, root):
+            robot["evidence"] = [i for i in robot["evidence"] if i["role"] != "product_page"]
+
+        def interface_without_source(robot, root):
+            robot["ai_basis"] = ["vendor_named_model", "open_model_interface"]
+
+        for mutate, needle in (
+            (no_product_page, "evidence lacks required roles ['product_page']"),
+            (interface_without_source, "evidence lacks required roles ['model_interface']"),
+        ):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_may_rest_on_an_open_model_interface_alone(self) -> None:
         def mutate(robot, root):
+            robot["ai_basis"] = ["open_model_interface"]
+            robot["named_models"] = []
             robot["evidence"] = [
-                item for item in robot["evidence"] if item["role"] != "technical_documentation"
+                item for item in robot["evidence"] if item["role"] == "product_page"
+            ] + [
+                {
+                    "kind": "web",
+                    "role": "model_interface",
+                    "label": "Policy SDK guide",
+                    "url": "https://docs.robots.example/sdk/policy",
+                    "verified_at": "2026-09-20",
+                }
             ]
 
         errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_unpinnable_is_true_and_only_on_web_evidence(self) -> None:
+        def ok(robot, root):
+            robot["evidence"][2]["unpinnable"] = True
+
+        def falsy(robot, root):
+            robot["evidence"][2]["unpinnable"] = False
+
+        self.assertFalse([e for e in self.catalog_with_robot(ok) if "sample-robot" in e])
         self.assertTrue(
-            any("evidence lacks required roles ['technical_documentation']" in e for e in errors),
-            errors,
+            any("unpinnable must be true when present" in e for e in self.catalog_with_robot(falsy))
         )
 
     def test_robot_evidence_role_is_required_and_closed(self) -> None:
@@ -871,9 +940,13 @@ ROBOT_EVIDENCE_ROLES = (
     "product_page",
     "technical_documentation",
     "named_model",
+    "model_interface",
     "supporting",
 )
-ROBOT_REQUIRED_EVIDENCE_ROLES = ROBOT_EVIDENCE_ROLES[:3]
+ROBOT_BASIS_EVIDENCE_ROLE = {
+    "vendor_named_model": "named_model",
+    "open_model_interface": "model_interface",
+}
 FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+")
 FIRST_PARTY_GITHUB_ORG = re.compile(r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?")
 # Hosts many unrelated parties publish on. A bare entry would make every tenant
@@ -963,10 +1036,19 @@ Append to the per-robot body of `validate_robots`:
                     f"{prefix}: unknown evidence role {item.get('role')!r} on "
                     f"{item.get('label')!r}"
                 )
+            if "unpinnable" in item and (
+                item["unpinnable"] is not True or item.get("kind") != "web"
+            ):
+                errors.append(
+                    f"{prefix}: unpinnable must be true when present, and only on web evidence"
+                )
         present_roles = {item.get("role") for item in evidence}
-        missing_roles = [
-            role for role in ROBOT_REQUIRED_EVIDENCE_ROLES if role not in present_roles
+        required_roles = ["product_page"] + [
+            ROBOT_BASIS_EVIDENCE_ROLE[basis]
+            for basis in ai_basis
+            if basis in ROBOT_BASIS_EVIDENCE_ROLE
         ]
+        missing_roles = [role for role in required_roles if role not in present_roles]
         if missing_roles:
             errors.append(f"{prefix}: evidence lacks required roles {missing_roles}")
         named_model_labels = {
@@ -993,13 +1075,13 @@ Append to the per-robot body of `validate_robots`:
             terms_evidence = []
         covered: set[object] = set()
         for item in terms_evidence:
-            if not isinstance(item, dict) or set(item) != {
+            if not isinstance(item, dict) or set(item) - {"unpinnable"} != {
                 "terms_kind",
                 "scope",
                 "kind",
                 "url",
                 "verified_at",
-            }:
+            } or item.get("unpinnable", True) is not True:
                 errors.append(f"{prefix}: terms evidence must match the terms evidence schema")
                 continue
             covered.add(item["terms_kind"])
@@ -1287,6 +1369,13 @@ In `tests/test_evidence_links.py`, in the first fixture's `documents` (`:84-177`
                                     "url": "https://robots.example/news/model",
                                     "verified_at": "2026-09-01",
                                 },
+                                {
+                                    "kind": "web",
+                                    "role": "model_interface",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/sdk",
+                                    "verified_at": "2026-09-01",
+                                },
                             ],
                             "terms_evidence": [
                                 {
@@ -1300,7 +1389,7 @@ In `tests/test_evidence_links.py`, in the first fixture's `documents` (`:84-177`
                 },
 ```
 
-Change `self.assertEqual(10, len(targets))` to `13` (three new distinct URLs; the product page and the record `url` deduplicate), and add:
+Change `self.assertEqual(10, len(targets))` to `14` (four new distinct URLs; the product page and the record `url` deduplicate), and add:
 
 ```python
         self.assertEqual(
@@ -1313,6 +1402,10 @@ Change `self.assertEqual(10, len(targets))` to `13` (three new distinct URLs; th
             "the named-model page is the collection's central fact and is watched for drift",
         )
         self.assertTrue(by_url["https://robots.example/terms"].monitor_terms)
+        self.assertFalse(
+            by_url["https://robots.example/sdk"].monitor_terms,
+            "an unpinnable page is link-checked but its hash can never settle",
+        )
 ```
 
 In the second fixture (`:211-217`) add `"robots.json": {"robots": []},`.
@@ -1407,7 +1500,11 @@ Expected: FAIL — `ModuleNotFoundError: check_page_stability`, target count 10 
 
 ```python
         is_terms = item.get("kind") == "web_terms"
-        is_monitored = is_terms or item.get("role") in monitor_roles
+        # An unpinnable page changes between fetches, so its hash can never settle:
+        # it is still link-checked, never drift-monitored.
+        is_monitored = (
+            is_terms or item.get("role") in monitor_roles
+        ) and not item.get("unpinnable")
 ```
 
 passing `kind="terms" if is_terms else "evidence"` as before and `monitor_terms=is_monitored`. After the three-collection loop (`:311-343`) add a robots loop:
@@ -1432,7 +1529,7 @@ passing `kind="terms" if is_terms else "evidence"` as before and `monitor_terms=
             record_id=record_id,
             group="evidence",
             record_reviewed_at=reviewed_at,
-            monitor_roles=frozenset({"named_model"}),
+            monitor_roles=frozenset({"named_model", "model_interface"}),
         )
         _add_evidence_items(
             targets,
@@ -1597,6 +1694,7 @@ add `"robots",` to the key tuples in `test_every_record_gets_a_page_plus_sitemap
                 "form_factor": "humanoid",
                 "availability": "reservation",
                 "status": "active",
+                "ai_basis": ["vendor_named_model"],
                 "named_models": [
                     {"name": "Sample-VLA", "kind": "vision_language_action",
                      "role_note": "Turns frames into motion.", "evidence_label": "News"}
@@ -1639,6 +1737,7 @@ Add to `BOOT_FIELDS` (what a card, a filter, and the mixed search read):
         "url",
         "description",
         "form_factor",
+        "ai_basis",
         "availability",
         "status",
     ),
@@ -1680,7 +1779,14 @@ Read how `SEARCH_FIELDS` values are flattened into the index text (`:324-332`). 
                 "; ".join(
                     f"{model['name']} (vendor-stated): {model['role_note']}"
                     for model in record["named_models"]
-                ),
+                )
+                or "None named by the maker",
+            ),
+            (
+                "Runs your own models",
+                "Yes, by a route the maker documents"
+                if "open_model_interface" in record["ai_basis"]
+                else "Not documented by the maker",
             ),
             ("Status", humanize(record["status"])),
             ("Not verified", record["not_verified"]),
@@ -1725,7 +1831,7 @@ git commit -m "Project robots into boot, search, detail, and share pages"
 
 **Interfaces:**
 - Consumes: `filterScoredCollection(records, filters, view)` — the generic engine; handles scalar and array facet fields.
-- Produces: `AtlasCore.filterRobots(robots, filters) -> robot[]` with filters `{ term, searchIndex, formFactor, availability, status }`, always name-sorted; `filterDirectoryEntries(projects, services, runtimes, models, filters, packs, robots)` reading `filters.robotSearchIndex` and emitting `{ kind: "robot", record }`; `RECORD_KINDS` including `"robot"`; `shareRecordPath("robot", id) === "records/robots/<id>/"`.
+- Produces: `AtlasCore.filterRobots(robots, filters) -> robot[]` with filters `{ term, searchIndex, formFactor, aiBasis, availability, status }`, always name-sorted; `filterDirectoryEntries(projects, services, runtimes, models, filters, packs, robots)` reading `filters.robotSearchIndex` and emitting `{ kind: "robot", record }`; `RECORD_KINDS` including `"robot"`; `shareRecordPath("robot", id) === "records/robots/<id>/"`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1733,9 +1839,9 @@ In `tests/test_web.js`, add `filterRobots` to the destructured import on line 6 
 
 ```js
 const robots = [
-  { id: "g-one", name: "G One", manufacturer: "Unibot", description: "A compact humanoid.", form_factor: "humanoid", availability: "orderable", status: "active", evidence: [{ url: "https://hidden.example/spec" }] },
-  { id: "rover", name: "Rover", manufacturer: "Dynamo", description: "A walking inspector.", form_factor: "quadruped", availability: "enterprise_sales", status: "active" },
-  { id: "old-arm", name: "Atlas Arm", manufacturer: "Dynamo", description: "A bench arm.", form_factor: "arm", availability: "research_only", status: "archived" },
+  { id: "g-one", name: "G One", manufacturer: "Unibot", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active", evidence: [{ url: "https://hidden.example/spec" }] },
+  { id: "rover", name: "Rover", manufacturer: "Dynamo", description: "A walking inspector.", form_factor: "quadruped", ai_basis: ["open_model_interface"], availability: "enterprise_sales", status: "active" },
+  { id: "old-arm", name: "Atlas Arm", manufacturer: "Dynamo", description: "A bench arm.", form_factor: "arm", ai_basis: ["vendor_named_model"], availability: "research_only", status: "archived" },
 ];
 
 test("robot filters combine form factor, availability, and status, sorted by name only", () => {
@@ -1743,6 +1849,7 @@ test("robot filters combine form factor, availability, and status, sorted by nam
   assert.deepEqual(filterRobots(robots, { sort: "score" }).map(item => item.name), ["Atlas Arm", "G One", "Rover"]);
   assert.deepEqual(filterRobots(robots, { formFactor: "quadruped" }).map(item => item.name), ["Rover"]);
   assert.deepEqual(filterRobots(robots, { availability: "orderable" }).map(item => item.name), ["G One"]);
+  assert.deepEqual(filterRobots(robots, { aiBasis: "open_model_interface" }).map(item => item.name), ["G One", "Rover"]);
   assert.deepEqual(filterRobots(robots, { status: "archived" }).map(item => item.name), ["Atlas Arm"]);
   assert.deepEqual(filterRobots(robots, { formFactor: "arm", status: "active" }), []);
 });
@@ -1790,6 +1897,7 @@ After `filterPacks` (`:180-182`):
     searchFields: ["id", "name", "short_name", "manufacturer", "description"],
     facets: {
       formFactor: "form_factor",
+      aiBasis: "ai_basis",
       availability: "availability",
       status: "status",
     },
@@ -1830,7 +1938,7 @@ git commit -m "Filter robots by form factor, availability, and status"
 
 **Interfaces:**
 - Consumes: `AtlasCore.filterRobots`, `filterDirectoryEntries(..., packs, robots)`, payload paths from Task 7, the generic `renderCollection(name)` and `COLLECTIONS` table in `web/app.js:762-947`.
-- Produces: DOM ids `#robot-collection-count`, `#robots-directory-panel`, `#robot-search`, `#robot-form-factor-filter`, `#robot-availability-filter`, `#robot-status-filter`, `#robot-result-count`, `#reset-robot-filters`, `#robot-grid`, `#robot-pager`, `#robot-dialog`, `#robot-dialog-content`; card class `.robot-card`; card button attribute `data-robot`; `?collection=robots`; `record=robot:<id>`.
+- Produces: DOM ids `#robot-collection-count`, `#robots-directory-panel`, `#robot-search`, `#robot-form-factor-filter`, `#robot-ai-basis-filter`, `#robot-availability-filter`, `#robot-status-filter`, `#robot-result-count`, `#reset-robot-filters`, `#robot-grid`, `#robot-pager`, `#robot-dialog`, `#robot-dialog-content`; card class `.robot-card`; card button attribute `data-robot`; `?collection=robots`; `record=robot:<id>`.
 
 - [ ] **Step 1: Write the failing browser tests**
 
@@ -1841,8 +1949,8 @@ const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 
 const ROBOTS = [
-  { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", availability: "orderable", status: "active" },
-  { id: "rover", name: "Rover", manufacturer: "Dynamo", url: "https://dynamo.example/rover", description: "A walking inspector.", form_factor: "quadruped", availability: "enterprise_sales", status: "active" },
+  { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
+  { id: "rover", name: "Rover", manufacturer: "Dynamo", url: "https://dynamo.example/rover", description: "A walking inspector.", form_factor: "quadruped", ai_basis: ["open_model_interface"], availability: "enterprise_sales", status: "active" },
 ];
 const DETAIL = {
   first_party_domains: ["unibot.example"],
@@ -1887,6 +1995,9 @@ test("the robots scope filters, opens its own dialog, and never scores or compar
   await page.locator("#robot-form-factor-filter").selectOption("quadruped");
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["Rover"]);
   await page.locator("#reset-robot-filters").click();
+  await page.locator("#robot-ai-basis-filter").selectOption("vendor_named_model");
+  await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["G One"]);
+  await page.locator("#reset-robot-filters").click();
   await page.locator("#robot-search").fill("unibot");
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["G One"]);
 
@@ -1895,6 +2006,7 @@ test("the robots scope filters, opens its own dialog, and never scores or compar
   await expect(page.locator("#robot-dialog-content .eyebrow")).toContainText("Unscored");
   await expect(page.locator("#robot-dialog-content")).toContainText("Models the vendor names");
   await expect(page.locator("#robot-dialog-content")).toContainText("vendor-stated");
+  await expect(page.locator("#robot-dialog-content")).toContainText("Running your own models");
   await expect(page.locator("#robot-dialog-content")).toContainText("not verified by the Atlas");
   await expect(page).toHaveURL(/record=robot(%3A|:)g-one/);
 
@@ -1943,9 +2055,10 @@ Expected: all three FAIL — the first on `toHaveCount(1)` (no switcher entry ye
         <section class="control-panel inference-controls" aria-label="Robot filters">
           <label class="search-field"><span>Search</span><input id="robot-search" type="search" placeholder="Search robots, makers, and named models" autocomplete="off"></label>
           <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
+          <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
           <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
           <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
-          <p class="filter-guidance">Robots are listed for what their makers document: the models they name, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
+          <p class="filter-guidance">Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
         </section>
         <div class="result-row"><p id="robot-result-count" aria-live="polite"></p><button id="reset-robot-filters" class="ghost-button">Clear filters</button></div>
         <section id="robot-grid" class="project-grid inference-grid" aria-label="Reviewed robots"></section>
@@ -1992,6 +2105,7 @@ Use an accent variable that already exists in the file (list them with `grep -n 
     records: () => state.robots,
     groups: [
       ["robot_form_factors", "#robot-form-factor-filter", item => [item.form_factor]],
+      ["robot_ai_bases", "#robot-ai-basis-filter", item => item.ai_basis],
       ["robot_availability", "#robot-availability-filter", item => [item.availability]],
       ["project_statuses", "#robot-status-filter", item => [item.status]],
     ],
@@ -2045,6 +2159,7 @@ In the `COLLECTIONS` table (`:762-924`), a new entry — the generic, pre-ADR-03
       term: $("#robot-search").value,
       searchIndex: searchIndexes.robots,
       formFactor: $("#robot-form-factor-filter").value,
+      aiBasis: $("#robot-ai-basis-filter").value,
       availability: $("#robot-availability-filter").value,
       status: $("#robot-status-filter").value,
     }),
@@ -2072,9 +2187,10 @@ function robotDialogMarkup(robot) {
   return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
-      <section class="detail-block"><h3>Models the vendor names</h3>${(robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("")}<p class="unscored-note">${escapeHTML(robot.not_verified || "")}</p></section>
+      <section class="detail-block"><h3>Models the vendor names</h3>${(robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("") || "<p>The maker names no model for this robot.</p>"}<p class="unscored-note">${escapeHTML(robot.not_verified || "")}</p></section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
       <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
-      <section class="detail-block"><h3>Developer access</h3><p>${detailText(robot.developer_access || "—")}</p></section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? "" : `<section class="detail-block"><h3>Developer access</h3><p>${detailText(robot.developer_access || "—")}</p></section>`}
       <section class="detail-block"><h3>Availability</h3><p><strong>${escapeHTML(taxonomyName("robot_availability", robot.availability))}</strong></p><p>${detailText(robot.availability_note || "")}</p></section>
       <section class="detail-block"><h3>Terms</h3><p>${detailText(robot.terms_note || "")}</p>${(robot.terms_evidence || []).map(robotTermsLink).join("") || "<p>No terms were published on the maker's pages at review time.</p>"}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(robot.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}<p>Reviewed ${escapeHTML(robot.verified_at || "")}.</p></section>
@@ -2082,6 +2198,8 @@ function robotDialogMarkup(robot) {
     </div>`;
 }
 ```
+
+An evidence entry marked `unpinnable` must say so to the reader: wrap the sources list so each such entry is followed by `<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>` (map over `robot.evidence`, call `specificationEvidenceLink(item)`, and append the note when `item.unpinnable`).
 
 Look at how `openRecordDialog` merges the boot record with the lazily loaded detail (`:1530-1545`) — if the markup function first renders from the boot record alone, every detail field above must tolerate being `undefined`, which the `|| …` guards already do.
 
@@ -2108,7 +2226,7 @@ After `openPack` (`:1695`): `function openRobot(id) { return openRecordDialog("r
 - Filter inputs, beside the packs line (`:2103`):
 
 ```js
-  ["#robot-search", "#robot-form-factor-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
+  ["#robot-search", "#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
 ```
 
 - Reset, beside the packs reset (`:2144-2152`):
@@ -2117,6 +2235,7 @@ After `openPack` (`:1695`): `function openRobot(id) { return openRecordDialog("r
   $("#reset-robot-filters").addEventListener("click", () => {
     $("#robot-search").value = "";
     $("#robot-form-factor-filter").value = "";
+    $("#robot-ai-basis-filter").value = "";
     $("#robot-availability-filter").value = "";
     $("#robot-status-filter").value = "";
     state.page.robots = 1;
@@ -2134,7 +2253,7 @@ After `openPack` (`:1695`): `function openRobot(id) { return openRecordDialog("r
 - `renderTaxonomy()` (`:1304-1305`), after the pack groups:
 
 ```js
-    ["Robot forms", state.taxonomy.robot_form_factors], ["Robot availability", state.taxonomy.robot_availability],
+    ["Robot forms", state.taxonomy.robot_form_factors], ["How a robot uses AI", state.taxonomy.robot_ai_bases], ["Robot availability", state.taxonomy.robot_availability],
     ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
 ```
 
@@ -2178,10 +2297,14 @@ In `tests/test_directory.py`, load `robots.json` in `setUpClass` beside `cls.pac
                 "stars", "stars_verified_at", "price", "price_usd", "benchmarks",
             ):
                 self.assertNotIn(field, record, record["id"])
-            self.assertTrue(record["named_models"], record["id"])
+            self.assertEqual(
+                "vendor_named_model" in record["ai_basis"],
+                bool(record["named_models"]),
+                record["id"],
+            )
             self.assertTrue(record["not_verified"].strip(), record["id"])
         for group in (
-            "robot_form_factors", "robot_availability",
+            "robot_form_factors", "robot_ai_bases", "robot_availability",
             "robot_model_kinds", "robot_terms_kinds",
         ):
             self.assertTrue(self.taxonomy[group], group)
@@ -2211,12 +2334,12 @@ Run: `uv run python -m unittest tests.test_directory -k robots 2>&1 | tail -6` �
 - `AGENTS.md` rule 7: "Specifications, agent packs, and robots are unscored".
 - `docs/CURATION.md:21`: exclusions are also for robots that fail the Robots boundary in `ROBOTS.md`; add to the uniqueness sentence that a repository appears in at most one of `projects.json`, `packs.json`, `robots.json`, and `exclusions.json`.
 - `docs/DATA_MODEL.md`: a Robots section after packs — envelope, every field with one line each, the evidence `role` values, the `terms_evidence` item shape, relationships.
-- `docs/TAXONOMY.md`: the four robot groups and one sentence that a robot never receives a family or role.
+- `docs/TAXONOMY.md`: the five robot groups and one sentence that a robot never receives a family or role.
 - `docs/OPERATIONS.md`: the link checker monitors robot terms and named-model pages for drift and a drifted named-model page is resolved as terms drift is; `check_page_stability.py` usage; `robots.json` in the refresh staging list.
 - `docs/WEB.md`: switcher list (`:15`); a Robots scope line after `:21`; `:37` — say plainly that specifications, models, agent packs, and robots get no badges (this also closes the existing gap where packs are not named); filters and details after `:74`; `:79` and `:84` enumerations (`robot:id`); `:89` "eight payloads" with `app/robots.json` — and correct the sentence's claim: the eight boot payloads are fetched together and a missing one stops the page, while the lazy payloads degrade; the change-surface table; the measurement one-liner at `:139` plus a re-measured figure at `:146`; and a new matrix row:
 
 ```markdown
-32. with at least one robot published, switch to Robots, reload the scoped URL, combine form, availability, and status, open a robot detail and confirm "Models the vendor names", the vendor-stated label, the not-verified sentence, hardware, terms, and sources; confirm no score, sort, badge, or Compare control; search the mixed Directory for a robot; follow a related system into its dialog and confirm the URL names the system; reload a `record=robot:` URL. With none published, confirm the Robots entry is absent from the switcher and the All total is unchanged.
+32. with at least one robot published, switch to Robots, reload the scoped URL, combine form, AI basis, availability, and status, open a robot detail and confirm "Models the vendor names", the vendor-stated label, the not-verified sentence, hardware, terms, and sources; confirm no score, sort, badge, or Compare control; search the mixed Directory for a robot; follow a related system into its dialog and confirm the URL names the system; reload a `record=robot:` URL. With none published, confirm the Robots entry is absent from the switcher and the All total is unchanged.
 ```
 
 - `README.md`, `ROADMAP.md`: add Robots to the collection lists in the same one-sentence style as packs.
@@ -2276,11 +2399,11 @@ For every URL a subagent returned: fetch it, find the quoted sentence, and disca
 uv run python scripts/check_page_stability.py "<url>"
 ```
 
-Record both hashes for the PR description. Expected for a citable page: `stable: citable`. `figure.ai` is the known risk: batch 39 could not pin it under the candidate hasher. If it is unstable here too, look for a stable first-party alternative for that role; if none exists for a required role, Figure stays held.
+Record both hashes for the PR description. Expected for a citable page: `stable: citable`. `figure.ai` is the known risk: batch 39 could not pin it under the candidate hasher. If it is unstable here too, look for a stable first-party alternative for that role; if none exists, cite the page with `"unpinnable": true` and say so in the batch note. An unpinnable page does not hold Figure.
 
 - [ ] **Step 3: Decide each robot against the six conditions**
 
-Write down, per robot, which condition fails first, if one does. Expected hard cases: **Spot** and condition 3 — batch 39's evidence shows classical autonomy in the SDK documentation, so it passes only if Boston Dynamics' own documentation names a learned policy; a press article or a conference talk is not first-party documentation. **1X NEO** and condition 6 — a 404 terms page is `none_published`, not a failure. **Unitree G1** — a warranty page is `warranty_only`; check the `unitreerobotics` GitHub organisation for an SDK licence and cite it as `sdk_license` with the pinned blob under `supporting`.
+Write down, per robot, which condition fails first, if one does. Expected hard cases: **Spot** and condition 3 — batch 39's evidence shows classical autonomy in the SDK documentation, so its likely basis is `open_model_interface` alone: check whether Boston Dynamics' own documentation describes a supported way to run the reader's own model or policy (the Spot SDK and its documented control services are the place to look), and add `vendor_named_model` only if that documentation also names a learned policy; a press article or a conference talk is not first-party documentation. **1X NEO** and condition 6 — a 404 terms page is `none_published`, not a failure. **Unitree G1** — a warranty page is `warranty_only`; check the `unitreerobotics` GitHub organisation for an SDK licence and cite it as `sdk_license` with the pinned blob under `supporting`.
 
 - [ ] **Step 4: Write each passing record**
 
