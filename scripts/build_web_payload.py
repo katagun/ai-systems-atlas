@@ -233,11 +233,17 @@ def load_catalog(root: Path) -> dict[str, dict]:
     return catalog
 
 
-def model_records(catalog: dict[str, dict]) -> list[dict]:
+def _overlay_models(catalog: dict[str, dict]) -> tuple[list[dict], int]:
     """Overlay reviewed Atlas models on the complete attributed source snapshot.
 
     A linked record matches its row by source_id. A record reviewed before
-    models.dev listed it has no source_id and matches by id (ADR 036).
+    models.dev listed it has no source_id and matches by id (ADR 036), but
+    only against a row no linked record has already claimed by source_id -
+    the single pass below is the one place that distinction is made, so the
+    combined list and the unmatched count can never drift apart.
+
+    Returns the combined list and the count of null-source records left
+    unmatched after the pass.
     """
     linked: dict[str, dict] = {}
     unlisted: dict[str, dict] = {}
@@ -274,16 +280,19 @@ def model_records(catalog: dict[str, dict]) -> list[dict]:
         )
     combined.extend(linked.values())
     combined.extend(unlisted.values())
-    return combined
+    return combined, len(unlisted)
+
+
+def model_records(catalog: dict[str, dict]) -> list[dict]:
+    """Overlay reviewed Atlas models on the complete attributed source snapshot."""
+    records, _ = _overlay_models(catalog)
+    return records
 
 
 def unlisted_model_count(catalog: dict[str, dict]) -> int:
     """Reviewed models that no models.dev row stands behind yet."""
-    row_ids = {row["id"] for row in catalog["models-dev.json"]["models"]}
-    return sum(
-        record["source_id"] is None and record["id"] not in row_ids
-        for record in catalog["models.json"]["models"]
-    )
+    _, count = _overlay_models(catalog)
+    return count
 
 
 def searchable_text(value) -> str:

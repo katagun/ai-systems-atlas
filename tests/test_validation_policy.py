@@ -2457,6 +2457,53 @@ class ValidationPolicyTests(unittest.TestCase):
         )
         self.assertTrue(source["models"])  # fixture sanity
 
+    def test_null_source_record_whose_id_matches_a_row_claimed_by_another_is_rejected(
+        self,
+    ) -> None:
+        """Two reviews cannot both stand behind one models.dev row (ADR 036)."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        models_path = root / "directory" / "models.json"
+        document = json.loads(models_path.read_text(encoding="utf-8"))
+        first, second = document["models"][0], document["models"][1]
+        # first stays linked to its own row by source_id, but freezes its id so
+        # the row's original id is free; a null-source copy then claims that id.
+        claimed_row_id = first["id"]
+        first["id"] = claimed_row_id + "-frozen"
+        duplicate = dict(second)
+        duplicate["id"] = claimed_row_id
+        duplicate["source_id"] = None
+        document["models"].append(duplicate)
+        self.write_json(models_path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                f"id matches models.dev row {first['source_id']}" in e
+                and f"which {first['id']} is already linked to" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_null_source_record_whose_id_matches_an_unclaimed_row_is_not_rejected(
+        self,
+    ) -> None:
+        """A null-source id that merely coincides with an unclaimed row is the
+        normal link-pending state (ADR 036), not a collision."""
+
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertFalse(
+            [error for error in errors if "already linked to (ADR 036)" in error],
+            errors,
+        )
+
     def test_queued_row_for_a_null_source_record_is_reported_not_rejected(self) -> None:
         from scripts.validate_directory import model_link_pending
 

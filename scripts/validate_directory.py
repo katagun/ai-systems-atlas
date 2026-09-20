@@ -2906,13 +2906,37 @@ def validate_model_source_links(
     source_by_row_id = {
         row.get("id"): source_id for source_id, row in rows_by_source.items()
     }
+    row_by_id = {row.get("id"): row for row in source_models if isinstance(row, dict)}
+    linked_by_source_id = {
+        model.get("source_id"): model.get("id")
+        for model in models
+        if isinstance(model, dict) and isinstance(model.get("source_id"), str)
+    }
     for model in models:
         if not isinstance(model, dict):
             continue
         source_id = model.get("source_id")
+        prefix = f"model {model.get('id', 'unknown')}"
+        if source_id is None:
+            # ADR 036: an id that matches a row already claimed by a different
+            # linked record means two reviews point at one release; the row
+            # a null-source record's id merely coincides with must still be
+            # unclaimed, or it is not a link-pending state but a collision.
+            row = row_by_id.get(model.get("id"))
+            row_source_id = row.get("source_id") if isinstance(row, dict) else None
+            other_model_id = (
+                linked_by_source_id.get(row_source_id)
+                if isinstance(row_source_id, str)
+                else None
+            )
+            if other_model_id is not None:
+                errors.append(
+                    f"{prefix}: id matches models.dev row {row_source_id}, which "
+                    f"{other_model_id} is already linked to (ADR 036)"
+                )
+            continue
         if not isinstance(source_id, str):
             continue
-        prefix = f"model {model.get('id', 'unknown')}"
         if source_id not in rows_by_source:
             errors.append(
                 f"{prefix}: source_id {source_id} is missing from the complete "

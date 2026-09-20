@@ -152,6 +152,30 @@ class WebPayloadTests(unittest.TestCase):
             [(item["id"], item["review_status"]) for item in records],
         )
 
+    def test_null_source_record_whose_id_matches_a_row_claimed_by_another_stays_unlisted(
+        self,
+    ) -> None:
+        """A row already claimed by source_id cannot also satisfy an id match.
+
+        Regression for an undercount: a null-source record's id coinciding
+        with a source row does not make it matched when a different linked
+        record has already claimed that row by source_id.
+        """
+        rows = [self._row("acme/chat-2026", "model-R-id")]
+        catalog = self._catalog_with(
+            [
+                {"id": "model-L", "source_id": "acme/chat-2026", "name": "Linked"},
+                {"id": "model-R-id", "source_id": None, "name": "Reviewed"},
+            ],
+            rows,
+        )
+
+        records = model_records(catalog)
+
+        self.assertEqual(2, len(records))
+        self.assertEqual(1, unlisted_model_count(catalog))
+        self.assertEqual(len(rows) + unlisted_model_count(catalog), len(records))
+
     def test_every_imported_model_keeps_its_complete_source_metadata(self) -> None:
         records = {item["id"]: item for item in model_records(self.catalog)}
         boot = {
