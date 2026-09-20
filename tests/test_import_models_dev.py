@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import io
+import json
 import tarfile
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
+from scripts import import_models_dev
 from scripts.import_models_dev import (
     build_document,
     build_source_document,
@@ -29,6 +33,16 @@ def model_record(source_id: str, *, output: list[str] | None = None) -> dict:
         "attachment": False,
         "tool_call": True,
     }
+
+
+def model_toml(name: str) -> str:
+    return (
+        f'name = "{name}"\n'
+        f'description = "{name} description"\n'
+        "tool_call = true\n"
+        "[limit]\ncontext = 8192\noutput = 1024\n"
+        '[modalities]\ninput = ["text"]\noutput = ["text"]\n'
+    )
 
 
 def archive_with(files: dict[str, str]) -> bytes:
@@ -131,6 +145,84 @@ class ModelsDevImportTests(unittest.TestCase):
 
         self.assertEqual(2, eligible)
         self.assertEqual(["acme/chat"], [item["source_id"] for item in candidates])
+
+    def test_row_for_a_null_source_reviewed_model_is_queued_like_any_other(
+        self,
+    ) -> None:
+        # ADR 036: run() builds published_source_ids from string source_ids only, so a
+        # reviewed record with source_id null never keeps its upstream row out of the queue.
+        catalog = {"acme/chat": model_record("acme/chat")}
+
+        candidates, eligible = normalize_catalog(
+            catalog,
+            observed_at="2026-09-20",
+            minimum_records=1,
+            published_source_ids=set(),
+        )
+
+        self.assertEqual(1, eligible)
+        self.assertEqual(["model-acme-chat"], [item["id"] for item in candidates])
+
+    def test_run_queues_models_dev_row_for_a_null_source_reviewed_model(self) -> None:
+        # Behavioural pin for the same ADR 036 guarantee, exercised through run()
+        # end to end: a reviewed model with source_id null must not suppress its
+        # models.dev row, while a reviewed model with a real source_id still does.
+        real_source_models_path = import_models_dev.SOURCE_MODELS_PATH
+        real_mtime = real_source_models_path.stat().st_mtime_ns
+
+        files = {
+            f"models/acme/filler-{index:03d}.toml": model_toml(f"filler-{index:03d}")
+            for index in range(100)
+        }
+        files["models/acme/chat.toml"] = model_toml("chat")
+        archive_bytes = archive_with(files)
+
+        def fake_getter(url: str, token: str | None) -> tuple[dict, bytes]:
+            return {"sha": COMMIT}, b""
+
+        def fake_archive_getter(url: str, token: str | None) -> bytes:
+            return archive_bytes
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            models_path = tmp_path / "models.json"
+            candidates_path = tmp_path / "model-candidates.json"
+            dispositions_path = tmp_path / "model-dispositions.json"
+            source_models_path = tmp_path / "models-dev.json"
+
+            models_path.write_text(
+                json.dumps(
+                    {
+                        "models": [
+                            {"id": "model-acme-chat", "source_id": None},
+                            {
+                                "id": "model-acme-filler-000",
+                                "source_id": "acme/filler-000",
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with (
+                patch.object(import_models_dev, "MODELS_PATH", models_path),
+                patch.object(import_models_dev, "CANDIDATES_PATH", candidates_path),
+                patch.object(import_models_dev, "DISPOSITIONS_PATH", dispositions_path),
+                patch.object(
+                    import_models_dev, "SOURCE_MODELS_PATH", source_models_path
+                ),
+            ):
+                document = import_models_dev.run(
+                    fake_getter, fake_archive_getter, observed_at="2026-09-20"
+                )
+
+        source_ids = {item["source_id"] for item in document["candidates"]}
+        self.assertIn("acme/chat", source_ids)
+        self.assertNotIn("acme/filler-000", source_ids)
+        self.assertEqual(101, document["eligible_record_count"])
+
+        self.assertEqual(real_mtime, real_source_models_path.stat().st_mtime_ns)
 
     def test_source_snapshot_keeps_every_model_regardless_of_output_modality(
         self,
