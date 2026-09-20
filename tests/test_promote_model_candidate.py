@@ -8,11 +8,18 @@ from copy import deepcopy
 from pathlib import Path
 
 from scripts.promote_model_candidate import (
+    EMPTY_SOURCE_METADATA,
     PromotionError,
     apply_promotion,
     build_draft,
+    build_gap_draft,
     preflight_promotion,
     write_draft,
+)
+from scripts.validate_directory import (
+    MODEL_CAPABILITIES,
+    MODEL_LIMITS,
+    MODEL_SOURCE_METADATA_REQUIRED,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -259,6 +266,109 @@ class PromoteModelCandidateTests(unittest.TestCase):
             write_draft(path, build_draft(self.candidate, self.queue))
 
         self.assertEqual("keep me", path.read_text(encoding="utf-8"))
+
+    def test_empty_source_metadata_matches_the_schema(self) -> None:
+        self.assertEqual(MODEL_SOURCE_METADATA_REQUIRED, set(EMPTY_SOURCE_METADATA))
+        self.assertEqual(MODEL_CAPABILITIES, set(EMPTY_SOURCE_METADATA["capabilities"]))
+        self.assertEqual(MODEL_LIMITS, set(EMPTY_SOURCE_METADATA["limits"]))
+
+    def test_gap_draft_returns_a_deep_copy_of_the_empty_template(self) -> None:
+        first = build_gap_draft(self.root, "acme/unlisted")
+        first["source_metadata"]["modalities"]["output"].append("text")
+        first["source_metadata"]["links"].append({"label": "x", "url": "https://x"})
+
+        second = build_gap_draft(self.root, "acme/other-unlisted")
+
+        self.assertEqual([], second["source_metadata"]["modalities"]["output"])
+        self.assertEqual([], second["source_metadata"]["links"])
+        self.assertEqual([], EMPTY_SOURCE_METADATA["modalities"]["output"])
+        self.assertEqual([], EMPTY_SOURCE_METADATA["links"])
+
+    def gap_record(self) -> dict:
+        """The fixture record rewritten as a complete null-source review."""
+        record = deepcopy(self.record)
+        record["source_id"] = None
+        record["id"] = "model-acme-unlisted"
+        record["evidence"] = [
+            item
+            for item in record["evidence"]
+            if "github.com/anomalyco/models.dev/blob/" not in item["url"]
+        ]
+        return record
+
+    def test_gap_draft_has_null_source_and_empty_metadata(self) -> None:
+        draft = build_gap_draft(self.root, "acme/unlisted")
+
+        self.assertEqual("model-acme-unlisted", draft["id"])
+        self.assertIsNone(draft["source_id"])
+        self.assertEqual([], draft["source_metadata"]["modalities"]["output"])
+        self.assertEqual([], draft["evidence"])
+        self.assertEqual("review_required", draft["license_review_status"])
+
+    def test_gap_draft_refuses_ids_models_dev_already_lists(self) -> None:
+        with self.assertRaisesRegex(
+            PromotionError, "already in the models.dev snapshot"
+        ):
+            build_gap_draft(self.root, self.candidate["source_id"])
+
+    def test_gap_draft_refuses_dispositioned_ids(self) -> None:
+        write_json(
+            self.root / "directory" / "model-dispositions.json",
+            {
+                "dispositions": [
+                    {
+                        "source_id": "acme/unlisted",
+                        "disposition": "held",
+                        "reason": "x",
+                        "decided_at": "2026-09-20",
+                    }
+                ]
+            },
+        )
+        with self.assertRaisesRegex(PromotionError, "dispositioned"):
+            build_gap_draft(self.root, "acme/unlisted")
+
+    def test_gap_draft_refuses_an_id_that_is_already_published(self) -> None:
+        models = json.loads((self.root / "directory" / "models.json").read_text())
+        taken = models["models"][0]["source_id"]
+        source = {"models": []}
+        write_json(self.root / "directory" / "models-dev.json", source)
+        with self.assertRaisesRegex(PromotionError, "already published"):
+            build_gap_draft(self.root, taken)
+
+    def test_complete_gap_review_passes_and_apply_leaves_the_queue_alone(self) -> None:
+        queue_path = self.root / "directory" / "model-candidates.json"
+        before = queue_path.read_bytes()
+
+        preflight_promotion(self.root, self.gap_record())
+        remaining, model_id = apply_promotion(self.root, self.gap_record())
+
+        self.assertEqual("model-acme-unlisted", model_id)
+        self.assertEqual(1, remaining)
+        self.assertEqual(before, queue_path.read_bytes())
+        models = json.loads((self.root / "directory" / "models.json").read_text())
+        added = [m for m in models["models"] if m["id"] == "model-acme-unlisted"]
+        self.assertEqual([None], [m["source_id"] for m in added])
+
+    def test_gap_review_still_needs_the_authoritative_model_url(self) -> None:
+        record = self.gap_record()
+        record["evidence"] = [
+            e for e in record["evidence"] if e["url"] != record["url"]
+        ]
+        with self.assertRaisesRegex(PromotionError, "authoritative model URL"):
+            preflight_promotion(self.root, record)
+
+    def test_gap_review_is_refused_once_models_dev_lists_the_id(self) -> None:
+        record = self.gap_record()
+        record["id"] = self.candidate["id"]
+        with self.assertRaisesRegex(PromotionError, "use the queue"):
+            preflight_promotion(self.root, record)
+
+    def test_missing_source_id_key_is_still_rejected(self) -> None:
+        record = deepcopy(self.record)
+        del record["source_id"]
+        with self.assertRaisesRegex(PromotionError, "requires a models.dev source_id"):
+            preflight_promotion(self.root, record)
 
 
 if __name__ == "__main__":
