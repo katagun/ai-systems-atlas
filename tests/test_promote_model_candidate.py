@@ -10,9 +10,12 @@ from pathlib import Path
 from scripts.promote_model_candidate import (
     EMPTY_SOURCE_METADATA,
     PromotionError,
+    apply_link,
     apply_promotion,
     build_draft,
     build_gap_draft,
+    metadata_diff,
+    preflight_link,
     preflight_promotion,
     write_draft,
 )
@@ -388,6 +391,101 @@ class PromoteModelCandidateTests(unittest.TestCase):
         del record["source_id"]
         with self.assertRaisesRegex(PromotionError, "requires a models.dev source_id"):
             preflight_promotion(self.root, record)
+
+    def install_null_source_twin(self, *, model_id: str | None = None) -> dict:
+        record = deepcopy(self.record)
+        record["source_id"] = None
+        record["id"] = model_id or self.candidate["id"]
+        record["source_metadata"]["limits"]["context"] = 123
+        record["evidence"] = [
+            e
+            for e in record["evidence"]
+            if "github.com/anomalyco/models.dev/blob/" not in e["url"]
+        ]
+        path = self.root / "directory" / "models.json"
+        models = json.loads(path.read_text())
+        models["models"].append(record)
+        write_json(path, models)
+        return record
+
+    def test_metadata_diff_names_each_differing_leaf(self) -> None:
+        self.assertEqual(
+            ["limits.context: 123 -> 456", "name: 'A' -> 'B'"],
+            metadata_diff(
+                {"name": "A", "limits": {"context": 123}, "family": "f"},
+                {"name": "B", "limits": {"context": 456}, "family": "f"},
+            ),
+        )
+
+    def test_link_adopts_upstream_metadata_and_removes_the_candidate(self) -> None:
+        twin = self.install_null_source_twin()
+
+        diff = apply_link(
+            self.root, twin["id"], self.candidate["source_id"], "2026-09-20"
+        )
+
+        self.assertTrue(
+            any(line.startswith("limits.context: 123 -> ") for line in diff)
+        )
+        models = json.loads((self.root / "directory" / "models.json").read_text())
+        linked = next(m for m in models["models"] if m["id"] == twin["id"])
+        self.assertEqual(self.candidate["source_id"], linked["source_id"])
+        self.assertEqual(self.candidate["source_metadata"], linked["source_metadata"])
+        self.assertEqual("2026-09-20", linked["metadata_verified_at"])
+        self.assertEqual(twin["verified_at"], linked["verified_at"])
+        self.assertEqual(twin["score"], linked["score"])
+        self.assertTrue(
+            any(
+                e["url"].endswith(f"/models/{self.candidate['source_id']}.toml")
+                and e["label"] == "Pinned models.dev source metadata"
+                and e["verified_at"] == "2026-09-20"
+                for e in linked["evidence"]
+            )
+        )
+        queue = json.loads(
+            (self.root / "directory" / "model-candidates.json").read_text()
+        )
+        self.assertEqual([], queue["candidates"])
+
+    def test_link_keeps_a_frozen_id_when_upstream_used_another_name(self) -> None:
+        twin = self.install_null_source_twin(model_id="model-acme-guessed-name")
+
+        apply_link(self.root, twin["id"], self.candidate["source_id"], "2026-09-20")
+
+        models = json.loads((self.root / "directory" / "models.json").read_text())
+        ids = {m["id"]: m["source_id"] for m in models["models"]}
+        self.assertEqual(self.candidate["source_id"], ids["model-acme-guessed-name"])
+
+    def test_preflight_link_writes_nothing(self) -> None:
+        twin = self.install_null_source_twin()
+        before = {
+            name: (self.root / "directory" / name).read_bytes()
+            for name in ("models.json", "model-candidates.json")
+        }
+
+        preflight_link(self.root, twin["id"], self.candidate["source_id"], "2026-09-20")
+
+        for name, payload in before.items():
+            self.assertEqual(payload, (self.root / "directory" / name).read_bytes())
+
+    def test_link_refuses_a_record_that_is_already_linked(self) -> None:
+        models = json.loads((self.root / "directory" / "models.json").read_text())
+        linked_id = models["models"][0]["id"]
+        with self.assertRaisesRegex(PromotionError, "already linked"):
+            preflight_link(
+                self.root, linked_id, self.candidate["source_id"], "2026-09-20"
+            )
+
+    def test_link_refuses_a_source_id_that_is_not_queued(self) -> None:
+        twin = self.install_null_source_twin()
+        with self.assertRaisesRegex(PromotionError, "model candidate not found"):
+            preflight_link(self.root, twin["id"], "acme/ghost", "2026-09-20")
+
+    def test_link_refuses_a_stale_or_future_metadata_date(self) -> None:
+        twin = self.install_null_source_twin()
+        for bad in ("2026-09-03", "2999-01-01", "yesterday"):
+            with self.subTest(bad=bad), self.assertRaises(PromotionError):
+                preflight_link(self.root, twin["id"], self.candidate["source_id"], bad)
 
 
 if __name__ == "__main__":
