@@ -1352,6 +1352,11 @@
       "kind": "open_source"
     },
     {
+      "id": "LicenseRef-AWS-Service-Terms",
+      "name": "AWS Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-Alibaba-Model-Studio-Agreement",
       "name": "Alibaba Cloud Model Studio Service Agreement",
       "kind": "proprietary"
