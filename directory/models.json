@@ -16257,6 +16257,231 @@
       "verified_at": "2026-09-04"
     },
     {
+      "id": "model-mistral-voxtral-mini-3b-2507",
+      "source_id": "mistral/voxtral-mini-3b-2507",
+      "name": "Voxtral Mini 3B 2507",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Voxtral-Mini-3B-2507",
+      "description": "An ungated 4.7B audio-and-text input model producing text output with a 32,768-token context, released under Apache-2.0.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Voxtral Mini 3B 2507",
+        "description": "Open audio-language model for speech transcription, audio understanding, and voice-driven tool use",
+        "family": "voxtral",
+        "release_date": "2025-07-15",
+        "last_updated": "2025-07-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Voxtral-Mini-3B-2507"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries an apache-2.0 frontmatter declaration corroborated by the Hugging Face tag, the launch announcement, and the docs page badge. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Voxtral-Mini-3B-2507/blob/3060fe34b35ba5d44202ce9ff3c097642914f8f3/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Voxtral-Mini-3B-2507 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Voxtral-Mini-3B-2507 release (July 2025). The Voxtral Small sibling, the transcribe-optimized API product, the retired voxtral-mini-2507 API model, community quantizations and fine-tunes, and downstream products remain separate boundaries.",
+      "strengths": [
+        "Ungated audio-input weights with consolidated and sharded Safetensors and tokenizer in the official repository",
+        "The model card documents the audio length limits and Transformers and vLLM deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "The 32K token context bounds the audio input to the documented duration limits"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 6,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Voxtral Mini 2507 weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Voxtral-Mini-3B-2507",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Voxtral Mini model documentation",
+          "url": "https://docs.mistral.ai/models/voxtral-mini-25-07",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Voxtral launch announcement",
+          "url": "https://mistral.ai/news/voxtral",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/voxtral-mini-3b-2507.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-voxtral-small-24b-2507",
+      "source_id": "mistral/voxtral-small-24b-2507",
+      "name": "Voxtral Small 24B 2507",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Voxtral-Small-24B-2507",
+      "description": "An ungated 24.3B audio-and-text input model producing text output with a 32,768-token context, released under Apache-2.0 and served on the Mistral API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Voxtral Small 24B 2507",
+        "description": "Open audio-language model for speech transcription, audio understanding, and voice-driven tool use",
+        "family": "voxtral",
+        "release_date": "2025-07-15",
+        "last_updated": "2025-07-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Voxtral-Small-24B-2507"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries an apache-2.0 frontmatter declaration corroborated by the Hugging Face tag, the launch announcement, and the docs page badge. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Voxtral-Small-24B-2507/blob/da5b42409f279fdd92febee0511a6c32828569c1/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Voxtral-Small-24B-2507 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Voxtral-Small-24B-2507 release (July 2025). The Voxtral Mini sibling, the voxtral-small-latest alias, community quantizations and fine-tunes, and downstream products remain separate boundaries.",
+      "strengths": [
+        "Ungated audio-input weights with consolidated and sharded Safetensors and tokenizer in the official repository",
+        "The model card documents the audio length limits and Transformers and vLLM deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "The 32K token context bounds the audio input to the documented duration limits"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Voxtral Small 2507 weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Voxtral-Small-24B-2507",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Voxtral Small model documentation",
+          "url": "https://docs.mistral.ai/models/voxtral-small-25-07",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Voxtral launch announcement",
+          "url": "https://mistral.ai/news/voxtral",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/voxtral-small-24b-2507.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-moonshotai-kimi-k2-thinking",
       "source_id": "moonshotai/kimi-k2-thinking",
       "name": "Kimi K2 Thinking",
@@ -26142,6 +26367,330 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-zhipuai-glm-5-turbo",
+      "source_id": "zhipuai/glm-5-turbo",
+      "name": "GLM-5-Turbo",
+      "developer": "Z.ai",
+      "url": "https://docs.z.ai/guides/llm/glm-5-turbo",
+      "description": "An API-served text foundation model optimized for agentic coding scenarios, available through the Z.ai API under the Z.AI terms of use, without downloadable model weights.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-5-Turbo",
+        "description": "Faster GLM-5 lane for coding agents that need lower latency",
+        "family": "glm",
+        "release_date": "2026-03-16",
+        "last_updated": "2026-03-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-ZAI-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Z.ai provides GLM-5-Turbo as a managed service under its Terms of Use and Additional Terms for API Services, which reserve all rights in the models and prohibit extracting data, parameters, or code from the service. No model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-ZAI-API-Terms",
+          "kind": "web_terms",
+          "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+          "verified_at": "2026-09-18",
+          "scope": "Access to GLM-5-Turbo through the Z.ai API under the Terms of Use and the Additional Terms for API Services"
+        }
+      ],
+      "access_boundary": "This record represents the GLM-5-Turbo release served under the Z.ai API model name glm-5-turbo, launched March 2026. The GLM-5 and later open-weight releases, the multimodal 5V-Turbo sibling, the Z.ai API and chat products, and reseller surfaces remain separate service or product boundaries.",
+      "strengths": [
+        "Z.ai publishes a dedicated API documentation page with the model identity, context, and benchmarks",
+        "The ZClawBench optimization target and OpenClaw integration are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Z.ai publishes no versioning, deprecation, or retirement posture for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GLM-5-Turbo API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-5-turbo",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.AI terms of use and API services terms",
+          "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-5-turbo.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-5-1",
+      "source_id": "zhipuai/glm-5.1",
+      "name": "GLM-5.1",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-5.1",
+      "description": "An ungated 754B text model with a 200,000-token context, released under a standard MIT license file and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-5.1",
+        "description": "Strong GLM coding model for agentic engineering, terminals, and repository generation",
+        "family": "glm",
+        "release_date": "2026-04-07",
+        "last_updated": "2026-04-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-5.1"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a standard MIT license text dated 2026, granting permission to use, copy, modify, and distribute the software without restriction, with the card frontmatter also declaring MIT. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/LICENSE",
+          "verified_at": "2026-09-18",
+          "scope": "GLM-5.1 weights, tokenizer, and bundled model code in the official zai-org repository"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-5.1 release of April 2026 at Hugging Face commit 26e1bd6e011feb778d25ae34b09b07074139d92d. GLM-5, GLM-5.2, and later releases, the Turbo and vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with a standard MIT license file shipped in the repository",
+        "The model card documents SGLang, vLLM, xLLM, Transformers, and KTransformers serving paths"
+      ],
+      "tradeoffs": [
+        "No versioning or deprecation policy is published for the line",
+        "Third-party hosting listings are not verified host documentation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-5.1 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-5.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-5.1 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-5.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GLM-5.1 announcement",
+          "url": "https://z.ai/blog/glm-5.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-5.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-5-2",
+      "source_id": "zhipuai/glm-5.2",
+      "name": "GLM-5.2",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-5.2",
+      "description": "An ungated 753B text model with a 1,000,000-token context, released under a standard MIT license file with explicit open-source prose and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-5.2",
+        "description": "Open flagship GLM for long-horizon coding agents and million-token context work",
+        "family": "glm",
+        "release_date": "2026-06-13",
+        "last_updated": "2026-06-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-5.2"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a standard MIT license text dated 2026, the card frontmatter declares MIT, and the card body states the model is pure open source with no regional limits. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/LICENSE",
+          "verified_at": "2026-09-18",
+          "scope": "GLM-5.2 weights, tokenizer, and bundled model code in the official zai-org repository"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-5.2 release of June 2026 at Hugging Face commit cf457fa734ab149ffef225f80893eb38c6ff5cdc, with the newer zai-org/GLM-5.3-BF16 named as successor. GLM-5 and GLM-5.1, the Turbo and vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with a standard MIT license file and explicit open-source grant prose",
+        "The card names the successor release and a migration guide is published"
+      ],
+      "tradeoffs": [
+        "No versioning or deprecation policy beyond the successor pointer is published",
+        "Third-party hosting listings are not verified host documentation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.82
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-5.2 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-5.2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-5.2 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-5.2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GLM-5.2 announcement",
+          "url": "https://z.ai/blog/glm-5.2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-5.2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-zhipuai-glm-5-3",
       "source_id": "zhipuai/glm-5.3",
       "name": "GLM-5.3",
@@ -26364,6 +26913,115 @@
       ],
       "metadata_verified_at": "2026-09-12",
       "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-zhipuai-glm-5v-turbo",
+      "source_id": "zhipuai/glm-5v-turbo",
+      "name": "GLM-5V-Turbo",
+      "developer": "Z.ai",
+      "url": "https://docs.z.ai/guides/vlm/glm-5v-turbo",
+      "description": "An API-served multimodal coding foundation model handling text, image, video, and document input, available through the Z.ai API under the Z.AI terms of use, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-5V-Turbo",
+        "description": "Fast GLM vision model for screenshots, documents, and multimodal agent tasks",
+        "family": "glm",
+        "release_date": "2026-04-01",
+        "last_updated": "2026-04-01",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-ZAI-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Z.ai provides GLM-5V-Turbo as a managed service under its Terms of Use and Additional Terms for API Services, which reserve all rights in the models and prohibit extracting data, parameters, or code from the service. No model weights are licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-ZAI-API-Terms",
+          "kind": "web_terms",
+          "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+          "verified_at": "2026-09-18",
+          "scope": "Access to GLM-5V-Turbo through the Z.ai API under the Terms of Use and the Additional Terms for API Services"
+        }
+      ],
+      "access_boundary": "This record represents the GLM-5V-Turbo release served under the Z.ai API model name glm-5v-turbo, launched April 2026 and built on the GLM-5-Turbo language base. The text-only Turbo sibling, the GLM-5 and later open-weight releases, the Z.ai API and chat products, and reseller surfaces remain separate service or product boundaries.",
+      "strengths": [
+        "Z.ai publishes a dedicated API documentation page and a first-party technical report",
+        "The report documents the multimodal agentic architecture and its language base"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Z.ai publishes no versioning, deprecation, or retirement posture for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GLM-5V-Turbo API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-5v-turbo",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.AI terms of use and API services terms",
+          "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GLM-5V-Turbo technical report",
+          "url": "https://arxiv.org/abs/2604.26752",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-5v-turbo.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     }
   ]
 }

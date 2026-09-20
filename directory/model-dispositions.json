@@ -517,6 +517,12 @@
       "disposition": "held",
       "reason": "The ID names a dated API refresh of the Pixtral Large line whose reviewable identity is the line record; the 2502 snapshot has no dedicated docs page or lifecycle row. Held pending a line-level review.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "zhipuai/glm-4.5-flash",
+      "disposition": "excluded",
+      "reason": "No weight release was ever published under this name and no standalone first-party release identity exists; it is a free-tier API product of the reviewed GLM-4.5 line.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
