@@ -1,6 +1,6 @@
 # ADR 026: App payloads are a projection of the published endpoints
 
-**Status:** Accepted
+**Status:** Accepted. Amended by [ADR 036](036-reviewed-models-may-precede-their-models-dev-source-row.md) (a reviewed model may have no models.dev row yet).
 
 ## Context
 

@@ -123,6 +123,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md",
             "docs/adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md",
             "docs/adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md",
+            "docs/adr/036-reviewed-models-may-precede-their-models-dev-source-row.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

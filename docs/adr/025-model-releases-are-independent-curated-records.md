@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-09-04
+- Amended by: [ADR 036](036-reviewed-models-may-precede-their-models-dev-source-row.md) (a reviewed model may have no models.dev row yet)
 
 ## Context
 

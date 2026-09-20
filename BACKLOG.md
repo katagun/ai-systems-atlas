@@ -98,7 +98,7 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Revisit Google Co-Scientist and AlphaProof when either becomes generally available through a self-serve or contractable product boundary.
 - [ ] Revisit Meta's announced Harness framework only after a repository, documentation, or first-party product page exists.
 - [ ] Revisit fx's `model_backends` when a tagged release ships the configurable model connections merged in `vercel-labs/fx#780` on 2026-09-15 (61 commits past v0.0.10 on 2026-09-17): add `openai_compatible` and `local_runtime` with the release notes as evidence and retire the first weakness.
-- [ ] Revisit Harvey Tenet only if Harvey publishes weights, a model card with a license, or a callable endpoint. Harvey's 2026-08-20 research preview names a Kimi K3 base post-trained with Fireworks, but neither that post nor Fireworks' 2026-08-26 write-up offers an artifact, license, or API; Hugging Face lists no Harvey organisation and models.dev has no source ID. It therefore fails the identity and evidence gate in [`docs/MODELS.md`](docs/MODELS.md) and cannot be held in `model-dispositions.json`, which requires a snapshot source ID. Today it is a proprietary checkpoint inside the Harvey product, which the reviewed Kimi K3 record's boundary already excludes as a downstream fine-tune; the Harvey product itself would meet the same repo-less queue gap recorded for Elicit.
+- [ ] Revisit Harvey Tenet only if Harvey publishes weights, a model card with a license, or a callable endpoint. Harvey's 2026-08-20 research preview names a Kimi K3 base post-trained with Fireworks, but neither that post nor Fireworks' 2026-08-26 write-up offers an artifact, license, or API; Hugging Face lists no Harvey organisation and models.dev has no source ID. It therefore fails the identity and evidence gate in [`docs/MODELS.md`](docs/MODELS.md) and cannot be held in `model-dispositions.json`, which requires a snapshot source ID. Today it is a proprietary checkpoint inside the Harvey product, which the reviewed Kimi K3 record's boundary already excludes as a downstream fine-tune; the Harvey product itself would meet the same repo-less queue gap recorded for Elicit. See the dispositions item below.
 
 ## Later
 
@@ -124,6 +124,8 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Decide whether the Codex record is the terminal agent alone or also the IDE extension and desktop app distributed from the same repository.
 - [ ] Re-check Khoj's status and links; its desktop download is missing and the homepage now leads with a different product.
 - [ ] Decide whether Perplexity Personal Computer is operationally distinct from the cloud Perplexity Computer record.
+- [ ] Curate Claude Mythos 5.1 as the first model reviewed without a models.dev row ([ADR 036](docs/adr/036-reviewed-models-may-precede-their-models-dev-source-row.md)): `init-gap anthropic/claude-mythos-5-1`, first-party evidence only, separate change from the mechanism.
+- [ ] Decide how to hold or exclude a release models.dev does not list. `model-dispositions.json` is keyed by snapshot `source_id`, so such a release can be reviewed (ADR 036) but not dispositioned.
 
 ## Backlog hygiene
 

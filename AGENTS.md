@@ -15,7 +15,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
 9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
 10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
-11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records.
+11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records. A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 036); its metadata is then Atlas-authored, never attributed to models.dev.
 12. Publish catalog JSON only from `PUBLISHED_DATA` in `scripts/sync_web_data.py`; queues, dispositions, and discovery configuration remain unpublished.
 13. Edit canonical inputs and generators, not generated data copies, app payloads, share pages, blog output, fonts, or logos. Generator locations and asset-version dependencies are in `docs/WEB.md` and `docs/BLOG.md`.
 14. After published catalog edits, run the regeneration sequence below and commit its output; record additions also need logo regeneration per `docs/WEB.md`.
