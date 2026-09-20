@@ -504,7 +504,10 @@ function renderStats() {
   $("#inference-collection-count").textContent = state.inferenceServices.length;
   $("#runtime-collection-count").textContent = state.localRuntimes.length;
   $("#model-collection-count").textContent = state.models.length;
-  $("#pack-collection-count").textContent = state.packs.length;
+  // The switcher counts what the scope lists, and the Packs scope lists packs
+  // beside host-installed systems (ADR 035), so both are counted here.
+  $("#pack-collection-count").textContent = state.packs.length
+    + AtlasCore.packShapedSystems(state.projects, {}).length;
 }
 
 function syncCollectionSwitcher() {
