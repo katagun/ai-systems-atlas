@@ -116,7 +116,7 @@ def _facts_for(
                 taxonomy_name(taxonomy, "source_models", record["source_model"]),
             ),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
-            ("Deployment", " · ".join(humanize(item) for item in record["deployment"])),
+            ("Deployment", names(taxonomy, "deployment_modes", record["deployment"])),
             ("Status", humanize(record["status"])),
         ]
         successor = by_id.get(record.get("superseded_by") or "")

@@ -5007,7 +5007,7 @@
       "stars": 132952,
       "stars_verified_at": "2026-09-14",
       "historical_stars": null,
-      "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged.",
+      "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged. Its README installs the skill set by cloning the repository into `~/.claude/skills/gstack` and running its setup script, so the workflow runs inside the host agent's sessions.",
       "score": {
         "task_reliability": 8.0,
         "tool_use": 9.2,
@@ -5031,7 +5031,7 @@
       ],
       "why_it_matters": "Shows how structured roles, artifacts, safety gates, and verification turn general coding agents into a repeatable software-delivery system.",
       "research_confidence": "high",
-      "verified_at": "2026-09-18",
+      "verified_at": "2026-09-20",
       "pushed_at": "2026-09-11T19:40:16Z",
       "forks": 19845,
       "open_issues": 888,
