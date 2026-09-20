@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1020,4 +1020,11 @@ test("packShapedSystems lists only host-pack systems, by name, honouring the ter
   assert.deepEqual(packShapedSystems(systems, { term: "skills" }).map(item => item.id), ["superpowers"]);
   assert.deepEqual(packShapedSystems(systems, { term: "onlyindex", searchIndex: { gstack: "onlyindex" } }).map(item => item.id), ["gstack"]);
   assert.deepEqual(packShapedSystems([systems[2]], {}), []);
+});
+
+test("mergePackScopeEntries unions packs and host-pack systems by name with kind tiebreak", () => {
+  const packs = [{ id: "b-pack", name: "B" }];
+  const systems = [{ id: "z-sys", name: "Z" }, { id: "a-sys", name: "A" }];
+  assert.deepEqual(mergePackScopeEntries(packs, systems).map(item => [item.kind, item.record.id]), [["system", "a-sys"], ["pack", "b-pack"], ["system", "z-sys"]]);
+  assert.deepEqual(mergePackScopeEntries([], []), []);
 });
