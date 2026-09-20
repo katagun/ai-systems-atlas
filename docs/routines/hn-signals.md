@@ -30,6 +30,17 @@ Finally:
 
     uv run python scripts/run_hn_signals.py finish
 
+NOBODY IS WATCHING. This run is unattended, and any command outside the short list the
+operator pre-approved stops and waits for a person who is not there: on 2026-09-18 a
+`cat` of the bundle waited 24 hours, and the 2026-09-14 run spent 7 of its 124 minutes
+working. The whole routine needs two shell commands, `prepare` and `finish` above, each
+run on its own line exactly as written, never joined to another command with `&&`, `;`,
+or a pipe. Do everything else with the file tools: open the bundle and
+`directory/hn-signals.json` with Read, and add each `assessment` with Edit. Do not run
+`cat`, `git`, `python`, `node`, `ls`, or any other command to look around, check your
+work, or validate; `finish` validates. Pushing a branch and opening a pull request are
+not part of this routine. If one of the two commands is itself refused, stop and report.
+
 WHAT THIS IS. An evidence-reading and sorting pass, not a review and not discovery.
 `directory/hn-signals.json` is populated only by the daily sweep in
 `scripts/sweep_hackernews.py`; this routine never adds or removes a signal, and never
