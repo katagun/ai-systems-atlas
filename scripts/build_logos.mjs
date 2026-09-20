@@ -79,6 +79,7 @@ const RECORD_MARKS = {
   smolagents: "lobe:huggingface",
   "strands-agents-sdk": "lobe:aws",
   "venice-ai": "lobe:venice",
+  "vercel-ai-sdk": "lobe:vercel",
   warp: "simple:warp",
   "watsonx-orchestrate": "lobe:ibm",
   "z-ai": "lobe:zai",
