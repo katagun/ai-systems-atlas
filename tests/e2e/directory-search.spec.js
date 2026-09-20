@@ -588,6 +588,7 @@ test("the agent packs scope filters, opens its own dialog, and never scores or c
   await page.goto("/?collection=packs");
 
   await expect(page.getByRole("button", { name: /^Agent packs / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: `Agent packs ${catalogCounts.packs + catalogCounts.hostPackSystems}` })).toHaveCount(1);
   await expect(page.locator("#pack-result-count")).toContainText(`${catalogCounts.packs} packs · ${catalogCounts.hostPackSystems} installed systems · Scores hidden`);
   await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
