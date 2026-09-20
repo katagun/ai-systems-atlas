@@ -1907,17 +1907,75 @@ def validate_robot_first_party_urls(
             errors.append(f"{prefix}: {label} {url!r} is not first-party")
 
 
+def validate_robot_identity(
+    robot: dict[str, Any],
+    repo: Any,
+    robot_id: Any,
+    index: ProjectIndex,
+    model_ids: set[str],
+    pack_repos: set[str],
+    robot_ids: set[str],
+    robot_repos_seen: set[str],
+    robot_urls_seen: set[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    """A robot's repo, url, and related_*/superseded_by references cross into other collections."""
+    if isinstance(repo, str):
+        if repo.lower() in index.repos:
+            errors.append(f"{prefix}: {repo} cannot be both a system and a robot")
+        if repo.lower() in pack_repos:
+            errors.append(f"{prefix}: {repo} cannot be both a pack and a robot")
+        if repo.lower() in robot_repos_seen:
+            errors.append(f"{prefix}: duplicate robot repository {repo}")
+        robot_repos_seen.add(repo.lower())
+    url_key = canonical_url_key(robot.get("url", ""))
+    if url_key in index.url_keys:
+        errors.append(f"{prefix}: {robot.get('url')} is already a system record")
+    if url_key in robot_urls_seen:
+        errors.append(f"{prefix}: duplicate robot url {robot.get('url')}")
+    robot_urls_seen.add(url_key)
+    for field, allowed in (
+        ("related_systems", index.ids),
+        ("related_models", model_ids),
+        ("related_robots", robot_ids),
+    ):
+        if field in robot:
+            validate_string_list(
+                robot, field, allowed, prefix, errors, allow_empty=True
+            )
+    # Only a list can be searched for self-membership without risk: a null or
+    # dict value already failed the schema check above via validate_string_list.
+    related_robots = robot.get("related_robots")
+    if isinstance(related_robots, list) and robot_id in related_robots:
+        errors.append(f"{prefix}: cannot relate to itself")
+    if "superseded_by" in robot:
+        superseded_by = robot["superseded_by"]
+        if not isinstance(superseded_by, str) or superseded_by not in robot_ids:
+            errors.append(f"{prefix}: superseded_by must name a robot record")
+
+
 def validate_robots(
     robots_data: dict[str, Any],
     tax: Taxonomy,
     index: ProjectIndex,
     errors: list[str],
+    *,
+    model_ids: set[str],
+    pack_repos: set[str],
 ) -> list[Any]:
     """Validate unscored robot records: what a vendor documents, never what a robot does (ADR 037)."""
     robots_value = validate_collection_envelope(
         robots_data, "robots.json", "1.0", "robots", errors
     )
     enum_ids = tax.enum_ids
+    robot_ids = {
+        item.get("id")
+        for item in robots_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    robot_repos_seen: set[str] = set()
+    robot_urls_seen: set[str] = set()
     for robot in robots_value:
         if not isinstance(robot, dict):
             errors.append("robots.json: every robot must be an object")
@@ -2030,6 +2088,20 @@ def validate_robots(
         ):
             errors.append(f"{prefix}: repo must be owner/name when present")
             repo = None
+
+        validate_robot_identity(
+            robot,
+            repo,
+            robot_id,
+            index,
+            model_ids,
+            pack_repos,
+            robot_ids,
+            robot_repos_seen,
+            robot_urls_seen,
+            prefix,
+            errors,
+        )
 
         evidence = validate_robot_evidence_roles(
             robot, ai_basis, named_models, repo, prefix, errors
@@ -2795,6 +2867,7 @@ def validate_unique_record_ids(
     models_value: list[Any],
     errors: list[str],
     packs_value: list[Any] | None = None,
+    robots_value: list[Any] | None = None,
 ) -> None:
     """No identifier may name a record in more than one collection."""
     collection_ids: dict[str, list[str]] = {}
@@ -2805,6 +2878,7 @@ def validate_unique_record_ids(
         ("local-runtimes.json", local_runtimes_value),
         ("models.json", models_value),
         ("packs.json", packs_value or []),
+        ("robots.json", robots_value or []),
     ):
         for record in collection_records:
             if isinstance(record, dict) and isinstance(record.get("id"), str):
@@ -3385,7 +3459,24 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
-    validate_robots(catalog["robots.json"], tax, index, errors)
+    model_ids = {
+        item["id"]
+        for item in models_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    robots_value = validate_robots(
+        catalog["robots.json"],
+        tax,
+        index,
+        errors,
+        model_ids=model_ids,
+        pack_repos=pack_repos,
+    )
+    robot_repos = {
+        item["repo"].lower()
+        for item in robots_value
+        if isinstance(item, dict) and isinstance(item.get("repo"), str)
+    }
 
     validate_unique_record_ids(
         index.projects,
@@ -3395,6 +3486,7 @@ def validate(root: Path = ROOT) -> list[str]:
         models_value,
         errors,
         packs_value=packs_value,
+        robots_value=robots_value,
     )
 
     candidate_repos = validate_candidates(
@@ -3403,6 +3495,10 @@ def validate(root: Path = ROOT) -> list[str]:
     if overlap := candidate_repos & pack_repos:
         errors.append(
             f"repositories cannot be both candidates and packs: {sorted(overlap)}"
+        )
+    if overlap := candidate_repos & robot_repos:
+        errors.append(
+            f"repositories cannot be both candidates and robots: {sorted(overlap)}"
         )
     validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     dispositioned_ids = validate_model_dispositions(
@@ -3421,7 +3517,10 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(
-        catalog["exclusions.json"], index.repos | pack_repos, candidate_repos, errors
+        catalog["exclusions.json"],
+        index.repos | pack_repos | robot_repos,
+        candidate_repos,
+        errors,
     )
     validate_queue_envelopes(
         catalog["candidates.json"], catalog["license-review.json"], errors

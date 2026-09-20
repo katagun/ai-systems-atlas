@@ -79,6 +79,7 @@ class PromoteModelCandidateTests(unittest.TestCase):
             "inference-services.json",
             "local-runtimes.json",
             "packs.json",
+            "robots.json",
         ):
             (directory / name).write_bytes((ROOT / "directory" / name).read_bytes())
         self.queue = queue

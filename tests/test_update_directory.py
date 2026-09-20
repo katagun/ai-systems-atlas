@@ -666,6 +666,7 @@ class UpdateDirectoryTests(unittest.TestCase):
             update_directory.CANDIDATES_PATH: {"candidates": []},
             update_directory.LICENSE_REVIEW_PATH: {"entries": []},
             update_directory.PACKS_PATH: {"packs": []},
+            update_directory.ROBOTS_PATH: {"robots": []},
         }
 
         with (
@@ -742,6 +743,19 @@ class KnownUrlTests(unittest.TestCase):
         self.assertIn("https://github.com/obra/superpowers", known)
         repos = update_directory.known_repos_from([], {"entries": []}, packs)
         self.assertEqual({"obra/superpowers"}, repos)
+
+    def test_a_robot_url_joins_the_known_set_with_or_without_a_repo(self) -> None:
+        """A robot is a decided record; discovery must not re-queue its product page."""
+        robots = [
+            {"url": "https://robots.example/sample"},
+            {"repo": "Example-Robotics/SDK", "url": "https://robots.example/other"},
+        ]
+        known = update_directory.known_urls_from([], {"entries": []}, (), robots)
+        self.assertLessEqual(
+            {"https://robots.example/sample", "https://robots.example/other"}, known
+        )
+        repos = update_directory.known_repos_from([], {"entries": []}, (), robots)
+        self.assertEqual({"example-robotics/sdk"}, repos)
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+import urllib.parse
 from pathlib import Path
 from typing import ClassVar
 
@@ -847,10 +848,15 @@ class ValidationPolicyTests(unittest.TestCase):
             robot["status"] = "superseded"
             robot["superseded_by"] = "sample-robot"
 
+        def unknown(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = "no-such-robot"
+
         for mutate, needle in (
             (missing, "superseded status requires superseded_by"),
             (stray, "superseded_by requires the superseded status"),
             (itself, "a robot cannot supersede itself"),
+            (unknown, "superseded_by must name a robot record"),
         ):
             with self.subTest(needle=needle):
                 errors = self.catalog_with_robot(mutate)
@@ -1195,6 +1201,83 @@ class ValidationPolicyTests(unittest.TestCase):
                 "named_models.evidence_label must be a non-empty string" in e
                 for e in errors
             ),
+            errors,
+        )
+
+    def test_robot_ids_must_be_unique_across_collections(self) -> None:
+        def mutate(robot, root):
+            specs = json.loads(
+                (root / "directory" / "specifications.json").read_text(encoding="utf-8")
+            )
+            robot["id"] = specs["specifications"][0]["id"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("appears in more than one collection" in e for e in errors), errors
+        )
+
+    def test_robot_related_ids_must_exist(self) -> None:
+        for field in ("related_systems", "related_models", "related_robots"):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field):
+                    robot[field] = ["no-such-record"]
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(f"unknown {field}" in e for e in errors), errors)
+
+    def test_robot_cannot_relate_to_itself(self) -> None:
+        def mutate(robot, root):
+            robot["related_robots"] = ["sample-robot"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("cannot relate to itself" in e for e in errors), errors)
+
+    def test_robot_url_cannot_duplicate_a_system_url(self) -> None:
+        def mutate(robot, root):
+            projects = json.loads(
+                (root / "directory" / "projects.json").read_text(encoding="utf-8")
+            )
+            repoless = next(p for p in projects["projects"] if p.get("repo") is None)
+            robot["url"] = repoless["url"]
+            robot["first_party_domains"] = [
+                urllib.parse.urlsplit(repoless["url"]).hostname
+            ]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is already a system record" in e for e in errors), errors)
+
+    def test_robot_repo_cannot_be_a_system_pack_candidate_or_exclusion(self) -> None:
+        def mutate(robot, root):
+            projects = json.loads(
+                (root / "directory" / "projects.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = next(
+                p["repo"] for p in projects["projects"] if p.get("repo")
+            )
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both a system and a robot" in e for e in errors), errors
+        )
+
+    def test_robot_superseded_by_list_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = ["sample-robot-2"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("superseded_by must name a robot record" in e for e in errors), errors
+        )
+
+    def test_robot_related_robots_dict_entry_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["related_robots"] = [{"id": "sample-robot-2"}]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("related_robots must contain only strings" in e for e in errors),
             errors,
         )
 
