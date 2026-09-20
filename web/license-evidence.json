@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-18",
+  "verified_at": "2026-09-20",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3221,6 +3221,30 @@
           "url": "https://github.com/vanna-ai/vanna/blob/main/LICENSE",
           "blob_sha": "ce7db53087e8a3bc7d83a67bbf49c3e39b323671",
           "immutable_url": "https://api.github.com/repos/vanna-ai/vanna/git/blobs/ce7db53087e8a3bc7d83a67bbf49c3e39b323671"
+        }
+      ]
+    },
+    {
+      "project_id": "vercel-ai-sdk",
+      "repo": "vercel/ai",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository root notice covering every package; each of the 80 package manifests declares Apache-2.0",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vercel/ai/blob/main/LICENSE",
+          "blob_sha": "6c16c29f41168411dbf6e3ba3a063ce789c27334",
+          "immutable_url": "https://api.github.com/repos/vercel/ai/git/blobs/6c16c29f41168411dbf6e3ba3a063ce789c27334"
+        },
+        {
+          "license_id": "ISC",
+          "scope": "vendored zod-to-json-schema converter inside the provider-utils package",
+          "kind": "git_blob",
+          "path": "packages/provider-utils/src/to-json-schema/zod3-to-json-schema/LICENSE",
+          "url": "https://github.com/vercel/ai/blob/main/packages/provider-utils/src/to-json-schema/zod3-to-json-schema/LICENSE",
+          "blob_sha": "b3b48f8f4534527adca8cd26cd424ae94e69b983",
+          "immutable_url": "https://api.github.com/repos/vercel/ai/git/blobs/b3b48f8f4534527adca8cd26cd424ae94e69b983"
         }
       ]
     },
