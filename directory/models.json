@@ -2303,6 +2303,224 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-anthropic-claude-fable-5",
+      "source_id": "anthropic/claude-fable-5",
+      "name": "Claude Fable 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/fable-5/overview",
+      "description": "A pinned Mythos-class Claude release in legacy status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Fable 5",
+        "description": "Claude model for creative writing, analysis, and controlled agent workflows",
+        "family": "claude-fable",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Fable 5 release identified by the dateless pinned ID claude-fable-5, the general-use safeguarded variant of the Mythos-class tier that sits above the Opus class. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, Claude Mythos 5, and later Fable releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, legacy status, and a retirement date commitment",
+        "The suspension and redeployment events of June and July 2026 are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until June 9, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/fable-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 launch announcement",
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-fable-5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-fable-5-1",
+      "source_id": "anthropic/claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+      "description": "A pinned Mythos-class Claude release in current status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Fable 5.1",
+        "description": "Claude model for demanding reasoning and long-horizon agentic work",
+        "family": "claude-fable",
+        "release_date": "2026-09-01",
+        "last_updated": "2026-09-01",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Fable 5.1 release identified by the dateless pinned ID claude-fable-5-1, the current model of the Fable line with a documented breaking-change surface against Fable 5. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, Claude Fable 5, and later releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Three documented API changes are breaking for developers migrating from Fable 5"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5.1 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5.1 release announcement",
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-fable-5-1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-anthropic-claude-haiku-4-5",
       "source_id": "anthropic/claude-haiku-4-5",
       "name": "Claude Haiku 4.5",
@@ -2404,6 +2622,442 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-anthropic-claude-mythos-5",
+      "source_id": "anthropic/claude-mythos-5",
+      "name": "Claude Mythos 5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/mythos-5/overview",
+      "description": "An invite-only pinned Mythos-class Claude release with a 1M-token context, available through Anthropic's developer API under access programs and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Mythos 5",
+        "description": "Restricted Claude model for advanced cybersecurity and biology research workflows",
+        "family": "claude-mythos",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Mythos 5 release identified by the dateless pinned ID claude-mythos-5, the safeguards-lifted variant of the Mythos-class tier delivered by invitation through Project Glasswing and sharing Claude Fable 5's underlying weights. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Fable 5, Claude Mythos Preview, and later Mythos releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, invite-only status, and a retirement date commitment",
+        "The suspension and redeployment events of June and July 2026 are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access is invite-only through the trusted-access programs, gating reach to approved customers"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Mythos 5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/mythos-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5 and Mythos 5 launch announcement",
+          "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-mythos-5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-5-20251101",
+      "source_id": "anthropic/claude-opus-4-5-20251101",
+      "name": "Claude Opus 4.5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-5/overview",
+      "description": "A pinned multimodal Claude release in legacy status, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.5",
+        "description": "Flagship Claude model for deep reasoning, coding, and long-horizon agents",
+        "family": "claude-opus",
+        "release_date": "2025-11-01",
+        "last_updated": "2025-11-01",
+        "knowledge_cutoff": "2025-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the fixed Claude Opus 4.5 snapshot identified by claude-opus-4-5-20251101, which the pre-4.6 alias claude-opus-4-5 resolves to. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and later Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until November 24, 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-5/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.5 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-5-20251101.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-6",
+      "source_id": "anthropic/claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-6/overview",
+      "description": "A pinned multimodal Claude release in legacy status with a 1M-token context, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.6",
+        "description": "High-end Claude for difficult coding, planning, and slower expert reasoning",
+        "family": "claude-opus",
+        "release_date": "2026-02-05",
+        "last_updated": "2026-03-13",
+        "knowledge_cutoff": "2025-05-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Opus 4.6 release identified by the dateless pinned ID claude-opus-4-6, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until February 5, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.6 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-6/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.6 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-6.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-opus-4-7",
+      "source_id": "anthropic/claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-7/overview",
+      "description": "A pinned multimodal Claude release in legacy status with a 1M-token context and an updated tokenizer, available through Anthropic's developer API and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 4.7",
+        "description": "Stronger Opus tier for advanced software work and high-stakes reasoning",
+        "family": "claude-opus",
+        "release_date": "2026-04-16",
+        "last_updated": "2026-04-16",
+        "knowledge_cutoff": "2026-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Opus 4.7 release identified by the dateless pinned ID claude-opus-4-7, which Anthropic documents as a single fixed snapshot rather than an alias. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Platform on AWS, Claude applications, and other Opus releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed model ID with pinned-snapshot semantics, lifecycle status, release date, and a retirement date commitment",
+        "The official model page identifies first-party API access and independent cloud-platform paths with per-platform model IDs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is in legacy status with a retirement commitment only until April 16, 2027"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.7 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/opus-4-7/overview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Opus 4.7 release announcement",
+          "url": "https://www.anthropic.com/news/claude-opus-4-7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/anthropic/claude-opus-4-7.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-anthropic-claude-opus-4-8",
@@ -8619,6 +9273,110 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-google-gemini-3-1-flash-live-preview",
+      "source_id": "google/gemini-3.1-flash-live-preview",
+      "name": "Gemini 3.1 Flash Live Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview",
+      "description": "A legacy real-time dialogue preview release served through Google's Live API under Google's API terms, with text and audio output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.1 Flash Live Preview",
+        "description": "High-quality, low-latency Live API model for real-time dialogue and voice-first AI applications",
+        "family": "gemini-flash",
+        "release_date": "2026-03-26",
+        "last_updated": "2026-03-26",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.1 Flash Live preview identified by the model code gemini-3.1-flash-live-preview, released March 2026 and still served with no committed shutdown date, marked legacy with gemini-3.8-live named as its successor. The Gemini 3.8 Live line, the translate and transcribe live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents a release-specific model page with modalities, limits, and lifecycle status",
+        "The changelog and deprecations page name the release and its family position"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.1 Flash Live Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.1-flash-live-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-google-gemini-3-1-pro-preview",
       "source_id": "google/gemini-3.1-pro-preview",
       "name": "Gemini 3.1 Pro Preview",
@@ -8936,6 +9694,213 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-flash-lite.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-3-5-live-translate-preview",
+      "source_id": "google/gemini-3.5-live-translate-preview",
+      "name": "Gemini 3.5 Live Translate Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-live-translate-preview",
+      "description": "A real-time speech-to-speech translation preview release served through Google's Live API under Google's API terms, with audio and text transcript output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.5 Live Translate Preview",
+        "description": "Low-latency audio-to-audio model for real-time speech translation across 70+ languages",
+        "family": "gemini-pro",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "audio",
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.5 Live Translate preview identified by the model code gemini-3.5-live-translate-preview, released June 9, 2026 and still served with no shutdown date announced. The Gemini 3.1 Flash Live and 3.5 Transcribe live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents a release-specific model page with modalities, limits, and lifecycle status",
+        "The changelog and deprecations page name the release and its family position"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.4
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.5 Live Translate Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-live-translate-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-live-translate-preview.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-3-5-transcribe-live",
+      "source_id": "google/gemini-3.5-transcribe-live",
+      "name": "Gemini 3.5 Transcribe Live",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-transcribe",
+      "description": "A low-latency streaming speech-to-text release served through Google's Live API under Google's API terms, with text output and no downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 3.5 Transcribe Live",
+        "description": "Speech transcription model for accurate audio-to-text and captioning workflows",
+        "family": "gemini",
+        "release_date": "2026-08-26",
+        "last_updated": "2026-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 3.5 Transcribe Live variant of the Gemini 3.5 Transcribe line, generally available August 26, 2026 with no shutdown date announced and documented through the unary gemini-3.5-transcribe model page. The unary variant, the live translate and Flash Live lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the model page, GA changelog entry, and a dedicated live-transcription guide",
+        "The published limit is a 10-minute audio duration per live session rather than a token context"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Live API surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 3.5 Transcribe model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-transcribe",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini Live API transcription guide",
+          "url": "https://ai.google.dev/gemini-api/docs/live-api/live-transcribe",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-3.5-transcribe-live.toml",
           "verified_at": "2026-09-18"
         }
       ],
@@ -9371,6 +10336,115 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/deep-research-preview-04-2026.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-gemini-robotics-er-1-6-preview",
+      "source_id": "google/gemini-robotics-er-1.6-preview",
+      "name": "Gemini Robotics-ER 1.6 Preview",
+      "developer": "Google",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-robotics-er-1.6-preview",
+      "description": "A retired embodied-reasoning preview release served through Google's Gemini API under Google's API terms, shut down August 31, 2026, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini Robotics-ER 1.6 Preview",
+        "description": "Vision-language model for embodied reasoning: spatial understanding, task planning, and physical-world agentic robotics",
+        "family": "gemini",
+        "release_date": "2026-04-14",
+        "last_updated": "2026-04-14",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google provides the release as a managed service under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. The terms permit customer applications but prohibit extracting or replicating model components such as parameter weights, so nothing is licensed for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-18",
+          "scope": "Access to the release through the Gemini API and Google AI Studio, including the incorporated Google APIs Terms of Service and Prohibited Use Policy"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini Robotics-ER 1.6 preview identified by the model code gemini-robotics-er-1.6-preview, released April 14, 2026 and shut down August 31, 2026 with gemini-robotics-er-2-preview named as its replacement. The ER 2 line, the robotics action and model lines, and later Gemini releases remain separate model or service boundaries.",
+      "strengths": [
+        "Google documents the release, deprecation, and shutdown dates in the changelog, deprecations table, and robotics overview",
+        "The model page documents text output for plans, tool calls, and structured outputs"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is shut down and new traffic must migrate to the ER 2 preview"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini Robotics-ER 1.6 Preview model documentation",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-robotics-er-1.6-preview",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API deprecations and model lifecycle page",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemini API changelog documenting launch and shutdown",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/google/gemini-robotics-er-1.6-preview.toml",
           "verified_at": "2026-09-18"
         }
       ],
@@ -13428,6 +14502,118 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-mistral-devstral-small-2",
+      "source_id": "mistral/devstral-small-2",
+      "name": "Devstral Small 2",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "description": "An ungated 24B agentic coding model handling text and image input with a 262,144-token context, released under Apache-2.0.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Devstral Small 2",
+        "description": "Compact multimodal coding model for repository exploration, file editing, and software agents",
+        "family": "devstral",
+        "release_date": "2025-12-09",
+        "last_updated": "2025-12-09",
+        "knowledge_cutoff": "2025-12",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card states the model is licensed under the Apache 2.0 License and carries an apache-2.0 frontmatter declaration, following the Mistral weight-release posture. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512/blob/55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Devstral-Small-2-24B-Instruct-2512 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Devstral-Small-2-24B-Instruct-2512 release (Devstral Small 2, December 2025). The Devstral 2 flagship, the Devstral-Small-2507 release, the retired labs-devstral-small-2512 API model, community quantizations and fine-tunes, and downstream products remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with consolidated and sharded Safetensors, tokenizer, and system prompt in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "The API serving line for this release is already deprecated or retired per the docs lifecycle table"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 6,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Devstral Small 2 weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Devstral Small 2 model documentation",
+          "url": "https://docs.mistral.ai/models/devstral-small-2-25-12",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Devstral Small 2 release announcement",
+          "url": "https://mistral.ai/news/devstral-2-vibe-cli/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/devstral-small-2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-mistral-magistral-small-2506",
       "source_id": "mistral/magistral-small-2506",
       "name": "Magistral Small",
@@ -13531,6 +14717,451 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-mistral-magistral-small-2509",
+      "source_id": "mistral/magistral-small-2509",
+      "name": "Magistral Small 2509",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Magistral-Small-2509",
+      "description": "An ungated 24B reasoning model handling text and image input with a 131,072-token context, released under Apache-2.0.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Magistral Small 1.2",
+        "description": "Open multimodal reasoning model for transparent analysis of text and images",
+        "family": "magistral",
+        "release_date": "2025-09-18",
+        "last_updated": "2025-09-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Magistral-Small-2509"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card states the model is licensed under the Apache 2.0 License and carries an apache-2.0 frontmatter declaration, following the Mistral weight-release posture. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Magistral-Small-2509/blob/a31cc96ab10cf19bc42c628fedf1e359e0853c49/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Magistral-Small-2509 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Magistral-Small-2509 release (Magistral Small 1.2, September 2025). The Magistral Small 2506 and 2507 releases, Magistral Medium, the retired magistral-small-2509 API model, community quantizations and fine-tunes, and downstream products remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with consolidated and sharded Safetensors, tokenizer, and system prompt in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "The API serving line for this release is already deprecated or retired per the docs lifecycle table"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.58
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Magistral Small 2509 weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Magistral-Small-2509",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Magistral Small 1.2 model documentation",
+          "url": "https://docs.mistral.ai/models/magistral-small-1-2-25-09",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/magistral-small-2509.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-ministral-3-14b-instruct-2512",
+      "source_id": "mistral/ministral-3-14b-instruct-2512",
+      "name": "Ministral 3 14B Instruct",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512",
+      "description": "An ungated 3 multimodal instruction model with a 262,144-token context, released under Apache-2.0 and served on the Mistral API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Ministral 3 14B",
+        "description": "Open vision-language model for efficient local deployment, instruction following, and tool use",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card states the model is licensed under the Apache 2.0 License and carries an apache-2.0 frontmatter declaration, following the Mistral weight-release posture. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512/blob/29439f81c2be264d8d393273f99e7db9c0961120/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Ministral-3-14B-Instruct-2512 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Ministral-3-14B-Instruct-2512 release (December 2025). The Base and Reasoning siblings, official BF16 and GGUF checkpoints, the 3B and 8B lines, the retired 2410 line, the ministral-14b alias ID, the Studio API product, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with consolidated and sharded Safetensors, tokenizer, and system prompt in the official repository",
+        "The model card and launch announcement document the Apache-2.0 grant and wide hosting availability"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "No deprecation history exists yet for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 14B Instruct weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 14B model documentation",
+          "url": "https://docs.mistral.ai/models/ministral-3-14b-25-12",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 launch announcement",
+          "url": "https://mistral.ai/news/mistral-3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/ministral-3-14b-instruct-2512.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-ministral-3-3b-instruct-2512",
+      "source_id": "mistral/ministral-3-3b-instruct-2512",
+      "name": "Ministral 3 3B Instruct",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512",
+      "description": "An ungated 3 multimodal instruction model with a 262,144-token context, released under Apache-2.0 and served on the Mistral API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Ministral 3 3B",
+        "description": "Compact open vision-language model for edge deployment, instruction following, and tool use",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card states the model is licensed under the Apache 2.0 License and carries an apache-2.0 frontmatter declaration, following the Mistral weight-release posture. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512/blob/b35d4dfe56c142746f54dbd64f579faab2744308/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Ministral-3-3B-Instruct-2512 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Ministral-3-3B-Instruct-2512 release (December 2025). The Base and Reasoning siblings, official BF16 and GGUF checkpoints, the 8B and 14B lines, the retired 2410 line, the Studio API product, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with consolidated and sharded Safetensors, tokenizer, and system prompt in the official repository",
+        "The model card and launch announcement document the Apache-2.0 grant and wide hosting availability"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "No deprecation history exists yet for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 3B Instruct weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 3B model documentation",
+          "url": "https://docs.mistral.ai/models/ministral-3-3b-25-12",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 launch announcement",
+          "url": "https://mistral.ai/news/mistral-3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/ministral-3-3b-instruct-2512.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-mistral-ministral-3-8b-instruct-2512",
+      "source_id": "mistral/ministral-3-8b-instruct-2512",
+      "name": "Ministral 3 8B Instruct",
+      "developer": "Mistral AI",
+      "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512",
+      "description": "An ungated 3 multimodal instruction model with a 262,144-token context, released under Apache-2.0 and served on the Mistral API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Ministral 3 8B",
+        "description": "Compact open vision-language model for edge deployment, instruction following, and tool use",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card states the model is licensed under the Apache 2.0 License and carries an apache-2.0 frontmatter declaration, following the Mistral weight-release posture. The Mistral API is governed separately by the commercial terms of service.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512/blob/5b26027e7b19eeb4b7352e1fed3926375dd2cb4d/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Official mistralai/Ministral-3-8B-Instruct-2512 weights, tokenizer, and bundled model code per the pinned model card"
+        }
+      ],
+      "access_boundary": "This record represents the mistralai/Ministral-3-8B-Instruct-2512 release (December 2025). The Base and Reasoning siblings, official BF16 and GGUF checkpoints, the 3B and 14B lines, the retired 2410 line, the Studio API product, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with consolidated and sharded Safetensors, tokenizer, and system prompt in the official repository",
+        "The model card and launch announcement document the Apache-2.0 grant and wide hosting availability"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the Apache-2.0 grant rests on the card declaration",
+        "No deprecation history exists yet for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 8B Instruct weights repository and model card",
+          "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 8B model documentation",
+          "url": "https://docs.mistral.ai/models/ministral-3-8b-25-12",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Ministral 3 launch announcement",
+          "url": "https://mistral.ai/news/mistral-3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/mistral/ministral-3-8b-instruct-2512.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-mistral-ministral-8b-instruct-2410",
@@ -15170,6 +16801,708 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-nvidia-llama-3-1-nemotron-70b-instruct",
+      "source_id": "nvidia/llama-3.1-nemotron-70b-instruct",
+      "name": "Llama 3.1 Nemotron 70B Instruct",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct",
+      "description": "An ungated 70B text instruction model aligned on reward benchmarks and tool use, governed by the NVIDIA Open Model License over the Llama 3.1 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron 70B Instruct",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-04-15",
+        "last_updated": "2025-04-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.download.nvidia.com/licenses/nvidia-open-model-license-agreement-june-2024.pdf",
+          "scope": "Llama-3.1-Nemotron-70B-Instruct weights and bundled model code, June 2024 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3.1-Nemotron-70B-Instruct v1.0 release of October 2024 at Hugging Face commit a83af1f4968437064635f6726fb745e5b615e863. The Transformers-format sibling repository, the Ultra and Super variants, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the governing NVIDIA Open Model License text pinned",
+        "The model card names the base Llama 3.1 agreement and its acceptable-use policy"
+      ],
+      "tradeoffs": [
+        "The weights ship in NeMo format, so Transformers users must convert from the sibling repository",
+        "The trial endpoint cites the Llama terms rather than the NVIDIA license, a documented surface conflict"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 5.96
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-70b-instruct.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3",
+      "source_id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+      "name": "Llama 3.1 Nemotron Safety Guard 8B v3",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3",
+      "description": "An ungated 8B content-safety guard model over the Llama 3.1 8B base that emits safe/unsafe verdicts as generated text, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron Safety Guard 8B v3",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2025-10-28",
+        "last_updated": "2025-10-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable with guardrail and indemnity clauses, over the Llama 3.1 Community License base named as \"Built with Llama\".",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3.1-Nemotron-Safety-Guard-8B-v3 weights, LoRA adapter, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3 v1.0 release dated October 28, 2025 at Hugging Face commit 8fdc246ba3d56db9c469d534233b9f582d3afafa. The Llama 3.1 8B base model, the v2 and earlier guard generations, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the LoRA adapter shipping beside the full checkpoint",
+        "The model card documents the verdict JSON schema and Model Card++ subcards"
+      ],
+      "tradeoffs": [
+        "The revocable NVIDIA Open Model License carries guardrail and indemnity clauses",
+        "The guard context is limited to 8K tokens by the base-model configuration"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.82
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-safety-guard-8b-v3",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-safety-guard-8b-v3.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-1-nemotron-ultra-253b",
+      "source_id": "nvidia/llama-3.1-nemotron-ultra-253b",
+      "name": "Llama 3.1 Nemotron Ultra 253B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+      "description": "An ungated 253B text reasoning model with a DecILM sparse architecture, governed by the NVIDIA Open Model License over the Llama 3.1 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.1 Nemotron Ultra 253B",
+        "description": "Flagship Nemotron model for high-throughput reasoning and complex agents",
+        "family": "nemotron",
+        "release_date": "2025-04-07",
+        "last_updated": "2025-04-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_1-Nemotron-Ultra-253B-v1 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/license/",
+          "scope": "Llama 3.1 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_1/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.1 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_1-Nemotron-Ultra-253B-v1 v1.0 release dated April 7, 2025 at Hugging Face commit 5b47def5b8957142d82faeb44bfad9349d02840d. The 70B Instruct and Super siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a consistent NVIDIA Open Model License citation on card and endpoint",
+        "Dated release with a model version, trained-dates range, and build.nvidia.com documentation"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.62
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_1-nemotron-ultra-253b-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.1-nemotron-ultra-253b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1",
+      "source_id": "nvidia/llama-3.3-nemotron-super-49b-v1",
+      "name": "Llama 3.3 Nemotron Super 49B v1",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+      "description": "An ungated 49B text reasoning model with a DecILM sparse architecture, governed by the NVIDIA Open Model License over the Llama 3.3 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.3 Nemotron Super 49B v1",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-04-07",
+        "last_updated": "2025-04-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.3-Community",
+        "LicenseRef-Llama-3.3-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_3-Nemotron-Super-49B-v1 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/license/",
+          "scope": "Llama 3.3 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.3 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_3-Nemotron-Super-49B-v1 v1.0 release dated March 18, 2025 at Hugging Face commit 387156d8d6868c19f3472fa607aa9bfc4f662333. The v1.5 upgrade, the 70B Instruct and Ultra siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a consistent NVIDIA Open Model License citation on card and endpoint",
+        "Dated release with a model version and Transformers and vLLM runtime documentation"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.62
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_3-nemotron-super-49b-v1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.3-nemotron-super-49b-v1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-3-3-nemotron-super-49b-v1-5",
+      "source_id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "name": "Llama 3.3 Nemotron Super 49B v1.5",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5",
+      "description": "An ungated 49B text reasoning model upgrading the v1 release with improved instruction following and tool calling, governed by the NVIDIA Open Model License over the Llama 3.3 base.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Llama 3.3 Nemotron Super 49B v1.5",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2025-07-25",
+        "last_updated": "2025-07-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.3-Community",
+        "LicenseRef-Llama-3.3-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Llama-3_3-Nemotron-Super-49B-v1_5 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-Community",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/license/",
+          "scope": "Llama 3.3 Community License named on the NVIDIA model card as the base-model agreement"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.3-AUP",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://developer.meta.com/ai/llama3_3/use-policy/",
+          "scope": "Acceptable-use policy of the base Llama 3.3 model named on the NVIDIA model card"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Llama-3_3-Nemotron-Super-49B-v1_5 v1.5 release dated July 25, 2025 at Hugging Face commit 420ba7d28211abf116b8b103ab700d92619daf98. The v1 release, the 70B Instruct and Ultra siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with dual dated release records on Hugging Face and build.nvidia.com",
+        "The model card documents the explicit upgrade relationship to the v1 release and a tool-call parser"
+      ],
+      "tradeoffs": [
+        "The DecILM architecture requires trust-remote-code loading and NVIDIA-hardware-oriented runtime documentation",
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 6.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/llama-3_3-nemotron-super-49b-v1_5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/llama-3.3-nemotron-super-49b-v1.5.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-content-safety",
+      "source_id": "nvidia/nemotron-3-content-safety",
+      "name": "Nemotron 3 Content Safety",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3-Content-Safety",
+      "description": "An ungated V1.1 content-safety model merged into the Gemma-3-4B-it base that emits safe/unsafe verdicts as generated text, governed by the NVIDIA Nemotron Open Model License.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Content Safety",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-04-16",
+        "last_updated": "2026-04-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Nemotron-Open-Model",
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Nemotron Open Model License, whose grant is perpetual and irrevocable. The merged Gemma-3-4B-it base adds the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer, named on the model card.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-nemotron-open-model-license/",
+          "scope": "Nemotron-3-Content-Safety weights and bundled model code, December 2025 edition of the NVIDIA Nemotron Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/terms",
+          "scope": "Gemma Terms of Use named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "scope": "Gemma Prohibited Use Policy named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3-Content-Safety V1.1 release of March 2026 at Hugging Face commit b47f6f6c18dc7d11a786abbbca2510cba58ede20. The Gemma-3-4B-it base model, the 3.5 content-safety line, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated merged weights with Model Card++ subcards and a released training dataset",
+        "The model card documents the verdict schema and Transformers and vLLM runtimes"
+      ],
+      "tradeoffs": [
+        "The web-hosted NVIDIA license can change independently of the pinned repository",
+        "The dual Gemma base layer adds restricted-use terms to the governing instrument"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3-Content-Safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-content-safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-content-safety.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-nvidia-nemotron-3-nano-30b-a3b",
       "source_id": "nvidia/nemotron-3-nano-30b-a3b",
       "name": "Nemotron 3 Nano 30B A3B",
@@ -15269,6 +17602,1029 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-nano-omni-30b-a3b-reasoning",
+      "source_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "name": "Nemotron 3 Nano Omni 30B A3B Reasoning",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
+      "description": "An ungated 30B multimodal reasoning model handling text, image, video, and audio input, governed by the NVIDIA Open Model Agreement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Nano Omni 30B A3B Reasoning",
+        "description": "Open Nemotron omni model combining reasoning with text, vision, and audio",
+        "family": "nemotron",
+        "release_date": "2026-04-28",
+        "last_updated": "2026-04-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model-Agreement"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card and the trial endpoint both state that use of the model is governed by the NVIDIA Open Model Agreement, a web-hosted NVIDIA document distinct from the Nemotron Open Model License and the Open Model License used by other Nemotron releases. Its grant is perpetual, worldwide, non-exclusive, no-charge, royalty-free, and irrevocable, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model-Agreement",
+          "scope": "Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-agreement/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 v1.0 release dated April 28, 2026 at Hugging Face commit e5e9932441de940c9a62185c870ea5bcd4cd24e2. The text-only Nano sibling, the FP8 and NVFP4 variants, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a consistent NVIDIA Open Model Agreement citation on card and endpoint",
+        "Dated release with video, audio, image, and text input support and a technical report"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is not an OSI-approved instrument",
+        "Reasoning is enabled by default, which raises per-request inference cost"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-super-120b-a12b",
+      "source_id": "nvidia/nemotron-3-super-120b-a12b",
+      "name": "Nemotron 3 Super 120B A12B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "description": "An ungated 120B text reasoning model with an A12B mixture-of-experts architecture, governed by the NVIDIA Nemotron Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Super 120B A12B",
+        "description": "Nemotron middle tier for collaborative agents and high-volume reasoning workloads",
+        "family": "nemotron",
+        "release_date": "2026-03-11",
+        "last_updated": "2026-03-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Nemotron-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Nemotron Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable right to reproduce, modify, and distribute the work with notice obligations, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
+          "scope": "NVIDIA-Nemotron-3-Super-120B-A12B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-nemotron-open-model-license/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 v1.0 release dated March 2026 at Hugging Face commit 2dc98e2afe4face0e4ce40972a915c45368bd34a. The Ultra and Nano siblings, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with the governing Nemotron Open Model License cited on card and endpoint",
+        "Dated release with a technical report and reproducibility configuration"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is not an OSI-approved instrument",
+        "Frontier-scale inference needs multi-GPU serving with NVIDIA-oriented runtime documentation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-super-120b-a12b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-super-120b-a12b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-ultra-550b-a55b",
+      "source_id": "nvidia/nemotron-3-ultra-550b-a55b",
+      "name": "Nemotron 3 Ultra 550B A55B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+      "description": "An ungated 550B text reasoning model with an A55B mixture-of-experts architecture and up to 1M-token context, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3 Ultra 550B A55B",
+        "description": "Largest Nemotron 3 model for maximum open-weight reasoning and agent accuracy",
+        "family": "nemotron",
+        "release_date": "2026-06-04",
+        "last_updated": "2026-06-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card and the trial endpoint both state that use of the model is governed by the OpenMDW License Agreement 1.1, a permissive-style third-party instrument that imposes no use restrictions beyond notice and litigation termination clauses. It is not OSI-approved, so the record classifies it as open source consistent with the taxonomy classification of the instrument.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 v1.0 release dated June 4, 2026 at Hugging Face commit 77df655d5e9f8362164ed14dd8b48f8bce657498. The Super and Nano siblings, the NVFP4 checkpoint served by the trial endpoint, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a consistent OpenMDW-1.1 citation on card, metadata, and trial endpoint",
+        "Dated release with model dates, cutoffs, and a technical report"
+      ],
+      "tradeoffs": [
+        "Frontier-scale footprint needs eight or more B200-class or 16 H100 GPUs with multi-node orchestration",
+        "The trial endpoint serves the NVFP4 variant rather than the BF16 release under review"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.84
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3-ultra-550b-a55b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-5-content-safety",
+      "source_id": "nvidia/nemotron-3.5-content-safety",
+      "name": "Nemotron 3.5 Content Safety",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-3.5-Content-Safety",
+      "description": "An ungated V1.2 content-safety model merged into the Gemma-3-4B-it base that emits safe/unsafe verdicts as generated text, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3.5 Content Safety",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-06-04",
+        "last_updated": "2026-06-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the OpenMDW License Agreement 1.1, a permissive instrument classified as open source in the taxonomy. The merged Gemma-3-4B-it base also carries the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer, named on the model card.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "Nemotron-3.5-Content-Safety weights and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-3.5-Content-Safety V1.2 release of June 2026 at Hugging Face commit 35645ed3543b7e7ffaed2e788699e57a5051497c. The Gemma-3-4B-it base model, the Nemotron 3 content-safety line, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated merged weights with the training dataset released and an Ollama Modelfile shipped",
+        "The model card documents the verdict schema with optional reasoning traces and custom-policy modes"
+      ],
+      "tradeoffs": [
+        "The merged Gemma base layer adds restricted-use terms beside the permissive OpenMDW instrument",
+        "The NVIDIA blog's stale license prose names the Open Model License while the card governs"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-3.5-Content-Safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3.5-content-safety",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3.5-content-safety.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-3-5-lightning",
+      "source_id": "nvidia/nemotron-3.5-lightning",
+      "name": "Nemotron 3.5 Lightning 30B A3B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "description": "An ungated 30B text reasoning model with an A3B mixture-of-experts architecture and up to 1M-token context, governed by the OpenMDW License Agreement 1.1.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron 3.5 Lightning 30B A3B",
+        "description": "Fast NVIDIA Nemotron MoE for reliable agentic tasks across enterprise workloads",
+        "family": "nemotron",
+        "release_date": "2026-08-11",
+        "last_updated": "2026-08-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenMDW-1.1"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships the OpenMDW License Agreement 1.1 file, and the card and trial endpoint both name it as the governing instrument. It imposes no use restrictions beyond notice and litigation termination clauses but is not OSI-approved, so the record classifies it as open source consistent with the taxonomy classification of the instrument.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenMDW-1.1",
+          "scope": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 weights, tokenizer, and bundled model code",
+          "kind": "web_terms",
+          "url": "https://raw.githubusercontent.com/OpenMDW/OpenMDW/refs/heads/main/1.1/LICENSE.OpenMDW-1.1",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 v1.0 release dated August 11, 2026 at Hugging Face commit a9904d24bcc1d289a1950fa9d2b978c47cf903b9. The NVFP4 checkpoint served by the trial endpoint, the 3.x generation, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with the OpenMDW-1.1 license file shipped in the repository",
+        "Dated GA release with model dates, validated 256K context, and technical documentation"
+      ],
+      "tradeoffs": [
+        "The permissive OpenMDW-1.1 instrument is not OSI-approved",
+        "The trial endpoint serves the NVFP4 variant rather than the BF16 release under review"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 7.38
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-3.5-lightning.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-cascade-2-30b-a3b",
+      "source_id": "nvidia/nemotron-cascade-2-30b-a3b",
+      "name": "Nemotron Cascade 2 30B A3B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Cascade-2-30B-A3B",
+      "description": "An ungated 30B text reasoning model post-trained with Cascade reinforcement learning, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Cascade 2 30B A3B",
+        "description": "Nemotron model for efficient reasoning, coding, and specialized AI agents",
+        "family": "nemotron",
+        "release_date": "2026-03-24",
+        "last_updated": "2026-04-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable and which adds guardrail-termination, ethics, and indemnity clauses. It is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "scope": "Nemotron-Cascade-2-30B-A3B weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Cascade-2-30B-A3B release dated March 2026 at Hugging Face commit 6327cdbcf907e1c7cec9cb29fb6e6cebdf8feaf7. The Cascade 1 generation, the Nemotron 3 siblings, downstream quantizations, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights with a technical report and solution assets",
+        "The model card names the governing license and the training methodology"
+      ],
+      "tradeoffs": [
+        "The revocable October 2025 edition of the NVIDIA Open Model License carries guardrail and indemnity clauses",
+        "No build.nvidia.com trial endpoint is published for this release, so reach is download-only"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.32
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Cascade-2-30B-A3B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-cascade-2-30b-a3b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-content-safety-reasoning-4b",
+      "source_id": "nvidia/nemotron-content-safety-reasoning-4b",
+      "name": "Nemotron Content Safety Reasoning 4B",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Content-Safety-Reasoning-4B",
+      "description": "An ungated 4B content-safety model merged into the Gemma-3-4B-it base that emits harm verdicts with optional reasoning traces as generated text, governed by the NVIDIA Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Content Safety Reasoning 4B",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "nemotron",
+        "release_date": "2026-01-22",
+        "last_updated": "2026-01-22",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Gemma-Terms-of-Use",
+        "LicenseRef-Gemma-Prohibited-Use-Policy"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, the October 2025 edition whose grant is revocable with guardrail and indemnity clauses. The merged Gemma-3-4B-it base adds the Gemma Terms of Use and the Gemma Prohibited Use Policy as a secondary layer.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "Nemotron-Content-Safety-Reasoning-4B weights and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Terms-of-Use",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/terms",
+          "scope": "Gemma Terms of Use named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        },
+        {
+          "license_id": "LicenseRef-Gemma-Prohibited-Use-Policy",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://ai.google.dev/gemma/prohibited_use_policy",
+          "scope": "Gemma Prohibited Use Policy named on the NVIDIA model card for the merged Gemma-3-4B-it base"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Content-Safety-Reasoning-4B v1.0 release of November 2025 at Hugging Face commit 29da6ec41d9c710d937afcd41f65e241ab822792. The Gemma-3-4B-it base model, the Nemotron 3 content-safety lines, downstream fine-tunes, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the verdict schema, reasoning traces, and three worked examples documented",
+        "The model card cites the EMNLP 2025 paper and releases dataset links"
+      ],
+      "tradeoffs": [
+        "Leftover DeepSpeed training-state files clutter the weight repository",
+        "The release dates conflict between the card (November 2025) and the trial endpoint (January 2026)"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 7,
+        "deployment_portability": 7,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.52
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Content-Safety-Reasoning-4B",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-content-safety-reasoning-4b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-content-safety-reasoning-4b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-mini-4b-instruct",
+      "source_id": "nvidia/nemotron-mini-4b-instruct",
+      "name": "Nemotron Mini 4B Instruct",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct",
+      "description": "An ungated 4B text instruction model for on-device and edge workloads, governed by the NVIDIA Community Model License of August 2024.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Mini 4B Instruct",
+        "description": "Compact Nemotron model for efficient reasoning and deployable AI agents",
+        "family": "nemotron",
+        "release_date": "2024-08-21",
+        "last_updated": "2024-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Community-Model-2024"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a zero-byte LICENSE placeholder beside the governing nvidia-community-model-license-aug2024.pdf, while the card front matter names the different NVIDIA Open Model License and the trial page cites the older NVIDIA AI Foundation Models Community License Agreement. The in-repo August 2024 PDF governs, with a revocable grant and a production gate on NVIDIA NIM runtimes, and the conflicting pointers open a durable license review incident.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Community-Model-2024",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct/blob/791833e92ebddb0bc2c1007f6d2b6764f886a2ae/nvidia-community-model-license-aug2024.pdf",
+          "scope": "Nemotron-Mini-4B-Instruct weights and bundled model code, NVIDIA Community Model License dated August 23, 2024"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/Nemotron-Mini-4B-Instruct release at Hugging Face commit 791833e92ebddb0bc2c1007f6d2b6764f886a2ae. The Nemotron 3 generation, downstream quantizations, the NVIDIA build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated weights with the governing NVIDIA Community Model License pinned in the repository",
+        "The build.nvidia.com trial endpoint and NIM packaging are documented"
+      ],
+      "tradeoffs": [
+        "The license is revocable, non-sublicensable, and gates production use on an NVIDIA NIM runtime subscription",
+        "The card front matter, the trial page, and the in-repo license file point to three different instruments"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 7,
+        "deployment_portability": 5,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 6,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/Nemotron-Mini-4B-Instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint and API terms",
+          "url": "https://build.nvidia.com/nvidia/nemotron-mini-4b-instruct",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-mini-4b-instruct.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-nano-12b-v2-vl",
+      "source_id": "nvidia/nemotron-nano-12b-v2-vl",
+      "name": "Nemotron Nano 12B v2 VL",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
+      "description": "An ungated 12B vision-language reasoning model handling text, image, and video input, governed by the NVIDIA Open Model License, whose trial endpoint reached end of life in August 2026.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Nano 12B v2 VL",
+        "description": "Nemotron multimodal model for visual reasoning and agentic AI workflows",
+        "family": "nemotron",
+        "release_date": "2025-10-28",
+        "last_updated": "2025-10-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "NVIDIA-Nemotron-Nano-12B-v2-VL-BF16 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16 v1.0 release dated October 28, 2025 at Hugging Face commit ca9543b126e8bf3176916d3d305ccc415f89fd4d. The FP8 and NVFP4 variants, the 9B text sibling, downstream quantizations, the retired build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a dated release, model version, and technical report",
+        "Video and image processors ship beside the weights, and NIM container packaging persists"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses",
+        "The build.nvidia.com trial endpoint returned end-of-life in August 2026, removing the hosted trial path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 6.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint documentation",
+          "url": "https://build.nvidia.com/nvidia/nemotron-nano-12b-v2-vl",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-nano-12b-v2-vl.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-nemotron-nano-9b-v2",
+      "source_id": "nvidia/nemotron-nano-9b-v2",
+      "name": "Nemotron Nano 9B v2",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+      "description": "An ungated 9B text reasoning model with tool-call support, governed by the NVIDIA Open Model License, whose trial endpoint reached end of life in August 2026.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Nemotron Nano 9B v2",
+        "description": "Compact Nemotron model for efficient reasoning and deployable AI agents",
+        "family": "nemotron",
+        "release_date": "2025-08-18",
+        "last_updated": "2025-08-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The model card states that use of the model is governed by the NVIDIA Open Model License, a web-hosted NVIDIA document rather than a file in the repository. The license grants a perpetual, worldwide, non-exclusive, royalty-free but revocable right to reproduce, modify, and distribute the work with notice obligations and guardrail and indemnity clauses, but it is an NVIDIA-specific instrument, not an OSI-approved license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "kind": "web_terms",
+          "verified_at": "2026-09-18",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "scope": "NVIDIA-Nemotron-Nano-9B-v2 weights, tokenizer, and bundled model code, October 2025 edition of the NVIDIA Open Model License"
+        }
+      ],
+      "access_boundary": "This record represents the nvidia/NVIDIA-Nemotron-Nano-9B-v2 v1.0 release dated August 18, 2025 at Hugging Face commit 6533e8de2c68e4536bf7c411d7a3ce5734111476. The FP8 and NVFP4 variants, the 12B VL sibling, downstream quantizations, the retired build.nvidia.com trial endpoint, and NIM packaging are separate model or service boundaries.",
+      "strengths": [
+        "Ungated Safetensors shards with a dated release, model version, and technical report",
+        "The trial endpoint's deprecation and end-of-life dates are documented, and NIM packaging persists"
+      ],
+      "tradeoffs": [
+        "The NVIDIA-specific license is revocable with guardrail and indemnity clauses",
+        "The build.nvidia.com trial endpoint returned end-of-life in August 2026, removing the hosted trial path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 6.86
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model card, weights, and runtime guidance",
+          "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA-hosted trial endpoint documentation",
+          "url": "https://build.nvidia.com/nvidia/nvidia-nemotron-nano-9b-v2",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/nvidia/nemotron-nano-9b-v2.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-openai-gpt-oss-20b",
@@ -21916,6 +25272,755 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-zhipuai-glm-4-5-air",
+      "source_id": "zhipuai/glm-4.5-air",
+      "name": "GLM-4.5-Air",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.5-Air",
+      "description": "An ungated 110B lightweight text model with a 131,072-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.5-Air",
+        "description": "Lighter GLM-4.5 variant for fast coding assistance and cheaper agents",
+        "family": "glm-air",
+        "release_date": "2025-07-28",
+        "last_updated": "2025-07-28",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 98304
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.5-Air"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and an explicit card statement that the models are released under the MIT open-source license and can be used commercially and for secondary development. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.5-Air/blob/a24ceef6ce4f3536971efe9b778bdaa1bab18daa/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.5-Air release of July 2025 at Hugging Face commit a24ceef6ce4f3536971efe9b778bdaa1bab18daa. The GLM-4.5 flagship, the vision lines, the GLM-4.6 and later generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line",
+        "The dedicated GLM-4.5-Air API documentation page is not served"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.5-Air weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.5-Air",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.5 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.5",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.5-air.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-5v",
+      "source_id": "zhipuai/glm-4.5v",
+      "name": "GLM-4.5V",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.5V",
+      "description": "An ungated 107B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.5V",
+        "description": "GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-08-11",
+        "last_updated": "2025-08-11",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 64000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.5V"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.5V/blob/ed47433b37111465ec527affaaddceff371bca04/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.5V release of August 2025 at Hugging Face commit ed47433b37111465ec527affaaddceff371bca04. The GLM-4.5-Air base model, the text-only lines, the GLM-4.6V and later vision generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.5V weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.5V",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.5V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.5v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.5v.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6",
+      "source_id": "zhipuai/glm-4.6",
+      "name": "GLM-4.6",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6",
+      "description": "An ungated 356B text model with a 204,800-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6",
+        "description": "Late GLM-4 workhorse for coding agents, reasoning, and structured tasks",
+        "family": "glm",
+        "release_date": "2025-09-30",
+        "last_updated": "2025-09-30",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6/blob/be72194883d968d7923a07e2f61681ea9a2826d1/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6 release of September 2025 at Hugging Face commit be72194883d968d7923a07e2f61681ea9a2826d1. The GLM-4.5 generation, the vision lines, the GLM-4.7 and later generations, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.6",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6v",
+      "source_id": "zhipuai/glm-4.6v",
+      "name": "GLM-4.6V",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6V",
+      "description": "An ungated 107B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6V",
+        "description": "GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-12-08",
+        "last_updated": "2025-12-08",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6V"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V/blob/4e2d47eb0b41c5280d8294b17cef9e94fdcfff46/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6V release of December 2025 at Hugging Face commit 4e2d47eb0b41c5280d8294b17cef9e94fdcfff46. The 4.6V-Flash sibling, the text-only lines, the GLM-4.5V vision generation, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6V weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.6v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6v.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-6v-flash",
+      "source_id": "zhipuai/glm-4.6v-flash",
+      "name": "GLM-4.6V-Flash",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash",
+      "description": "An ungated 9B multimodal vision reasoning model handling text, image, and video input, declared MIT on the model card and served on the Z.ai API free tier.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.6V-Flash",
+        "description": "Lightweight GLM vision model for visual reasoning, documents, and multimodal agents",
+        "family": "glm",
+        "release_date": "2025-12-08",
+        "last_updated": "2025-12-08",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash/blob/411bb4d77144a3f03accbf4b780f5acb8b7cde4e/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.6V-Flash release of December 2025 at Hugging Face commit 411bb4d77144a3f03accbf4b780f5acb8b7cde4e. The 4.6V flagship sibling, the text-only lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.22
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.6V-Flash weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.6V-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.6V API documentation",
+          "url": "https://docs.z.ai/guides/vlm/glm-4.6v",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.6v-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-7",
+      "source_id": "zhipuai/glm-4.7",
+      "name": "GLM-4.7",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.7",
+      "description": "An ungated 355B text model with a 204,800-token context, declared MIT on the model card and served on the Z.ai API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.7",
+        "description": "Mature GLM model for dependable coding, reasoning, and structured agent tasks",
+        "family": "glm",
+        "release_date": "2025-12-22",
+        "last_updated": "2025-12-22",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 204800,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.7"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.7/blob/602d01efcdd332c5238ca4bcede555defbe83eb7/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.7 release of December 2025 at Hugging Face commit 602d01efcdd332c5238ca4bcede555defbe83eb7. The GLM-4.6 generation, the Flash and FlashX tiers, the vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.04
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.7 weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.7 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.7.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-zhipuai-glm-4-7-flash",
+      "source_id": "zhipuai/glm-4.7-flash",
+      "name": "GLM-4.7-Flash",
+      "developer": "Z.ai",
+      "url": "https://huggingface.co/zai-org/GLM-4.7-Flash",
+      "description": "An ungated 30B text model with a 200,000-token context, declared MIT on the model card and served on the Z.ai API free tier.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GLM-4.7-Flash",
+        "description": "Budget GLM lane for fast coding help, routing, and everyday automation",
+        "family": "glm-flash",
+        "release_date": "2026-01-19",
+        "last_updated": "2026-01-19",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/GLM-4.7-Flash"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships no LICENSE file; the pinned model card carries a frontmatter `license: mit` declaration and no grant prose in the card body. The grant rests on that declaration pointing at the standard MIT text, following the family posture of the reviewed GLM-5 release. The Z.ai API is governed separately by platform terms.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/zai-org/GLM-4.7-Flash/blob/7dd20894a642a0aa287e9827cb1a1f7f91386b67/README.md",
+          "verified_at": "2026-09-18",
+          "scope": "Weights, tokenizer, and chat template in the official zai-org repository, as declared in the pinned model card frontmatter"
+        }
+      ],
+      "access_boundary": "This record represents the zai-org/GLM-4.7-Flash release of January 2026 at Hugging Face commit 7dd20894a642a0aa287e9827cb1a1f7f91386b67. The GLM-4.7 flagship, the FlashX variant, the vision lines, the Z.ai API and chat products, ModelScope mirrors, and downstream quantizations and fine-tunes remain separate boundaries.",
+      "strengths": [
+        "Ungated BF16 checkpoint with tokenizer and chat template in the official repository",
+        "The model card documents Transformers, vLLM, and SGLang deployment paths"
+      ],
+      "tradeoffs": [
+        "No LICENSE file ships with the weights; the MIT grant rests on the frontmatter declaration",
+        "No versioning or deprecation policy is published for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official zai-org/GLM-4.7-Flash weights repository and model card",
+          "url": "https://huggingface.co/zai-org/GLM-4.7-Flash",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Z.ai GLM-4.7 API documentation",
+          "url": "https://docs.z.ai/guides/llm/glm-4.7",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/zhipuai/glm-4.7-flash.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-zhipuai-glm-5",

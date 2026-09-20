@@ -1213,6 +1213,11 @@
       "id": "cloud_optional",
       "name": "Optional cloud services",
       "definition": "Adjunct vendor services a self-operated deployment may use without depending on them."
+    },
+    {
+      "id": "host_pack",
+      "name": "Installed into a host agent",
+      "definition": "A skills bundle, plugin, or vault template the user installs into a host coding agent's own directories, so the system runs inside that host's sessions rather than as its own process."
     }
   ],
   "project_statuses": [
@@ -1492,8 +1497,23 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-NVIDIA-Community-Model-2024",
+      "name": "NVIDIA Community Model License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-NVIDIA-Nemotron-Open-Model",
       "name": "NVIDIA Nemotron Open Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Open-Model",
+      "name": "NVIDIA Open Model License",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-NVIDIA-Open-Model-Agreement",
+      "name": "NVIDIA Open Model Agreement",
       "kind": "restricted"
     },
     {

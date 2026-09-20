@@ -159,6 +159,7 @@ uv run python scripts/sync_web_data.py
 uv run python -m unittest tests.test_directory -v
 uv run python scripts/validate_directory.py
 ```
+
 Expected: PASS, and the validator still reports the existing counts.
 
 - [ ] **Step 7: Commit**
@@ -208,6 +209,7 @@ uv run python -m unittest discover -s tests -v 2>&1 | tail -5
 uv run python scripts/validate_directory.py
 uv run python -m compileall scripts tests
 ```
+
 Expected: identical test count, OK, and the same validator summary line as Step 1.
 
 - [ ] **Step 6: Commit**
@@ -307,6 +309,7 @@ uv run python scripts/sync_web_data.py
 uv run python scripts/validate_directory.py
 uv run python -m unittest discover -s tests -v
 ```
+
 Expected: PASS. The new policy tests still fail until Task 5 supplies records — if the fixtures need at least one record, move those three assertions to Task 5 rather than weakening them.
 
 - [ ] **Step 9: Commit**
@@ -350,6 +353,7 @@ One authoritative documentation source per claim. Missing public evidence lowers
 ```bash
 uv run python scripts/sync_web_data.py && uv run python scripts/validate_directory.py
 ```
+
 Expected: the summary line's runtime count increments by one.
 
 - [ ] **Step 5: Re-enable and pass the Task 4 policy tests**
@@ -501,6 +505,7 @@ In `tests/e2e/directory-search.spec.js`, add specs for switching to the runtimes
 node --check web/app-core.js && node --check web/app.js && node --test tests/test_web.js
 npm ci && npx playwright install chromium && npm run test:e2e
 ```
+
 Expected: PASS.
 
 - [ ] **Step 15: Commit**
@@ -532,6 +537,7 @@ Each must answer a distinct deployment, routing, residency, retention, or procur
 ```bash
 uv run python scripts/sync_web_data.py && uv run python scripts/validate_directory.py
 ```
+
 Expected: the inference-service count rises to 41, and the cross-collection id check passes with both `ollama` and `ollama-cloud` present.
 
 - [ ] **Step 4: Commit**
@@ -619,6 +625,7 @@ uv run python -m compileall scripts tests
 node --check web/app-core.js && node --check web/app.js && node --test tests/test_web.js
 npm run test:e2e
 ```
+
 Expected: all PASS. Paste the real output; do not summarize a run you did not do.
 
 - [ ] **Step 6: Exercise the browser**
@@ -626,6 +633,7 @@ Expected: all PASS. Paste the real output; do not summarize a run you did not do
 ```bash
 uv run python -m http.server 8765 --directory web
 ```
+
 Walk the numbered checklist in `docs/WEB.md`, including the new runtime steps.
 
 - [ ] **Step 7: Commit**

@@ -40,6 +40,10 @@ A marketplace record pins its manifest and names its steward, hosts, install mec
 
 Packs are never scored, sorted by popularity, or assigned a system family.
 
+## Scored systems that install as packs
+
+A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it inline among the unscored packs, alphabetically, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 034](adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md) and [ADR 035](adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md).
+
 ## Current coverage
 
 The collection opens with four of the six repositories ADR 031's first application excluded: claude-code-tresor as a process kit, agent-toolkit and Build with Claude as marketplaces, and Second Brain Starter as a vault bundle. `NVIDIA/skills` and `AI-Research-SKILLs` remain excluded as mirrors, `knowledge-garden` as a personal snapshot. The first exclusion re-review after the collection opened lifted one more, Second Brain LLM Wiki, as a skills bundle whose only shipped code is a one-time scaffolding script.

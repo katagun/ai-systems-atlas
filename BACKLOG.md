@@ -66,7 +66,7 @@ A sixth unscored collection in the [ADR 008](docs/adr/008-specifications-are-uns
 
 ### Coverage batches
 
-- [ ] Curate the thirty-first models.dev queue batch: Gemini flash lines (`google/gemini-2.5-flash-lite`, `gemini-2.5-computer-use-preview-10-2025`, `gemini-3.1-flash-lite`, `gemini-3.1-flash-lite-preview`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.6-flash`, `gemini-3.7-flash`). All eight are API-only under the existing Gemini API terms; the 2.5 lines are retired or deprecated and the 3.x lines are active. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The live, transcribe, translate, embedding, robotics, and music lines stay queued for later.
+- [ ] Curate the thirty-eighth models.dev queue batch: Mistral (`mistral/devstral-small-2`, `magistral-small-2509`, `ministral-3-14b-instruct-2512`, `ministral-3-8b-instruct-2512`, `ministral-3-3b-instruct-2512`, `ministral-14b`, `ministral-3b`, `pixtral-large-2502`). The weight lines carry Apache-2.0 or the Mistral research and non-production licenses; the Pixtral Large line is API-only. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The Voxtral audio pair stays queued for later.
 
 ### Reader experience
 

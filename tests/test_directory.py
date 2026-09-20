@@ -630,6 +630,7 @@ class DirectoryTests(unittest.TestCase):
             "martian",
             "chutes",
             "trustedrouter",
+            "orcarouter",
             "volcengine-ark",
             "zhipu-bigmodel",
             "siliconflow-cn",
@@ -1059,6 +1060,23 @@ class DirectoryTests(unittest.TestCase):
             self.assertNotIn(record["repo"].lower(), project_repos, record["id"])
         for group in ("pack_types", "pack_hosts", "pack_install_mechanisms"):
             self.assertTrue(self.taxonomy[group], group)
+
+    def test_systems_installed_as_packs_carry_the_host_pack_deployment_mode(
+        self,
+    ) -> None:
+        modes = {item["id"] for item in self.taxonomy["deployment_modes"]}
+        self.assertIn("host_pack", modes)
+        carriers = {
+            p["id"] for p in self.document["projects"] if "host_pack" in p["deployment"]
+        }
+        self.assertIn("superpowers", carriers)
+        for project in self.document["projects"]:
+            if "host_pack" in project["deployment"]:
+                # A pack-installed system still runs somewhere: it names another mode or an interface.
+                self.assertTrue(
+                    len(project["deployment"]) > 1 or project.get("agent_interfaces"),
+                    project["id"],
+                )
 
 
 if __name__ == "__main__":

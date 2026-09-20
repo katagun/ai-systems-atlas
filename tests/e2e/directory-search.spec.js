@@ -588,14 +588,18 @@ test("the agent packs scope filters, opens its own dialog, and never scores or c
   await page.goto("/?collection=packs");
 
   await expect(page.getByRole("button", { name: /^Agent packs / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#pack-result-count")).toContainText(`${catalogCounts.packs} packs · Unscored`);
+  await expect(page.getByRole("button", { name: `Agent packs ${catalogCounts.packs + catalogCounts.hostPackSystems}` })).toHaveCount(1);
+  await expect(page.locator("#pack-result-count")).toContainText(`${catalogCounts.packs} packs · ${catalogCounts.hostPackSystems} installed systems · Scores hidden`);
   await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
   await expect(page.locator("#pack-sort-filter")).toHaveCount(0);
 
   await page.locator("#pack-type-filter").selectOption("marketplace");
   const names = page.locator("#pack-grid .project-card h2");
-  await expect(names).toHaveText(["Build with Claude", "agent-toolkit"].sort((a, b) => a.localeCompare(b)));
+  await expect(page.locator('#pack-grid [data-pack="agent-toolkit"]')).toHaveCount(1);
+  await expect(page.locator('#pack-grid [data-pack="claude-code-tresor"]')).toHaveCount(0);
+  // Pack facets describe packs, not systems: the host-installed systems stay listed.
+  await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
 
   await page.locator("#reset-pack-filters").click();
   await page.locator("#pack-search").fill("tresor");
@@ -639,4 +643,28 @@ test("taxonomy documents every pack group", async ({ page }) => {
     await expect(page.locator("#taxonomy-content h2", { hasText: group })).toHaveCount(1);
   }
   await expect(page.locator("#taxonomy-content")).toContainText("Marketplace");
+});
+
+test("the packs scope lists scored systems installed as packs inline without scores and opens their system dialog", async ({ page }) => {
+  await page.goto("/?collection=packs");
+  const cards = page.locator("#pack-grid .project-card h2");
+  await expect(cards.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
+  await expect(cards.filter({ hasText: /^agent-toolkit$/ })).toHaveCount(1);
+  await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
+  await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
+
+  await page.locator("#pack-search").fill("Superpowers");
+  await expect(cards).toHaveText(["Superpowers"]);
+
+  await page.locator('#pack-grid [data-project="superpowers"]').click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(page).toHaveURL(/record=system(%3A|:)superpowers/);
+});
+
+test("the systems deployment filter reaches systems installed into a host agent", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#deployment-filter").selectOption("host_pack");
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
 });

@@ -46,7 +46,7 @@ ALE-Bench executes code in Docker as its core function; OpenAI's Deep Research r
 
 ## Decisions
 
-### 1. No new role. ADR 023 declines the category.
+### 1. No new role. ADR 023 declines the category
 
 A three-part boundary test was derived from the evidence — owns the loop, closes on a measurement it did not author, and something is adoptable — and then refuted. It is not adopted. Four reasons, each decisive on its own.
 

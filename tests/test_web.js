@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1008,4 +1008,23 @@ test("every field a badge tests reaches the boot payload", () => {
       }
     }
   }
+});
+
+test("packShapedSystems lists only host-pack systems, by name, honouring the term and index", () => {
+  const systems = [
+    { id: "gstack", name: "GStack", description: "Cross-host workflow.", deployment: ["local_cli", "host_pack"], repo: "garrytan/gstack", url: "https://github.com/garrytan/gstack" },
+    { id: "superpowers", name: "Superpowers", description: "A skills library.", deployment: ["local_cli", "host_pack"], repo: "obra/superpowers", url: "https://github.com/obra/superpowers" },
+    { id: "emdash", name: "emdash", description: "Desktop app.", deployment: ["desktop"], repo: "x/emdash", url: "https://github.com/x/emdash" },
+  ];
+  assert.deepEqual(packShapedSystems(systems, {}).map(item => item.id), ["gstack", "superpowers"]);
+  assert.deepEqual(packShapedSystems(systems, { term: "skills" }).map(item => item.id), ["superpowers"]);
+  assert.deepEqual(packShapedSystems(systems, { term: "onlyindex", searchIndex: { gstack: "onlyindex" } }).map(item => item.id), ["gstack"]);
+  assert.deepEqual(packShapedSystems([systems[2]], {}), []);
+});
+
+test("mergePackScopeEntries unions packs and host-pack systems by name with kind tiebreak", () => {
+  const packs = [{ id: "b-pack", name: "B" }];
+  const systems = [{ id: "z-sys", name: "Z" }, { id: "a-sys", name: "A" }];
+  assert.deepEqual(mergePackScopeEntries(packs, systems).map(item => [item.kind, item.record.id]), [["system", "a-sys"], ["pack", "b-pack"], ["system", "z-sys"]]);
+  assert.deepEqual(mergePackScopeEntries([], []), []);
 });
