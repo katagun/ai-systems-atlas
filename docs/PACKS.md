@@ -42,7 +42,7 @@ Packs are never scored, sorted by popularity, or assigned a system family.
 
 ## Scored systems that install as packs
 
-A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it under "Scored systems installed as packs" beside the unscored packs, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 033](adr/033-installing-into-a-host-is-a-deployment-mode-not-a-collection.md).
+A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it inline among the unscored packs, alphabetically, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 034](adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md) and [ADR 035](adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md).
 
 ## Current coverage
 

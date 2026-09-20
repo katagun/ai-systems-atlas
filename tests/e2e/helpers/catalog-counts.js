@@ -11,6 +11,7 @@ function read(name) {
 }
 
 const projects = read("projects.json").projects;
+const hostPackSystems = read("app/systems.json").systems.filter(system => (system.deployment || []).includes("host_pack"));
 const inferenceServices = read("inference-services.json").services;
 const localRuntimes = read("local-runtimes.json").runtimes;
 const packs = read("packs.json").packs;
@@ -80,6 +81,7 @@ module.exports = {
   inferenceServices: inferenceServices.length,
   localRuntimes: localRuntimes.length,
   packs: packs.length,
+  hostPackSystems: hostPackSystems.length,
   models,
   reviewedModels: reviewedModels.length,
   allDirectoryEntries,

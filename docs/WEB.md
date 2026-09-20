@@ -18,7 +18,7 @@ Use progressive disclosure for explanation and specialist controls:
 - In Inference services, keep search, service type, delivery, model source, API style, and score sort visible.
 - In Local runtimes, keep search, runtime type, accelerator, model format, API style, and score sort visible.
 - In Agent packs, keep search, pack type, host, install mechanism, and licence visible; results are alphabetical and unscored.
-- Below the packs grid, the Packs scope lists scored systems whose deployment includes `host_pack` under 'Scored systems installed as packs', alphabetical, search-term only, scores hidden, each opening its own system dialog; the block hides when empty (ADR 033).
+- The Packs grid lists packs and scored systems whose deployment includes `host_pack` inline, alphabetical by name; pack facets narrow only packs while the search term narrows both; scores stay hidden, nothing offers comparison, and each system card opens its own system dialog (ADR 035).
 - In Models, keep search, model type, distribution, modality, source model, license, and access-score sort visible.
 - State the applicable score-scope rule beside each collection's controls.
 - Offer comparison only after the user enters one comparable scope: a selected system family, Inference services, Local runtimes, or Models.
@@ -70,7 +70,7 @@ System, inference-service, and local-runtime cards replace the tags row with up 
 - Local-runtime filters combine search, runtime type, accelerator, model format, and API style inside the Local runtimes Directory scope. Results default to local-runtime score and can be sorted alphabetically.
 - Local-runtime search indexes visible identity and boundary prose; evidence URLs and license blob identifiers must not create false-positive cards.
 - Local-runtime details show the dedicated score dimensions, the runtime/service/assistant boundary, accelerators, model formats, serving modes, deployment surfaces, hardware requirements, model management, operational controls, scoped license evidence, and reviewed sources. The score language must exclude model quality, throughput, latency, benchmark rank, and hardware cost.
-- Pack filters combine search, type, host, install mechanism, and licence inside the Agent packs Directory scope. Results are alphabetical, explicitly unscored, and never offer comparison.
+- Pack filters combine search, type, host, install mechanism, and licence inside the Agent packs Directory scope. Results are alphabetical, explicitly unscored, and never offer comparison. Scored host-installed systems appear inline in the same grid, narrowed by the search term only.
 - Pack details show what the pack installs, any distribution machinery, why it is not a scored system, hosts, packaging formats linked to their specification records, scoped licence evidence, and reviewed sources.
 - Local runtimes reuse the inference API-style taxonomy because the trait describes the same documented contract on both sides of the service boundary.
 - Model filters combine search, model type, distribution mode, modality, source model, and license inside the Models view. Search and modality apply to all source rows; the Atlas model type, distribution, source-model, and license facets naturally select only reviewed rows because imported rows carry none of those conclusions. Results default to reviewed model-access score first, with unscored imports following alphabetically, and can be sorted wholly by name.
@@ -193,6 +193,6 @@ Then verify in a browser:
 28. compare two to four models, reload a `model:` comparison URL, and confirm the table never presents quality, benchmark, price, latency, or throughput rankings.
 29. open a model detail and verify imported models.dev fields are visibly attributed as source metadata while the model boundary, licensing, score, and evidence remain reviewed Atlas fields.
 30. confirm card badges on a system from each family, an inference service, and a local runtime; confirm reviewed and imported models and specifications show none; confirm a badge-less card keeps its footer at the bottom; confirm badges read as outlined chips distinct from the source and license pills; hover a badge for its definition; and find every badge in Taxonomy in both palettes.
-31. switch to Agent packs, reload the scoped URL, combine every filter, open a process-kit and a marketplace detail, follow a packaging-format link into Specifications, and confirm no score, sort-by-score, or Compare control appears; search the mixed Directory for a pack; confirm the scored-systems block lists Superpowers, shows no score or Compare, and opens the system dialog.
+31. switch to Agent packs, reload the scoped URL, combine every filter, open a process-kit and a marketplace detail, follow a packaging-format link into Specifications, and confirm no score, sort-by-score, or Compare control appears; search the mixed Directory for a pack; confirm Superpowers is listed inline among the packs with no score or Compare and opens the system dialog.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.

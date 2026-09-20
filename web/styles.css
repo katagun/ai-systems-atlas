@@ -680,10 +680,6 @@ input:focus, select:focus {
 .local-runtime-card::before { background: var(--amber); }
 .agent-pack-card { min-height: 380px; background: var(--card-pack); }
 .agent-pack-card::before { background: var(--cyan); }
-.pack-systems-block { margin-top: 2rem; }
-.pack-systems-heading { margin: 0 0 .5rem; font-size: 1.25rem; font-weight: 600; }
-.pack-systems-count { color: var(--muted); font: .8rem var(--font-mono); }
-.pack-systems-note { margin: 0 0 1rem; color: var(--muted); font-size: .86rem; line-height: 1.55; }
 .mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);
