@@ -14,7 +14,7 @@
 
 - Three pull requests, in order: **PR 1** Task 1; **PR 2** Tasks 2–10; **PR 3** Task 11. Do not merge PR 2 with a robot record in it, and do not start PR 3 before PR 2 is merged and deployed.
 - Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. Forbidden record fields, verbatim from the spec: `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, `benchmarks`.
-- Taxonomy group ids, verbatim: `robot_form_factors` = `humanoid`, `quadruped`, `arm`, `mobile_manipulator`, `other`; `robot_availability` = `orderable`, `reservation`, `enterprise_sales`, `research_only`, `announced`; `robot_model_kinds` = `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`; `robot_terms_kinds` = `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`.
+- Taxonomy group ids, verbatim: `robot_form_factors` = `humanoid`, `quadruped`, `arm`, `mobile_manipulator` (no `other`: ADR 036 names exactly these); `robot_availability` = `orderable`, `reservation`, `enterprise_sales`, `research_only`, `announced`; `robot_model_kinds` = `vision_language_action`, `language_or_vision_language`, `reinforcement_learning_policy`, `other_learned`; `robot_terms_kinds` = `terms_of_sale`, `sdk_license`, `software_terms`, `warranty_only`, `none_published`.
 - Evidence roles, verbatim: `product_page`, `technical_documentation`, `named_model`, plus `supporting` for any further first-party page. The first three are each required at least once. (`supporting` is this plan's one addition to the spec; without it every extra citation would have to claim a required role.)
 - Record-reference kind is `robot`; share pages live at `records/robots/<id>/`; payloads are `app/robots.json`, `app/search/robots.json`, `app/detail/robot/<id>.json`. `web/robots.json` (the published collection) is unrelated to the existing `web/robots.txt`.
 - The Robots navigation entry is hidden while the collection has zero records.
@@ -86,9 +86,9 @@ In `tests/test_documentation.py`, inside `test_task_routing_documents_exist`, ad
 Run: `uv run python -m unittest tests.test_documentation -v 2>&1 | tail -15`
 Expected: FAIL in `test_task_routing_documents_exist` with `docs/ROBOTS.md`.
 
-- [ ] **Step 3: Brief a repo-only skeptic, then write ADR 037**
+- [ ] **Step 3: Read the skeptic's findings, then write ADR 037**
 
-Before drafting, dispatch a general-purpose subagent with no web access to refute the collection (ADR 032 line 13 made this a precondition, and the owner's standing preference is skeptic-first). Give it the spec path and ask specifically: (a) does ADR 034's "placement is not decided by distribution form" defeat a Robots collection; (b) does the gate rest on composition evidence or on a behaviour claim (ADR 032 line 34); (c) what significance standard and weak point does the record state (ADR 032 line 42). Check the file and line citations it returns yourself; fold surviving objections into "Alternatives considered".
+The controller has already briefed a repo-only skeptic; its findings are in `.superpowers/sdd/2026-09-20-robots-collection/adr-037-skeptic.md` (the dispatch gives the absolute path). Read it first. The spec was amended to answer it; the ADR must answer each surviving objection in its own words — condition 3 records documentation, not behaviour (cite ADR 029's "Statuses record documentation, not behaviour" and answer ADR 023's "convicts the inspectable and acquits the opaque"); the significance cost is stated ("nothing refuses the tenth quadruped except the queue and the ecosystem-significance judgement"); `first_party_domains` is named as a new, unmonitored trust anchor with its two limits; a withdrawn claim keeps its record under ADR 016 with `status: removed`; discovery cannot see repo-less products. Check every file and line citation you reuse from the skeptic's file yourself.
 
 Then write the ADR with these sections and this content:
 
@@ -126,7 +126,7 @@ Then write the ADR with these sections and this content:
 ## Alternatives considered
 ```
 - **Robots as `agent_system` records** — condition 4 unmeetable; scores would measure a closed stack.
-- **Hardware as a trait on software records (ADR 034's reasoning)** — a robot exists whether or not reviewed software runs on it, and only a robot record can carry both the model-to-robot and the software-to-robot relationship.
+- **Hardware as a trait on software records (ADR 034's reasoning)** — a robot exists whether or not reviewed software runs on it, and it cannot meet the systems gate. Do not argue from `related_models`: it is empty by design.
 - **Structured numeric specifications** — would invite ranking and churn with every vendor revision.
 - **Admitting any programmable robot** — pulls in classical robotics that batch 39 excluded on the software side.
 
@@ -292,7 +292,7 @@ In `tests/test_validation_policy.py`, add to `ValidationPolicyTests`, after the 
             (ROOT / "directory" / "taxonomy.json").read_text(encoding="utf-8")
         )
         self.assertEqual(
-            ["humanoid", "quadruped", "arm", "mobile_manipulator", "other"],
+            ["humanoid", "quadruped", "arm", "mobile_manipulator"],
             [item["id"] for item in taxonomy["robot_form_factors"]],
         )
         self.assertEqual(
@@ -332,8 +332,7 @@ In `directory/taxonomy.json`, after the closing `]` of `pack_install_mechanisms`
     {"id": "humanoid", "name": "Humanoid", "definition": "A robot with a torso, two arms, and legs or a wheeled base standing in for them, built to work in spaces made for people."},
     {"id": "quadruped", "name": "Quadruped", "definition": "A four-legged walking robot."},
     {"id": "arm", "name": "Arm", "definition": "A fixed or bench-mounted manipulator with no locomotion of its own."},
-    {"id": "mobile_manipulator", "name": "Mobile manipulator", "definition": "One or more arms on a wheeled or tracked base that moves itself."},
-    {"id": "other", "name": "Other", "definition": "A robot whose body fits none of the named forms; the record's description says what it is."}
+    {"id": "mobile_manipulator", "name": "Mobile manipulator", "definition": "One or more arms on a wheeled or tracked base that moves itself."}
   ],
   "robot_availability": [
     {"id": "orderable", "name": "Orderable", "definition": "The maker's own site takes an order or states a price and a way to buy."},
@@ -498,6 +497,26 @@ git commit -m "Register the empty Robots collection and its taxonomy groups"
                 errors = self.catalog_with_robot(mutate)
                 self.assertTrue(any(needle in e for e in errors), errors)
 
+    def test_robot_superseded_status_names_a_successor_robot(self) -> None:
+        def missing(robot, root):
+            robot["status"] = "superseded"
+
+        def stray(robot, root):
+            robot["superseded_by"] = "sample-robot-2"
+
+        def itself(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = "sample-robot"
+
+        for mutate, needle in (
+            (missing, "superseded status requires superseded_by"),
+            (stray, "superseded_by requires the superseded status"),
+            (itself, "a robot cannot supersede itself"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
     def test_robot_requires_at_least_one_named_model(self) -> None:
         def mutate(robot, root):
             robot["named_models"] = []
@@ -574,6 +593,7 @@ ROBOT_OPTIONAL = {
     "short_name",
     "variants",
     "repo",
+    "superseded_by",
     "related_systems",
     "related_models",
     "related_robots",
@@ -647,6 +667,13 @@ Replace the loop body of `validate_robots` with:
             errors.append(f"{prefix}: unknown research confidence")
         if not valid_date(robot.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
+        if robot.get("status") == "superseded":
+            if "superseded_by" not in robot:
+                errors.append(f"{prefix}: superseded status requires superseded_by")
+            elif robot["superseded_by"] == robot_id:
+                errors.append(f"{prefix}: a robot cannot supersede itself")
+        elif "superseded_by" in robot:
+            errors.append(f"{prefix}: superseded_by requires the superseded status")
 
         named_models = robot.get("named_models")
         if not isinstance(named_models, list) or not named_models:
@@ -791,6 +818,23 @@ git commit -m "Validate the robot record schema"
                     any("first_party_domains entries must be" in e for e in errors), errors
                 )
 
+    def test_robot_product_page_anchors_the_first_party_list(self) -> None:
+        def mutate(robot, root):
+            robot["first_party_domains"] = ["docs.robots.example", "github.com/example-robotics"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("url 'https://robots.example/sample' is not first-party" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_refuse_multi_tenant_hosts(self) -> None:
+        for value in ("github.io", "huggingface.co", "youtube.com", "medium.com", "notion.site"):
+            with self.subTest(value=value):
+
+                def mutate(robot, root, value=value):
+                    robot["first_party_domains"].append(value)
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any("is a shared host" in e for e in errors), errors)
+
     def test_robot_none_published_stands_alone_and_permits_no_terms_evidence(self) -> None:
         def alone(robot, root):
             robot["terms"] = ["none_published"]
@@ -832,6 +876,23 @@ ROBOT_EVIDENCE_ROLES = (
 ROBOT_REQUIRED_EVIDENCE_ROLES = ROBOT_EVIDENCE_ROLES[:3]
 FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+")
 FIRST_PARTY_GITHUB_ORG = re.compile(r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?")
+# Hosts many unrelated parties publish on. A bare entry would make every tenant
+# first-party, so a shared host enters only as github.com/<org>.
+MULTI_TENANT_HOSTS = frozenset(
+    {
+        "github.com",
+        "github.io",
+        "gitlab.com",
+        "huggingface.co",
+        "youtube.com",
+        "medium.com",
+        "substack.com",
+        "notion.site",
+        "x.com",
+        "twitter.com",
+        "linkedin.com",
+    }
+)
 
 
 def url_is_first_party(url: object, domains: list[str]) -> bool:
@@ -870,7 +931,11 @@ Append to the per-robot body of `validate_robots`:
             domains = []
         clean_domains: list[str] = []
         for entry in domains:
-            if isinstance(entry, str) and (
+            if isinstance(entry, str) and entry in MULTI_TENANT_HOSTS and entry != "github.com":
+                errors.append(
+                    f"{prefix}: first_party_domains entry {entry!r} is a shared host"
+                )
+            elif isinstance(entry, str) and (
                 FIRST_PARTY_GITHUB_ORG.fullmatch(entry)
                 or (FIRST_PARTY_HOST.fullmatch(entry) and entry != "github.com")
             ):
@@ -965,6 +1030,8 @@ Append to the per-robot body of `validate_robots`:
             if not url_is_first_party(url, clean_domains):
                 errors.append(f"{prefix}: {label} {url!r} is not first-party")
 ```
+
+The record `url` is already in the first-party loop above, so a list that omits the product page's own host fails on `url` — that is the anchor the spec requires; no extra code is needed beyond the test. A subdomain of a shared host (`vendor.github.io`) still passes as a bare host entry, because it names one tenant.
 
 `kind: "web_terms"` on `terms_evidence` is what makes `scripts/check_evidence_links.py` monitor a URL for drift (`_add_evidence_items`, `:154-179`), so it is fixed here rather than left to the reviewer. An SDK licence that lives in a repository is cited as `web_terms` on its `github.com/<org>/…/blob/…` URL, with the pinned blob added to `evidence` under the `supporting` role.
 
@@ -1105,7 +1172,11 @@ Change the signature to `def validate_robots(robots_data, tax, index, errors, *,
                 )
         if robot_id in robot.get("related_robots", []):
             errors.append(f"{prefix}: cannot relate to itself")
+        if "superseded_by" in robot and robot["superseded_by"] not in robot_ids:
+            errors.append(f"{prefix}: superseded_by must name a robot record")
 ```
+
+Add to this task's tests a case that sets `status: "superseded"` with `superseded_by: "no-such-robot"` and expects `"superseded_by must name a robot record"`.
 
 Before the loop, initialise:
 

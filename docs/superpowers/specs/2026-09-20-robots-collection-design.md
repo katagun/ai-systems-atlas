@@ -17,7 +17,7 @@ Batch 39 also left one property untested: whether "a model in the decision loop"
 
 Robots are recorded in `directory/robots.json`, an unscored collection with its own schema, boundary, and comparison policy, as [ADR 013](../../adr/013-distinct-collections-share-one-directory-surface.md) requires. [ADR 015](../../adr/015-local-runtimes-are-self-operated-execution-records.md) requires a further collection to carry its own decision record and forbids admitting by analogy; ADR 037 is that record, and ADR 036 is not. ADR 037 is drafted with this spec and stays Proposed until the collection plumbing lands.
 
-The strongest argument against a collection is [ADR 034](../../adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)'s: where a system runs is a trait, not a placement. ADR 037 must answer it. The answer this design rests on: a robot is a product a reader chooses, it exists whether or not any reviewed software runs on it, it cannot meet the systems gate, and only a robot record can carry both the model-to-robot and the software-to-robot relationship.
+The strongest argument against a collection is [ADR 034](../../adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md)'s: where a system runs is a trait, not a placement. ADR 037 must answer it. The answer this design rests on: a robot is a product a reader chooses, it exists whether or not any reviewed software runs on it, and it cannot meet the systems gate.
 
 ### 2. Record unit
 
@@ -28,21 +28,23 @@ One robot product as the manufacturer sells it — "Unitree G1", not Unitree and
 Add a robot to `directory/robots.json` when all six hold, each from first-party pages:
 
 1. **Identifiable product** from one named manufacturer.
-2. **It is a robot:** a machine with its own actuators that moves itself or manipulates objects. `form_factor` is one of `humanoid`, `quadruped`, `arm`, `mobile_manipulator`, `other`.
-3. **The vendor names a learned model or policy** — a vision-language-action model, a language or vision-language model, a reinforcement-learning policy — that drives the robot's behaviour. It is recorded in `named_models` with its evidence and a `research_confidence`. It is a vendor claim and is never scored.
+2. **It is a robot:** a machine with its own actuators that moves itself or manipulates objects. `form_factor` is one of `humanoid`, `quadruped`, `arm`, `mobile_manipulator` — exactly the forms ADR 036 names. A robot of another form waits for a scope decision; there is no `other`.
+3. **First-party documentation names a learned model or policy and states what it controls on the robot** — a vision-language-action model, a language or vision-language model, a reinforcement-learning policy. The record states what the documentation says, never what the robot does, the rule [ADR 029](../../adr/029-trust-records-are-unscored-and-never-first-hand.md) set for trust statuses: "Statuses record documentation, not behaviour." It is recorded in `named_models` with its evidence and a `research_confidence`, and is never scored.
 4. **A spec sheet or technical documentation exists and can be pinned.** A demo video, a press release, or a waitlist page alone fails.
 5. **The vendor states availability:** `orderable`, `reservation`, `enterprise_sales`, `research_only`, or `announced`.
 6. **Terms are recorded as found.** Terms of sale, an SDK licence, software terms, a warranty-only page, or none published. Absence is recorded, not disqualifying, and never rewritten as a classification by inference.
 
 Outside the collection: robots whose documentation names no learned model or policy, robot components, vehicles, drones, simulators, lab prototypes with no stated availability, and concept videos. ADR 036 already bounds the domain; this collection does not widen it.
 
-Condition 3 is batch 39's untested property, exercised. It is establishable for a closed system without reading source because it asks what the vendor's documentation names, not what the robot does.
+Condition 3 is batch 39's untested property, exercised. It is establishable for a closed system without reading source because it asks what the vendor's documentation names, not what the robot does. ADR 023 warned against a test that "convicts the inspectable and acquits the opaque"; this one reads documentation for open and closed robots alike and never reads source for either, and unequal documentation shows in `research_confidence`, as ADR 007 intends.
 
 ### 4. Comparison policy and stated weak point
 
 Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. They are listed alphabetically.
 
 The collection's weak point is stated on every record: the named-model fact is the vendor's own claim, which the Atlas cannot verify, and the evidence is mutable web content. `not_verified` carries that sentence.
+
+Significance is not a gate, and the collection says what that costs, as ADR 032 did for packs: nothing refuses the tenth quadruped except the queue and the ecosystem-significance judgement `docs/COVERAGE.md` already applies to the ninth coding agent.
 
 `docs/COVERAGE.md`'s rule — "Do not add a new family merely to fit a famous product" — applies. A famous robot that fails condition 3 or 4 stays held with its reason.
 
@@ -68,7 +70,7 @@ Top-level key `robots`. Validation mirrors packs: required, optional, and forbid
 | `not_verified` | The weak-point sentence. |
 | `status`, `evidence`, `verified_at` | Existing project statuses, existing evidence shape, existing meaning. |
 
-**Optional:** `short_name`, `variants`, `repo`, `related_systems` (ids in `projects.json`), `related_models` (ids in `models.json`), `related_robots`. Relationships aid navigation and are not compatibility claims. `related_models` stays empty until the action-policy model decision in `BACKLOG.md` is made; until then models are named only as text in `named_models`.
+**Optional:** `short_name`, `variants`, `repo`, `superseded_by` (a robot id; required when `status` is `superseded`, forbidden otherwise, never the record's own id), `related_systems` (ids in `projects.json`), `related_models` (ids in `models.json`), `related_robots`. Relationships aid navigation and are not compatibility claims. `related_models` stays empty until the action-policy model decision in `BACKLOG.md` is made; until then models are named only as text in `named_models`.
 
 **Forbidden:** `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, `benchmarks`. Hardware is prose so that no numeric specification can be sorted or ranked, and price stays out as it does in every collection.
 
@@ -138,4 +140,6 @@ Pull request 2 is test-driven. Validation-policy tests cover each forbidden fiel
 
 - **The collection may open nearly empty.** If condition 3 or the two-fetch rule holds most of the four candidates, the first publish is one or two records. That is the boundary working; the remedy is screening more robots, not loosening the gate.
 - **Vendor claims change quietly.** Evidence rule 5 monitors the named-model page, but a vendor can change the robot and leave the page alone. `not_verified` states the limit rather than hiding it.
-- **`first_party_domains` is reviewer-asserted.** The validator checks URLs against the list, not the list against the world. A wrong entry is a review error, caught the way a wrong licence scope is: by the next reviewer reading the evidence.
+- **`first_party_domains` is a new kind of trust anchor.** No other collection has a reviewer-asserted list that the validator then trusts, and nothing monitors it for drift. The validator checks URLs against the list, not the list against the world. Two limits keep it narrow: the record `url`'s own host must be in the list, so the anchor is the product page a reader can open; and multi-tenant hosts are refused as bare domains, so a shared host can enter only as `github.com/<org>`. A wrong entry is still a review error that only the next reviewer catches.
+- **A withdrawn claim.** If a vendor stops naming a model, the record is kept, as [ADR 016](../../adr/016-superseded-predecessors-keep-their-record.md) keeps a reviewed record whose standing changes: the reviewer sets `status` to `removed` and says why in `description`. Nothing is deleted.
+- **Discovery cannot see robots.** The refresh discovers GitHub repositories by topic, and a robot is a product, usually with no repository. ADR 023 extended discovery in the same record that named a class; here there is nothing to extend, so robot candidates are queued by hand and `BACKLOG.md` carries the routing work.
