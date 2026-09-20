@@ -37,6 +37,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Managed inference, service scores, trust records | [Inference services](docs/INFERENCE_SERVICES.md) |
 | Self-operated inference, runtime scores | [Local runtimes](docs/LOCAL_RUNTIMES.md) |
 | Skills, plugins, vault bundles, marketplaces, host-installed packs | [Agent packs](docs/PACKS.md) |
+| AI robots, vendor-named models, robot hardware, terms of sale | [Robots](docs/ROBOTS.md) |
 | Candidate triage routine | [Candidate triage](docs/routines/candidate-triage.md) |
 | Hacker News attention signals and sweep routine | [HN signals](docs/routines/hn-signals.md) |
 | Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |

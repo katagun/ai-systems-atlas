@@ -90,6 +90,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",
             "docs/PACKS.md",
+            "docs/ROBOTS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
             "docs/adr/003-multi-axis-directory.md",
@@ -124,6 +125,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md",
             "docs/adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md",
             "docs/adr/036-the-agent-to-physical-world-boundary-is-in-scope.md",
+            "docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
