@@ -114,3 +114,27 @@ test("Models comparisons stay inside the model-access profile and restore from t
   await expect(page.locator("#comparison-tray")).toBeHidden();
   await expect(page).not.toHaveURL(/compare=/);
 });
+
+test("a reviewed model models.dev does not list yet says so and never prints null", async ({ page }) => {
+  await page.route("**/app/models.json*", async route => {
+    const response = await route.fetch();
+    const payload = await response.json();
+    const models = payload.models.map(model => model.id === QWEN ? { ...model, source_id: null } : model);
+    await route.fulfill({ response, json: { ...payload, unlisted_reviewed_count: 1, models } });
+  });
+  await page.goto("/?view=models");
+
+  await expect(page.locator("#models-kicker")).toContainText("1 not yet on models.dev");
+  const card = page.locator(`#model-grid .project-card:has([data-model="${QWEN}"])`);
+  await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
+  await expect(card.locator(".card-footer")).toContainText("Not yet listed on models.dev");
+  await expect(card).not.toContainText("null");
+  await expect(card.locator(".card-source-meta")).toHaveAttribute("title", "Reviewed by Atlas from developer documentation");
+
+  await card.locator(`[data-model="${QWEN}"]`).click();
+  const dialog = page.locator("#model-dialog-content");
+  await expect(dialog).toContainText("models.dev ID: Not yet listed on models.dev");
+  await expect(dialog).toContainText("Reviewed by Atlas from developer documentation");
+  await expect(dialog).not.toContainText("Source links from models.dev");
+  await expect(dialog).not.toContainText("null");
+});
