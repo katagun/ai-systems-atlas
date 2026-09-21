@@ -717,9 +717,17 @@ to 8,000 characters of its page text. All three are already public, and the subm
 chose the first two, so treat the returned number as you treat the page: data about an
 attacker-influenceable input. The model is pinned by version in `rank_signals.MODEL`;
 move it deliberately, and re-measure against recorded verdicts when you do. The
-2026-09-20 measurement — 59 judged signals, all five `worth_review` in the top eight,
-about $0.006 per 60-signal queue — rests on five positives and is recorded in
-`BACKLOG.md`.
+2026-09-20 measurement replayed 265 re-fetched pages from every queue in Git history:
+20 seconds in total, about 141,000 tokens and $0.006 per 60-signal queue, and against the
+59 readable signals the routine had already judged, all five `worth_review` ranked in the
+top eight. Three cautions bound it. Five positives is a small sample. Only 106 of the 265
+pages still matched their pinned hash, so the verdicts had been given to text that has
+since changed. And a companion question asking which collection a page belongs to was
+unreliable — it called the iOS 27 page not a product and a Moon essay a model release —
+which is why only the yes/no probability is used. The question also cannot know what the
+catalog already holds: the top of the unjudged ranking was pages about Claude, the Gemini
+app, and the OpenAI Agents API, which the routine calls `out_of_scope` as rehashes.
+`BACKLOG.md` holds the re-measurement that decides whether the step stays.
 
 ### Running the loop locally
 
