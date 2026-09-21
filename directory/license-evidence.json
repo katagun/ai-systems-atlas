@@ -3448,6 +3448,21 @@
           "verified_at": "2026-09-18"
         }
       ]
+    },
+    {
+      "project_id": "flue",
+      "repo": "withastro/flue",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "monorepo, including the runtime, CLI, Vite plugin, client SDK, React bindings, and the database, telemetry, and channel packages",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/withastro/flue/blob/main/LICENSE",
+          "blob_sha": "78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33",
+          "immutable_url": "https://api.github.com/repos/withastro/flue/git/blobs/78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-18"
