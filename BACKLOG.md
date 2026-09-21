@@ -84,7 +84,7 @@ Ideas from the 2026-09-20 brainstorm on [TypeSafe](https://docs.typesafe.ai/llms
 
 ### Coverage batches
 
-- [ ] Curate the fortieth models.dev queue batch: Amazon Nova (`amazon/nova-2-lite`, `nova-lite`, `nova-micro`, `nova-premier`, `nova-pro`). All five are API-only under Amazon Bedrock and the Nova model terms. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The OpenAI and leftover clusters stay queued for later.
+- [ ] Curate the forty-first models.dev queue batch: OpenAI safeguards, Whisper, and newer API lines (`openai/gpt-oss-safeguard-120b`, `gpt-oss-safeguard-20b`, `whisper-large-v3`, `whisper-large-v3-turbo`, `gpt-5.2-pro`, `gpt-6-astra-fast`, `gpt-realtime-2.1`, `gpt-realtime-whisper`). The weight lines are Apache-2.0 or OpenAI-licensed; the API lines sit under the existing OpenAI services agreement. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The retired o1/o3/GPT-3.5/GPT-4 lines stay queued for a disposition batch later.
 
 ### Reader experience
 

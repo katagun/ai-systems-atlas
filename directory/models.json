@@ -19468,6 +19468,216 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-openai-gpt-oss-safeguard-120b",
+      "source_id": "openai/gpt-oss-safeguard-120b",
+      "name": "GPT OSS Safeguard 120B",
+      "developer": "OpenAI",
+      "url": "https://huggingface.co/openai/gpt-oss-safeguard-120b",
+      "description": "An ungated 117B safety-reasoning model built on the gpt-oss family that classifies text against caller-provided safety policies, released under Apache-2.0.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "GPT OSS Safeguard 120B",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "gpt-oss",
+        "release_date": "2025-10-29",
+        "last_updated": "2025-10-29",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/openai/gpt-oss-safeguard-120b"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a verbatim Apache License 2.0 file beside a USAGE_POLICY that adds no use restriction, and the card and announcement confirm the permissive grant for commercial deployment.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/openai/gpt-oss-safeguard-120b/blob/main/LICENSE",
+          "verified_at": "2026-09-18",
+          "scope": "Official openai/gpt-oss-safeguard-120b weights, tokenizer, and bundled model code"
+        }
+      ],
+      "access_boundary": "This record represents the openai/gpt-oss-safeguard-120b release of October 2025. The gpt-oss-120b base, the 20B safeguard sibling, downstream fine-tunes, and the OpenAI hosted services remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with the verbatim Apache-2.0 license file shipped in the repository",
+        "The card documents the safety-policy classification usage and the technical report is published"
+      ],
+      "tradeoffs": [
+        "The MXFP4-quantized artifact set ships without full-precision or original checkpoints",
+        "No first-party API or developers.openai.com model page exists for the release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 7.36
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official OpenAI weights repository and model card",
+          "url": "https://huggingface.co/openai/gpt-oss-safeguard-120b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT OSS Safeguard announcement",
+          "url": "https://openai.com/index/introducing-gpt-oss-safeguard/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-oss-safeguard-120b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-openai-gpt-oss-safeguard-20b",
+      "source_id": "openai/gpt-oss-safeguard-20b",
+      "name": "GPT OSS Safeguard 20B",
+      "developer": "OpenAI",
+      "url": "https://huggingface.co/openai/gpt-oss-safeguard-20b",
+      "description": "An ungated 21B safety-reasoning model built on the gpt-oss family that classifies text against caller-provided safety policies, released under Apache-2.0.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "GPT OSS Safeguard 20B",
+        "description": "Safety model for policy screening, moderation, and risk-aware routing workflows",
+        "family": "gpt-oss",
+        "release_date": "2025-10-29",
+        "last_updated": "2025-10-29",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/openai/gpt-oss-safeguard-20b"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a verbatim Apache License 2.0 file beside a USAGE_POLICY that adds no use restriction, and the card and announcement confirm the permissive grant for commercial deployment.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/openai/gpt-oss-safeguard-20b/blob/main/LICENSE",
+          "verified_at": "2026-09-18",
+          "scope": "Official openai/gpt-oss-safeguard-20b weights, tokenizer, and bundled model code"
+        }
+      ],
+      "access_boundary": "This record represents the openai/gpt-oss-safeguard-20b release of October 2025. The gpt-oss-20b base, the 120B safeguard sibling, downstream fine-tunes, and the OpenAI hosted services remain separate boundaries.",
+      "strengths": [
+        "Ungated weights with the verbatim Apache-2.0 license file shipped in the repository",
+        "The card documents the safety-policy classification usage and the technical report is published"
+      ],
+      "tradeoffs": [
+        "The MXFP4-quantized artifact set ships without full-precision or original checkpoints",
+        "No first-party API or developers.openai.com model page exists for the release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 7,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 7.36
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official OpenAI weights repository and model card",
+          "url": "https://huggingface.co/openai/gpt-oss-safeguard-20b",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT OSS Safeguard announcement",
+          "url": "https://openai.com/index/introducing-gpt-oss-safeguard/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-oss-safeguard-20b.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-openai-gpt-4-1",
       "source_id": "openai/gpt-4.1",
       "name": "GPT-4.1",
@@ -21154,6 +21364,107 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-openai-gpt-5-2-pro",
+      "source_id": "openai/gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.2-pro",
+      "description": "An API-served GPT release pinned to the dated snapshot gpt-5.2-pro-2025-12-11, available through OpenAI's Responses API under the OpenAI Services Agreement, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-5.2 Pro",
+        "description": "Higher-accuracy GPT-5.2 variant for tougher reasoning and review workflows",
+        "family": "gpt-pro",
+        "release_date": "2025-12-11",
+        "last_updated": "2025-12-11",
+        "knowledge_cutoff": "2025-08-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": false
+        },
+        "limits": {
+          "context": 400000,
+          "input": 272000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides GPT-5.2 Pro as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to GPT-5.2 Pro through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-5.2 Pro release identified by the dated snapshot gpt-5.2-pro-2025-12-11, launched December 2025 and superseded by the GPT-5.5 Pro tier. The GPT-5.5 Pro successor, the standard GPT-5.2 line, the OpenAI API platform, ChatGPT, and later GPT releases remain separate service or product boundaries.",
+      "strengths": [
+        "OpenAI documents a pinnable dated snapshot with launch date, modalities, and endpoints",
+        "The model page states the superseded tier explicitly and names the recommended successor"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The release is served only through the Responses API with no documented third-party path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.66
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-5.2 Pro model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.2-pro",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official GPT-5.2 announcement",
+          "url": "https://openai.com/index/introducing-gpt-5-2/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-5.2-pro.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
       "id": "model-openai-gpt-5-3-codex",
       "source_id": "openai/gpt-5.3-codex",
       "name": "GPT-5.3 Codex",
@@ -22638,6 +22949,221 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-openai-gpt-realtime-2-1",
+      "source_id": "openai/gpt-realtime-2.1",
+      "name": "GPT-Realtime-2.1",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1",
+      "description": "An API-served realtime speech model with audio and text output, available through OpenAI's Realtime API under the OpenAI Services Agreement, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-Realtime-2.1",
+        "description": "Realtime speech-to-speech model with configurable reasoning, tool use, and robust voice-agent behavior",
+        "family": "gpt",
+        "release_date": "2026-07-06",
+        "last_updated": "2026-07-06",
+        "knowledge_cutoff": "2024-09-30",
+        "modalities": {
+          "input": [
+            "text",
+            "audio",
+            "image"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": false
+        },
+        "limits": {
+          "context": 128000,
+          "input": 96000,
+          "output": 32000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to GPT-Realtime-2.1 through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-Realtime-2.1 release of July 2026, which updates GPT-Realtime-2 and is named as the recommended replacement for the retiring gpt-realtime and gpt-4o-realtime lines. The Realtime API platform, the gpt-realtime-2.1-mini sibling, the transcription models, and later OpenAI releases remain separate service or product boundaries.",
+      "strengths": [
+        "OpenAI documents the model page, launch date, and its placement as the current replacement in the deprecations table",
+        "The modalities, endpoints, and rate limits are documented first-party"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The snapshot identity is alias-only with nothing pinnable, and the release is served only through the Realtime API"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-Realtime-2.1 model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official Realtime model release announcement",
+          "url": "https://community.openai.com/t/new-realtime-models-on-the-api-gpt-realtime-2-1-and-gpt-realtime-2-1-mini/1385896",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-realtime-2.1.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-openai-gpt-realtime-whisper",
+      "source_id": "openai/gpt-realtime-whisper",
+      "name": "GPT-Realtime-Whisper",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-whisper",
+      "description": "An API-served streaming speech-to-text model with text output, available through OpenAI's realtime transcription endpoint under the OpenAI Services Agreement, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT Realtime Whisper",
+        "description": "Streaming speech-to-text model for low-latency transcript deltas from live audio",
+        "family": "whisper",
+        "release_date": "2026-05-07",
+        "last_updated": "2026-05-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-18",
+          "scope": "Commercial access to GPT-Realtime-Whisper through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-Realtime-Whisper release of May 2026, a streaming speech-to-text model served through the v1/realtime/transcription_sessions endpoint. The deprecated whisper-1 and GPT-4o Transcribe family, the gpt-transcribe and gpt-live-transcribe successors, the Realtime API platform, and later OpenAI releases remain separate service or product boundaries.",
+      "strengths": [
+        "OpenAI documents the model page, launch date, and the transcription endpoint",
+        "The release is explicitly outside the deprecated transcription family named in the deprecations page"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "The snapshot identity is alias-only with nothing pinnable, and the release is served only through one dedicated endpoint"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.12
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-Realtime-Whisper model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-realtime-whisper",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official voice intelligence announcement",
+          "url": "https://openai.com/index/advancing-voice-intelligence-with-new-models-in-the-api/",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-18"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-realtime-whisper.toml",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "metadata_verified_at": "2026-09-18",
+      "verified_at": "2026-09-18"
     },
     {
       "id": "model-perplexity-sonar",
