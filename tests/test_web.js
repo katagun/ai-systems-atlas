@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -538,6 +538,7 @@ test("record references parse only a known kind and a plain id", () => {
   assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
   assert.deepEqual(parseRecordReference("model:model-alibaba-qwen2-5-coder-0-5b"), { kind: "model", id: "model-alibaba-qwen2-5-coder-0-5b" });
   assert.deepEqual(parseRecordReference("pack:superpowers"), { kind: "pack", id: "superpowers" });
+  assert.deepEqual(parseRecordReference("robot:g-one"), { kind: "robot", id: "g-one" });
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
@@ -551,6 +552,7 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("model", "model-alibaba-qwen2-5-coder-0-5b"), "records/models/model-alibaba-qwen2-5-coder-0-5b/");
   assert.equal(shareRecordPath("pack", "superpowers"), "records/packs/superpowers/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
+  assert.equal(shareRecordPath("robot", "g-one"), "records/robots/g-one/");
 });
 
 const packs = [
@@ -587,6 +589,38 @@ test("mixed directory browsing includes packs and reads their own index key", ()
     ["Brain Kit"],
   );
   assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }), []);
+});
+
+const robots = [
+  { id: "g-one", name: "G One", manufacturer: "Unibot", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active", evidence: [{ url: "https://hidden.example/spec" }] },
+  { id: "rover", name: "Rover", manufacturer: "Dynamo", description: "A walking inspector.", form_factor: "quadruped", ai_basis: ["open_model_interface"], availability: "enterprise_sales", status: "active" },
+  { id: "old-arm", name: "Atlas Arm", manufacturer: "Dynamo", description: "A bench arm.", form_factor: "arm", ai_basis: ["vendor_named_model"], availability: "research_only", status: "archived" },
+];
+
+test("robot filters combine form factor, availability, and status, sorted by name only", () => {
+  assert.deepEqual(filterRobots(robots, {}).map(item => item.name), ["Atlas Arm", "G One", "Rover"]);
+  assert.deepEqual(filterRobots(robots, { sort: "score" }).map(item => item.name), ["Atlas Arm", "G One", "Rover"]);
+  assert.deepEqual(filterRobots(robots, { formFactor: "quadruped" }).map(item => item.name), ["Rover"]);
+  assert.deepEqual(filterRobots(robots, { availability: "orderable" }).map(item => item.name), ["G One"]);
+  assert.deepEqual(filterRobots(robots, { aiBasis: "open_model_interface" }).map(item => item.name), ["G One", "Rover"]);
+  assert.deepEqual(filterRobots(robots, { status: "archived" }).map(item => item.name), ["Atlas Arm"]);
+  assert.deepEqual(filterRobots(robots, { formFactor: "arm", status: "active" }), []);
+});
+
+test("robot search covers name and maker, reads the index for named models, and never evidence URLs", () => {
+  assert.deepEqual(filterRobots(robots, { term: "dynamo" }).map(item => item.name), ["Atlas Arm", "Rover"]);
+  assert.deepEqual(filterRobots(robots, { term: "hidden" }), []);
+  assert.deepEqual(filterRobots(robots, { term: "sample-vla", searchIndex: { "g-one": "sample-vla" } }).map(item => item.name), ["G One"]);
+});
+
+test("mixed directory browsing includes robots and reads their own index key", () => {
+  const entries = filterDirectoryEntries([], [], [], [], { term: "rover" }, [], robots);
+  assert.deepEqual(entries.map(item => [item.kind, item.record.name]), [["robot", "Rover"]]);
+  assert.deepEqual(
+    filterDirectoryEntries([], [], [], [], { term: "onlyinindex", robotSearchIndex: { rover: "onlyinindex" } }, [], robots).map(item => item.record.name),
+    ["Rover"],
+  );
+  assert.deepEqual(filterDirectoryEntries([], [], [], [], { term: "rover" }), []);
 });
 
 test("theme preference cycles system, light, dark and recovers from unknown values", () => {
@@ -877,6 +911,7 @@ test("specifications, models, and unknown kinds or families get no badges", () =
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
   assert.deepEqual(cardBadges("pack", packs[0]), []);
+  assert.deepEqual(cardBadges("robot", robots[0]), []);
 });
 
 test("inference-service and local-runtime badges skip facts their cards already print", () => {
