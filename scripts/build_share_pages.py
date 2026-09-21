@@ -154,7 +154,9 @@ def _facts_for(
             "Open official specification",
         )
     if kind == "inference":
-        eyebrow = f"Inference service · {taxonomy_name(taxonomy, 'inference_service_types', record['service_type'])}"
+        eyebrow = taxonomy_name(
+            taxonomy, "inference_service_types", record["service_type"]
+        )
         facts = [
             ("Operator", record["operator"]),
             (
@@ -179,9 +181,7 @@ def _facts_for(
             "Open official service documentation",
         )
     if kind == "model":
-        eyebrow = (
-            f"Model · {taxonomy_name(taxonomy, 'model_types', record['model_type'])}"
-        )
+        eyebrow = taxonomy_name(taxonomy, "model_types", record["model_type"])
         facts = [
             ("Developer", record["developer"]),
             (
@@ -205,9 +205,7 @@ def _facts_for(
             "Open official model page",
         )
     if kind == "pack":
-        eyebrow = (
-            f"Agent pack · {taxonomy_name(taxonomy, 'pack_types', record['pack_type'])}"
-        )
+        eyebrow = taxonomy_name(taxonomy, "pack_types", record["pack_type"])
         facts = [
             ("Steward", record["steward"]),
             ("Hosts", names(taxonomy, "pack_hosts", record["hosts"])),
@@ -222,7 +220,7 @@ def _facts_for(
             ("Installs", record["installs"]),
         ]
         return eyebrow, record["description"], facts, "CreativeWork", "Open repository"
-    eyebrow = f"Local runtime · {taxonomy_name(taxonomy, 'local_runtime_types', record['runtime_type'])}"
+    eyebrow = taxonomy_name(taxonomy, "local_runtime_types", record["runtime_type"])
     facts = [
         ("Maintainer", record["maintainer"]),
         (
