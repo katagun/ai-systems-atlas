@@ -43,7 +43,14 @@ class PromoteModelCandidateTests(unittest.TestCase):
         taxonomy = json.loads((ROOT / "directory" / "taxonomy.json").read_text())
         models = json.loads((ROOT / "directory" / "models.json").read_text())
         queue = json.loads((ROOT / "directory" / "model-candidates.json").read_text())
-        self.record = deepcopy(models["models"].pop(0))
+        # The fixture promotes a linked record; models reviewed ahead of models.dev
+        # (source_id null, ADR 038) stay in the collection and never count as eligible.
+        first_linked = next(
+            index
+            for index, model in enumerate(models["models"])
+            if model["source_id"] is not None
+        )
+        self.record = deepcopy(models["models"].pop(first_linked))
         self.candidate = {
             "id": self.record["id"],
             "source_id": self.record["source_id"],
@@ -68,7 +75,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
                 evidence["url"] = pinned_url
         queue["updated_at"] = "2026-09-04"
         queue["source_record_count"] = len(models["models"]) + 1
-        queue["eligible_record_count"] = len(models["models"]) + 1
+        queue["eligible_record_count"] = (
+            sum(model["source_id"] is not None for model in models["models"]) + 1
+        )
         queue["candidates"] = [deepcopy(self.candidate)]
         source_models = {
             "models": [
