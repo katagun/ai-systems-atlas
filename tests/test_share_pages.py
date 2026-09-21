@@ -184,6 +184,7 @@ class SharePageTests(unittest.TestCase):
         ]
         page = build_pages(catalog)["records/robots/bot/index.html"]
         self.assertIn("Robot · Humanoid", page)
+        self.assertNotIn("Robot · Robot", page)
         self.assertIn("Bot &lt;One&gt;", page)
         self.assertIn("Sample-VLA", page)
         self.assertIn("vendor-stated", page)

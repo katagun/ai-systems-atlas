@@ -226,7 +226,10 @@ def _facts_for(
         ]
         return eyebrow, record["description"], facts, "CreativeWork", "Open repository"
     if kind == "robot":
-        eyebrow = f"Robot · {taxonomy_name(taxonomy, 'robot_form_factors', record['form_factor'])}"
+        # render_page() already prefixes the eyebrow with COLLECTION_LABELS[kind]
+        # ("Robot"); this branch supplies only the form factor, not the label
+        # again, or the page reads "Robot · Robot · Humanoid".
+        eyebrow = taxonomy_name(taxonomy, "robot_form_factors", record["form_factor"])
         facts = [
             ("Maker", record["manufacturer"]),
             (
