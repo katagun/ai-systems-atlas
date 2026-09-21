@@ -142,7 +142,6 @@ These items have no repository action until their stated trigger occurs. Move on
 - [ ] Decide whether the Codex record is the terminal agent alone or also the IDE extension and desktop app distributed from the same repository.
 - [ ] Re-check Khoj's status and links; its desktop download is missing and the homepage now leads with a different product.
 - [ ] Decide whether Perplexity Personal Computer is operationally distinct from the cloud Perplexity Computer record.
-- [ ] Curate Claude Mythos 5.1 as the first model reviewed without a models.dev row ([ADR 038](docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)): `init-gap anthropic/claude-mythos-5-1`, first-party evidence only, separate change from the mechanism.
 - [ ] Decide how to hold or exclude a release models.dev does not list. `model-dispositions.json` is keyed by snapshot `source_id`, so such a release can be reviewed (ADR 038) but not dispositioned.
 
 ## Backlog hygiene
