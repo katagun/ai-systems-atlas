@@ -804,24 +804,32 @@ input:focus, select:focus {
 }
 .card-badge {
   display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  padding: .26rem .5rem;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-chip);
-  background: transparent;
-  color: var(--text);
-  font: 600 .64rem var(--font-body);
   cursor: help;
 }
-.card-badge::before {
-  content: "";
-  flex: none;
-  width: .38rem;
-  height: .38rem;
-  border-radius: 50%;
-  background: var(--cyan);
+[data-family="control"] { color: var(--cyan); }
+[data-family="capability"] { color: var(--violet); }
+[data-family="platform"] { color: var(--amber); }
+.badge-emblem {
+  display: block;
+  width: 1.7rem;
+  height: 1.7rem;
 }
+.badge-frame {
+  fill: color-mix(in srgb, currentColor 13%, var(--panel));
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.badge-glyph {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.badge-glyph .badge-dot,
+.badge-glyph text { fill: currentColor; stroke: none; }
+.badge-glyph text { font: 700 6.4px var(--font-mono); }
 .card-source-meta {
   display: flex;
   flex-wrap: wrap;

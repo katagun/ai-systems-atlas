@@ -618,12 +618,13 @@ function modelModalityRoute(model) {
 }
 
 // Badges replace the tags row on system, inference-service, and
-// local-runtime cards. A card with none omits the row rather than printing an
-// empty strip. The definition rides in the title for pointers and in hidden
-// text for screen readers; badges are never controls.
+// local-runtime cards. Each is an icon-only emblem whose frame names its
+// family; the name and definition ride in visually hidden text for screen
+// readers and in data attributes for the pointer tooltip. Badges are never
+// controls and take no tab stop.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
 function packHosts(pack) {

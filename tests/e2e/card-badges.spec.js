@@ -18,24 +18,38 @@ const byId = (records, id) => {
   return record;
 };
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-// A badge's text is its name followed by the hidden ": definition".
-const namePatterns = badges => badges.map(badge => new RegExp("^" + escapeRegExp(badge.name) + ":"));
+// A badge's text always contains its name followed by the hidden ": definition";
+// lettered accelerator badges (apple-metal, amd-rocm, npu) also draw letters
+// inside the emblem itself, which precede that text, so the pattern is not
+// anchored to the start.
+const namePatterns = badges => badges.map(badge => new RegExp(escapeRegExp(badge.name) + ":"));
 
-// OpenClaw matches all five agent-system badges, so its card shows the cap.
+// OpenClaw matches all five agent-system badges, so its card shows the whole set.
 const openclaw = byId(projects, "openclaw");
 // Chroma matches no memory-system badge, so its card has no badge row.
 const chroma = byId(projects, "chroma");
 const ollama = byId(runtimes, "ollama");
 const reviewedModel = byId(reviewedModels, "model-alibaba-qwen2-5-coder-0-5b");
 
-test("an agent-system card shows its first four badges in priority order", async ({ page }) => {
+test("an agent-system card shows every matching badge as an emblem in set order", async ({ page }) => {
   const expected = cardBadges("system", openclaw);
-  expect(expected.map(badge => badge.name)).toEqual(["Local-first", "Sandboxed execution", "Browser control", "MCP"]);
+  expect(expected.map(badge => badge.name)).toEqual(["Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
 
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(openclaw.name);
   const card = page.locator('#project-grid .project-card:has([data-project="openclaw"])');
   await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  await expect(card.locator(".card-badge svg.badge-emblem")).toHaveCount(expected.length);
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(expected.map(badge => badge.family));
+  // Emblems are icon-only: the badge carries no visible label of its own,
+  // only the svg emblem and the visually hidden name/definition text.
+  const first = card.locator(".card-badge").first();
+  const structure = await first.evaluate(item => ({
+    children: [...item.children].map(child => child.getAttribute("class")),
+    directText: [...item.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent.trim()).filter(Boolean),
+  }));
+  expect(structure.children).toEqual(["badge-emblem", "visually-hidden"]);
+  expect(structure.directText).toEqual([]);
   await expect(card.locator(".tags")).toHaveCount(0);
 });
 
@@ -73,8 +87,8 @@ test("badges explain themselves without adding tab stops", async ({ page }) => {
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(openclaw.name);
   const badges = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badges');
-  await expect(badges.locator(".card-badge").first()).toHaveAttribute("title", first.definition);
-  await expect(badges.locator(".card-badge .visually-hidden").first()).toHaveText(`: ${first.definition}`);
+  await expect(badges.locator(".card-badge").first()).not.toHaveAttribute("title", /.*/);
+  await expect(badges.locator(".card-badge .visually-hidden").first()).toHaveText(`${first.name}: ${first.definition}`);
   await expect(badges.locator("a, button, [tabindex]")).toHaveCount(0);
 });
 
@@ -124,7 +138,13 @@ for (const colorScheme of ["light", "dark"]) {
     const source = await style(card.locator(".source-badge"));
     expect(badge.background).toBe("rgba(0, 0, 0, 0)");
     expect(source.background).not.toBe(badge.background);
-    expect(badge.color).not.toBe(badge.border);
+    // The emblem reads as a framed icon, not a flat chip: its frame is
+    // filled a soft tint of the family colour while its outline stays solid.
+    const frame = await card.locator(".card-badge .badge-frame").first().evaluate(element => {
+      const computed = getComputedStyle(element);
+      return { fill: computed.fill, stroke: computed.stroke };
+    });
+    expect(frame.fill).not.toBe(frame.stroke);
   });
 }
 
