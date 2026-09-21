@@ -42,6 +42,9 @@ class SharePageTests(unittest.TestCase):
             share_page_path("model", "model-alibaba-qwen2-5-coder-0-5b"),
         )
         self.assertEqual("records/packs/kit/index.html", share_page_path("pack", "kit"))
+        self.assertEqual(
+            "records/robots/bot/index.html", share_page_path("robot", "bot")
+        )
         with self.assertRaises(ValueError):
             share_page_path("constructor", "ollama")
         with self.assertRaises(ValueError):
@@ -65,6 +68,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "robots",
             )
         )
         self.assertEqual(records + 2, len(self.pages))
@@ -141,6 +145,87 @@ class SharePageTests(unittest.TestCase):
             self.pages["records/models/model-alibaba-qwen2-5-coder-0-5b/index.html"],
         )
 
+    def test_robot_page_states_the_vendor_claim_and_carries_no_score(self) -> None:
+        catalog = {
+            key: []
+            for key in (
+                "projects",
+                "specifications",
+                "services",
+                "runtimes",
+                "models",
+                "packs",
+                "robots",
+            )
+        }
+        catalog["taxonomy"] = self.catalog["taxonomy"]
+        catalog["robots"] = [
+            {
+                "id": "bot",
+                "name": "Bot <One>",
+                "manufacturer": "Example Robotics",
+                "url": "https://robots.example/bot",
+                "description": "A humanoid.",
+                "form_factor": "humanoid",
+                "availability": "reservation",
+                "status": "active",
+                "ai_basis": ["vendor_named_model"],
+                "named_models": [
+                    {
+                        "name": "Sample-VLA",
+                        "kind": "vision_language_action",
+                        "role_note": "Turns frames into motion.",
+                        "evidence_label": "News",
+                    }
+                ],
+                "not_verified": "The model is the maker's claim.",
+                "verified_at": "2026-09-20",
+            }
+        ]
+        page = build_pages(catalog)["records/robots/bot/index.html"]
+        self.assertIn("Robot · Humanoid", page)
+        self.assertIn("Bot &lt;One&gt;", page)
+        self.assertIn("Sample-VLA", page)
+        self.assertIn("vendor-stated", page)
+        self.assertNotIn("score", page.lower())
+
+    def test_robot_page_states_no_named_model_when_the_robot_is_interface_only(
+        self,
+    ) -> None:
+        catalog = {
+            key: []
+            for key in (
+                "projects",
+                "specifications",
+                "services",
+                "runtimes",
+                "models",
+                "packs",
+                "robots",
+            )
+        }
+        catalog["taxonomy"] = self.catalog["taxonomy"]
+        catalog["robots"] = [
+            {
+                "id": "open-bot",
+                "name": "Open Bot",
+                "manufacturer": "Example Robotics",
+                "url": "https://robots.example/open-bot",
+                "description": "A humanoid with an open model interface.",
+                "form_factor": "humanoid",
+                "availability": "reservation",
+                "status": "active",
+                "ai_basis": ["open_model_interface"],
+                "named_models": [],
+                "developer_access": "The vendor documents an SDK.",
+                "not_verified": "The interface is the maker's claim.",
+                "verified_at": "2026-09-20",
+            }
+        ]
+        page = build_pages(catalog)["records/robots/open-bot/index.html"]
+        self.assertIn("None named by the maker", page)
+        self.assertIn("Yes, by a route the maker documents", page)
+
     def test_pages_escape_record_text_everywhere(self) -> None:
         catalog = {
             key: []
@@ -151,6 +236,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "robots",
             )
         }
         catalog["taxonomy"] = self.catalog["taxonomy"]

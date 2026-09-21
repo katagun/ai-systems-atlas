@@ -253,6 +253,7 @@ for (const [file, listKey] of [
   ["web/local-runtimes.json", "runtimes"],
   ["web/models.json", "models"],
   ["web/packs.json", "packs"],
+  ["web/robots.json", "robots"],
 ]) {
   for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) recordNames.set(record.id, record.name);
 }

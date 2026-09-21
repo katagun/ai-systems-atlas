@@ -39,6 +39,7 @@ COLLECTIONS = {
     "runtime": ("local-runtimes", "runtimes"),
     "model": ("models", "models"),
     "pack": ("packs", "packs"),
+    "robot": ("robots", "robots"),
 }
 COLLECTION_LABELS = {
     "system": "System",
@@ -47,6 +48,7 @@ COLLECTION_LABELS = {
     "runtime": "Local runtime",
     "model": "Model",
     "pack": "Agent pack",
+    "robot": "Robot",
 }
 
 
@@ -85,6 +87,7 @@ def load_catalog(root: Path = ROOT) -> dict:
         "runtimes": read("local-runtimes.json")["runtimes"],
         "models": read("models.json")["models"],
         "packs": read("packs.json")["packs"],
+        "robots": read("robots.json")["robots"],
         "taxonomy": read("taxonomy.json"),
     }
 
@@ -222,6 +225,32 @@ def _facts_for(
             ("Installs", record["installs"]),
         ]
         return eyebrow, record["description"], facts, "CreativeWork", "Open repository"
+    if kind == "robot":
+        eyebrow = f"Robot · {taxonomy_name(taxonomy, 'robot_form_factors', record['form_factor'])}"
+        facts = [
+            ("Maker", record["manufacturer"]),
+            (
+                "Availability",
+                taxonomy_name(taxonomy, "robot_availability", record["availability"]),
+            ),
+            (
+                "Models the vendor names",
+                "; ".join(
+                    f"{model['name']} (vendor-stated): {model['role_note']}"
+                    for model in record["named_models"]
+                )
+                or "None named by the maker",
+            ),
+            (
+                "Runs your own models",
+                "Yes, by a route the maker documents"
+                if "open_model_interface" in record["ai_basis"]
+                else "Not documented by the maker",
+            ),
+            ("Status", humanize(record["status"])),
+            ("Not verified", record["not_verified"]),
+        ]
+        return eyebrow, record["description"], facts, "Product", "Open official page"
     eyebrow = f"Local runtime · {taxonomy_name(taxonomy, 'local_runtime_types', record['runtime_type'])}"
     facts = [
         ("Maintainer", record["maintainer"]),

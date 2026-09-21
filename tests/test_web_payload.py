@@ -63,6 +63,7 @@ class WebPayloadTests(unittest.TestCase):
             "specifications",
             "models",
             "packs",
+            "robots",
         ):
             self.assertIn(
                 "verified_at", json.loads(self.payloads[f"app/{collection}.json"])
@@ -151,6 +152,7 @@ class WebPayloadTests(unittest.TestCase):
                 ("specifications.json", "specifications"),
                 ("models.json", "models"),
                 ("packs.json", "packs"),
+                ("robots.json", "robots"),
             )
         )
         self.assertEqual(records, len(detail))
@@ -163,6 +165,59 @@ class WebPayloadTests(unittest.TestCase):
             self.assertNotIn("score", entry)
             self.assertNotIn("installs", entry, "installs is detail-only prose")
             self.assertIn("pack_type", entry)
+
+    def test_robots_are_unscored_and_boot_carries_only_card_fields(self) -> None:
+        boot = json.loads(self.payloads["app/robots.json"])
+        self.assertIn("robots", boot)
+        for entry in boot["robots"]:
+            self.assertNotIn("score", entry)
+            self.assertNotIn("hardware", entry, "hardware is detail-only prose")
+            self.assertIn("form_factor", entry)
+
+    def test_an_empty_robots_collection_still_ships_its_boot_payload(self) -> None:
+        """app/robots.json sits in the blocking boot fetch; a missing file blanks the site."""
+        catalog = {
+            **self.catalog,
+            "robots.json": {"verified_at": "2026-09-20", "robots": []},
+        }
+        payloads = build_payloads(catalog)
+        self.assertEqual([], json.loads(payloads["app/robots.json"])["robots"])
+        self.assertEqual({}, json.loads(payloads["app/search/robots.json"]))
+
+    def test_named_models_are_searchable_by_name_only(self) -> None:
+        """A dict-valued search field is flattened to its name, not a Python repr."""
+        robot = {
+            "id": "fixture-bot",
+            "name": "Fixture Bot",
+            "manufacturer": "Example Robotics",
+            "url": "https://robots.example/fixture",
+            "description": "A test fixture.",
+            "form_factor": "humanoid",
+            "availability": "reservation",
+            "status": "active",
+            "ai_basis": ["vendor_named_model"],
+            "named_models": [
+                {
+                    "name": "Sample-VLA",
+                    "kind": "vision_language_action",
+                    "role_note": "Turns camera frames into arm motion, mentioning roleonlyword.",
+                    "evidence_label": "Model announcement",
+                }
+            ],
+            "not_verified": "The model is the maker's claim.",
+            "verified_at": "2026-09-20",
+        }
+        catalog = {
+            **self.catalog,
+            "robots.json": {
+                "verified_at": "2026-09-20",
+                "robots": [robot],
+            },
+        }
+        payloads = build_payloads(catalog)
+        index = json.loads(payloads["app/search/robots.json"])
+        self.assertIn("sample-vla", index["fixture-bot"])
+        self.assertNotIn("roleonlyword", index["fixture-bot"])
 
     def test_trust_records_are_detail_only_and_never_searched(self) -> None:
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""
