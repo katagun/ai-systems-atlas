@@ -526,13 +526,24 @@ function renderStats() {
 
 function syncCollectionSwitcher() {
   const family = $("#family-filter").value;
+  let activeButton = null;
   $$('[data-directory-collection]').forEach(button => {
     const buttonFamily = button.dataset.directoryFamily;
     const active = button.dataset.directoryCollection === state.directoryCollection
       && (buttonFamily === undefined || buttonFamily === family);
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
+    if (active) activeButton = button;
   });
+  // The switcher wraps at desktop widths, so every entry is already visible
+  // there; only the narrow layout keeps the horizontal scroll strip that can
+  // hide the active entry off-screen. Scrolling only fires when the strip is
+  // actually scrollable, so a scope change on a wide viewport never jolts the
+  // page, and it never asks for smooth scrolling so reduced motion is respected.
+  const switcher = $(".collection-switcher");
+  if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
+    activeButton.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
 }
 
 function jumpToDirectoryFamily(family) {

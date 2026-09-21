@@ -28,20 +28,31 @@ async function withRobots(page) {
   await page.route(/\/app\/detail\/robot\/g-one\.json/, route => route.fulfill({ json: DETAIL }));
 }
 
+// Routing an explicitly empty collection makes the empty-nav assertion
+// independent of whether the published collection happens to be empty: it
+// stays meaningful (and would fail if the renderStats() hidden-toggle line
+// were ever deleted) regardless of real catalog data.
+async function withEmptyRobots(page) {
+  await page.route(/\/app\/robots\.json/, route => route.fulfill({ json: { verified_at: "2026-09-20", robots: [] } }));
+  await page.route(/\/app\/search\/robots\.json/, route => route.fulfill({ json: {} }));
+}
+
 test("the robots entry stays out of the navigation while the collection is empty", async ({ page }) => {
-  test.skip(catalogCounts.robots > 0, "the published collection has records");
+  await withEmptyRobots(page);
   await page.goto("/");
   // toBeHidden also passes for an element that does not exist, so pin its presence first.
   await expect(page.locator('[data-directory-collection="robots"]')).toHaveCount(1);
   await expect(page.locator('[data-directory-collection="robots"]')).toBeHidden();
-  await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries));
+  await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries - catalogCounts.robots));
 });
 
 test("the robots scope filters, opens its own dialog, and never scores or compares", async ({ page }) => {
   await withRobots(page);
   await page.goto("/?collection=robots");
 
-  await expect(page.getByRole("button", { name: "Robots 2" })).toHaveAttribute("aria-pressed", "true");
+  const switcherButton = page.getByRole("button", { name: "Robots 2" });
+  await expect(switcherButton).toBeVisible();
+  await expect(switcherButton).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#robot-result-count")).toContainText("2 robots · Unscored");
   await expect(page.locator("#robot-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#robot-grid .compare-toggle")).toHaveCount(0);
@@ -82,4 +93,18 @@ test("mixed browsing surfaces robots without scores or comparison", async ({ pag
   await expect(card.locator(".family-label")).toContainText("Robot · Quadruped");
   await expect(card.locator(".score-ring")).toHaveCount(0);
   await expect(card.locator(".compare-toggle")).toHaveCount(0);
+});
+
+test("the active Robots switcher entry stays reachable at a wide desktop width", async ({ page }) => {
+  await withRobots(page);
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?collection=robots");
+  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+});
+
+test("the active Robots switcher entry scrolls into view on a phone", async ({ page }) => {
+  await withRobots(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=robots");
+  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
 });
