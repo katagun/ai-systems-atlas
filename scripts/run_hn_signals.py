@@ -365,6 +365,25 @@ def default_ranker(
     )
 
 
+STALE_QUEUE_DAYS = 2
+
+
+def queue_age_days(document: dict[str, Any], today: date) -> int | None:
+    """Whole days since the sweep stamped this queue, or None when it carries no date.
+
+    An unreadable date is not an old date: guessing here would cry wolf on every fixture
+    and hand-built queue, and a warning that fires wrongly stops being read.
+    """
+    stamp = document.get("updated_at")
+    if not isinstance(stamp, str):
+        return None
+    try:
+        swept = date.fromisoformat(stamp[:10])
+    except ValueError:
+        return None
+    return (today - swept).days
+
+
 def bundled_pages(worktree: Path) -> dict[str, str]:
     """Story id to page text, as `verify_signal_pages --refresh` bundled it."""
     try:
@@ -382,6 +401,7 @@ def prepare(
     run=shell,
     from_ref: str = DEFAULT_FROM_REF,
     ranker: Callable[..., tuple[list[str], dict[str, float]]] | None = None,
+    today: date | None = None,
 ) -> int:
     """Refresh an isolated worktree from `from_ref` and build the signal-page bundle."""
     installed = (
@@ -451,6 +471,18 @@ def prepare(
             f"error: could not read {QUEUE} from the worktree: {error}", file=sys.stderr
         )
         return 1
+    # A stale queue still reads as a queue, which is how a dead sweep went unnoticed for
+    # four days in 2026-09: twice in one week the wrapper refused every run while this
+    # routine reassessed whatever was last committed. The sweep's log is read by nobody,
+    # so say it here, where a person reads the run. Warn, never fail: an old queue with
+    # unassessed signals is still work worth doing.
+    age = queue_age_days(document, today or date.today())
+    if age is not None and age > STALE_QUEUE_DAYS:
+        print(
+            f"warning: this queue is {age} days old (swept {document['updated_at'][:10]}); "
+            "the daily sweep has probably stopped — read /tmp/atlas-hn-sweep.log",
+            file=sys.stderr,
+        )
     signals = [
         signal for signal in document.get("signals", []) if isinstance(signal, dict)
     ]
