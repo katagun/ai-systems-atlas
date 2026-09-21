@@ -1557,6 +1557,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-TypeSafe-MCA",
+      "name": "TypeSafe Master Customer Agreement",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-Unclear",
       "name": "Unclear or unresolved terms",
       "kind": "unclear"
