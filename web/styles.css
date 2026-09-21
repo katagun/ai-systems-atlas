@@ -974,6 +974,8 @@ body.has-badge-legend main { padding-bottom: 8rem; }
 .taxonomy-item { padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); }
 .taxonomy-item strong { color: var(--text); font-size: .9rem; font-weight: 600; }
 .taxonomy-item p { margin-bottom: 0; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+.taxonomy-lede { margin: -.3rem 0 .8rem; color: var(--muted); font-size: .9rem; }
+.taxonomy-item .badge-emblem { float: right; margin-left: .6rem; }
 .api-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.4rem; }
 .api-facts article { padding: 1.4rem 1.4rem 1.4rem 0; border-top: 2px solid var(--line-strong); }
 .api-facts h2 { margin: 0 0 .5rem; font-size: 1.05rem; font-weight: 600; }

@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { cardBadgeGlossary, cardBadges } = require("../../web/app-core.js");
+const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -198,15 +198,16 @@ test("tapping an emblem toggles the tooltip and an outside tap closes it", async
   await context.close();
 });
 
-test("the Taxonomy view defines every card badge and where it appears", async ({ page }) => {
-  const glossary = cardBadgeGlossary();
-
+test("Taxonomy lists every badge under its family with its emblem", async ({ page }) => {
   await page.goto("/?view=taxonomy");
-  const group = page.locator("#taxonomy-content .taxonomy-group").filter({ has: page.locator("h2", { hasText: /^Card badges$/ }) });
-  await expect(group.locator(".taxonomy-item")).toHaveCount(glossary.length);
-  for (const [index, entry] of glossary.entries()) {
-    const item = group.locator(".taxonomy-item").nth(index);
-    await expect(item.locator("strong")).toHaveText(entry.name);
-    await expect(item.locator("p")).toHaveText(`${entry.definition} Shown on: ${entry.scopes.join(", ")}.`);
+  const glossary = cardBadgeGlossary();
+  for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
+    const group = page.locator(`#taxonomy-content [data-badge-family="${id}"]`);
+    await expect(group.locator("h2")).toHaveText(`Card badges · ${family.name}`);
+    await expect(group.locator(".taxonomy-lede")).toHaveText(family.meaning);
+    const expected = glossary.filter(entry => entry.family === id);
+    await expect(group.locator(".taxonomy-item strong")).toHaveText(expected.map(entry => entry.name));
+    await expect(group.locator(".taxonomy-item svg.badge-emblem")).toHaveCount(expected.length);
   }
+  await expect(page.locator('#taxonomy-content [data-badge-family="control"] .taxonomy-item').first()).toContainText("Shown on: Agent systems, Memory systems, Assistant systems.");
 });

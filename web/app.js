@@ -1365,9 +1365,20 @@ function renderTaxonomy() {
     `${family.name} roles`,
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
+  const glossary = AtlasCore.cardBadgeGlossary();
+  const badgeGroups = Object.entries(AtlasCore.BADGE_FAMILIES).map(([id, family]) => [
+    `Card badges · ${family.name}`,
+    glossary.filter(entry => entry.family === id).map(entry => ({
+      name: entry.name,
+      definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.`,
+      emblem: AtlasCore.badgeEmblem(entry.id),
+      family: id,
+    })),
+    { lede: family.meaning, badgeFamily: id },
+  ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
-    ["Card badges", AtlasCore.cardBadgeGlossary().map(entry => ({ name: entry.name, definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.` }))],
+    ...badgeGroups,
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
@@ -1394,7 +1405,7 @@ function renderTaxonomy() {
     ["Pack install mechanisms", state.taxonomy.pack_install_mechanisms],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
-  $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
+  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
 // Every record dialog is the same frame — find the record, paint one content
