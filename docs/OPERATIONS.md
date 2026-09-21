@@ -658,9 +658,15 @@ that against the signal's recorded `content_sha256` before truncating anything, 
 detection sees the whole page regardless of the cap. A truncated page gets a trailing
 marker naming its `url` so the model knows the rest was cut, not that the page ended.
 
-To run it daily without being asked, schedule it with launchd. Write
-`~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting the checkout path, then
-load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
+To run it daily without being asked, schedule `scripts/run_hn_sweep.py` with launchd from
+a dedicated worktree on the branch the routine reads:
+
+```bash
+git worktree add -b local/hn-signals ../atlas-hn-sweep origin/main
+```
+
+Write `~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting that worktree's
+path, then load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -668,11 +674,11 @@ load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.
 <plist version="1.0">
 <dict>
   <key>Label</key><string>com.atlas.hn-sweep</string>
-  <key>WorkingDirectory</key><string>/path/to/ai-systems-atlas</string>
+  <key>WorkingDirectory</key><string>/path/to/atlas-hn-sweep</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string><string>-lc</string>
-    <string>uv run python scripts/sweep_hackernews.py</string>
+    <string>uv run python scripts/run_hn_sweep.py</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>23</integer></dict>
@@ -685,11 +691,18 @@ load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.
 The agent runs only while you are logged in, and launchd fires a missed run once at next
 login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
 moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
-The sweep leaves `directory/hn-signals.json` modified in the working tree. The scheduled
-routine reads the queue from the local branch `local/hn-signals`, so in practice the launchd
-job runs a small wrapper from a dedicated worktree on that branch: refuse a dirty tree,
-fetch `origin main`, move the branch onto `origin/main` so the sweep and the routine both
-run current code, sweep, and commit the file.
+`sweep_hackernews.py` alone leaves `directory/hn-signals.json` modified in the working
+tree. The scheduled routine reads the queue from the local branch `local/hn-signals`, so
+the launchd job runs `scripts/run_hn_sweep.py`, which owns the git sequence around the
+sweep: refuse a dirty tree, refuse any branch but `local/hn-signals`, fetch `origin main`,
+move the branch onto `origin/main` so the sweep and the routine both run current code,
+sweep, and commit the file. Arguments it does not know, such as `--lag-days`, pass through
+to the sweep. The plist holds the only machine-specific values, the worktree's path and
+the schedule; the `-lc` login shell supplies `PATH`.
+
+The branch check is a safety catch, not a convention. The runner hard-resets its branch,
+so started by mistake in a working checkout it would discard that branch's unpushed
+commits; it refuses instead, before anything moves.
 
 That last step resets rather than rebases, and the difference is load-bearing. Each sweep
 rewrites the queue wholesale, so replaying yesterday's sweep commits onto `main` conflicts
@@ -703,7 +716,8 @@ previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swe
 remains recoverable for one generation.
 
 The commit skips the repository's hooks (`git commit --no-verify`), and a commit that
-fails anyway is unstaged and discarded before the wrapper exits. Both halves come from one
+fails anyway is unstaged and discarded before the runner exits, as is a queue the sweep
+half-wrote before failing. Both halves come from one
 failure. On 2026-09-18 the pre-commit hook failed the sweep's commit, the queue stayed
 staged, and the dirty-tree guard then refused the next two sweeps — so the routine reran a
 four-day-old queue, again unnoticed, until 2026-09-20. Installing the hook's dependencies
@@ -712,9 +726,12 @@ does not rescue it: the suite asserts that a checkout holds no `.hn-signal-bundl
 is the one `prepare` writes that directory into, so the suite cannot pass here. Skipping
 it costs nothing, because the commit is one data file on a branch that is never pushed,
 and `run_hn_signals.py finish` and the `verify` check both validate the queue before
-`main` sees it. The rule the two failures share: no step of the wrapper may leave the tree
-in a state its own first guard refuses, because a refused sweep is silent and a stale
-queue still reads as a queue.
+`main` sees it. The rule the two failures share: no step may leave the tree in a state
+the runner's own first guard refuses, because a refused sweep is silent and a stale queue
+still reads as a queue. Both failures happened while this sequence was a shell script
+outside the repository, where no test could hold that rule. `tests/test_run_hn_sweep.py`
+now drives a real repository, injects a failure at the fetch, the reset, the add, and the
+commit, and after each asserts a clean tree and that the next sweep still runs.
 
 `run_hn_signals.py prepare` is where that silence ends. It warns on stderr when the queue
 it was handed was swept more than two days ago, naming the sweep date and
