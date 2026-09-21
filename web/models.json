@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-18",
+  "verified_at": "2026-09-20",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -3140,6 +3140,108 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-anthropic-claude-mythos-5-1",
+      "source_id": null,
+      "name": "Claude Mythos 5.1",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/mythos-5-1/overview",
+      "description": "An invite-only pinned Mythos-class Claude release with a 1M-token context, available through Anthropic's developer API under Project Glasswing and documented third-party cloud platforms, without downloadable model weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Mythos 5.1",
+        "description": null,
+        "family": null,
+        "release_date": "2026-09-01",
+        "last_updated": null,
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": null,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Anthropic provides the release as a managed service under its Commercial Terms of Service, which incorporate the Usage Policy and Supported Regions Policy by reference. The terms permit customer applications but prohibit reverse engineering the Services or using them to train competing models, and license no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-20",
+          "scope": "Commercial access to the release through Anthropic API keys and related Anthropic services, including incorporated usage restrictions"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Mythos 5.1 release identified by the dateless pinned ID claude-mythos-5-1, which Anthropic documents as the same model as Claude Fable 5.1 offered by invitation only through Project Glasswing. Anthropic's API, Amazon Bedrock, Google Cloud, Microsoft Foundry, Claude Fable 5.1, Claude Mythos 5, and later Mythos releases remain separate service or product boundaries.",
+      "strengths": [
+        "Anthropic documents a fixed dateless model ID with pinned-snapshot semantics, invite-only status, a release date, and a retirement date commitment",
+        "The official model page lists per-platform model IDs for the Claude API, Amazon Bedrock, Google Cloud, and Microsoft Foundry"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access is invite-only through Project Glasswing and an account team, gating reach to approved customers"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Claude Mythos 5.1 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/mythos-5-1/overview",
+          "verified_at": "2026-09-20"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-20"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Fable 5.1 and Mythos 5.1 release announcement",
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+          "verified_at": "2026-09-20"
+        }
+      ],
+      "metadata_verified_at": "2026-09-20",
+      "verified_at": "2026-09-20"
     },
     {
       "id": "model-anthropic-claude-opus-4-5-20251101",
