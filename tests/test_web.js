@@ -591,9 +591,13 @@ test("mixed directory browsing includes packs and reads their own index key", ()
   assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }), []);
 });
 
+// Rover sorts last by name but carries a stray score higher than any tie
+// fallback (robots never carry scores in real data) so that an unpinned
+// score sort would put it first; this is what proves the "sorted by name
+// only" pin actually does something instead of merely tying on every pair.
 const robots = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active", evidence: [{ url: "https://hidden.example/spec" }] },
-  { id: "rover", name: "Rover", manufacturer: "Dynamo", description: "A walking inspector.", form_factor: "quadruped", ai_basis: ["open_model_interface"], availability: "enterprise_sales", status: "active" },
+  { id: "rover", name: "Rover", manufacturer: "Dynamo", description: "A walking inspector.", form_factor: "quadruped", ai_basis: ["open_model_interface"], availability: "enterprise_sales", status: "active", score: { overall: 9 } },
   { id: "old-arm", name: "Atlas Arm", manufacturer: "Dynamo", description: "A bench arm.", form_factor: "arm", ai_basis: ["vendor_named_model"], availability: "research_only", status: "archived" },
 ];
 
