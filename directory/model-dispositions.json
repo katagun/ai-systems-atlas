@@ -529,6 +529,24 @@
       "disposition": "held",
       "reason": "The release entered legacy status March 13, 2026 and reached end of life September 14, 2026, so it is no longer obtainable through Bedrock, and the model card launch date conflicts with the GA announcement, leaving the fixed identity open. Held in case AWS restores access or documents the release again.",
       "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "openai/gpt-6-astra-fast",
+      "disposition": "excluded",
+      "reason": "Fast mode is a service-tier processing option selected through the service_tier parameter on the reviewed gpt-6-astra release, not a separate release identity; no first-party model page exists for the name.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "openai/whisper-large-v3",
+      "disposition": "held",
+      "reason": "The repository ships no LICENSE file and the two sibling Whisper cards tag different licenses (apache-2.0 here, mit on the turbo sibling), so no governing license text can be confirmed. Held in case OpenAI publishes a governing license file or clarifies the terms.",
+      "decided_at": "2026-09-18"
+    },
+    {
+      "source_id": "openai/whisper-large-v3-turbo",
+      "disposition": "held",
+      "reason": "The repository ships no LICENSE file and the two sibling Whisper cards tag different licenses (mit here, apache-2.0 on the large-v3 sibling), so no governing license text can be confirmed. Held in case OpenAI publishes a governing license file or clarifies the terms.",
+      "decided_at": "2026-09-18"
     }
   ]
 }
