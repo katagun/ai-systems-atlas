@@ -687,6 +687,13 @@ and `run_hn_signals.py finish` and the `verify` check both validate the queue be
 in a state its own first guard refuses, because a refused sweep is silent and a stale
 queue still reads as a queue.
 
+`run_hn_signals.py prepare` is where that silence ends. It warns on stderr when the queue
+it was handed was swept more than two days ago, naming the sweep date and
+`/tmp/atlas-hn-sweep.log`, and then prepares the queue anyway: old unassessed signals are
+still work, and a warning a person reads beats a log nobody does. A queue with no
+readable `updated_at` draws no warning, because a guess that fires wrongly stops being
+read.
+
 ### Pre-ranking the queue
 
 `prepare` can order the pending list by how likely each page is to be a system, so the
