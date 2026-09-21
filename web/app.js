@@ -627,6 +627,46 @@ function badgeRow(badges) {
   return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
+// One tooltip serves every emblem. It is pointer-only help: screen readers
+// already get the same words from each badge's hidden text, so the tooltip is
+// aria-hidden and emblems stay out of the tab order.
+function initBadgeTooltip() {
+  const tooltip = $("#badge-tooltip");
+  if (!tooltip) return;
+  let anchor = null;
+  const hide = () => { tooltip.hidden = true; anchor = null; };
+  const show = badge => {
+    anchor = badge;
+    tooltip.dataset.family = badge.dataset.family;
+    tooltip.querySelector(".badge-tooltip-family").textContent = AtlasCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
+    tooltip.querySelector(".badge-tooltip-name").textContent = badge.dataset.name;
+    tooltip.querySelector(".badge-tooltip-definition").textContent = badge.dataset.definition;
+    tooltip.hidden = false;
+    const target = badge.getBoundingClientRect();
+    const box = tooltip.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(Math.max(margin, target.left), window.innerWidth - box.width - margin);
+    const below = target.bottom + margin;
+    const top = below + box.height > window.innerHeight - margin ? target.top - box.height - margin : below;
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${Math.max(margin, top)}px`;
+  };
+  document.addEventListener("pointerover", event => {
+    if (event.pointerType === "touch") return;
+    const badge = event.target.closest?.(".card-badge");
+    if (badge) show(badge);
+    else if (anchor) hide();
+  });
+  document.addEventListener("click", event => {
+    const badge = event.target.closest?.(".card-badge");
+    if (badge && badge !== anchor) show(badge);
+    else hide();
+  });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
+  window.addEventListener("scroll", hide, { passive: true });
+  window.addEventListener("resize", hide);
+}
+
 function packHosts(pack) {
   return pack.hosts.map(item => taxonomyName("pack_hosts", item)).join(" · ");
 }
@@ -2085,6 +2125,7 @@ function bindEvents() {
     if (document.activeElement === input) loadIndexes();
   }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
+  initBadgeTooltip();
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;

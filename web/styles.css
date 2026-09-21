@@ -830,6 +830,25 @@ input:focus, select:focus {
 .badge-glyph .badge-dot,
 .badge-glyph text { fill: currentColor; stroke: none; }
 .badge-glyph text { font: 700 6.4px var(--font-mono); }
+.badge-tooltip {
+  position: fixed;
+  z-index: 40;
+  display: grid;
+  gap: .15rem;
+  width: min(17rem, calc(100vw - 1rem));
+  padding: .6rem .7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background: var(--panel);
+  box-shadow: var(--shadow-dialog);
+  font-size: .8rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+.badge-tooltip[hidden] { display: none; }
+.badge-tooltip-family { font: 600 .6rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.badge-tooltip-name { color: var(--text); font-size: .86rem; }
+.badge-tooltip-definition { color: var(--muted); }
 .card-source-meta {
   display: flex;
   flex-wrap: wrap;

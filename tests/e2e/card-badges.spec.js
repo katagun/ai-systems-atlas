@@ -148,6 +148,56 @@ for (const colorScheme of ["light", "dark"]) {
   });
 }
 
+test("hovering an emblem explains it and Escape dismisses it", async ({ page }) => {
+  const [first] = cardBadges("system", openclaw);
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  const tooltip = page.locator("#badge-tooltip");
+  await expect(tooltip).toBeHidden();
+  // The emblem sits below the fold, so Playwright's own hover scrolls it
+  // into view over the page's `scroll-behavior: smooth`; that animation
+  // races the hover's pointerover against this file's "scroll hides the
+  // tooltip" behavior. Scroll it into view and let the animation settle
+  // first, the same way the footer test below waits out smooth-scroll.
+  await emblem.scrollIntoViewIfNeeded();
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => new Promise(resolve => {
+    let last = window.scrollY;
+    const check = () => requestAnimationFrame(() => {
+      if (window.scrollY === last) return resolve();
+      last = window.scrollY;
+      check();
+    });
+    check();
+  }));
+  await emblem.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".badge-tooltip-family")).toHaveText("Control and privacy");
+  await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
+  await expect(tooltip.locator(".badge-tooltip-definition")).toHaveText(first.definition);
+  await expect(tooltip).toHaveAttribute("aria-hidden", "true");
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+});
+
+test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
+  const page = await context.newPage();
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  const tooltip = page.locator("#badge-tooltip");
+  await emblem.tap();
+  await expect(tooltip).toBeVisible();
+  const box = await tooltip.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  await page.locator("h1").first().tap();
+  await expect(tooltip).toBeHidden();
+  await context.close();
+});
+
 test("the Taxonomy view defines every card badge and where it appears", async ({ page }) => {
   const glossary = cardBadgeGlossary();
 
