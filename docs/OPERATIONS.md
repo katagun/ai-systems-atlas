@@ -673,6 +673,20 @@ discards nothing that matters: assessments are committed to `hn-signals/pending`
 previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
 remains recoverable for one generation.
 
+The commit skips the repository's hooks (`git commit --no-verify`), and a commit that
+fails anyway is unstaged and discarded before the wrapper exits. Both halves come from one
+failure. On 2026-09-18 the pre-commit hook failed the sweep's commit, the queue stayed
+staged, and the dirty-tree guard then refused the next two sweeps — so the routine reran a
+four-day-old queue, again unnoticed, until 2026-09-20. Installing the hook's dependencies
+does not rescue it: the suite asserts that a checkout holds no `.hn-signal-bundle`
+(`test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout`), and this checkout
+is the one `prepare` writes that directory into, so the suite cannot pass here. Skipping
+it costs nothing, because the commit is one data file on a branch that is never pushed,
+and `run_hn_signals.py finish` and the `verify` check both validate the queue before
+`main` sees it. The rule the two failures share: no step of the wrapper may leave the tree
+in a state its own first guard refuses, because a refused sweep is silent and a stale
+queue still reads as a queue.
+
 ### Pre-ranking the queue
 
 `prepare` can order the pending list by how likely each page is to be a system, so the
