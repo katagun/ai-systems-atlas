@@ -39,7 +39,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 </head>
 <body>
 <main>
-<p class="eyebrow">Local runtime · Local runtime · Embedded library</p>
+<p class="eyebrow">Local runtime · Embedded library</p>
 <h1>WebLLM</h1>
 <p class="lead">In-browser LLM inference engine built on MLCEngine that runs entirely client-side through WebGPU, exposing an OpenAI-compatible JavaScript and TypeScript API with streaming, JSON-mode structured generation, and Web Worker, Service Worker, and browser-extension integration.</p>
 <dl><dt>Maintainer</dt><dd>MLC AI community</dd><dt>Accelerators</dt><dd>WebGPU</dd><dt>Model formats</dt><dd>MLC compiled</dd><dt>Source model</dt><dd>Open source</dd><dt>Licenses</dt><dd>Apache License 2.0</dd><dt>Boundary</dt><dd>Represents the mlc-ai/web-llm package: its TypeScript API, prebuilt-model registry, and the browser-side MLCEngine that runs entirely inside a web page through WebGPU and WebAssembly, with no local server process. It is published, versioned, and licensed separately from mlc-ai/mlc-llm, the sibling record covering the Python compiler, CLI, and REST server; both consume the same compiled MLC model format, but a genuinely new model architecture still depends on mlc-llm&#x27;s Python compilation pipeline to produce the WASM model library this package loads. WebLLM Chat (chat.webllm.ai) and the community web-llm-chat project are demonstration and third-party chat applications built on this engine, not part of the reviewed package, so it stays on the runtime side of the ADR 015 test.</dd></dl>

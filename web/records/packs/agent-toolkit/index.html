@@ -39,7 +39,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 </head>
 <body>
 <main>
-<p class="eyebrow">Agent pack · Agent pack · Marketplace</p>
+<p class="eyebrow">Agent pack · Marketplace</p>
 <h1>agent-toolkit</h1>
 <p class="lead">A Claude Code marketplace manifest through which one steward&#x27;s skills, agents, and slash commands are each installed separately.</p>
 <dl><dt>Steward</dt><dd>Softaworks (softaworks)</dd><dt>Hosts</dt><dd>Claude Code</dd><dt>Install</dt><dd>Host marketplace</dd><dt>Licenses</dt><dd>MIT License</dd><dt>Status</dt><dd>Active</dd><dt>Installs</dt><dd>A Claude Code marketplace manifest at .claude-plugin/marketplace.json, registered with /plugin marketplace add and then installed entry by entry with /plugin install &lt;name&gt;@agent-toolkit; each entry names a source directory under dist/plugins/, which scripts/build_plugins.py generates from the repository&#x27;s skills/, agents/, and commands/ trees. The README also documents npx skills add softaworks/agent-toolkit for Agent Skills hosts and cp -r skills/&lt;name&gt; ~/.claude/skills/ by hand. The README says the skills-installer path also works with Codex, Cursor, and other agents, but documents an install only for Claude Code, so only Claude Code is recorded as a host. This record pins the manifest and does not list, count, or review its entries.</dd></dl>

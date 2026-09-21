@@ -5,6 +5,7 @@ from pathlib import Path
 
 from scripts.build_blog import blog_sitemap_entries
 from scripts.build_share_pages import (
+    COLLECTION_LABELS,
     SITE_URL,
     build_pages,
     load_catalog,
@@ -107,6 +108,28 @@ class SharePageTests(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/ollama/ollama" rel="noreferrer">Repository ↗</a>',
             page,
+        )
+
+    def test_eyebrow_names_the_collection_once(self) -> None:
+        """render_page adds the collection label; a branch that adds it too doubles it."""
+        samples = {
+            "system": "kilo-code",
+            "spec": "mcp",
+            "inference": "openai-api",
+            "runtime": "exo",
+            "model": "model-alibaba-qwen2-5-coder-0-5b",
+            "pack": "agent-toolkit",
+        }
+        for kind, record_id in samples.items():
+            page = self.pages[share_page_path(kind, record_id)]
+            eyebrow = page.split('<p class="eyebrow">')[1].split("</p>")[0]
+            label = COLLECTION_LABELS[kind]
+            with self.subTest(kind=kind, eyebrow=eyebrow):
+                self.assertTrue(eyebrow.startswith(f"{label} · "))
+                self.assertNotIn(f"{label} · {label}", eyebrow)
+        self.assertIn(
+            '<p class="eyebrow">Agent pack · Marketplace</p>',
+            self.pages["records/packs/agent-toolkit/index.html"],
         )
 
     def test_pages_follow_the_os_colour_scheme(self) -> None:
