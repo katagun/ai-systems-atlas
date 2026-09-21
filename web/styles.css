@@ -849,6 +849,62 @@ input:focus, select:focus {
 .badge-tooltip-family { font: 600 .6rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
 .badge-tooltip-name { color: var(--text); font-size: .86rem; }
 .badge-tooltip-definition { color: var(--muted); }
+/* The strip sits over whatever the Directory grid scrolls beneath it, but its
+   badge list is a read-only key with no controls or tab stops — nothing in it
+   is meant to be clicked. Leaving the whole strip pointer-transparent and
+   re-enabling it only on the close button and the "All badges" link means it
+   never steals a click aimed at a card control that a scroll happens to land
+   at the same screen position, in any width or scroll position. */
+.badge-legend {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 25;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem 1.1rem;
+  padding: .55rem max(1.5rem, calc((100% - 1360px) / 2));
+  border-top: 1px solid var(--line-strong);
+  background: var(--panel-glass);
+  backdrop-filter: blur(10px);
+  font-size: .78rem;
+  pointer-events: none;
+}
+.badge-legend-more, .badge-legend-close { pointer-events: auto; }
+.badge-legend[hidden], .badge-legend-chip[hidden] { display: none; }
+.badge-legend-title { margin: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.badge-legend-items { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: 0; padding: 0; list-style: none; }
+.badge-legend-items li { display: inline-flex; align-items: center; gap: .4rem; }
+.badge-legend-items span { color: var(--muted); }
+.badge-legend-items strong { color: var(--text); font-weight: 600; }
+.badge-legend-items[data-mode="badges"] li > span:only-of-type { color: var(--text); font-weight: 600; }
+.badge-legend .badge-emblem { width: 1.35rem; height: 1.35rem; flex: none; }
+.badge-legend-more { margin-left: auto; color: var(--cyan); font-weight: 600; }
+.badge-legend-close { border: 0; background: transparent; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.badge-legend-close:hover { color: var(--text); }
+.badge-legend-chip {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 25;
+  padding: .4rem .7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background: var(--panel);
+  box-shadow: var(--shadow-dialog);
+  color: var(--text);
+  font: 600 .72rem var(--font-body);
+  cursor: pointer;
+}
+/* 16rem clears the comparison tray's tallest real state at 390px: four items
+   selected with the "Four is the maximum" message wrapped measures 223px tall
+   (tray itself sits 1rem off the bottom), 239px total — comfortably inside. */
+.badge-legend-chip.is-above-tray { bottom: 16rem; }
+/* 8rem clears the legend's tallest real state: the unscoped Systems union (11
+   badges) wraps to two rows at 768-800px, measured at 116.75px (7.3rem); the
+   single row at 1280px is 40px. Both are well inside this budget. */
+body.has-badge-legend footer { margin-bottom: 8rem; }
+body.has-badge-legend main { padding-bottom: 8rem; }
 .card-source-meta {
   display: flex;
   flex-wrap: wrap;

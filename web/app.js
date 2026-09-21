@@ -18,7 +18,7 @@ const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], taxonomy: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
-  directoryCollection: "all", directoryRoles: null,
+  directoryCollection: "all", directoryRoles: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
@@ -292,6 +292,7 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0;
+  syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
   $("#comparison-open").disabled = records.length < 2;
@@ -488,6 +489,7 @@ function applyDirectoryDefaults() {
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").checked = defaults.localOnly;
   updateScoreSortAvailability();
+  syncBadgeLegend();
 }
 
 function renderStats() {
@@ -559,6 +561,7 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   }
   renderers[selected]();
   if (updateURL) writeDirectoryURL();
+  syncBadgeLegend();
 }
 
 const PAGE_CONTAINERS = {
@@ -665,6 +668,51 @@ function initBadgeTooltip() {
   document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
   window.addEventListener("scroll", hide, { passive: true });
   window.addEventListener("resize", hide);
+}
+
+// The legend explains the emblems of whatever Directory scope is showing. The
+// reader's open/closed choice is remembered; without one it starts open on
+// wide viewports and closed on phones. It always steps aside for the
+// comparison tray, which owns the same edge of the viewport.
+const BADGE_LEGEND_STORAGE_KEY = "atlas.badgeLegend";
+function badgeLegendPreference() {
+  try {
+    const stored = localStorage.getItem(BADGE_LEGEND_STORAGE_KEY);
+    if (stored === "open" || stored === "closed") return stored;
+  } catch {}
+  return window.matchMedia("(max-width: 720px)").matches ? "closed" : "open";
+}
+function setBadgeLegendPreference(value) {
+  try { localStorage.setItem(BADGE_LEGEND_STORAGE_KEY, value); } catch {}
+  state.badgeLegendPreference = value;
+  syncBadgeLegend();
+}
+function syncBadgeLegend() {
+  const strip = $("#badge-legend");
+  const chip = $("#badge-legend-chip");
+  if (!strip || !chip) return;
+  const inDirectory = $(".view.is-active")?.id === "directory";
+  const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
+  const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily) : null;
+  const trayOpen = !$("#comparison-tray").hidden;
+  const open = Boolean(legend) && !trayOpen && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
+  if (legend) {
+    $("#badge-legend-items").dataset.mode = legend.mode;
+    $("#badge-legend-items").innerHTML = legend.mode === "families"
+      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}">${AtlasCore.familyEmblem(family.id)}<span><strong>${escapeHTML(family.name)}</strong> ${escapeHTML(family.meaning)}</span></li>`).join("")
+      : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AtlasCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
+  }
+  strip.hidden = !open;
+  chip.hidden = !legend || open;
+  chip.setAttribute("aria-expanded", String(open));
+  chip.classList.toggle("is-above-tray", trayOpen);
+  document.body.classList.toggle("has-badge-legend", open);
+}
+function initBadgeLegend() {
+  $("#badge-legend-close").addEventListener("click", () => setBadgeLegendPreference("closed"));
+  $("#badge-legend-chip").addEventListener("click", () => setBadgeLegendPreference("open"));
+  $("#badge-legend-more").addEventListener("click", event => { event.preventDefault(); activateView("taxonomy"); });
+  syncBadgeLegend();
 }
 
 function packHosts(pack) {
@@ -2087,6 +2135,7 @@ function activateView(id) {
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
+  syncBadgeLegend();
   writeViewURL(id);
   window.scrollTo({ top: 0 });
 }
@@ -2126,6 +2175,7 @@ function bindEvents() {
   }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   initBadgeTooltip();
+  initBadgeLegend();
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
@@ -2135,6 +2185,7 @@ function bindEvents() {
     syncCollectionSwitcher();
     state.page.systems = 1;
     renderProjects();
+    syncBadgeLegend();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
