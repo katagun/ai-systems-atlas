@@ -233,19 +233,36 @@ def load_catalog(root: Path) -> dict[str, dict]:
     return catalog
 
 
-def model_records(catalog: dict[str, dict]) -> list[dict]:
-    """Overlay reviewed Atlas models on the complete attributed source snapshot."""
-    reviewed = {
-        record["source_id"]: {**record, "review_status": "reviewed"}
-        for record in catalog["models.json"]["models"]
-    }
+def _overlay_models(catalog: dict[str, dict]) -> tuple[list[dict], int]:
+    """Overlay reviewed Atlas models on the complete attributed source snapshot.
+
+    A linked record matches its row by source_id. A record reviewed before
+    models.dev listed it has no source_id and matches by id (ADR 038), but
+    only against a row no linked record has already claimed by source_id -
+    the single pass below is the one place that distinction is made, so the
+    combined list and the unmatched count can never drift apart.
+
+    Returns the combined list and the count of null-source records left
+    unmatched after the pass.
+    """
+    linked: dict[str, dict] = {}
+    unlisted: dict[str, dict] = {}
+    for record in catalog["models.json"]["models"]:
+        reviewed = {**record, "review_status": "reviewed"}
+        if record["source_id"] is None:
+            unlisted[record["id"]] = reviewed
+        else:
+            linked[record["source_id"]] = reviewed
     source = catalog["models-dev.json"]
     commit = source["source"]["commit"]
     combined: list[dict] = []
     for source_record in source["models"]:
         source_id = source_record["source_id"]
-        if source_id in reviewed:
-            combined.append(reviewed.pop(source_id))
+        if source_id in linked:
+            combined.append(linked.pop(source_id))
+            continue
+        if source_record["id"] in unlisted:
+            combined.append(unlisted.pop(source_record["id"]))
             continue
         metadata = source_record["source_metadata"]
         combined.append(
@@ -261,8 +278,21 @@ def model_records(catalog: dict[str, dict]) -> list[dict]:
                 "source_url": f"https://github.com/anomalyco/models.dev/blob/{commit}/models/{source_id}.toml",
             }
         )
-    combined.extend(reviewed.values())
-    return combined
+    combined.extend(linked.values())
+    combined.extend(unlisted.values())
+    return combined, len(unlisted)
+
+
+def model_records(catalog: dict[str, dict]) -> list[dict]:
+    """Overlay reviewed Atlas models on the complete attributed source snapshot."""
+    records, _ = _overlay_models(catalog)
+    return records
+
+
+def unlisted_model_count(catalog: dict[str, dict]) -> int:
+    """Reviewed models that no models.dev row stands behind yet."""
+    _, count = _overlay_models(catalog)
+    return count
 
 
 def searchable_text(value) -> str:
@@ -282,9 +312,10 @@ def dumps(payload) -> str:
 def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
     payloads: dict[str, str] = {}
     model_source_details: dict[str, dict] = {}
+    overlaid_models, unlisted_count = _overlay_models(catalog)
     for collection, name, key, kind in COLLECTIONS:
         document = catalog[name]
-        records = model_records(catalog) if collection == "models" else document[key]
+        records = overlaid_models if collection == "models" else document[key]
         boot_fields = BOOT_FIELDS[collection]
 
         entries = []
@@ -317,6 +348,7 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                         "source_record_count"
                     ],
                     "reviewed_count": len(document[key]),
+                    "unlisted_reviewed_count": unlisted_count,
                 }
             )
         payloads[f"app/{collection}.json"] = dumps({**envelope, collection: entries})

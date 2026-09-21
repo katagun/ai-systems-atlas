@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelSourceLabel, modelsKickerText, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, UNLISTED_MODEL_LABEL, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -300,6 +300,33 @@ test("model filtering keeps unscored source imports and sorts them after reviews
     ["Audio Source"],
   );
   assert.deepEqual(filterModels([importedModel], { type: "language_model" }), []);
+});
+
+test("a reviewed model without a models.dev row never prints null", () => {
+  const unlisted = { ...models[0], source_id: null };
+  assert.equal(modelSourceLabel(models[0]), "alibaba/qwen");
+  assert.equal(modelSourceLabel(unlisted), UNLISTED_MODEL_LABEL);
+  assert.equal(UNLISTED_MODEL_LABEL, "Not yet listed on models.dev");
+});
+
+test("metadata attribution names Atlas when models.dev has no row", () => {
+  const listed = modelMetadataAttribution(models[0]);
+  const unlisted = modelMetadataAttribution({ ...models[0], source_id: null });
+  assert.equal(listed.listed, true);
+  assert.match(listed.cardTitle, /models\.dev/);
+  assert.equal(listed.noLinksText, "No source links reported by models.dev.");
+  assert.equal(unlisted.listed, false);
+  assert.equal(unlisted.cardTitle, "Reviewed by Atlas from developer documentation");
+  assert.equal(unlisted.noLinksText, "No source links recorded.");
+  for (const text of Object.values(unlisted)) {
+    if (typeof text === "string") assert.doesNotMatch(text, /models\.dev/);
+  }
+});
+
+test("the models kicker counts reviewed models models.dev does not list", () => {
+  assert.equal(modelsKickerText(400, 242, 0), "400 models.dev records · 242 Atlas reviewed");
+  assert.equal(modelsKickerText(400, 243, 1), "400 models.dev records · 243 Atlas reviewed · 1 not yet on models.dev");
+  assert.equal(modelsKickerText(400, 243, undefined), "400 models.dev records · 243 Atlas reviewed");
 });
 
 test("local runtime search covers visible boundary prose but not evidence URLs", () => {

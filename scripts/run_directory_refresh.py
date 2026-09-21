@@ -241,10 +241,31 @@ def run_checks(run, token: str | None) -> list[tuple[str, bool, str]]:
     return results
 
 
+def link_pending_lines(results: list[tuple[str, bool, str]]) -> list[str]:
+    """Every `link pending:` line any check printed, deduplicated in first-seen order.
+
+    `validate_directory` prints one such line per reviewed model that models.dev now
+    lists (ADR 038); without this, the line has no reader outside a raw terminal.
+    """
+    seen: set[str] = set()
+    lines: list[str] = []
+    for _name, _ok, output in results:
+        for line in output.splitlines():
+            if line.startswith("link pending:") and line not in seen:
+                seen.add(line)
+                lines.append(line)
+    return lines
+
+
 def print_check_summary(results: list[tuple[str, bool, str]]) -> None:
     print("== Verification results ==")
     for name, ok, _output in results:
         print(f"- {name}: {'passed' if ok else 'FAILED'}")
+    pending = link_pending_lines(results)
+    if pending:
+        print("== Models awaiting a models.dev link ==")
+        for line in pending:
+            print(line)
 
 
 def has_staged_changes(run) -> bool:
@@ -268,6 +289,17 @@ def build_pr_body(results: list[tuple[str, bool, str]]) -> str:
     for name, ok, _output in results:
         lines.append(f"- `{name}`: {'passed' if ok else '**failed**'}")
     lines.append("")
+    pending = link_pending_lines(results)
+    if pending:
+        lines.append("## Models awaiting a models.dev link")
+        lines.append("")
+        lines.extend(f"- {line}" for line in pending)
+        lines.append("")
+        lines.append(
+            "models.dev now lists these reviewed releases; run the `link` command "
+            "in docs/MODELS.md."
+        )
+        lines.append("")
     lines.append("Review license incidents and candidate additions before merging.")
     return "\n".join(lines)
 

@@ -436,7 +436,7 @@ Do not copy prices, rate limits, model leaderboards, or exhaustive model invento
 
 Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not a lab, model family, hosted endpoint, or repackaging—as the review unit. Verify the official identity, boundary, every governing distribution term, source model, distribution modes, evidence, and `model_access` score. Treat every models.dev field as attributed discovery metadata until first-party evidence supports the Atlas conclusion. Remove the candidate only in the same change that publishes or otherwise disposes of it, then synchronize, regenerate share pages, verify, and exercise Models search, filters, comparison, URL restoration, and details.
 
-For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md).
+For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
 Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
 
@@ -567,7 +567,10 @@ already accepts. A red run still opens or updates its issue-worthy signal in the
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
 signals, candidates, model candidates, and the check summary before merging any refresh pull
-request.
+request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
+`link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
+prints the same `link pending:` lines those sections are built from.
 
 ### Tokens
 
@@ -669,6 +672,47 @@ discards nothing that matters: assessments are committed to `hn-signals/pending`
 `run_hn_signals.py finish`, never to this branch, and the branch is never pushed. Keep the
 previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
 remains recoverable for one generation.
+
+The commit skips the repository's hooks (`git commit --no-verify`), and a commit that
+fails anyway is unstaged and discarded before the wrapper exits. Both halves come from one
+failure. On 2026-09-18 the pre-commit hook failed the sweep's commit, the queue stayed
+staged, and the dirty-tree guard then refused the next two sweeps — so the routine reran a
+four-day-old queue, again unnoticed, until 2026-09-20. Installing the hook's dependencies
+does not rescue it: the suite asserts that a checkout holds no `.hn-signal-bundle`
+(`test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout`), and this checkout
+is the one `prepare` writes that directory into, so the suite cannot pass here. Skipping
+it costs nothing, because the commit is one data file on a branch that is never pushed,
+and `run_hn_signals.py finish` and the `verify` check both validate the queue before
+`main` sees it. The rule the two failures share: no step of the wrapper may leave the tree
+in a state its own first guard refuses, because a refused sweep is silent and a stale
+queue still reads as a queue.
+
+### Pre-ranking the queue
+
+`prepare` can order the pending list by how likely each page is to be a system, so the
+routine reads the likeliest signals first and the `--limit` cap keeps those rather than
+the lowest story ids. `scripts/rank_signals.py` sends one yes/no question per bundled
+page to TypeSafe's System One API, which returns a probability and no generated text.
+The order is all it produces: every signal still gets an assessment, none is skipped, and
+a rank is never evidence and never cited, exactly as ADR 028 treats points and comment
+counts.
+
+It is off until a key exists. Put `TYPESAFE_API_KEY=...` in the environment, or in an
+ignored `.env` at the root of the checkout `prepare` runs from — for the scheduled
+routine that is the sweep checkout, not the primary one. The key never belongs in the
+repository, a plist that is committed, or a workflow secret. Everything fails open: no
+key, an unreachable API, a rejected request, or a malformed answer leaves the queue in
+sweep order with a warning, and `verify` never reaches the network because only `main`
+passes `prepare` a ranker.
+
+Two things leave the machine when it is on: each pending signal's title and URL, and up
+to 8,000 characters of its page text. All three are already public, and the submitter
+chose the first two, so treat the returned number as you treat the page: data about an
+attacker-influenceable input. The model is pinned by version in `rank_signals.MODEL`;
+move it deliberately, and re-measure against recorded verdicts when you do. The
+2026-09-20 measurement — 59 judged signals, all five `worth_review` in the top eight,
+about $0.006 per 60-signal queue — rests on five positives and is recorded in
+`BACKLOG.md`.
 
 ### Running the loop locally
 

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Guarded human-review workflow for promoting one models.dev candidate.
+"""Guarded human-review workflow for promoting or linking a models.dev candidate.
 
 The command scaffolds review work but never invents editorial conclusions. Its
 apply path writes only after the complete proposed model collection and the
-remaining candidate queue pass validation together.
+remaining candidate queue pass validation together. A reviewed model may be
+promoted before models.dev lists it (a gap review, ADR 038) and later linked
+to the models.dev row that names it once one appears.
 """
 
 from __future__ import annotations
@@ -11,16 +13,19 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import stat
 import sys
 import tempfile
 from copy import deepcopy
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 try:
     from .validate_directory import (
+        Taxonomy,
+        stable_model_id,
         validate_model_candidates,
         validate_models,
         validate_taxonomy,
@@ -28,6 +33,8 @@ try:
     )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from validate_directory import (
+        Taxonomy,
+        stable_model_id,
         validate_model_candidates,
         validate_models,
         validate_taxonomy,
@@ -36,6 +43,28 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS_DEV_REPO = "https://github.com/anomalyco/models.dev"
+
+EMPTY_SOURCE_METADATA: dict[str, Any] = {
+    "name": "",
+    "description": None,
+    "family": None,
+    "release_date": None,
+    "last_updated": None,
+    "knowledge_cutoff": None,
+    "modalities": {"input": [], "output": []},
+    "capabilities": {
+        "attachment": None,
+        "reasoning": None,
+        "tool_call": None,
+        "structured_output": None,
+        "temperature": None,
+    },
+    "limits": {"context": None, "input": None, "output": None},
+    "reported_open_weights": None,
+    "reported_license": None,
+    "links": [],
+    "weights": [],
+}
 
 
 class PromotionError(ValueError):
@@ -94,6 +123,18 @@ def build_draft(
     reported_name = (
         source_metadata.get("name") if isinstance(source_metadata, dict) else None
     )
+    evidence = (
+        []
+        if candidate.get("source_id") is None
+        else [
+            {
+                "kind": "web",
+                "label": "Pinned models.dev source metadata",
+                "url": models_dev_evidence_url(candidate, candidates_data),
+                "verified_at": "",
+            }
+        ]
+    )
     return {
         "id": candidate.get("id"),
         "source_id": candidate.get("source_id"),
@@ -122,17 +163,64 @@ def build_draft(
             "documentation_provenance": None,
             "overall": None,
         },
-        "evidence": [
-            {
-                "kind": "web",
-                "label": "Pinned models.dev source metadata",
-                "url": models_dev_evidence_url(candidate, candidates_data),
-                "verified_at": "",
-            }
-        ],
+        "evidence": evidence,
         "metadata_verified_at": "",
         "verified_at": "",
     }
+
+
+def _dispositioned(directory: Path) -> dict[str, str]:
+    path = directory / "model-dispositions.json"
+    if not path.exists():
+        return {}
+    return {
+        entry["source_id"]: str(entry.get("disposition", "dispositioned"))
+        for entry in load_json(path).get("dispositions", [])
+        if isinstance(entry, dict) and isinstance(entry.get("source_id"), str)
+    }
+
+
+def _refuse_listed(directory: Path, expected_source_id: str, model_id: str) -> None:
+    """A gap review is only for releases models.dev does not list (ADR 038)."""
+    rows = load_json(directory / "models-dev.json").get("models") or []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if row.get("source_id") == expected_source_id:
+            raise PromotionError(
+                f"{expected_source_id} is already in the models.dev snapshot; use the "
+                "queue (init, or link for an existing record)"
+            )
+        if row.get("id") == model_id:
+            row_source_id = row.get("source_id")
+            raise PromotionError(
+                f"models.dev already lists {row_source_id}, whose id {model_id} this "
+                "review would take; use the queue (init, or link for an existing record)"
+            )
+    # Defence in depth only: validate_model_dispositions rejects a disposition whose
+    # source_id is absent from the snapshot, so in a valid catalog the loop above
+    # already raises on the snapshot row before a dispositioned id reaches this check.
+    disposition = _dispositioned(directory).get(expected_source_id)
+    if disposition:
+        raise PromotionError(f"{expected_source_id} is dispositioned as {disposition}")
+
+
+def build_gap_draft(root: Path, expected_source_id: str) -> dict[str, Any]:
+    """Scaffold a review for a release models.dev does not list yet."""
+    if not re.fullmatch(
+        r"[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._/-]*", expected_source_id
+    ):
+        raise PromotionError("expected id must look like PROVIDER/MODEL")
+    directory = root / "directory"
+    model_id = stable_model_id(expected_source_id)
+    _refuse_listed(directory, expected_source_id, model_id)
+    models = load_json(directory / "models.json").get("models") or []
+    if any(isinstance(m, dict) and m.get("id") == model_id for m in models):
+        raise PromotionError(f"model id is already published: {model_id}")
+    return build_draft(
+        {"id": model_id, "source_id": None, "source_metadata": EMPTY_SOURCE_METADATA},
+        {},
+    )
 
 
 def _valid_date(value: object) -> date | None:
@@ -186,7 +274,9 @@ def _promotion_specific_errors(
             continue
         if model.get("id") == record.get("id"):
             errors.append(f"model id is already published: {record.get('id')}")
-        if model.get("source_id") == record.get("source_id"):
+        if record.get("source_id") is not None and model.get("source_id") == record.get(
+            "source_id"
+        ):
             errors.append(
                 f"models.dev source_id is already published: {record.get('source_id')}"
             )
@@ -227,12 +317,149 @@ def _promotion_specific_errors(
     return errors
 
 
+def _with_record(models_data: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
+    """Insert `record` into a proposed copy of models.json, sorted, with the
+    collection's verified_at bumped when the record is newer."""
+    proposed_models = deepcopy(models_data)
+    if isinstance(proposed_models.get("models"), list):
+        proposed_models["models"].append(deepcopy(record))
+        proposed_models["models"].sort(
+            key=lambda item: (
+                str(item.get("developer", "")).casefold(),
+                str(item.get("name", "")).casefold(),
+                str(item.get("id", "")),
+            )
+        )
+    record_date = _valid_date(record.get("verified_at"))
+    collection_date = _valid_date(proposed_models.get("verified_at"))
+    if record_date and (collection_date is None or record_date > collection_date):
+        proposed_models["verified_at"] = record_date.isoformat()
+    return proposed_models
+
+
+class _CrossCollectionDocuments(NamedTuple):
+    """The other record collections a promoted model's id/repo must stay unique against."""
+
+    projects: dict[str, Any]
+    specifications: dict[str, Any]
+    inference_services: dict[str, Any]
+    local_runtimes: dict[str, Any]
+    packs: dict[str, Any]
+
+
+def _validate_proposed_models(
+    proposed_models: dict[str, Any],
+    taxonomy_data: dict[str, Any],
+    cross_collection: _CrossCollectionDocuments,
+    errors: list[str],
+) -> Taxonomy:
+    """Validate a proposed models.json against the taxonomy and every other
+    collection's ids, appending problems to `errors` in place. Returns the
+    validated taxonomy, which callers that also validate the candidate queue
+    (via `validate_model_candidates`) need afterward."""
+    taxonomy_errors: list[str] = []
+    taxonomy = validate_taxonomy(taxonomy_data, taxonomy_errors)
+    errors.extend(taxonomy_errors)
+    validate_models(proposed_models, taxonomy, errors)
+    published = proposed_models.get("models")
+    validate_unique_record_ids(
+        cross_collection.projects.get("projects", []),
+        cross_collection.specifications.get("specifications", []),
+        cross_collection.inference_services.get("services", []),
+        cross_collection.local_runtimes.get("runtimes", []),
+        published if isinstance(published, list) else [],
+        errors,
+        packs_value=cross_collection.packs.get("packs")
+        if isinstance(cross_collection.packs.get("packs"), list)
+        else [],
+    )
+    return taxonomy
+
+
+def _preflight_gap(
+    directory: Path, record: dict[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Preflight a review of a release models.dev does not list yet (ADR 038)."""
+    model_id = str(record.get("id"))
+    source_models_data = load_json(directory / "models-dev.json")
+    rows = source_models_data.get("models") or []
+    if any(isinstance(row, dict) and row.get("id") == model_id for row in rows):
+        raise PromotionError(
+            f"models.dev now lists a row with id {model_id}; use the queue instead "
+            "of a gap review"
+        )
+    models_data = load_json(directory / "models.json")
+    candidates_data = load_json(directory / "model-candidates.json")
+    taxonomy_data = load_json(directory / "taxonomy.json")
+    projects_data = load_json(directory / "projects.json")
+    specifications_data = load_json(directory / "specifications.json")
+    inference_services_data = load_json(directory / "inference-services.json")
+    local_runtimes_data = load_json(directory / "local-runtimes.json")
+    packs_data = load_json(directory / "packs.json")
+
+    errors: list[str] = []
+    models = (
+        models_data.get("models") if isinstance(models_data.get("models"), list) else []
+    )
+    if any(isinstance(m, dict) and m.get("id") == model_id for m in models):
+        errors.append(f"model id is already published: {model_id}")
+    if record.get("license_review_status") != "verified":
+        errors.append("license_review_status must be verified before promotion")
+    evidence = (
+        record.get("evidence") if isinstance(record.get("evidence"), list) else []
+    )
+    urls = {item.get("url") for item in evidence if isinstance(item, dict)}
+    if record.get("url") not in urls:
+        errors.append("evidence must include the authoritative model URL")
+    if any("github.com/anomalyco/models.dev/" in str(url) for url in urls):
+        errors.append(
+            "a gap review cannot cite models.dev evidence; models.dev does not list it"
+        )
+    metadata_date = _valid_date(record.get("metadata_verified_at"))
+    reviewed_date = _valid_date(record.get("verified_at"))
+    current_date = datetime.now(UTC).date()
+    if reviewed_date and metadata_date and reviewed_date < metadata_date:
+        errors.append("verified_at predates metadata_verified_at")
+    if metadata_date and metadata_date > current_date:
+        errors.append("metadata_verified_at cannot be in the future")
+    if reviewed_date and reviewed_date > current_date:
+        errors.append("verified_at cannot be in the future")
+
+    proposed_models = _with_record(models_data, record)
+
+    _validate_proposed_models(
+        proposed_models,
+        taxonomy_data,
+        _CrossCollectionDocuments(
+            projects_data,
+            specifications_data,
+            inference_services_data,
+            local_runtimes_data,
+            packs_data,
+        ),
+        errors,
+    )
+    if errors:
+        formatted = "\n".join(f"- {error}" for error in errors)
+        raise PromotionError(f"gap review is not ready for promotion:\n{formatted}")
+    return proposed_models, candidates_data
+
+
 def preflight_promotion(
     root: Path,
     record: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return complete proposed documents or raise without writing anything."""
     directory = root / "directory"
+    if "source_id" not in record or (
+        record["source_id"] is not None
+        and (not isinstance(record["source_id"], str) or not record["source_id"])
+    ):
+        raise PromotionError("review record requires a models.dev source_id")
+    source_id = record["source_id"]
+    if source_id is None:
+        return _preflight_gap(directory, record)
+
     models_data = load_json(directory / "models.json")
     source_models_data = load_json(directory / "models-dev.json")
     candidates_data = load_json(directory / "model-candidates.json")
@@ -242,9 +469,6 @@ def preflight_promotion(
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
-    source_id = record.get("source_id")
-    if not isinstance(source_id, str) or not source_id:
-        raise PromotionError("review record requires a models.dev source_id")
     dispositions_path = directory / "model-dispositions.json"
     dispositions_data: dict[str, Any] = {"dispositions": []}
     if dispositions_path.exists():
@@ -264,21 +488,8 @@ def preflight_promotion(
         models_data,
         source_models_data,
     )
-    proposed_models = deepcopy(models_data)
+    proposed_models = _with_record(models_data, record)
     proposed_candidates = deepcopy(candidates_data)
-    if isinstance(proposed_models.get("models"), list):
-        proposed_models["models"].append(deepcopy(record))
-        proposed_models["models"].sort(
-            key=lambda item: (
-                str(item.get("developer", "")).casefold(),
-                str(item.get("name", "")).casefold(),
-                str(item.get("id", "")),
-            )
-        )
-    record_date = _valid_date(record.get("verified_at"))
-    collection_date = _valid_date(proposed_models.get("verified_at"))
-    if record_date and (collection_date is None or record_date > collection_date):
-        proposed_models["verified_at"] = record_date.isoformat()
 
     remaining = proposed_candidates.get("candidates")
     if isinstance(remaining, list):
@@ -287,22 +498,19 @@ def preflight_promotion(
             for item in remaining
             if not isinstance(item, dict) or item.get("source_id") != source_id
         ]
-    taxonomy_errors: list[str] = []
-    taxonomy = validate_taxonomy(taxonomy_data, taxonomy_errors)
-    errors.extend(taxonomy_errors)
-    validate_models(proposed_models, taxonomy, errors)
-    published_models = proposed_models.get("models")
-    validate_unique_record_ids(
-        projects_data.get("projects", []),
-        specifications_data.get("specifications", []),
-        inference_services_data.get("services", []),
-        local_runtimes_data.get("runtimes", []),
-        published_models if isinstance(published_models, list) else [],
+    taxonomy = _validate_proposed_models(
+        proposed_models,
+        taxonomy_data,
+        _CrossCollectionDocuments(
+            projects_data,
+            specifications_data,
+            inference_services_data,
+            local_runtimes_data,
+            packs_data,
+        ),
         errors,
-        packs_value=packs_data.get("packs")
-        if isinstance(packs_data.get("packs"), list)
-        else [],
     )
+    published_models = proposed_models.get("models")
     validate_model_candidates(
         proposed_candidates,
         published_models if isinstance(published_models, list) else [],
@@ -325,6 +533,136 @@ def preflight_promotion(
     return proposed_models, proposed_candidates
 
 
+def metadata_diff(authored: Any, upstream: Any, path: str = "") -> list[str]:
+    """Leaf-level differences between hand-authored and models.dev metadata."""
+    if isinstance(authored, dict) and isinstance(upstream, dict):
+        lines: list[str] = []
+        for key in sorted(set(authored) | set(upstream)):
+            lines.extend(
+                metadata_diff(
+                    authored.get(key),
+                    upstream.get(key),
+                    f"{path}.{key}" if path else key,
+                )
+            )
+        return lines
+    return [] if authored == upstream else [f"{path}: {authored!r} -> {upstream!r}"]
+
+
+def preflight_link(
+    root: Path, model_id: str, source_id: str, metadata_verified_at: str
+) -> tuple[dict[str, Any], dict[str, Any], list[str]]:
+    """Propose linking a reviewed model to the models.dev row that now lists it."""
+    directory = root / "directory"
+    models_data = load_json(directory / "models.json")
+    candidates_data = load_json(directory / "model-candidates.json")
+    source_models_data = load_json(directory / "models-dev.json")
+    taxonomy_data = load_json(directory / "taxonomy.json")
+    projects_data = load_json(directory / "projects.json")
+    specifications_data = load_json(directory / "specifications.json")
+    inference_services_data = load_json(directory / "inference-services.json")
+    local_runtimes_data = load_json(directory / "local-runtimes.json")
+    packs_data = load_json(directory / "packs.json")
+
+    models = (
+        models_data.get("models") if isinstance(models_data.get("models"), list) else []
+    )
+    matches = [m for m in models if isinstance(m, dict) and m.get("id") == model_id]
+    if len(matches) != 1:
+        raise PromotionError(f"reviewed model not found: {model_id}")
+    if matches[0].get("source_id") is not None:
+        raise PromotionError(
+            f"{model_id} is already linked to {matches[0]['source_id']}; "
+            "set source_id to null by hand first if upstream changed"
+        )
+    disposition = _dispositioned(directory).get(source_id)
+    if disposition:
+        raise PromotionError(
+            f"{source_id} is dispositioned as {disposition}; lift it first"
+        )
+    candidate = candidate_for(candidates_data, source_id)
+    rows = [
+        row
+        for row in source_models_data.get("models") or []
+        if isinstance(row, dict) and row.get("source_id") == source_id
+    ]
+    if len(rows) != 1 or rows[0].get("source_metadata") != candidate.get(
+        "source_metadata"
+    ):
+        raise PromotionError(
+            "candidate metadata differs from the complete models.dev source snapshot"
+        )
+
+    attested = _valid_date(metadata_verified_at)
+    queue_date = _valid_date(candidates_data.get("updated_at"))
+    if attested is None:
+        raise PromotionError("--metadata-verified-at must be an ISO date")
+    if queue_date and attested < queue_date:
+        raise PromotionError(
+            "metadata_verified_at predates the imported candidate snapshot"
+        )
+    if attested > datetime.now(UTC).date():
+        raise PromotionError("metadata_verified_at cannot be in the future")
+
+    proposed_models = deepcopy(models_data)
+    record = next(m for m in proposed_models["models"] if m.get("id") == model_id)
+    diff = metadata_diff(
+        record.get("source_metadata"), candidate.get("source_metadata")
+    )
+    record["source_id"] = source_id
+    record["source_metadata"] = deepcopy(candidate["source_metadata"])
+    record["metadata_verified_at"] = metadata_verified_at
+    pinned_url = models_dev_evidence_url(candidate, candidates_data)
+    # A wrong-guess repair (unlink, re-link) leaves a stale pinned entry from the
+    # excluded row on the record; drop every existing models.dev evidence entry
+    # before appending the current one so linking never produces two.
+    record["evidence"] = [
+        item
+        for item in record["evidence"]
+        if not str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+    ]
+    record["evidence"].append(
+        {
+            "kind": "web",
+            "label": "Pinned models.dev source metadata",
+            "url": pinned_url,
+            "verified_at": metadata_verified_at,
+        }
+    )
+    proposed_candidates = deepcopy(candidates_data)
+    proposed_candidates["candidates"] = [
+        item
+        for item in proposed_candidates["candidates"]
+        if not isinstance(item, dict) or item.get("source_id") != source_id
+    ]
+
+    errors: list[str] = []
+    taxonomy = _validate_proposed_models(
+        proposed_models,
+        taxonomy_data,
+        _CrossCollectionDocuments(
+            projects_data,
+            specifications_data,
+            inference_services_data,
+            local_runtimes_data,
+            packs_data,
+        ),
+        errors,
+    )
+    validate_model_candidates(
+        proposed_candidates,
+        proposed_models["models"],
+        source_models_data.get("models") or [],
+        taxonomy,
+        errors,
+        set(_dispositioned(directory)),
+    )
+    if errors:
+        formatted = "\n".join(f"- {error}" for error in errors)
+        raise PromotionError(f"link is not safe to apply:\n{formatted}")
+    return proposed_models, proposed_candidates, diff
+
+
 def _write_json_atomic(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
@@ -342,23 +680,43 @@ def _write_json_atomic(path: Path, value: dict[str, Any]) -> None:
         temporary_path.unlink(missing_ok=True)
 
 
-def apply_promotion(root: Path, record: dict[str, Any]) -> tuple[int, str]:
-    """Apply a preflighted promotion and return remaining count plus model id."""
-    proposed_models, proposed_candidates = preflight_promotion(root, record)
+def _write_both(
+    root: Path, proposed_models: dict[str, Any], proposed_candidates: dict[str, Any]
+) -> None:
+    """Write both catalog files, rolling either back if the other write fails.
+    Skips the candidate queue write when it did not change."""
     models_path = root / "directory" / "models.json"
     candidates_path = root / "directory" / "model-candidates.json"
     original_models = models_path.read_bytes()
     original_candidates = candidates_path.read_bytes()
     try:
         _write_json_atomic(models_path, proposed_models)
-        _write_json_atomic(candidates_path, proposed_candidates)
+        if proposed_candidates != load_json(candidates_path):
+            _write_json_atomic(candidates_path, proposed_candidates)
     except Exception:
         models_path.write_bytes(original_models)
         candidates_path.write_bytes(original_candidates)
         raise
+
+
+def apply_promotion(root: Path, record: dict[str, Any]) -> tuple[int, str]:
+    """Apply a preflighted promotion and return remaining count plus model id."""
+    proposed_models, proposed_candidates = preflight_promotion(root, record)
+    _write_both(root, proposed_models, proposed_candidates)
     candidates = proposed_candidates.get("candidates")
     remaining = len(candidates) if isinstance(candidates, list) else 0
     return remaining, str(record.get("id"))
+
+
+def apply_link(
+    root: Path, model_id: str, source_id: str, metadata_verified_at: str
+) -> list[str]:
+    """Apply a preflighted link and return the metadata diff lines."""
+    proposed_models, proposed_candidates, diff = preflight_link(
+        root, model_id, source_id, metadata_verified_at
+    )
+    _write_both(root, proposed_models, proposed_candidates)
+    return diff
 
 
 def write_draft(path: Path, draft: dict[str, Any]) -> None:
@@ -369,7 +727,10 @@ def write_draft(path: Path, draft: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Scaffold, check, or apply one reviewed models.dev candidate.",
+        description=(
+            "Scaffold, check, apply, or link one reviewed models.dev candidate, "
+            "including gap reviews for releases models.dev does not list yet."
+        ),
     )
     parser.add_argument("--root", type=Path, default=ROOT, help=argparse.SUPPRESS)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -377,6 +738,14 @@ def build_parser() -> argparse.ArgumentParser:
     init = commands.add_parser("init", help="write an incomplete human-review draft")
     init.add_argument("candidate", help="models.dev source_id or Atlas candidate id")
     init.add_argument(
+        "--output", type=Path, required=True, help="new JSON review-draft path"
+    )
+
+    gap = commands.add_parser(
+        "init-gap", help="write a review draft for a release models.dev does not list"
+    )
+    gap.add_argument("expected", help="the models.dev id you expect, PROVIDER/MODEL")
+    gap.add_argument(
         "--output", type=Path, required=True, help="new JSON review-draft path"
     )
 
@@ -388,6 +757,22 @@ def build_parser() -> argparse.ArgumentParser:
         command.add_argument(
             "record", type=Path, help="completed JSON review-draft path"
         )
+
+    link = commands.add_parser(
+        "link", help="link a reviewed model to the models.dev row that now lists it"
+    )
+    link.add_argument(
+        "model_id", help="Atlas id of the reviewed model without a source_id"
+    )
+    link.add_argument("source_id", help="queued models.dev source_id to adopt")
+    link.add_argument(
+        "--metadata-verified-at",
+        required=True,
+        help="ISO date you checked the upstream metadata",
+    )
+    link.add_argument(
+        "--dry-run", action="store_true", help="show the metadata diff and stop"
+    )
     return parser
 
 
@@ -406,18 +791,52 @@ def main(argv: list[str] | None = None) -> int:
             print("complete every editorial field, then run the check command")
             return 0
 
+        if args.command == "init-gap":
+            output = args.output.resolve()
+            write_draft(output, build_gap_draft(root, args.expected))
+            print(f"wrote incomplete gap review draft for {args.expected} to {output}")
+            print(
+                "fill source_metadata from the developer's documentation, then run check"
+            )
+            return 0
+
+        if args.command == "link":
+            if args.dry_run:
+                _, _, diff = preflight_link(
+                    root, args.model_id, args.source_id, args.metadata_verified_at
+                )
+            else:
+                diff = apply_link(
+                    root, args.model_id, args.source_id, args.metadata_verified_at
+                )
+            print("hand-authored -> models.dev metadata:")
+            for line in diff or ["(no differences)"]:
+                print(f"  {line}")
+            if args.dry_run:
+                print("dry run: nothing written")
+            else:
+                print(f"linked {args.model_id} to {args.source_id}")
+                print(
+                    "re-read the review if any difference touches a score or the boundary,"
+                )
+                print(
+                    "then synchronize web data, regenerate share pages, and run full verification"
+                )
+            return 0
+
         record = load_json(args.record.resolve())
         if args.command == "check":
             _, proposed_candidates = preflight_promotion(root, record)
             print(
-                f"ready to promote {record['source_id']}; "
+                f"ready to promote {record.get('source_id') or record.get('id')}; "
                 f"{len(proposed_candidates['candidates'])} candidates would remain"
             )
             return 0
 
         remaining, model_id = apply_promotion(root, record)
         print(
-            f"promoted {record['source_id']} as {model_id}; {remaining} candidates remain"
+            f"promoted {record.get('source_id') or record.get('id')} as {model_id}; "
+            f"{remaining} candidates remain"
         )
         print(
             "next: synchronize web data, regenerate share pages, and run full verification"
