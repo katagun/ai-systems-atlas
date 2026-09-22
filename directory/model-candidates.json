@@ -1,19 +1,218 @@
 {
   "version": "1.0",
   "updated_at": "2026-09-22",
-  "source_record_count": 395,
-  "eligible_record_count": 383,
+  "source_record_count": 424,
+  "eligible_record_count": 407,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "9df518aae587f231d955a3f849306082c543aa4d",
+    "commit": "1bc95312f70441e339d5aa010ad656b9c7706952",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/9df518aae587f231d955a3f849306082c543aa4d",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/1bc95312f70441e339d5aa010ad656b9c7706952",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "36c20e72ed57b18664a95819a33928d70a4520f70abb884be993ae1d4f060c66"
+    "sha256": "4507d16eded6022248bbf283ea200e0cd4b1c3289ff31294bbd558c7b971a964"
   },
   "candidates": [
+    {
+      "id": "model-ai21-jamba-large",
+      "source_id": "ai21/jamba-large",
+      "source_metadata": {
+        "name": "Jamba Large",
+        "description": "AI21's hybrid SSM-Transformer long-context model for enterprise agents and grounded generation",
+        "family": "jamba",
+        "release_date": "2025-07-01",
+        "last_updated": "2025-07-01",
+        "knowledge_cutoff": "2024-08-22",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-ai21-jamba-mini",
+      "source_id": "ai21/jamba-mini",
+      "source_metadata": {
+        "name": "Jamba Mini",
+        "description": "AI21's efficient, lightweight hybrid SSM-Transformer model for a wide range of tasks",
+        "family": "jamba",
+        "release_date": "2026-01-01",
+        "last_updated": "2026-01-01",
+        "knowledge_cutoff": "2024-08-22",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-alibaba-qwen3-8-omni-flash",
+      "source_id": "alibaba/qwen3.8-omni-flash",
+      "source_metadata": {
+        "name": "Qwen3.8 Omni Flash",
+        "description": "Qwen omni model for text, vision, audio, and multimodal agent tasks",
+        "family": "qwen",
+        "release_date": "2026-09-17",
+        "last_updated": "2026-09-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-anthropic-claude-opus-5-5",
+      "source_id": "anthropic/claude-opus-5-5",
+      "source_metadata": {
+        "name": "Claude Opus 5.5",
+        "description": "Claude model for long-running agentic coding and knowledge work",
+        "family": "claude-opus",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
     {
       "id": "model-google-gemini-embedding-001",
       "source_id": "google/gemini-embedding-001",
@@ -51,7 +250,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -101,7 +300,59 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-google-gemma-4-12b-it",
+      "source_id": "google/gemma-4-12b-it",
+      "source_metadata": {
+        "name": "Gemma 4 12B IT",
+        "description": "Compact Gemma 4 instruction model for open, self-hosted chat and reasoning",
+        "family": "gemma",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-4-12B-it"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -149,7 +400,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -197,7 +448,205 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-mixedbread-toast-1",
+      "source_id": "mixedbread/toast-1",
+      "source_metadata": {
+        "name": "Toast 1",
+        "description": "Specialized search model for knowledge-intensive questions, multi-step retrieval, and evidence synthesis",
+        "family": null,
+        "release_date": "2026-08-13",
+        "last_updated": "2026-08-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 131000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-moonshotai-kimi-k2-8-preview",
+      "source_id": "moonshotai/kimi-k2.8-preview",
+      "source_metadata": {
+        "name": "Kimi K2.8 Preview",
+        "description": "Kimi coding model with more efficient thinking and up to 1M context, available through Kimi Code",
+        "family": "kimi-k2",
+        "release_date": "2026-09-11",
+        "last_updated": "2026-09-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-motif-technologies-motif-3",
+      "source_id": "motif-technologies/motif-3",
+      "source_metadata": {
+        "name": "Motif 3",
+        "description": "Motif 3 is a large-scale, decoder-only Mixture-of-Experts (MoE) language model with 314 billion total parameters and 13.2 billion parameters activated per token.",
+        "family": "motif",
+        "release_date": "2026-08-07",
+        "last_updated": "2026-08-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Model weights",
+            "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-nex-agi-nex-n2-pro",
+      "source_id": "nex-agi/nex-n2-pro",
+      "source_metadata": {
+        "name": "Nex-N2-Pro",
+        "description": "Open agentic MoE model (397B total, 17B active) for coding, tool use, and research workflows",
+        "family": null,
+        "release_date": "2026-06-02",
+        "last_updated": "2026-06-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/nex-agi/Nex-N2-Pro"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -244,7 +693,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -291,7 +740,740 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-14",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-openbmb-minicpm5-2b",
+      "source_id": "openbmb/minicpm5-2b",
+      "source_metadata": {
+        "name": "MiniCPM5-2B",
+        "description": "Dense 2B-class open-source model for on-device and resource-constrained use, with native long-context support, tool calling, and agentic tasks",
+        "family": null,
+        "release_date": "2026-09-06",
+        "last_updated": "2026-09-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/openbmb/MiniCPM5-2B"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-quiverai-arrow-2",
+      "source_id": "quiverai/arrow-2",
+      "source_metadata": {
+        "name": "Arrow 2",
+        "description": "Fast SVG generation model for creation, vectorization, editing, and animation",
+        "family": null,
+        "release_date": "2026-09-16",
+        "last_updated": "2026-09-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-quiverai-arrow-2-telos",
+      "source_id": "quiverai/arrow-2-telos",
+      "source_metadata": {
+        "name": "Arrow 2 Telos",
+        "description": "High-fidelity SVG generation model for complex vector work and long-context refinement",
+        "family": null,
+        "release_date": "2026-09-16",
+        "last_updated": "2026-09-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1050000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-stepfun-step-5-preview",
+      "source_id": "stepfun/step-5-preview",
+      "source_metadata": {
+        "name": "Step 5 Preview",
+        "description": "StepFun's next-generation flagship base model for coding and professional knowledge work, with native text, image, and video input and a 1M-token context window",
+        "family": null,
+        "release_date": "2026-09-16",
+        "last_updated": "2026-09-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": 1000000,
+          "output": 1000000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-typesafe-jev-latest",
+      "source_id": "typesafe/jev-latest",
+      "source_metadata": {
+        "name": "Jev",
+        "description": "System One model for fast, typed probabilistic decisions over text or structured state",
+        "family": null,
+        "release_date": "2026-09-15",
+        "last_updated": "2026-09-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 64000,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-unbiased-pareto",
+      "source_id": "unbiased/pareto",
+      "source_metadata": {
+        "name": "Pareto",
+        "description": "Blended multimodal model that runs multiple language models in parallel and returns a synthesized answer",
+        "family": null,
+        "release_date": "2026-09-17",
+        "last_updated": "2026-09-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-vispark-vision-large",
+      "source_id": "vispark/vision-large",
+      "source_metadata": {
+        "name": "Vision Large",
+        "description": "Most capable Vision model for complex reasoning, detailed media analysis, and structured output over a 1M-token context window.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-vispark-vision-medium",
+      "source_id": "vispark/vision-medium",
+      "source_metadata": {
+        "name": "Vision Medium",
+        "description": "Balanced multimodal model pairing a 1M-token context window with deeper reasoning for analysis, content creation, and tool use across text, image, audio, video, and PDF inputs.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-vispark-vision-small",
+      "source_id": "vispark/vision-small",
+      "source_metadata": {
+        "name": "Vision Small",
+        "description": "Fast, low-cost multimodal model for understanding text, images, audio, video, and PDFs, with tool calling and a 1M-token context window.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-vivgrid-viv-fast",
+      "source_id": "vivgrid/viv-fast",
+      "source_metadata": {
+        "name": "Viv Fast",
+        "description": "Fast coding model",
+        "family": null,
+        "release_date": "2026-09-21",
+        "last_updated": "2026-09-21",
+        "knowledge_cutoff": "2026-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Model docs",
+            "url": "https://docs.vivgrid.com/models/viv-fast"
+          }
+        ],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xai-grok-4-7",
+      "source_id": "xai/grok-4.7",
+      "source_metadata": {
+        "name": "Grok 4.7",
+        "description": "xAI's frontier model for long-running agents, coding, knowledge work, and visual projects",
+        "family": "grok",
+        "release_date": "2026-09-21",
+        "last_updated": "2026-09-21",
+        "knowledge_cutoff": "2026-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 500000,
+          "input": null,
+          "output": 500000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xai-grok-voice-stt-1-0",
+      "source_id": "xai/grok-voice-stt-1.0",
+      "source_metadata": {
+        "name": "Grok Voice STT 1.0",
+        "description": "Grok Voice STT 1.0 is xAI's speech-to-text model. It supports transcription with word-level timestamps, optional speaker diarization, and multichannel audio.",
+        "family": null,
+        "release_date": "2026-08-04",
+        "last_updated": "2026-08-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 15000,
+          "input": null,
+          "output": 15000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-6-flash",
+      "source_id": "xiaomi/mimo-v2.6-flash",
+      "source_metadata": {
+        "name": "MiMo-V2.6-Flash",
+        "description": "MiMo Flash model for multimodal coding agents and long-context automation",
+        "family": "mimo",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-09-22",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-6-pro",
+      "source_id": "xiaomi/mimo-v2.6-pro",
+      "source_metadata": {
+        "name": "MiMo-V2.6-Pro",
+        "description": "Stronger MiMo Pro tier for multimodal reasoning and coding-agent execution",
+        "family": "mimo",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-09-22",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-6-pro-ultraspeed",
+      "source_id": "xiaomi/mimo-v2.6-pro-ultraspeed",
+      "source_metadata": {
+        "name": "MiMo-V2.6-Pro-UltraSpeed",
+        "description": "MiMo pro model for strong multimodal reasoning and agent execution",
+        "family": "mimo",
+        "release_date": "2026-09-21",
+        "last_updated": "2026-09-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-09-22",
+      "last_seen_at": "2026-09-22",
       "review_required": [
         "official_identity",
         "model_boundary",
