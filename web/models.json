@@ -19678,6 +19678,307 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-openai-gpt-3-5-turbo",
+      "source_id": "openai/gpt-3.5-turbo",
+      "name": "GPT-3.5 Turbo",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-3.5-turbo",
+      "description": "A legacy GPT model line served through OpenAI's API under the OpenAI Services Agreement, text-only, without downloadable model weights; OpenAI names GPT-5.6 Terra as its recommended replacement.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-3.5-turbo",
+        "description": "Compact GPT model for low-latency assistance and high-volume workloads",
+        "family": "gpt",
+        "release_date": "2023-03-01",
+        "last_updated": "2023-11-06",
+        "knowledge_cutoff": "2021-09-01",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16385,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-3.5 Turbo release identified by the dated snapshot gpt-3.5-turbo-0125, announced March 2023. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Terra as the recommended replacement. The later GPT-4o and GPT-5 family lines, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Chat Completions, Responses API, and fine-tuning are documented endpoints"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-3.5 Turbo model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-3.5-turbo",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-3.5-turbo.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-gpt-4",
+      "source_id": "openai/gpt-4",
+      "name": "GPT-4",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4",
+      "description": "The flagship GPT-4 API line served under the OpenAI Services Agreement, text-only, without downloadable model weights; OpenAI names GPT-5.6 Sol as its recommended replacement.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-4",
+        "description": "GPT model for general reasoning, writing, coding, and tool-assisted tasks",
+        "family": "gpt",
+        "release_date": "2023-11-06",
+        "last_updated": "2024-04-09",
+        "knowledge_cutoff": "2023-11",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-4 release identified by the dated snapshot gpt-4-0613, announced November 2023. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Sol as the recommended replacement. The later GPT-4o, GPT-4.1, and GPT-5 family lines, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Chat Completions, Responses API, Assistants, batch, and fine-tuning are documented endpoints"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-4 model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-4.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-gpt-4-turbo",
+      "source_id": "openai/gpt-4-turbo",
+      "name": "GPT-4 Turbo",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/gpt-4-turbo",
+      "description": "A vision-capable GPT-4 API line served under the OpenAI Services Agreement, without downloadable model weights; OpenAI names GPT-5.6 Sol as its recommended replacement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "GPT-4 Turbo",
+        "description": "Compact GPT model for low-latency assistance and high-volume workloads",
+        "family": "gpt",
+        "release_date": "2023-11-06",
+        "last_updated": "2024-04-09",
+        "knowledge_cutoff": "2023-12",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the GPT-4 Turbo release identified by the dated snapshot gpt-4-turbo-2024-04-09, announced November 2023. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Sol as the recommended replacement. The later GPT-4o, GPT-4.1, and GPT-5 family lines, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "A 128,000-token context window with image input is documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official GPT-4 Turbo model documentation",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4-turbo",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/gpt-4-turbo.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-openai-gpt-4-1",
       "source_id": "openai/gpt-4.1",
       "name": "GPT-4.1",
@@ -23164,6 +23465,613 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-openai-o1",
+      "source_id": "openai/o1",
+      "name": "o1",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o1",
+      "description": "The first o-series reasoning API line, served under the OpenAI Services Agreement without downloadable model weights; OpenAI names GPT-5.6 Sol as its recommended replacement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o1",
+        "description": "O-series reasoning model for hard analysis, math, coding, and planning",
+        "family": "o",
+        "release_date": "2024-12-05",
+        "last_updated": "2024-12-05",
+        "knowledge_cutoff": "2023-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o1 release identified by the dated snapshot o1-2024-12-17, announced December 2024. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Sol as the recommended replacement. The o1-pro sibling, the later o3 and o4-mini lines, the GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Reasoning behavior, image and PDF input, and structured outputs are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o1 model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o1",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o1.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-o1-pro",
+      "source_id": "openai/o1-pro",
+      "name": "o1-pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o1-pro",
+      "description": "A higher-compute version of the o1 reasoning line, served only through the Responses API under the OpenAI Services Agreement without downloadable model weights; OpenAI recommends the GPT-5.6 Sol line at reasoning.mode pro.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o1-pro",
+        "description": "O-series reasoning model for hard analysis, math, coding, and planning",
+        "family": "o-pro",
+        "release_date": "2025-03-19",
+        "last_updated": "2025-03-19",
+        "knowledge_cutoff": "2023-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o1-pro release identified by the dated snapshot o1-pro-2025-03-19, announced March 2025. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with the GPT-5.6 Sol line at reasoning.mode pro as the recommended replacement. The o1 line it derives from, the later o3-pro, the GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "The separate pricing and the Responses-API-only serving path are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Served only through the Responses API with no Chat Completions path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 8,
+        "overall": 4.5
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o1-pro model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o1-pro",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o1-pro.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-o3",
+      "source_id": "openai/o3",
+      "name": "o3",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o3",
+      "description": "A deliberate o-series reasoning API line, served under the OpenAI Services Agreement without downloadable model weights; OpenAI names GPT-5.6 Sol as its recommended replacement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o3",
+        "description": "Deliberate o-series reasoner for hard math, coding, and multi-step analysis",
+        "family": "o",
+        "release_date": "2025-04-16",
+        "last_updated": "2025-04-16",
+        "knowledge_cutoff": "2024-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o3 release identified by the dated snapshot o3-2025-04-16, announced April 2025. OpenAI announced its deprecation and documents the shutdown date of December 11, 2026 with GPT-5.6 Sol as the recommended replacement. The o3-mini and o3-pro siblings, the later GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Reasoning behavior, image and PDF input, and structured outputs are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o3 model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o3",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o3.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-o3-mini",
+      "source_id": "openai/o3-mini",
+      "name": "o3-mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o3-mini",
+      "description": "A smaller o-series reasoning API line, served under the OpenAI Services Agreement without downloadable model weights; OpenAI names GPT-5.6 Sol as its recommended replacement.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o3-mini",
+        "description": "Smaller o-series reasoner for economical coding, math, and planning tasks",
+        "family": "o-mini",
+        "release_date": "2024-12-20",
+        "last_updated": "2025-01-29",
+        "knowledge_cutoff": "2024-05",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o3-mini release identified by the dated snapshot o3-mini-2025-01-31, announced December 2024. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Sol as the recommended replacement. The o3 and o3-pro siblings, the later GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Reasoning behavior, structured outputs, and tool use are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o3-mini model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o3-mini",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o3-mini.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-o3-pro",
+      "source_id": "openai/o3-pro",
+      "name": "o3-pro",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o3-pro",
+      "description": "A higher-compute version of the o3 reasoning line, served only through the Responses API under the OpenAI Services Agreement without downloadable model weights; OpenAI recommends the GPT-5.6 Sol line at reasoning.mode pro.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o3-pro",
+        "description": "High-effort o3 tier for difficult technical reasoning and careful answers",
+        "family": "o-pro",
+        "release_date": "2025-06-10",
+        "last_updated": "2025-06-10",
+        "knowledge_cutoff": "2024-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o3-pro release identified by the dated snapshot o3-pro-2025-06-10, announced June 2025. OpenAI announced its deprecation and documents the shutdown date of December 11, 2026 with the GPT-5.6 Sol line at reasoning.mode pro as the recommended replacement. The o3 and o3-mini lines it derives from, the later GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "The separate pricing and the Responses-API-only serving path are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Served only through the Responses API with no Chat Completions path"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 8,
+        "overall": 4.5
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o3-pro model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o3-pro",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o3-pro.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-openai-o4-mini",
+      "source_id": "openai/o4-mini",
+      "name": "o4-mini",
+      "developer": "OpenAI",
+      "url": "https://developers.openai.com/api/docs/models/o4-mini",
+      "description": "A fast o-series reasoning API line, served under the OpenAI Services Agreement without downloadable model weights; OpenAI names GPT-5.6 Terra as its recommended replacement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "o4-mini",
+        "description": "Fast o-series model for compact reasoning, coding, and tool use",
+        "family": "o-mini",
+        "release_date": "2025-04-16",
+        "last_updated": "2025-04-16",
+        "knowledge_cutoff": "2024-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 200000,
+          "input": null,
+          "output": 100000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-OpenAI-Services-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "OpenAI provides the release as a managed service under the OpenAI Services Agreement, which permits customer applications but licenses no model weights for self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-OpenAI-Services-Agreement",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-22",
+          "scope": "Commercial access through the OpenAI API and related OpenAI services"
+        }
+      ],
+      "access_boundary": "This record represents the o4-mini release identified by the dated snapshot o4-mini-2025-04-16, announced April 2025. OpenAI announced its deprecation and documents the shutdown date of October 23, 2026 with GPT-5.6 Terra as the recommended replacement. The o1 and o3 lines, the later GPT-5 family, the OpenAI platform, and ChatGPT remain separate product or service boundaries.",
+      "strengths": [
+        "OpenAI documents the pinned snapshot, deprecation date, and recommended replacement first-party",
+        "Reasoning behavior, image input, tool use, and structured outputs are documented"
+      ],
+      "tradeoffs": [
+        "No developer-published weights are available for self-operation",
+        "Access ends at the documented shutdown date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 4.78
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official o4-mini model documentation",
+          "url": "https://developers.openai.com/api/docs/models/o4-mini",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official API deprecations and model lifecycle page",
+          "url": "https://developers.openai.com/api/docs/deprecations",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/openai/o4-mini.toml",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-perplexity-sonar",
