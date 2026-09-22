@@ -1457,6 +1457,11 @@
       "kind": "proprietary"
     },
     {
+      "id": "LicenseRef-Microsoft-API-Terms",
+      "name": "Microsoft Product and Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-MiniMax-M2-Modified-MIT",
       "name": "MiniMax M2 Modified MIT License",
       "kind": "restricted"
@@ -1570,6 +1575,11 @@
       "id": "LicenseRef-W3C-Software-Document",
       "name": "W3C Software and Document License",
       "kind": "open_content"
+    },
+    {
+      "id": "LicenseRef-Writer-API-Terms",
+      "name": "Writer API and Product Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-ZAI-API-Terms",
