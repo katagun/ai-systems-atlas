@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-18",
+  "updated_at": "2026-09-22",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -564,6 +564,12 @@
       "source_id": "openai/o4-mini-deep-research",
       "disposition": "held",
       "reason": "A specialized deep-research variant of the o4-mini line whose service was shut down on July 23, 2026; the model page remains for documentation only and no current serving identity exists, so it is held pending re-review if the variant returns.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "sdaia/allam-2-7b",
+      "disposition": "held",
+      "reason": "The first-party ALLaM-2.0-7B-Instruct weight repository is gated behind authentication and returns no anonymous model card, license text, or resolved boundary, so no authoritative identity or license evidence can be established from public sources. models.dev attributes the row to a stale sdaia org with no models; the distributor is Humain. Held in case the gate or license documentation opens.",
       "decided_at": "2026-09-22"
     }
   ]
