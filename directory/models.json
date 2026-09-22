@@ -119,6 +119,210 @@
       "verified_at": "2026-09-22"
     },
     {
+      "id": "model-ai21-jamba-large",
+      "source_id": "ai21/jamba-large",
+      "name": "Jamba Large 1.6",
+      "developer": "AI21 Labs",
+      "url": "https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6",
+      "description": "AI21 Labs' Jamba Large 1.6, a hybrid SSM-Transformer enterprise language model with 256K context, published under the Jamba Open Model License on a gated Hugging Face repository.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Jamba Large",
+        "description": "AI21's hybrid SSM-Transformer long-context model for enterprise agents and grounded generation",
+        "family": "jamba",
+        "release_date": "2025-07-01",
+        "last_updated": "2025-07-01",
+        "knowledge_cutoff": "2024-08-22",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Jamba-Open-Model-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The Jamba Large 1.6 weights are governed by the Jamba Open Model License, documented on AI21's license page and in the repository LICENSE.txt. The custom license is not OSI-approved: it carries a $50M revenue gate, attribution and naming requirements, and revocability.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Jamba-Open-Model-License",
+          "scope": "AI21-Jamba-Large-1.6 repository weights and checkpoints under the Jamba Open Model License",
+          "kind": "web_terms",
+          "url": "https://www.ai21.com/licenses/jamba-open-model-license",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the AI21-Jamba-Large-1.6 checkpoint released March 6, 2025. The Jamba Mini 1.6 sibling, earlier Jamba checkpoints, and third-party hosts are separate boundaries.",
+      "strengths": [
+        "The first Jamba record in the Atlas, a distinct hybrid SSM-Transformer architecture with 256K context",
+        "The governing license is documented on an official page and in the repository license file"
+      ],
+      "tradeoffs": [
+        "The custom Jamba license is not open source, with a revenue gate and revocability",
+        "The weight repository is gated and requires accepting terms"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 6,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 5.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/ai21/jamba-large.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Jamba 1.6 announcement",
+          "url": "https://www.ai21.com/blog/introducing-jamba-1-6",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-ai21-jamba-mini",
+      "source_id": "ai21/jamba-mini",
+      "name": "Jamba Mini 1.6",
+      "developer": "AI21 Labs",
+      "url": "https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6",
+      "description": "AI21 Labs' Jamba Mini 1.6, the 52-billion-parameter sibling checkpoint of the Jamba 1.6 line with 256K context, function calling, and structured output, published under the Jamba Open Model License.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Jamba Mini",
+        "description": "AI21's efficient, lightweight hybrid SSM-Transformer model for a wide range of tasks",
+        "family": "jamba",
+        "release_date": "2026-01-01",
+        "last_updated": "2026-01-01",
+        "knowledge_cutoff": "2024-08-22",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Jamba-Open-Model-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The Jamba Mini 1.6 weights are governed by the same Jamba Open Model License as the Large sibling, documented on AI21's license page and in the repository LICENSE.txt.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Jamba-Open-Model-License",
+          "scope": "AI21-Jamba-Mini-1.6 repository weights and checkpoints under the Jamba Open Model License",
+          "kind": "web_terms",
+          "url": "https://www.ai21.com/licenses/jamba-open-model-license",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the AI21-Jamba-Mini-1.6 checkpoint. The Jamba Large 1.6 sibling, earlier Jamba checkpoints, and third-party hosts are separate boundaries.",
+      "strengths": [
+        "A distinct sibling checkpoint of the Jamba 1.6 line with a separate size and record boundary",
+        "256K context with documented function calling and structured output"
+      ],
+      "tradeoffs": [
+        "Same custom-license and gating constraints as the Large sibling",
+        "Separate record from Large per the Atlas size-sibling convention, so readers must compare the pair"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 6,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 5.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/ai21/jamba-mini.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-alibaba-qwen2-5-coder-32b-instruct",
       "source_id": "alibaba/qwen2.5-coder-32b-instruct",
       "name": "Qwen2.5-Coder-32B-Instruct",
@@ -2405,6 +2609,103 @@
       "verified_at": "2026-09-12"
     },
     {
+      "id": "model-alibaba-qwen3-8-omni-flash",
+      "source_id": "alibaba/qwen3.8-omni-flash",
+      "name": "Qwen3.8 Omni Flash",
+      "developer": "Alibaba",
+      "url": "https://help.aliyun.com/en/model-studio/qwen3-8-omni-flash",
+      "description": "Alibaba's Qwen3.8 Omni Flash, an omni-modal model accepting text, image, audio, and video input with 1M context and enabled thinking, served through Alibaba Cloud Model Studio across six regions and QwenCloud.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Qwen3.8 Omni Flash",
+        "description": "Qwen omni model for text, vision, audio, and multimodal agent tasks",
+        "family": "qwen",
+        "release_date": "2026-09-17",
+        "last_updated": "2026-09-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Alibaba-Model-Studio-Agreement"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Qwen3.8 Omni Flash is served, not distributed, under the Alibaba Cloud Model Studio service agreement that governs the other reviewed hosted Qwen records.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Alibaba-Model-Studio-Agreement",
+          "scope": "Qwen3.8 Omni Flash hosted model and API served under Alibaba Cloud Model Studio terms",
+          "kind": "web_terms",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-8-omni-flash",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen3.8 Omni Flash hosted release served through Alibaba Cloud Model Studio, the successor to the qwen3.5-omni line. The qwen3.8-flash, qwen3.8-max, and open-weight Qwen releases are separate boundaries.",
+      "strengths": [
+        "Distinct new omni-modal line with fully documented native audio and video input and 1M context",
+        "Dated docs and a live serving presence across six regions and QwenCloud"
+      ],
+      "tradeoffs": [
+        "No downloadable weights, so self-operation is unavailable",
+        "A very fresh release with the lifecycle still settling"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 8,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.54
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/alibaba/qwen3.8-omni-flash.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-8-omni-flash",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-alibaba-qwq-32b",
       "source_id": "alibaba/qwq-32b",
       "name": "QwQ 32B",
@@ -4101,6 +4402,103 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-anthropic-claude-opus-5-5",
+      "source_id": "anthropic/claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "developer": "Anthropic",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "description": "Anthropic's Claude Opus 5.5, the first model of the Claude 5.5 family released September 22, 2026, a text-and-image model with 1M-token context and always-on adaptive thinking, served through the Claude API and major cloud marketplaces.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Opus 5.5",
+        "description": "Claude model for long-running agentic coding and knowledge work",
+        "family": "claude-opus",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Claude Opus 5.5 is served, not distributed, under Anthropic's commercial terms, which already govern the reviewed Opus and Opus 5 lines. No weights are released.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "Claude Opus 5.5 API access and related Anthropic services",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Opus 5.5 release of September 22, 2026, the first model of the Claude 5.5 family with the pinned claude-opus-5-5 API identifier. The reviewed Opus 5 and Opus 4.8 lines, earlier Opus releases, and independent hosts are separate boundaries.",
+      "strengths": [
+        "Dated first-party announcement and docs page with per-platform model identifiers and a retirement commitment of no sooner than September 2027",
+        "Served on the Claude API, Amazon Bedrock, Google Vertex AI, and Microsoft Foundry"
+      ],
+      "tradeoffs": [
+        "Closed weights served only through managed APIs",
+        "Always-on thinking cannot be disabled and forced tool-use errors break some Opus 5 migration paths"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 9,
+        "overall": 4.94
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/anthropic/claude-opus-5-5.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://www.anthropic.com/claude-opus-5-5",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-anthropic-claude-sonnet-4-5",
@@ -11822,6 +12220,120 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-google-gemma-4-12b-it",
+      "source_id": "google/gemma-4-12b-it",
+      "name": "Gemma 4 12B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/gemma-4-12B-it",
+      "description": "Google's Gemma 4 12B instruction-tuned unified multimodal release of June 3, 2026, an encoder-free model accepting text, image, audio, and video input with 256K context, published as Apache-2.0 open weights.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemma 4 12B IT",
+        "description": "Compact Gemma 4 instruction model for open, self-hosted chat and reasoning",
+        "family": "gemma",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-06-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/gemma-4-12B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card and Google's Gemma 4 license page state Apache-2.0 as the governing license; the repository ships no separate LICENSE file, matching the reviewed Gemma 4 31B IT record's evidence pattern. models.dev's release date and text-only modalities understate the first-party release.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Official google/gemma-4-12B-it model repository, Safetensors weights, tokenizer, and chat template",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/google/gemma-4-12B-it",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the google/gemma-4-12B-it instruction-tuned release of June 3, 2026. The Gemma 4 E2B, E4B, 26B A4B, and 31B variants, the base checkpoint, quantizations, and hosted Gemma services are separate boundaries.",
+      "strengths": [
+        "Ungated Safetensors weights on the official google org with an encoder-free unified multimodal architecture",
+        "Clear Apache-2.0 grant stated by the model card and Google's Gemma 4 license page"
+      ],
+      "tradeoffs": [
+        "The repository ships no LICENSE file; the grant rests on model-card metadata and the license page",
+        "models.dev's discovery metadata understates the release date and the audio and video input modalities"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/google/gemma-4-12b-it.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/google/gemma-4-12B-it",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Gemma 4 12B announcement and technical report",
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12b/",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-google-gemma-4-26b-a4b-it",
       "source_id": "google/gemma-4-26b-a4b-it",
       "name": "Gemma 4 26B A4B IT",
@@ -17988,6 +18500,101 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-mixedbread-toast-1",
+      "source_id": "mixedbread/toast-1",
+      "name": "Toast 1",
+      "developer": "Mixedbread AI",
+      "url": "https://www.mixedbread.com/blog/toast-1",
+      "description": "Mixedbread AI's Toast 1, a specialized search and knowledge-task model with tool-calling and 131K context, released August 13, 2026, served through the Mixedbread API and listed on Vercel AI Gateway.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Toast 1",
+        "description": "Specialized search model for knowledge-intensive questions, multi-step retrieval, and evidence synthesis",
+        "family": null,
+        "release_date": "2026-08-13",
+        "last_updated": "2026-08-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 131000,
+          "input": null,
+          "output": 4000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Mixedbread-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Toast 1 is served, not distributed; the governing terms are the Mixedbread service terms covering the search and API surface.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Mixedbread-Service-Terms",
+          "scope": "Toast 1 served through the Mixedbread API under Mixedbread service terms",
+          "kind": "web_terms",
+          "url": "https://www.mixedbread.com/pages/terms",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Toast 1 release of August 13, 2026, a search-agent specialization distinct from the open toast-harness tool loop. The Mixedbread Search service and independent hosts are separate boundaries.",
+      "strengths": [
+        "Dated first-party announcement and changelog entry with full API documentation",
+        "Dedicated model identifier with documented limits, and a second hosting path on Vercel AI Gateway"
+      ],
+      "tradeoffs": [
+        "API-only with no weights and no standalone model page beyond the agent and search surface",
+        "The search-agent framing needs the language-model boundary kept distinct from the Mixedbread service"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 4.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/mixedbread/toast-1.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://www.mixedbread.com/blog/toast-1",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-moonshotai-kimi-k2-thinking",
       "source_id": "moonshotai/kimi-k2-thinking",
       "name": "Kimi K2 Thinking",
@@ -18416,6 +19023,102 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-moonshotai-kimi-k2-8-preview",
+      "source_id": "moonshotai/kimi-k2.8-preview",
+      "name": "Kimi K2.8 Preview",
+      "developer": "Moonshot AI",
+      "url": "https://www.kimi.com/code/docs/en/kimi-code/whats-new.html",
+      "description": "Moonshot AI's Kimi K2.8 Preview, a text, image, and video reasoning model with 1M-token context released September 11, 2026, served behind the kimi-for-coding API identifier across Kimi Code surfaces.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Kimi K2.8 Preview",
+        "description": "Kimi coding model with more efficient thinking and up to 1M context, available through Kimi Code",
+        "family": "kimi-k2",
+        "release_date": "2026-09-11",
+        "last_updated": "2026-09-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Kimi K2.8 Preview is served, not distributed, under the Moonshot platform and Kimi Code service terms; no weights are released and no existing Kimi weight-license identifier applies to this API-only preview.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Kimi K2.8 Preview served through Kimi Code under Moonshot platform service terms",
+          "kind": "web_terms",
+          "url": "https://www.kimi.com/code/docs/en/kimi-code/whats-new.html",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Kimi K2.8 Preview release of September 11, 2026, served behind the unchanged kimi-for-coding API identifier across Kimi Code, Kimi Code CLI, and Kimi Work. The reviewed Kimi K3, K2.7 Code, and earlier K2 records are separate boundaries.",
+      "strengths": [
+        "Dated first-party changelog identity and a full rollout across all Kimi membership tiers",
+        "Distinct capabilities including 1M-token context and K3-style thinking controls versus K2.7 Code"
+      ],
+      "tradeoffs": [
+        "Identity is a changelog entry only, with no dedicated model page, and the release serves behind a rotating alias",
+        "Preview label and no weights, so lifecycle and artifact certainty are limited"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.88
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/moonshotai/kimi-k2.8-preview.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://www.kimi.com/code/docs/en/kimi-code/whats-new.html",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-moonshotai-kimi-k3",
       "source_id": "moonshotai/kimi-k3",
       "name": "Kimi K3",
@@ -18530,6 +19233,106 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-motif-technologies-motif-3",
+      "source_id": "motif-technologies/motif-3",
+      "name": "Motif 3",
+      "developer": "Motif Technologies",
+      "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+      "description": "Motif Technologies' Motif 3, a 315-billion-parameter MoE language model with 13.2B active parameters, published as ungated open weights under a confirmed MIT license with a bundled technical report.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Motif 3",
+        "description": "Motif 3 is a large-scale, decoder-only Mixture-of-Experts (MoE) language model with 314 billion total parameters and 13.2 billion parameters activated per token.",
+        "family": "motif",
+        "release_date": "2026-08-07",
+        "last_updated": "2026-08-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Model weights",
+            "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository carries a LICENSE.md file with the standard MIT text under Copyright 2026 Motif Technologies Corp., confirming the reported MIT grant.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Motif-3 repository, Safetensors weights, tokenizer, and chat template under the MIT license file",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Motif-Technologies/Motif-3/blob/main/LICENSE.md",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Motif-3 weight release. The Beta and NVFP4 variants, base checkpoints, and independent hosts are separate boundaries.",
+      "strengths": [
+        "Truly permissive MIT license confirmed by an in-repository license file",
+        "First Motif line for the Atlas with a flagship-scale MoE and a first-party technical report"
+      ],
+      "tradeoffs": [
+        "Roughly 630 GB of BF16 weights make deployment heavy",
+        "A young vendor with thin provenance and a text-only English and Korean surface"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 10,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 7,
+        "overall": 7.26
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/motif-technologies/motif-3.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-nvidia-llama-3-1-nemotron-70b-instruct",
@@ -25168,6 +25971,105 @@
       "verified_at": "2026-09-22"
     },
     {
+      "id": "model-openbmb-minicpm5-2b",
+      "source_id": "openbmb/minicpm5-2b",
+      "name": "MiniCPM5-2B",
+      "developer": "OpenBMB",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "description": "OpenBMB's MiniCPM5-2B, the second checkpoint of the MiniCPM5 series, a dense 2.5-billion-parameter on-device language model with 131K context and tool calling, published under Apache-2.0.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "MiniCPM5-2B",
+        "description": "Dense 2B-class open-source model for on-device and resource-constrained use, with native long-context support, tool calling, and agentic tasks",
+        "family": null,
+        "release_date": "2026-09-06",
+        "last_updated": "2026-09-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/openbmb/MiniCPM5-2B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Hugging Face repository ships no separate LICENSE file, but the OpenBMB/MiniCPM GitHub repository carries the full Apache-2.0 text, matching the evidence used for the reviewed MiniCPM5-1B record.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "MiniCPM5-2B weights and checkpoints under the OpenBMB Apache-2.0 family license",
+          "kind": "web_terms",
+          "url": "https://github.com/OpenBMB/MiniCPM/blob/main/LICENSE",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the MiniCPM5-2B weight release, the sibling checkpoint of the reviewed MiniCPM5-1B. The MiniCPM5-1B and MiniCPM3/4 generations, quantized and GGUF variants, and hosted services are separate boundaries.",
+      "strengths": [
+        "Genuine sibling checkpoint of the just-reviewed MiniCPM5-1B with strong coding, math, and agent strengths at 2B scale",
+        "Apache-2.0 grant backed by the first-party OpenBMB/MiniCPM repository license text"
+      ],
+      "tradeoffs": [
+        "The Hugging Face repository ships no LICENSE file; the grant is evidenced from the GitHub repository",
+        "The 2B scale ceiling limits the hardest reasoning and coding tasks"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 3,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 7,
+        "overall": 7.02
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/openbmb/minicpm5-2b.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-perplexity-sonar",
       "source_id": "perplexity/sonar",
       "name": "Sonar",
@@ -26173,6 +27075,225 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-xai-grok-4-7",
+      "source_id": "xai/grok-4.7",
+      "name": "Grok 4.7",
+      "developer": "SpaceXAI (xAI)",
+      "url": "https://docs.x.ai/developers/models/grok-4.7",
+      "description": "xAI's Grok 4.7, released September 21, 2026, a text-and-image model with 500K context and configurable reasoning effort, served through the Grok API, Grok Build, and several independent hosts.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Grok 4.7",
+        "description": "xAI's frontier model for long-running agents, coding, knowledge work, and visual projects",
+        "family": "grok",
+        "release_date": "2026-09-21",
+        "last_updated": "2026-09-21",
+        "knowledge_cutoff": "2026-05",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 500000,
+          "input": null,
+          "output": 500000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Grok 4.7 is served, not distributed, under the xAI enterprise terms and acceptable use policy that already govern the reviewed Grok 4.6 record. No weights are released.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "scope": "Business access to Grok 4.7 through the xAI API and related xAI services",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "scope": "Acceptable-use, anti-distillation, and competing-model restrictions incorporated into xAI service access",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Grok 4.7 release of September 21, 2026, with the pinned grok-4.7 API identifier. The reviewed Grok 4.6 and Grok 4.1 lines, the Grok Voice Transcribe line, and independent hosts are separate boundaries.",
+      "strengths": [
+        "Dated first-party announcement and full docs model page with pricing, rate limits, and regions",
+        "Distinct new base model independent of the reviewed Grok 4.6 line, with a documented safeguard stack"
+      ],
+      "tradeoffs": [
+        "Closed weights with no dated snapshot identifiers or retirement policy",
+        "No fixable snapshot identity beyond the launch-dated release"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/xai/grok-4.7.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://docs.x.ai/developers/models/grok-4.7",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Grok 4.7 announcement",
+          "url": "https://x.ai/news/grok-4-7",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-xai-grok-voice-stt-1-0",
+      "source_id": "xai/grok-voice-stt-1.0",
+      "name": "Grok Voice Transcribe 1.0",
+      "developer": "SpaceXAI (xAI)",
+      "url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-text",
+      "description": "xAI's Grok Voice Transcribe 1.0, a speech-to-text model released April 17, 2026, transcribing audio in 25 languages through the STT API and WebSocket endpoint, being superseded by the Transcribe 2.0 release.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Grok Voice STT 1.0",
+        "description": "Grok Voice STT 1.0 is xAI's speech-to-text model. It supports transcription with word-level timestamps, optional speaker diarization, and multichannel audio.",
+        "family": null,
+        "release_date": "2026-08-04",
+        "last_updated": "2026-08-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 15000,
+          "input": null,
+          "output": 15000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-xAI-Enterprise-Terms",
+        "LicenseRef-xAI-AUP"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Grok Voice Transcribe 1.0 is served, not distributed, under the xAI enterprise terms and acceptable use policy used by the reviewed Grok records. The models.dev row names the catalog-invented 'Grok Voice STT 1.0'; the first-party identity is grok-voice-transcribe-1.0.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-xAI-Enterprise-Terms",
+          "scope": "Access to the Grok Voice Transcribe 1.0 STT API and related xAI services",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/terms-of-service-enterprise",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "license_id": "LicenseRef-xAI-AUP",
+          "scope": "Acceptable-use and anti-distillation restrictions incorporated into xAI service access",
+          "kind": "web_terms",
+          "url": "https://x.ai/legal/acceptable-use-policy",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Grok Voice Transcribe 1.0 speech-to-text release served through the xAI STT API, launched April 17, 2026, and named by the pinned grok-voice-transcribe-1.0 slug. The Transcribe 2.0 successor, the speech-to-speech voice lines, and the Grok 4.x lines are separate boundaries.",
+      "strengths": [
+        "Dated first-party announcement and a dedicated docs page naming the model with endpoints, pricing, and limits",
+        "License path identical to the already-verified Grok records, unambiguous for an API-only line"
+      ],
+      "tradeoffs": [
+        "The models.dev identity 'Grok Voice STT 1.0' diverges from the first-party grok-voice-transcribe-1.0 slug",
+        "Already being superseded by Transcribe 2.0 and scheduled for deprecation, so the line carries a terminating lifecycle"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 7,
+        "overall": 3.76
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/xai/grok-voice-stt-1.0.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-text",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Grok STT and TTS APIs announcement",
+          "url": "https://x.ai/news/grok-stt-and-tts-apis",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
       "id": "model-stepfun-step-3-5-flash",
       "source_id": "stepfun/step-3.5-flash",
       "name": "Step 3.5 Flash",
@@ -26385,6 +27506,102 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-stepfun-step-5-preview",
+      "source_id": "stepfun/step-5-preview",
+      "name": "Step 5 Preview",
+      "developer": "StepFun",
+      "url": "https://www.stepfun.com/step-5-preview",
+      "description": "StepFun's Step 5 Preview, a reasoning-focused sparse-MoE model with 600B total and 27B active parameters, 1M context, and vision input, announced September 20, 2026, with weights scheduled to open on October 15, 2026.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Step 5 Preview",
+        "description": "StepFun's next-generation flagship base model for coding and professional knowledge work, with native text, image, and video input and a 1M-token context window",
+        "family": null,
+        "release_date": "2026-09-16",
+        "last_updated": "2026-09-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": 1000000,
+          "output": 1000000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Step 5 Preview is currently served through the StepFun Open Platform API with closed weights; the governing terms are the StepFun Open Platform service terms. The announcement schedules weight release for October 15, 2026, which is not yet distributable.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Step 5 Preview served through the StepFun Open Platform API under StepFun service terms",
+          "kind": "web_terms",
+          "url": "https://platform.stepfun.ai/docs/en/guides/models/step-5-preview",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Step 5 Preview release announced September 20, 2026, a distinct line from the reviewed Step 3.5 Flash and Step 3.7 Flash records. The scheduled weight release and the earlier Step 3.x lines are separate boundaries.",
+      "strengths": [
+        "Clear dated first-party announcement and platform docs establishing the Step 5 line identity",
+        "Distinct 1M-context vision-capable reasoning architecture with reasoning_effort support"
+      ],
+      "tradeoffs": [
+        "Closed weights until the scheduled October 15, 2026 release, so the record is API-only today",
+        "Preview label and a very fresh release with a thin ecosystem runtime"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/stepfun/step-5-preview.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://www.stepfun.com/step-5-preview",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-swiss-ai-apertus-70b",
@@ -27643,6 +28860,400 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-vispark-vision-large",
+      "source_id": "vispark/vision-large",
+      "name": "Vision Large",
+      "developer": "Vispark",
+      "url": "https://vispark.in/ai",
+      "description": "Vispark's Vision Large, the most capable tier of the Vision foundational model line, a multimodal model with text output and 1M context served through the Vispark Lab API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Vision Large",
+        "description": "Most capable Vision model for complex reasoning, detailed media analysis, and structured output over a 1M-token context window.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Vispark-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Vision Large is served, not distributed, under the Vispark service terms; no weights are released.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Vispark-Service-Terms",
+          "scope": "Vision Large served through the Vispark Lab API under Vispark service terms",
+          "kind": "web_terms",
+          "url": "https://vispark.in/terms",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Vision Large tier of the Vispark Vision line. The Vision Medium and Vision Small tiers are separate records, and the consumer Chat product with image and voice generation is a separate service boundary.",
+      "strengths": [
+        "First-party model page, lab, and dated launch blog establish the line identity",
+        "Live API with a documented 1M-token context and three-tier pricing"
+      ],
+      "tradeoffs": [
+        "No fixed snapshot identity beyond the dateless vision-large tier name",
+        "API output is text while the consumer product advertises image and voice generation, which needs careful scoping"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/vispark/vision-large.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://vispark.in/ai",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-vispark-vision-medium",
+      "source_id": "vispark/vision-medium",
+      "name": "Vision Medium",
+      "developer": "Vispark",
+      "url": "https://vispark.in/ai",
+      "description": "Vispark's Vision Medium, the balanced tier of the Vision foundational model line, a multimodal model with text output served through the Vispark Lab API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Vision Medium",
+        "description": "Balanced multimodal model pairing a 1M-token context window with deeper reasoning for analysis, content creation, and tool use across text, image, audio, video, and PDF inputs.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Vispark-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Vision Medium is served, not distributed, under the Vispark service terms; no weights are released.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Vispark-Service-Terms",
+          "scope": "Vision Medium served through the Vispark Lab API under Vispark service terms",
+          "kind": "web_terms",
+          "url": "https://vispark.in/terms",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Vision Medium tier of the Vispark Vision line. The Vision Large and Vision Small tiers are separate records, and the consumer Chat product is a separate service boundary.",
+      "strengths": [
+        "First-party model page and dated launch blog establish the line identity",
+        "Live API with documented pricing for a distinct balanced tier"
+      ],
+      "tradeoffs": [
+        "No fixed snapshot identity beyond the dateless vision-medium tier name",
+        "API output is text while the consumer product advertises image and voice generation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/vispark/vision-medium.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://vispark.in/ai",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-vispark-vision-small",
+      "source_id": "vispark/vision-small",
+      "name": "Vision Small",
+      "developer": "Vispark",
+      "url": "https://vispark.in/ai",
+      "description": "Vispark's Vision Small, the fastest and lowest-cost tier of the Vision foundational model line, a multimodal model with text output served through the Vispark Lab API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Vision Small",
+        "description": "Fast, low-cost multimodal model for understanding text, images, audio, video, and PDFs, with tool calling and a 1M-token context window.",
+        "family": null,
+        "release_date": "2024-05-15",
+        "last_updated": "2026-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Vispark-Service-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Vision Small is served, not distributed, under the Vispark service terms; no weights are released.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Vispark-Service-Terms",
+          "scope": "Vision Small served through the Vispark Lab API under Vispark service terms",
+          "kind": "web_terms",
+          "url": "https://vispark.in/terms",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Vision Small tier of the Vispark Vision line. The Vision Large and Vision Medium tiers are separate records, and the consumer Chat product is a separate service boundary.",
+      "strengths": [
+        "First-party model page and dated launch blog establish the line identity",
+        "Live API with a documented low-cost tier for fast responses"
+      ],
+      "tradeoffs": [
+        "No fixed snapshot identity beyond the dateless vision-small tier name",
+        "API output is text while the consumer product advertises image and voice generation"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 7,
+        "overall": 3.74
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/vispark/vision-small.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://vispark.in/ai",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-vivgrid-viv-fast",
+      "source_id": "vivgrid/viv-fast",
+      "name": "Viv Fast",
+      "developer": "Vivgrid",
+      "url": "https://vivgrid.com/docs/models/viv-fast",
+      "description": "Vivgrid's Viv Fast, a closed-weight multimodal model with 1M context and 256K output marketed for low-cost tool-calling, served through the Vivgrid API with a dated September 21, 2026 docs identity.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Viv Fast",
+        "description": "Fast coding model",
+        "family": null,
+        "release_date": "2026-09-21",
+        "last_updated": "2026-09-21",
+        "knowledge_cutoff": "2026-09",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Model docs",
+            "url": "https://docs.vivgrid.com/models/viv-fast"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Viv Fast is served, not distributed, under the Vivgrid service terms; no weights or license file exist and the provenance of the underlying weights is not first-party disclosed.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Viv Fast served through the Vivgrid API under Vivgrid service terms",
+          "kind": "web_terms",
+          "url": "https://vivgrid.com/docs/models/viv-fast",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the Viv Fast API model documented on Vivgrid's model page. Vivgrid is primarily a gateway provider, so the boundary keeps the reviewed API identity distinct from any underlying third-party model.",
+      "strengths": [
+        "Dated first-party docs page with concrete specs, pricing, and context limits",
+        "A low-cost API tier with a documented 1M-context serving surface"
+      ],
+      "tradeoffs": [
+        "Identity rests on a docs page alone with no announcement or model card",
+        "Provenance is unverified because Vivgrid is a gateway and the underlying model is not disclosed"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 6,
+        "overall": 3.6
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/vivgrid/viv-fast.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://vivgrid.com/docs/models/viv-fast",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-writer-palmyra-x4",
@@ -29045,6 +30656,216 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-6-flash",
+      "source_id": "xiaomi/mimo-v2.6-flash",
+      "name": "MiMo-V2.6-Flash",
+      "developer": "Xiaomi",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
+      "description": "Xiaomi's MiMo-V2.6-Flash, a 309-billion-parameter sparse-MoE omnimodal model with 15B active parameters and 1M context, released September 22, 2026, as MIT open weights with a first-party API. models.dev reports open weights as false, which contradicts the first-party announcement.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2.6-Flash",
+        "description": "MiMo Flash model for multimodal coding agents and long-context automation",
+        "family": "mimo",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-09-22",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Hugging Face model card declares MIT and Xiaomi's V2.6 announcement states the weights are fully open-sourced. The repository card metadata is the governing evidence; models.dev's open-weights flag is stale.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "XiaomiMiMo/MiMo-V2.6-Flash-RL repository weights, Safetensors checkpoint, tokenizer, and chat template",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the MiMo-V2.6-Flash-RL release announced September 22, 2026, a distinct efficiency tier of the MiMo-V2.6 line. The MiMo-V2.6-Pro sibling, the reviewed V2 and V2.5 records, and the Pro UltraSpeed serving mode are separate boundaries.",
+      "strengths": [
+        "Fully open weights under a declared MIT grant with a technical report and RL harnesses",
+        "A distinct efficiency tier that outperforms the reviewed V2.5-Pro on agent benchmarks at a lower price"
+      ],
+      "tradeoffs": [
+        "A brand-new release with thin community runtime maturity",
+        "The 309-billion-parameter dense-MoE checkpoint is heavy to self-host"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.3
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/xiaomi/mimo-v2.6-flash.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "MiMo-V2.6 announcement",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2-6",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-xiaomi-mimo-v2-6-pro",
+      "source_id": "xiaomi/mimo-v2.6-pro",
+      "name": "MiMo-V2.6-Pro",
+      "developer": "Xiaomi",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "description": "Xiaomi's MiMo-V2.6-Pro, the flagship sparse-MoE omnimodal model of the V2.6 line with 1.02T total and 42B active parameters and 1M context, released September 22, 2026, as MIT open weights with a first-party API.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "MiMo-V2.6-Pro",
+        "description": "Stronger MiMo Pro tier for multimodal reasoning and coding-agent execution",
+        "family": "mimo",
+        "release_date": "2026-09-22",
+        "last_updated": "2026-09-22",
+        "knowledge_cutoff": "2026-09-22",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Hugging Face model card declares MIT and Xiaomi's V2.6 announcement states the weights are fully open-sourced. models.dev's open-weights flag is stale.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "XiaomiMiMo/MiMo-V2.6-Pro-RL repository weights, Safetensors checkpoint, tokenizer, and chat template",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "access_boundary": "This record represents the MiMo-V2.6-Pro-RL release announced September 22, 2026, the flagship tier of the MiMo-V2.6 line. The MiMo-V2.6-Flash sibling, the reviewed V2 and V2.5 records, and the Pro UltraSpeed serving mode (excluded as an alias) are separate boundaries.",
+      "strengths": [
+        "Fully open weights under a declared MIT grant with a technical report and RL harnesses",
+        "A distinct flagship tier marketed as the most powerful open-source model in its class"
+      ],
+      "tradeoffs": [
+        "The 1.02-trillion-parameter MoE is a serious self-hosting burden",
+        "Evaluations are vendor-reported and the release is days old with immature community verification"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 7,
+        "artifact_availability": 9,
+        "deployment_portability": 5,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.1
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/1bc95312f70441e339d5aa010ad656b9c7706952/models/xiaomi/mimo-v2.6-pro.toml",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "MiMo-V2.6 announcement",
+          "url": "https://mimo.mi.com/docs/en-US/news/latest/v2-6",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "metadata_verified_at": "2026-09-22",
+      "verified_at": "2026-09-22"
     },
     {
       "id": "model-zhipuai-glm-4-5",

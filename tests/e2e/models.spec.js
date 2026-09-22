@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 
 const QWEN = "model-alibaba-qwen2-5-coder-0-5b";
-const DEEPSEEK = "model-deepseek-deepseek-v3";
+const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
 
 test("Models exposes every source record and keeps Atlas reviews distinct", async ({ page }) => {
   await page.goto("/?view=models");
@@ -104,7 +104,7 @@ test("Models comparisons stay inside the model-access profile and restore from t
   await page.locator("#comparison-open").click();
   await expect(page.locator("#comparison-dialog .eyebrow")).toHaveText("Model access and deployability score");
   await expect(page.locator("#comparison-dialog thead")).toContainText("Qwen2.5-Coder-0.5B");
-  await expect(page.locator("#comparison-dialog thead")).toContainText("DeepSeek-V3");
+  await expect(page.locator("#comparison-dialog thead")).toContainText("DeepSeek V4 Pro");
   await expect(page.locator("#comparison-dialog")).toContainText("License Clarity · 22%");
   await expect(page.locator("#comparison-dialog")).toContainText("excludes output quality");
   await page.locator("#comparison-dialog .dialog-close").click();

@@ -571,6 +571,42 @@
       "disposition": "held",
       "reason": "The first-party ALLaM-2.0-7B-Instruct weight repository is gated behind authentication and returns no anonymous model card, license text, or resolved boundary, so no authoritative identity or license evidence can be established from public sources. models.dev attributes the row to a stale sdaia org with no models; the distributor is Humain. Held in case the gate or license documentation opens.",
       "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "nex-agi/nex-n2-pro",
+      "disposition": "held",
+      "reason": "The Hugging Face repository declares Apache-2.0 in model-card metadata but ships no LICENSE file anywhere in the repository, and the GitHub organization repo carries no license either, so the weight-scope grant cannot be confirmed under the Atlas evidence rule. The release is also a derivative of the Qwen3.5 base whose terms would govern in any case. Held until Nex publishes governing license text.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "quiverai/arrow-2",
+      "disposition": "held",
+      "reason": "The release's output modality is SVG vector graphics, not served language-model text; the first-party docs state output modality SVG and the terms describe generation of vector images. It is an image generator, and the taxonomy has no language-model type for a release whose primary output is image, so it stays a source record under the generator rule until the Atlas reviews generators.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "quiverai/arrow-2-telos",
+      "disposition": "held",
+      "reason": "A distinct tier of the Arrow 2 generation whose output modality is SVG vector graphics, not served language-model text; same image-generator shape as arrow-2, so it stays a source record under the generator rule until the Atlas reviews generators.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "typesafe/jev-latest",
+      "disposition": "held",
+      "reason": "The models.dev row is the moving jev-latest alias whose snapshot names the model Jev with a September 15, 2026 release date, which diverges from the Atlas review pinned to jev-1.13.0. Linking would bind the reviewed record to a moving target, so the row is held pending a stable versioned models.dev row for the pinned release.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "xiaomi/mimo-v2.6-pro-ultraspeed",
+      "disposition": "excluded",
+      "reason": "The name is an ultra-high-speed serving mode of the MiMo-V2.6-Pro release with no independent weight repository, license, or fixed identity; the V2.6 announcement describes it as up to 20x faster inference on the same weights. Mirrors the excluded mimo-v2.5-pro-ultraspeed precedent.",
+      "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "unbiased/pareto",
+      "disposition": "excluded",
+      "reason": "The release is a blended composite service that runs several frontier and open models per request and keeps the best answer; no distinct trained artifact or fixed single-model identity exists. Consistent with the excluded sakana/fugu composite precedent; a gateway service is not a model release.",
+      "decided_at": "2026-09-22"
     }
   ]
 }
