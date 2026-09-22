@@ -264,9 +264,12 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-mini-4b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-nano-12b-v2-vl/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-nano-9b-v2/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-3-5-turbo/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1-nano/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1/</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-turbo/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-1-codex-max/</loc><lastmod>2026-09-16</lastmod></url>
@@ -299,6 +302,12 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-safeguard-20b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-realtime-2-1/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-realtime-whisper/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o1-pro/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o1/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3-mini/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3-pro/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o4-mini/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-deep-research/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-pro/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-reasoning-pro/</loc><lastmod>2026-09-18</lastmod></url>

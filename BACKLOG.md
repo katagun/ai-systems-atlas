@@ -84,7 +84,7 @@ Ideas from the 2026-09-20 brainstorm on [TypeSafe](https://docs.typesafe.ai/llms
 
 ### Coverage batches
 
-- [ ] Curate the forty-first models.dev queue batch: OpenAI safeguards, Whisper, and newer API lines (`openai/gpt-oss-safeguard-120b`, `gpt-oss-safeguard-20b`, `whisper-large-v3`, `whisper-large-v3-turbo`, `gpt-5.2-pro`, `gpt-6-astra-fast`, `gpt-realtime-2.1`, `gpt-realtime-whisper`). The weight lines are Apache-2.0 or OpenAI-licensed; the API lines sit under the existing OpenAI services agreement. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`. The retired o1/o3/GPT-3.5/GPT-4 lines stay queued for a disposition batch later.
+- [ ] Curate the forty-third models.dev queue batch: the remaining non-OpenAI queue lines (`alibaba/qwen3-coder-next`, `alibaba/qwq-plus`, `deepseek/deepseek-v4-flash-0423`, `deepseek/deepseek-v4.1-flash`, `microsoft/mai-code-1-flash`, `microsoft/mai-code-1.1-flash`, `thinkingmachines/inkling`, `thinkingmachines/inkling-small`, `writer/palmyra-x4`, `writer/palmyra-x5`, and the singles `aisingapore/gemma-sea-lion-v4-27b-it`, `ibm/granite-4-h-micro`, `inclusionai/ling-3.0-flash-fin`, `meituan/longcat-2.0`, `openbmb/minicpm5-1b`, `sdaia/allam-2-7b`, `trendyol/asure-12b`). The Google embedding and Lyria audio lines and the NVIDIA embed and rerank lines stay queued out of scope as unscored source records. Promote or exclude every reviewed candidate in the same change with first-party evidence and the `model_access` score under `docs/MODELS.md`.
 
 ### Reader experience
 
