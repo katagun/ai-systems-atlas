@@ -136,7 +136,10 @@ request headers, because a `304 Not Modified` answer carries no body to store. W
 heading of the same or higher level, or the element carrying the id. If the id is missing
 from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a
 `TERMS_SECTION_IDS` entry only after a stored diff shows a page's churn sits outside its
-terms. An entry from before stored text gains its text silently when its hash is unchanged,
+terms. Evaluated 2026-09-23 with no entry added: `https://deepinfra.com/terms` carries only
+heading ids and its h1 section spans the footer `Latest Models` menu, and
+`https://cohere.com/terms-of-use` has no stable id around its terms (React-generated ids only).
+An entry from before stored text gains its text silently when its hash is unchanged,
 and an anchored URL moves from its whole-page baseline to its section silently only when the
 page still hashes to that baseline; any other difference stays drift until reviewed. A page without a
 baseline gets one on its first successful observation only when every review date for that
