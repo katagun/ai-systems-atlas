@@ -70,7 +70,9 @@ uv run python scripts/promote_model_candidate.py init PROVIDER/MODEL --output mo
 uv run python scripts/promote_model_candidate.py check model-review.json
 uv run python scripts/promote_model_candidate.py apply model-review.json
 uv run python scripts/sync_web_data.py
+uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
+node scripts/build_asset_version.mjs
 ```
 
 `init` copies only the candidate ID, attributed `source_metadata`, and exact commit-pinned models.dev evidence URL. It deliberately leaves all human-owned classifications, license conclusions, prose, scores, evidence dates, and review dates incomplete. Complete the draft from authoritative sources before running `check`.

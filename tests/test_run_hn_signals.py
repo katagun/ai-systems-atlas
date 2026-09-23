@@ -145,6 +145,57 @@ class VerifierTests(unittest.TestCase):
         )
         self.assertEqual(problems, [])
 
+    def test_a_queue_without_a_signals_list_is_reported_not_raised(self) -> None:
+        from scripts import verify_signal_pages
+
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        path.write_text('{"version": "1.0", "signals": {}}', encoding="utf-8")
+        problems = verify_signal_pages.verify(
+            refresh=True, fetcher=lambda url: "page", signals_path=path
+        )
+        self.assertTrue(any("malformed" in problem for problem in problems), problems)
+
+    def test_a_readable_signal_missing_its_url_is_reported_not_fetched(
+        self,
+    ) -> None:
+        from scripts import verify_signal_pages
+
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        fetched: list[str] = []
+
+        def fetcher(url: str) -> str:
+            fetched.append(url)
+            return "page"
+
+        path.write_text(
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "signals": [
+                        None,
+                        {
+                            "story_id": "7",
+                            "page_status": "readable",
+                            "assessment": {"verdict": "worth_review"},
+                        },
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=fetcher, signals_path=path, baseline=[]
+        )
+        self.assertTrue(
+            any("not an object" in problem for problem in problems), problems
+        )
+        self.assertTrue(any("missing url" in problem for problem in problems), problems)
+        self.assertEqual([], fetched)
+
     def test_the_verifier_hashes_a_page_exactly_as_the_sweep_did(self) -> None:
         """The sweep pins the digest; the verifier reproduces it. Two extractors that
         disagreed by one character would report drift on every page, every day."""

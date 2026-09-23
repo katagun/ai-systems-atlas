@@ -290,6 +290,25 @@ class RenderTests(unittest.TestCase):
         self.assertNotIn("A claim.", text)
         self.assertIn("0 flagged at confidence 0.6 or above, 1 below", text)
 
+    def test_zero_confidence_sorts_below_positive_and_unknown_confidence(
+        self,
+    ) -> None:
+        """0.0 is the weakest signal, not a missing one: `or 1.0` ranked it first."""
+        report = cfs.BlockReport(
+            "o/r",
+            quotes_checked=3,
+            claims=[
+                {"sentence": "Zero.", "choice": "contradicted", "confidence": 0.0},
+                {"sentence": "Strong.", "choice": "contradicted", "confidence": 0.9},
+                {"sentence": "Unknown.", "choice": "contradicted"},
+            ],
+        )
+        listed = report.listed_claims(0.0)
+        self.assertEqual(
+            ["Unknown.", "Strong.", "Zero."],
+            [claim["sentence"] for claim in listed],
+        )
+
     def test_a_missing_quote_is_always_listed(self) -> None:
         report = cfs.BlockReport("o/r", quotes_checked=1, quotes_missing=["never said"])
         text = cfs.render([report], judged=False)

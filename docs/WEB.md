@@ -195,5 +195,6 @@ Then verify in a browser:
 30. open a reviewed model with `source_id: null` and confirm the card and dialog show "Not yet listed on models.dev", the metadata is credited to Atlas, and the record is counted in the kicker.
 31. confirm card badges on a system from each family, an inference service, and a local runtime; confirm reviewed and imported models and specifications show none; confirm a badge-less card keeps its footer at the bottom; confirm badges read as outlined chips distinct from the source and license pills; hover a badge for its definition; and find every badge in Taxonomy in both palettes.
 32. switch to Agent packs, reload the scoped URL, combine every filter, open a process-kit and a marketplace detail, follow a packaging-format link into Specifications, and confirm no score, sort-by-score, or Compare control appears; search the mixed Directory for a pack; confirm Superpowers is listed inline among the packs with no score or Compare and opens the system dialog.
+33. once the robots scope ships, open it, confirm records list alphabetically with no sort control, no score, no Compare control, and no Finder goal; open a record dialog and confirm its evidence roles render.
 
 Use semantic controls and preserve keyboard operation, focus visibility, reduced-motion behavior, and meaningful accessible names.
