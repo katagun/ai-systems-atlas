@@ -67,6 +67,16 @@ def hit(title: str, url: str | None, points: int) -> dict:
 
 
 class GateTests(unittest.TestCase):
+    def test_a_hit_missing_created_at_is_dropped(self) -> None:
+        story = hit("Launch", "https://v.example/x", 99)
+        del story["created_at"]
+        self.assertEqual([], kept_stories({"hits": [story]}, 10))
+
+    def test_a_hit_missing_object_id_is_dropped(self) -> None:
+        story = hit("Launch", "https://v.example/x", 99)
+        del story["objectID"]
+        self.assertEqual([], kept_stories({"hits": [story]}, 10))
+
     def test_a_story_without_an_outbound_link_is_dropped(self) -> None:
         payload = {"hits": [hit("Ask HN: anything?", None, 90)]}
         self.assertEqual(kept_stories(payload, points_floor=10), [])
@@ -276,6 +286,30 @@ class DocumentTests(unittest.TestCase):
         document = self.build(boom)
         self.assertEqual(document["signals"][0]["page_status"], "failed")
         self.assertIsNone(document["signals"][0]["content_sha256"])
+
+    def test_a_story_missing_identity_fields_is_skipped_not_recorded(self) -> None:
+        """A deleted or flagged HN row lacks url/objectID; it must not raise."""
+        good = {
+            "objectID": "49616354",
+            "title": "Mercury 2.5",
+            "url": "https://vendor.example/launch",
+            "points": 231,
+            "num_comments": 88,
+            "created_at": "2026-09-08T20:14:52Z",
+        }
+        document = sweep_hackernews.build_document(
+            [good, {"title": "no url, no id", "points": 500}, "not-a-dict"],
+            window_start="2026-09-07T00:00:00Z",
+            window_end="2026-09-08T00:00:00Z",
+            points_floor=10,
+            story_count=3,
+            qualifying_count=3,
+            suppressed=0,
+            discovered_at="2026-09-09",
+            fetcher=lambda url: SENTINEL_PAGE_TEXT,
+        )
+        self.assertEqual(1, len(document["signals"]))
+        self.assertEqual("49616354", document["signals"][0]["story_id"])
 
     def test_no_signal_carries_a_classification_field(self) -> None:
         document = self.build(lambda url: "text")

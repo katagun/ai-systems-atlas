@@ -113,7 +113,8 @@ A candidate's `triage` block is likewise evidence, not a conclusion: accepting a
 4. Score only against the matching family profile.
 5. Record strengths, weaknesses, why the project matters, confidence, and verification date.
 6. Remove or resolve any corresponding candidate or license-review record.
-7. Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py`.
+7. Run `uv run python scripts/sync_web_data.py`, `uv run python scripts/build_web_payload.py`,
+   `uv run python scripts/build_share_pages.py`, and `node scripts/build_asset_version.mjs`.
 8. Run validation and tests with `uv`, then exercise the static UI.
 
 Automated system discovery writes durable candidates with proposed family and role only. Automated model ingestion writes provider-independent metadata to the public `models-dev.json` source snapshot and the separate review queue without a proposed Atlas license, source model, boundary, or score. Source rows and candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.
