@@ -86,8 +86,8 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
   await expect(page.locator("#badge-legend-chip")).toBeHidden();
 });
 
-// Resolves once the page stops scrolling: focus and scrollTo both honour the
-// page's `scroll-behavior: smooth`, so measure only after it settles.
+// Resolves once the page stops scrolling: focus scrolling honours the page's
+// `scroll-behavior: smooth`, so measure only after it settles.
 const settleScroll = page => page.evaluate(() => new Promise(resolve => {
   let last = window.scrollY;
   const check = () => requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -102,12 +102,25 @@ const settleScroll = page => page.evaluate(() => new Promise(resolve => {
 // the bottom of the page the footer sits flush above the strip: neither under
 // it nor above a band of empty space.
 async function expectFooterClearsLegend(page) {
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await settleScroll(page);
-  const footer = await page.locator("footer").boundingBox();
-  const strip = await page.locator("#badge-legend").boundingBox();
-  expect(footer.y + footer.height).toBeLessThanOrEqual(strip.y + 1);
-  expect(footer.y + footer.height).toBeGreaterThanOrEqual(strip.y - 1);
+  // `goto` resolves on load, before the data-driven first render; the legend
+  // appears in the same task as that render, so wait for it before scrolling.
+  await expect(page.locator("#badge-legend")).toBeVisible();
+  // Jump to the end and poll until the page rests there: a smooth scroll can
+  // look settled before it starts, and the end moves if the page grows after
+  // the jump. Both edges then come from the one layout that met the condition.
+  const edges = await page.waitForFunction(() => {
+    const end = document.documentElement.scrollHeight - window.innerHeight;
+    if (Math.abs(window.scrollY - end) > 0.5) {
+      window.scrollTo({ top: end, behavior: "instant" });
+      return null;
+    }
+    return {
+      footerBottom: document.querySelector("footer").getBoundingClientRect().bottom,
+      stripTop: document.querySelector("#badge-legend").getBoundingClientRect().top,
+    };
+  }).then(handle => handle.jsonValue());
+  expect(edges.footerBottom).toBeLessThanOrEqual(edges.stripTop + 1);
+  expect(edges.footerBottom).toBeGreaterThanOrEqual(edges.stripTop - 1);
 }
 
 test("the open legend never covers the site footer, and phones start collapsed", async ({ page, browser }) => {
