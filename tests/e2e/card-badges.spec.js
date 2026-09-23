@@ -207,7 +207,8 @@ test("Taxonomy lists every badge under its family with its emblem", async ({ pag
     await expect(group.locator(".taxonomy-lede")).toHaveText(family.meaning);
     const expected = glossary.filter(entry => entry.family === id);
     await expect(group.locator(".taxonomy-item strong")).toHaveText(expected.map(entry => entry.name));
+    await expect(group.locator(".taxonomy-item p")).toHaveText(expected.map(entry => `${entry.definition} Shown on: ${entry.scopes.join(", ")}.`));
     await expect(group.locator(".taxonomy-item svg.badge-emblem")).toHaveCount(expected.length);
   }
-  await expect(page.locator('#taxonomy-content [data-badge-family="control"] .taxonomy-item').first()).toContainText("Shown on: Agent systems, Memory systems, Assistant systems.");
+  await expect(page.locator("#taxonomy-content [data-badge-family] .taxonomy-item")).toHaveCount(glossary.length);
 });
