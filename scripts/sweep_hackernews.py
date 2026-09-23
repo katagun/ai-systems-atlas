@@ -99,6 +99,35 @@ def denylisted_host(host: str, denylist: frozenset[str]) -> bool:
     return host in denylist or any(host.endswith("." + entry) for entry in denylist)
 
 
+def usable_story_fields(story: Any) -> tuple[str, str | int, str, int, str] | None:
+    """Identity fields a signal can be built from, or None when the row is malformed.
+
+    The attention source occasionally returns rows missing `url`, `objectID`,
+    `title`, `points`, or `created_at` (deleted or flagged stories). Both the
+    eligibility gate and the document builder use this check so neither raises
+    `KeyError` on such a row; malformed rows are dropped, never recorded.
+    """
+    if not isinstance(story, dict):
+        return None
+    url = story.get("url")
+    object_id = story.get("objectID")
+    title = story.get("title")
+    points = story.get("points")
+    created_at = story.get("created_at")
+    if (
+        not isinstance(url, str)
+        or not url
+        or not isinstance(object_id, str | int)
+        or not isinstance(title, str)
+        or not title.strip()
+        or not isinstance(points, int)
+        or not isinstance(created_at, str)
+        or not created_at
+    ):
+        return None
+    return url, object_id, title, points, created_at
+
+
 def eligible_stories_with_total(
     payload: dict[str, Any],
     *,
@@ -119,14 +148,14 @@ def eligible_stories_with_total(
     kept: list[dict[str, Any]] = []
     qualifying = 0
     for story in payload.get("hits", []):
-        if not isinstance(story, dict):
+        fields = usable_story_fields(story)
+        if fields is None:
             continue
-        host = registrable_host(story.get("url"))
+        url, _object_id, _title, points, _created_at = fields
+        host = registrable_host(url)
         if not host or denylisted_host(host, denylist):
             continue
-        if not isinstance(story.get("points"), int) or story["points"] < points_floor:
-            continue
-        if not isinstance(story.get("title"), str) or not story["title"].strip():
+        if points < points_floor:
             continue
         qualifying += 1
         if len(kept) < MAX_SIGNALS:
@@ -296,7 +325,10 @@ def build_document(
     """
     signals: list[dict[str, Any]] = []
     for story in stories:
-        url = story["url"]
+        fields = usable_story_fields(story)
+        if fields is None:
+            continue
+        url, object_id, title, points, created_at = fields
         page_status = "readable"
         digest: str | None = None
         try:
@@ -315,13 +347,13 @@ def build_document(
                 digest = content_hash(text)
         signals.append(
             {
-                "story_id": str(story["objectID"]),
-                "story_url": f"https://news.ycombinator.com/item?id={story['objectID']}",
-                "title": story["title"],
+                "story_id": str(object_id),
+                "story_url": f"https://news.ycombinator.com/item?id={object_id}",
+                "title": title,
                 "url": url,
-                "points": story["points"],
+                "points": points,
                 "num_comments": story.get("num_comments") or 0,
-                "submitted_at": story["created_at"],
+                "submitted_at": created_at,
                 "page_status": page_status,
                 "content_sha256": digest,
                 "fetched_at": f"{discovered_at}T00:00:00Z",

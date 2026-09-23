@@ -272,7 +272,18 @@ class BlockReport:
             if not isinstance(claim.get("confidence"), int | float)
             or claim["confidence"] >= min_confidence
         ]
-        return sorted(shown, key=lambda claim: -(claim.get("confidence") or 1.0))
+        # An explicit 0.0 confidence is the weakest signal, not a missing one:
+        # `or 1.0` would rank it strongest, so only None (unknown) defaults to 1.0.
+        return sorted(
+            shown,
+            key=lambda claim: (
+                -(
+                    claim["confidence"]
+                    if isinstance(claim.get("confidence"), int | float)
+                    else 1.0
+                )
+            ),
+        )
 
     @property
     def clean(self) -> bool:

@@ -67,7 +67,7 @@ The same rule applies to the collection-specific `inference_service`, `local_run
 
 The Finder is a transparent decision flow over the operational collections:
 
-1. choose a memory, agent, assistant, or inference-service direction;
+1. choose a memory, agent, assistant, inference-service, or local-runtime direction;
 2. choose a desired job, which maps to one or more system roles or one inference-service type;
 3. choose a priority supported by that record's own traits and score profile.
 

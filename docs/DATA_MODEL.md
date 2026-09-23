@@ -27,6 +27,8 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
+`directory/robots.json` is not in the table yet: the Robots collection plumbing has not landed (see the robots item in [`../BACKLOG.md`](../BACKLOG.md)), so it is neither canonical nor published, and the regeneration sequence in step 7 of [`ROBOTS.md`](ROBOTS.md) applies once it ships.
+
 The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Project record

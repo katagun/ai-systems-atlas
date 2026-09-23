@@ -412,6 +412,25 @@ class UpdateDirectoryTests(unittest.TestCase):
         self.assertGreater(successful_queries, 0)
         self.assertEqual([], failures)
 
+    def test_discovery_tolerates_a_candidate_missing_repo_and_url(self) -> None:
+        previous = [{"name": "Broken"}]
+
+        candidates, new_count, _successful_queries, failures = (
+            update_directory.discover_candidates(
+                set(),
+                previous,
+                {"coding_agent": "agent_system"},
+                lambda _path, _token: {"items": []},
+                None,
+                "2026-08-25",
+                sleeper=lambda _seconds: None,
+            )
+        )
+
+        self.assertEqual(previous, candidates)
+        self.assertEqual(0, new_count)
+        self.assertEqual([], failures)
+
     def test_official_rss_discovery_creates_only_a_provisional_observation(
         self,
     ) -> None:
