@@ -354,7 +354,8 @@
   // collections always tests the same field and value. A badge only asserts
   // presence: a missing, null, false, or empty field never produces one, and a
   // card without a badge claims nothing is absent. A badge never repeats a fact
-  // the card already prints elsewhere (role pill, license row, footer). See
+  // the card already prints elsewhere (role pill, license row, footer). Each
+  // badge also names its family (frame and accent) and owns one glyph. See
   // docs/WEB.md "Card badges".
   const CARD_BADGES = {
     "local-first": {
