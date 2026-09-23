@@ -849,12 +849,8 @@ input:focus, select:focus {
 .badge-tooltip-family { font: 600 .6rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
 .badge-tooltip-name { color: var(--text); font-size: .86rem; }
 .badge-tooltip-definition { color: var(--muted); }
-/* The strip sits over whatever the Directory grid scrolls beneath it, but its
-   badge list is a read-only key with no controls or tab stops — nothing in it
-   is meant to be clicked. Leaving the whole strip pointer-transparent and
-   re-enabling it only on the close button and the "All badges" link means it
-   never steals a click aimed at a card control that a scroll happens to land
-   at the same screen position, in any width or scroll position. */
+/* The strip is fixed over the bottom of the viewport. Script measures its
+   height into --legend-h, and the rules below keep content clear of it. */
 .badge-legend {
   position: fixed;
   inset: auto 0 0;
@@ -868,9 +864,7 @@ input:focus, select:focus {
   background: var(--panel-glass);
   backdrop-filter: blur(10px);
   font-size: .78rem;
-  pointer-events: none;
 }
-.badge-legend-more, .badge-legend-close { pointer-events: auto; }
 .badge-legend[hidden], .badge-legend-chip[hidden] { display: none; }
 .badge-legend-title { margin: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .badge-legend-items { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: 0; padding: 0; list-style: none; }
@@ -896,15 +890,12 @@ input:focus, select:focus {
   font: 600 .72rem var(--font-body);
   cursor: pointer;
 }
-/* 16rem clears the comparison tray's tallest real state at 390px: four items
-   selected with the "Four is the maximum" message wrapped measures 223px tall
-   (tray itself sits 1rem off the bottom), 239px total — comfortably inside. */
-.badge-legend-chip.is-above-tray { bottom: 16rem; }
-/* 8rem clears the legend's tallest real state: the unscoped Systems union (11
-   badges) wraps to two rows at 768-800px, measured at 116.75px (7.3rem); the
-   single row at 1280px is 40px. Both are well inside this budget. */
-body.has-badge-legend footer { margin-bottom: 8rem; }
-body.has-badge-legend main { padding-bottom: 8rem; }
+/* The strip's height varies with scope and width (one or two rows on a desktop,
+   more on a phone), so clearance uses the measured --legend-h. Scroll padding keeps
+   focused and scrolled-to elements above the strip; the footer's margin, the
+   only bottom clearance, lets the page's end scroll clear of it. */
+html:has(body.has-badge-legend) { scroll-padding-bottom: var(--legend-h); }
+body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 .card-source-meta {
   display: flex;
   flex-wrap: wrap;

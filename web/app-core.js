@@ -377,7 +377,7 @@
       definition: "Can run agent actions in a local container or an external sandbox.",
       test: { field: "execution_boundaries", anyOf: ["container", "external_sandbox"] },
       family: "control",
-      glyph: '<path d="M16 10 21.5 12.8v6.4L16 22l-5.5-2.800v-6.4ZM10.5 12.8 16 15.6l5.5-2.800M16 15.6V22"/>',
+      glyph: '<path d="M16 10 21.5 12.8v6.4L16 22l-5.5-2.8v-6.4ZM10.5 12.8 16 15.6l5.5-2.8M16 15.6V22"/>',
     },
     "browser-control": {
       name: "Browser control",
@@ -454,7 +454,7 @@
       definition: "Accepts asynchronous jobs that trade an immediate response for separate capacity or pricing.",
       test: { field: "delivery_modes", anyOf: ["batch"] },
       family: "capability",
-      glyph: '<path d="m10.5 13 5.5-2.8 5.5 2.8-5.5 2.8ZM10.5 16.2 16 19l5.5-2.800M10.5 19.3 16 22l5.5-2.7"/>',
+      glyph: '<path d="m10.5 13 5.5-2.8 5.5 2.8-5.5 2.8ZM10.5 16.2 16 19l5.5-2.8M10.5 19.3 16 22l5.5-2.7"/>',
     },
     "apple-metal": {
       name: "Apple Metal",

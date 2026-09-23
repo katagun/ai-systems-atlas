@@ -54,6 +54,8 @@ test("closing the legend leaves a Key chip and the choice survives a reload", as
   await expect(legend(page)).toBeHidden();
   await expect(chip).toBeVisible();
   await expect(chip).toHaveAttribute("aria-expanded", "false");
+  // Focus follows the toggle so a keyboard reader is never dropped on <body>.
+  expect(await page.evaluate(() => document.activeElement?.id)).toBe("badge-legend-chip");
 
   await page.reload();
   await expect(legend(page)).toBeHidden();
@@ -62,9 +64,10 @@ test("closing the legend leaves a Key chip and the choice survives a reload", as
   await chip.click();
   await expect(legend(page)).toBeVisible();
   await expect(chip).toBeHidden();
+  expect(await page.evaluate(() => document.activeElement?.id)).toBe("badge-legend-close");
 });
 
-test("the legend yields to the comparison tray", async ({ page }) => {
+test("the legend and its Key chip step aside for the comparison tray", async ({ page }) => {
   // The Compare control only exists once a family narrows the grid to one
   // score profile (comparisons are never comparable across families), so a
   // family must be selected before any [data-compare-id] button exists.
@@ -74,23 +77,83 @@ test("the legend yields to the comparison tray", async ({ page }) => {
   await page.locator("#project-grid [data-compare-id]").first().click();
   await expect(page.locator("#comparison-tray")).toBeVisible();
   await expect(legend(page)).toBeHidden();
-  await expect(page.locator("#badge-legend-chip")).toBeVisible();
+  await expect(page.locator("#badge-legend-chip")).toBeHidden();
+
+  // Clearing the comparison hands the edge back to the reader's stored choice.
+  await page.locator("#comparison-clear").click();
+  await expect(page.locator("#comparison-tray")).toBeHidden();
+  await expect(legend(page)).toBeVisible();
+  await expect(page.locator("#badge-legend-chip")).toBeHidden();
 });
+
+// Resolves once the page stops scrolling: focus and scrollTo both honour the
+// page's `scroll-behavior: smooth`, so measure only after it settles.
+const settleScroll = page => page.evaluate(() => new Promise(resolve => {
+  let last = window.scrollY;
+  const check = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (window.scrollY === last) return resolve();
+    last = window.scrollY;
+    check();
+  }));
+  check();
+}));
+
+// The footer's clearance is the strip's measured height, applied once, so at
+// the bottom of the page the footer sits flush above the strip: neither under
+// it nor above a band of empty space.
+async function expectFooterClearsLegend(page) {
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await settleScroll(page);
+  const footer = await page.locator("footer").boundingBox();
+  const strip = await page.locator("#badge-legend").boundingBox();
+  expect(footer.y + footer.height).toBeLessThanOrEqual(strip.y + 1);
+  expect(footer.y + footer.height).toBeGreaterThanOrEqual(strip.y - 1);
+}
 
 test("the open legend never covers the site footer, and phones start collapsed", async ({ page, browser }) => {
   await page.goto("/?collection=inference");
-  await page.locator("footer").scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  const footer = await page.locator("footer").boundingBox();
-  const strip = await legend(page).boundingBox();
-  expect(footer.y + footer.height).toBeLessThanOrEqual(strip.y + 1);
+  await expectFooterClearsLegend(page);
 
   const phone = await browser.newContext({ viewport: { width: 390, height: 800 }, baseURL: test.info().project.use.baseURL });
   const small = await phone.newPage();
   await small.goto("/?collection=inference");
   await expect(small.locator("#badge-legend")).toBeHidden();
   await expect(small.locator("#badge-legend-chip")).toBeVisible();
+
+  // Systems is the widest scope; at phone width its strip wraps to several rows.
+  await small.goto("/?collection=systems");
+  await small.locator("#badge-legend-chip").click();
+  await expect(small.locator("#badge-legend")).toBeVisible();
+  await expectFooterClearsLegend(small);
   await phone.close();
+});
+
+test("keyboard focus never lands under the open legend", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?collection=systems");
+  await expect(legend(page)).toBeVisible();
+  const covered = [];
+  let stops = 0;
+  for (let tab = 0; tab < 150; tab += 1) {
+    await page.keyboard.press("Tab");
+    await settleScroll(page);
+    const stop = await page.evaluate(() => {
+      const element = document.activeElement;
+      const strip = document.querySelector("#badge-legend");
+      if (!element || element === document.body || strip.contains(element)) return null;
+      const box = element.getBoundingClientRect();
+      if (!box.width || !box.height) return null;
+      const key = strip.getBoundingClientRect();
+      const inside = box.top >= key.top && box.bottom <= key.bottom && box.left >= key.left && box.right <= key.right;
+      const name = (element.getAttribute("aria-label") || element.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40);
+      return { inside, label: `${element.tagName.toLowerCase()} ${name}` };
+    });
+    if (!stop) continue;
+    stops += 1;
+    if (stop.inside) covered.push(stop.label);
+  }
+  expect(stops).toBeGreaterThan(50);
+  expect(covered).toEqual([]);
 });
 
 test("All badges opens the Taxonomy glossary without a tab stop on any emblem", async ({ page }) => {

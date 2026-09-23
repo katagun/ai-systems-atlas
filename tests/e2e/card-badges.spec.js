@@ -198,6 +198,25 @@ test("tapping an emblem toggles the tooltip and an outside tap closes it", async
   await context.close();
 });
 
+test("repainting the grid dismisses a tapped tooltip", async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
+  const page = await context.newPage();
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const tooltip = page.locator("#badge-tooltip");
+  await page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first().tap();
+  await expect(tooltip).toBeVisible();
+  // A touch reader types while the tooltip is up; the grid repaints with the
+  // same cards, so nothing scrolls or moves under a pointer to hide it.
+  await page.locator("#project-search").evaluate(input => {
+    input.value = input.value.slice(0, -1);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page.locator('#project-grid [data-project="openclaw"]')).not.toHaveCount(0);
+  await expect(tooltip).toBeHidden();
+  await context.close();
+});
+
 test("Taxonomy lists every badge under its family with its emblem", async ({ page }) => {
   await page.goto("/?view=taxonomy");
   const glossary = cardBadgeGlossary();

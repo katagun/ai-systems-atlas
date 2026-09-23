@@ -633,11 +633,15 @@ function badgeRow(badges) {
 // One tooltip serves every emblem. It is pointer-only help: screen readers
 // already get the same words from each badge's hidden text, so the tooltip is
 // aria-hidden and emblems stay out of the tab order.
+// Grids repaint in place (search, filters, paging), detaching the emblem a
+// tooltip points at; each badge grid's renderer calls this afterwards.
+let hideDetachedBadgeTooltip = () => {};
 function initBadgeTooltip() {
   const tooltip = $("#badge-tooltip");
   if (!tooltip) return;
   let anchor = null;
   const hide = () => { tooltip.hidden = true; anchor = null; };
+  hideDetachedBadgeTooltip = () => { if (anchor && !anchor.isConnected) hide(); };
   const show = badge => {
     anchor = badge;
     tooltip.dataset.family = badge.dataset.family;
@@ -672,8 +676,9 @@ function initBadgeTooltip() {
 
 // The legend explains the emblems of whatever Directory scope is showing. The
 // reader's open/closed choice is remembered; without one it starts open on
-// wide viewports and closed on phones. It always steps aside for the
-// comparison tray, which owns the same edge of the viewport.
+// wide viewports and closed on phones. The strip and its Key chip both step
+// aside for the comparison tray, which owns the same edge of the viewport, and
+// come back as the stored choice says once it closes.
 const BADGE_LEGEND_STORAGE_KEY = "atlas.badgeLegend";
 function badgeLegendPreference() {
   try {
@@ -694,8 +699,8 @@ function syncBadgeLegend() {
   const inDirectory = $(".view.is-active")?.id === "directory";
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
   const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily) : null;
-  const trayOpen = !$("#comparison-tray").hidden;
-  const open = Boolean(legend) && !trayOpen && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
+  const shown = Boolean(legend) && $("#comparison-tray").hidden;
+  const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
   if (legend) {
     $("#badge-legend-items").dataset.mode = legend.mode;
     $("#badge-legend-items").innerHTML = legend.mode === "families"
@@ -703,14 +708,22 @@ function syncBadgeLegend() {
       : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AtlasCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
   }
   strip.hidden = !open;
-  chip.hidden = !legend || open;
+  chip.hidden = !shown || open;
   chip.setAttribute("aria-expanded", String(open));
-  chip.classList.toggle("is-above-tray", trayOpen);
   document.body.classList.toggle("has-badge-legend", open);
 }
 function initBadgeLegend() {
-  $("#badge-legend-close").addEventListener("click", () => setBadgeLegendPreference("closed"));
-  $("#badge-legend-chip").addEventListener("click", () => setBadgeLegendPreference("open"));
+  const strip = $("#badge-legend");
+  const chip = $("#badge-legend-chip");
+  // The strip's height depends on the scope and the viewport width, so the
+  // page's bottom clearance and scroll padding read the measured height from
+  // --legend-h instead of guessing a budget.
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty("--legend-h", `${strip.hidden ? 0 : strip.getBoundingClientRect().height}px`);
+  }).observe(strip);
+  // Focus follows the toggle so a keyboard reader is not dropped on the page.
+  $("#badge-legend-close").addEventListener("click", () => { setBadgeLegendPreference("closed"); chip.focus(); });
+  chip.addEventListener("click", () => { setBadgeLegendPreference("open"); $("#badge-legend-close").focus(); });
   $("#badge-legend-more").addEventListener("click", event => { event.preventDefault(); activateView("taxonomy"); });
   syncBadgeLegend();
 }
@@ -821,6 +834,7 @@ function renderAllDirectoryEntries() {
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
+  hideDetachedBadgeTooltip();
   renderPager("all", paged);
 }
 
@@ -1032,6 +1046,7 @@ function renderCollection(name) {
     bindComparisonButtons(grid);
     renderComparisonControls();
   }
+  hideDetachedBadgeTooltip();
   renderPager(collection.pageKey, paged);
 }
 
@@ -1070,6 +1085,7 @@ function renderPacks() {
   $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   paintMarks(grid);
+  hideDetachedBadgeTooltip();
   renderPager("packs", paged);
 }
 
