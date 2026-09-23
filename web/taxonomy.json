@@ -1402,6 +1402,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-Jamba-Open-Model-License",
+      "name": "Jamba Open Model License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Kimi-K2-Modified-MIT",
       "name": "Kimi K2 Modified MIT License",
       "kind": "restricted"
@@ -1457,6 +1462,11 @@
       "kind": "proprietary"
     },
     {
+      "id": "LicenseRef-Microsoft-API-Terms",
+      "name": "Microsoft Product and Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-MiniMax-M2-Modified-MIT",
       "name": "MiniMax M2 Modified MIT License",
       "kind": "restricted"
@@ -1500,6 +1510,11 @@
       "id": "LicenseRef-Mistral-Research-License",
       "name": "Mistral Research License",
       "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Mixedbread-Service-Terms",
+      "name": "Mixedbread Service Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-NVIDIA-Community-Model-2024",
@@ -1567,9 +1582,19 @@
       "kind": "unclear"
     },
     {
+      "id": "LicenseRef-Vispark-Service-Terms",
+      "name": "Vispark Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-W3C-Software-Document",
       "name": "W3C Software and Document License",
       "kind": "open_content"
+    },
+    {
+      "id": "LicenseRef-Writer-API-Terms",
+      "name": "Writer API and Product Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-ZAI-API-Terms",

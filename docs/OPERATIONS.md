@@ -136,7 +136,10 @@ request headers, because a `304 Not Modified` answer carries no body to store. W
 heading of the same or higher level, or the element carrying the id. If the id is missing
 from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a
 `TERMS_SECTION_IDS` entry only after a stored diff shows a page's churn sits outside its
-terms. An entry from before stored text gains its text silently when its hash is unchanged,
+terms. Evaluated 2026-09-23 with no entry added: `https://deepinfra.com/terms` carries only
+heading ids and its h1 section spans the footer `Latest Models` menu, and
+`https://cohere.com/terms-of-use` has no stable id around its terms (React-generated ids only).
+An entry from before stored text gains its text silently when its hash is unchanged,
 and an anchored URL moves from its whole-page baseline to its section silently only when the
 page still hashes to that baseline; any other difference stays drift until reviewed. A page without a
 baseline gets one on its first successful observation only when every review date for that
@@ -229,6 +232,35 @@ or `origin`. To review a run:
    block could have skipped verification entirely. To check an older citation, open its
    `immutable_url`, which addresses a blob SHA and cannot change under it.
    Pass `--baseline-ref` to compare against something other than `origin/main`.
+4. Check that each finding says what its documents say with
+   `uv run python scripts/check_finding_support.py`. `--recheck` proves a cited document
+   is real; it cannot show that the finding quotes it faithfully, and a quote nobody
+   wrote passes every hash check. The script is read-only and works in two layers.
+   Quotes are checked in code: every quoted span of twelve characters or more must
+   appear verbatim in one of the block's pinned documents, after folding typography
+   (curly quotes, dashes, Markdown emphasis, whitespace, a comma tucked inside the
+   closing quote) and honouring `...` elisions. A miss is a fact, printed as
+   `QUOTE NOT IN SOURCE`; `--strict` exits 1 on one. Claims are judged by TypeSafe's
+   System One API when `TYPESAFE_API_KEY` exists (see "Pre-ranking the queue" for the key
+   and what leaves the machine — here, the pinned documents and the finding). Each
+   sentence is one question over the documents with four answers, and sentences about
+   the review itself are never sent. Flags at confidence 0.6 or above are listed,
+   strongest first; `--min-confidence 0` lists them all. `--quotes-only` skips this
+   layer, and any failure in it leaves the quote report standing.
+
+   Two things are reported rather than judged. A web page that no longer hashes to its
+   pin cannot convict a quote or a claim written about the page as it was, so both are
+   skipped for it. A git blob that does not hash to its recorded `content_sha256` is
+   printed as `RECORD INCONSISTENT`, because a blob cannot change: the record pins a blob
+   and a digest that describe different bytes, and the blob is still what gets checked.
+
+   Measured on 2026-09-20 against the 45 findings then queued: 161 quotes, one not in
+   its source (a heading and its body fused into one "quote" with an invented colon), one
+   inconsistent record, and one listed claim, which rested on a page the block never
+   pinned. With one fabricated sentence appended to each of 41 findings, the claim layer
+   flagged 40 and listed 39. Those fabrications were blatant by construction and written
+   by the tool's author, so read the 39 as a ceiling: a subtle distortion will score
+   lower. A listed flag is a place to look, never a conclusion.
 
 The unattended `finish` path validates the queue before any re-fetch and invokes the
 rechecker with `--unattended`. That mode accepts only GitHub LICENSE and README blobs
