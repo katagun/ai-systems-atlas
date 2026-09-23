@@ -64,7 +64,7 @@ Behaviour:
 
 - A close button collapses the strip to a small "Key" chip at the bottom-left; the chip reopens it. The state persists in `localStorage` under its own key, wrapped in try/catch like the theme and page-size keys, and the page renders correctly without storage.
 - Viewports under the phone breakpoint start collapsed unless the reader has opened it.
-- While `.comparison-tray` is visible the legend shows as the chip, positioned clear of the tray, so the two never stack.
+- The legend and its Key chip step aside while the comparison tray is open, so the two never stack; when the tray closes the stored choice applies again.
 - The Directory content gains bottom padding equal to the strip's height so the strip never covers the last card row or the site footer.
 - The strip is a labelled `<aside>` with a list; the close button and chip are real buttons. It is not shown in Finder, Taxonomy, or record dialogs.
 
@@ -100,7 +100,7 @@ New legend coverage (same spec file or a sibling):
 
 - contents match the active scope and change with it; the All scope shows families only; Models shows none;
 - collapse persists across reload; the chip reopens it;
-- opening the comparison tray collapses the legend to the chip;
+- opening the comparison tray hides the legend and its chip, and clearing the comparison brings the legend back;
 - the last card row and the site footer are reachable with the strip open.
 
 Completion follows `AGENTS.md` rules 15–17: regenerate the asset version stamp with Node 22 (`/usr/local/bin/node`), run `pre-commit run --all-files`, exercise the updated browser matrix in both palettes, and report only checks actually run.
