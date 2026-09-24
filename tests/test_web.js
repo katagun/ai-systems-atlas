@@ -907,6 +907,10 @@ test("specifications, imported models, and unknown kinds or families get no badg
   // Imported rows are gated on review_status alone, not on distribution_modes
   // being absent: an imported row with every mode still takes no badge.
   assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
+  // The gate is an allow-list on review_status === "reviewed", not a
+  // block-list on "imported": a malformed or future-status record with no
+  // review_status at all also takes no badge, even carrying every mode.
+  assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
   assert.deepEqual(cardBadges("pack", packs[0]), []);
@@ -1072,9 +1076,11 @@ function publishedBadgeScopes() {
     "system:assistant_system": family("assistant_system"),
     inference: ["inference", readWebJSON("inference-services.json").services],
     runtime: ["runtime", readWebJSON("local-runtimes.json").runtimes],
-    // models.json is the reviewed catalog only, so every row here is a
-    // candidate for a model badge with no review_status filter needed.
-    model: ["model", readWebJSON("models.json").models],
+    // The reviewed catalog (models.json) carries no review_status field of
+    // its own — only the merged boot payload marks reviewed vs imported —
+    // so read the boot payload here, filtered the same way cardBadgeSetKey
+    // gates: review_status === "reviewed" exactly.
+    model: ["model", readWebJSON("app/models.json").models.filter(record => record.review_status === "reviewed")],
   };
 }
 

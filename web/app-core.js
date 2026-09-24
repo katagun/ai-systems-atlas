@@ -528,8 +528,9 @@
 
   function cardBadgeSetKey(kind, record) {
     if (kind === "system") return `system:${record.system_family}`;
-    // Imported models.dev rows carry no reviewed field a badge could test.
-    if (kind === "model" && record.review_status === "imported") return "";
+    // Only a reviewed model has a reviewed field a badge could test; an
+    // imported row, a malformed record, or a future status all take none.
+    if (kind === "model") return record.review_status === "reviewed" ? "model" : "";
     return kind;
   }
 
