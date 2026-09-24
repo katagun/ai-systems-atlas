@@ -19,6 +19,7 @@ PUBLISHED_DATA = (
     "models-dev.json",
     "packs.json",
     "labs.json",
+    "robots.json",
 )
 
 

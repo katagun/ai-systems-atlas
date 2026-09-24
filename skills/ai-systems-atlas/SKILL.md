@@ -16,6 +16,7 @@ The Atlas (<https://peacefulcoexistance.com/>) reviews and curates AI agent, mem
 | Managed inference APIs and hosting platforms | `inference-services.json` |
 | Self-hosted inference runtimes (Ollama, vLLM, LM Studio, ...) | `local-runtimes.json` |
 | Skills bundles, plugins, process kits, vault bundles, and plugin marketplaces a host agent installs (unscored); scored systems that install as packs are in `projects.json` with `deployment` containing `host_pack` | `packs.json` |
+| AI robots — humanoids, quadrupeds, arms, mobile manipulators — whose makers name a learned model or document a way to run your own (unscored; a named model is the maker's claim) | `robots.json` |
 | Every provider-independent record present in models.dev | `models-dev.json` |
 | Atlas-reviewed language-model releases, distribution terms, evidence, and access scores | `models.json` |
 | The organizations that develop reviewed releases: headquarters, type, where they publish, and the names other files use for them (unscored) | `labs.json` |

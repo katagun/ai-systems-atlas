@@ -58,6 +58,7 @@ STAGED_DIRECTORY_FILES = (
     "directory/specifications.json",
     "directory/packs.json",
     "directory/labs.json",
+    "directory/robots.json",
     "directory/taxonomy.json",
 )
 

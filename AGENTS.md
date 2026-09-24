@@ -11,7 +11,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 4. Decide inclusion by the collection's relevance and operational boundary, never by license or source model.
 5. Base license classifications on authoritative, scoped license/terms evidence covering every material license; README claims and GitHub SPDX detection are insufficient.
 6. Assign exactly one compatible `system_family` and `primary_role` only to system records in `projects.json`; traits are not roles.
-7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, and labs are unscored; mixed discovery hides scores and comparisons.
+7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, labs, and robots are unscored; mixed discovery hides scores and comparisons.
 8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
 9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
 10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
@@ -69,4 +69,4 @@ node scripts/build_asset_version.mjs
 The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.yaml) and runs in [verify.yml](.github/workflows/verify.yml).
 It runs on commit via pre-commit; `pre-commit run --all-files` reproduces CI exactly, browser suite included.
 Browser tests (`npm run test:e2e`) start their own server. An exploratory server is available with
-`uv run python -m http.server 8765 --bind 127.0.0.1 --directory web`.
+`uv run python scripts/serve_web.py 8765`.
