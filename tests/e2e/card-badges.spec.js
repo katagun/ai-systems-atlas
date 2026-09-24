@@ -10,7 +10,8 @@ const WEB_DIR = path.join(__dirname, "..", "..", "web");
 const read = file => JSON.parse(fs.readFileSync(path.join(WEB_DIR, file), "utf8"));
 const projects = read("projects.json").projects;
 const runtimes = read("local-runtimes.json").runtimes;
-const reviewedModels = read("app/models.json").models.filter(model => model.review_status === "reviewed");
+const allModels = read("app/models.json").models;
+const reviewedModels = allModels.filter(model => model.review_status === "reviewed");
 
 const byId = (records, id) => {
   const record = records.find(candidate => candidate.id === id);
@@ -29,7 +30,11 @@ const openclaw = byId(projects, "openclaw");
 // Chroma matches no memory-system badge, so its card has no badge row.
 const chroma = byId(projects, "chroma");
 const ollama = byId(runtimes, "ollama");
+// Downloadable weights only, so its card shows exactly one model badge.
 const reviewedModel = byId(reviewedModels, "model-alibaba-qwen2-5-coder-0-5b");
+// Carries all three distribution modes, so its card shows the whole model set.
+const allModesModel = byId(reviewedModels, "model-alibaba-qwen3-8-27b");
+const importedModel = byId(allModels, "model-alibaba-qwen-flash");
 
 test("an agent-system card shows every matching badge as an emblem in set order", async ({ page }) => {
   const expected = cardBadges("system", openclaw);
@@ -111,17 +116,51 @@ test("a record shows the same badges in its collection grid and in All", async (
     .toHaveText(namePatterns(runtimeBadges));
 });
 
-test("a reviewed-model card shows no badges and keeps its attributed models.dev modality", async ({ page }) => {
-  expect(cardBadges("model", reviewedModel)).toEqual([]);
+test("a reviewed-model card has no role pill and shows its distribution modes as badges, plus its attributed models.dev modality", async ({ page }) => {
+  const expected = cardBadges("model", reviewedModel);
+  expect(expected.map(badge => badge.name)).toEqual(["Downloadable weights"]);
 
   await page.goto("/?view=models");
   await page.locator("#model-search").fill(reviewedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
-  await expect(card.locator(".card-badges")).toHaveCount(0);
+  await expect(card.locator(".role-badge")).toHaveCount(0);
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["control"]);
   const meta = card.locator(".card-source-meta");
   await expect(meta).toContainText("→");
   await expect(meta).toHaveAttribute("title", "From models.dev source metadata, not Atlas reviewed");
   await expect(meta.locator(".visually-hidden")).toHaveText("From models.dev: ");
+});
+
+test("a reviewed-model card carrying every distribution mode shows all three badges, in taxonomy order", async ({ page }) => {
+  const expected = cardBadges("model", allModesModel);
+  expect(expected.map(badge => badge.name)).toEqual(["Downloadable weights", "Developer API", "Third-party hosting"]);
+
+  await page.goto("/?view=models");
+  await page.locator("#model-search").fill(allModesModel.name);
+  const card = page.locator(`#model-grid .model-card:has([data-model="${allModesModel.id}"])`);
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["control", "platform", "platform"]);
+});
+
+test("an imported models.dev card keeps its role pill and shows no badges", async ({ page }) => {
+  expect(cardBadges("model", importedModel)).toEqual([]);
+
+  await page.goto("/?view=models");
+  await page.locator("#model-search").fill(importedModel.name);
+  const card = page.locator(`#model-grid .model-card:has([data-model="${importedModel.id}"])`);
+  await expect(card.locator(".role-badge")).toHaveText("Imported metadata · Not Atlas reviewed");
+  await expect(card.locator(".card-badges")).toHaveCount(0);
+});
+
+test("a reviewed-model card shows the same badges in the Models grid and in the mixed All directory", async ({ page }) => {
+  const expected = cardBadges("model", reviewedModel);
+
+  await page.goto("/");
+  await page.locator("#all-directory-search").fill(reviewedModel.name);
+  const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
+  await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
+  await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));
 });
 
 for (const colorScheme of ["light", "dark"]) {
