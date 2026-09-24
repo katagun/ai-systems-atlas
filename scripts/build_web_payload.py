@@ -25,6 +25,7 @@ COLLECTIONS = (
     ("specifications", "specifications.json", "specifications", "spec"),
     ("models", "models.json", "models", "model"),
     ("packs", "packs.json", "packs", "pack"),
+    ("labs", "labs.json", "labs", "lab"),
 )
 
 # What a card, a filter, a sort, and the finder read before anything is clicked.
@@ -140,6 +141,20 @@ BOOT_FIELDS = {
         "status",
         "stars",
     ),
+    # A lab card and every cross-link to a lab join through catalog_names and
+    # systems (ADR 041), so both must be on the boot record; the join itself runs
+    # in the browser over boot records the page already holds.
+    "labs": (
+        "id",
+        "name",
+        "url",
+        "description",
+        "lab_type",
+        "headquarters",
+        "parent_organization",
+        "catalog_names",
+        "systems",
+    ),
 }
 
 # Exactly the fields each filter in web/app-core.js searches today.
@@ -208,6 +223,14 @@ SEARCH_FIELDS = {
         "description",
         "installs",
         "not_a_system",
+    ),
+    "labs": (
+        "id",
+        "name",
+        "description",
+        "organization_note",
+        "catalog_names",
+        "parent_organization",
     ),
 }
 

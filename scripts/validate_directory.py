@@ -10,17 +10,21 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
+    from . import import_openrouter as openrouter
     from .discovery_sources import (
         canonical_url_key,
         https_url_host,
         validate_discovery_sources,
     )
+    from .lab_relations import lab_relations, organization_names, source_namespace
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    import import_openrouter as openrouter
     from discovery_sources import (
         canonical_url_key,
         https_url_host,
         validate_discovery_sources,
     )
+    from lab_relations import lab_relations, organization_names, source_namespace
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
@@ -38,12 +42,15 @@ PUBLISHED_DATA = (
     "models.json",
     "models-dev.json",
     "packs.json",
+    "labs.json",
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA,
     "candidates.json",
     "model-candidates.json",
     "model-dispositions.json",
+    openrouter.LEADS_NAME,
+    openrouter.DISPOSITIONS_NAME,
     "license-review.json",
     "discovery-sources.json",
     "hn-signals.json",
@@ -135,6 +142,9 @@ TAXONOMY_GROUPS = (
     "pack_types",
     "pack_hosts",
     "pack_install_mechanisms",
+    "lab_types",
+    "lab_channel_kinds",
+    "countries",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -260,6 +270,45 @@ PACK_FORBIDDEN = {
     "score_profile",
     "system_family",
     "primary_role",
+}
+
+LAB_REQUIRED = {
+    "id",
+    "name",
+    "url",
+    "description",
+    "lab_type",
+    "headquarters",
+    "organization_note",
+    "catalog_names",
+    "systems",
+    "channels",
+    "evidence",
+    "verified_at",
+}
+LAB_OPTIONAL = {"parent_organization", "safety_framework"}
+# A lab is recorded, never ranked, and a licence belongs to a release, not to the
+# organization that made it (ADR 041, ADR 025).
+LAB_FORBIDDEN = {
+    "score",
+    "score_profile",
+    "stars",
+    "stars_verified_at",
+    "system_family",
+    "primary_role",
+    "licenses",
+    "source_model",
+}
+LAB_ID_PATTERN = re.compile(r"lab-[a-z0-9][a-z0-9-]*")
+LAB_CHANNEL_REQUIRED = {"kind", "url"}
+LAB_SAFETY_FRAMEWORK_REQUIRED = {"title", "url", "verified_at"}
+# A channel of these kinds names an organization, not a page inside one, so the
+# GitHub cross-check can read the organization straight off the URL.
+LAB_CHANNEL_URL_PATTERNS = {
+    "github": re.compile(
+        r"https://github\.com/([A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)"
+    ),
+    "hugging_face": re.compile(r"https://huggingface\.co/([A-Za-z0-9][A-Za-z0-9._-]*)"),
 }
 
 LOCAL_RUNTIME_REQUIRED = {
@@ -1644,6 +1693,215 @@ def validate_packs(
     return packs_value
 
 
+def validate_lab_catalog_names(
+    lab: dict[str, Any],
+    prefix: str,
+    names_by_field: dict[str, set[str]],
+    errors: list[str],
+) -> set[str]:
+    """Each catalog name must name a record; one must be a reviewed model's developer."""
+    validate_string_list(lab, "catalog_names", None, prefix, errors)
+    values = lab.get("catalog_names")
+    if not isinstance(values, list):
+        return set()
+    names = {name for name in values if isinstance(name, str)}
+    for name in sorted(names):
+        if not name.strip() or name != name.strip():
+            errors.append(
+                f"{prefix}: catalog name {name!r} must be a trimmed, non-empty string"
+            )
+        elif not any(name in field_names for field_names in names_by_field.values()):
+            errors.append(f"{prefix}: catalog name {name!r} names no catalog record")
+    if names and not names & names_by_field["developer"]:
+        errors.append(
+            f"{prefix}: develops no reviewed model release; a lab is recorded only "
+            "once the catalog has reviewed a release it developed (ADR 041)"
+        )
+    return names
+
+
+def validate_lab_channels(
+    lab: dict[str, Any], prefix: str, kinds: set[str], errors: list[str]
+) -> set[str]:
+    """Validate where a lab publishes; return its GitHub organizations, lower-cased."""
+    channels = lab.get("channels")
+    github_orgs: set[str] = set()
+    if not isinstance(channels, list) or not channels:
+        errors.append(f"{prefix}: channels must be a non-empty list")
+        return github_orgs
+    urls: set[str] = set()
+    for channel in channels:
+        if not isinstance(channel, dict) or set(channel) != LAB_CHANNEL_REQUIRED:
+            errors.append(
+                f"{prefix}: every channel must have exactly {sorted(LAB_CHANNEL_REQUIRED)}"
+            )
+            continue
+        kind, url = channel["kind"], channel["url"]
+        if kind not in kinds:
+            errors.append(f"{prefix}: unknown channel kind {kind!r}")
+        if https_url_host(url) is None:
+            errors.append(
+                f"{prefix}: channel url must be an HTTPS URL on a public DNS host"
+            )
+            continue
+        if url in urls:
+            errors.append(f"{prefix}: channel URLs must be unique")
+        urls.add(url)
+        pattern = LAB_CHANNEL_URL_PATTERNS.get(kind)
+        if pattern is None:
+            continue
+        match = pattern.fullmatch(url)
+        if match is None:
+            errors.append(
+                f"{prefix}: a {kind} channel must be an organization URL with no path "
+                "or trailing slash"
+            )
+        elif kind == "github":
+            github_orgs.add(match.group(1).lower())
+    return github_orgs
+
+
+def validate_lab_safety_framework(
+    lab: dict[str, Any], prefix: str, errors: list[str]
+) -> None:
+    """A framework the lab publishes on its own pages; absence is never a finding."""
+    if "safety_framework" not in lab:
+        return
+    framework = lab["safety_framework"]
+    if (
+        not isinstance(framework, dict)
+        or set(framework) != LAB_SAFETY_FRAMEWORK_REQUIRED
+    ):
+        errors.append(
+            f"{prefix}: safety_framework must have exactly "
+            f"{sorted(LAB_SAFETY_FRAMEWORK_REQUIRED)}"
+        )
+        return
+    if not isinstance(framework["title"], str) or not framework["title"].strip():
+        errors.append(f"{prefix}: safety_framework title must be a non-empty string")
+    if https_url_host(framework["url"]) is None:
+        errors.append(
+            f"{prefix}: safety_framework url must be an HTTPS URL on a public DNS host"
+        )
+    if not valid_date(framework["verified_at"]):
+        errors.append(f"{prefix}: safety_framework verified_at must be an ISO date")
+    elif valid_date(lab.get("verified_at")) and (
+        framework["verified_at"] > lab["verified_at"]
+    ):
+        errors.append(
+            f"{prefix}: safety_framework verified_at must not be after the lab verified_at"
+        )
+
+
+def validate_lab_joins(
+    lab: dict[str, Any],
+    prefix: str,
+    names: set[str],
+    github_orgs: set[str],
+    catalog: dict[str, list[Any]],
+    errors: list[str],
+) -> None:
+    """A lab's joins must be whole: no split namespace, no unlisted system of its own."""
+    namespaces = set(lab_relations(lab, catalog)["namespaces"])
+    for model in catalog["models"]:
+        if not isinstance(model, dict):
+            continue
+        namespace = source_namespace(model.get("source_id"))
+        if namespace in namespaces and model.get("developer") not in names:
+            errors.append(
+                f"{prefix}: models.dev namespace {namespace} is split: "
+                f"{model.get('id')} names developer {model.get('developer')!r}, "
+                "which the lab does not name"
+            )
+    listed = {item for item in lab.get("systems") or [] if isinstance(item, str)}
+    for project in catalog["projects"]:
+        repo = project.get("repo") if isinstance(project, dict) else None
+        if not isinstance(repo, str) or "/" not in repo:
+            continue
+        owner = repo.split("/", 1)[0].lower()
+        if owner in github_orgs and project.get("id") not in listed:
+            errors.append(
+                f"{prefix}: system {project.get('id')} is published from the lab's "
+                f"GitHub organization {owner} but is not listed in systems"
+            )
+
+
+def validate_labs(
+    labs_data: dict[str, Any],
+    tax: Taxonomy,
+    catalog: dict[str, list[Any]],
+    index: ProjectIndex,
+    errors: list[str],
+) -> list[Any]:
+    """Validate unscored lab records: organizations joined to what they develop (ADR 041)."""
+    enum_ids = tax.enum_ids
+    labs_value = validate_collection_envelope(
+        labs_data, "labs.json", "1.0", "labs", errors
+    )
+    names_by_field = organization_names(catalog)
+    owners: dict[tuple[str, str], Any] = {}
+    for lab in labs_value:
+        if not isinstance(lab, dict):
+            errors.append("labs.json: every lab must be an object")
+            continue
+        prefix = f"lab {lab.get('id', 'unknown')}"
+        for field in sorted(LAB_FORBIDDEN & set(lab)):
+            errors.append(f"{prefix}: {field} is never recorded on a lab")
+        fields = set(lab) - LAB_FORBIDDEN
+        if LAB_REQUIRED - fields or fields - LAB_REQUIRED - LAB_OPTIONAL:
+            missing = sorted(LAB_REQUIRED - fields)
+            extra = sorted(fields - LAB_REQUIRED - LAB_OPTIONAL)
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
+        lab_id = lab.get("id")
+        if not isinstance(lab_id, str) or not LAB_ID_PATTERN.fullmatch(lab_id):
+            errors.append(f"{prefix}: id must be a slug starting with lab-")
+        for field in ("name", "description", "organization_note"):
+            if not isinstance(lab.get(field), str) or not lab[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        if "parent_organization" in lab and (
+            not isinstance(lab["parent_organization"], str)
+            or not lab["parent_organization"].strip()
+        ):
+            errors.append(
+                f"{prefix}: parent_organization must be a non-empty string when present"
+            )
+        if https_url_host(lab.get("url")) is None:
+            errors.append(f"{prefix}: url must be an HTTPS URL on a public DNS host")
+        if lab.get("lab_type") not in enum_ids["lab_types"]:
+            errors.append(f"{prefix}: unknown lab type")
+        if lab.get("headquarters") not in enum_ids["countries"]:
+            errors.append(f"{prefix}: unknown headquarters country")
+        names = validate_lab_catalog_names(lab, prefix, names_by_field, errors)
+        validate_string_list(
+            lab, "systems", index.ids, prefix, errors, allow_empty=True
+        )
+        systems = {item for item in lab.get("systems") or [] if isinstance(item, str)}
+        github_orgs = validate_lab_channels(
+            lab, prefix, enum_ids["lab_channel_kinds"], errors
+        )
+        validate_lab_safety_framework(lab, prefix, errors)
+        validate_web_evidence(lab, prefix, errors)
+        if not valid_date(lab.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+        # One lab per catalog name, system, and GitHub organization: a shared one
+        # would make a join ambiguous.
+        for kind, values in (
+            ("catalog name", names),
+            ("system", systems),
+            ("GitHub organization", github_orgs),
+        ):
+            for value in sorted(values):
+                owner = owners.setdefault((kind, value), lab_id)
+                if owner != lab_id:
+                    errors.append(
+                        f"{prefix}: {kind} {value!r} already belongs to {owner}"
+                    )
+        validate_lab_joins(lab, prefix, names, github_orgs, catalog, errors)
+    return labs_value
+
+
 def validate_inference_services(
     inference_services_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -2402,6 +2660,198 @@ def validate_model_dispositions(
     return dispositioned
 
 
+def validate_openrouter_dispositions(
+    data: dict[str, Any], errors: list[str]
+) -> tuple[set[str], bool]:
+    """Validate the human-owned OpenRouter decisions: the terms review and each disposition.
+
+    Returns the dispositioned routes and whether a terms review is recorded (ADR 039).
+    """
+    name = openrouter.DISPOSITIONS_NAME
+    dispositioned: set[str] = set()
+    if set(data) != {"version", "updated_at", "terms_reviewed_at", "dispositions"}:
+        errors.append(f"{name}: document fields differ from schema")
+    if data.get("version") != "1.0":
+        errors.append(f"{name}: unsupported version")
+    if not valid_date(data.get("updated_at")):
+        errors.append(f"{name}: updated_at must be an ISO date")
+    reviewed_at = data.get("terms_reviewed_at")
+    if reviewed_at is not None and not valid_date(reviewed_at):
+        errors.append(f"{name}: terms_reviewed_at must be an ISO date or null")
+    terms_reviewed = valid_date(reviewed_at)
+    dispositions = data.get("dispositions")
+    if not isinstance(dispositions, list):
+        errors.append(f"{name}: dispositions must be a list")
+        return dispositioned, terms_reviewed
+    for entry in dispositions:
+        route_id = entry.get("openrouter_id") if isinstance(entry, dict) else None
+        prefix = f"OpenRouter disposition {route_id if isinstance(route_id, str) else 'unknown'}"
+        if not isinstance(entry, dict) or set(entry) != {
+            "openrouter_id",
+            "disposition",
+            "reason",
+            "decided_at",
+        }:
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        if (
+            not isinstance(route_id, str)
+            or not openrouter.ROUTE_ID.fullmatch(route_id)
+            or route_id in dispositioned
+        ):
+            errors.append(
+                f"{prefix}: openrouter_id must be a unique route without a variant suffix"
+            )
+            continue
+        dispositioned.add(route_id)
+        if entry.get("disposition") not in {"held", "excluded"}:
+            errors.append(f"{prefix}: disposition must be held or excluded")
+        reason = entry.get("reason")
+        if not isinstance(reason, str) or not reason.strip():
+            errors.append(f"{prefix}: reason must be a non-empty string")
+        if not valid_date(entry.get("decided_at")):
+            errors.append(f"{prefix}: decided_at must be an ISO date")
+    return dispositioned, terms_reviewed
+
+
+def validate_openrouter_lead(
+    lead: Any, fetched_at: Any, prefix: str, errors: list[str]
+) -> None:
+    """One lead holds identifiers only, each seen in the recorded fetch."""
+    if not isinstance(lead.get("canonical_slug"), str) or not (
+        openrouter.ROUTE_ID.fullmatch(lead["canonical_slug"])
+    ):
+        errors.append(f"{prefix}: canonical_slug is invalid")
+    name = lead.get("name")
+    if (
+        not isinstance(name, str)
+        or not name.strip()
+        or CONTROL_CHARACTER_PATTERN.search(name)
+    ):
+        errors.append(f"{prefix}: name must be a non-empty single-line string")
+    hugging_face_id = lead.get("hugging_face_id")
+    if hugging_face_id is not None and (
+        not isinstance(hugging_face_id, str)
+        or not openrouter.HUGGING_FACE_ID.fullmatch(hugging_face_id)
+    ):
+        errors.append(f"{prefix}: hugging_face_id must be null or ORG/REPO")
+    for field in ("listed_at", "discovered_at", "last_seen_at"):
+        if not valid_date(lead.get(field)):
+            errors.append(f"{prefix}: {field} must be an ISO date")
+    if (
+        valid_date(lead.get("discovered_at"))
+        and valid_date(lead.get("last_seen_at"))
+        and lead["discovered_at"] > lead["last_seen_at"]
+    ):
+        errors.append(f"{prefix}: discovered_at must not follow last_seen_at")
+    if lead.get("last_seen_at") != fetched_at:
+        errors.append(f"{prefix}: last_seen_at must equal the recorded fetch date")
+
+
+def validate_openrouter_leads(
+    data: dict[str, Any],
+    dispositioned: set[str],
+    terms_reviewed: bool,
+    errors: list[str],
+) -> None:
+    """Validate the unpublished OpenRouter cross-check (ADR 039).
+
+    A never-fetched file carries nulls and no leads. A fetched one pins the response by
+    date and SHA-256, requires a recorded terms review, and keeps its sorted leads
+    disjoint from the dispositions.
+    """
+    name = openrouter.LEADS_NAME
+    if set(data) != {
+        "version",
+        "updated_at",
+        "source",
+        "listed_count",
+        "eligible_count",
+        "leads",
+    }:
+        errors.append(f"{name}: document fields differ from schema")
+    if data.get("version") != "1.0":
+        errors.append(f"{name}: unsupported version")
+    if not valid_date(data.get("updated_at")):
+        errors.append(f"{name}: updated_at must be an ISO date")
+    source = data.get("source")
+    if not isinstance(source, dict) or set(source) != {
+        "name",
+        "url",
+        "terms_url",
+        "fetched_at",
+        "sha256",
+    }:
+        errors.append(f"{name}: source fields differ from schema")
+        source = {}
+    elif (source["name"], source["url"], source["terms_url"]) != (
+        openrouter.SOURCE_NAME,
+        openrouter.ENDPOINT,
+        openrouter.TERMS_URL,
+    ):
+        errors.append(
+            f"{name}: source must identify OpenRouter's public model list and terms"
+        )
+    leads = data.get("leads")
+    if not isinstance(leads, list):
+        errors.append(f"{name}: leads must be a list")
+        leads = []
+    fetched_at, sha256 = source.get("fetched_at"), source.get("sha256")
+    listed, eligible = data.get("listed_count"), data.get("eligible_count")
+    if fetched_at is None and sha256 is None and listed is None and eligible is None:
+        if leads:
+            errors.append(f"{name}: leads require a recorded fetch")
+        return
+    if not valid_date(fetched_at):
+        errors.append(f"{name}: source fetched_at must be an ISO date once fetched")
+    if not isinstance(sha256, str) or not CONTENT_SHA_PATTERN.fullmatch(sha256):
+        errors.append(f"{name}: source sha256 is invalid")
+    if not all(
+        isinstance(count, int) and not isinstance(count, bool) and count >= 0
+        for count in (listed, eligible)
+    ):
+        errors.append(
+            f"{name}: listed_count and eligible_count must be non-negative integers once fetched"
+        )
+    elif not len(leads) <= eligible <= listed:
+        errors.append(
+            f"{name}: counts must satisfy leads <= eligible_count <= listed_count"
+        )
+    if not terms_reviewed:
+        errors.append(
+            f"{name}: an import requires terms_reviewed_at in "
+            f"{openrouter.DISPOSITIONS_NAME}; clear the leads or record the review"
+        )
+    seen: set[str] = set()
+    previous = ""
+    for lead in leads:
+        route_id = lead.get("openrouter_id") if isinstance(lead, dict) else None
+        prefix = (
+            f"OpenRouter lead {route_id if isinstance(route_id, str) else 'unknown'}"
+        )
+        if not isinstance(lead, dict) or set(lead) != set(openrouter.LEAD_FIELDS):
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        if (
+            not isinstance(route_id, str)
+            or not openrouter.ROUTE_ID.fullmatch(route_id)
+            or route_id in seen
+        ):
+            errors.append(
+                f"{prefix}: openrouter_id must be a unique route without a variant suffix"
+            )
+            continue
+        seen.add(route_id)
+        if route_id < previous:
+            errors.append(f"{prefix}: leads must be sorted by openrouter_id")
+        previous = route_id
+        if route_id in dispositioned:
+            errors.append(
+                f"{prefix}: dispositioned OpenRouter routes must not remain leads"
+            )
+        validate_openrouter_lead(lead, fetched_at, prefix, errors)
+
+
 def validate_unique_record_ids(
     projects: list[dict[str, Any]],
     specifications_value: list[Any],
@@ -2410,6 +2860,7 @@ def validate_unique_record_ids(
     models_value: list[Any],
     errors: list[str],
     packs_value: list[Any] | None = None,
+    labs_value: list[Any] | None = None,
 ) -> None:
     """No identifier may name a record in more than one collection."""
     collection_ids: dict[str, list[str]] = {}
@@ -2420,6 +2871,7 @@ def validate_unique_record_ids(
         ("local-runtimes.json", local_runtimes_value),
         ("models.json", models_value),
         ("packs.json", packs_value or []),
+        ("labs.json", labs_value or []),
     ):
         for record in collection_records:
             if isinstance(record, dict) and isinstance(record.get("id"), str):
@@ -3042,6 +3494,14 @@ def validate(root: Path = ROOT) -> list[str]:
         )
     if (root / "web" / "hn-signals.json").exists():
         errors.append("hn-signals.json: attention-source signals must not be published")
+    if (root / "web" / openrouter.LEADS_NAME).exists():
+        errors.append(
+            f"{openrouter.LEADS_NAME}: OpenRouter-derived model leads must not be published"
+        )
+    if (root / "web" / openrouter.DISPOSITIONS_NAME).exists():
+        errors.append(
+            f"{openrouter.DISPOSITIONS_NAME}: OpenRouter lead decisions must not be published"
+        )
 
     tax = validate_taxonomy(catalog["taxonomy.json"], errors)
 
@@ -3090,6 +3550,21 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
+    labs_value = validate_labs(
+        catalog["labs.json"],
+        tax,
+        {
+            "projects": index.projects,
+            "models": models_value,
+            "source_models": source_models_value,
+            "services": inference_services_value,
+            "runtimes": local_runtimes_value,
+            "specifications": specifications_value,
+            "packs": packs_value,
+        },
+        index,
+        errors,
+    )
 
     validate_unique_record_ids(
         index.projects,
@@ -3099,6 +3574,7 @@ def validate(root: Path = ROOT) -> list[str]:
         models_value,
         errors,
         packs_value=packs_value,
+        labs_value=labs_value,
     )
 
     candidate_repos = validate_candidates(
@@ -3122,6 +3598,15 @@ def validate(root: Path = ROOT) -> list[str]:
         tax,
         errors,
         dispositioned_ids,
+    )
+    openrouter_dispositioned, terms_reviewed = validate_openrouter_dispositions(
+        catalog[openrouter.DISPOSITIONS_NAME], errors
+    )
+    validate_openrouter_leads(
+        catalog[openrouter.LEADS_NAME],
+        openrouter_dispositioned,
+        terms_reviewed,
+        errors,
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(
@@ -3151,12 +3636,18 @@ def main() -> int:
     model_count = len(load("models.json")["models"])
     source_model_count = len(load("models-dev.json")["models"])
     pack_count = len(load("packs.json")["packs"])
+    labs = load("labs.json")["labs"]
+    lab_names = {name for lab in labs for name in lab["catalog_names"]}
+    covered = sum(
+        model["developer"] in lab_names for model in load("models.json")["models"]
+    )
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
         f"{inference_service_count} scored inference services; "
         f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
         f"{pack_count} unscored agent packs; "
+        f"{len(labs)} unscored labs developing {covered} of the reviewed model releases; "
         f"{source_model_count} attributed models.dev source records"
     )
     for model_id, source_id in model_link_pending(

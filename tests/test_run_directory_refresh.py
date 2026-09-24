@@ -172,9 +172,19 @@ class GenerationStepsTests(unittest.TestCase):
         self.assertFalse(ok)
         ran = [call["command"] for call in run.calls]
         self.assertIn(list(failing), ran)
-        # The third generation step (sync_web_data.py) must never run.
+        # Neither the OpenRouter cross-check, which would match against a stale
+        # snapshot, nor any later step (sync_web_data.py onwards) may run.
+        self.assertNotIn(["uv", "run", "python", "scripts/import_openrouter.py"], ran)
         self.assertNotIn(["uv", "run", "python", "scripts/sync_web_data.py"], ran)
         self.assertEqual(2, len(results))
+
+    def test_the_openrouter_cross_check_follows_the_models_dev_import(self) -> None:
+        """ADR 039: leads are matched against the snapshot the same run refreshed."""
+        scripts = [command[-1] for _name, command, _token in refresh.GENERATION_STEPS]
+        self.assertEqual(
+            scripts.index("scripts/import_models_dev.py") + 1,
+            scripts.index("scripts/import_openrouter.py"),
+        )
 
 
 class ChecksTests(unittest.TestCase):
@@ -293,6 +303,120 @@ class PublishGatingTests(unittest.TestCase):
         ]
         self.assertEqual(1, len(create_calls))
         self.assertIn("--draft", create_calls[0])
+
+
+OPENROUTER_IMPORT = ("uv", "run", "python", "scripts/import_openrouter.py")
+OPENROUTER_SKIP = (
+    "OpenRouter import skipped without a request: no terms review is recorded. Read "
+    "https://openrouter.ai/terms, then set terms_reviewed_at in "
+    "directory/openrouter-model-dispositions.json (docs/MODELS.md, ADR 039)."
+)
+
+
+class OpenRouterReportTests(unittest.TestCase):
+    """A skipped import is otherwise silent: the gate must reach the pull request."""
+
+    def test_the_report_keeps_only_the_importers_own_lines(self) -> None:
+        output = "\n".join(
+            [
+                "Resolved 42 packages in 3ms",
+                "staged 2 OpenRouter model leads from 430 eligible routes (446 listed)",
+                "prunable OpenRouter disposition: acme/gone is no longer listed",
+                "",
+            ]
+        )
+        results = [
+            ("refresh models.dev source and candidate metadata", 0, "staged 6 model"),
+            (refresh.OPENROUTER_STEP, 0, output),
+        ]
+
+        self.assertEqual(
+            [
+                "staged 2 OpenRouter model leads from 430 eligible routes (446 listed)",
+                "prunable OpenRouter disposition: acme/gone is no longer listed",
+            ],
+            refresh.openrouter_report(results),
+        )
+        self.assertEqual([], refresh.openrouter_report(results[:1]))
+
+    def test_the_pr_body_adds_a_section_only_for_a_report(self) -> None:
+        results = [("validate_directory", True, "validated\n")]
+
+        self.assertEqual(
+            refresh.build_pr_body(results), refresh.build_pr_body(results, [])
+        )
+        body = refresh.build_pr_body(results, [OPENROUTER_SKIP])
+        self.assertIn("## OpenRouter model leads", body)
+        self.assertIn(f"- {OPENROUTER_SKIP}", body)
+        self.assertTrue(
+            body.endswith(
+                "Review license incidents and candidate additions before merging."
+            )
+        )
+
+    def test_an_openrouter_failure_is_reported_and_the_run_continues(self) -> None:
+        """The importer only ever writes unpublished leads, and only on success, so an
+        OpenRouter outage must not cost the week's GitHub and models.dev reads."""
+        failure = "OpenRouter import failed without changing the leads: HTTP Error 503"
+        run = ScriptedRun(clean_matching_tree({OPENROUTER_IMPORT: (1, failure)}))
+        stderr = io.StringIO()
+        with (
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(stderr),
+        ):
+            ok, results = refresh.run_generation_steps(run, None)
+
+        self.assertTrue(ok)
+        self.assertEqual(len(refresh.GENERATION_STEPS), len(results))
+        self.assertIn(
+            ["uv", "run", "python", "scripts/sync_web_data.py"],
+            [call["command"] for call in run.calls],
+        )
+        self.assertIn("warning", stderr.getvalue())
+        self.assertTrue(refresh.reported_step_failed(results))
+        self.assertEqual([failure], refresh.openrouter_report(results))
+
+    def test_an_openrouter_failure_still_fails_the_run_for_the_scheduler(
+        self,
+    ) -> None:
+        run = ScriptedRun(clean_matching_tree({OPENROUTER_IMPORT: (1, "boom")}))
+        with (
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            # Nothing is staged, so this is the early no-changes exit.
+            self.assertEqual(1, refresh.main([], run=run))
+        run = ScriptedRun(clean_matching_tree())
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(0, refresh.main([], run=run))
+
+    def test_publish_carries_the_importers_report_into_the_pull_request(
+        self,
+    ) -> None:
+        overrides = clean_matching_tree(
+            {
+                OPENROUTER_IMPORT: (0, f"Resolved 42 packages\n{OPENROUTER_SKIP}\n"),
+                DIFF_QUIET: (1, ""),
+                PUSH: (0, ""),
+            }
+        )
+        run = ScriptedRun(
+            overrides,
+            prefixes=[
+                (PR_LIST, (0, "")),
+                (("gh", "pr", "create"), (0, "https://example.invalid/pull/1")),
+            ],
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(0, refresh.main(["--publish"], run=run))
+        (create,) = [
+            call["command"]
+            for call in run.calls
+            if call["command"][:3] == ["gh", "pr", "create"]
+        ]
+        body = create[create.index("--body") + 1]
+        self.assertIn(f"- {OPENROUTER_SKIP}", body)
+        self.assertNotIn("Resolved 42 packages", body)
 
 
 class LinkPendingTests(unittest.TestCase):
