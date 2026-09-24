@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of ten files:
+`directory/` is canonical. The browser consumes synchronized copies of eleven files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -18,6 +18,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
 | `packs.json` | Reviewed, unscored agent packs recorded for what a host installs | Yes |
+| `labs.json` | Reviewed, unscored labs that develop the reviewed model releases, joined to the rest of the catalog by name | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
@@ -31,7 +32,7 @@ Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_sh
 
 `directory/robots.json` is not in the table yet: the Robots collection plumbing has not landed (see the robots item in [`../BACKLOG.md`](../BACKLOG.md)), so it is neither canonical nor published, and the regeneration sequence in step 7 of [`ROBOTS.md`](ROBOTS.md) applies once it ships.
 
-The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
+The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory, and Labs is a sibling view because an organization is not a deployable choice. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Project record
 
@@ -75,6 +76,7 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 | `stars_verified_at` | Automation | `stars` was observed on this date |
 | `generated_at` | Automation/editor | The published project document was last regenerated |
 | `trust.verified_at` | Human reviewer | The trust record's properties and findings were reviewed on this date; never automated |
+| `safety_framework.verified_at` (lab) | Human reviewer | The lab's published safety framework was read on this date; never automated |
 | `excluded_at` (exclusion) | Human reviewer | The exclusion decision was first recorded on this date |
 | `verified_at` (exclusion) | Human reviewer | The exclusion reason was last re-checked against current sources on this date; never automated |
 
@@ -184,6 +186,21 @@ Pack records are independent from project records. They contain no `system_famil
 - **Review:** pinned `evidence` (manifest or skill frontmatter as a Git blob, plus dated web sources) and human-owned `verified_at`. A marketplace's `verified_at` dates its pinned manifest, never the catalogue behind it.
 
 A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
+
+## Lab record
+
+Lab records are independent from every other collection. They contain no `system_family`, role, score profile, score, rank, stars, licence, or source model, and the validator rejects each if present. The envelope is `{"version": "1.0", "verified_at": <ISO date>, "labs": [...]}`.
+
+- **Identity:** `id` (a slug with the `lab-` prefix, since several organizations share a name with a record elsewhere), `name`, the organization's official `url`, and a one-sentence `description`.
+- **Organization:** taxonomy-backed `lab_type` (`lab_types`) and `headquarters` (`countries`), optional `parent_organization` present only when first-party evidence names one, and `organization_note`, reviewed prose saying how the organization's catalog names relate: which unit develops the models, which operates the services, and what the parent is.
+- **Catalog links:** `catalog_names`, the exact strings other collections use for the organization, and `systems`, ids of the `projects.json` records it builds, because a system record names no organization.
+- **Channels:** non-empty `channels`, each `{kind, url}` with `kind` from `lab_channel_kinds`: the model catalog, release notes, and news pages a reader watches, and the GitHub and Hugging Face organizations it publishes from. `github` and `hugging_face` channels are organization URLs with no path.
+- **Safety framework (optional):** `safety_framework` `{title, url, verified_at}` when the organization publishes a frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages. Absence is not a finding that none exists.
+- **Review:** non-empty dated first-party `evidence` in the inference-service shape and human-owned `verified_at`.
+
+Everything else is joined, never stored: reviewed models whose `developer` is one of `catalog_names`; services by `operator`, runtimes by `maintainer`, specifications by any of `stewards`, and packs by `steward`, each matched against `catalog_names`; models.dev source rows in the namespaces (`source_id` before the `/`) of the lab's reviewed models, until a review overlays them; and the systems listed in `systems`. `scripts/lab_relations.py` and `labRelations` in `web/app-core.js` state these rules for the scripts and the page.
+
+Validation requires every catalog name to match a record and at least one to be a reviewed model's `developer` (the inclusion gate); refuses a catalog name, system, or GitHub organization claimed by two labs; refuses a models.dev namespace split between labs; and requires every published system whose repository sits in one of the lab's GitHub organizations to be listed in `systems`. See [`LABS.md`](LABS.md) and [ADR 041](adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md).
 
 ## Inference service record
 

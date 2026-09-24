@@ -6,7 +6,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Data: CC-BY-4.0](https://img.shields.io/badge/data-CC--BY--4.0-lightgrey)](LICENSE-DATA)
 
-AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases, the specifications that connect systems, managed inference services, runtimes you host yourself, and unscored agent packs a host agent installs. One Directory surface discovers systems, the complete models.dev source catalog, inference services, and local runtimes while preserving the distinction between attributed source metadata and Atlas-reviewed records. Models remains a specialist sibling view and Specifications remains a separate artifact view.
+AI Systems Atlas is a curated directory of operational AI systems, provider-independent model releases and the labs that develop them, the specifications that connect systems, managed inference services, runtimes you host yourself, and unscored agent packs a host agent installs. One Directory surface discovers systems, the complete models.dev source catalog, inference services, and local runtimes while preserving the distinction between attributed source metadata and Atlas-reviewed records. Models and Labs are specialist sibling views, and Specifications remains a separate artifact view.
 
 Browse the published directory at [peacefulcoexistance.com](https://peacefulcoexistance.com/). Every reviewed record is also published as JSON with no key and no rate limit — the [API page](https://peacefulcoexistance.com/?view=api) lists each file, and [llms.txt](https://peacefulcoexistance.com/llms.txt) says the same thing for an agent.
 
@@ -66,6 +66,7 @@ directory/local-runtimes.json  reviewed and separately scored self-operated infe
 directory/models.json         reviewed and separately scored model releases
 directory/models-dev.json     complete commit-pinned models.dev source snapshot
 directory/packs.json          reviewed unscored agent packs a host agent installs
+directory/labs.json           reviewed unscored labs that develop the reviewed model releases
 directory/model-candidates.json unpublished text-output model review queue
 directory/openrouter-model-leads.json unpublished OpenRouter cross-check leads for models.dev gaps
 directory/openrouter-model-dispositions.json OpenRouter terms review and lead decisions
@@ -91,6 +92,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.
 - Inference services are classified by service boundary, delivery, model sources, and API style, then scored only on stable operational-service traits; their scores are not comparable to system-family scores.
+- Labs are unscored records of the organizations that develop reviewed releases. A lab joins its releases, services, runtimes, specifications, and packs by the names the catalog already uses for it, and never carries a licence, score, or rank.
 - Local runtimes are classified by runtime type, accelerators, model formats, serving modes, and deployment surfaces, then scored only on documented execution capability; their scores exclude throughput, latency, and benchmark rank and are not comparable to any other profile.
 
 The weekly workflow refreshes live metadata, preserves candidate and license-review queues, validates the complete catalog, runs tests, and commits only verified data changes.

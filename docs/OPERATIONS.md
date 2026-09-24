@@ -61,7 +61,7 @@ The report reads `directory/` and prints one row per reviewed record, oldest edi
 - **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, or trust record, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
 - **metadata** is the newest automated timestamp, `metadata_verified_at` or `stars_verified_at`, or `none` for records without GitHub metadata. It says how fresh the live numbers are, not how fresh the review is.
 
-`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, or `specifications` and may repeat.
+`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, `specifications`, `packs`, or `labs` and may repeat. A lab's oldest evidence includes the date its safety framework was read.
 
 ## Metadata refresh
 
@@ -90,7 +90,7 @@ The refresh is transactional at the repository level:
 
 Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
-The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json` carries no stars and is never touched by this pass.
+The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json` and `directory/labs.json` carry no stars and are never touched by this pass.
 
 models.dev discovery is a separate fail-closed import:
 
@@ -112,7 +112,8 @@ It needs no token and makes no request until `terms_reviewed_at` is recorded in 
 
 The weekly workflow checks the authoritative record URL, every reviewed evidence URL,
 every immutable evidence URL, and every license or governing-terms URL across systems,
-specifications, inference services, local runtimes, and reviewed models:
+specifications, inference services, local runtimes, reviewed models, agent packs, and labs,
+including each lab's channel pages and the safety framework it publishes:
 
 ```bash
 GITHUB_TOKEN=... uv run python scripts/check_evidence_links.py
@@ -480,6 +481,12 @@ Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not
 For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
 Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification. An OpenRouter lead is only a pointer: cite the developer's own documentation, never the listing, for identity, licensing, or hosting.
+
+## Review a lab
+
+Follow [`LABS.md`](LABS.md) and treat one organization, under every name the catalog already uses for it, as the review unit. Confirm the inclusion gate from `models.json` before anything else: a lab is recorded only once a release it developed has been reviewed. Read the organization's own terms, privacy policy, or filings for its entity and headquarters, then each channel page and any framework it publishes. Never record funding, valuation, headcount, benchmarks, or news, and never give an organization a licence or a score. Validation refuses a name, system, or GitHub organization claimed by two labs, a models.dev namespace split between developer strings the lab does not all name, and a system in the lab's own GitHub organization that its `systems` list leaves out. Synchronize, regenerate the payloads and share pages, validate, and exercise the Labs view and a record dialog's Lab link.
+
+No automation creates, edits, or dates a lab record. When a new reviewed release names a developer no lab covers, the release stands on its own and the lab waits for its own review; when a reviewed release adds a new developer string for a covered organization, validation flags the split namespace until the lab names it.
 
 ## Resolve a license review
 

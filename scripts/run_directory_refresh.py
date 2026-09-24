@@ -57,6 +57,7 @@ STAGED_DIRECTORY_FILES = (
     "directory/local-runtimes.json",
     "directory/specifications.json",
     "directory/packs.json",
+    "directory/labs.json",
     "directory/taxonomy.json",
 )
 

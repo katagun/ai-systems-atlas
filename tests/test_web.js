@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -543,6 +543,7 @@ test("every logo mapping points at a published record and a vendored plain mark"
     ...readJSON("inference-services.json").services.map(record => record.id),
     ...readJSON("local-runtimes.json").runtimes.map(record => record.id),
     ...readJSON("models.json").models.map(record => record.id),
+    ...readJSON("labs.json").labs.map(record => record.id),
   ]);
 
   assert.ok(Object.keys(logos.records).length > 0);
@@ -565,6 +566,7 @@ test("record references parse only a known kind and a plain id", () => {
   assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
   assert.deepEqual(parseRecordReference("model:model-alibaba-qwen2-5-coder-0-5b"), { kind: "model", id: "model-alibaba-qwen2-5-coder-0-5b" });
   assert.deepEqual(parseRecordReference("pack:superpowers"), { kind: "pack", id: "superpowers" });
+  assert.deepEqual(parseRecordReference("lab:lab-openai"), { kind: "lab", id: "lab-openai" });
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
@@ -577,6 +579,7 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
   assert.equal(shareRecordPath("model", "model-alibaba-qwen2-5-coder-0-5b"), "records/models/model-alibaba-qwen2-5-coder-0-5b/");
   assert.equal(shareRecordPath("pack", "superpowers"), "records/packs/superpowers/");
+  assert.equal(shareRecordPath("lab", "lab-openai"), "records/labs/lab-openai/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
 });
 
@@ -614,6 +617,102 @@ test("mixed directory browsing includes packs and reads their own index key", ()
     ["Brain Kit"],
   );
   assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }), []);
+});
+
+const labs = [
+  { id: "lab-alpha", name: "Alpha", description: "An AI company with a cloud unit.", lab_type: "ai_company", headquarters: "us", parent_organization: "Alpha Holdings", catalog_names: ["Alpha", "Alpha Cloud"], systems: ["alpha-chat"] },
+  { id: "lab-beta", name: "Beta", description: "A technology company.", lab_type: "technology_company", headquarters: "fr", catalog_names: ["Beta", "Beta Research"], systems: [] },
+];
+const labCatalog = {
+  models: [
+    { id: "alpha-one", name: "Alpha One", developer: "Alpha", source_id: "alpha/one", review_status: "reviewed", distribution_modes: ["developer_api"], source_metadata: { release_date: "2026-03-02" } },
+    { id: "alpha-two", name: "Alpha Two", developer: "Alpha", source_id: "alpha/two", review_status: "reviewed", distribution_modes: ["developer_api", "third_party_hosting"], source_metadata: { release_date: "2026-07" } },
+    { id: "alpha-early", name: "Alpha Early", developer: "Alpha", source_id: null, review_status: "reviewed", distribution_modes: ["downloadable_weights"], source_metadata: {} },
+    { id: "alpha-three", name: "Alpha Three", developer: "alpha", source_id: "alpha/three", review_status: "imported" },
+    { id: "beta-one", name: "Beta One", developer: "Beta Research", source_id: "beta/one", review_status: "reviewed", distribution_modes: ["downloadable_weights"], source_metadata: { release_date: "2025-11-20" } },
+    { id: "gamma-one", name: "Gamma One", developer: "Gamma", source_id: "gamma/one", review_status: "reviewed", distribution_modes: ["developer_api"] },
+    { id: "gamma-two", name: "Gamma Two", developer: "gamma", source_id: "gamma/two", review_status: "imported" },
+  ],
+  services: [{ id: "alpha-api", operator: "Alpha Cloud" }, { id: "router", operator: "Router Inc." }],
+  runtimes: [{ id: "beta-serve", maintainer: "Beta" }],
+  specifications: [{ id: "shared-spec", stewards: ["Alpha", "Beta"] }, { id: "other-spec", stewards: ["Community"] }],
+  packs: [{ id: "alpha-pack", steward: "Alpha" }],
+  projects: [{ id: "alpha-chat" }, { id: "unrelated" }],
+};
+
+test("a lab joins every record whose organization field it names", () => {
+  const alpha = labRelations(labs[0], labCatalog);
+  assert.deepEqual(alpha.models.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"]);
+  assert.deepEqual(alpha.namespaces, ["alpha"]);
+  assert.deepEqual(alpha.sourceRows.map(item => item.id), ["alpha-three"]);
+  assert.deepEqual(alpha.services.map(item => item.id), ["alpha-api"]);
+  assert.deepEqual(alpha.specifications.map(item => item.id), ["shared-spec"]);
+  assert.deepEqual(alpha.packs.map(item => item.id), ["alpha-pack"]);
+  assert.deepEqual(alpha.systems.map(item => item.id), ["alpha-chat"]);
+  const beta = labRelations(labs[1], labCatalog);
+  assert.deepEqual(beta.models.map(item => item.id), ["beta-one"], "a unit name the lab lists joins its releases");
+  assert.deepEqual(beta.runtimes.map(item => item.id), ["beta-serve"]);
+  assert.deepEqual(beta.sourceRows, [], "a namespace with no pending rows adds none");
+  assert.deepEqual(labRelations({ catalog_names: ["Nobody"] }, labCatalog).models, []);
+});
+
+test("source namespaces are the models.dev directory before the slash", () => {
+  assert.equal(sourceNamespace("alpha/one"), "alpha");
+  assert.equal(sourceNamespace("alpha/nested/one"), "alpha");
+  for (const value of [null, undefined, "", "noslash", "/leading"]) assert.equal(sourceNamespace(value), null);
+});
+
+test("lab releases list newest first and fall back to the name when a date is missing", () => {
+  const alpha = labRelations(labs[0], labCatalog).models;
+  assert.deepEqual(releasesNewestFirst(alpha).map(item => item.id), ["alpha-two", "alpha-one", "alpha-early"]);
+  assert.equal(releaseDate(alpha[2]), "");
+  assert.deepEqual(alpha.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"], "sorting copies rather than reorders");
+});
+
+test("a lab shows which distribution modes its releases carry, in taxonomy order", () => {
+  const alpha = labRelations(labs[0], labCatalog).models;
+  assert.deepEqual(labDistributionModes(alpha, ["downloadable_weights", "developer_api", "third_party_hosting"]), ["downloadable_weights", "developer_api", "third_party_hosting"]);
+  assert.deepEqual(labDistributionModes(alpha.slice(0, 1), ["downloadable_weights", "developer_api"]), ["developer_api"]);
+  assert.deepEqual(labDistributionModes(alpha, []), ["developer_api", "downloadable_weights", "third_party_hosting"]);
+});
+
+test("lab filters combine type, headquarters, and release distribution, sorted by name only", () => {
+  assert.deepEqual(filterLabs([...labs].reverse(), {}).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { sort: "score" }).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { type: "technology_company" }).map(item => item.id), ["lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { headquarters: "us" }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "downloadable_weights", models: labCatalog.models }).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "third_party_hosting", models: labCatalog.models }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "developer_api" }), [], "without models no lab has a release");
+});
+
+test("lab search covers names, units, and parent organizations", () => {
+  assert.deepEqual(filterLabs(labs, { term: "Beta Research" }).map(item => item.id), ["lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { term: "Holdings" }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { term: "Hangzhou", searchIndex: { "lab-beta": "lab-beta beta offices in hangzhou" } }).map(item => item.id), ["lab-beta"]);
+});
+
+test("a record dialog finds its lab by its own collection's join rule", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  const ids = (kind, record) => labsForRecord(kind, record, index).map(item => item.id);
+  assert.deepEqual(ids("model", labCatalog.models[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("model", labCatalog.models[3]), ["lab-alpha"], "an imported row joins through its namespace");
+  assert.deepEqual(ids("model", labCatalog.models[6]), [], "a namespace no lab reviewed stays unjoined");
+  assert.deepEqual(ids("model", labCatalog.models[5]), []);
+  assert.deepEqual(ids("inference", labCatalog.services[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("inference", labCatalog.services[1]), []);
+  assert.deepEqual(ids("runtime", labCatalog.runtimes[0]), ["lab-beta"]);
+  assert.deepEqual(ids("spec", labCatalog.specifications[0]), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(ids("pack", labCatalog.packs[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("system", { id: "alpha-chat" }), ["lab-alpha"]);
+  assert.deepEqual(ids("system", { id: "unrelated" }), []);
+  assert.deepEqual(labsForRecord("model", labCatalog.models[0], null), []);
+});
+
+test("the models lab filter narrows to the ids it is given", () => {
+  const ids = new Set(["model-vision"]);
+  assert.deepEqual(filterModels(models, { ids }).map(item => item.id), ["model-vision"]);
+  assert.equal(filterModels(models, {}).length, models.length);
 });
 
 test("theme preference cycles system, light, dark and recovers from unknown values", () => {
@@ -860,8 +959,9 @@ test("an unknown or malformed view parameter resolves to no view", () => {
 });
 
 const badgeNames = badges => badges.map(badge => badge.name);
+const isTypeBadge = id => CARD_BADGES[id].family === "type";
 
-test("agent-system badges follow priority order and show every match", () => {
+test("agent-system badges lead with the type and follow priority order, showing every match", () => {
   const record = {
     system_family: "agent_system",
     local_first: true,
@@ -869,12 +969,22 @@ test("agent-system badges follow priority order and show every match", () => {
     agent_capabilities: ["mcp", "browser_control"],
     deployment: ["self_hosted"],
   };
-  assert.deepEqual(badgeNames(cardBadges("system", record)), ["Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
-  assert.deepEqual(cardBadges("system", record).map(badge => badge.family), ["control", "control", "capability", "capability", "control"]);
+  assert.deepEqual(badgeNames(cardBadges("system", record)), ["Agent system", "Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
+  assert.deepEqual(cardBadges("system", record).map(badge => badge.family), ["type", "control", "control", "capability", "capability", "control"]);
 });
 
-test("no badge set can overflow the card cap of six", () => {
-  for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) assert.ok(ids.length <= 6, `${key} lists ${ids.length} badges`);
+// A set may list a type badge for every value of its type field, but they all
+// test that one field for one value each, so a card matches at most one of
+// them. The cap therefore bounds one type badge plus the set's traits.
+test("no card can overflow the cap of six: one type badge plus its set's traits", () => {
+  for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
+    const types = ids.filter(isTypeBadge);
+    assert.ok(types.length > 0, `${key} lists no type badge`);
+    assert.deepEqual(ids.slice(0, types.length), types, `${key} must list its type badges first`);
+    assert.equal(new Set(types.map(id => CARD_BADGES[id].test.field)).size, 1, `${key} type badges must all test one field`);
+    assert.equal(new Set(types.map(id => CARD_BADGES[id].test.equals)).size, types.length, `${key} type badges must test distinct values`);
+    assert.ok(1 + ids.length - types.length <= 6, `${key} can show ${1 + ids.length - types.length} badges`);
+  }
 });
 
 test("badges come from the record's own family", () => {
@@ -886,11 +996,11 @@ test("badges come from the record's own family", () => {
     architectures: ["plain_files"],
     agent_capabilities: ["mcp"],
   };
-  assert.deepEqual(badgeNames(cardBadges("system", memory)), ["Editable by you", "Graph retrieval", "Plain files"]);
-  assert.deepEqual(cardBadges("system", { system_family: "agent_system", human_editable: true }), []);
+  assert.deepEqual(badgeNames(cardBadges("system", memory)), ["Memory system", "Editable by you", "Graph retrieval", "Plain files"]);
+  assert.deepEqual(badgeNames(cardBadges("system", { system_family: "agent_system", human_editable: true })), ["Agent system"]);
 });
 
-test("missing, null, false, empty, and non-boolean fields never produce a badge", () => {
+test("missing, null, false, empty, and non-boolean fields never produce a trait badge", () => {
   const records = [
     { system_family: "agent_system" },
     { system_family: "agent_system", local_first: null, execution_boundaries: null, agent_capabilities: [], deployment: [] },
@@ -898,22 +1008,32 @@ test("missing, null, false, empty, and non-boolean fields never produce a badge"
     { system_family: "agent_system", local_first: "true" },
     { system_family: "agent_system", deployment: "self_hosted" },
   ];
-  for (const record of records) assert.deepEqual(cardBadges("system", record), [], JSON.stringify(record));
+  for (const record of records) assert.deepEqual(badgeNames(cardBadges("system", record)), ["Agent system"], JSON.stringify(record));
 });
 
-test("specifications, imported models, and unknown kinds or families get no badges", () => {
-  assert.deepEqual(cardBadges("spec", { status: "published", licenses: ["MIT"] }), []);
-  assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights"] }), []);
-  // Imported rows are gated on review_status alone, not on distribution_modes
-  // being absent: an imported row with every mode still takes no badge.
-  assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
-  // The gate is an allow-list on review_status === "reviewed", not a
-  // block-list on "imported": a malformed or future-status record with no
-  // review_status at all also takes no badge, even carrying every mode.
-  assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
+test("a type badge needs its type field to equal one value exactly", () => {
+  for (const service_type of [undefined, null, "", "Direct model API", ["direct_model_api"], "constructor"]) {
+    assert.deepEqual(cardBadges("inference", { service_type, delivery_modes: ["batch"] }).map(badge => badge.id), ["batch"], JSON.stringify(service_type));
+  }
+  assert.deepEqual(badgeNames(cardBadges("inference", { service_type: "routing_aggregator" })), ["Routing aggregator"]);
+});
+
+test("specifications, packs, and labs carry only their type; imported rows only the source record", () => {
+  assert.deepEqual(badgeNames(cardBadges("spec", { specification_type: "protocol", status: "published", licenses: ["MIT"] })), ["Protocol"]);
+  assert.deepEqual(badgeNames(cardBadges("pack", packs[0])), ["Process kit"]);
+  assert.deepEqual(badgeNames(cardBadges("lab", labs[1])), ["Technology company"]);
+  // An imported row has no reviewed field, so even a row carrying every
+  // distribution mode takes the source-record badge and nothing else.
+  for (const record of [
+    { review_status: "imported" },
+    { review_status: "imported", model_type: "language_model", distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] },
+  ]) assert.deepEqual(badgeNames(cardBadges("model", record)), ["Source record"], JSON.stringify(record));
+  // The gate is an allow-list on review_status: a malformed or future-status
+  // record takes no badge, even carrying every mode and a type.
+  assert.deepEqual(cardBadges("model", { model_type: "language_model", distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
+  assert.deepEqual(cardBadges("model", { review_status: "retracted", model_type: "language_model" }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
-  assert.deepEqual(cardBadges("pack", packs[0]), []);
 });
 
 // Reviewed-model cards trade their role pill for the same distribution_modes
@@ -933,6 +1053,10 @@ test("reviewed-model badges test distribution_modes, in taxonomy order, and ever
   );
   assert.deepEqual(cardBadges("model", { review_status: "reviewed", distribution_modes: [] }), []);
   assert.deepEqual(cardBadges("model", { review_status: "reviewed" }), []);
+  assert.deepEqual(
+    badgeNames(cardBadges("model", { review_status: "reviewed", model_type: "multimodal_language_model", distribution_modes: ["developer_api"] })),
+    ["Multimodal language model", "Developer API"],
+  );
 });
 
 test("inference-service and local-runtime badges skip facts their cards already print", () => {
@@ -947,12 +1071,13 @@ test("inference-service and local-runtime badges skip facts their cards already 
 });
 
 // Role pills print api_styles (services, runtimes) and distribution_modes
-// (models); service footers print model_sources. A badge on those fields
-// would repeat the card to itself.
-test("no badge tests a field its card already prints", () => {
+// (models); service footers print model_sources. A trait badge on those fields
+// would repeat the card to itself. The type badge is the one deliberate
+// restatement: it repeats the type the eyebrow prints, as an emblem.
+test("no trait badge tests a field its card already prints", () => {
   const printed = { inference: ["api_styles", "model_sources"], runtime: ["api_styles"], model: ["model_type", "source_model", "licenses"] };
   for (const [key, fields] of Object.entries(printed)) {
-    for (const id of CARD_BADGE_SETS[key]) {
+    for (const id of CARD_BADGE_SETS[key].filter(id => !isTypeBadge(id))) {
       assert.ok(!fields.includes(CARD_BADGES[id].test.field), `${id} repeats ${CARD_BADGES[id].test.field}, which ${key} cards already print`);
     }
   }
@@ -976,6 +1101,9 @@ test("every badge list names a defined badge and every defined badge is listed",
   for (const [id, badge] of Object.entries(CARD_BADGES)) {
     assert.ok(badge.name && badge.definition, `${id} needs a name and a definition`);
     assert.ok(Array.isArray(badge.test.anyOf) ? badge.test.anyOf.length > 0 : badge.test.anyOf === undefined, `${id} has a malformed test`);
+    // Type badges test one value exactly; trait badges test presence.
+    if (badge.family === "type") assert.ok(typeof badge.test.equals === "string" && badge.test.anyOf === undefined, `${id} must test one value with equals`);
+    else assert.equal(badge.test.equals, undefined, `${id} is a trait badge and must not test equality`);
   }
 });
 
@@ -988,7 +1116,7 @@ test("the badge glossary lists each badge once with every place it appears", () 
 });
 
 test("every badge belongs to one family and owns a unique glyph", () => {
-  assert.deepEqual(Object.keys(BADGE_FAMILIES), ["control", "capability", "platform"]);
+  assert.deepEqual(Object.keys(BADGE_FAMILIES), ["type", "control", "capability", "platform"]);
   const css = fs.readFileSync(path.join(__dirname, "..", "web", "styles.css"), "utf8");
   for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
     assert.ok(family.name && family.meaning && family.frame, `${id} needs a name, a meaning, and a frame`);
@@ -1018,9 +1146,11 @@ test("emblems are hidden decorative SVG built from the family frame and the badg
 
 test("the legend lists only what the active scope can show", () => {
   const ids = legend => legend.badges.map(badge => badge.id);
-  assert.deepEqual(ids(badgeLegend("inference")), ["dedicated-endpoints", "reserved-capacity", "batch"].sort((a, b) =>
-    Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[a].family) - Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[b].family)));
-  assert.deepEqual(ids(badgeLegend("systems", "agent_system")), ["local-first", "sandboxed-execution", "self-hostable", "browser-control", "mcp"]);
+  const inFamilyOrder = list => [...list].sort((a, b) =>
+    Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[a].family) - Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[b].family));
+  assert.deepEqual(ids(badgeLegend("inference")), inFamilyOrder(CARD_BADGE_SETS.inference));
+  assert.deepEqual(ids(badgeLegend("inference")).slice(0, 4), ["direct-model-api", "cloud-model-platform", "managed-inference-host", "routing-aggregator"]);
+  assert.deepEqual(ids(badgeLegend("systems", "agent_system")), ["agent-system", "local-first", "sandboxed-execution", "self-hostable", "browser-control", "mcp"]);
   const systems = badgeLegend("systems");
   assert.equal(systems.mode, "badges");
   assert.equal(new Set(ids(systems)).size, ids(systems).length, "each badge once");
@@ -1029,11 +1159,13 @@ test("the legend lists only what the active scope can show", () => {
   assert.deepEqual(families, [...families].sort((a, b) => a - b), "grouped by family in registry order");
   for (const scope of ["all", "packs"]) {
     assert.equal(badgeLegend(scope).mode, "families");
-    assert.deepEqual(badgeLegend(scope).families.map(family => family.id), ["control", "capability", "platform"]);
+    assert.deepEqual(badgeLegend(scope).families.map(family => family.id), ["type", "control", "capability", "platform"]);
   }
-  // Models has one fixed set — no system-family narrowing — so its legend
-  // always names the whole CARD_BADGE_SETS.model list, in family order.
-  assert.deepEqual(ids(badgeLegend("models")), CARD_BADGE_SETS.model);
+  // Models lists reviewed and imported rows together, so its legend names the
+  // reviewed set and the source-record badge, types first.
+  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
+  assert.deepEqual(ids(badgeLegend("specifications")), CARD_BADGE_SETS.spec);
+  assert.deepEqual(ids(badgeLegend("labs")), CARD_BADGE_SETS.lab);
   assert.equal(badgeLegend("systems", "constructor"), null);
   assert.equal(badgeLegend("toString"), null);
 });
@@ -1056,9 +1188,34 @@ const BADGE_FIELD_VOCABULARIES = {
   distribution_modes: "model_distribution_modes",
 };
 
+// Each type field and the vocabulary its values come from. An imported row's
+// review_status is set by the payload builder, not the taxonomy.
+const TYPE_FIELD_VOCABULARIES = {
+  system_family: "system_families",
+  service_type: "inference_service_types",
+  runtime_type: "local_runtime_types",
+  model_type: "model_types",
+  specification_type: "specification_types",
+  pack_type: "pack_types",
+  lab_type: "lab_types",
+};
+
 test("every value a badge tests exists in its taxonomy vocabulary", () => {
   const taxonomy = readWebJSON("taxonomy.json");
   for (const [id, badge] of Object.entries(CARD_BADGES)) {
+    if (badge.test.equals !== undefined) {
+      if (badge.test.field === "review_status") {
+        assert.equal(badge.test.equals, "imported", `${id} may only mark an imported row`);
+        continue;
+      }
+      const group = TYPE_FIELD_VOCABULARIES[badge.test.field];
+      assert.ok(group, `${id} tests ${badge.test.field}, which is not a type field`);
+      assert.ok(taxonomy[group].some(item => item.id === badge.test.equals), `${id} names unknown ${group} value ${badge.test.equals}`);
+      // System families are named in the plural ("Memory systems"); a badge names one record.
+      const taxonomyName = taxonomy[group].find(item => item.id === badge.test.equals).name;
+      assert.equal(badge.name, group === "system_families" ? taxonomyName.replace(/s$/, "") : taxonomyName, `${id} must carry its taxonomy name`);
+      continue;
+    }
     if (!badge.test.anyOf) continue;
     const group = BADGE_FIELD_VOCABULARIES[badge.test.field];
     assert.ok(group, `${id} tests ${badge.test.field}, which has no known vocabulary`);
@@ -1067,31 +1224,64 @@ test("every value a badge tests exists in its taxonomy vocabulary", () => {
   }
 });
 
+// A new type value without a badge would leave its cards without one, so every
+// value of every type vocabulary must have a type badge in the matching set.
+test("every value of every type vocabulary has a type badge", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const setsFor = { system_family: key => key.startsWith("system:"), service_type: key => key === "inference", runtime_type: key => key === "runtime", model_type: key => key === "model", specification_type: key => key === "spec", pack_type: key => key === "pack", lab_type: key => key === "lab" };
+  for (const [field, group] of Object.entries(TYPE_FIELD_VOCABULARIES)) {
+    const listed = Object.entries(CARD_BADGE_SETS).filter(([key]) => setsFor[field](key)).flatMap(([, ids]) => ids).filter(id => CARD_BADGES[id].test.field === field);
+    const covered = new Set(listed.map(id => CARD_BADGES[id].test.equals));
+    for (const { id } of taxonomy[group]) assert.ok(covered.has(id), `${group} value ${id} has no type badge`);
+  }
+  for (const family of taxonomy.system_families) {
+    const types = CARD_BADGE_SETS[`system:${family.id}`].filter(isTypeBadge);
+    assert.deepEqual(types.map(id => CARD_BADGES[id].test.equals), [family.id], `system:${family.id} must list exactly its own family badge`);
+  }
+});
+
 function publishedBadgeScopes() {
   const projects = readWebJSON("projects.json").projects;
   const family = name => ["system", projects.filter(record => record.system_family === name)];
+  // The reviewed catalog (models.json) carries no review_status field of its
+  // own — only the merged boot payload marks reviewed vs imported — so read
+  // the boot payload here, split the same way cardBadgeSetKey gates.
+  const bootModels = readWebJSON("app/models.json").models;
   return {
     "system:agent_system": family("agent_system"),
     "system:memory_system": family("memory_system"),
     "system:assistant_system": family("assistant_system"),
     inference: ["inference", readWebJSON("inference-services.json").services],
     runtime: ["runtime", readWebJSON("local-runtimes.json").runtimes],
-    // The reviewed catalog (models.json) carries no review_status field of
-    // its own — only the merged boot payload marks reviewed vs imported —
-    // so read the boot payload here, filtered the same way cardBadgeSetKey
-    // gates: review_status === "reviewed" exactly.
-    model: ["model", readWebJSON("app/models.json").models.filter(record => record.review_status === "reviewed")],
+    model: ["model", bootModels.filter(record => record.review_status === "reviewed")],
+    "model-source": ["model", bootModels.filter(record => record.review_status === "imported")],
+    spec: ["spec", readWebJSON("specifications.json").specifications],
+    pack: ["pack", readWebJSON("packs.json").packs],
+    lab: ["lab", readWebJSON("labs.json").labs],
   };
 }
 
-test("every badge appears on at least one published card in each place it is listed", () => {
+// Trait badges must be earned by some published card. A type badge exists for
+// every value of its vocabulary, whether or not a record carries it yet.
+test("every trait badge appears on at least one published card in each place it is listed", () => {
   const scopes = publishedBadgeScopes();
   assert.deepEqual(Object.keys(scopes).sort(), Object.keys(CARD_BADGE_SETS).sort());
   for (const [scope, ids] of Object.entries(CARD_BADGE_SETS)) {
     const [kind, records] = scopes[scope];
     assert.ok(records.length > 0, `${scope} has no published records`);
-    for (const id of ids) {
+    for (const id of ids.filter(id => !isTypeBadge(id))) {
       assert.ok(records.some(record => cardBadges(kind, record).some(badge => badge.id === id)), `${id} never appears on a ${scope} card`);
+    }
+  }
+});
+
+test("every published card carries exactly one type badge, and it leads the row", () => {
+  for (const [scope, [kind, records]] of Object.entries(publishedBadgeScopes())) {
+    for (const record of records) {
+      const badges = cardBadges(kind, record);
+      assert.ok(badges.length > 0 && badges.length <= 6, `${scope}/${record.id} shows ${badges.length} badges`);
+      assert.equal(badges[0].family, "type", `${scope}/${record.id} does not lead with its type`);
+      assert.equal(badges.filter(badge => badge.family === "type").length, 1, `${scope}/${record.id} shows more than one type badge`);
     }
   }
 });
@@ -1104,6 +1294,12 @@ test("every field a badge tests reaches the boot payload", () => {
     inference: [readWebJSON("inference-services.json").services, readWebJSON("app/inference.json").inference],
     runtime: [readWebJSON("local-runtimes.json").runtimes, readWebJSON("app/runtimes.json").runtimes],
     model: [readWebJSON("models.json").models, readWebJSON("app/models.json").models],
+    // review_status is added by the payload builder, so no published row has
+    // it and the loop below checks nothing here beyond the join.
+    "model-source": [readWebJSON("models-dev.json").models, readWebJSON("app/models.json").models],
+    spec: [readWebJSON("specifications.json").specifications, readWebJSON("app/specifications.json").specifications],
+    pack: [readWebJSON("packs.json").packs, readWebJSON("app/packs.json").packs],
+    lab: [readWebJSON("labs.json").labs, readWebJSON("app/labs.json").labs],
   };
   for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
     const kind = key.split(":")[0];

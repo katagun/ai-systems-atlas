@@ -306,6 +306,7 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 VIEWS = (
     ("finder", "Finder"),
     ("models", "Models"),
+    ("labs", "Labs"),
     ("specifications", "Specifications"),
     ("taxonomy", "Taxonomy"),
     ("api", "API"),

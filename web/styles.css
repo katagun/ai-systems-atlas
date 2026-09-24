@@ -59,6 +59,7 @@
   --card-inference: linear-gradient(145deg, #f9fdff, #fff 68%);
   --card-runtime: linear-gradient(145deg, #fffaf5, #fff 68%);
   --card-pack: linear-gradient(145deg, #f7fdfa, #fff 68%);
+  --card-lab: linear-gradient(145deg, #f7f9fb, #fff 68%);
   --radius: 14px;
   --radius-control: 8px;
   --radius-chip: 6px;
@@ -135,6 +136,7 @@
     --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
     --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
     --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
+    --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
   }
 }
 :root[data-theme="dark"] {
@@ -198,6 +200,7 @@
   --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
   --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
   --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
+  --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
 }
 
 * { box-sizing: border-box; }
@@ -680,6 +683,8 @@ input:focus, select:focus {
 .local-runtime-card::before { background: var(--amber); }
 .agent-pack-card { min-height: 380px; background: var(--card-pack); }
 .agent-pack-card::before { background: var(--cyan); }
+.lab-card { min-height: 360px; background: var(--card-lab); }
+.lab-card::before { background: var(--slate-ink); }
 .mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);
@@ -755,6 +760,7 @@ input:focus, select:focus {
 .specification-card .role-badge { background: var(--slate-soft); color: var(--slate-ink); }
 .inference-service-card .role-badge { background: var(--blue-soft); color: var(--blue-ink); }
 .local-runtime-card .role-badge { background: var(--amber-soft); color: var(--amber-ink); }
+.lab-card .role-badge { background: var(--slate-soft); color: var(--slate-ink); }
 .license-row {
   display: flex;
   flex-wrap: wrap;
@@ -815,6 +821,7 @@ input:focus, select:focus {
   display: inline-flex;
   cursor: help;
 }
+[data-family="type"] { color: var(--slate-ink); }
 [data-family="control"] { color: var(--cyan); }
 [data-family="capability"] { color: var(--violet); }
 [data-family="platform"] { color: var(--amber); }
@@ -1248,6 +1255,9 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(5px); }
 .trust-table td:nth-child(2) { white-space: nowrap; font-weight: 600; color: var(--text); }
 .detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
+.lab-release-list { margin: .5rem 0 .8rem; padding: 0; list-style: none; }
+.lab-release-list li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .2rem .75rem; padding: .35rem 0; border-top: 1px solid var(--line); }
+.lab-release-list .link-button { text-align: left; }
 
 footer {
   width: min(1360px, calc(100% - 3rem));
@@ -1295,8 +1305,8 @@ footer #data-date, footer .footer-meta {
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .header-tools { order: 2; }
   .brand small { display: none; }
-  .tabs { order: 3; width: 100%; gap: .8rem; overflow-x: auto; }
-  .tab { flex: 0 0 auto; font-size: .7rem; }
+  .tabs { order: 3; width: 100%; gap: .5rem; overflow-x: auto; }
+  .tab { flex: 0 0 auto; font-size: .66rem; }
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
   .hero h1 { font-size: clamp(2.55rem, 11vw, 3.7rem); }
   .hero { gap: 2rem; }
