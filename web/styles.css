@@ -934,6 +934,7 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   color: var(--cyan);
   cursor: pointer;
   font-weight: 600;
+  white-space: nowrap;
 }
 .card-footer button:hover,
 .finder-result-footer button:hover { color: var(--text); }
@@ -950,6 +951,7 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   background: var(--sage-soft);
   color: var(--cyan);
 }
+.card-stars { white-space: nowrap; }
 .archived { color: var(--amber); font-weight: 500; }
 
 .taxonomy-content { display: grid; gap: 1rem; margin-top: 3.5rem; }
@@ -1121,7 +1123,6 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   color: var(--muted);
   font-size: .74rem;
 }
-.finder-result-footer button { white-space: nowrap; }
 .finder-disclaimer { max-width: 900px; margin: 1.5rem auto 0; font-size: .78rem; text-align: center; }
 
 dialog {

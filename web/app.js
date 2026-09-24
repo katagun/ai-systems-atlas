@@ -631,6 +631,19 @@ function badgeRow(badges) {
   return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
+// Stars are live repository metadata, never a score or a badge, and every
+// system and local-runtime card whose record carries a count shows it, in
+// every view. Screen readers hear "GitHub stars" instead of the glyph's name.
+function starCount(record) {
+  if (record.stars == null) return "";
+  return `<span class="card-stars">${escapeHTML(compactNumber(record.stars))}<span aria-hidden="true"> ★</span><span class="visually-hidden"> GitHub stars</span></span>`;
+}
+
+const systemStatus = project => project.status === "active" ? "" : `<b class="archived">${escapeHTML(project.status)}</b>`;
+
+// A footer reads its facts in order, a dot between each, skipping any absent.
+const footerFacts = (...facts) => facts.filter(Boolean).join(" · ");
+
 // One tooltip serves every emblem. It is pointer-only help: screen readers
 // already get the same words from each badge's hidden text, so the tooltip is
 // aria-hidden and emblems stay out of the tab order.
@@ -769,18 +782,16 @@ function importedModelCard(model, { mixed = false } = {}) {
   </article>`;
 }
 
-function mixedSystemCard(record, { hideScoreFooter = false } = {}) {
+// One system card serves the All and Agent packs grids, which both hide scores.
+function mixedSystemCard(record) {
   const location = projectLocation(record);
-  const footer = hideScoreFooter
-    ? `<div class="card-footer"><button data-project="${escapeHTML(record.id)}">View details →</button></div>`
-    : `<div class="card-footer"><span>${record.status === "active" ? "System-family score" : escapeHTML(label(record.status))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>`;
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
       <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", record))}
-      ${footer}
+      <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
     </article>`;
 }
 
@@ -818,7 +829,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         ${badgeRow(AtlasCore.cardBadges("runtime", record))}
-        <div class="card-footer"><span>Dedicated runtime score</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>${starCount(record)}</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
     if (kind === "inference") {
@@ -890,14 +901,15 @@ const COLLECTIONS = {
     card: (project, { family }) => {
 
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
-    const githubSignal = project.stars == null ? "No GitHub metrics" : `${compactNumber(project.stars)} ★`;
+    // Only this grid sorts by stars, so only its cards explain a missing count.
+    const githubSignal = project.stars == null ? "No GitHub metrics" : starCount(project);
     return `<article class="project-card ${escapeHTML(project.system_family)}">
       <div class="card-top"><div class="card-identity">${cardMark(project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", project))}
-      <div class="card-footer"><span>${escapeHTML(githubSignal)} ${project.status !== "active" ? `<b class="archived">· ${escapeHTML(project.status)}</b>` : ""}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
+      <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
     </article>`;
     },
   },
@@ -990,7 +1002,7 @@ const COLLECTIONS = {
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("runtime", runtime))}
-    <div class="card-footer"><span>${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
+    <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
   </article>`,
   },
   models: {
@@ -1083,7 +1095,7 @@ function renderPacks() {
   state.page.packs = paged.page;
   const grid = $("#pack-grid");
   grid.innerHTML = paged.items.map(({ kind, record }) =>
-    kind === "pack" ? packCard(record) : mixedSystemCard(record, { hideScoreFooter: true })).join("")
+    kind === "pack" ? packCard(record) : mixedSystemCard(record)).join("")
     || '<div class="notice">No agent packs match these filters.</div>';
   $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
@@ -1329,7 +1341,7 @@ function renderFinderResults() {
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
-      <div class="finder-result-footer"><span>${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
+      <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
