@@ -166,13 +166,13 @@ uv run python scripts/build_web_payload.py --check
 Confirm the blocking boot payload stays small — this is the number `web/app/` exists to keep down:
 
 ```bash
-uv run python -m http.server 8765 --directory web &
+uv run python scripts/serve_web.py 8765 &
 sleep 2
 python3 -c "
 import urllib.request, gzip
 total = 0
 for path in ['app/systems.json','app/inference.json','app/runtimes.json','app/specifications.json','app/models.json','app/packs.json','app/labs.json','app/robots.json','taxonomy.json']:
-    body = urllib.request.urlopen(f'http://localhost:8765/{path}').read()
+    body = urllib.request.urlopen(f'http://127.0.0.1:8765/{path}').read()
     total += len(gzip.compress(body, 9))
 print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
