@@ -53,7 +53,9 @@
           "verified_at": "2026-09-17"
         }
       ],
-      "verified_at": "2026-09-17"
+      "verified_at": "2026-09-17",
+      "stars": 2502,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "buildwithclaude",
@@ -99,7 +101,9 @@
           "immutable_url": "https://api.github.com/repos/davepoon/buildwithclaude/git/blobs/f72b42331ac1ecea9f115b205cc8867a5fd730cd"
         }
       ],
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "stars": 3537,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "claude-code-tresor",
@@ -145,7 +149,9 @@
           "immutable_url": "https://api.github.com/repos/alirezarezvani/claude-code-tresor/git/blobs/f94d97c4310413ddecbdde5056f42e7fa08117e6"
         }
       ],
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "stars": 778,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "second-brain-llm-wiki",
@@ -200,7 +206,9 @@
           "immutable_url": "https://api.github.com/repos/NicholasSpisak/second-brain/git/blobs/67c50664b09cafcd08259ea42dc643cc1560116c"
         }
       ],
-      "verified_at": "2026-09-17"
+      "verified_at": "2026-09-17",
+      "stars": 724,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "second-brain-starter",
@@ -243,7 +251,9 @@
           "immutable_url": "https://api.github.com/repos/coleam00/second-brain-starter/git/blobs/03db644d8431d36d269cdbedc93b50e0f061738b"
         }
       ],
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "stars": 789,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "typesafe-agent-skills",
@@ -320,7 +330,9 @@
           "verified_at": "2026-09-20"
         }
       ],
-      "verified_at": "2026-09-20"
+      "verified_at": "2026-09-20",
+      "stars": 2074,
+      "stars_verified_at": "2026-09-24"
     }
   ]
 }

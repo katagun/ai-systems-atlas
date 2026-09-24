@@ -25,6 +25,8 @@ COLLECTIONS = (
     ("specifications", "specifications.json", "specifications", "spec"),
     ("models", "models.json", "models", "model"),
     ("packs", "packs.json", "packs", "pack"),
+    ("labs", "labs.json", "labs", "lab"),
+    ("robots", "robots.json", "robots", "robot"),
 )
 
 # What a card, a filter, a sort, and the finder read before anything is clicked.
@@ -101,6 +103,7 @@ BOOT_FIELDS = {
         "description",
         "stewards",
         "related_specifications",
+        "stars",
     ),
     # source_metadata is a nested block rather than a card field, and it is here
     # for the same reason the flat ones are: the card prints the family and the
@@ -136,6 +139,33 @@ BOOT_FIELDS = {
         "install_mechanism",
         "packaging_formats",
         "licenses",
+        "status",
+        "stars",
+    ),
+    # A lab card and every cross-link to a lab join through catalog_names and
+    # systems (ADR 041), so both must be on the boot record; the join itself runs
+    # in the browser over boot records the page already holds.
+    "labs": (
+        "id",
+        "name",
+        "url",
+        "description",
+        "lab_type",
+        "headquarters",
+        "parent_organization",
+        "catalog_names",
+        "systems",
+    ),
+    "robots": (
+        "id",
+        "name",
+        "short_name",
+        "manufacturer",
+        "url",
+        "description",
+        "form_factor",
+        "ai_basis",
+        "availability",
         "status",
     ),
 }
@@ -206,6 +236,23 @@ SEARCH_FIELDS = {
         "description",
         "installs",
         "not_a_system",
+    ),
+    "labs": (
+        "id",
+        "name",
+        "description",
+        "organization_note",
+        "catalog_names",
+        "parent_organization",
+    ),
+    "robots": (
+        "id",
+        "name",
+        "short_name",
+        "manufacturer",
+        "description",
+        "named_models",
+        "variants",
     ),
 }
 
@@ -301,6 +348,11 @@ def searchable_text(value) -> str:
         return ""
     if isinstance(value, list):
         return " ".join(searchable_text(item) for item in value)
+    if isinstance(value, dict):
+        # A robot's named_models entries carry role notes, kinds, and labels
+        # beside the model name; only the name is meant to be findable, so a
+        # dict is reduced to it rather than stringified whole.
+        return searchable_text(value.get("name"))
     return str(value)
 
 

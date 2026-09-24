@@ -176,6 +176,73 @@ class EvidenceLinkTests(unittest.TestCase):
                         }
                     ]
                 },
+                "labs.json": {
+                    "labs": [
+                        {
+                            "id": "lab-example",
+                            "url": "https://example.com/lab",
+                            "verified_at": "2026-08-09",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "url": "https://example.com/lab-terms",
+                                    "verified_at": "2026-08-09",
+                                }
+                            ],
+                            "channels": [
+                                {"kind": "news", "url": "https://example.com/lab-news"}
+                            ],
+                            "safety_framework": {
+                                "title": "Framework",
+                                "url": "https://example.com/lab-framework",
+                                "verified_at": "2026-08-08",
+                            },
+                        }
+                    ]
+                },
+                "robots.json": {
+                    "robots": [
+                        {
+                            "id": "bot",
+                            "url": "https://robots.example/bot",
+                            "verified_at": "2026-09-01",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "role": "product_page",
+                                    "url": "https://robots.example/bot",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "named_model",
+                                    "url": "https://robots.example/news/model",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "model_interface",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/sdk",
+                                    "verified_at": "2026-09-01",
+                                },
+                            ],
+                            "terms_evidence": [
+                                {
+                                    "kind": "web_terms",
+                                    "url": "https://robots.example/terms",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web_terms",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/warranty",
+                                    "verified_at": "2026-09-01",
+                                },
+                            ],
+                        }
+                    ]
+                },
             }
             for filename, document in documents.items():
                 (directory / filename).write_text(
@@ -185,7 +252,7 @@ class EvidenceLinkTests(unittest.TestCase):
             targets = check_evidence_links.collect_targets(directory)
 
         by_url = {item.url: item for item in targets}
-        self.assertEqual(10, len(targets))
+        self.assertEqual(19, len(targets))
         self.assertEqual(
             ("specifications:spec:url", "systems:system:url"),
             by_url["https://example.com/shared"].references,
@@ -202,6 +269,92 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertEqual(
             ("packs:kit:url",), by_url["https://example.com/kit"].references
         )
+        self.assertEqual(
+            ("labs:lab-example:channel:0",),
+            by_url["https://example.com/lab-news"].references,
+        )
+        self.assertIn("channel", by_url["https://example.com/lab-news"].kinds)
+        self.assertEqual(
+            (("labs:lab-example:safety_framework", "2026-08-08"),),
+            by_url["https://example.com/lab-framework"].review_dates,
+        )
+        self.assertEqual(
+            ("robots:bot:evidence:0", "robots:bot:url"),
+            tuple(sorted(by_url["https://robots.example/bot"].references)),
+        )
+        self.assertFalse(by_url["https://robots.example/bot"].monitor_terms)
+        self.assertTrue(
+            by_url["https://robots.example/news/model"].monitor_terms,
+            "the named-model page is the collection's central fact and is watched for drift",
+        )
+        self.assertTrue(by_url["https://robots.example/terms"].monitor_terms)
+        self.assertFalse(
+            by_url["https://robots.example/sdk"].monitor_terms,
+            "an unpinnable page is link-checked but its hash can never settle",
+        )
+        self.assertFalse(
+            by_url["https://robots.example/warranty"].monitor_terms,
+            "an unpinnable terms page is link-checked but never drift-monitored",
+        )
+
+    def test_unpinnable_citation_overrides_monitoring_for_the_same_url(self) -> None:
+        """One evidence item marking a URL unpinnable must veto monitoring even
+        when another citation of the same URL would otherwise turn it on."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            documents = {
+                "projects.json": {"projects": []},
+                "license-evidence.json": {"entries": []},
+                "specifications.json": {"specifications": []},
+                "inference-services.json": {"services": []},
+                "local-runtimes.json": {"runtimes": []},
+                "models.json": {"models": []},
+                "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
+                "robots.json": {
+                    "robots": [
+                        {
+                            "id": "dual",
+                            "url": "https://robots.example/dual",
+                            "verified_at": "2026-09-01",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "role": "named_model",
+                                    "url": "https://robots.example/shared-basis",
+                                    "verified_at": "2026-09-01",
+                                },
+                                {
+                                    "kind": "web",
+                                    "role": "supporting",
+                                    "unpinnable": True,
+                                    "url": "https://robots.example/shared-basis",
+                                    "verified_at": "2026-09-01",
+                                },
+                            ],
+                            "terms_evidence": [],
+                        }
+                    ]
+                },
+            }
+            for filename, document in documents.items():
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
+
+            targets = check_evidence_links.collect_targets(directory)
+
+        by_url = {item.url: item for item in targets}
+        target = by_url["https://robots.example/shared-basis"]
+        self.assertEqual(
+            ("robots:dual:evidence:0", "robots:dual:evidence:1"),
+            tuple(sorted(target.references)),
+        )
+        self.assertFalse(
+            target.monitor_terms,
+            "an unpinnable citation must veto monitoring even when another "
+            "citation of the same URL would otherwise turn it on",
+        )
 
     def test_trust_urls_are_link_checked_and_never_drift_hashed(self) -> None:
         """A third-party page is not the Atlas's to accept changes to: check the link, hash nothing."""
@@ -214,6 +367,8 @@ class EvidenceLinkTests(unittest.TestCase):
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
                 "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
+                "robots.json": {"robots": []},
                 "inference-services.json": {
                     "services": [
                         {

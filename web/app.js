@@ -15,14 +15,15 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], taxonomy: null,
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], labs: [], robots: [], taxonomy: null,
+  labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
   directoryCollection: "all", directoryRoles: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
-  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1 },
+  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -165,10 +166,10 @@ async function bootstrap() {
   // needed, so it stays a direct read of the endpoint. Everything else arrives
   // on demand: a record's detail when a dialog or comparison needs it, a search
   // index when a search box takes focus, logos.json off the critical path.
-  const [systems, inference, runtimes, specifications, models, taxonomy, packs] = await Promise.all([
+  const [systems, inference, runtimes, specifications, models, taxonomy, packs, labs, robots] = await Promise.all([
     loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
     loadJSON("app/specifications.json"), loadJSON("app/models.json"), loadJSON("taxonomy.json"),
-    loadJSON("app/packs.json")
+    loadJSON("app/packs.json"), loadJSON("app/labs.json"), loadJSON("app/robots.json")
   ]);
   state.projects = systems.systems;
   state.inferenceServices = inference.inference;
@@ -180,16 +181,21 @@ async function bootstrap() {
   state.modelUnlistedCount = models.unlisted_reviewed_count;
   state.taxonomy = taxonomy;
   state.packs = packs.packs;
-  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at]
+  state.labs = labs.labs;
+  state.labIndex = AtlasCore.buildLabIndex(state.labs, state.models);
+  state.robots = robots.robots;
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at, robots.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
   $("#data-date").textContent = `Data updated ${dataDate}`;
   populateFilters();
   populateCollectionFilters();
+  populateModelLabFilter();
   renderStats();
   renderFinder();
   renderModels();
+  renderLabs();
   renderSpecifications();
   renderTaxonomy();
   bindEvents();
@@ -432,7 +438,30 @@ const COLLECTION_FILTERS = {
     ],
     licenseFilter: "#pack-license-filter",
   },
+  labs: {
+    records: () => state.labs,
+    groups: [
+      ["lab_types", "#lab-type-filter", item => [item.lab_type]],
+      ["countries", "#lab-country-filter", item => [item.headquarters]],
+      ["model_distribution_modes", "#lab-distribution-filter", item => labRelationsFor(item).models.flatMap(model => model.distribution_modes || [])],
+    ],
+  },
+  robots: {
+    records: () => state.robots,
+    groups: [
+      ["robot_form_factors", "#robot-form-factor-filter", item => [item.form_factor]],
+      ["robot_ai_bases", "#robot-ai-basis-filter", item => item.ai_basis],
+      ["robot_availability", "#robot-availability-filter", item => [item.availability]],
+      ["project_statuses", "#robot-status-filter", item => [item.status]],
+    ],
+  },
 };
+
+// The Models view's Lab facet lists labs by name rather than a taxonomy group.
+function populateModelLabFilter() {
+  [...state.labs].sort((a, b) => a.name.localeCompare(b.name)).forEach(lab =>
+    $("#model-lab-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</option>`));
+}
 
 function populateCollectionFilters() {
   for (const collection of Object.values(COLLECTION_FILTERS)) {
@@ -497,8 +526,8 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length;
-  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, and packs`;
+  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length + state.robots.length;
+  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, packs, and robots`;
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#memory-collection-count").textContent = memories;
@@ -511,17 +540,43 @@ function renderStats() {
   // beside host-installed systems (ADR 035), so both are counted here.
   $("#pack-collection-count").textContent = state.packs.length
     + AtlasCore.packShapedSystems(state.projects, {}).length;
+  // An empty collection has no navigation entry: the scope exists before its
+  // first record is reviewed, and a reader should not be sent to an empty page.
+  $("#robot-collection-count").textContent = state.robots.length;
+  $("#robot-collection-count").parentElement.hidden = state.robots.length === 0;
 }
 
 function syncCollectionSwitcher() {
   const family = $("#family-filter").value;
+  let activeButton = null;
   $$('[data-directory-collection]').forEach(button => {
     const buttonFamily = button.dataset.directoryFamily;
     const active = button.dataset.directoryCollection === state.directoryCollection
       && (buttonFamily === undefined || buttonFamily === family);
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
+    if (active) activeButton = button;
   });
+  // The switcher wraps at desktop widths, so every entry is already visible
+  // there; only the narrow layout keeps the horizontal scroll strip that can
+  // hide the active entry off-screen. Scrolling only fires when the strip is
+  // actually scrollable, so a scope change on a wide viewport never jolts the
+  // page, and it never asks for smooth scrolling so reduced motion is respected.
+  // scrollIntoView would do here, but it can scroll the whole page vertically
+  // to bring the switcher itself into view (e.g. a Systems family change that
+  // re-syncs it while it sits above the fold on a phone); moving only
+  // switcher.scrollLeft, by the button's nearest-edge overflow, never touches
+  // the page's own scroll position.
+  const switcher = $(".collection-switcher");
+  if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
+    const switcherRect = switcher.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    if (buttonRect.left < switcherRect.left) {
+      switcher.scrollLeft -= switcherRect.left - buttonRect.left;
+    } else if (buttonRect.right > switcherRect.right) {
+      switcher.scrollLeft += buttonRect.right - switcherRect.right;
+    }
+  }
 }
 
 function jumpToDirectoryFamily(family) {
@@ -535,7 +590,7 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes", "packs"].includes(collection) ? collection : "all";
+  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime");
@@ -547,16 +602,19 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   $("#inference-directory-panel").hidden = selected !== "inference";
   $("#runtimes-directory-panel").hidden = selected !== "runtimes";
   $("#packs-directory-panel").hidden = selected !== "packs";
+  $("#robots-directory-panel").hidden = selected !== "robots";
   const renderers = {
     all: renderAllDirectoryEntries,
     systems: renderProjects,
     inference: renderInferenceServices,
     runtimes: renderLocalRuntimes,
     packs: renderPacks,
+    robots: () => renderCollection("robots"),
   };
   for (const [name, grid] of [
     ["all", "#all-directory-grid"], ["systems", "#project-grid"],
     ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
+    ["robots", "#robot-grid"],
   ]) {
     if (name !== selected) $(grid).innerHTML = "";
   }
@@ -573,13 +631,15 @@ const PAGE_CONTAINERS = {
   models: "#model-pager",
   specifications: "#specification-pager",
   packs: "#pack-pager",
+  labs: "#lab-pager",
+  robots: "#robot-pager",
 };
 
 function pageRenderer(key) {
   return {
     all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
     runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
-    packs: renderPacks,
+    packs: renderPacks, labs: renderLabs, robots: () => renderCollection("robots"),
   }[key];
 }
 
@@ -590,6 +650,7 @@ function setPageSize(pageSize) {
   Object.keys(state.page).forEach(key => { state.page[key] = 1; });
   pageRenderer(state.directoryCollection)();
   renderModels();
+  renderLabs();
   renderSpecifications();
 }
 
@@ -632,8 +693,9 @@ function badgeRow(badges) {
 }
 
 // Stars are live repository metadata, never a score or a badge, and every
-// system and local-runtime card whose record carries a count shows it, in
-// every view. Screen readers hear "GitHub stars" instead of the glyph's name.
+// card whose record carries a count shows it, in every view where the card
+// appears: systems, local runtimes, agent packs, and specifications with a
+// repo. Screen readers hear "GitHub stars" instead of the glyph's name.
 function starCount(record) {
   if (record.stars == null) return "";
   return `<span class="card-stars">${escapeHTML(compactNumber(record.stars))}<span aria-hidden="true"> ★</span><span class="visually-hidden"> GitHub stars</span></span>`;
@@ -714,7 +776,7 @@ function syncBadgeLegend() {
   const inDirectory = activeViewId === "directory";
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
   const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
-    : activeViewId === "models" ? AtlasCore.badgeLegend("models")
+    : ["models", "specifications", "labs"].includes(activeViewId) ? AtlasCore.badgeLegend(activeViewId)
     : null;
   const shown = Boolean(legend) && $("#comparison-tray").hidden;
   const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
@@ -756,7 +818,62 @@ function packCard(pack, { mixed = false } = {}) {
     <span class="role-badge">${escapeHTML(packHosts(pack))}</span>
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
-    <div class="card-footer"><span>${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+    ${badgeRow(AtlasCore.cardBadges("pack", pack))}
+    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+  </article>`;
+}
+
+// A lab's other records are joined by the names the catalog already uses for it
+// (ADR 041); the join runs over the boot records this page holds.
+function labRelationsFor(lab) {
+  return AtlasCore.labRelations(lab, {
+    models: state.models, projects: state.projects, services: state.inferenceServices,
+    runtimes: state.localRuntimes, specifications: state.specifications, packs: state.packs,
+  });
+}
+
+const labDistributionOrder = () => state.taxonomy.model_distribution_modes.map(item => item.id);
+
+// Every Atlas count on a lab card is a join over reviewed records; nothing on it
+// ranks the lab. The newest reviewed release date is a tracking signal only.
+function labCard(lab) {
+  const relations = labRelationsFor(lab);
+  const modes = AtlasCore.labDistributionModes(relations.models, labDistributionOrder());
+  const newest = AtlasCore.releasesNewestFirst(relations.models)[0];
+  const counts = [
+    [relations.models.length, "reviewed release", "reviewed releases"],
+    [relations.systems.length, "system", "systems"],
+    [relations.services.length, "inference service", "inference services"],
+    [relations.runtimes.length, "local runtime", "local runtimes"],
+    [relations.specifications.length, "specification", "specifications"],
+    [relations.packs.length, "agent pack", "agent packs"],
+  ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
+  const origin = lab.parent_organization ? `Part of ${lab.parent_organization}` : new URL(lab.url).hostname.replace(/^www\./, "");
+  const newestDate = newest && AtlasCore.releaseDate(newest);
+  return `<article class="project-card lab-card">
+    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${escapeHTML(origin)}</div></div></div></div>
+    <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
+    <p>${escapeHTML(lab.description)}</p>
+    <div class="tags">${counts}</div>
+    ${badgeRow(AtlasCore.cardBadges("lab", lab))}
+    <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span><button data-lab="${escapeHTML(lab.id)}">View details →</button></div>
+  </article>`;
+}
+
+// A record a lab claims links to that lab, by its own collection's join rule.
+function labLinksMarkup(kind, record) {
+  const labs = AtlasCore.labsForRecord(kind, record, state.labIndex);
+  if (!labs.length) return "";
+  return `<p><strong>Lab:</strong> ${labs.map(lab => `<button type="button" class="link-button" data-open-lab="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</button>`).join(" · ")}</p>`;
+}
+
+function robotCard(robot, { mixed = false } = {}) {
+  const formLabel = taxonomyName("robot_form_factors", robot.form_factor);
+  return `<article class="project-card robot-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
+    <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
+    <p>${escapeHTML(robot.description)}</p>
+    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span><button data-robot="${escapeHTML(robot.id)}">View details →</button></div>
   </article>`;
 }
 
@@ -781,6 +898,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
     <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
+    ${badgeRow(AtlasCore.cardBadges("model", model))}
     <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><button data-model="${escapeHTML(model.id)}">View source details →</button></div>
   </article>`;
 }
@@ -809,7 +927,8 @@ function renderAllDirectoryEntries() {
     runtimeSearchIndex: searchIndexes.runtimes,
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
-  }, state.packs);
+    robotSearchIndex: searchIndexes.robots,
+  }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
@@ -826,6 +945,7 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     if (kind === "pack") return packCard(record, { mixed: true });
+    if (kind === "robot") return robotCard(record, { mixed: true });
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -845,12 +965,13 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, or agent packs match this search.</div>';
+  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
+  $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
 }
@@ -945,9 +1066,33 @@ const COLLECTIONS = {
       <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
-      <div class="card-footer"><span>No editorial score</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
+      ${badgeRow(AtlasCore.cardBadges("spec", specification))}
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
     </article>`;
     },
+  },
+  labs: {
+    grid: "#lab-grid",
+    resultCount: "#lab-result-count",
+    pageKey: "labs",
+    dataset: "lab",
+    noun: ["lab", "labs"],
+    empty: "No labs match these filters.",
+    open: id => openLab(id),
+    context() {
+      const covered = state.models.filter(model => isReviewedModel(model) && state.labIndex.byName.has(model.developer)).length;
+      $("#labs-kicker").textContent = `${state.labs.length} labs · developers of ${covered} of ${state.reviewedModelCount} reviewed releases`;
+      return { suffix: " · Unscored", comparable: false };
+    },
+    records: () => AtlasCore.filterLabs(state.labs, {
+      term: $("#lab-search").value,
+      searchIndex: searchIndexes.labs,
+      type: $("#lab-type-filter").value,
+      headquarters: $("#lab-country-filter").value,
+      distribution: $("#lab-distribution-filter").value,
+      models: state.models,
+    }),
+    card: lab => labCard(lab),
   },
   inference: {
     grid: "#inference-grid",
@@ -1029,6 +1174,7 @@ const COLLECTIONS = {
       license: $("#model-license-filter").value,
       sort: $("#model-sort-filter").value,
       searchIndex: searchIndexes.models,
+      ids: labModelIds($("#model-lab-filter").value),
     }),
     card: model => {
       if (!isReviewedModel(model)) return importedModelCard(model);
@@ -1041,6 +1187,25 @@ const COLLECTIONS = {
         <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },
+  },
+  robots: {
+    grid: "#robot-grid",
+    resultCount: "#robot-result-count",
+    pageKey: "robots",
+    dataset: "robot",
+    noun: ["robot", "robots"],
+    empty: "No robots match these filters.",
+    open: id => openRobot(id),
+    context: () => ({ suffix: " · Unscored", comparable: false }),
+    records: () => AtlasCore.filterRobots(state.robots, {
+      term: $("#robot-search").value,
+      searchIndex: searchIndexes.robots,
+      formFactor: $("#robot-form-factor-filter").value,
+      aiBasis: $("#robot-ai-basis-filter").value,
+      availability: $("#robot-availability-filter").value,
+      status: $("#robot-status-filter").value,
+    }),
+    card: robot => robotCard(robot),
   },
 };
 
@@ -1073,6 +1238,16 @@ const renderSpecifications = () => renderCollection("specifications");
 const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
+const renderLabs = () => renderCollection("labs");
+
+// One lab's releases for the Models view's Lab facet: its reviewed releases and
+// the imported rows in their models.dev namespaces. No lab selected, no filter.
+function labModelIds(labId) {
+  const lab = labId ? state.labs.find(item => item.id === labId) : null;
+  if (!lab) return undefined;
+  const relations = labRelationsFor(lab);
+  return new Set([...relations.models, ...relations.sourceRows].map(model => model.id));
+}
 // One grid of installables: unscored packs beside scored host-installed
 // systems (ADR 035). Pack facets narrow only packs; the search term narrows
 // both. Scores stay hidden and comparison stays off, as the scope requires.
@@ -1114,13 +1289,14 @@ function renderSearchSurfaces() {
   const renderers = {
     all: renderAllDirectoryEntries, systems: renderProjects,
     inference: renderInferenceServices, runtimes: renderLocalRuntimes,
-    packs: renderPacks,
+    packs: renderPacks, robots: () => renderCollection("robots"),
   };
   renderers[state.directoryCollection]?.();
-  // Specifications and Models are sibling views rather than directory
-  // collections, so neither is in the map above and both repaint every time.
+  // Specifications, Models, and Labs are sibling views rather than directory
+  // collections, so none is in the map above and each repaints every time.
   renderSpecifications();
   renderModels();
+  renderLabs();
   if (state.directoryRoles) renderFinder();
 }
 
@@ -1344,6 +1520,7 @@ function renderFinderResults() {
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
+      ${badgeRow(AtlasCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
       <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
@@ -1437,6 +1614,9 @@ function renderTaxonomy() {
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
     ["Pack install mechanisms", state.taxonomy.pack_install_mechanisms],
+    ["Lab types", state.taxonomy.lab_types], ["Lab channels", state.taxonomy.lab_channel_kinds],
+    ["Robot forms", state.taxonomy.robot_form_factors], ["How a robot uses AI", state.taxonomy.robot_ai_bases], ["Robot availability", state.taxonomy.robot_availability],
+    ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
@@ -1481,7 +1661,7 @@ function systemDialogMarkup(project) {
   return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${detailText(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
-      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(item => taxonomyName("deployment_modes", item)).join(", "))}</p><p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
+      <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(item => taxonomyName("deployment_modes", item)).join(", "))}</p>${labLinksMarkup("system", project)}<p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(project.strengths)}</section>
@@ -1496,7 +1676,7 @@ function specificationDialogMarkup(specification) {
   const related = specification.related_specifications.map(relatedId => state.specifications.find(item => item.id === relatedId)).filter(Boolean);
   return `<p class="eyebrow">${escapeHTML(taxonomyName("specification_types", specification.specification_type))} · ${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</p><h1>${escapeHTML(specification.name)}</h1><p>${escapeHTML(specification.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p><p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>Artifact identity</h3><p><strong>Status:</strong> ${escapeHTML(taxonomyName("specification_statuses", specification.status))}</p><p><strong>Version:</strong> ${escapeHTML(specification.current_version || "Rolling / unversioned")}</p><p><strong>Steward:</strong> ${escapeHTML(specification.stewards.join(" · "))}</p>${labLinksMarkup("spec", specification)}<p><a href="${escapeHTML(specification.url)}" target="_blank" rel="noreferrer">Open official specification ↗</a></p>${specification.repo ? `<p><a href="https://github.com/${escapeHTML(specification.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>What it standardizes</h3><p>${detailText(specification.standardizes)}</p></section>
       <section class="detail-block"><h3>What it does not standardize</h3><p>${detailText(specification.does_not_standardize)}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(specification.license_note)}</p>${(specification.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
@@ -1511,13 +1691,63 @@ function packDialogMarkup(pack) {
   const relatedSystems = (pack.related_systems || []).map(id => state.projects.find(item => item.id === id)).filter(Boolean);
   return `<p class="eyebrow">Agent pack · ${escapeHTML(taxonomyName("pack_types", pack.pack_type))} · Unscored</p><h1>${escapeHTML(pack.name)}</h1><p>${escapeHTML(pack.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Pack identity</h3><p><strong>Steward:</strong> ${escapeHTML(pack.steward)}</p><p><strong>Status:</strong> ${escapeHTML(label(pack.status))}</p><p><strong>Hosts:</strong> ${escapeHTML(packHosts(pack))}</p><p><strong>Install:</strong> ${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}</p><p><a href="${escapeHTML(pack.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p><p><a href="https://github.com/${escapeHTML(pack.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p></section>
+      <section class="detail-block"><h3>Pack identity</h3><p><strong>Steward:</strong> ${escapeHTML(pack.steward)}</p>${labLinksMarkup("pack", pack)}<p><strong>Status:</strong> ${escapeHTML(label(pack.status))}</p><p><strong>Hosts:</strong> ${escapeHTML(packHosts(pack))}</p><p><strong>Install:</strong> ${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}</p><p><a href="${escapeHTML(pack.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p><p><a href="https://github.com/${escapeHTML(pack.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p></section>
       <section class="detail-block"><h3>What it installs</h3><p>${detailText(pack.installs)}</p>${pack.distribution_machinery ? `<p><strong>Distribution machinery:</strong> ${escapeHTML(pack.distribution_machinery)}</p>` : ""}</section>
       <section class="detail-block"><h3>Why it is not a scored system</h3><p>${detailText(pack.not_a_system)}</p><p class="unscored-note">Packs are recorded for what they install, never for what they do. A pack that owns state or does enforced work is a scored system instead (ADR 031, ADR 032).</p></section>
       <section class="detail-block"><h3>Packaging formats</h3>${formats.length ? `<p>${formats.map(item => `<button type="button" class="ghost-button" data-open-spec="${escapeHTML(item.id)}">${escapeHTML(item.short_name)}</button>`).join(" ")}</p>` : "<p>No packaging format recorded; the pack installs by script or clone.</p>"}</section>
       <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(pack.license_note)}</p>${(pack.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(pack.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
       <section class="detail-block"><h3>Related records</h3>${relatedPacks.length || relatedSystems.length ? `<p>${[...relatedPacks.map(item => `<button type="button" class="ghost-button" data-open-pack="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
+    </div>`;
+}
+
+function robotTermsLink(item) {
+  return `<p><strong>${escapeHTML(taxonomyName("robot_terms_kinds", item.terms_kind))}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>` + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
+}
+
+// An evidence entry a maker can change without notice (a live pricing or
+// availability page, not a dated document) is marked unpinnable at review
+// time. The reader sees the same source link everyone else gets, plus a note
+// that the Atlas cannot pin what the page said when it was reviewed.
+function robotEvidenceLink(item) {
+  return specificationEvidenceLink(item) + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
+}
+
+// named_models, terms_evidence, not_verified, verified_at, terms_note,
+// hardware, developer_access, and availability_note only arrive with detail;
+// the boot record carries only id, name, short_name, manufacturer, url,
+// description, form_factor, ai_basis, availability, and status. Asserting an
+// absence — "the maker names no model", "no terms were published" — off a
+// field that has simply not loaded yet would be a false claim, so each one
+// renders the detailText em dash (lines ~31-37) until robotDetailLoaded is
+// true, exactly as the other three record dialogs already do for their own
+// detail-only fields.
+function robotDialogMarkup(robot) {
+  const relatedSystems = (robot.related_systems || []).map(id => state.projects.find(item => item.id === id)).filter(Boolean);
+  const relatedRobots = (robot.related_robots || []).map(id => state.robots.find(item => item.id === id)).filter(Boolean);
+  const hardware = robot.hardware || {};
+  const detailLoaded = robotDetailLoaded(robot);
+  const namedModelsMarkup = (robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("");
+  const modelsSection = detailLoaded && !(robot.ai_basis || []).includes("vendor_named_model")
+    ? "<p>The maker names no model for this robot.</p>"
+    : namedModelsMarkup || "<p>—</p>";
+  const notVerifiedMarkup = robot.not_verified ? `<p class="unscored-note">${escapeHTML(robot.not_verified)}</p>` : "";
+  const termsMarkup = (robot.terms_evidence || []).map(robotTermsLink).join("");
+  const termsSection = detailLoaded
+    ? termsMarkup || "<p>No terms were published on the maker's pages at review time.</p>"
+    : "<p>—</p>";
+  const reviewedLine = robot.verified_at ? `<p>Reviewed ${escapeHTML(robot.verified_at)}.</p>` : "";
+  return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>Models the vendor names</h3>${modelsSection}${notVerifiedMarkup}</section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
+      <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? "" : `<section class="detail-block"><h3>Developer access</h3><p>${detailText(robot.developer_access || "—")}</p></section>`}
+      <section class="detail-block"><h3>Availability</h3><p><strong>${escapeHTML(taxonomyName("robot_availability", robot.availability))}</strong></p><p>${detailText(robot.availability_note || "")}</p></section>
+      <section class="detail-block"><h3>Terms</h3><p>${detailText(robot.terms_note || "")}</p>${termsSection}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(robot.evidence || []).map(robotEvidenceLink).join("") || "<p>—</p>"}${reviewedLine}</section>
+      <section class="detail-block"><h3>Related records</h3>${relatedSystems.length || relatedRobots.length ? `<p>${[...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedRobots.map(item => `<button type="button" class="ghost-button" data-open-robot="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
     </div>`;
 }
 
@@ -1580,7 +1810,7 @@ function inferenceDialogMarkup(service) {
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(service.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("inference_service_types", service.service_type))} · ${escapeHTML(profile.name)} ${escapeHTML(service.score.overall)}</p><h1>${escapeHTML(service.name)}</h1><p>${escapeHTML(service.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
+      <section class="detail-block"><h3>Service identity</h3><p><strong>Operator:</strong> ${escapeHTML(service.operator)}</p>${labLinksMarkup("inference", service)}<p><strong>Type:</strong> ${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><p><a href="${escapeHTML(service.url)}" target="_blank" rel="noreferrer">Open official service documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(service.score.overall)}</td></tr></table><p class="unscored-note">Operational service score only. It excludes model quality, current price, and transient latency or throughput.</p></section>
       <section class="detail-block"><h3>Service boundary</h3><p>${detailText(service.service_boundary)}</p><p class="unscored-note">Companies, models, local runtimes, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Delivery and model sources</h3><p><strong>Delivery:</strong> ${escapeHTML(service.delivery_modes.map(item => taxonomyName("inference_delivery_modes", item)).join(" · "))}</p><p><strong>Model sources:</strong> ${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</p><p><strong>API styles:</strong> ${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</p></section>
@@ -1600,7 +1830,7 @@ function runtimeDialogMarkup(runtime) {
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(runtime.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))} · ${escapeHTML(profile.name)} ${escapeHTML(runtime.score.overall)}</p><h1>${escapeHTML(runtime.name)}</h1><p>${escapeHTML(runtime.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p><p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
+      <section class="detail-block"><h3>Runtime identity</h3><p><strong>Maintainer:</strong> ${escapeHTML(runtime.maintainer)}</p>${labLinksMarkup("runtime", runtime)}<p><strong>Type:</strong> ${escapeHTML(taxonomyName("local_runtime_types", runtime.runtime_type))}</p>${runtime.repo ? `<p><strong>Repository:</strong> ${escapeHTML(runtime.repo)}</p>` : ""}<p><a href="${escapeHTML(runtime.url)}" target="_blank" rel="noreferrer">Open official documentation ↗</a></p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(runtime.score.overall)}</td></tr></table><p class="unscored-note">Documented execution capability only. It excludes model quality, throughput, latency, benchmark rank, and hardware cost.</p></section>
       <section class="detail-block"><h3>Runtime boundary</h3><p>${detailText(runtime.runtime_boundary)}</p><p class="unscored-note">Managed inference services, models, and system-family scores remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Execution</h3><p><strong>Accelerators:</strong> ${escapeHTML(runtime.accelerators.map(item => taxonomyName("runtime_accelerators", item)).join(" · "))}</p><p><strong>Model formats:</strong> ${escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · "))}</p><p><strong>Serving:</strong> ${escapeHTML(runtime.serving_modes.map(item => taxonomyName("runtime_serving_modes", item)).join(" · "))}</p></section>
@@ -1642,6 +1872,9 @@ const loadedDetail = new Set();
 // loadedDetail. Safe to reference from functions defined earlier in this
 // file: none of them run until the whole script has finished loading.
 const inferenceDetailLoaded = service => loadedDetail.has(`inference:${service.id}`);
+// robotDialogMarkup's own version of the same predicate, keyed the way
+// loadDetail keys loadedDetail for a robot: `robot:<id>`.
+const robotDetailLoaded = robot => loadedDetail.has(`robot:${robot.id}`);
 const detailRequests = new Map();
 let modelSourceDetails = null;
 let modelSourceDetailsRequest = null;
@@ -1709,7 +1942,7 @@ function importedModelDialogMarkup(model) {
   const limits = metadata.limits || {};
   return `<p class="eyebrow">models.dev source record · Not Atlas reviewed</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description || "Loading the models.dev source description…")}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p></section>
+      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p></section>
       <section class="detail-block"><h3>Review status</h3><p>This is attributed metadata imported directly from models.dev. Atlas has not reviewed its identity boundary, licensing, distribution, evidence, or access score.</p><p class="unscored-note">Reported license and open-weight fields are source claims, not Atlas conclusions.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
@@ -1734,7 +1967,7 @@ function modelDialogMarkup(model) {
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AtlasCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AtlasCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
@@ -1746,6 +1979,88 @@ function modelDialogMarkup(model) {
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(model.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
     </div>`;
+}
+
+// How many of a lab's reviewed releases its dialog lists before handing off to
+// the Models view's Lab facet for the rest.
+const LAB_RECENT_RELEASES = 8;
+
+function labRecordButtons(records, attribute) {
+  return records.map(item => `<button type="button" class="ghost-button" ${attribute}="${escapeHTML(item.id)}">${escapeHTML(item.short_name || item.name)}</button>`).join(" ");
+}
+
+function labChannelMarkup(channel) {
+  const shown = channel.url.replace(/^https:\/\//, "").replace(/\/$/, "");
+  return `<p><strong>${escapeHTML(taxonomyName("lab_channel_kinds", channel.kind))}:</strong> <a class="lab-channel-link" href="${escapeHTML(channel.url)}" target="_blank" rel="noreferrer">${escapeHTML(shown)} ↗</a></p>`;
+}
+
+// The framework field says only that the lab publishes one. Until the detail
+// file lands, presence is unknown, which must not read as "none found".
+function labSafetyFrameworkMarkup(lab) {
+  if (!loadedDetail.has(`lab:${lab.id}`)) return "<p>—</p>";
+  const framework = lab.safety_framework;
+  if (!framework) {
+    return '<p>None found on the lab\'s own pages.</p><p class="unscored-note">Absence here is not a finding that the lab has no framework.</p>';
+  }
+  return `<p><a href="${escapeHTML(framework.url)}" target="_blank" rel="noreferrer">${escapeHTML(framework.title)} ↗</a> <span class="evidence-date">read ${escapeHTML(framework.verified_at)}</span></p><p class="unscored-note">Recorded because the lab publishes it. The Atlas does not assess whether or how it is followed.</p>`;
+}
+
+// Like the other record dialogs, this paints from the boot record and repaints
+// when app/detail/lab/<id>.json lands with the note, channels, framework, and
+// sources. Every joined list is computed from records the page already holds.
+function labDialogMarkup(lab) {
+  const relations = labRelationsFor(lab);
+  const releases = AtlasCore.releasesNewestFirst(relations.models);
+  const modes = AtlasCore.labDistributionModes(relations.models, labDistributionOrder());
+  const modeCounts = modes.map(mode => `${escapeHTML(taxonomyName("model_distribution_modes", mode))}: ${relations.models.filter(model => (model.distribution_modes || []).includes(mode)).length}`).join(" · ");
+  const recent = releases.slice(0, LAB_RECENT_RELEASES).map(model => `<li><button type="button" class="link-button" data-open-model="${escapeHTML(model.id)}">${escapeHTML(model.name)}</button><span class="evidence-date">${escapeHTML(AtlasCore.releaseDate(model) || "release date not reported")}</span></li>`).join("");
+  const total = relations.models.length + relations.sourceRows.length;
+  const pending = relations.sourceRows.length
+    ? `<p>models.dev also lists ${relations.sourceRows.length} ${relations.sourceRows.length === 1 ? "release" : "releases"} under ${escapeHTML(relations.namespaces.join(", "))} that the Atlas has not reviewed.</p>`
+    : "";
+  const others = [
+    ["Local runtimes it maintains", relations.runtimes, "data-open-runtime"],
+    ["Specifications it stewards", relations.specifications, "data-open-spec"],
+    ["Agent packs it publishes", relations.packs, "data-open-pack"],
+  ].filter(([, records]) => records.length).map(([title, records, attribute]) =>
+    `<section class="detail-block"><h3>${title}</h3><p>${labRecordButtons(records, attribute)}</p></section>`).join("");
+  return `<p class="eyebrow">Lab · ${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · Unscored</p><h1>${escapeHTML(lab.name)}</h1><p>${escapeHTML(lab.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p><p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
+      <section class="detail-block"><h3>How it is organized</h3><p>${detailText(lab.organization_note)}</p></section>
+      <section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>
+      <section class="detail-block"><h3>Systems it builds</h3>${relations.systems.length ? `<p>${labRecordButtons(relations.systems, "data-open-project")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
+      <section class="detail-block"><h3>Inference services it operates</h3>${relations.services.length ? `<p>${labRecordButtons(relations.services, "data-open-inference")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
+      ${others}
+      <section class="detail-block"><h3>Where it publishes</h3>${(lab.channels || []).map(labChannelMarkup).join("") || "<p>—</p>"}</section>
+      <section class="detail-block"><h3>Safety framework</h3>${labSafetyFrameworkMarkup(lab)}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(lab.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}<p class="unscored-note">Labs are recorded, never scored or ranked. Every count here is joined from the catalog's own reviewed records.</p></section>
+    </div>`;
+}
+
+// A lab dialog opens the records it lists over the current view, and hands its
+// full release list to the Models view's Lab facet.
+function bindLabDialogLinks() {
+  const root = $("#lab-dialog-content");
+  for (const [attribute, open] of [
+    ["data-open-model", openModel], ["data-open-project", openProject],
+    ["data-open-inference", openInferenceService], ["data-open-runtime", openLocalRuntime],
+    ["data-open-spec", openSpecification], ["data-open-pack", openPack],
+  ]) {
+    $$(`[${attribute}]`, root).forEach(button => button.addEventListener("click", () => {
+      $("#lab-dialog").close();
+      open(button.getAttribute(attribute));
+    }));
+  }
+  $$("[data-browse-lab-models]", root).forEach(button => button.addEventListener("click", () => browseLabModels(button.dataset.browseLabModels)));
+}
+
+function browseLabModels(labId) {
+  $("#lab-dialog").close();
+  $("#model-lab-filter").value = labId;
+  state.page.models = 1;
+  renderModels();
+  activateView("models");
 }
 
 const RECORD_DIALOGS = {
@@ -1793,6 +2108,23 @@ const RECORD_DIALOGS = {
     find: id => state.models.find(item => item.id === id),
     markup: modelDialogMarkup,
   },
+  lab: {
+    dialog: "#lab-dialog",
+    content: "#lab-dialog-content",
+    find: id => state.labs.find(item => item.id === id),
+    markup: labDialogMarkup,
+    afterRender: bindLabDialogLinks,
+  },
+  robot: {
+    dialog: "#robot-dialog",
+    content: "#robot-dialog-content",
+    find: id => state.robots.find(item => item.id === id),
+    markup: robotDialogMarkup,
+    afterRender: () => {
+      $$('[data-open-robot]', $("#robot-dialog-content")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.openRobot)));
+      $$('[data-open-project]', $("#robot-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#robot-dialog").close(); openProject(button.dataset.openProject); }));
+    },
+  },
 };
 
 function paintRecordDialog(dialog, record) {
@@ -1831,6 +2163,8 @@ function openInferenceService(id) { return openRecordDialog("inference", id); }
 function openLocalRuntime(id) { return openRecordDialog("runtime", id); }
 function openPack(id) { return openRecordDialog("pack", id); }
 function openModel(id) { return openRecordDialog("model", id); }
+function openLab(id) { return openRecordDialog("lab", id); }
+function openRobot(id) { return openRecordDialog("robot", id); }
 
 
 function specificationEvidenceLink(item) {
@@ -1861,7 +2195,7 @@ function runtimeLicenseEvidenceLink(item) {
 // `record=kind:id` URL, so the address bar always links to what is on screen.
 // Dispatch is static, as with comparisons, because the kind comes from the URL.
 const RECORD_DIALOG_SELECTORS = [
-  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#pack-dialog", "#model-dialog",
+  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#pack-dialog", "#model-dialog", "#lab-dialog", "#robot-dialog",
 ];
 const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">Copy link shares a preview page for this record.</span></p>';
 
@@ -1872,6 +2206,8 @@ function openRecord(kind, id) {
   if (kind === "runtime") return openLocalRuntime(id);
   if (kind === "pack") return openPack(id);
   if (kind === "model") return openModel(id);
+  if (kind === "lab") return openLab(id);
+  if (kind === "robot") return openRobot(id);
   return false;
 }
 
@@ -1917,6 +2253,7 @@ function restoreRecordFromURL() {
   if (reference && openRecord(reference.kind, reference.id)) {
     if (reference.kind === "spec") activateView("specifications");
     if (reference.kind === "model") activateView("models");
+    if (reference.kind === "lab") activateView("labs");
     return;
   }
   url.searchParams.delete("record");
@@ -2166,8 +2503,8 @@ function restoreViewFromURL() {
 }
 
 function activateView(id) {
-  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : "packs");
+  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
+    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
   }
   const comparisonFitsView = (id === "models" && state.comparison.kind === "model")
@@ -2193,8 +2530,9 @@ function activateView(id) {
 const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
-  "#model-search": ["models"], "#pack-search": ["packs", "systems"],
-  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs"],
+  "#model-search": ["models"], "#pack-search": ["packs", "systems"], "#lab-search": ["labs"],
+  "#robot-search": ["robots"],
+  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
 };
 
 function bindEvents() {
@@ -2240,8 +2578,10 @@ function bindEvents() {
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
   ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
-  ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
+  ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
+  ["#lab-search", "#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
   ["#pack-search", "#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
+  ["#robot-search", "#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -2278,6 +2618,7 @@ function bindEvents() {
     $("#model-modality-filter").value = "";
     $("#model-source-filter").value = "";
     $("#model-license-filter").value = "";
+    $("#model-lab-filter").value = "";
     $("#model-sort-filter").value = "score";
     state.page.models = 1;
     renderModels();
@@ -2290,6 +2631,23 @@ function bindEvents() {
     $("#pack-license-filter").value = "";
     state.page.packs = 1;
     renderPacks();
+  });
+  $("#reset-lab-filters").addEventListener("click", () => {
+    $("#lab-search").value = "";
+    $("#lab-type-filter").value = "";
+    $("#lab-country-filter").value = "";
+    $("#lab-distribution-filter").value = "";
+    state.page.labs = 1;
+    renderLabs();
+  });
+  $("#reset-robot-filters").addEventListener("click", () => {
+    $("#robot-search").value = "";
+    $("#robot-form-factor-filter").value = "";
+    $("#robot-ai-basis-filter").value = "";
+    $("#robot-availability-filter").value = "";
+    $("#robot-status-filter").value = "";
+    state.page.robots = 1;
+    renderCollection("robots");
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
@@ -2355,13 +2713,23 @@ function bindEvents() {
   $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
   $("#pack-dialog .dialog-close").addEventListener("click", () => $("#pack-dialog").close());
   $("#pack-dialog").addEventListener("click", event => { if (event.target === $("#pack-dialog")) $("#pack-dialog").close(); });
+  $("#robot-dialog .dialog-close").addEventListener("click", () => $("#robot-dialog").close());
+  $("#robot-dialog").addEventListener("click", event => { if (event.target === $("#robot-dialog")) $("#robot-dialog").close(); });
   $("#model-dialog .dialog-close").addEventListener("click", () => $("#model-dialog").close());
   $("#model-dialog").addEventListener("click", event => { if (event.target === $("#model-dialog")) $("#model-dialog").close(); });
+  $("#lab-dialog .dialog-close").addEventListener("click", () => $("#lab-dialog").close());
+  $("#lab-dialog").addEventListener("click", event => { if (event.target === $("#lab-dialog")) $("#lab-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
   window.addEventListener("popstate", syncRecordWithHistory);
   document.addEventListener("click", event => {
     const button = event.target.closest("[data-copy-record-link]");
     if (button) copyRecordLink(button);
+    // Every record dialog links a lab-claimed record to its lab (ADR 041).
+    const labLink = event.target.closest("[data-open-lab]");
+    if (labLink) {
+      labLink.closest("dialog")?.close();
+      openLab(labLink.dataset.openLab);
+    }
   });
   $("#comparison-open").addEventListener("click", openComparison);
   $("#comparison-clear").addEventListener("click", () => clearComparison());

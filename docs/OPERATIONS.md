@@ -41,7 +41,7 @@ What runs, and where it is configured:
 - Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
 - JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
 - Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it before the pre-commit step).
-- Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
+- Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`, `openrouter-model-leads.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
 
 There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
 
@@ -61,14 +61,15 @@ The report reads `directory/` and prints one row per reviewed record, oldest edi
 - **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, or trust record, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
 - **metadata** is the newest automated timestamp, `metadata_verified_at` or `stars_verified_at`, or `none` for records without GitHub metadata. It says how fresh the live numbers are, not how fresh the review is.
 
-`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, or `specifications` and may repeat.
+`pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, `specifications`, `packs`, or `labs` and may repeat. A lab's oldest evidence includes the date its safety framework was read.
 
 ## Metadata refresh
 
-The weekly refresh runs this alongside the models.dev import, synchronization, payload and
-share-page regeneration, and verification, as one local script; see "Scheduled workflow" below
-for `scripts/run_directory_refresh.py` and how it is scheduled and published. The commands
-below run this step, or the models.dev import, on their own.
+The weekly refresh runs this alongside the models.dev import, the OpenRouter cross-check,
+synchronization, payload and share-page regeneration, and verification, as one local script; see
+"Scheduled workflow" below for `scripts/run_directory_refresh.py` and how it is scheduled and
+published. The commands below run this step, the models.dev import, or the OpenRouter
+cross-check on their own.
 
 ```bash
 GITHUB_TOKEN=... uv run python scripts/update_directory.py
@@ -89,7 +90,7 @@ The refresh is transactional at the repository level:
 
 Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
-The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json` carries no stars and is never touched by this pass.
+The same run also refreshes GitHub star counts for `directory/local-runtimes.json`, `directory/packs.json`, and `directory/specifications.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/labs.json` and `directory/robots.json` carry no stars and are never touched by this pass.
 
 models.dev discovery is a separate fail-closed import:
 
@@ -99,11 +100,20 @@ GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
 
 It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue, and also filters the `source_id` values dispositioned in `directory/model-dispositions.json` while keeping them in the eligible count, but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
+The OpenRouter cross-check runs next, against the snapshot the models.dev import just wrote:
+
+```bash
+uv run python scripts/import_openrouter.py
+```
+
+It needs no token and makes no request until `terms_reviewed_at` is recorded in `directory/openrouter-model-dispositions.json`; until then it reports that it skipped. Once enabled, it fetches OpenRouter's public model list once and replaces the unpublished `directory/openrouter-model-leads.json` only after its count, pagination, and schema checks pass. It writes nothing under `web/` and never edits models, candidates, or dispositions. See the OpenRouter section of [`MODELS.md`](MODELS.md) and [ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md).
+
 ## Evidence links and terms drift
 
 The weekly workflow checks the authoritative record URL, every reviewed evidence URL,
 every immutable evidence URL, and every license or governing-terms URL across systems,
-specifications, inference services, local runtimes, and reviewed models:
+specifications, inference services, local runtimes, reviewed models, agent packs, labs, and robots,
+including each lab's channel pages and the safety framework it publishes:
 
 ```bash
 GITHUB_TOKEN=... uv run python scripts/check_evidence_links.py
@@ -163,6 +173,27 @@ not steward, and a finding's pinned `content_sha256` is a review-time record com
 nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
+Robots carry terms in place of licences, and the page that names a model is the fact the
+record exists to report, so the checker hashes both. A robot's record `url` is checked as a
+link; every item in `terms_evidence` is hashed as `web_terms` like any other terms page; and
+in `evidence`, the items whose role is `named_model` or `model_interface` are hashed too. A
+drifted named-model or model-interface page is resolved exactly as terms drift is: read the
+stored diff, open the vendor's page, correct whatever the record now states wrongly, and
+advance the affected human-owned `verified_at` so the next run accepts the new hash. Drift
+never hides a robot and never rewrites its record. Evidence with the roles `product_page`,
+`technical_documentation`, or `supporting` is link-checked only.
+
+An evidence or terms-evidence item may carry `"unpinnable": true`, which says the page's
+visible text changes between fetches so its hash can never settle. An unpinnable citation is
+still link-checked — a `404` on it still fails — and is never drift-monitored. The veto is
+per URL rather than per citation: if any record cites a URL as unpinnable, that URL is left
+out of monitoring even where another citation of the same URL would have turned monitoring
+on. Reviewing a page before citing it is `scripts/check_page_stability.py`, below.
+
+`directory/robots.json` is in the refresh's staged path list, so a hand-written robot record
+travels with a weekly refresh, but no step of the refresh ever writes one: automation does
+not create, edit, or remove a robot record (ADR 037).
+
 To resolve terms drift, start from the stored diff (`--show-drift`), inspect the authoritative
 page, update every affected conclusion
 and scoped evidence item as needed, and advance every affected human-owned `verified_at`.
@@ -188,6 +219,27 @@ For each URL the import keeps an entry found in only one cache, prefers the entr
 after a strictly newer human review of every reference, and otherwise keeps the most
 recently checked entry. When two baselines agree it keeps any open drift; when they disagree
 without a newer review it opens terms drift, so a person decides which page is right.
+
+## The two-fetch rule for a robot's evidence
+
+Before citing a page on a robot record, fetch it twice and compare the hashes the evidence
+monitor would keep:
+
+```bash
+uv run python scripts/check_page_stability.py <url>
+uv run python scripts/check_page_stability.py <url> --wait 5   # a shorter gap between fetches
+```
+
+The script fetches the URL, waits `--wait` seconds (120 by default), fetches it again, and
+hashes each body with the same visible-text normalisation `check_evidence_links.py` uses. It
+prints both hashes and exits `0` when they match, `1` when they differ, and `2` when either
+fetch fails. Paste both hashes into the pull request description either way.
+
+Differing hashes do not disqualify the page. Look for a stable first-party alternative
+first; where none exists, cite the page with `"unpinnable": true`, which records the
+instability on the record itself and keeps the link checker on it. An unpinnable page never
+holds a robot out of the collection. See [`ROBOTS.md`](ROBOTS.md) and
+[ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md).
 
 ## Review a candidate
 
@@ -470,7 +522,13 @@ Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not
 
 For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
-Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
+Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification. An OpenRouter lead is only a pointer: cite the developer's own documentation, never the listing, for identity, licensing, or hosting.
+
+## Review a lab
+
+Follow [`LABS.md`](LABS.md) and treat one organization, under every name the catalog already uses for it, as the review unit. Confirm the inclusion gate from `models.json` before anything else: a lab is recorded only once a release it developed has been reviewed. Read the organization's own terms, privacy policy, or filings for its entity and headquarters, then each channel page and any framework it publishes. Never record funding, valuation, headcount, benchmarks, or news, and never give an organization a licence or a score. Validation refuses a name, system, or GitHub organization claimed by two labs, a models.dev namespace split between developer strings the lab does not all name, and a system in the lab's own GitHub organization that its `systems` list leaves out. Synchronize, regenerate the payloads and share pages, validate, and exercise the Labs view and a record dialog's Lab link.
+
+No automation creates, edits, or dates a lab record. When a new reviewed release names a developer no lab covers, the release stands on its own and the lab waits for its own review; when a reviewed release adds a new developer string for a covered organization, validation flags the split namespace until the lab names it.
 
 ## Resolve a license review
 
@@ -491,7 +549,8 @@ never triggers the required `verify` check, so a workflow-opened refresh pull re
 never reach a mergeable state without an extra repository secret. `scripts/run_directory_refresh.py`
 reproduces the retired `.github/workflows/update-directory.yml` on the maintainer's own
 machine instead: it refreshes system/runtime metadata, the complete public models.dev source
-snapshot, and both candidate queues; synchronizes the public data again after the model
+snapshot, and both candidate queues; cross-checks the models against OpenRouter's public model
+list into unpublished leads (ADR 039); synchronizes the public data again after the model
 import; regenerates payloads and share pages; checks reviewed links and mutable terms; verifies
 the result; and, only when asked, opens or updates a pull request. It never commits directly to
 the default branch, and it runs no judgment of its own — it is a deterministic wrapper around
@@ -504,9 +563,12 @@ uv run python scripts/run_directory_refresh.py --publish   # also push and open/
 
 The runner refuses to start on a dirty working tree or on a `HEAD` that does not match a
 freshly fetched `origin/main` — a refresh must be generated from current main, never from a
-stale or locally modified checkout. It runs the six generation steps in order, stopping at the
+stale or locally modified checkout. It runs the seven generation steps in order, stopping at the
 first failure, then runs every verification check even after one fails, so a single broken
-record cannot hide the rest, and prints a pass/fail summary. It stages the same explicit path
+record cannot hide the rest, and prints a pass/fail summary. A failed OpenRouter cross-check is
+the one step that does not stop the run: the importer leaves its leads unchanged, and the
+failure is reported in the pull-request body rather than costing the week's GitHub and
+models.dev reads. It stages the same explicit path
 list the retired workflow staged (`STAGED_DIRECTORY_FILES` in the script) — never an unqualified
 `git add -A directory`, which once swept the daily attention-source queue into this weekly
 branch — and, if that leaves nothing staged, says so and exits successfully. Otherwise it
@@ -523,7 +585,8 @@ carrying the per-check results when any check failed. Because the pull request i
 the maintainer's own `gh` credentials rather than a workflow token, `verify` actually runs on
 it. Without `--publish`, the runner stops after the local commit and prints the exact command
 to publish; review the commit yourself before deciding to push it. Either way the runner exits
-non-zero when a check failed, even after a successful publish, so a scheduler notices.
+non-zero when a check or the OpenRouter cross-check failed, even after a successful publish,
+so a scheduler notices.
 
 Schedule it with launchd, following the same pattern as the attention-source sweep: a
 dedicated worktree and a small wrapper script, not the runner pointed at an everyday
@@ -598,11 +661,14 @@ next login rather than once per missed week — the same tradeoff the attention-
 already accepts. A red run still opens or updates its issue-worthy signal in the log rather than
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
-signals, candidates, model candidates, and the check summary before merging any refresh pull
-request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+signals, candidates, model candidates, OpenRouter leads, and the check summary before merging
+any refresh pull request. The refresh's check summary and the pull-request body both list a "Models awaiting a
 models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
 `link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
-prints the same `link pending:` lines those sections are built from.
+prints the same `link pending:` lines those sections are built from. The pull-request body also
+carries an "OpenRouter model leads" section with the importer's own summary: how many leads it
+staged, that it skipped because no terms review is recorded, or why it failed, and any prunable
+dispositions.
 
 ### Tokens
 
@@ -914,7 +980,7 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 ## App payloads
 
-`uv run python scripts/build_web_payload.py` writes five boot payloads, five search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. The weekly refresh (`scripts/run_directory_refresh.py`) synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
+`uv run python scripts/build_web_payload.py` writes seven boot payloads, seven search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. The weekly refresh (`scripts/run_directory_refresh.py`) synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
 
 ## Share pages
 

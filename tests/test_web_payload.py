@@ -66,6 +66,8 @@ class WebPayloadTests(unittest.TestCase):
             "specifications",
             "models",
             "packs",
+            "labs",
+            "robots",
         ):
             self.assertIn(
                 "verified_at", json.loads(self.payloads[f"app/{collection}.json"])
@@ -234,6 +236,8 @@ class WebPayloadTests(unittest.TestCase):
                 ("specifications.json", "specifications"),
                 ("models.json", "models"),
                 ("packs.json", "packs"),
+                ("labs.json", "labs"),
+                ("robots.json", "robots"),
             )
         )
         self.assertEqual(records, len(detail))
@@ -246,6 +250,79 @@ class WebPayloadTests(unittest.TestCase):
             self.assertNotIn("score", entry)
             self.assertNotIn("installs", entry, "installs is detail-only prose")
             self.assertIn("pack_type", entry)
+
+    def test_labs_boot_carries_the_join_keys_and_detail_carries_the_review(
+        self,
+    ) -> None:
+        """The page joins a lab in the browser from boot fields alone (ADR 041)."""
+        boot = json.loads(self.payloads["app/labs.json"])
+        self.assertTrue(boot["labs"], "the collection has published records")
+        for entry in boot["labs"]:
+            self.assertNotIn("score", entry)
+            for field in ("catalog_names", "systems", "lab_type", "headquarters"):
+                self.assertIn(field, entry)
+            for field in ("organization_note", "channels", "evidence"):
+                self.assertNotIn(field, entry, f"{field} is detail-only")
+        detail = json.loads(self.payloads["app/detail/lab/lab-anthropic.json"])
+        self.assertIn("organization_note", detail)
+        self.assertIn("channels", detail)
+        self.assertEqual(
+            "Responsible Scaling Policy (Version 3.4)",
+            detail["safety_framework"]["title"],
+        )
+
+    def test_robots_are_unscored_and_boot_carries_only_card_fields(self) -> None:
+        boot = json.loads(self.payloads["app/robots.json"])
+        self.assertIn("robots", boot)
+        for entry in boot["robots"]:
+            self.assertNotIn("score", entry)
+            self.assertNotIn("hardware", entry, "hardware is detail-only prose")
+            self.assertIn("form_factor", entry)
+
+    def test_an_empty_robots_collection_still_ships_its_boot_payload(self) -> None:
+        """app/robots.json sits in the blocking boot fetch; a missing file blanks the site."""
+        catalog = {
+            **self.catalog,
+            "robots.json": {"verified_at": "2026-09-20", "robots": []},
+        }
+        payloads = build_payloads(catalog)
+        self.assertEqual([], json.loads(payloads["app/robots.json"])["robots"])
+        self.assertEqual({}, json.loads(payloads["app/search/robots.json"]))
+
+    def test_named_models_are_searchable_by_name_only(self) -> None:
+        """A dict-valued search field is flattened to its name, not a Python repr."""
+        robot = {
+            "id": "fixture-bot",
+            "name": "Fixture Bot",
+            "manufacturer": "Example Robotics",
+            "url": "https://robots.example/fixture",
+            "description": "A test fixture.",
+            "form_factor": "humanoid",
+            "availability": "reservation",
+            "status": "active",
+            "ai_basis": ["vendor_named_model"],
+            "named_models": [
+                {
+                    "name": "Sample-VLA",
+                    "kind": "vision_language_action",
+                    "role_note": "Turns camera frames into arm motion, mentioning roleonlyword.",
+                    "evidence_label": "Model announcement",
+                }
+            ],
+            "not_verified": "The model is the maker's claim.",
+            "verified_at": "2026-09-20",
+        }
+        catalog = {
+            **self.catalog,
+            "robots.json": {
+                "verified_at": "2026-09-20",
+                "robots": [robot],
+            },
+        }
+        payloads = build_payloads(catalog)
+        index = json.loads(payloads["app/search/robots.json"])
+        self.assertIn("sample-vla", index["fixture-bot"])
+        self.assertNotIn("roleonlyword", index["fixture-bot"])
 
     def test_trust_records_are_detail_only_and_never_searched(self) -> None:
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""

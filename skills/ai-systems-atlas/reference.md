@@ -9,6 +9,8 @@ Loaded on demand from [SKILL.md](SKILL.md) when a query needs a field the summar
 - `inference-services.json`: `{version, verified_at, services: [...], generated_at}`
 - `local-runtimes.json`: `{version, verified_at, runtimes: [...]}`
 - `packs.json`: `{version, verified_at, packs: [...]}`
+- `labs.json`: `{version, verified_at, labs: [...]}`
+- `robots.json`: `{version, verified_at, robots: [...]}`
 - `models.json`: `{version, verified_at, source: {...}, models: [...]}`
 - `models-dev.json`: `{version, updated_at, source_record_count, source: {...}, models: [...]}`
 - `taxonomy.json`: `{version, principle, <enum and score-profile groups, listed below>}`
@@ -31,6 +33,22 @@ Never scored. `specification_type` is one of `protocol`, `metadata_schema`, `ins
 `id, name, short_name, steward, repo, url, description, pack_type, hosts, packaging_formats, install_mechanism, installs, distribution_machinery, not_a_system, status, licenses, license_note, license_evidence, related_packs, related_systems, evidence, verified_at`
 
 Never scored and never carrying stars. `pack_type` is one of `skills_bundle`, `plugin`, `process_kit`, `vault_bundle`, `marketplace`; `hosts` and `install_mechanism` use the `pack_hosts` and `pack_install_mechanisms` taxonomy groups; `packaging_formats` names `specifications.json` records. `installs` states what the pack places in the host, counted from its pinned tree; `not_a_system` states why it is not a scored record. A marketplace record never lists, counts, or reviews its entries. See [docs/PACKS.md](../../docs/PACKS.md).
+
+## `labs.json` record fields
+
+`id, name, url, description, lab_type, headquarters, parent_organization, organization_note, catalog_names, systems, channels, safety_framework, evidence, verified_at`
+
+Never scored, ranked, or carrying a licence. `lab_type` and `headquarters` use the `lab_types` and `countries` taxonomy groups (`headquarters` is `none_listed` when the organization's own pages and filings give no single headquarters, base, or principal address); each of `channels` is `{kind, url}` with `kind` from `lab_channel_kinds`; `parent_organization` and `safety_framework` (`{title, url, verified_at}`) are present only when first-party evidence supports them. A lab's other records are joined, not copied: reviewed models whose `developer` is in `catalog_names`; services by `operator`, runtimes by `maintainer`, specifications by any of `stewards`, and packs by `steward`, each in `catalog_names`; models.dev rows in the namespaces (`source_id` before the `/`) of the lab's reviewed models; and systems listed by id in `systems`. See [docs/LABS.md](../../docs/LABS.md).
+
+## `robots.json` record fields
+
+`id, name, manufacturer, url, first_party_domains, description, form_factor, availability, availability_note, ai_basis, named_models, research_confidence, hardware, developer_access, terms, terms_note, terms_evidence, not_verified, status, evidence, verified_at`, plus the optional `short_name, variants, repo, superseded_by, related_systems, related_models, related_robots`.
+
+Never scored and never priced: a robot record carries no `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, or `benchmarks`. `form_factor` uses `robot_form_factors`, `availability` uses `robot_availability`, `status` uses `project_statuses`, and `research_confidence` uses `research_confidence_levels`.
+
+`ai_basis` uses `robot_ai_bases` and holds one or both of `vendor_named_model` and `open_model_interface`. `named_models` lists what the maker's own documentation names — each entry is `{name, kind, role_note, evidence_label}`, with `kind` from `robot_model_kinds` — and it is non-empty exactly when `ai_basis` contains `vendor_named_model`. A named model is the maker's claim, not an Atlas finding, and is not verified; `not_verified` says so on every record. `developer_access` states in the maker's terms what a documented interface lets a model control.
+
+`hardware` is four prose fields, `{compute, sensors, actuation, power}`, each of which may read `"Not published."`; no hardware number is lifted into a structured field, so nothing about a robot can be sorted or ranked. `terms` uses `robot_terms_kinds`, where `none_published` appears alone, and each `terms_evidence` item is `{terms_kind, scope, kind, url, verified_at}` with `kind` always `web_terms` and an optional `unpinnable: true`. Every `evidence` item carries a `role` from `product_page`, `technical_documentation`, `named_model`, `model_interface`, `supporting`, and may also carry `unpinnable: true`. Every evidence URL and the record `url` falls under an entry in `first_party_domains`. `superseded_by` names another robot and is present exactly when `status` is `superseded`. See [docs/ROBOTS.md](../../docs/ROBOTS.md).
 
 ## `inference-services.json` record fields
 
@@ -58,6 +76,6 @@ Each source row contains `id, source_id, source_metadata`. `source_metadata` con
 
 ## `taxonomy.json` top-level groups
 
-`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, trust_property_statuses, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, model_types, model_modalities, model_distribution_modes, inference_service_score_profile, local_runtime_score_profile, model_score_profile, specification_types, specification_scopes, specification_statuses, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
+`version, principle, system_families, primary_roles, agent_relations, provider_relationships, model_backends, model_types, model_modalities, model_distribution_modes, inference_service_types, inference_delivery_modes, inference_model_sources, inference_api_styles, trust_property_statuses, local_runtime_types, runtime_accelerators, runtime_model_formats, runtime_serving_modes, runtime_deployment_surfaces, inference_service_score_profile, local_runtime_score_profile, model_score_profile, specification_types, specification_scopes, specification_statuses, pack_types, pack_hosts, pack_install_mechanisms, lab_types, lab_channel_kinds, countries, robot_form_factors, robot_ai_bases, robot_availability, robot_model_kinds, robot_terms_kinds, architectures, retrieval_modes, capture_modes, memory_lifecycle, agent_interfaces, execution_boundaries, agent_capabilities, deployment_modes, project_statuses, license_review_statuses, provenance_levels, research_confidence_levels, licenses, source_models, score_profiles`
 
 Each group is a list of enum entries (or a scoring-profile object for the three `*_score_profile` keys). Fetch `taxonomy.json` before filtering by any enum field to confirm current valid values — enums are added and renamed over time, and this reference is not re-verified on every taxonomy change.

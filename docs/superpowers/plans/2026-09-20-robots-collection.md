@@ -2382,6 +2382,8 @@ Branch: `claude/robots-first-records`, cut from `main` after PR 2 is merged and 
 
 ### Task 11: Review Spot, Unitree G1, Figure, and 1X NEO
 
+> **Before dispatching (from the PR 2 final review):** (a) the candidate↔robot overlap check compares repositories only and all four held robots have `repo: null`, so removing each published robot's candidate in the same change is a manual step the reviewer must show in the PR; (b) the `unpinnable` veto in `check_evidence_links.py` is per URL across every collection — before citing a page as unpinnable, grep the other collections' evidence and terms for the same URL, because the citation would silently stop drift monitoring there; (c) decide whether a robot may cite `git_blob` evidence from a vendor SDK repository: today `validate_evidence_items` ties blobs to the robot's own `repo`, and repository uniqueness forbids a robot sharing a repo with a system or pack — Unitree's SDK organisation is the live case, so cite SDK licences as `web_terms` on the blob URL under `github.com/<org>` in `first_party_domains`, and set `repo` only when the robot itself owns a repository no other collection records. (d) Owner decision 2026-09-24: robots will carry one identifying type badge on `form_factor` (the #293 contract), added with the badge session's robot-badge follow-up after this task, when ADR 037's badge sentence is amended; do not add it here.
+
 This task is curation, not code. Its steps are a procedure; its outcomes are not known in advance, and any of the four may stay held. `AGENTS.md` rule 8 applies: every classification, sentence, and confidence level is the reviewer's.
 
 **Files:**
