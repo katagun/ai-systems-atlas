@@ -250,6 +250,6 @@ test("outside Systems, a card without a star count makes no GitHub claim", async
   await expectNoGitHubClaim(page.locator('#runtime-grid .project-card:has([data-local-runtime="lm-studio"])'));
 
   await page.goto("/?view=specifications");
-  await page.locator("#specification-search").fill("Cursor Rules");
+  await page.locator("#specification-search").fill("Cursor Project");
   await expectNoGitHubClaim(page.locator('#specification-grid .project-card:has([data-specification="cursor-rules"])'));
 });
