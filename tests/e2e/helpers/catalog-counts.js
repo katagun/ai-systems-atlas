@@ -15,6 +15,7 @@ const hostPackSystems = read("app/systems.json").systems.filter(system => (syste
 const inferenceServices = read("inference-services.json").services;
 const localRuntimes = read("local-runtimes.json").runtimes;
 const packs = read("packs.json").packs;
+const labs = read("labs.json").labs;
 const reviewedModels = read("models.json").models;
 const sourceModels = read("models-dev.json").models;
 const sourceModelIds = new Set(sourceModels.map(model => model.source_id));
@@ -76,6 +77,49 @@ function topReviewedModelName() {
   return reviewedModelNames(() => true)[0];
 }
 
+// A lab joins the reviewed releases whose developer is one of its catalog
+// names (web/app-core.js labRelations); labs sort by name only (filterLabs).
+function labDeveloperNames(labId) {
+  return new Set(labs.find(lab => lab.id === labId).catalog_names);
+}
+
+function labNames(predicate = () => true) {
+  return labs.filter(predicate).map(lab => lab.name).sort((a, b) => a.localeCompare(b));
+}
+
+function labsWithReleaseDistribution(mode) {
+  return labNames(lab => {
+    const names = new Set(lab.catalog_names);
+    return reviewedModels.some(model => names.has(model.developer) && (model.distribution_modes || []).includes(mode));
+  });
+}
+
+// The lab search reads the generated index, which holds these fields
+// (scripts/build_web_payload.py SEARCH_FIELDS["labs"]).
+function labsMatching(term) {
+  const needle = term.toLowerCase();
+  return labNames(lab =>
+    [lab.id, lab.name, lab.description, lab.organization_note, ...lab.catalog_names, lab.parent_organization || ""]
+      .join(" ")
+      .toLowerCase()
+      .includes(needle)
+  );
+}
+
+function reviewedModelsDevelopedBy(labId) {
+  const names = labDeveloperNames(labId);
+  return reviewedModelNames(model => names.has(model.developer));
+}
+
+// A lab dialog's longest unbroken strings are a channel URL and a word in the
+// lab's name; the phone-width check opens the lab with the longest of each.
+function labIdWithLongest(measure) {
+  return labs.reduce((best, lab) => (measure(lab) > measure(best) ? lab : best)).id;
+}
+
+const labNamesInCatalog = new Set(labs.flatMap(lab => lab.catalog_names));
+const labCoveredModels = reviewedModels.filter(model => labNamesInCatalog.has(model.developer)).length;
+
 module.exports = {
   projects: projects.length,
   inferenceServices: inferenceServices.length,
@@ -92,4 +136,12 @@ module.exports = {
   reviewedModelsWithDistribution,
   reviewedModelsWithLicense,
   topReviewedModelName,
+  labs: labs.length,
+  labCoveredModels,
+  labNames,
+  labsWithReleaseDistribution,
+  labsMatching,
+  reviewedModelsDevelopedBy,
+  labIdWithLongestChannel: labIdWithLongest(lab => Math.max(...lab.channels.map(channel => channel.url.length))),
+  labIdWithLongestNameWord: labIdWithLongest(lab => Math.max(...lab.name.split(/\s+/).map(word => word.length))),
 };

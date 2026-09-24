@@ -1,0 +1,1948 @@
+{
+  "version": "1.0",
+  "verified_at": "2026-09-24",
+  "labs": [
+    {
+      "id": "lab-ai-singapore",
+      "name": "AI Singapore",
+      "url": "https://aisingapore.org/",
+      "description": "The national AI programme that develops the SEA-LION models for Southeast Asian languages.",
+      "lab_type": "public_research",
+      "headquarters": "sg",
+      "organization_note": "AI Singapore is a national programme supported by the National Research Foundation, Singapore and hosted by the National University of Singapore; the pages reviewed name no separate legal entity. Its SEA-LION team develops the models and publishes them under its Hugging Face organization.",
+      "catalog_names": [
+        "AI Singapore"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/aisingapore"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/aisingapore"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SEA-LION repository: AI Singapore is a national programme supported by the National Research Foundation, Singapore and hosted by the National University of Singapore",
+          "url": "https://github.com/aisingapore/sealion",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "AI Singapore's site for the national AI programme",
+          "url": "https://aisingapore.org/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-ai21-labs",
+      "name": "AI21 Labs",
+      "url": "https://www.ai21.com/",
+      "description": "The AI company that develops the Jamba models and offers them through AI21 Studio.",
+      "lab_type": "ai_company",
+      "headquarters": "il",
+      "organization_note": "AI21 Labs Ltd., whose privacy policy gives its principal place of business in Tel Aviv, develops the Jamba models and operates AI21 Studio; its terms of service are governed by Israeli law. One name, AI21 Labs, covers the models and the API.",
+      "catalog_names": [
+        "AI21 Labs"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.ai21.com/docs/jamba-foundation-models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.ai21.com/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.ai21.com/blog/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/AI21Labs"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/ai21labs"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy naming AI21 Labs Ltd. as data controller, with its principal place of business in Tel Aviv, Israel",
+          "url": "https://www.ai21.com/terms-policies/privacy-policy/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service: an agreement with AI21 Labs Ltd. governed by the laws of Israel",
+          "url": "https://www.ai21.com/terms-of-service/",
+          "verified_at": "2026-08-28"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-aikido-security",
+      "name": "Aikido Security",
+      "url": "https://www.aikido.dev/",
+      "description": "The application-security company that develops the Altar open-weight model for defensive security work alongside its security platform.",
+      "lab_type": "technology_company",
+      "headquarters": "be",
+      "organization_note": "Aikido Security BV, registered in Belgium with its registered office in Ghent, is the contracting entity; its press kit says it was founded in Ghent and lists its European headquarters there, beside UK, APAC, and Defense headquarters elsewhere. Its principal business is a code, cloud, and runtime security platform, and Altar-1 is the model release the catalog reviews.",
+      "catalog_names": [
+        "Aikido Security"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.aikido.dev/category/news"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/AikidoSec"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of use: Aikido Security BV, registered in Belgium with its registered office at Coupure Rechts 88, 9000 Gent",
+          "url": "https://www.aikido.dev/policies/terms",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Press kit: founded in Ghent, Belgium, with its European headquarters at Keizer Karelstraat 15, Ghent",
+          "url": "https://www.aikido.dev/company/press-kit",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-alibaba",
+      "name": "Alibaba",
+      "url": "https://www.alibabagroup.com/",
+      "description": "The technology company whose Qwen team develops the Qwen models, served by Alibaba Cloud through Model Studio.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Alibaba Group Holding Limited is a Cayman Islands holding company with an executive office in Hong Kong; the principal executive offices of its major businesses are in Hangzhou. Its Qwen team develops the models, publishes them under the Qwen organizations, and builds Qwen Code, and Alibaba Cloud operates Model Studio. The catalog names the developer Alibaba for most releases and Qwen for two, and names the Model Studio operator Alibaba Cloud, so all three names belong to this record.",
+      "catalog_names": [
+        "Alibaba",
+        "Qwen",
+        "Alibaba Cloud"
+      ],
+      "systems": [
+        "qwen-code"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://qwen.ai/research/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/QwenLM"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Qwen"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Form 20-F for fiscal 2026: a Cayman Islands holding company whose major businesses have their principal executive offices in Hangzhou",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001577552/000119312526231755/baba-20260331.htm",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Model Studio model list naming the Qwen series and third-party models",
+          "url": "https://www.alibabacloud.com/help/en/model-studio/models",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-amazon",
+      "name": "Amazon",
+      "url": "https://www.amazon.science/",
+      "description": "The technology company that develops the Amazon Nova models and builds Amazon Bedrock, Amazon Quick, Kiro, and the Strands Agents SDK.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "organization_note": "Amazon develops the Nova models, and Amazon Web Services, of Seattle, serves them through Amazon Bedrock and builds Amazon Quick, Amazon Bedrock AgentCore, Kiro, and the Strands Agents SDK. The catalog names the developer Amazon and the Bedrock operator Amazon Web Services, so both names belong to this record.",
+      "catalog_names": [
+        "Amazon",
+        "Amazon Web Services"
+      ],
+      "systems": [
+        "amazon-quick",
+        "bedrock-agentcore",
+        "kiro",
+        "strands-agents-sdk"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+        },
+        {
+          "kind": "news",
+          "url": "https://aws.amazon.com/blogs/aws/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/strands-agents"
+        }
+      ],
+      "safety_framework": {
+        "title": "Amazon's Frontier Model Safety Framework",
+        "url": "https://www.amazon.science/publications/amazons-frontier-model-safety-framework",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "AWS privacy notice naming Amazon Web Services, Inc. at 410 Terry Avenue North, Seattle",
+          "url": "https://aws.amazon.com/privacy/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Kiro FAQ stating that Kiro is built and operated by AWS",
+          "url": "https://kiro.dev/faq/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-ant-group",
+      "name": "Ant Group",
+      "url": "https://www.antgroup.com/en",
+      "description": "The digital-payments and technology company whose inclusionAI initiative develops the Ling, Ring, and Ming models.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China, lists Hangzhou offices at 77 Xueyuan Road. inclusionAI, which Ant Group founded as its artificial general intelligence effort, develops and publishes the models; the catalog names their developer Inclusion AI (Ant Group). Ant Group's principal business is digital payments and financial technology.",
+      "catalog_names": [
+        "Inclusion AI (Ant Group)"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://developer.ant-ling.com/en/docs/models/price"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.antgroup.com/en/news-media/press-releases"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/inclusionAI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/inclusionAI"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Our Offices page listing Ant Group's Hangzhou offices at 77 Xueyuan Road",
+          "url": "https://www.antgroup.com/en/about/our-offices",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Hong Kong exchange filing naming Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2020/1103/2020110302285.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "inclusionAI's GitHub profile: the series of open-source projects from Ant Group working towards artificial general intelligence",
+          "url": "https://github.com/inclusionAI",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-anthropic",
+      "name": "Anthropic",
+      "url": "https://www.anthropic.com/",
+      "description": "The AI company that develops the Claude models and builds the Claude apps, Claude Code, and the Anthropic API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Anthropic PBC, a public benefit corporation based and headquartered in the United States, develops the models and runs the products; Anthropic Ireland, Limited contracts with customers in the European Economic Area, Switzerland, and the UK. Its board is elected by stockholders and by the Long-Term Benefit Trust, which is not a parent company. One name, Anthropic, covers the models, the API, and the specifications it stewards.",
+      "catalog_names": [
+        "Anthropic"
+      ],
+      "systems": [
+        "claude",
+        "claude-code",
+        "claude-agent-sdk",
+        "claude-cowork"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/overview"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.anthropic.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/anthropics"
+        }
+      ],
+      "safety_framework": {
+        "title": "Responsible Scaling Policy (Version 3.4)",
+        "url": "https://www.anthropic.com/responsible-scaling-policy",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy: Anthropic PBC at 548 Market St, San Francisco, a company based and headquartered in the United States",
+          "url": "https://www.anthropic.com/legal/privacy",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Commercial terms naming Anthropic, PBC and Anthropic Ireland, Limited",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Company page: the board is elected by stockholders and the Long-Term Benefit Trust",
+          "url": "https://www.anthropic.com/company",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-arcee-ai",
+      "name": "Arcee AI",
+      "url": "https://www.arcee.ai/",
+      "description": "The AI company that trains the Trinity open-weight models and builds the MergeKit and DistillKit model tools.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Arcee AI, Inc. owns the site and calls itself an open intelligence lab based in the U.S.; its contributor agreement is governed by California law. It trains the Trinity models, publishes their weights under its Hugging Face organization, and serves them through the Arcee platform. One name, Arcee AI, covers the models in the catalog.",
+      "catalog_names": [
+        "Arcee AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://www.arcee.ai/trinity"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.arcee.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/arcee-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/arcee-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy: the site is owned by Arcee AI, Inc., an open intelligence lab based in the U.S.",
+          "url": "https://www.arcee.ai/privacy-policy",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "MergeKit contributor agreement naming Arcee AI, Inc. under California law",
+          "url": "https://github.com/arcee-ai/mergekit/blob/main/CLA.md",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-bytedance",
+      "name": "ByteDance",
+      "url": "https://www.bytedance.com/en/",
+      "description": "The technology company whose Seed team develops the Seed models, served through Volcano Engine Ark in China and BytePlus ModelArk internationally.",
+      "lab_type": "technology_company",
+      "headquarters": "none_listed",
+      "organization_note": "ByteDance's own pages describe more than 150,000 employees in nearly 120 cities and list offices by region, but name no headquarters; its website is provided by ByteDance Ltd. of the Cayman Islands. The ByteDance Seed team develops the models, Beijing Volcano Engine Technology operates Volcano Engine Ark in China, and BytePlus Pte. Ltd. of Singapore operates BytePlus ModelArk. The catalog names the developer and both operators, so all three names belong to this record.",
+      "catalog_names": [
+        "ByteDance Seed",
+        "BytePlus",
+        "北京火山引擎科技有限公司 (Beijing Volcano Engine Technology)"
+      ],
+      "systems": [
+        "deer-flow",
+        "openviking"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://seed.bytedance.com/en/models"
+        },
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.byteplus.com/en/docs/ModelArk/1330310"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.byteplus.com/en/docs/ModelArk/1159178"
+        },
+        {
+          "kind": "news",
+          "url": "https://seed.bytedance.com/en/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/ByteDance-Seed"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/bytedance"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/volcengine"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/ByteDance-Seed"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named",
+          "url": "https://www.bytedance.com/en/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Offices page listing ByteDance offices by region",
+          "url": "https://www.bytedance.com/en/resources/offices",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "ByteDance.com privacy policy (2023 revision): the site is provided and controlled by ByteDance Ltd., Grand Cayman",
+          "url": "https://sf16-sg.tiktokcdn.com/obj/eden-sg/ptvaeh7vbozps/bytedance_official/ByteDance.com%20WebsiteGlobalEN06-2023revision1.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "BytePlus documentation terms naming BytePlus Pte. Ltd., 1 Raffles Quay, Singapore",
+          "url": "https://docs.byteplus.com/en/docs/legal/docs-terms-of-service",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Volcano Engine Ark agreement naming 北京火山引擎科技有限公司, reviewed for the Volcano Engine Ark record",
+          "url": "https://docs.volcengine.com/docs/82379/1104498",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "ByteDance Seed's GitHub profile: labs across China, Singapore, and the U.S.",
+          "url": "https://github.com/ByteDance-Seed",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-cohere",
+      "name": "Cohere",
+      "url": "https://cohere.com/",
+      "description": "The AI company that develops the Command models for enterprise use and, through its research lab Cohere Labs, the Aya and North releases.",
+      "lab_type": "ai_company",
+      "headquarters": "ca",
+      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record.",
+      "catalog_names": [
+        "Cohere",
+        "Cohere Labs"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.cohere.com/docs/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.cohere.com/v2/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://cohere.com/blog"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/CohereLabs"
+        }
+      ],
+      "safety_framework": {
+        "title": "The Cohere Secure AI Frontier Model Framework (V1.0, February 2025)",
+        "url": "https://cohere.com/security/the-cohere-secure-ai-frontier-model-framework-february-2025.pdf",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
+          "url": "https://cohere.com/saas-agreement",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-deepseek",
+      "name": "DeepSeek",
+      "url": "https://www.deepseek.com/",
+      "description": "The AI company that develops the DeepSeek V, R, and OCR models and runs the DeepSeek app and API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "Hangzhou DeepSeek Artificial Intelligence Co., Ltd. develops the models and provides the DeepSeek app and the DeepSeek API under its own terms, and publishes weights and the DeepSeek Harness under its deepseek-ai organizations. One name, DeepSeek, covers the models, the API, and the products.",
+      "catalog_names": [
+        "DeepSeek"
+      ],
+      "systems": [
+        "deepseek",
+        "deepseek-harness"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://api-docs.deepseek.com/updates"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/deepseek-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/deepseek-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Open Platform terms naming Hangzhou DeepSeek Artificial Intelligence Co., Ltd. and its Hangzhou registered office",
+          "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-google",
+      "name": "Google",
+      "url": "https://deepmind.google/",
+      "description": "The technology company whose Google DeepMind unit develops the Gemini and Gemma models that Google serves through the Gemini API, Vertex AI, and the Gemini apps.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "parent_organization": "Alphabet Inc.",
+      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates Vertex AI and the Gemini Enterprise Agent Platform. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Vertex AI operator Google Cloud, so all three names belong to this record.",
+      "catalog_names": [
+        "Google",
+        "Google DeepMind",
+        "Google Cloud"
+      ],
+      "systems": [
+        "gemini-apps",
+        "gemini-cli",
+        "google-adk",
+        "antigravity",
+        "antigravity-sdk",
+        "gemini-enterprise-agent-platform",
+        "genkit"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://ai.google.dev/gemini-api/docs/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://deepmind.google/blog/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/google-gemini"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/google"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/google"
+        }
+      ],
+      "safety_framework": {
+        "title": "Frontier Safety Framework",
+        "url": "https://deepmind.google/frontier-safety/",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of service naming Google LLC at 1600 Amphitheatre Parkway, Mountain View",
+          "url": "https://policies.google.com/terms",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Alphabet investor release: Alphabet is a collection of companies, the largest of which is Google",
+          "url": "https://abc.xyz/investor/news/news-details/2026/Alphabet-Announces-Date-of-First-Quarter-2026-Financial-Results-Conference-Call-2026-18KYkWPpu7/default.aspx",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-ibm",
+      "name": "IBM",
+      "url": "https://www.ibm.com/",
+      "description": "The technology company that develops the Granite models and serves them through watsonx.ai, alongside its watsonx Orchestrate agent platform.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "organization_note": "International Business Machines Corporation, incorporated in New York, has its principal executive office in Armonk, New York. It develops the Granite models, publishes them under its ibm-granite organizations, and serves them through watsonx.ai; watsonx Orchestrate is its agent platform. BeeAI Framework began at IBM but was contributed to the Linux Foundation, so it is not listed here. One name, IBM, covers the models, the service, and the platform.",
+      "catalog_names": [
+        "IBM"
+      ],
+      "systems": [
+        "watsonx-orchestrate"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-ibm.html?context=wx"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.ibm.com/new/announcements"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/ibm-granite"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/ibm-granite"
+        }
+      ],
+      "safety_framework": {
+        "title": "Trustworthy AI at scale: IBM's AI Safety and Governance Framework",
+        "url": "https://newsroom.ibm.com/blog-trustworthy-ai-at-scale-ibms-ai-safety-and-governance-framework",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Form 10-K: incorporated in New York, principal executive office at One New Orchard Road, Armonk",
+          "url": "https://www.sec.gov/Archives/edgar/data/51143/000155837023002376/ibm-20221231x10k.htm",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "IBM announcement contributing BeeAI, Docling, and Data Prep Kit to the Linux Foundation",
+          "url": "https://www.ibm.com/new/announcements/ibm-adds-open-source-projects-docling-beeaI-and-data-prep-kit-added-to-the-linux-foundation",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "watsonx Orchestrate product page",
+          "url": "https://www.ibm.com/products/watsonx-orchestrate",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-meituan",
+      "name": "Meituan",
+      "url": "https://www.meituan.com/",
+      "description": "The technology company whose LongCat team develops the LongCat models.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Meituan, incorporated in the Cayman Islands and listed in Hong Kong, gives its contact address on Wangjing East Road in Chaoyang District, Beijing. Its LongCat team develops the models, publishes them under the meituan-longcat organizations, and runs LongCat chat. One name, Meituan, covers the models in the catalog.",
+      "catalog_names": [
+        "Meituan"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/meituan-longcat"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/meituan-longcat"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Meituan contact page giving its address in Chaoyang District, Beijing",
+          "url": "https://about.meituan.com/contact",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Meituan 2025 annual report: incorporated in the Cayman Islands with limited liability",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042403596.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "LongCat-2.0 licence: copyright Meituan",
+          "url": "https://github.com/meituan-longcat/LongCat-2.0/blob/main/LICENSE",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-meta",
+      "name": "Meta",
+      "url": "https://ai.meta.com/",
+      "description": "The technology company that develops the Llama and Muse models and builds Meta AI, Muse Code, and the Meta Model API on them.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "organization_note": "Meta Platforms, Inc., of Menlo Park, develops the models and operates the Meta Model API. The catalog names the developer Meta and the API operator Meta Platforms, so both names belong to this record. Llama weights are published under the meta-llama organization and Muse Glimmer's under meta-models.",
+      "catalog_names": [
+        "Meta",
+        "Meta Platforms"
+      ],
+      "systems": [
+        "meta-ai",
+        "muse-code",
+        "meta-business-agent-platform"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://dev.meta.ai/docs/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://ai.meta.com/blog/"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/meta-llama"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/meta-models"
+        }
+      ],
+      "safety_framework": {
+        "title": "Advanced AI Scaling Framework (version 2)",
+        "url": "https://ai.meta.com/static-resource/Meta_Advanced-AI-Scaling-Framework-v2",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy naming Meta Platforms, Inc. at 1 Meta Way, Menlo Park",
+          "url": "https://www.meta.com/legal/privacy-policy/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Muse Glimmer 30B model card published under the meta-models organization, reviewed for the model record",
+          "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-microsoft",
+      "name": "Microsoft",
+      "url": "https://microsoft.ai/",
+      "description": "The technology company that develops the MAI and Phi models and builds the Copilot assistants, Microsoft Foundry, and several agent frameworks.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "organization_note": "Microsoft Corporation, of Redmond, develops the MAI models through Microsoft AI and publishes the Phi models and ONNX Runtime GenAI, and Microsoft Azure operates Microsoft Foundry Models. The catalog names the developer and runtime maintainer Microsoft and the Foundry operator Microsoft Azure, so both names belong to this record.",
+      "catalog_names": [
+        "Microsoft",
+        "Microsoft Azure"
+      ],
+      "systems": [
+        "microsoft-copilot",
+        "microsoft-365-copilot",
+        "microsoft-copilot-studio",
+        "microsoft-foundry-agent-service",
+        "microsoft-agent-framework",
+        "semantic-kernel",
+        "autogen",
+        "magentic-ui",
+        "taskweaver"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://microsoft.ai/models/"
+        },
+        {
+          "kind": "news",
+          "url": "https://microsoft.ai/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/microsoft"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/microsoft"
+        }
+      ],
+      "safety_framework": {
+        "title": "Frontier Governance Framework",
+        "url": "https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Microsoft-Frontier-Governance-Framework.pdf",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy statement naming Microsoft Corporation, One Microsoft Way, Redmond",
+          "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-minimax",
+      "name": "MiniMax",
+      "url": "https://www.minimax.io/",
+      "description": "The AI company that develops the MiniMax M-series language models, alongside speech, music, and video models, and offers them through the MiniMax Open Platform.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "MiniMax Group Inc., a Shanghai-based holding company listed on the Hong Kong stock exchange, develops the models and runs the MiniMax Open Platform; its international apps are contracted through Nanonoble Pte. Ltd. of Singapore. One name, MiniMax, covers the models and the platform.",
+      "catalog_names": [
+        "MiniMax"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://platform.minimax.io/docs/guides/text-generation"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://platform.minimax.io/docs/release-notes/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.minimax.io/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/MiniMax-AI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/MiniMaxAI"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "MiniMax Group Inc. global offering prospectus filed with the Hong Kong stock exchange",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1231/2025123100025.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "App and web terms of service naming Nanonoble Pte. Ltd. of Singapore",
+          "url": "https://www.minimax.io/audio/doc/terms-of-service.html",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-mistral-ai",
+      "name": "Mistral AI",
+      "url": "https://mistral.ai/",
+      "description": "The AI company that develops the Mistral, Ministral, Magistral, Devstral, and Voxtral models and runs Mistral AI Studio and the Mistral Vibe assistant on them.",
+      "lab_type": "ai_company",
+      "headquarters": "fr",
+      "organization_note": "Mistral AI, a French simplified joint-stock company registered in Paris, develops the models, operates Mistral AI Studio and its API, and runs Mistral Vibe, the assistant it renamed from Le Chat. One name, Mistral AI, covers the models, the service, and the assistant.",
+      "catalog_names": [
+        "Mistral AI"
+      ],
+      "systems": [
+        "mistral-vibe"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.mistral.ai/models/overview"
+        },
+        {
+          "kind": "news",
+          "url": "https://mistral.ai/news/"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/mistralai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Commercial terms: Mistral AI, a French simplified joint-stock company, 15 rue des Halles, Paris",
+          "url": "https://legal.mistral.ai/terms/commercial-terms-of-service",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-mixedbread-ai",
+      "name": "Mixedbread",
+      "url": "https://www.mixedbread.com/",
+      "description": "The AI company that develops search and retrieval models, including the Toast model, and serves them through the Mixedbread API.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "mixedbread ai inc., whose terms are governed by Delaware law, is the contracting entity; the pages reviewed give no address or headquarters, and its job listings name San Francisco roles. The catalog names the developer Mixedbread AI.",
+      "catalog_names": [
+        "Mixedbread AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "release_notes",
+          "url": "https://www.mixedbread.com/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.mixedbread.com/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/mixedbread-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/mixedbread-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms and conditions: an agreement with mixedbread ai inc. governed by Delaware law",
+          "url": "https://www.mixedbread.com/pages/terms",
+          "verified_at": "2026-09-22"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy naming mixedbread ai inc.",
+          "url": "https://www.mixedbread.com/pages/privacy",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-moonshot-ai",
+      "name": "Moonshot AI",
+      "url": "https://www.moonshot.ai/",
+      "description": "The AI company that develops the Kimi models and offers them through the Moonshot AI Open Platform.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "Beijing Moonshot Technology Co., Ltd. (北京月之暗面科技有限公司), based in Haidian, Beijing, develops the models and operates the Kimi API platform. It trades as Moonshot AI and brands its models and assistant Kimi; the catalog uses the one name Moonshot AI for the models and the platform.",
+      "catalog_names": [
+        "Moonshot AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://platform.kimi.ai/docs/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.kimi.com/en/blog/"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/moonshotai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Kimi API platform privacy policy naming Beijing Moonshot Technology and its Haidian, Beijing contact address",
+          "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-motif-technologies",
+      "name": "Motif Technologies",
+      "url": "https://motiftech.io/",
+      "description": "The AI company that develops the Motif language models.",
+      "lab_type": "ai_company",
+      "headquarters": "kr",
+      "organization_note": "Motif Technologies gives its address on the 19th floor of the Gangnam Building, 396 Seocho-daero, Seoul, and its model licences name Motif Technologies Corp. It publishes the Motif models under its Hugging Face organization and training code under its GitHub organization. The pages reviewed name no parent company.",
+      "catalog_names": [
+        "Motif Technologies"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://motiftech.io/en/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/MotifTechnologies"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Motif-Technologies"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Contact page giving its address at 396 Seocho-daero, Seoul",
+          "url": "https://motiftech.io/en/contact/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Motif 3 licence naming Motif Technologies Corp.",
+          "url": "https://huggingface.co/Motif-Technologies/Motif-3/blob/main/LICENSE.md",
+          "verified_at": "2026-09-22"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-nvidia",
+      "name": "NVIDIA",
+      "url": "https://www.nvidia.com/",
+      "description": "The accelerated-computing company that develops the Nemotron models, serves models through the NVIDIA API Catalog, and maintains the TensorRT LLM runtime.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "organization_note": "NVIDIA Corporation, of Santa Clara, develops the Nemotron models, operates the NVIDIA API Catalog, and maintains TensorRT LLM. One name, NVIDIA, covers the models, the service, and the runtime.",
+      "catalog_names": [
+        "NVIDIA"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://developer.nvidia.com/topics/ai/nemotron"
+        },
+        {
+          "kind": "news",
+          "url": "https://nvidianews.nvidia.com/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/NVIDIA"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/nvidia"
+        }
+      ],
+      "safety_framework": {
+        "title": "Frontier AI Risk Assessment",
+        "url": "https://images.nvidia.com/content/pdf/NVIDIA-Frontier-AI-Risk-Assessment.pdf",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy naming NVIDIA Corporation at 2788 San Tomas Expressway, Santa Clara",
+          "url": "https://www.nvidia.com/en-us/about-nvidia/privacy-policy/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-openai",
+      "name": "OpenAI",
+      "url": "https://openai.com/",
+      "description": "The AI company that develops the GPT, o-series, and gpt-oss models and builds ChatGPT, Codex, and the OpenAI API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "parent_organization": "OpenAI Foundation",
+      "organization_note": "OpenAI Group PBC, a public benefit corporation controlled by the nonprofit OpenAI Foundation, develops the models and runs the products; the October 2025 recapitalization set this structure. Its privacy policy names OpenAI OpCo, LLC, of San Francisco. One name, OpenAI, covers the models, the API, and the specifications it co-stewards.",
+      "catalog_names": [
+        "OpenAI"
+      ],
+      "systems": [
+        "chatgpt",
+        "codex",
+        "openai-agents-sdk"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://developers.openai.com/api/docs/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://openai.com/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/openai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/openai"
+        }
+      ],
+      "safety_framework": {
+        "title": "Preparedness Framework (Version 2)",
+        "url": "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy naming OpenAI OpCo, LLC at 1455 Third Street, San Francisco",
+          "url": "https://openai.com/policies/row-privacy-policy/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Structure page: the OpenAI Foundation controls OpenAI Group PBC",
+          "url": "https://openai.com/our-structure/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-openbmb",
+      "name": "OpenBMB",
+      "url": "https://www.openbmb.cn/en/",
+      "description": "The open lab that develops the MiniCPM models and open-source agent and training tools.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "OpenBMB, the Open Lab for Big Model Base, is founded and supported by Tsinghua University's natural language processing laboratory (THUNLP) and ModelBest Inc., and the MiniCPM models credit ModelBest, THUNLP, and Renmin University's Gaoling School of Artificial Intelligence. It names no legal entity of its own, and the pages reviewed give no location.",
+      "catalog_names": [
+        "OpenBMB"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/OpenBMB"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/openbmb"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc.",
+          "url": "https://www.openbmb.org/en/about-us",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "MiniCPM repository crediting Modelbest Inc., THUNLP, and the Gaoling School of Artificial Intelligence",
+          "url": "https://github.com/OpenBMB/MiniCPM",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-ornith-ai",
+      "name": "Ornith AI (DeepReinforce)",
+      "url": "https://deep-reinforce.com/",
+      "description": "The AI company that develops the Ornith open-weight models for agentic coding and IterX, an API for reinforcement learning from code feedback.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "The site at deep-reinforce.com now presents the company as Ornith AI, its GitHub and Hugging Face organizations were renamed from DeepReinforce to ornith-ai, and its model posts moved to ornith.ai. The pages reviewed name no legal entity and give no location. The catalog names the developer DeepReinforce.",
+      "catalog_names": [
+        "DeepReinforce"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/ornith-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/ornith-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Company site at deep-reinforce.com, titled Ornith AI",
+          "url": "https://deep-reinforce.com/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Ornith-1.5 announcement on ornith.ai",
+          "url": "https://ornith.ai/ornith_1_5.html",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Ornith-1 repository, renamed from the DeepReinforce organization",
+          "url": "https://github.com/ornith-ai/Ornith-1",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-perplexity",
+      "name": "Perplexity",
+      "url": "https://www.perplexity.ai/",
+      "description": "The AI company that develops the Sonar models and builds the Perplexity answer engine, Perplexity Computer, and the Perplexity API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Perplexity AI, Inc., whose careers page calls San Francisco its home base, develops the Sonar models and operates the Perplexity API. The catalog names the developer Perplexity and the API operator Perplexity AI, so both names belong to this record.",
+      "catalog_names": [
+        "Perplexity",
+        "Perplexity AI"
+      ],
+      "systems": [
+        "perplexity",
+        "perplexity-computer"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.perplexity.ai/docs/agent-api/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.perplexity.ai/docs/resources/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.perplexity.ai/hub/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/perplexityai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/perplexity-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "API terms: a contract with Perplexity AI, Inc., reviewed for the Perplexity API record",
+          "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+          "verified_at": "2026-08-28"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: San Francisco is Perplexity's home base",
+          "url": "https://www.perplexity.ai/hub/careers",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-poolside",
+      "name": "Poolside",
+      "url": "https://poolside.ai/",
+      "description": "The AI company that trains the Laguna models and builds the pool coding agent, Poolside Assistant, Poolside Chat, and the Poolside API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Poolside, Inc., a Delaware corporation whose terms give its offices at 548 Market Street, San Francisco, calls itself a U.S.-based AI company; its careers pages say it was founded in the US and has its home there, with a team distributed across Europe and North America that meets in Paris each month. One name, Poolside, covers the models, the API, and the products.",
+      "catalog_names": [
+        "Poolside"
+      ],
+      "systems": [
+        "pool",
+        "poolside-assistant",
+        "poolside-chat"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.poolside.ai/get-started/supported-models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.poolside.ai/release-notes/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://poolside.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/poolsideai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/poolside"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Government page: Poolside is a U.S.-based AI company",
+          "url": "https://poolside.ai/government",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Terms naming Poolside, Inc., a Delaware corporation with offices in San Francisco, reviewed for the Poolside API record",
+          "url": "https://poolside.ai/legal/eula",
+          "verified_at": "2026-09-02"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-stepfun",
+      "name": "StepFun",
+      "url": "https://www.stepfun.com/",
+      "description": "The AI company that develops the Step models and offers them through the StepFun Open Platform in China and internationally.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record.",
+      "catalog_names": [
+        "StepFun",
+        "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
+        "StepFun Technology (HK) Limited"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/stepfun-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/stepfun-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform privacy policy giving the registered address in Xuhui District, Shanghai",
+          "url": "https://platform.stepfun.com/legal/privacy-policy.html",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Mainland platform user agreement naming the Shanghai operating entity, reviewed for the StepFun Open Platform record",
+          "url": "https://platform.stepfun.com/docs/zh/agreement/userservice",
+          "verified_at": "2026-08-31"
+        },
+        {
+          "kind": "web",
+          "label": "International platform terms naming StepFun Technology (HK) Limited, reviewed for the international platform record",
+          "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
+          "verified_at": "2026-09-11"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-swiss-ai-initiative",
+      "name": "Swiss AI Initiative",
+      "url": "https://www.swiss-ai.org/",
+      "description": "The national research initiative, co-led by ETH Zurich and EPFL, that develops the Apertus open models.",
+      "lab_type": "public_research",
+      "headquarters": "ch",
+      "organization_note": "The Swiss AI Initiative is a national research effort launched in December 2023 and co-led by ETH Zurich and EPFL, the first initiative of the Swiss National AI Institute; it was seeded with compute on the CSCS Alps system and a grant from the ETH Domain. Apertus is developed with EPFL, ETH Zurich, and CSCS, and the Apertus websites belong to EPFL. The pages reviewed name no legal entity for the initiative itself.",
+      "catalog_names": [
+        "Swiss AI Initiative"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://apertus-ai.org/pages/documentation/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/swiss-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/swiss-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Swiss AI Initiative site: the first initiative of the Swiss National AI Institute, seeded with CSCS compute and an ETH Domain grant",
+          "url": "https://www.swiss-ai.org/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Organization page: co-led by ETH Zurich and EPFL",
+          "url": "https://www.swiss-ai.org/team-3",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Source of the Apertus site: developed by the Swiss AI Initiative with EPFL, ETH Zurich, and CSCS; the sites belong to EPFL",
+          "url": "https://github.com/swiss-ai/www-apertus",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-tencent",
+      "name": "Tencent",
+      "url": "https://www.tencent.com/",
+      "description": "The technology company whose Tencent Hy team develops the Hy models, served through Tencent Cloud TokenHub.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Tencent Holdings Limited, incorporated in the Cayman Islands and listed in Hong Kong, is headquartered in Shenzhen. Its Tencent Hy team (腾讯混元团队) develops the Hy models and publishes them under the Tencent-Hunyuan and tencent organizations, and Tencent Cloud operates TokenHub. The catalog names the developer Tencent and the operator Tencent Cloud, so both names belong to this record.",
+      "catalog_names": [
+        "Tencent",
+        "Tencent Cloud"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/Tencent-Hunyuan"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/tencent"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Tencent article on its headquarters moving into Tencent Building, Shenzhen",
+          "url": "https://www.tencent.com/en-us/articles/80116.html",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Tencent Holdings Limited 2021 annual report: incorporated in the Cayman Islands with limited liability",
+          "url": "https://static.www.tencent.com/uploads/2022/04/07/7c31a327fb1c068906b70ba7ebede899.PDF",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Hy3 repository licence: copyright Tencent",
+          "url": "https://github.com/Tencent-Hunyuan/Hy3",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-thinking-machines-lab",
+      "name": "Thinking Machines Lab",
+      "url": "https://thinkingmachines.ai/",
+      "description": "The AI research and product company that develops the Inkling models and the Tinker fine-tuning API.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "Thinking Machines Lab, Inc. describes itself as an artificial intelligence research and product company; its terms send court disputes to San Francisco, but the pages reviewed give no address. It develops the Inkling models, publishes their weights under its Hugging Face organization, and runs Tinker.",
+      "catalog_names": [
+        "Thinking Machines Lab"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://tinker-docs.thinkingmachines.ai/tinker/models/"
+        },
+        {
+          "kind": "news",
+          "url": "https://thinkingmachines.ai/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/thinking-machines-lab"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/thinkingmachines"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company",
+          "url": "https://thinkingmachines.ai/legal/privacy/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Service terms of use, with court disputes in San Francisco",
+          "url": "https://thinkingmachines.ai/legal/terms/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-trendyol",
+      "name": "Trendyol",
+      "url": "https://www.trendyol.com/",
+      "description": "The e-commerce company that develops the Trendyol-LLM models for shopping tasks in Turkish and English.",
+      "lab_type": "technology_company",
+      "headquarters": "tr",
+      "organization_note": "Trendyol's imprint gives its headquarters at the Trendyol Campus in Maslak, Istanbul, and its engineering site carries the copyright of DSM Grup Danışmanlık İletişim ve Satış Tic. A.Ş. Its principal business is e-commerce, and it publishes the Trendyol-LLM models under its Hugging Face organization.",
+      "catalog_names": [
+        "Trendyol"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Trendyol"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul",
+          "url": "https://www.trendyol.com/en/imprint",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Trendyol Tech site source, copyright DSM Grup Danışmanlık İletişim ve Satış Tic. A.Ş.",
+          "url": "https://github.com/Trendyol/trendyol.github.io",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-typesafe-ai",
+      "name": "TypeSafe AI",
+      "url": "https://typesafe.ai/",
+      "description": "The AI company that develops the Jev models for typed judgments and serves them through its System One API.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "TypeSafe AI, Inc., located at 255 California Street, San Francisco, offers the site, and its team page names a San Francisco office. It develops the Jev models, serves them through the System One API, and publishes its SDKs and agent skills under the typesafe-ai organization. The catalog names the model developer TypeSafe AI and the pack steward TypeSafe AI (typesafe-ai), so both names belong to this record. This catalog's maintenance scripts are a paying customer of the TypeSafe API.",
+      "catalog_names": [
+        "TypeSafe AI",
+        "TypeSafe AI (typesafe-ai)"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.typesafe.ai/models"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/typesafe-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of use: the site is offered by TypeSafe AI, Inc., 255 California St, San Francisco",
+          "url": "https://typesafe.ai/legal/terms",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Team page naming its San Francisco office",
+          "url": "https://typesafe.ai/team",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Master customer agreement, reviewed for the Jev 1.13 record",
+          "url": "https://typesafe.ai/legal/mca",
+          "verified_at": "2026-09-20"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-upstage",
+      "name": "Upstage",
+      "url": "https://www.upstage.ai/",
+      "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
+      "lab_type": "ai_company",
+      "headquarters": "kr",
+      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines and offers them through its console API. One name, Upstage, covers the models in the catalog.",
+      "catalog_names": [
+        "Upstage"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://console.upstage.ai/docs/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.upstage.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/UpstageAI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/upstage"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Site footer business information: Upstage Co., Ltd., Teheran-ro 7-gil, Gangnam-gu, Seoul (read through the site capture in Upstage's own cookbook repository)",
+          "url": "https://www.upstage.ai/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service, reviewed for the Solar Pro 2 record",
+          "url": "https://www.upstage.ai/terms-of-service",
+          "verified_at": "2026-09-18"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-vispark",
+      "name": "Vispark",
+      "url": "https://vispark.in/",
+      "description": "The technology company that develops the Vision models alongside music, cloud, and payment services.",
+      "lab_type": "technology_company",
+      "headquarters": "in",
+      "organization_note": "Vispark describes itself as an Indian tech company offering Vision AI, music streaming, cloud services, and payments, and says its Vision model was trained from scratch in India. The pages reviewed name no legal entity or address.",
+      "catalog_names": [
+        "Vispark"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://vispark.in/ai"
+        },
+        {
+          "kind": "news",
+          "url": "https://blog.vispark.in/"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: Vispark is an Indian tech company offering Vision AI, music streaming, cloud services, and payments",
+          "url": "https://vispark.in/about",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Vision AI page: India's foundational model",
+          "url": "https://vispark.in/ai",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-vivgrid",
+      "name": "Vivgrid",
+      "url": "https://vivgrid.com/",
+      "description": "The AI agent platform company that serves other developers' models, and its own Viv Fast model, through one OpenAI-compatible API.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "Vivgrid's privacy policy names Allegro US, LLC as the company behind it, and its SDKs carry the same copyright; the pages reviewed give no address. Its platform mainly serves other developers' models through one API, and Viv Fast is the release the catalog reviews.",
+      "catalog_names": [
+        "Vivgrid"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/vivgrid"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy: Allegro US, LLC (Vivgrid)",
+          "url": "https://www.vivgrid.com/privacy",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Viv SDK licence: copyright Allegro US, LLC",
+          "url": "https://github.com/vivgrid/viv/blob/main/LICENSE",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-writer",
+      "name": "Writer",
+      "url": "https://writer.com/",
+      "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Writer, Inc. takes legal notices at 111 Maiden Lane, San Francisco, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
+      "catalog_names": [
+        "Writer"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://dev.writer.com/home/models-overview"
+        },
+        {
+          "kind": "news",
+          "url": "https://writer.com/newsroom/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/writer"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Writer"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform services agreement: notices to Writer, Inc., 111 Maiden Lane, San Francisco, under California law",
+          "url": "https://writer.com/legal/platform-services/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy giving the San Francisco mailing address",
+          "url": "https://writer.com/legal/privacy/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-xai",
+      "name": "SpaceXAI (xAI)",
+      "url": "https://x.ai/",
+      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
+      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
+      "catalog_names": [
+        "xAI",
+        "SpaceXAI (xAI)"
+      ],
+      "systems": [
+        "grok",
+        "grok-bot"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.x.ai/developers/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.x.ai/developers/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://x.ai/news"
+        }
+      ],
+      "safety_framework": {
+        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
+        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
+        "verified_at": "2026-09-24"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1 Exhibit 21 listing X.AI LLC (Nevada) among its subsidiaries",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001181412/000162828026036936/exhibit21-sx1.htm",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy naming SpaceXAI LLC",
+          "url": "https://x.ai/legal/privacy-policy",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-xiaomi",
+      "name": "Xiaomi",
+      "url": "https://www.mi.com/global/",
+      "description": "The consumer-electronics company whose MiMo team develops the MiMo models and offers them through the Xiaomi MiMo API platform.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Xiaomi Corporation, incorporated in the Cayman Islands and listed in Hong Kong, gives its address at the Xiaomi Campus on Anningzhuang Road, Haidian District, Beijing. Its MiMo team develops the models, publishes them under the XiaomiMiMo organizations, and runs the Xiaomi MiMo API platform. One name, Xiaomi, covers the models in the catalog.",
+      "catalog_names": [
+        "Xiaomi"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/XiaomiMiMo"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/XiaomiMiMo"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Investor relations contacts giving the Xiaomi Campus address in Haidian District, Beijing",
+          "url": "https://ir.mi.com/investor-resources/ir-contacts",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "Xiaomi Corporation 2025 annual report: incorporated in the Cayman Islands with limited liability",
+          "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2026/04/28/5-29-08/Xiaomi%202025%20AR_EN.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "MiMo repository licence: copyright Xiaomi Corporation",
+          "url": "https://github.com/XiaomiMiMo/MiMo/blob/main/LICENSE",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "lab-z-ai",
+      "name": "Z.ai",
+      "url": "https://z.ai/",
+      "description": "The AI company, known in China as Zhipu, that develops the GLM models and builds the Z.ai assistant, ZCode, and the Z.ai and BigModel APIs on them.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "Beijing Zhipu Huazhang Technology (北京智谱华章科技股份有限公司) develops the GLM models and operates the Zhipu AI Open Platform (BigModel) in China, while the international Z.ai Model API is contracted through Jingsheng Hengxing Technology Pte. Ltd. of Singapore. The catalog uses the brand and both entity names, so all three belong to this record.",
+      "catalog_names": [
+        "Z.ai",
+        "Jingsheng Hengxing Technology Pte. Ltd. (Z.ai)",
+        "北京智谱华章科技股份有限公司 (Beijing Zhipu Huazhang Technology)"
+      ],
+      "systems": [
+        "z-ai",
+        "zcode"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.z.ai/guides/overview/overview"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.z.ai/release-notes/new-released"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/zai-org"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/zai-org"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Z.ai terms of use naming Jingsheng Hengxing Technology Pte. Ltd. of Singapore",
+          "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "label": "BigModel user agreement naming 北京智谱华章科技股份有限公司, reviewed for the Zhipu AI Open Platform record",
+          "url": "https://docs.bigmodel.cn/cn/terms/user-agreement",
+          "verified_at": "2026-08-31"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    }
+  ]
+}

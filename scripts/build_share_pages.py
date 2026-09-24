@@ -23,9 +23,11 @@ from pathlib import Path
 
 try:
     from .build_blog import blog_sitemap_entries
+    from .lab_relations import lab_relations
     from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_blog import blog_sitemap_entries
+    from lab_relations import lab_relations
     from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +41,7 @@ COLLECTIONS = {
     "runtime": ("local-runtimes", "runtimes"),
     "model": ("models", "models"),
     "pack": ("packs", "packs"),
+    "lab": ("labs", "labs"),
 }
 COLLECTION_LABELS = {
     "system": "System",
@@ -47,6 +50,7 @@ COLLECTION_LABELS = {
     "runtime": "Local runtime",
     "model": "Model",
     "pack": "Agent pack",
+    "lab": "Lab",
 }
 
 
@@ -85,6 +89,7 @@ def load_catalog(root: Path = ROOT) -> dict:
         "runtimes": read("local-runtimes.json")["runtimes"],
         "models": read("models.json")["models"],
         "packs": read("packs.json")["packs"],
+        "labs": read("labs.json")["labs"],
         "taxonomy": read("taxonomy.json"),
     }
 
@@ -104,10 +109,45 @@ def names(taxonomy: dict, group: str, values: list[str]) -> str:
     return " · ".join(taxonomy_name(taxonomy, group, value) for value in values)
 
 
+def _lab_facts(
+    record: dict, taxonomy: dict, catalog: dict
+) -> tuple[str, str, list[tuple[str, str]], str, str]:
+    """A lab's facts, with its other records joined by name as the app joins them (ADR 041)."""
+    relations = lab_relations(record, catalog)
+    facts = [
+        ("Headquarters", taxonomy_name(taxonomy, "countries", record["headquarters"])),
+    ]
+    if record.get("parent_organization"):
+        facts.append(("Parent organization", record["parent_organization"]))
+    facts += [
+        ("Named in the catalog as", " · ".join(record["catalog_names"])),
+        ("Reviewed model releases", str(len(relations["models"]))),
+    ]
+    for label, key in (("Systems", "systems"), ("Inference services", "services")):
+        if relations[key]:
+            facts.append(
+                (label, " · ".join(sorted(item["name"] for item in relations[key])))
+            )
+    framework = record.get("safety_framework")
+    facts += [
+        ("Safety framework", framework["title"] if framework else "None recorded"),
+        ("How it is organized", record["organization_note"]),
+    ]
+    return (
+        taxonomy_name(taxonomy, "lab_types", record["lab_type"]),
+        record["description"],
+        facts,
+        "Organization",
+        "Open official site",
+    )
+
+
 def _facts_for(
-    kind: str, record: dict, taxonomy: dict, by_id: dict
+    kind: str, record: dict, taxonomy: dict, by_id: dict, catalog: dict | None = None
 ) -> tuple[str, str, list[tuple[str, str]], str, str]:
     """Return (eyebrow, lead, facts, about_type, official_label)."""
+    if kind == "lab":
+        return _lab_facts(record, taxonomy, catalog or {})
     if kind == "system":
         eyebrow = f"{taxonomy_name(taxonomy, 'system_families', record['system_family'])} · {taxonomy_name(taxonomy, 'primary_roles', record['primary_role'])}"
         facts = [
@@ -247,9 +287,11 @@ def _facts_for(
     )
 
 
-def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
+def render_page(
+    kind: str, record: dict, taxonomy: dict, by_id: dict, catalog: dict | None = None
+) -> str:
     eyebrow, lead, facts, about_type, official_label = _facts_for(
-        kind, record, taxonomy, by_id
+        kind, record, taxonomy, by_id, catalog
     )
     name, url = record["name"], share_page_url(kind, record["id"])
     description = preview_description(record["description"])
@@ -263,6 +305,11 @@ def render_page(kind: str, record: dict, taxonomy: dict, by_id: dict) -> str:
         about["provider"] = {"@type": "Organization", "name": record["operator"]}
     if kind == "model":
         about["creator"] = {"@type": "Organization", "name": record["developer"]}
+    if kind == "lab" and record.get("parent_organization"):
+        about["parentOrganization"] = {
+            "@type": "Organization",
+            "name": record["parent_organization"],
+        }
     if record.get("repo"):
         about["sameAs"] = f"https://github.com/{record['repo']}"
     json_ld = {
@@ -344,7 +391,7 @@ def build_pages(catalog: dict) -> dict[str, str]:
         by_id = {record["id"]: record for record in records}
         for record in records:
             path = share_page_path(kind, record["id"])
-            pages[path] = render_page(kind, record, taxonomy, by_id)
+            pages[path] = render_page(kind, record, taxonomy, by_id, catalog)
             entries.append((share_page_url(kind, record["id"]), record["verified_at"]))
     # The blog module owns its pages; this module owns the sitemap, so it asks
     # rather than duplicating any knowledge of where posts live.

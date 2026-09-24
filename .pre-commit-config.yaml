@@ -89,7 +89,7 @@ repos:
         language: system
         name: codespell typo scan
         entry: uvx codespell@2.3.0
-        args: [-L, "slite,asure,unparseable,nce,coexistance,newyorker,commitable,ake,assertin,assertIn"]
+        args: [-L, "slite,asure,grup,unparseable,nce,coexistance,newyorker,commitable,ake,assertin,assertIn"]
         types: [text]
         exclude: |
           (?x)^(
@@ -97,7 +97,7 @@ repos:
             uv\.lock|package-lock\.json|
             web/(records|app|blog|fonts)/|
             web/[^/]*\.json|web/sitemap\.xml|web/robots\.txt|
-            directory/(hn-signals|model-candidates|models-dev)\.json
+            directory/(hn-signals|model-candidates|models-dev|openrouter-model-leads)\.json
           )
 
       # YAML workflows and routines against .yamllint.yml.

@@ -345,6 +345,7 @@ class _CrossCollectionDocuments(NamedTuple):
     inference_services: dict[str, Any]
     local_runtimes: dict[str, Any]
     packs: dict[str, Any]
+    labs: dict[str, Any]
 
 
 def _validate_proposed_models(
@@ -372,6 +373,9 @@ def _validate_proposed_models(
         packs_value=cross_collection.packs.get("packs")
         if isinstance(cross_collection.packs.get("packs"), list)
         else [],
+        labs_value=cross_collection.labs.get("labs")
+        if isinstance(cross_collection.labs.get("labs"), list)
+        else [],
     )
     return taxonomy
 
@@ -396,6 +400,7 @@ def _preflight_gap(
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
+    labs_data = load_json(directory / "labs.json")
 
     errors: list[str] = []
     models = (
@@ -436,6 +441,7 @@ def _preflight_gap(
             inference_services_data,
             local_runtimes_data,
             packs_data,
+            labs_data,
         ),
         errors,
     )
@@ -469,6 +475,7 @@ def preflight_promotion(
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
+    labs_data = load_json(directory / "labs.json")
     dispositions_path = directory / "model-dispositions.json"
     dispositions_data: dict[str, Any] = {"dispositions": []}
     if dispositions_path.exists():
@@ -507,6 +514,7 @@ def preflight_promotion(
             inference_services_data,
             local_runtimes_data,
             packs_data,
+            labs_data,
         ),
         errors,
     )
@@ -563,6 +571,7 @@ def preflight_link(
     inference_services_data = load_json(directory / "inference-services.json")
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
+    labs_data = load_json(directory / "labs.json")
 
     models = (
         models_data.get("models") if isinstance(models_data.get("models"), list) else []
@@ -646,6 +655,7 @@ def preflight_link(
             inference_services_data,
             local_runtimes_data,
             packs_data,
+            labs_data,
         ),
         errors,
     )

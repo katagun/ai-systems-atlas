@@ -37,6 +37,9 @@ class DirectoryTests(unittest.TestCase):
         cls.packs = json.loads(
             (ROOT / "directory" / "packs.json").read_text(encoding="utf-8")
         )
+        cls.labs = json.loads(
+            (ROOT / "directory" / "labs.json").read_text(encoding="utf-8")
+        )
 
     def test_models_dev_source_snapshot_contains_every_upstream_record(self) -> None:
         source_records = self.models_dev["models"]
@@ -1066,6 +1069,79 @@ class DirectoryTests(unittest.TestCase):
             self.assertTrue(record["installs"].strip(), record["id"])
             self.assertNotIn(record["repo"].lower(), project_repos, record["id"])
         for group in ("pack_types", "pack_hosts", "pack_install_mechanisms"):
+            self.assertTrue(self.taxonomy[group], group)
+
+    def test_labs_are_an_unscored_collection_joined_by_name(self) -> None:
+        records = self.labs["labs"]
+        expected = {
+            "lab-ai-singapore",
+            "lab-ai21-labs",
+            "lab-aikido-security",
+            "lab-alibaba",
+            "lab-amazon",
+            "lab-ant-group",
+            "lab-anthropic",
+            "lab-arcee-ai",
+            "lab-bytedance",
+            "lab-cohere",
+            "lab-deepseek",
+            "lab-google",
+            "lab-ibm",
+            "lab-meituan",
+            "lab-meta",
+            "lab-microsoft",
+            "lab-minimax",
+            "lab-mistral-ai",
+            "lab-mixedbread-ai",
+            "lab-moonshot-ai",
+            "lab-motif-technologies",
+            "lab-nvidia",
+            "lab-openai",
+            "lab-openbmb",
+            "lab-ornith-ai",
+            "lab-perplexity",
+            "lab-poolside",
+            "lab-stepfun",
+            "lab-swiss-ai-initiative",
+            "lab-tencent",
+            "lab-thinking-machines-lab",
+            "lab-trendyol",
+            "lab-typesafe-ai",
+            "lab-upstage",
+            "lab-vispark",
+            "lab-vivgrid",
+            "lab-writer",
+            "lab-xai",
+            "lab-xiaomi",
+            "lab-z-ai",
+        }
+        self.assertLessEqual(expected, {record["id"] for record in records})
+        by_id = {record["id"]: record for record in records}
+        # ByteDance's own pages list offices by region and name no headquarters, and the
+        # Cayman Islands entity behind its website does not count as one.
+        self.assertEqual(by_id["lab-bytedance"]["headquarters"], "none_listed")
+        developers = {model["developer"] for model in self.models["models"]}
+        claimed: dict[str, str] = {}
+        for record in records:
+            for field in (
+                "system_family",
+                "primary_role",
+                "score_profile",
+                "score",
+                "stars",
+                "stars_verified_at",
+                "licenses",
+                "source_model",
+            ):
+                self.assertNotIn(field, record, record["id"])
+            self.assertTrue(set(record["catalog_names"]) & developers, record["id"])
+            self.assertTrue(record["organization_note"].strip(), record["id"])
+            for name in record["catalog_names"]:
+                self.assertNotIn(
+                    name, claimed, f"{record['id']} and {claimed.get(name)}"
+                )
+                claimed[name] = record["id"]
+        for group in ("lab_types", "lab_channel_kinds", "countries"):
             self.assertTrue(self.taxonomy[group], group)
 
     def test_systems_installed_as_packs_carry_the_host_pack_deployment_mode(
