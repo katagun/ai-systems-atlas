@@ -901,14 +901,38 @@ test("missing, null, false, empty, and non-boolean fields never produce a badge"
   for (const record of records) assert.deepEqual(cardBadges("system", record), [], JSON.stringify(record));
 });
 
-test("specifications, models, and unknown kinds or families get no badges", () => {
+test("specifications, imported models, and unknown kinds or families get no badges", () => {
   assert.deepEqual(cardBadges("spec", { status: "published", licenses: ["MIT"] }), []);
   assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights"] }), []);
-  assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights"] }), []);
-  assert.deepEqual(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] }), []);
+  // Imported rows are gated on review_status alone, not on distribution_modes
+  // being absent: an imported row with every mode still takes no badge.
+  assert.deepEqual(cardBadges("model", { review_status: "imported", distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
+  // The gate is an allow-list on review_status === "reviewed", not a
+  // block-list on "imported": a malformed or future-status record with no
+  // review_status at all also takes no badge, even carrying every mode.
+  assert.deepEqual(cardBadges("model", { distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
   assert.deepEqual(cardBadges("pack", packs[0]), []);
+});
+
+// Reviewed-model cards trade their role pill for the same distribution_modes
+// fact printed as up to three emblems, in the taxonomy's own priority order.
+test("reviewed-model badges test distribution_modes, in taxonomy order, and every reviewed model carries at least one", () => {
+  assert.deepEqual(
+    badgeNames(cardBadges("model", { review_status: "reviewed", distribution_modes: ["downloadable_weights"] })),
+    ["Downloadable weights"],
+  );
+  assert.deepEqual(
+    badgeNames(cardBadges("model", { review_status: "reviewed", distribution_modes: ["third_party_hosting", "developer_api"] })),
+    ["Developer API", "Third-party hosting"],
+  );
+  assert.deepEqual(
+    badgeNames(cardBadges("model", { review_status: "reviewed", distribution_modes: ["third_party_hosting", "developer_api", "downloadable_weights"] })),
+    ["Downloadable weights", "Developer API", "Third-party hosting"],
+  );
+  assert.deepEqual(cardBadges("model", { review_status: "reviewed", distribution_modes: [] }), []);
+  assert.deepEqual(cardBadges("model", { review_status: "reviewed" }), []);
 });
 
 test("inference-service and local-runtime badges skip facts their cards already print", () => {
@@ -926,13 +950,12 @@ test("inference-service and local-runtime badges skip facts their cards already 
 // (models); service footers print model_sources. A badge on those fields
 // would repeat the card to itself.
 test("no badge tests a field its card already prints", () => {
-  const printed = { inference: ["api_styles", "model_sources"], runtime: ["api_styles"] };
+  const printed = { inference: ["api_styles", "model_sources"], runtime: ["api_styles"], model: ["model_type", "source_model", "licenses"] };
   for (const [key, fields] of Object.entries(printed)) {
     for (const id of CARD_BADGE_SETS[key]) {
       assert.ok(!fields.includes(CARD_BADGES[id].test.field), `${id} repeats ${CARD_BADGES[id].test.field}, which ${key} cards already print`);
     }
   }
-  assert.ok(!Object.hasOwn(CARD_BADGE_SETS, "model"), "model cards print distribution_modes in their role pill; they take no badges");
 });
 
 test("the data model quotes the trait badge definitions verbatim", () => {
@@ -1008,7 +1031,9 @@ test("the legend lists only what the active scope can show", () => {
     assert.equal(badgeLegend(scope).mode, "families");
     assert.deepEqual(badgeLegend(scope).families.map(family => family.id), ["control", "capability", "platform"]);
   }
-  assert.equal(badgeLegend("models"), null);
+  // Models has one fixed set — no system-family narrowing — so its legend
+  // always names the whole CARD_BADGE_SETS.model list, in family order.
+  assert.deepEqual(ids(badgeLegend("models")), CARD_BADGE_SETS.model);
   assert.equal(badgeLegend("systems", "constructor"), null);
   assert.equal(badgeLegend("toString"), null);
 });
@@ -1051,6 +1076,11 @@ function publishedBadgeScopes() {
     "system:assistant_system": family("assistant_system"),
     inference: ["inference", readWebJSON("inference-services.json").services],
     runtime: ["runtime", readWebJSON("local-runtimes.json").runtimes],
+    // The reviewed catalog (models.json) carries no review_status field of
+    // its own — only the merged boot payload marks reviewed vs imported —
+    // so read the boot payload here, filtered the same way cardBadgeSetKey
+    // gates: review_status === "reviewed" exactly.
+    model: ["model", readWebJSON("app/models.json").models.filter(record => record.review_status === "reviewed")],
   };
 }
 
