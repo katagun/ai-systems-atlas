@@ -1,6 +1,6 @@
 # Models
 
-Use this document for provider-independent model discovery, reviewed language-model releases, models.dev ingestion, and the `model_access` score profile. The complete automated source snapshot is `directory/models-dev.json`, the canonical reviewed collection is `directory/models.json`, and the workflow queue is `directory/model-candidates.json` and is never published.
+Use this document for provider-independent model discovery, reviewed language-model releases, models.dev ingestion, the OpenRouter cross-check, and the `model_access` score profile. The complete automated source snapshot is `directory/models-dev.json`, the canonical reviewed collection is `directory/models.json`, and the workflow queue is `directory/model-candidates.json` and is never published. The OpenRouter cross-check's leads, in `directory/openrouter-model-leads.json`, are never published either.
 
 ## Record boundary
 
@@ -51,6 +51,35 @@ Benchmarks and prices are not copied. A models.dev license string is a review le
 
 Every source record is published in `models-dev.json`. Reviewed `source_id` values are removed from the queue, but the importer never creates, edits, or deletes a reviewed model. It cannot change descriptions, boundaries, licenses, evidence, scores, `verified_at`, or any other human-owned field. The web projection combines the complete source snapshot with reviewed records by `source_id` (or by `id` for a record with no `source_id` yet); imported rows remain unscored and explicitly unreviewed.
 
+## OpenRouter cross-check
+
+models.dev has gaps, and finding one used to depend on a reviewer noticing it. The weekly refresh therefore compares OpenRouter's public model list with Atlas ([ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md)). Its output, `directory/openrouter-model-leads.json`, lists text-output releases that OpenRouter routes and that no models.dev row or reviewed record represents. Neither that file nor `directory/openrouter-model-dispositions.json` is published.
+
+```bash
+uv run python scripts/import_openrouter.py
+```
+
+The importer sends one unauthenticated request to `https://openrouter.ai/api/v1/models`, the documented public endpoint, and never loads the site's pages. For each lead it keeps only the OpenRouter ID without its variant suffix, the canonical slug, the display name, the Hugging Face ID, and the listing date. It never copies descriptions, prices, benchmarks, rankings, latency, throughput, provider endpoints, parameters, or limits. The leads file pins the response by fetch date and SHA-256. The import is fail-closed: it refuses fewer than 100 or more than 20,000 rows, a paginated or truncated list, malformed rows, and a drop of more than 20% in eligible routes. A refused import changes nothing, and the weekly refresh reports it without stopping.
+
+Rows that OpenRouter itself marks as moving aliases (`~` IDs or an `alias_target`), its own `openrouter/` namespace (the router and cloaked models), and rows without text output are skipped. Variants such as `:free` fold into their route. A route is represented, and produces no lead, when:
+
+- its ID or canonical slug derives the stable ID of a models.dev row or reviewed record. OpenRouter author names that differ from models.dev's provider directories are translated first, such as `qwen` to `alibaba` and `meta-llama` to `meta`; the table is `AUTHOR_ALIASES` in the importer;
+- its Hugging Face ID matches a models.dev row's weight or source links, or a reviewed record's page or source metadata. Evidence is not read for this test, because it also cites base models;
+- a reviewed record cites its OpenRouter model page.
+
+### Terms gate
+
+Nothing is fetched until a maintainer has read OpenRouter's current [terms](https://openrouter.ai/terms), found that this use of the public API is permitted, and recorded that date as `terms_reviewed_at` in `directory/openrouter-model-dispositions.json`. Until then the importer reports that it skipped, and the refresh pull request carries that line. Setting the date back to `null` and rerunning the importer clears the stored leads without a request. The OpenRouter inference-service record already watches the terms page for drift. When the drift check reports a change, re-read the terms before the next import, then advance or withdraw the date.
+
+### Acting on a lead
+
+A lead is a pointer, never evidence: an aggregator listing does not establish identity, licensing, or hosting (see [Distribution-mode conventions](#distribution-mode-conventions)). Resolve each lead in one of two ways:
+
+- **Review it** through `init-gap` when the release passes the eligibility and release-identity rules; see [Releases models.dev does not list](#releases-modelsdev-does-not-list). Pass the ID models.dev would use, which names the developer's models.dev provider directory rather than OpenRouter's author name: `alibaba/qwen3-max` for OpenRouter's `qwen/qwen3-max`. The next import drops the lead once the record represents it. If the IDs do not line up, disposition the lead as `excluded` with a pointer to the record.
+- **Disposition it** in `directory/openrouter-model-dispositions.json` with `openrouter_id`, `disposition`, `reason`, and `decided_at`. Use `excluded` for a route that is not a reviewable release, or that is the same release as a models.dev row or reviewed record under another name (name that row or record in the reason). Use `held` for not now. Remove the lead in the same change; validation keeps leads and dispositions disjoint.
+
+A lead that models.dev later lists becomes an ordinary queue candidate, and the next import drops it. The importer prints a `prunable OpenRouter disposition` line for an entry whose route is no longer listed or is now represented; delete those entries.
+
 ## Review workflow
 
 For one record in `directory/model-candidates.json`, or for a release models.dev does not list (see [Releases models.dev does not list](#releases-modelsdev-does-not-list)):
@@ -81,7 +110,7 @@ node scripts/build_asset_version.mjs
 
 ### Releases models.dev does not list
 
-models.dev has gaps; a gap upstream is not a reason to leave a release out ([ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
+models.dev has gaps; a gap upstream is not a reason to leave a release out ([ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)). The [OpenRouter cross-check](#openrouter-cross-check) surfaces many such releases as leads. When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
 
 ```bash
 uv run python scripts/promote_model_candidate.py init-gap PROVIDER/MODEL --output model-review.json
@@ -102,7 +131,7 @@ uv run python scripts/promote_model_candidate.py link MODEL_ID PROVIDER/MODEL --
 
 If models.dev used a different ID than expected, the row shows as an ordinary imported card and produces no `link pending` line. Link it the same way; the record keeps its `id`. If upstream later also adds the ID you first expected, validation reports an id collision: set `source_id` to `null`, remove the pinned models.dev evidence entry, run the importer, link to the row whose stable ID matches the record `id` (`link` adds the fresh pinned entry), and exclude the other row as the exact snapshot the reviewed record represents. If upstream deletes a linked row, validation fails; set `source_id` to `null`, remove the pinned models.dev evidence entry, and re-attest the metadata rather than deleting the review — a null-source record may cite no models.dev evidence.
 
-Holds and exclusions still require a snapshot `source_id`, so a release models.dev does not list cannot be dispositioned; see `BACKLOG.md`.
+Holds and exclusions still require a snapshot `source_id`, so a release models.dev does not list cannot be dispositioned; see `BACKLOG.md`. An OpenRouter disposition only silences that release's OpenRouter lead.
 
 ### Distribution-mode conventions
 
@@ -150,6 +179,6 @@ The score asks how clearly a model can be obtained, governed, deployed, and trac
 
 ## Attribution
 
-The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`. `source_metadata` on a record with `source_id: null` is hand-authored Atlas material under `LICENSE-DATA`, not models.dev data.
+The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`. `source_metadata` on a record with `source_id: null` is hand-authored Atlas material under `LICENSE-DATA`, not models.dev data. Nothing derived from OpenRouter is published: the unpublished leads file names OpenRouter and its terms URL as its source, and a lead never enters `source_metadata`.
 
-See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes, and [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md) for releases models.dev does not list.
+See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md) for releases models.dev does not list, [ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md) for the OpenRouter cross-check, and `DATA_MODEL.md` for the exact JSON shapes.

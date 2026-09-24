@@ -2881,6 +2881,259 @@ class ValidationPolicyTests(unittest.TestCase):
             [("model-acme-chat", "acme/chat")], model_link_pending(models, candidates)
         )
 
+    # OpenRouter cross-check (ADR 039): unpublished leads, gated on a terms review.
+
+    OPENROUTER_LEAD: ClassVar[dict] = {
+        "openrouter_id": "nousresearch/hermes-4-405b",
+        "canonical_slug": "nousresearch/hermes-4-405b",
+        "name": "Nous: Hermes 4 405B",
+        "hugging_face_id": "NousResearch/Hermes-4-405B",
+        "listed_at": "2025-08-26",
+        "discovered_at": "2026-09-17",
+        "last_seen_at": "2026-09-24",
+    }
+
+    def openrouter_errors(
+        self,
+        *,
+        leads: list[dict] | None = None,
+        dispositions: list[dict] | None = None,
+        terms_reviewed_at: object = "2026-09-23",
+        fetched: bool = True,
+        **overrides: object,
+    ) -> list[str]:
+        """Validate a catalog whose OpenRouter files hold the given state; return
+        only the errors that name OpenRouter, so unrelated catalog state cannot mask
+        or fake a result."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        leads_document = {
+            "version": "1.0",
+            "updated_at": "2026-09-24",
+            "source": {
+                "name": "OpenRouter",
+                "url": "https://openrouter.ai/api/v1/models",
+                "terms_url": "https://openrouter.ai/terms",
+                "fetched_at": "2026-09-24" if fetched else None,
+                "sha256": "a" * 64 if fetched else None,
+            },
+            "listed_count": 446 if fetched else None,
+            "eligible_count": 430 if fetched else None,
+            "leads": [dict(self.OPENROUTER_LEAD)] if leads is None else leads,
+        }
+        for key, value in overrides.items():
+            if key in leads_document["source"]:
+                leads_document["source"][key] = value
+            else:
+                leads_document[key] = value
+        self.write_json(
+            root / "directory" / "openrouter-model-leads.json", leads_document
+        )
+        self.write_json(
+            root / "directory" / "openrouter-model-dispositions.json",
+            {
+                "version": "1.0",
+                "updated_at": "2026-09-23",
+                "terms_reviewed_at": terms_reviewed_at,
+                "dispositions": dispositions or [],
+            },
+        )
+        return [error for error in validate(root) if "openrouter" in error.lower()]
+
+    def test_the_openrouter_envelopes_are_checked(self) -> None:
+        cases = {
+            "another endpoint": (
+                {"url": "https://openrouter.ai/api/v1/models?output_modalities=all"},
+                "must identify OpenRouter's public model list",
+            ),
+            "another source": ({"name": "models.dev"}, "must identify OpenRouter"),
+            "version": ({"version": "2.0"}, "unsupported version"),
+            "updated date": ({"updated_at": "today"}, "updated_at must be"),
+            "leads shape": ({"leads": {}}, "leads must be a list"),
+            "extra field": ({"description": "copied"}, "document fields differ"),
+            "fetch date": ({"fetched_at": "2026-9-24"}, "fetched_at must be"),
+        }
+        for label, (overrides, message) in cases.items():
+            with self.subTest(label):
+                errors = self.openrouter_errors(**overrides)
+
+                self.assertTrue(any(message in error for error in errors), errors)
+
+    def test_a_reviewed_openrouter_import_is_valid(self) -> None:
+        self.assertEqual([], self.openrouter_errors())
+        self.assertEqual(
+            [], self.openrouter_errors(leads=[], fetched=False, terms_reviewed_at=None)
+        )
+
+    def test_openrouter_files_must_not_be_published(self) -> None:
+        for name, message in (
+            ("openrouter-model-leads.json", "leads must not be published"),
+            ("openrouter-model-dispositions.json", "decisions must not be published"),
+        ):
+            with self.subTest(name):
+                temporary, root = self.temporary_catalog()
+                self.addCleanup(temporary.cleanup)
+                (root / "web" / name).write_text("{}\n", encoding="utf-8")
+
+                errors = validate(root)
+
+                self.assertTrue(any(message in error for error in errors), errors)
+
+    def test_an_openrouter_import_requires_a_recorded_terms_review(self) -> None:
+        errors = self.openrouter_errors(terms_reviewed_at=None)
+
+        self.assertTrue(
+            any("an import requires terms_reviewed_at" in error for error in errors),
+            errors,
+        )
+
+    def test_openrouter_leads_require_a_recorded_fetch(self) -> None:
+        errors = self.openrouter_errors(fetched=False)
+
+        self.assertTrue(
+            any("leads require a recorded fetch" in error for error in errors), errors
+        )
+
+    def test_a_partial_openrouter_fetch_record_is_rejected(self) -> None:
+        errors = self.openrouter_errors(sha256=None, eligible_count=None)
+
+        self.assertTrue(any("sha256 is invalid" in error for error in errors), errors)
+        self.assertTrue(
+            any("must be non-negative integers" in error for error in errors), errors
+        )
+
+    def test_openrouter_leads_hold_identifiers_only(self) -> None:
+        for extra in ("description", "pricing", "benchmarks", "context_length"):
+            with self.subTest(extra):
+                lead = dict(self.OPENROUTER_LEAD, **{extra: "copied"})
+
+                errors = self.openrouter_errors(leads=[lead])
+
+                self.assertTrue(
+                    any("fields differ from schema" in error for error in errors),
+                    errors,
+                )
+
+    def test_openrouter_lead_fields_are_checked(self) -> None:
+        cases = {
+            "variant suffix": ({"openrouter_id": "acme/chat:free"}, "openrouter_id"),
+            "canonical slug": ({"canonical_slug": "acme chat"}, "canonical_slug"),
+            "control character": ({"name": "Chat\nline"}, "single-line"),
+            "hugging face id": ({"hugging_face_id": "acme"}, "hugging_face_id"),
+            "listed date": ({"listed_at": "2025"}, "listed_at"),
+            "discovery order": ({"discovered_at": "2026-09-25"}, "must not follow"),
+            "unseen in the fetch": (
+                {"discovered_at": "2026-09-20", "last_seen_at": "2026-09-23"},
+                "recorded fetch date",
+            ),
+        }
+        for label, (changes, message) in cases.items():
+            with self.subTest(label):
+                errors = self.openrouter_errors(
+                    leads=[dict(self.OPENROUTER_LEAD, **changes)]
+                )
+
+                self.assertTrue(any(message in error for error in errors), errors)
+
+    def test_openrouter_leads_are_sorted_unique_and_counted(self) -> None:
+        second = dict(self.OPENROUTER_LEAD, openrouter_id="acme/chat")
+        errors = self.openrouter_errors(leads=[dict(self.OPENROUTER_LEAD), second])
+        self.assertTrue(any("must be sorted" in error for error in errors), errors)
+
+        errors = self.openrouter_errors(
+            leads=[dict(self.OPENROUTER_LEAD), dict(self.OPENROUTER_LEAD)]
+        )
+        self.assertTrue(any("unique route" in error for error in errors), errors)
+
+        errors = self.openrouter_errors(eligible_count=0)
+        self.assertTrue(
+            any("leads <= eligible_count <= listed_count" in e for e in errors), errors
+        )
+
+    def test_the_openrouter_dispositions_envelope_and_source_block_are_checked(
+        self,
+    ) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        self.write_json(
+            root / "directory" / "openrouter-model-dispositions.json",
+            {"version": "2.0", "updated_at": "soon", "dispositions": {}},
+        )
+        leads_path = root / "directory" / "openrouter-model-leads.json"
+        leads = json.loads(leads_path.read_text(encoding="utf-8"))
+        leads["source"]["license"] = "unknown"
+        self.write_json(leads_path, leads)
+
+        errors = validate(root)
+
+        for message in (
+            "openrouter-model-dispositions.json: document fields differ from schema",
+            "openrouter-model-dispositions.json: unsupported version",
+            "openrouter-model-dispositions.json: updated_at must be an ISO date",
+            "openrouter-model-dispositions.json: dispositions must be a list",
+            "openrouter-model-leads.json: source fields differ from schema",
+        ):
+            with self.subTest(message):
+                self.assertIn(message, errors)
+
+    def test_non_object_openrouter_entries_are_reported_rather_than_crashing(
+        self,
+    ) -> None:
+        errors = self.openrouter_errors(
+            leads=["acme/chat"], dispositions=[["acme/chat"]]
+        )
+
+        self.assertTrue(
+            any("OpenRouter lead unknown: fields differ" in e for e in errors), errors
+        )
+        self.assertTrue(
+            any("OpenRouter disposition unknown: fields differ" in e for e in errors),
+            errors,
+        )
+
+    def test_dispositioned_openrouter_routes_must_not_remain_leads(self) -> None:
+        errors = self.openrouter_errors(
+            dispositions=[
+                {
+                    "openrouter_id": self.OPENROUTER_LEAD["openrouter_id"],
+                    "disposition": "held",
+                    "reason": "Awaiting a first-party model card.",
+                    "decided_at": "2026-09-24",
+                }
+            ]
+        )
+
+        self.assertTrue(
+            any("must not remain leads" in error for error in errors), errors
+        )
+
+    def test_openrouter_dispositions_are_checked(self) -> None:
+        valid = {
+            "openrouter_id": "acme/chat",
+            "disposition": "excluded",
+            "reason": "models.dev lists this release as acme/chat-2026.",
+            "decided_at": "2026-09-24",
+        }
+        self.assertEqual([], self.openrouter_errors(dispositions=[valid]))
+        cases = {
+            "variant suffix": ({"openrouter_id": "acme/chat:free"}, "openrouter_id"),
+            "disposition": ({"disposition": "ignored"}, "held or excluded"),
+            "reason": ({"reason": " "}, "reason must be"),
+            "decided date": ({"decided_at": "soon"}, "decided_at"),
+            "extra field": ({"source_id": "acme/chat"}, "fields differ from schema"),
+        }
+        for label, (changes, message) in cases.items():
+            with self.subTest(label):
+                errors = self.openrouter_errors(dispositions=[dict(valid, **changes)])
+
+                self.assertTrue(any(message in error for error in errors), errors)
+        errors = self.openrouter_errors(dispositions=[valid, dict(valid)])
+        self.assertTrue(any("unique route" in error for error in errors), errors)
+        errors = self.openrouter_errors(terms_reviewed_at="yesterday")
+        self.assertTrue(
+            any("terms_reviewed_at must be an ISO date" in e for e in errors), errors
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

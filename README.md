@@ -68,6 +68,8 @@ directory/models-dev.json     complete commit-pinned models.dev source snapshot
 directory/packs.json          reviewed unscored agent packs a host agent installs
 directory/labs.json           reviewed unscored labs that develop the reviewed model releases
 directory/model-candidates.json unpublished text-output model review queue
+directory/openrouter-model-leads.json unpublished OpenRouter cross-check leads for models.dev gaps
+directory/openrouter-model-dispositions.json OpenRouter terms review and lead decisions
 directory/exclusions.json       reviewed family/role boundary decisions
 directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
@@ -85,6 +87,7 @@ docs/                           task-focused policy, model, operations, and ADRs
 - Authoritative license and terms sources are human-reviewed; GitHub metadata is only a drift signal.
 - A detected license mismatch marks evidence for review without hiding the project or rewriting human conclusions.
 - Automated model-source records are visibly attributed and receive no editorial score or review date; workflow candidates remain unpublished.
+- OpenRouter's public model list is an unpublished cross-check for models.dev gaps: its leads are pointers, never evidence, and nothing is fetched before a recorded terms review.
 - Editorial verification dates are separate from live GitHub metadata dates.
 - Memory, agent, and assistant scores are never ranked across families.
 - Specifications are classified by type, integration scope, and status; they are never operationally scored.

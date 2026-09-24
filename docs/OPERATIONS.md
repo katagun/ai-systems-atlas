@@ -41,7 +41,7 @@ What runs, and where it is configured:
 - Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
 - JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
 - Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it before the pre-commit step).
-- Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
+- Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`, `openrouter-model-leads.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
 
 There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
 
@@ -65,10 +65,11 @@ The report reads `directory/` and prints one row per reviewed record, oldest edi
 
 ## Metadata refresh
 
-The weekly refresh runs this alongside the models.dev import, synchronization, payload and
-share-page regeneration, and verification, as one local script; see "Scheduled workflow" below
-for `scripts/run_directory_refresh.py` and how it is scheduled and published. The commands
-below run this step, or the models.dev import, on their own.
+The weekly refresh runs this alongside the models.dev import, the OpenRouter cross-check,
+synchronization, payload and share-page regeneration, and verification, as one local script; see
+"Scheduled workflow" below for `scripts/run_directory_refresh.py` and how it is scheduled and
+published. The commands below run this step, the models.dev import, or the OpenRouter
+cross-check on their own.
 
 ```bash
 GITHUB_TOKEN=... uv run python scripts/update_directory.py
@@ -98,6 +99,14 @@ GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
 ```
 
 It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue, and also filters the `source_id` values dispositioned in `directory/model-dispositions.json` while keeping them in the eligible count, but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
+
+The OpenRouter cross-check runs next, against the snapshot the models.dev import just wrote:
+
+```bash
+uv run python scripts/import_openrouter.py
+```
+
+It needs no token and makes no request until `terms_reviewed_at` is recorded in `directory/openrouter-model-dispositions.json`; until then it reports that it skipped. Once enabled, it fetches OpenRouter's public model list once and replaces the unpublished `directory/openrouter-model-leads.json` only after its count, pagination, and schema checks pass. It writes nothing under `web/` and never edits models, candidates, or dispositions. See the OpenRouter section of [`MODELS.md`](MODELS.md) and [ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md).
 
 ## Evidence links and terms drift
 
@@ -471,7 +480,7 @@ Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not
 
 For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
-Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
+Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification. An OpenRouter lead is only a pointer: cite the developer's own documentation, never the listing, for identity, licensing, or hosting.
 
 ## Review a lab
 
@@ -498,7 +507,8 @@ never triggers the required `verify` check, so a workflow-opened refresh pull re
 never reach a mergeable state without an extra repository secret. `scripts/run_directory_refresh.py`
 reproduces the retired `.github/workflows/update-directory.yml` on the maintainer's own
 machine instead: it refreshes system/runtime metadata, the complete public models.dev source
-snapshot, and both candidate queues; synchronizes the public data again after the model
+snapshot, and both candidate queues; cross-checks the models against OpenRouter's public model
+list into unpublished leads (ADR 039); synchronizes the public data again after the model
 import; regenerates payloads and share pages; checks reviewed links and mutable terms; verifies
 the result; and, only when asked, opens or updates a pull request. It never commits directly to
 the default branch, and it runs no judgment of its own — it is a deterministic wrapper around
@@ -511,9 +521,12 @@ uv run python scripts/run_directory_refresh.py --publish   # also push and open/
 
 The runner refuses to start on a dirty working tree or on a `HEAD` that does not match a
 freshly fetched `origin/main` — a refresh must be generated from current main, never from a
-stale or locally modified checkout. It runs the six generation steps in order, stopping at the
+stale or locally modified checkout. It runs the seven generation steps in order, stopping at the
 first failure, then runs every verification check even after one fails, so a single broken
-record cannot hide the rest, and prints a pass/fail summary. It stages the same explicit path
+record cannot hide the rest, and prints a pass/fail summary. A failed OpenRouter cross-check is
+the one step that does not stop the run: the importer leaves its leads unchanged, and the
+failure is reported in the pull-request body rather than costing the week's GitHub and
+models.dev reads. It stages the same explicit path
 list the retired workflow staged (`STAGED_DIRECTORY_FILES` in the script) — never an unqualified
 `git add -A directory`, which once swept the daily attention-source queue into this weekly
 branch — and, if that leaves nothing staged, says so and exits successfully. Otherwise it
@@ -530,7 +543,8 @@ carrying the per-check results when any check failed. Because the pull request i
 the maintainer's own `gh` credentials rather than a workflow token, `verify` actually runs on
 it. Without `--publish`, the runner stops after the local commit and prints the exact command
 to publish; review the commit yourself before deciding to push it. Either way the runner exits
-non-zero when a check failed, even after a successful publish, so a scheduler notices.
+non-zero when a check or the OpenRouter cross-check failed, even after a successful publish,
+so a scheduler notices.
 
 Schedule it with launchd, following the same pattern as the attention-source sweep: a
 dedicated worktree and a small wrapper script, not the runner pointed at an everyday
@@ -605,11 +619,14 @@ next login rather than once per missed week — the same tradeoff the attention-
 already accepts. A red run still opens or updates its issue-worthy signal in the log rather than
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
-signals, candidates, model candidates, and the check summary before merging any refresh pull
-request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+signals, candidates, model candidates, OpenRouter leads, and the check summary before merging
+any refresh pull request. The refresh's check summary and the pull-request body both list a "Models awaiting a
 models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
 `link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
-prints the same `link pending:` lines those sections are built from.
+prints the same `link pending:` lines those sections are built from. The pull-request body also
+carries an "OpenRouter model leads" section with the importer's own summary: how many leads it
+staged, that it skipped because no terms review is recorded, or why it failed, and any prunable
+dispositions.
 
 ### Tokens
 
