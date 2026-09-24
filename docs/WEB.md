@@ -188,12 +188,12 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The suite starts its own server on a port derived from the checkout's path and never adopts one it did not start, so the exploratory server below and a suite running in another worktree cannot serve it another checkout's `web/`. A stale server producing believable but wrong data is the failure this prevents; if its own port is occupied, the run stops with an error naming the port instead. Set `ATLAS_E2E_PORT` to choose the port yourself.
+The suite starts its own server on a port derived from the checkout's path and never adopts one it did not start, so the exploratory server below and a suite running in another worktree cannot serve it another checkout's `web/`. A stale server producing believable but wrong data is the failure this prevents; if its own port is occupied, the run stops with an error naming the port instead. Set `ATLAS_E2E_PORT` to choose the port yourself. The server is `scripts/serve_web.py` rather than `python -m http.server`, whose listen backlog of five drops connections when a page fetches its boot payloads in parallel. A dropped connection waits on the client to retry its handshake; when the retries failed too, as on 2026-09-24, pages never booted and each local run failed a different handful of tests.
 
 For exploratory browser verification, serve the static application:
 
 ```bash
-uv run python -m http.server 8765 --directory web
+uv run python scripts/serve_web.py 8765
 ```
 
 Then verify in a browser:

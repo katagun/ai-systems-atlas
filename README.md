@@ -24,7 +24,7 @@ uv run python -m unittest discover -s tests -v
 node --test tests/test_web.js
 npm run lint:js
 npm run test:e2e
-uv run python -m http.server 8765 --directory web
+uv run python scripts/serve_web.py 8765
 ```
 
 Open `http://127.0.0.1:8765`.
