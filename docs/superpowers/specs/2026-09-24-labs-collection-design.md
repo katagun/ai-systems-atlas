@@ -89,10 +89,14 @@ Nothing writes a lab record. The weekly refresh stages `labs.json` like every ca
 
 ### 9. Fitting the Directory redesign (direction B)
 
-The landing-page redesign session asked how labs plug into its front door, which has collection tiles, results scope tabs, a filter rail, and a record side panel. These are the answers.
+The landing-page redesign session asked how labs plug into its front door, which has collection tiles, results scope tabs, a filter rail, and a record side panel. Its spec, `docs/superpowers/specs/2026-09-24-directory-front-door-design.md` on `claude/landing-page-ux-review-4379c0` (commit `0bced6e2`), offers two ways in under "Collections in flight". These are the answers.
 
+- **Which of the two applies: both, with the collection first.**
+  - *As its own collection*, as (a) describes. Labs keeps its sibling view, so its tile and tab open the Labs view the way Specifications' open theirs, and labs stay out of the All union and its count.
+  - *As the maker behind existing records*, as a join rather than a second home, as (b) describes. Every record dialog already links to its lab through that join, so Phase 3 can build the Maker facet, the Labs group in search suggestions, and "More from this lab" from `labRelations` with no data change. None of them carries a score or a cross-collection Compare. Since the second lab batch, the join reaches all 303 reviewed releases, 113 of the 124 imported models.dev rows, 26 of 60 inference services, 3 of 17 local runtimes, 7 of 22 specifications, 1 of 6 packs, and 46 of 207 systems. Every other record keeps its raw field value, as (b) says.
+  - *Ranked search.* ADR 041 makes the Labs view alphabetical only. The labs session agrees that ADR 040 amends that sentence as it amends ADR 037's: alphabetical while browsing, match order under a query. ADR 041's other rules stay: no score, no sort control, no comparison. The matching wording in `docs/LABS.md` ("sorted by anything but name") and the Labs lines in `docs/WEB.md` change in the same PR.
 - **(a) Labs are a collection.** They are reviewed records with their own schema, and ADR 041 is their record under ADR 013: an explicit schema, a boundary (the inclusion gate), and a comparison policy (never compared, never scored, so ADR 014's no-mixing rule is met by having no profile). Labs ship today as a sibling primary view like Models and Specifications, not as a Directory switcher chip. An organization is not a deployable choice, so labs stay out of the All union and its count. In the redesign's registry, Labs is one entry:
-  - the tile shows its count, the one-line definition "The organizations that develop the reviewed model releases", and its categories, which `app/labs.json` already carries as `lab_type` and `headquarters`;
+  - the tile shows its name, its count, and its largest categories as links, all computed from the records in `app/labs.json` (`lab_type` and `headquarters`); under the front-door rule it carries no definition, which stays in Taxonomy;
   - the tab, list rows, record panel, share pages (`records/labs/<id>/`) and search index (`app/search/labs.json`) already exist.
 
   It is never empty, so it needs no hide-while-empty rule.
