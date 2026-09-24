@@ -1421,7 +1421,6 @@ class ValidationPolicyTests(unittest.TestCase):
             "raw.githubusercontent.com",
             "www.youtube.com",
             "hf.co",
-            "co.uk",
             "github.com",
         ):
             with self.subTest(value=value):
@@ -1441,6 +1440,38 @@ class ValidationPolicyTests(unittest.TestCase):
 
         errors = self.catalog_with_robot(mutate)
         self.assertTrue(any("is a shared host" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_refuse_public_suffixes(self) -> None:
+        # co.uk and com.au are public suffixes, not a maker's own registrable
+        # domain: nobody's site is "co.uk" itself, so a bare entry equal to one
+        # is refused with a distinct message from the shared-host one above.
+        for value in ("co.uk", "com.au"):
+            with self.subTest(value=value):
+
+                def mutate(robot, root, value=value):
+                    robot["first_party_domains"].append(value)
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any("is a public suffix" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_accept_domain_under_public_suffix(
+        self,
+    ) -> None:
+        # Unlike a shared host, a public suffix is not itself a platform any
+        # tenant can register onto: engineeredarts.co.uk is the maker's own
+        # registrable domain and must validate cleanly.
+        def mutate(robot, root):
+            robot["url"] = "https://engineeredarts.co.uk/sample"
+            robot["first_party_domains"] = ["engineeredarts.co.uk"]
+            robot["evidence"][0]["url"] = "https://engineeredarts.co.uk/sample"
+            robot["evidence"][1]["url"] = (
+                "https://docs.engineeredarts.co.uk/sample/specs"
+            )
+            robot["evidence"][2]["url"] = "https://engineeredarts.co.uk/news/sample-vla"
+            robot["terms_evidence"][0]["url"] = "https://engineeredarts.co.uk/terms"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
 
     def test_robot_none_published_stands_alone_and_permits_no_terms_evidence(
         self,

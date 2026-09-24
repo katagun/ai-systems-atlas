@@ -1937,13 +1937,11 @@ FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+
 FIRST_PARTY_GITHUB_ORG = re.compile(
     r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
 )
-# Hosts many unrelated parties publish on, plus public suffixes that are never
-# a maker's own domain. A bare entry, or any subdomain of one
-# (raw.githubusercontent.com, www.youtube.com, vendor.github.io,
-# example.co.uk), would make every tenant of that host first-party, so a
-# shared host enters only as github.com/<org>; a maker whose only site is a
-# github.io page cites it that way too (docs/ROBOTS.md's evidence workflow
-# step 1).
+# Hosts many unrelated parties publish on. A bare entry, or any subdomain of
+# one (raw.githubusercontent.com, www.youtube.com, vendor.github.io), would
+# make every tenant of that host first-party, so a shared host enters only as
+# github.com/<org>; a maker whose only site is a github.io page cites it that
+# way too (docs/ROBOTS.md's evidence workflow step 1).
 MULTI_TENANT_HOSTS = frozenset(
     {
         "github.com",
@@ -1971,10 +1969,24 @@ MULTI_TENANT_HOSTS = frozenset(
         "x.com",
         "twitter.com",
         "linkedin.com",
+    }
+)
+
+# Public suffixes under which any number of unrelated makers register their
+# own distinct domain (engineeredarts.co.uk, sony.co.jp). Unlike a
+# MULTI_TENANT_HOSTS entry, a maker's own registrable domain *under* one of
+# these is a perfectly good first-party anchor; only the bare suffix itself is
+# refused, since nobody's site is "co.uk".
+PUBLIC_SUFFIXES = frozenset(
+    {
         "co.uk",
         "com.au",
         "co.jp",
         "com.cn",
+        "co.nz",
+        "com.br",
+        "co.kr",
+        "com.tw",
     }
 )
 
@@ -2037,6 +2049,11 @@ def validate_robot_first_party_domains(
         if isinstance(entry, str) and _is_shared_host_entry(entry):
             errors.append(
                 f"{prefix}: first_party_domains entry {entry!r} is a shared host"
+            )
+        elif isinstance(entry, str) and entry in PUBLIC_SUFFIXES:
+            errors.append(
+                f"{prefix}: first_party_domains entry {entry!r} is a public "
+                "suffix, not a maker's domain"
             )
         elif isinstance(entry, str) and (
             FIRST_PARTY_GITHUB_ORG.fullmatch(entry) or FIRST_PARTY_HOST.fullmatch(entry)
