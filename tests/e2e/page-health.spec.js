@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-const VIEWS = ["Directory", "Finder", "Models", "Specifications", "Taxonomy"];
+const VIEWS = ["Directory", "Finder", "Models", "Labs", "Specifications", "Taxonomy"];
 
 test("every view and a detail dialog render without console or page errors", async ({ page }) => {
   const errors = [];

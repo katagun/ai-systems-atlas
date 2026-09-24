@@ -91,6 +91,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",
             "docs/PACKS.md",
+            "docs/LABS.md",
             "docs/ROBOTS.md",
             "docs/TAXONOMY.md",
             "docs/WEB.md",
@@ -128,6 +129,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/036-the-agent-to-physical-world-boundary-is-in-scope.md",
             "docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md",
             "docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md",
+            "docs/adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

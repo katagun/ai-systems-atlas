@@ -659,6 +659,310 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    SAMPLE_LAB: ClassVar[dict] = {
+        "id": "lab-sample",
+        "name": "Sample Lab",
+        "url": "https://example.com/",
+        "description": "A synthetic lab used to exercise lab validation.",
+        "lab_type": "ai_company",
+        "headquarters": "us",
+        "organization_note": "One name covers the synthetic lab's models and API.",
+        "catalog_names": ["Anthropic"],
+        "systems": [],
+        "channels": [
+            {"kind": "news", "url": "https://example.com/news"},
+            {"kind": "hugging_face", "url": "https://huggingface.co/sample-lab"},
+        ],
+        "safety_framework": {
+            "title": "Sample Scaling Policy",
+            "url": "https://example.com/policy",
+            "verified_at": "2026-09-20",
+        },
+        "evidence": [
+            {
+                "kind": "web",
+                "label": "Terms naming the synthetic lab's legal entity",
+                "url": "https://example.com/terms",
+                "verified_at": "2026-09-20",
+            }
+        ],
+        "verified_at": "2026-09-24",
+    }
+
+    def catalog_with_labs(self, labs: list[dict], mutate_root=None) -> list[str]:
+        """Validate a temporary catalog whose labs.json holds exactly these labs."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        if mutate_root is not None:
+            mutate_root(root)
+        labs_path = root / "directory" / "labs.json"
+        document = json.loads(labs_path.read_text(encoding="utf-8"))
+        document["labs"] = labs
+        self.write_json(labs_path, document)
+        self.write_json(root / "web" / "labs.json", document)
+        return validate(root)
+
+    def catalog_with_lab(self, mutate=None, mutate_root=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic lab."""
+        lab = json.loads(json.dumps(self.SAMPLE_LAB))
+        if mutate is not None:
+            mutate(lab)
+        return self.catalog_with_labs([lab], mutate_root)
+
+    def lab_errors(self, errors: list[str]) -> list[str]:
+        return [error for error in errors if error.startswith("lab ")]
+
+    def test_valid_lab_passes_validation(self) -> None:
+        self.assertEqual(self.lab_errors(self.catalog_with_lab()), [])
+
+    def test_lab_rejects_every_scoring_popularity_and_license_field(self) -> None:
+        for field, value in (
+            ("score", {"overall": 5}),
+            ("score_profile", "model_access"),
+            ("stars", 10),
+            ("stars_verified_at", "2026-09-24"),
+            ("system_family", "agent_system"),
+            ("primary_role", "coding_agent_workflow"),
+            ("licenses", ["MIT"]),
+            ("source_model", "open_source"),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(lab, field=field, value=value):
+                    lab[field] = value
+
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(
+                    any(f"{field} is never recorded on a lab" in e for e in errors),
+                    errors,
+                )
+
+    def test_lab_fields_must_match_the_schema(self) -> None:
+        def mutate(lab):
+            del lab["organization_note"]
+            lab["funding"] = "undisclosed"
+
+        errors = self.catalog_with_lab(mutate)
+        self.assertTrue(
+            any(
+                "missing=['organization_note'], extra=['funding']" in e for e in errors
+            ),
+            errors,
+        )
+
+    def test_lab_id_must_carry_the_lab_prefix(self) -> None:
+        def mutate(lab):
+            lab["id"] = "sample-lab"
+
+        errors = self.catalog_with_lab(mutate)
+        self.assertTrue(
+            any("id must be a slug starting with lab-" in e for e in errors), errors
+        )
+
+    def test_lab_rejects_unknown_type_and_headquarters(self) -> None:
+        for field, value, message in (
+            ("lab_type", "startup", "unknown lab type"),
+            ("headquarters", "atlantis", "unknown headquarters country"),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(lab, field=field, value=value):
+                    lab[field] = value
+
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_lab_prose_and_parent_must_not_be_empty(self) -> None:
+        for field, message in (
+            ("organization_note", "organization_note must be a non-empty string"),
+            ("parent_organization", "parent_organization must be a non-empty string"),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(lab, field=field):
+                    lab[field] = " "
+
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_lab_catalog_names_must_name_catalog_records(self) -> None:
+        def mutate(lab):
+            lab["catalog_names"].append("Nobody The Catalog Names")
+
+        errors = self.catalog_with_lab(mutate)
+        self.assertTrue(
+            any(
+                "catalog name 'Nobody The Catalog Names' names no catalog record" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_lab_is_recorded_only_once_it_developed_a_reviewed_release(self) -> None:
+        documents = {
+            name: json.loads((ROOT / "directory" / name).read_text(encoding="utf-8"))
+            for name in ("models.json", "inference-services.json")
+        }
+        developers = {m["developer"] for m in documents["models.json"]["models"]}
+        operator = next(
+            service["operator"]
+            for service in documents["inference-services.json"]["services"]
+            if service["operator"] not in developers
+        )
+
+        def mutate(lab):
+            lab["catalog_names"] = [operator]
+
+        errors = self.lab_errors(self.catalog_with_lab(mutate))
+        self.assertTrue(
+            any("develops no reviewed model release" in e for e in errors), errors
+        )
+        self.assertFalse(any("names no catalog record" in e for e in errors), errors)
+
+    def test_lab_systems_must_name_published_systems(self) -> None:
+        def mutate(lab):
+            lab["systems"] = ["not-a-published-system"]
+
+        errors = self.catalog_with_lab(mutate)
+        self.assertTrue(
+            any("unknown systems ['not-a-published-system']" in e for e in errors),
+            errors,
+        )
+
+    def test_lab_github_and_hugging_face_channels_name_an_organization(self) -> None:
+        for kind, url in (
+            ("github", "https://github.com/anthropics/claude-code"),
+            ("github", "https://github.com/anthropics/"),
+            ("hugging_face", "https://huggingface.co/sample-lab/model"),
+        ):
+            with self.subTest(url=url):
+
+                def mutate(lab, kind=kind, url=url):
+                    lab["channels"].append({"kind": kind, "url": url})
+
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(
+                    any(
+                        f"a {kind} channel must be an organization URL" in e
+                        for e in errors
+                    ),
+                    errors,
+                )
+
+    def test_lab_channels_need_a_known_kind_and_a_unique_url(self) -> None:
+        def unknown_kind(lab):
+            lab["channels"].append({"kind": "social", "url": "https://example.com/x"})
+
+        def duplicate(lab):
+            lab["channels"].append(dict(lab["channels"][0]))
+
+        for mutate, message in (
+            (unknown_kind, "unknown channel kind 'social'"),
+            (duplicate, "channel URLs must be unique"),
+        ):
+            with self.subTest(message=message):
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_lab_safety_framework_is_optional_but_complete_and_dated(self) -> None:
+        def absent(lab):
+            del lab["safety_framework"]
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(absent)), [])
+
+        def incomplete(lab):
+            del lab["safety_framework"]["title"]
+
+        def future(lab):
+            lab["safety_framework"]["verified_at"] = "2026-09-25"
+
+        for mutate, message in (
+            (incomplete, "safety_framework must have exactly"),
+            (future, "safety_framework verified_at must not be after"),
+        ):
+            with self.subTest(message=message):
+                errors = self.catalog_with_lab(mutate)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_lab_must_list_every_system_in_its_github_organizations(self) -> None:
+        def mutate(lab):
+            lab["channels"].append(
+                {"kind": "github", "url": "https://github.com/anthropics"}
+            )
+
+        errors = self.catalog_with_lab(mutate)
+        self.assertTrue(
+            any(
+                "system claude-code is published from the lab's GitHub organization "
+                "anthropics but is not listed in systems" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+        def listed(lab):
+            mutate(lab)
+            lab["systems"] = ["claude-agent-sdk", "claude-code"]
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(listed)), [])
+
+    def test_lab_cannot_leave_a_models_dev_namespace_split(self) -> None:
+        def rename_one_developer(root):
+            for folder in ("directory", "web"):
+                path = root / folder / "models.json"
+                document = json.loads(path.read_text(encoding="utf-8"))
+                model = next(
+                    m
+                    for m in document["models"]
+                    if m["developer"] == "Anthropic"
+                    and str(m.get("source_id")).startswith("anthropic/")
+                )
+                model["developer"] = "Anthropic PBC"
+                self.write_json(path, document)
+
+        errors = self.catalog_with_lab(mutate_root=rename_one_developer)
+        self.assertTrue(
+            any(
+                "models.dev namespace anthropic is split" in e
+                and "'Anthropic PBC'" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_two_labs_cannot_claim_the_same_name_system_or_organization(
+        self,
+    ) -> None:
+        first = json.loads(json.dumps(self.SAMPLE_LAB))
+        first["systems"] = ["claude-code", "claude-agent-sdk"]
+        first["channels"].append(
+            {"kind": "github", "url": "https://github.com/anthropics"}
+        )
+        second = json.loads(json.dumps(first))
+        second["id"] = "lab-sample-two"
+        errors = self.catalog_with_labs([first, second])
+        for message in (
+            "catalog name 'Anthropic' already belongs to lab-sample",
+            "system 'claude-code' already belongs to lab-sample",
+            "GitHub organization 'anthropics' already belongs to lab-sample",
+        ):
+            with self.subTest(message=message):
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_labs_must_be_published_to_web(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        document = json.loads(
+            (root / "directory" / "labs.json").read_text(encoding="utf-8")
+        )
+        document["verified_at"] = "2026-01-01"
+        self.write_json(root / "directory" / "labs.json", document)
+        errors = validate(root)
+        self.assertTrue(
+            any("web/labs.json is not synchronized" in error for error in errors),
+            errors,
+        )
+
     def catalog_with_malformed_record(
         self, document: str, key: str, entry: object
     ) -> list[str]:

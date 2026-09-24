@@ -11,7 +11,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 4. Decide inclusion by the collection's relevance and operational boundary, never by license or source model.
 5. Base license classifications on authoritative, scoped license/terms evidence covering every material license; README claims and GitHub SPDX detection are insufficient.
 6. Assign exactly one compatible `system_family` and `primary_role` only to system records in `projects.json`; traits are not roles.
-7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications and agent packs are unscored; mixed discovery hides scores and comparisons.
+7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, and labs are unscored; mixed discovery hides scores and comparisons.
 8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
 9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
 10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
@@ -38,6 +38,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Self-operated inference, runtime scores | [Local runtimes](docs/LOCAL_RUNTIMES.md) |
 | Skills, plugins, vault bundles, marketplaces, host-installed packs | [Agent packs](docs/PACKS.md) |
 | AI robots, vendor-named models, robot hardware, terms of sale | [Robots](docs/ROBOTS.md) |
+| AI labs, model developers, organization names across collections, where a lab publishes | [Labs](docs/LABS.md) |
 | Candidate triage routine | [Candidate triage](docs/routines/candidate-triage.md) |
 | Hacker News attention signals and sweep routine | [HN signals](docs/routines/hn-signals.md) |
 | Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |

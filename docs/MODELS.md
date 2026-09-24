@@ -6,7 +6,7 @@ Use this document for provider-independent model discovery, reviewed language-mo
 
 A model record represents one identifiable model release independently of where it is served. It is not:
 
-- the developer or research lab as a company;
+- the developer or research lab as a company, which belongs in Labs ([`LABS.md`](LABS.md));
 - a managed API or hosting platform, which belongs in Inference Services;
 - execution software, which belongs in Local Runtimes;
 - an assistant, agent, or memory product built on the model;

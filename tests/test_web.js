@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -543,6 +543,7 @@ test("every logo mapping points at a published record and a vendored plain mark"
     ...readJSON("inference-services.json").services.map(record => record.id),
     ...readJSON("local-runtimes.json").runtimes.map(record => record.id),
     ...readJSON("models.json").models.map(record => record.id),
+    ...readJSON("labs.json").labs.map(record => record.id),
   ]);
 
   assert.ok(Object.keys(logos.records).length > 0);
@@ -565,6 +566,7 @@ test("record references parse only a known kind and a plain id", () => {
   assert.deepEqual(parseRecordReference("runtime:ollama"), { kind: "runtime", id: "ollama" });
   assert.deepEqual(parseRecordReference("model:model-alibaba-qwen2-5-coder-0-5b"), { kind: "model", id: "model-alibaba-qwen2-5-coder-0-5b" });
   assert.deepEqual(parseRecordReference("pack:superpowers"), { kind: "pack", id: "superpowers" });
+  assert.deepEqual(parseRecordReference("lab:lab-openai"), { kind: "lab", id: "lab-openai" });
   for (const raw of [null, "", "ollama", "runtime:", ":ollama", "system:a:b", "constructor:x", "__proto__:x", "toString:x", "System:kilo-code"]) {
     assert.equal(parseRecordReference(raw), null, `expected ${JSON.stringify(raw)} to be rejected`);
   }
@@ -577,6 +579,7 @@ test("share record paths map each kind to its collection directory", () => {
   assert.equal(shareRecordPath("runtime", "ollama"), "records/local-runtimes/ollama/");
   assert.equal(shareRecordPath("model", "model-alibaba-qwen2-5-coder-0-5b"), "records/models/model-alibaba-qwen2-5-coder-0-5b/");
   assert.equal(shareRecordPath("pack", "superpowers"), "records/packs/superpowers/");
+  assert.equal(shareRecordPath("lab", "lab-openai"), "records/labs/lab-openai/");
   assert.equal(shareRecordPath("constructor", "ollama"), null);
 });
 
@@ -614,6 +617,102 @@ test("mixed directory browsing includes packs and reads their own index key", ()
     ["Brain Kit"],
   );
   assert.deepEqual(filterDirectoryEntries(combinedProjects, inferenceServices, localRuntimes, models, { term: "Superpowers" }), []);
+});
+
+const labs = [
+  { id: "lab-alpha", name: "Alpha", description: "An AI company with a cloud unit.", lab_type: "ai_company", headquarters: "us", parent_organization: "Alpha Holdings", catalog_names: ["Alpha", "Alpha Cloud"], systems: ["alpha-chat"] },
+  { id: "lab-beta", name: "Beta", description: "A technology company.", lab_type: "technology_company", headquarters: "fr", catalog_names: ["Beta", "Beta Research"], systems: [] },
+];
+const labCatalog = {
+  models: [
+    { id: "alpha-one", name: "Alpha One", developer: "Alpha", source_id: "alpha/one", review_status: "reviewed", distribution_modes: ["developer_api"], source_metadata: { release_date: "2026-03-02" } },
+    { id: "alpha-two", name: "Alpha Two", developer: "Alpha", source_id: "alpha/two", review_status: "reviewed", distribution_modes: ["developer_api", "third_party_hosting"], source_metadata: { release_date: "2026-07" } },
+    { id: "alpha-early", name: "Alpha Early", developer: "Alpha", source_id: null, review_status: "reviewed", distribution_modes: ["downloadable_weights"], source_metadata: {} },
+    { id: "alpha-three", name: "Alpha Three", developer: "alpha", source_id: "alpha/three", review_status: "imported" },
+    { id: "beta-one", name: "Beta One", developer: "Beta Research", source_id: "beta/one", review_status: "reviewed", distribution_modes: ["downloadable_weights"], source_metadata: { release_date: "2025-11-20" } },
+    { id: "gamma-one", name: "Gamma One", developer: "Gamma", source_id: "gamma/one", review_status: "reviewed", distribution_modes: ["developer_api"] },
+    { id: "gamma-two", name: "Gamma Two", developer: "gamma", source_id: "gamma/two", review_status: "imported" },
+  ],
+  services: [{ id: "alpha-api", operator: "Alpha Cloud" }, { id: "router", operator: "Router Inc." }],
+  runtimes: [{ id: "beta-serve", maintainer: "Beta" }],
+  specifications: [{ id: "shared-spec", stewards: ["Alpha", "Beta"] }, { id: "other-spec", stewards: ["Community"] }],
+  packs: [{ id: "alpha-pack", steward: "Alpha" }],
+  projects: [{ id: "alpha-chat" }, { id: "unrelated" }],
+};
+
+test("a lab joins every record whose organization field it names", () => {
+  const alpha = labRelations(labs[0], labCatalog);
+  assert.deepEqual(alpha.models.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"]);
+  assert.deepEqual(alpha.namespaces, ["alpha"]);
+  assert.deepEqual(alpha.sourceRows.map(item => item.id), ["alpha-three"]);
+  assert.deepEqual(alpha.services.map(item => item.id), ["alpha-api"]);
+  assert.deepEqual(alpha.specifications.map(item => item.id), ["shared-spec"]);
+  assert.deepEqual(alpha.packs.map(item => item.id), ["alpha-pack"]);
+  assert.deepEqual(alpha.systems.map(item => item.id), ["alpha-chat"]);
+  const beta = labRelations(labs[1], labCatalog);
+  assert.deepEqual(beta.models.map(item => item.id), ["beta-one"], "a unit name the lab lists joins its releases");
+  assert.deepEqual(beta.runtimes.map(item => item.id), ["beta-serve"]);
+  assert.deepEqual(beta.sourceRows, [], "a namespace with no pending rows adds none");
+  assert.deepEqual(labRelations({ catalog_names: ["Nobody"] }, labCatalog).models, []);
+});
+
+test("source namespaces are the models.dev directory before the slash", () => {
+  assert.equal(sourceNamespace("alpha/one"), "alpha");
+  assert.equal(sourceNamespace("alpha/nested/one"), "alpha");
+  for (const value of [null, undefined, "", "noslash", "/leading"]) assert.equal(sourceNamespace(value), null);
+});
+
+test("lab releases list newest first and fall back to the name when a date is missing", () => {
+  const alpha = labRelations(labs[0], labCatalog).models;
+  assert.deepEqual(releasesNewestFirst(alpha).map(item => item.id), ["alpha-two", "alpha-one", "alpha-early"]);
+  assert.equal(releaseDate(alpha[2]), "");
+  assert.deepEqual(alpha.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"], "sorting copies rather than reorders");
+});
+
+test("a lab shows which distribution modes its releases carry, in taxonomy order", () => {
+  const alpha = labRelations(labs[0], labCatalog).models;
+  assert.deepEqual(labDistributionModes(alpha, ["downloadable_weights", "developer_api", "third_party_hosting"]), ["downloadable_weights", "developer_api", "third_party_hosting"]);
+  assert.deepEqual(labDistributionModes(alpha.slice(0, 1), ["downloadable_weights", "developer_api"]), ["developer_api"]);
+  assert.deepEqual(labDistributionModes(alpha, []), ["developer_api", "downloadable_weights", "third_party_hosting"]);
+});
+
+test("lab filters combine type, headquarters, and release distribution, sorted by name only", () => {
+  assert.deepEqual(filterLabs([...labs].reverse(), {}).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { sort: "score" }).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { type: "technology_company" }).map(item => item.id), ["lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { headquarters: "us" }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "downloadable_weights", models: labCatalog.models }).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "third_party_hosting", models: labCatalog.models }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "developer_api" }), [], "without models no lab has a release");
+});
+
+test("lab search covers names, units, and parent organizations", () => {
+  assert.deepEqual(filterLabs(labs, { term: "Beta Research" }).map(item => item.id), ["lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { term: "Holdings" }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { term: "Hangzhou", searchIndex: { "lab-beta": "lab-beta beta offices in hangzhou" } }).map(item => item.id), ["lab-beta"]);
+});
+
+test("a record dialog finds its lab by its own collection's join rule", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  const ids = (kind, record) => labsForRecord(kind, record, index).map(item => item.id);
+  assert.deepEqual(ids("model", labCatalog.models[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("model", labCatalog.models[3]), ["lab-alpha"], "an imported row joins through its namespace");
+  assert.deepEqual(ids("model", labCatalog.models[6]), [], "a namespace no lab reviewed stays unjoined");
+  assert.deepEqual(ids("model", labCatalog.models[5]), []);
+  assert.deepEqual(ids("inference", labCatalog.services[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("inference", labCatalog.services[1]), []);
+  assert.deepEqual(ids("runtime", labCatalog.runtimes[0]), ["lab-beta"]);
+  assert.deepEqual(ids("spec", labCatalog.specifications[0]), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(ids("pack", labCatalog.packs[0]), ["lab-alpha"]);
+  assert.deepEqual(ids("system", { id: "alpha-chat" }), ["lab-alpha"]);
+  assert.deepEqual(ids("system", { id: "unrelated" }), []);
+  assert.deepEqual(labsForRecord("model", labCatalog.models[0], null), []);
+});
+
+test("the models lab filter narrows to the ids it is given", () => {
+  const ids = new Set(["model-vision"]);
+  assert.deepEqual(filterModels(models, { ids }).map(item => item.id), ["model-vision"]);
+  assert.equal(filterModels(models, {}).length, models.length);
 });
 
 test("theme preference cycles system, light, dark and recovers from unknown values", () => {

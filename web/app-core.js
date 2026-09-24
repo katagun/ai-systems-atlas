@@ -181,6 +181,106 @@
     return filterScoredCollection(packs, { ...filters, sort: "name" }, PACK_VIEW);
   }
 
+  // Labs are unscored organizations (ADR 041). A lab stores the names the other
+  // collections use for it and the ids of the systems it builds; everything else
+  // is joined here by the rules scripts/lab_relations.py states for the validator
+  // and share pages. `models` is the page's overlaid list, so a reviewed release
+  // carries review_status "reviewed" and an imported models.dev row "imported".
+  const LAB_VIEW = {
+    searchFields: ["id", "name", "description", "catalog_names", "parent_organization"],
+    facets: {
+      type: "lab_type",
+      headquarters: "headquarters",
+    },
+  };
+
+  function sourceNamespace(sourceId) {
+    if (typeof sourceId !== "string") return null;
+    const separator = sourceId.indexOf("/");
+    return separator > 0 ? sourceId.slice(0, separator) : null;
+  }
+
+  function labRelations(lab, catalog = {}) {
+    const names = new Set(lab.catalog_names || []);
+    const systemIds = new Set(lab.systems || []);
+    const models = catalog.models || [];
+    const reviewed = models.filter(model => model.review_status !== "imported" && names.has(model.developer));
+    const namespaces = [...new Set(reviewed.map(model => sourceNamespace(model.source_id)).filter(Boolean))].sort();
+    return {
+      models: reviewed,
+      namespaces,
+      sourceRows: models.filter(model => model.review_status === "imported" && namespaces.includes(sourceNamespace(model.source_id))),
+      services: (catalog.services || []).filter(item => names.has(item.operator)),
+      runtimes: (catalog.runtimes || []).filter(item => names.has(item.maintainer)),
+      specifications: (catalog.specifications || []).filter(item => (item.stewards || []).some(name => names.has(name))),
+      packs: (catalog.packs || []).filter(item => names.has(item.steward)),
+      systems: (catalog.projects || []).filter(item => systemIds.has(item.id)),
+    };
+  }
+
+  // Release dates are models.dev metadata (or Atlas-authored for a release it
+  // does not list), partial as YYYY-MM or full as YYYY-MM-DD; both sort as text.
+  function releaseDate(model) {
+    return model.source_metadata?.release_date || "";
+  }
+
+  function releasesNewestFirst(models) {
+    return [...models].sort((a, b) => releaseDate(b).localeCompare(releaseDate(a)) || a.name.localeCompare(b.name));
+  }
+
+  // The union of the distribution modes the lab's reviewed releases carry, in
+  // taxonomy order: each release keeps its own conclusion (ADR 025), and the
+  // lab only shows which ones occur.
+  function labDistributionModes(models, order = []) {
+    const present = new Set(models.flatMap(model => model.distribution_modes || []));
+    return [...order.filter(mode => present.has(mode)), ...[...present].filter(mode => !order.includes(mode)).sort()];
+  }
+
+  // Labs sort by name only; the distribution facet keeps a lab with at least one
+  // reviewed release distributed that way, so it needs the catalog's models.
+  function filterLabs(labs, filters = {}) {
+    return filterScoredCollection(labs, { ...filters, sort: "name" }, LAB_VIEW).filter(lab =>
+      !filters.distribution || labRelations(lab, { models: filters.models || [] }).models
+        .some(model => (model.distribution_modes || []).includes(filters.distribution)));
+  }
+
+  // Which lab claims each name, system, and models.dev namespace, so a record
+  // dialog can link to its lab without re-joining every lab on every paint.
+  function buildLabIndex(labs = [], models = []) {
+    const byName = new Map();
+    const bySystem = new Map();
+    const byNamespace = new Map();
+    for (const lab of labs) {
+      for (const name of lab.catalog_names || []) byName.set(name, lab);
+      for (const id of lab.systems || []) bySystem.set(id, lab);
+    }
+    for (const model of models) {
+      if (model.review_status === "imported") continue;
+      const lab = byName.get(model.developer);
+      const namespace = sourceNamespace(model.source_id);
+      if (lab && namespace && !byNamespace.has(namespace)) byNamespace.set(namespace, lab);
+    }
+    return { byName, bySystem, byNamespace };
+  }
+
+  // The labs a record belongs to by its collection's join rule; a specification
+  // with several stewards can belong to more than one.
+  function labsForRecord(kind, record, index) {
+    if (!index || !record) return [];
+    let labs;
+    if (kind === "system") labs = [index.bySystem.get(record.id)];
+    else if (kind === "model") {
+      labs = [record.review_status === "imported"
+        ? index.byNamespace.get(sourceNamespace(record.source_id))
+        : index.byName.get(record.developer)];
+    } else if (kind === "inference") labs = [index.byName.get(record.operator)];
+    else if (kind === "runtime") labs = [index.byName.get(record.maintainer)];
+    else if (kind === "spec") labs = (record.stewards || []).map(name => index.byName.get(name));
+    else if (kind === "pack") labs = [index.byName.get(record.steward)];
+    else labs = [];
+    return [...new Set(labs.filter(Boolean))];
+  }
+
   function filterInferenceServices(services, filters = {}) {
     return filterScoredCollection(services, filters, INFERENCE_SERVICE_VIEW);
   }
@@ -189,12 +289,15 @@
     return filterScoredCollection(runtimes, filters, LOCAL_RUNTIME_VIEW);
   }
 
+  // `ids`, when present, narrows to one lab's releases: its reviewed rows and the
+  // imported rows in its namespaces, which the caller resolves with labRelations.
   function filterModels(models, filters = {}) {
     return filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
-      !filters.modality || [
+      (!filters.modality || [
         ...(model.source_metadata?.modalities?.input || []),
         ...(model.source_metadata?.modalities?.output || []),
-      ].includes(filters.modality)
+      ].includes(filters.modality)) &&
+      (!filters.ids || filters.ids.has(model.id))
     );
   }
 
@@ -285,7 +388,7 @@
   // Record references come from the URL. The kind is checked against a static
   // list on purpose: a lookup keyed on user input could resolve inherited names
   // such as "constructor", and an id is a plain slug or it is nothing.
-  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model", "pack"];
+  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model", "pack", "lab"];
   const RECORD_ID = /^[\w.-]+$/;
   function parseRecordReference(raw) {
     if (typeof raw !== "string") return null;
@@ -300,7 +403,7 @@
   // The view parameter names a primary navigation tab. It is matched against a
   // static list for the same reason a record kind is: a lookup keyed on the URL
   // could resolve an inherited name such as "constructor".
-  const VIEW_IDS = ["directory", "finder", "models", "specifications", "taxonomy", "api"];
+  const VIEW_IDS = ["directory", "finder", "models", "labs", "specifications", "taxonomy", "api"];
   function parseViewId(raw) {
     return typeof raw === "string" && VIEW_IDS.includes(raw) ? raw : null;
   }
@@ -314,6 +417,7 @@
     if (kind === "runtime") return `records/local-runtimes/${id}/`;
     if (kind === "model") return `records/models/${id}/`;
     if (kind === "pack") return `records/packs/${id}/`;
+    if (kind === "lab") return `records/labs/${id}/`;
     return null;
   }
 
@@ -605,6 +709,7 @@
     CARD_BADGE_SETS,
     badgeEmblem,
     badgeLegend,
+    buildLabIndex,
     cardBadgeGlossary,
     cardBadges,
     compareProjects,
@@ -614,11 +719,15 @@
     filterAndSortProjects,
     filterDirectoryEntries,
     filterInferenceServices,
+    filterLabs,
     filterLocalRuntimes,
     filterModels,
     filterPacks,
     filterScoredCollection,
     filterSpecifications,
+    labDistributionModes,
+    labRelations,
+    labsForRecord,
     matchesProject,
     matchesRecordSearch,
     mergePackScopeEntries,
@@ -631,7 +740,10 @@
     parseRecordReference,
     parseViewId,
     recordHaystack,
+    releaseDate,
+    releasesNewestFirst,
     shareRecordPath,
+    sourceNamespace,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };

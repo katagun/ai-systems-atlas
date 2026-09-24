@@ -207,6 +207,22 @@ const RECORD_MARKS = {
   "model-zhipuai-glm-5": "lobe:zai",
   "model-zhipuai-glm-5-3": "lobe:zai",
   "model-zhipuai-glm-5-3-flash": "lobe:zai",
+  // Labs — the organization's own mark
+  "lab-alibaba": "lobe:alibaba",
+  "lab-amazon": "lobe:aws",
+  "lab-anthropic": "lobe:anthropic",
+  "lab-cohere": "lobe:cohere",
+  "lab-deepseek": "lobe:deepseek",
+  "lab-google": "lobe:google",
+  "lab-meta": "lobe:meta",
+  "lab-microsoft": "lobe:microsoft",
+  "lab-minimax": "lobe:minimax",
+  "lab-mistral-ai": "lobe:mistral",
+  "lab-moonshot-ai": "lobe:moonshot",
+  "lab-nvidia": "lobe:nvidia",
+  "lab-openai": "lobe:openai",
+  "lab-xai": "lobe:xai",
+  "lab-z-ai": "lobe:zai",
 };
 
 const ALLOWED_TAGS = new Set(["path", "g", "circle", "rect", "ellipse", "polygon"]);
@@ -254,6 +270,7 @@ for (const [file, listKey] of [
   ["web/local-runtimes.json", "runtimes"],
   ["web/models.json", "models"],
   ["web/packs.json", "packs"],
+  ["web/labs.json", "labs"],
 ]) {
   for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) recordNames.set(record.id, record.name);
 }
