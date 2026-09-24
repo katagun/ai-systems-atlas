@@ -18496,6 +18496,115 @@
       "why_it_matters": "The clearest worked example of a vendor's own desktop harness tuned to its flagship open-weights model line, showing how GLM-5.3's long-context, long-horizon capabilities are packaged into a product with its own agent workflow, execution modes, and multi-surface control.",
       "research_confidence": "medium",
       "verified_at": "2026-09-18"
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "verified_at": "2026-09-20",
+      "id": "flue",
+      "name": "Flue",
+      "repo": "withastro/flue",
+      "url": "https://github.com/withastro/flue",
+      "description": "Apache-2.0 TypeScript agent framework from the Astro team: agents are functions composed from hooks for a model, tools, skills, subagents, MCP connections, persistent state, and an optional sandbox, run on a durable runtime for Node.js or Cloudflare Workers.",
+      "primary_role": "agent_framework_sdk",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "deepseek",
+        "x_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "append-only conversation streams of messages, tool calls, results, compactions, and recovery facts; accepted submissions with their claims and leases; and per-conversation persistent state, held in memory, SQLite, an adapter database, or Cloudflare Durable Object storage",
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "stars": 8325,
+      "stars_verified_at": "2026-09-20",
+      "historical_stars": null,
+      "current_repo_note": "The root LICENSE is the full Apache-2.0 text and every packages/*/package.json manifest declares Apache-2.0. The runtime depends on the MIT-licensed Pi agent core and model API packages, which the Atlas reviews as the separate Pi record.",
+      "pushed_at": "2026-09-19T17:14:48Z",
+      "forks": 498,
+      "open_issues": 33,
+      "metadata_verified_at": "2026-09-20",
+      "github_detected_license": "Apache-2.0",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.8,
+        "autonomy": 8.3,
+        "human_control": 7.4,
+        "observability_recovery": 8.8,
+        "data_sovereignty": 8.6,
+        "interoperability": 8.8,
+        "maturity": 6.8,
+        "overall": 8.12
+      },
+      "strengths": [
+        "A documented accepted-work contract: every admitted submission is recorded before model work begins and reaches one durable outcome, with crash recovery, bounded retries, durable tool steps, and resumable delegated tasks",
+        "The sandbox is a declared, swappable boundary: an in-memory virtual shell, the host with an allowlisted environment, or provider sandboxes such as Daytona, E2B, Modal, Vercel, and Cloudflare through thin adapters",
+        "Open at each layer: Pi's provider catalog plus custom OpenAI- or Anthropic-compatible endpoints, MCP connections, database adapters, OpenTelemetry, Sentry, and Braintrust export, verified channel events, and Node.js, Cloudflare, and CI deploy targets"
+      ],
+      "weaknesses": [
+        "Young and fast-moving: first published in 2026, and the 2.0 release of 2026-07-31 was a breaking redesign that removed workflows and reset persisted state",
+        "There is no built-in approval or pause-for-human primitive; operator control is assembled from state-gated tool mounting, MCP annotation hints, aborts, and timeouts in application code",
+        "The local sandbox gives the model a real host shell with no isolation by design, and most provider sandboxes cannot stop a cancelled command that is already running"
+      ],
+      "why_it_matters": "Flue packages the coding-agent harness shape — a model loop with file and shell tools, skills, subagents, and a workspace — as a deployable TypeScript framework, and pairs it with an unusually explicit durability contract rather than leaving recovery to the integrator.",
+      "research_confidence": "medium",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source"
     }
   ]
 }

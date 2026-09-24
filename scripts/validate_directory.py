@@ -25,6 +25,9 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
+# Kept equal to scripts/promote_model_candidate.py's constant of the same name; a
+# null-source record (ADR 038) may cite no evidence URL under this prefix.
+MODELS_DEV_REPO = "https://github.com/anomalyco/models.dev"
 PUBLISHED_DATA = (
     "projects.json",
     "taxonomy.json",
@@ -2402,6 +2405,11 @@ def validate_model_source_metadata(
                 )
 
 
+def stable_model_id(source_id: str) -> str:
+    """The id models.dev import derives for a source id; kept equal to the importer's."""
+    return "model-" + re.sub(r"[^a-z0-9]+", "-", source_id.lower()).strip("-")
+
+
 def validate_models(
     models_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -2454,7 +2462,16 @@ def validate_models(
         ):
             errors.append(f"{prefix}: invalid id")
         source_id = model.get("source_id")
-        if not isinstance(source_id, str) or not re.fullmatch(
+        if source_id is None:
+            # ADR 038: reviewed before models.dev listed it. The id stands in for
+            # the expected upstream id, so it must have the stable slug form.
+            if not isinstance(model_id, str) or not re.fullmatch(
+                r"model-[a-z0-9]+(?:-[a-z0-9]+)*", model_id
+            ):
+                errors.append(
+                    f"{prefix}: a model without a models.dev source_id needs a stable slug id"
+                )
+        elif not isinstance(source_id, str) or not re.fullmatch(
             r"[A-Za-z0-9][A-Za-z0-9._/-]*", source_id
         ):
             errors.append(f"{prefix}: invalid models.dev source_id")
@@ -2637,9 +2654,7 @@ def validate_models_dev(
             errors.append(f"{prefix}: duplicate source_id")
         else:
             source_ids.add(source_id)
-            expected_id = "model-" + re.sub(
-                r"[^a-z0-9]+", "-", source_id.lower()
-            ).strip("-")
+            expected_id = stable_model_id(source_id)
             if model_id != expected_id:
                 errors.append(
                     f"{prefix}: id must be the stable source-derived id {expected_id}"
@@ -3390,6 +3405,95 @@ def validate_published_copies(root: Path, errors: list[str]) -> None:
             errors.append(f"web/{name} is not synchronized with directory/{name}")
 
 
+def validate_model_source_links(
+    models: list[Any], source_models: list[Any], errors: list[str]
+) -> None:
+    """Check reviewed models against the snapshot they claim to come from (ADR 038)."""
+    rows_by_source = {
+        row.get("source_id"): row
+        for row in source_models
+        if isinstance(row, dict) and isinstance(row.get("source_id"), str)
+    }
+    source_by_row_id = {
+        row.get("id"): source_id for source_id, row in rows_by_source.items()
+    }
+    row_by_id = {row.get("id"): row for row in source_models if isinstance(row, dict)}
+    linked_by_source_id = {
+        model.get("source_id"): model.get("id")
+        for model in models
+        if isinstance(model, dict) and isinstance(model.get("source_id"), str)
+    }
+    for model in models:
+        if not isinstance(model, dict):
+            continue
+        source_id = model.get("source_id")
+        prefix = f"model {model.get('id', 'unknown')}"
+        if source_id is None:
+            # ADR 038: a null-source record contains no models.dev data, so no
+            # surface may attribute it to models.dev; a leftover pinned entry
+            # from a hand repair (unlink, upstream deletion) is rejected here.
+            evidence = model.get("evidence")
+            if isinstance(evidence, list) and any(
+                str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+                for item in evidence
+                if isinstance(item, dict)
+            ):
+                errors.append(
+                    f"{prefix}: a model without a models.dev source_id cannot cite "
+                    "models.dev evidence"
+                )
+            # ADR 038: an id that matches a row already claimed by a different
+            # linked record means two reviews point at one release; the row
+            # a null-source record's id merely coincides with must still be
+            # unclaimed, or it is not a link-pending state but a collision.
+            row = row_by_id.get(model.get("id"))
+            row_source_id = row.get("source_id") if isinstance(row, dict) else None
+            other_model_id = (
+                linked_by_source_id.get(row_source_id)
+                if isinstance(row_source_id, str)
+                else None
+            )
+            if other_model_id is not None:
+                errors.append(
+                    f"{prefix}: id matches models.dev row {row_source_id}, which "
+                    f"{other_model_id} is already linked to (ADR 038)"
+                )
+            continue
+        if not isinstance(source_id, str):
+            continue
+        if source_id not in rows_by_source:
+            errors.append(
+                f"{prefix}: source_id {source_id} is missing from the complete "
+                "models.dev source snapshot; set it to null and re-attest the "
+                "metadata if upstream removed the row"
+            )
+        colliding = source_by_row_id.get(model.get("id"))
+        if colliding is not None and colliding != source_id:
+            errors.append(
+                f"{prefix}: id collides with models.dev row {colliding} while linked "
+                f"to {source_id}; unlink to null, link to {colliding}, and exclude "
+                f"{source_id} (ADR 038)"
+            )
+
+
+def model_link_pending(
+    models: list[Any], candidates: list[Any]
+) -> list[tuple[str, str]]:
+    """Queued rows whose stable id matches a reviewed model that has no source_id yet."""
+    waiting = {
+        model.get("id")
+        for model in models
+        if isinstance(model, dict) and model.get("source_id") is None
+    }
+    return sorted(
+        (candidate["id"], candidate["source_id"])
+        for candidate in candidates
+        if isinstance(candidate, dict)
+        and candidate.get("id") in waiting
+        and isinstance(candidate.get("source_id"), str)
+    )
+
+
 def validate(root: Path = ROOT) -> list[str]:
     """Validate the canonical catalog, its review queues, and the published copies."""
     directory = root / "directory"
@@ -3433,6 +3537,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     models_value = validate_models(catalog["models.json"], tax, errors)
     source_models_value = validate_models_dev(catalog["models-dev.json"], tax, errors)
+    validate_model_source_links(models_value, source_models_value, errors)
     if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get(
         "source"
     ):
@@ -3556,6 +3661,10 @@ def main() -> int:
         f"{robot_count} unscored robots; "
         f"{source_model_count} attributed models.dev source records"
     )
+    for model_id, source_id in model_link_pending(
+        load("models.json")["models"], load("model-candidates.json")["candidates"]
+    ):
+        print(f"link pending: {model_id} <- {source_id}")
     return 0
 
 

@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { CARD_BADGES, CARD_BADGE_SETS, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, shareRecordPath, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -300,6 +300,33 @@ test("model filtering keeps unscored source imports and sorts them after reviews
     ["Audio Source"],
   );
   assert.deepEqual(filterModels([importedModel], { type: "language_model" }), []);
+});
+
+test("a reviewed model without a models.dev row never prints null", () => {
+  const unlisted = { ...models[0], source_id: null };
+  assert.equal(modelSourceLabel(models[0]), "alibaba/qwen");
+  assert.equal(modelSourceLabel(unlisted), UNLISTED_MODEL_LABEL);
+  assert.equal(UNLISTED_MODEL_LABEL, "Not yet listed on models.dev");
+});
+
+test("metadata attribution names Atlas when models.dev has no row", () => {
+  const listed = modelMetadataAttribution(models[0]);
+  const unlisted = modelMetadataAttribution({ ...models[0], source_id: null });
+  assert.equal(listed.listed, true);
+  assert.match(listed.cardTitle, /models\.dev/);
+  assert.equal(listed.noLinksText, "No source links reported by models.dev.");
+  assert.equal(unlisted.listed, false);
+  assert.equal(unlisted.cardTitle, "Reviewed by Atlas from developer documentation");
+  assert.equal(unlisted.noLinksText, "No source links recorded.");
+  for (const text of Object.values(unlisted)) {
+    if (typeof text === "string") assert.doesNotMatch(text, /models\.dev/);
+  }
+});
+
+test("the models kicker counts reviewed models models.dev does not list", () => {
+  assert.equal(modelsKickerText(400, 242, 0), "400 models.dev records · 242 Atlas reviewed");
+  assert.equal(modelsKickerText(400, 243, 1), "400 models.dev records · 243 Atlas reviewed · 1 not yet on models.dev");
+  assert.equal(modelsKickerText(400, 243, undefined), "400 models.dev records · 243 Atlas reviewed");
 });
 
 test("local runtime search covers visible boundary prose but not evidence URLs", () => {
@@ -872,7 +899,7 @@ test("an unknown or malformed view parameter resolves to no view", () => {
 
 const badgeNames = badges => badges.map(badge => badge.name);
 
-test("agent-system badges follow priority order and stop at four", () => {
+test("agent-system badges follow priority order and show every match", () => {
   const record = {
     system_family: "agent_system",
     local_first: true,
@@ -880,7 +907,12 @@ test("agent-system badges follow priority order and stop at four", () => {
     agent_capabilities: ["mcp", "browser_control"],
     deployment: ["self_hosted"],
   };
-  assert.deepEqual(badgeNames(cardBadges("system", record)), ["Local-first", "Sandboxed execution", "Browser control", "MCP"]);
+  assert.deepEqual(badgeNames(cardBadges("system", record)), ["Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
+  assert.deepEqual(cardBadges("system", record).map(badge => badge.family), ["control", "control", "capability", "capability", "control"]);
+});
+
+test("no badge set can overflow the card cap of six", () => {
+  for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) assert.ok(ids.length <= 6, `${key} lists ${ids.length} badges`);
 });
 
 test("badges come from the record's own family", () => {
@@ -969,6 +1001,55 @@ test("the badge glossary lists each badge once with every place it appears", () 
   assert.equal(new Set(glossary.map(entry => entry.name)).size, glossary.length);
   assert.deepEqual(glossary.find(entry => entry.id === "local-first").scopes, ["Agent systems", "Memory systems", "Assistant systems"]);
   assert.deepEqual(glossary.find(entry => entry.id === "self-hostable").scopes, ["Agent systems", "Assistant systems"]);
+});
+
+test("every badge belongs to one family and owns a unique glyph", () => {
+  assert.deepEqual(Object.keys(BADGE_FAMILIES), ["control", "capability", "platform"]);
+  const css = fs.readFileSync(path.join(__dirname, "..", "web", "styles.css"), "utf8");
+  for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
+    assert.ok(family.name && family.meaning && family.frame, `${id} needs a name, a meaning, and a frame`);
+    assert.match(family.token, /^--[a-z-]+$/);
+    assert.ok(css.includes(`${family.token}:`), `${family.token} is not a token in styles.css`);
+    assert.ok(css.includes(`[data-family="${id}"] { color: var(${family.token}); }`), `styles.css must colour family ${id} with ${family.token}`);
+  }
+  const glyphs = new Set();
+  for (const [id, badge] of Object.entries(CARD_BADGES)) {
+    assert.ok(Object.hasOwn(BADGE_FAMILIES, badge.family), `${id} has unknown family ${badge.family}`);
+    assert.ok(badge.glyph, `${id} needs a glyph`);
+    assert.ok(!glyphs.has(badge.glyph), `${id} reuses another badge's glyph`);
+    glyphs.add(badge.glyph);
+  }
+  for (const [id, text] of [["apple-metal", "MTL"], ["amd-rocm", "ROC"], ["npu", "NPU"]]) assert.ok(CARD_BADGES[id].glyph.includes(`>${text}</text>`), `${id} must be lettered ${text}`);
+  assert.equal(cardBadgeGlossary().find(entry => entry.id === "mcp").family, "capability");
+});
+
+test("emblems are hidden decorative SVG built from the family frame and the badge glyph", () => {
+  const svg = badgeEmblem("local-first");
+  assert.match(svg, /^<svg class="badge-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false">/);
+  assert.ok(svg.includes(`d="${BADGE_FAMILIES.control.frame}"`));
+  assert.ok(svg.includes(CARD_BADGES["local-first"].glyph));
+  assert.ok(familyEmblem("platform").includes(`d="${BADGE_FAMILIES.platform.frame}"`));
+  assert.ok(!familyEmblem("platform").includes("badge-glyph"));
+});
+
+test("the legend lists only what the active scope can show", () => {
+  const ids = legend => legend.badges.map(badge => badge.id);
+  assert.deepEqual(ids(badgeLegend("inference")), ["dedicated-endpoints", "reserved-capacity", "batch"].sort((a, b) =>
+    Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[a].family) - Object.keys(BADGE_FAMILIES).indexOf(CARD_BADGES[b].family)));
+  assert.deepEqual(ids(badgeLegend("systems", "agent_system")), ["local-first", "sandboxed-execution", "self-hostable", "browser-control", "mcp"]);
+  const systems = badgeLegend("systems");
+  assert.equal(systems.mode, "badges");
+  assert.equal(new Set(ids(systems)).size, ids(systems).length, "each badge once");
+  assert.deepEqual(new Set(ids(systems)), new Set([...CARD_BADGE_SETS["system:agent_system"], ...CARD_BADGE_SETS["system:memory_system"], ...CARD_BADGE_SETS["system:assistant_system"]]));
+  const families = systems.badges.map(badge => Object.keys(BADGE_FAMILIES).indexOf(badge.family));
+  assert.deepEqual(families, [...families].sort((a, b) => a - b), "grouped by family in registry order");
+  for (const scope of ["all", "packs"]) {
+    assert.equal(badgeLegend(scope).mode, "families");
+    assert.deepEqual(badgeLegend(scope).families.map(family => family.id), ["control", "capability", "platform"]);
+  }
+  assert.equal(badgeLegend("models"), null);
+  assert.equal(badgeLegend("systems", "constructor"), null);
+  assert.equal(badgeLegend("toString"), null);
 });
 
 // Published-data guards: a renamed taxonomy value or a badge nothing can earn

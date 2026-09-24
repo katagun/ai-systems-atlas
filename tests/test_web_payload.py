@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from scripts import build_web_payload
 from scripts.build_web_payload import (
     BOOT_FIELDS,
     COLLECTIONS,
@@ -11,6 +13,7 @@ from scripts.build_web_payload import (
     build_payloads,
     load_catalog,
     model_records,
+    unlisted_model_count,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -85,16 +88,96 @@ class WebPayloadTests(unittest.TestCase):
         source = self.catalog["models-dev.json"]
         reviewed = self.catalog["models.json"]["models"]
 
-        self.assertEqual(source["source_record_count"], len(payload["models"]))
+        self.assertEqual(
+            source["source_record_count"] + payload["unlisted_reviewed_count"],
+            len(payload["models"]),
+        )
         self.assertEqual(len(reviewed), payload["reviewed_count"])
         self.assertEqual(
             len(reviewed),
             sum(item["review_status"] == "reviewed" for item in payload["models"]),
         )
-        self.assertEqual(
-            len(payload["models"]),
-            len({item["source_id"] for item in payload["models"]}),
+        ids = [item["id"] for item in payload["models"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        linked = [item["source_id"] for item in payload["models"] if item["source_id"]]
+        self.assertEqual(len(linked), len(set(linked)))
+
+    def _catalog_with(self, reviewed: list[dict], rows: list[dict]) -> dict:
+        return {
+            "models.json": {"models": reviewed},
+            "models-dev.json": {"source": {"commit": "c" * 40}, "models": rows},
+        }
+
+    @staticmethod
+    def _row(source_id: str, model_id: str) -> dict:
+        return {
+            "id": model_id,
+            "source_id": source_id,
+            "source_metadata": {"name": source_id, "description": None},
+        }
+
+    def test_null_source_record_overlays_the_row_with_its_id(self) -> None:
+        catalog = self._catalog_with(
+            [{"id": "model-acme-chat", "source_id": None, "name": "Chat"}],
+            [self._row("acme/chat", "model-acme-chat")],
         )
+
+        records = model_records(catalog)
+
+        self.assertEqual(["model-acme-chat"], [item["id"] for item in records])
+        self.assertEqual("reviewed", records[0]["review_status"])
+        self.assertEqual(0, unlisted_model_count(catalog))
+
+    def test_null_source_record_without_a_row_is_appended_and_counted(self) -> None:
+        catalog = self._catalog_with(
+            [{"id": "model-acme-chat", "source_id": None, "name": "Chat"}],
+            [self._row("acme/other", "model-acme-other")],
+        )
+
+        records = model_records(catalog)
+
+        self.assertEqual(
+            [("model-acme-other", "imported"), ("model-acme-chat", "reviewed")],
+            [(item["id"], item["review_status"]) for item in records],
+        )
+        self.assertEqual(1, unlisted_model_count(catalog))
+
+    def test_linked_record_with_a_frozen_id_overlays_its_own_source_row(self) -> None:
+        catalog = self._catalog_with(
+            [{"id": "model-acme-chat", "source_id": "acme/chat-2026", "name": "Chat"}],
+            [self._row("acme/chat-2026", "model-acme-chat-2026")],
+        )
+
+        records = model_records(catalog)
+
+        self.assertEqual(
+            [("model-acme-chat", "reviewed")],
+            [(item["id"], item["review_status"]) for item in records],
+        )
+
+    def test_null_source_record_whose_id_matches_a_row_claimed_by_another_stays_unlisted(
+        self,
+    ) -> None:
+        """A row already claimed by source_id cannot also satisfy an id match.
+
+        Regression for an undercount: a null-source record's id coinciding
+        with a source row does not make it matched when a different linked
+        record has already claimed that row by source_id.
+        """
+        rows = [self._row("acme/chat-2026", "model-R-id")]
+        catalog = self._catalog_with(
+            [
+                {"id": "model-L", "source_id": "acme/chat-2026", "name": "Linked"},
+                {"id": "model-R-id", "source_id": None, "name": "Reviewed"},
+            ],
+            rows,
+        )
+
+        records = model_records(catalog)
+
+        self.assertEqual(2, len(records))
+        self.assertEqual(1, unlisted_model_count(catalog))
+        self.assertEqual(len(rows) + unlisted_model_count(catalog), len(records))
 
     def test_every_imported_model_keeps_its_complete_source_metadata(self) -> None:
         records = {item["id"]: item for item in model_records(self.catalog)}
@@ -223,6 +306,17 @@ class WebPayloadTests(unittest.TestCase):
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""
         self.assertNotIn("trust", BOOT_FIELDS["inference"])
         self.assertNotIn("trust", SEARCH_FIELDS["inference"])
+
+    def test_build_payloads_runs_the_model_overlay_only_once(self) -> None:
+        """model_records() and unlisted_model_count() each run the overlay pass on
+        their own; build_payloads must run it once and reuse both results."""
+        with patch(
+            "scripts.build_web_payload._overlay_models",
+            wraps=build_web_payload._overlay_models,
+        ) as spy:
+            build_web_payload.build_payloads(self.catalog)
+
+        self.assertEqual(1, spy.call_count)
 
     def test_committed_output_matches_the_builder(self) -> None:
         """The same assertion --check makes, so a stale commit fails the suite too."""

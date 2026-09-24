@@ -61,7 +61,7 @@ Never scored and never priced: a robot record carries no `score`, `score_profile
 
 `id, source_id, name, developer, url, description, model_type, distribution_modes, source_metadata, licenses, source_model, license_review_status, license_note, license_evidence, access_boundary, strengths, tradeoffs, score_profile, score, evidence, metadata_verified_at, verified_at`
 
-`source_metadata` preserves provider-independent discovery facts imported from the pinned models.dev snapshot. The surrounding fields are human-reviewed Atlas conclusions. `score_profile` is always `model_access`; see [docs/MODELS.md](../../docs/MODELS.md). The profile never scores output quality, benchmarks, parameter count, current price, latency, or throughput.
+`source_id` is `null` when Atlas reviewed the release before models.dev listed it; `source_metadata` is then authored by Atlas from developer documentation rather than imported. Otherwise `source_metadata` preserves provider-independent discovery facts imported from the pinned models.dev snapshot. The surrounding fields are human-reviewed Atlas conclusions. `score_profile` is always `model_access`; see [docs/MODELS.md](../../docs/MODELS.md). The profile never scores output quality, benchmarks, parameter count, current price, latency, or throughput.
 
 ## `models-dev.json` source fields
 

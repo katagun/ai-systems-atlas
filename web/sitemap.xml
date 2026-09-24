@@ -85,6 +85,10 @@
   <url><loc>https://peacefulcoexistance.com/records/local-runtimes/vllm/</loc><lastmod>2026-08-29</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/local-runtimes/web-llm/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/local-runtimes/xinference/</loc><lastmod>2026-08-29</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-ai21-jamba-large/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-ai21-jamba-mini/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-aikido-altar-1/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-aisingapore-gemma-sea-lion-v4-27b-it/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen2-5-coder-0-5b/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen2-5-coder-32b-instruct/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen2-5-vl-72b-instruct/</loc><lastmod>2026-09-16</lastmod></url>
@@ -103,11 +107,14 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-8-flash-next/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-8-flash/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-8-max/</loc><lastmod>2026-09-12</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-8-omni-flash/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-coder-30b-a3b-instruct/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-coder-480b-a35b-instruct/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-coder-next/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-next-80b-a3b-instruct/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwen3-next-80b-a3b-thinking/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwq-32b/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-alibaba-qwq-plus/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-amazon-nova-2-lite/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-amazon-nova-lite/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-amazon-nova-micro/</loc><lastmod>2026-09-18</lastmod></url>
@@ -115,11 +122,13 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-fable-5-1/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-fable-5/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-haiku-4-5/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-mythos-5-1/</loc><lastmod>2026-09-20</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-mythos-5/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-4-5-20251101/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-4-6/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-4-7/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-4-8/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-5-5/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-opus-5/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-sonnet-4-5/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-anthropic-claude-sonnet-4-6/</loc><lastmod>2026-09-04</lastmod></url>
@@ -161,6 +170,8 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-r1/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v3-2/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v3/</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v4-1-flash/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v4-flash-0423/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v4-flash-0731/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v4-flash-vision-exp/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-deepseek-deepseek-v4-pro/</loc><lastmod>2026-09-12</lastmod></url>
@@ -195,11 +206,15 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-3-12b-it/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-3-27b-it/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-3-4b-it/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-12b-it/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-26b-a4b-it/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-31b-it/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-e2b-it/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-google-gemma-4-e4b-it/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-ibm-granite-4-h-micro/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-ibm-granite-4-h-small/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-inclusionai-ling-3-0-flash-fin/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-meituan-longcat-2-0/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-1-70b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-1-8b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-llama-3-2-11b-vision-instruct/</loc><lastmod>2026-09-04</lastmod></url>
@@ -213,6 +228,8 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-muse-spark-1-1/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-muse-spark-1-2/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-meta-muse-spark-1-3/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-microsoft-mai-code-1-1-flash/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-microsoft-mai-code-1-flash/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-microsoft-phi-4-mini/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-1/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-minimax-minimax-m2-5/</loc><lastmod>2026-09-16</lastmod></url>
@@ -241,11 +258,14 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-pixtral-12b/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-voxtral-mini-3b-2507/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-mistral-voxtral-small-24b-2507/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-mixedbread-toast-1/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k2-5/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k2-6/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k2-7-code/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k2-8-preview/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k2-thinking/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-moonshotai-kimi-k3/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-motif-technologies-motif-3/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-llama-3-1-nemotron-70b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-llama-3-1-nemotron-ultra-253b/</loc><lastmod>2026-09-18</lastmod></url>
@@ -263,9 +283,12 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-mini-4b-instruct/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-nano-12b-v2-vl/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-nvidia-nemotron-nano-9b-v2/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-3-5-turbo/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1-nano/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-1/</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4-turbo/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o-mini/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-4o/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-1-codex-max/</loc><lastmod>2026-09-16</lastmod></url>
@@ -273,6 +296,7 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-1-codex/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-1/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-2-codex/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-2-pro/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-2/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-3-codex/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-5-4-mini/</loc><lastmod>2026-09-16</lastmod></url>
@@ -293,6 +317,18 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-6-astra/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-120b/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-20b/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-safeguard-120b/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-oss-safeguard-20b/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-realtime-2-1/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-gpt-realtime-whisper/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o1-pro/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o1/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3-mini/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3-pro/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o3/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openai-o4-mini/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openbmb-minicpm5-1b/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-openbmb-minicpm5-2b/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-deep-research/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-pro/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-perplexity-sonar-reasoning-pro/</loc><lastmod>2026-09-18</lastmod></url>
@@ -303,22 +339,37 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-poolside-laguna-xs-2/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-stepfun-step-3-5-flash/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-stepfun-step-3-7-flash/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-stepfun-step-5-preview/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-swiss-ai-apertus-70b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-swiss-ai-apertus-8b/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy3-preview/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy3/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-tencent-hy4-preview/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-thinkingmachines-inkling-small/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-thinkingmachines-inkling/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-trendyol-asure-12b/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-typesafe-jev-1-13-0/</loc><lastmod>2026-09-20</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-upstage-solar-pro2/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-upstage-solar-pro3/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-upstage-solar-pro4/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-vispark-vision-large/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-vispark-vision-medium/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-vispark-vision-small/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-vivgrid-viv-fast/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-writer-palmyra-x4/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-writer-palmyra-x5/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-20-0309-non-reasoning/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-20-0309-reasoning/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-3/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-5/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-6/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-4-7/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-build-0-1/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-xai-grok-voice-stt-1-0/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-5-pro/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-5/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-6-flash/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-6-pro/</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-flash/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-omni/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-xiaomi-mimo-v2-pro/</loc><lastmod>2026-09-18</lastmod></url>
@@ -342,6 +393,7 @@
   <url><loc>https://peacefulcoexistance.com/records/packs/claude-code-tresor/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/second-brain-llm-wiki/</loc><lastmod>2026-09-17</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/second-brain-starter/</loc><lastmod>2026-09-16</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/packs/typesafe-agent-skills/</loc><lastmod>2026-09-20</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/specifications/a2a/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/specifications/acp/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/specifications/ag-ui/</loc><lastmod>2026-08-25</lastmod></url>
@@ -425,6 +477,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/engram/</loc><lastmod>2026-09-15</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/exo-harness/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/flowise/</loc><lastmod>2026-08-31</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/flue/</loc><lastmod>2026-09-20</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/foam/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/fx/</loc><lastmod>2026-09-17</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gajae-code/</loc><lastmod>2026-08-31</lastmod></url>

@@ -80,7 +80,8 @@ def assessed_story_ids(
     return {
         str(signal.get("story_id"))
         for signal in signals
-        if isinstance(signal.get("assessment"), dict)
+        if isinstance(signal, dict)
+        and isinstance(signal.get("assessment"), dict)
         and signal["assessment"] != prior.get(str(signal.get("story_id")))
     }
 
@@ -129,32 +130,43 @@ def verify(
     `signals_path` is injectable so tests can point this at a fake queue instead of
     the real one — the real queue may be empty, and the test must run with no network.
     """
-    document = json.loads(signals_path.read_text(encoding="utf-8"))
-    signals = document["signals"]
+    raw = json.loads(signals_path.read_text(encoding="utf-8"))
+    document = raw if isinstance(raw, dict) else {}
+    signals = document.get("signals")
+    if not isinstance(signals, list):
+        return ["signal queue is malformed: expected a `signals` list"]
     scope = None if refresh else assessed_story_ids(signals, baseline or [])
     problems: list[str] = []
     bundle: dict[str, str] = {}
     for signal in signals:
-        if signal["page_status"] != "readable":
+        if not isinstance(signal, dict):
+            problems.append("signal entry is not an object; skipped")
             continue
-        if scope is not None and str(signal.get("story_id")) not in scope:
+        story_id = signal.get("story_id")
+        url = signal.get("url")
+        if signal.get("page_status") != "readable":
+            continue
+        if scope is not None and str(story_id) not in scope:
+            continue
+        if story_id is None or not isinstance(url, str) or not url:
+            problems.append(f"signal {story_id}: missing url or story_id; skipped")
             continue
         try:
-            body = fetcher(signal["url"])
+            body = fetcher(url)
         except (OSError, ValueError) as error:
-            problems.append(f"signal {signal['story_id']}: re-fetch failed: {error}")
+            problems.append(f"signal {story_id}: re-fetch failed: {error}")
             continue
         # The same extraction the sweep hashed. Importing it rather than repeating it is
         # load-bearing: two extractors that disagree by one space report drift on every
         # page, every day, and a real change would be indistinguishable from the noise.
         text = extract_visible_text(body)
         digest = content_hash(text)
-        if digest != signal["content_sha256"]:
+        if digest != signal.get("content_sha256"):
             problems.append(
-                f"signal {signal['story_id']}: page changed since the sweep recorded it"
+                f"signal {story_id}: page changed since the sweep recorded it"
             )
             continue
-        bundle[signal["story_id"]] = _bundle_text(text, url=signal["url"])
+        bundle[str(story_id)] = _bundle_text(text, url=url)
     if refresh:
         BUNDLE_DIR.mkdir(exist_ok=True)
         (BUNDLE_DIR / "bundle.json").write_text(json.dumps(bundle), encoding="utf-8")
@@ -183,7 +195,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {problem}", file=sys.stderr)
     if not args.refresh:
         document = json.loads(SIGNALS_PATH.read_text(encoding="utf-8"))
-        scoped = assessed_story_ids(document["signals"], baseline or [])
+        queue = document.get("signals") if isinstance(document, dict) else None
+        scoped = assessed_story_ids(
+            queue if isinstance(queue, list) else [], baseline or []
+        )
         # Say what was verified. A silent "0 problems" reads identically whether this
         # run's citations held up or whether nothing was examined at all.
         print(f"rechecked {len(scoped)} signal(s) with a new assessment this run")

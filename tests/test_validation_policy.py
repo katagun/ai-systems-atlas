@@ -7,7 +7,12 @@ import urllib.parse
 from pathlib import Path
 from typing import ClassVar
 
-from scripts.validate_directory import CATALOG_DOCUMENTS, PUBLISHED_DATA, validate
+from scripts.validate_directory import (
+    CATALOG_DOCUMENTS,
+    MODELS_DEV_REPO,
+    PUBLISHED_DATA,
+    validate,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -3016,6 +3021,249 @@ class ValidationPolicyTests(unittest.TestCase):
         )
         errors = validate(root)
         self.assertEqual([error for error in errors if "hn-signals.json" in error], [])
+
+    def _with_null_source_models(self, mutate) -> list[str]:
+        """Turn the first reviewed model into a null-source record, apply mutate, validate.
+
+        ADR 038: a null-source record may not cite models.dev evidence (F2), so any
+        model `mutate` leaves with `source_id: None` has its models.dev evidence
+        entries stripped here, once, instead of in every caller.
+        """
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        mutate(document["models"])
+        for model in document["models"]:
+            if isinstance(model, dict) and model.get("source_id") is None:
+                model["evidence"] = [
+                    item
+                    for item in model.get("evidence", [])
+                    if not str(item.get("url", "")).startswith(MODELS_DEV_REPO)
+                ]
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models.json", document)
+        return validate(root)
+
+    def test_null_source_id_is_accepted_for_a_slug_id_with_text_output(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        # The detached upstream row now needs a queue entry or disposition, so the
+        # eligible-count error is expected; nothing may complain about the model.
+        self.assertFalse(
+            [error for error in errors if error.startswith("model ")], errors
+        )
+
+    def test_two_null_source_records_do_not_collide(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[1]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertFalse(
+            [error for error in errors if "duplicate models.dev source_id" in error],
+            errors,
+        )
+
+    def test_null_source_id_requires_a_stable_slug_id(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["id"] = "model-Not_A_Slug"
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any(
+                "without a models.dev source_id needs a stable slug id" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_null_source_id_still_requires_text_output(self) -> None:
+        # validate_model_source_metadata already enforces this for every reviewed
+        # model (require_text defaults to True); the test pins it for ADR 038,
+        # because the importer's modality gate never sees a null-source record.
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["source_metadata"]["modalities"]["output"] = ["image"]
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any("model candidates must produce text" in e for e in errors),
+            errors,
+        )
+
+    def test_null_source_record_cannot_cite_models_dev_evidence(self) -> None:
+        """ADR 038: a null-source record contains no models.dev data, so no surface
+        may attribute it to models.dev, including a leftover evidence entry left
+        behind by a hand repair (unlink to null, upstream deletion)."""
+
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            # _with_null_source_models would otherwise strip this for us; keep it
+            # here on purpose, to exercise the validator's own rejection of it.
+            models[0]["evidence"] = [
+                *models[0]["evidence"],
+                {
+                    "kind": "web",
+                    "label": "Pinned models.dev source metadata",
+                    "url": f"{MODELS_DEV_REPO}/blob/{'0' * 40}/models/acme/other.toml",
+                    "verified_at": "2026-09-16",
+                },
+            ]
+
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        mutate(document["models"])
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                "a model without a models.dev source_id cannot cite models.dev "
+                "evidence" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_empty_string_source_id_is_still_rejected(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = ""
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any("invalid models.dev source_id" in e for e in errors), errors
+        )
+
+    def test_validator_and_importer_derive_the_same_stable_id(self) -> None:
+        from scripts.import_models_dev import stable_model_id as importer_id
+        from scripts.validate_directory import stable_model_id as validator_id
+
+        for source_id in ("anthropic/claude-mythos-5-1", "Acme/Big_Model.v2", "x/y--z"):
+            self.assertEqual(importer_id(source_id), validator_id(source_id))
+
+    def test_reviewed_source_id_must_exist_in_the_snapshot(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = "acme/not-upstream"
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertTrue(
+            any(
+                "acme/not-upstream" in e
+                and "missing from the complete models.dev source snapshot" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_snapshot_row_id_must_not_collide_with_a_differently_linked_record(
+        self,
+    ) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        models_path = root / "directory" / "models.json"
+        document = json.loads(models_path.read_text(encoding="utf-8"))
+        source = json.loads(
+            (root / "directory" / "models-dev.json").read_text(encoding="utf-8")
+        )
+        first, second = document["models"][0], document["models"][1]
+        # A wrong-guess link: the record keeps its frozen id but points at another row.
+        first_row_id = first["id"]
+        first["source_id"], second["source_id"] = (
+            second["source_id"],
+            first["source_id"],
+        )
+        self.write_json(models_path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                first_row_id in e and "collides with models.dev row" in e
+                for e in errors
+            ),
+            errors,
+        )
+        self.assertTrue(source["models"])  # fixture sanity
+
+    def test_null_source_record_whose_id_matches_a_row_claimed_by_another_is_rejected(
+        self,
+    ) -> None:
+        """Two reviews cannot both stand behind one models.dev row (ADR 038)."""
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        models_path = root / "directory" / "models.json"
+        document = json.loads(models_path.read_text(encoding="utf-8"))
+        first, second = document["models"][0], document["models"][1]
+        # first stays linked to its own row by source_id, but freezes its id so
+        # the row's original id is free; a null-source copy then claims that id.
+        claimed_row_id = first["id"]
+        first["id"] = claimed_row_id + "-frozen"
+        duplicate = dict(second)
+        duplicate["id"] = claimed_row_id
+        duplicate["source_id"] = None
+        duplicate["evidence"] = [
+            item
+            for item in duplicate["evidence"]
+            if not item["url"].startswith(MODELS_DEV_REPO)
+        ]
+        document["models"].append(duplicate)
+        self.write_json(models_path, document)
+        self.write_json(root / "web" / "models.json", document)
+
+        errors = validate(root)
+
+        self.assertTrue(
+            any(
+                f"id matches models.dev row {first['source_id']}" in e
+                and f"which {first['id']} is already linked to" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_null_source_record_whose_id_matches_an_unclaimed_row_is_not_rejected(
+        self,
+    ) -> None:
+        """A null-source id that merely coincides with an unclaimed row is the
+        normal link-pending state (ADR 038), not a collision."""
+
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+
+        errors = self._with_null_source_models(mutate)
+
+        self.assertFalse(
+            [error for error in errors if "already linked to (ADR 038)" in error],
+            errors,
+        )
+
+    def test_queued_row_for_a_null_source_record_is_reported_not_rejected(self) -> None:
+        from scripts.validate_directory import model_link_pending
+
+        models = [{"id": "model-acme-chat", "source_id": None}]
+        candidates = [
+            {"id": "model-acme-chat", "source_id": "acme/chat"},
+            {"id": "model-acme-other", "source_id": "acme/other"},
+        ]
+
+        self.assertEqual(
+            [("model-acme-chat", "acme/chat")], model_link_pending(models, candidates)
+        )
 
 
 if __name__ == "__main__":

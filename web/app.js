@@ -18,7 +18,7 @@ const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], robots: [], taxonomy: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
-  directoryCollection: "all", directoryRoles: null,
+  directoryCollection: "all", directoryRoles: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
@@ -177,6 +177,7 @@ async function bootstrap() {
   state.models = models.models;
   state.reviewedModelCount = models.reviewed_count;
   state.modelSourceCount = models.source_record_count;
+  state.modelUnlistedCount = models.unlisted_reviewed_count;
   state.taxonomy = taxonomy;
   state.packs = packs.packs;
   state.robots = robots.robots;
@@ -293,6 +294,7 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0;
+  syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
   $("#comparison-open").disabled = records.length < 2;
@@ -498,6 +500,7 @@ function applyDirectoryDefaults() {
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").checked = defaults.localOnly;
   updateScoreSortAvailability();
+  syncBadgeLegend();
 }
 
 function renderStats() {
@@ -587,6 +590,7 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   }
   renderers[selected]();
   if (updateURL) writeDirectoryURL();
+  syncBadgeLegend();
 }
 
 const PAGE_CONTAINERS = {
@@ -647,12 +651,111 @@ function modelModalityRoute(model) {
 }
 
 // Badges replace the tags row on system, inference-service, and
-// local-runtime cards. A card with none omits the row rather than printing an
-// empty strip. The definition rides in the title for pointers and in hidden
-// text for screen readers; badges are never controls.
+// local-runtime cards. Each is an icon-only emblem whose frame names its
+// family; the name and definition ride in visually hidden text for screen
+// readers and in data attributes for the pointer tooltip. Badges are never
+// controls and take no tab stop.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" title="${escapeHTML(badge.definition)}">${escapeHTML(badge.name)}<span class="visually-hidden">: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+}
+
+// One tooltip serves every emblem. It is pointer-only help: screen readers
+// already get the same words from each badge's hidden text, so the tooltip is
+// aria-hidden and emblems stay out of the tab order.
+// Grids repaint in place (search, filters, paging), detaching the emblem a
+// tooltip points at; each badge grid's renderer calls this afterwards.
+let hideDetachedBadgeTooltip = () => {};
+function initBadgeTooltip() {
+  const tooltip = $("#badge-tooltip");
+  if (!tooltip) return;
+  let anchor = null;
+  const hide = () => { tooltip.hidden = true; anchor = null; };
+  hideDetachedBadgeTooltip = () => { if (anchor && !anchor.isConnected) hide(); };
+  const show = badge => {
+    anchor = badge;
+    tooltip.dataset.family = badge.dataset.family;
+    tooltip.querySelector(".badge-tooltip-family").textContent = AtlasCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
+    tooltip.querySelector(".badge-tooltip-name").textContent = badge.dataset.name;
+    tooltip.querySelector(".badge-tooltip-definition").textContent = badge.dataset.definition;
+    tooltip.hidden = false;
+    const target = badge.getBoundingClientRect();
+    const box = tooltip.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(Math.max(margin, target.left), window.innerWidth - box.width - margin);
+    const below = target.bottom + margin;
+    const top = below + box.height > window.innerHeight - margin ? target.top - box.height - margin : below;
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${Math.max(margin, top)}px`;
+  };
+  document.addEventListener("pointerover", event => {
+    if (event.pointerType === "touch") return;
+    const badge = event.target.closest?.(".card-badge");
+    if (badge) show(badge);
+    else if (anchor) hide();
+  });
+  document.addEventListener("click", event => {
+    const badge = event.target.closest?.(".card-badge");
+    if (badge && badge !== anchor) show(badge);
+    else hide();
+  });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
+  window.addEventListener("scroll", hide, { passive: true });
+  window.addEventListener("resize", hide);
+}
+
+// The legend explains the emblems of whatever Directory scope is showing. The
+// reader's open/closed choice is remembered; without one it starts open on
+// wide viewports and closed on phones. The strip and its Key chip both step
+// aside for the comparison tray, which owns the same edge of the viewport, and
+// come back as the stored choice says once it closes.
+const BADGE_LEGEND_STORAGE_KEY = "atlas.badgeLegend";
+function badgeLegendPreference() {
+  try {
+    const stored = localStorage.getItem(BADGE_LEGEND_STORAGE_KEY);
+    if (stored === "open" || stored === "closed") return stored;
+  } catch {}
+  return window.matchMedia("(max-width: 720px)").matches ? "closed" : "open";
+}
+function setBadgeLegendPreference(value) {
+  try { localStorage.setItem(BADGE_LEGEND_STORAGE_KEY, value); } catch {}
+  state.badgeLegendPreference = value;
+  syncBadgeLegend();
+}
+function syncBadgeLegend() {
+  const strip = $("#badge-legend");
+  const chip = $("#badge-legend-chip");
+  if (!strip || !chip) return;
+  const inDirectory = $(".view.is-active")?.id === "directory";
+  const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
+  const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily) : null;
+  const shown = Boolean(legend) && $("#comparison-tray").hidden;
+  const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
+  if (legend) {
+    $("#badge-legend-items").dataset.mode = legend.mode;
+    $("#badge-legend-items").innerHTML = legend.mode === "families"
+      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}">${AtlasCore.familyEmblem(family.id)}<span><strong>${escapeHTML(family.name)}</strong> ${escapeHTML(family.meaning)}</span></li>`).join("")
+      : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AtlasCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
+  }
+  strip.hidden = !open;
+  chip.hidden = !shown || open;
+  chip.setAttribute("aria-expanded", String(open));
+  document.body.classList.toggle("has-badge-legend", open);
+}
+function initBadgeLegend() {
+  const strip = $("#badge-legend");
+  const chip = $("#badge-legend-chip");
+  // The strip's height depends on the scope and the viewport width, so the
+  // page's bottom clearance and scroll padding read the measured height from
+  // --legend-h instead of guessing a budget.
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty("--legend-h", `${strip.hidden ? 0 : strip.getBoundingClientRect().height}px`);
+  }).observe(strip);
+  // Focus follows the toggle so a keyboard reader is not dropped on the page.
+  $("#badge-legend-close").addEventListener("click", () => { setBadgeLegendPreference("closed"); chip.focus(); });
+  chip.addEventListener("click", () => { setBadgeLegendPreference("open"); $("#badge-legend-close").focus(); });
+  $("#badge-legend-more").addEventListener("click", event => { event.preventDefault(); activateView("taxonomy"); });
+  syncBadgeLegend();
 }
 
 function packHosts(pack) {
@@ -680,11 +783,13 @@ function robotCard(robot, { mixed = false } = {}) {
   </article>`;
 }
 
-// Modality and family on a reviewed-model card come from models.dev, not from
+// Modality and family on a reviewed-model card come from models.dev, or from
+// developer documentation for a model models.dev does not list yet, not from
 // Atlas review, so they carry attributed plain text instead of badges.
 function modelSourceMeta(model) {
   const parts = [modelModalityRoute(model), model.source_metadata.family].filter(Boolean);
-  return `<div class="card-source-meta" title="From models.dev source metadata, not Atlas reviewed"><span class="visually-hidden">From models.dev: </span>${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
+  const attribution = AtlasCore.modelMetadataAttribution(model);
+  return `<div class="card-source-meta" title="${escapeHTML(attribution.cardTitle)}"><span class="visually-hidden">${escapeHTML(attribution.cardPrefix)}</span>${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
 }
 
 function importedModelCard(model, { mixed = false } = {}) {
@@ -774,6 +879,7 @@ function renderAllDirectoryEntries() {
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
+  hideDetachedBadgeTooltip();
   renderPager("all", paged);
 }
 
@@ -938,7 +1044,7 @@ const COLLECTIONS = {
     empty: "No models match these filters.",
     open: id => openModel(id),
     context() {
-      $("#models-kicker").textContent = `${state.modelSourceCount} models.dev records · ${state.reviewedModelCount} Atlas reviewed`;
+      $("#models-kicker").textContent = AtlasCore.modelsKickerText(state.modelSourceCount, state.reviewedModelCount, state.modelUnlistedCount);
       return { suffix: ` · ${state.reviewedModelCount} Atlas reviewed; source imports are unscored`, comparable: true };
     },
     records: () => AtlasCore.filterModels(state.models, {
@@ -959,7 +1065,7 @@ const COLLECTIONS = {
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
-        <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
+        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },
   },
@@ -1004,6 +1110,7 @@ function renderCollection(name) {
     bindComparisonButtons(grid);
     renderComparisonControls();
   }
+  hideDetachedBadgeTooltip();
   renderPager(collection.pageKey, paged);
 }
 
@@ -1042,6 +1149,7 @@ function renderPacks() {
   $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   paintMarks(grid);
+  hideDetachedBadgeTooltip();
   renderPager("packs", paged);
 }
 
@@ -1337,9 +1445,20 @@ function renderTaxonomy() {
     `${family.name} roles`,
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
+  const glossary = AtlasCore.cardBadgeGlossary();
+  const badgeGroups = Object.entries(AtlasCore.BADGE_FAMILIES).map(([id, family]) => [
+    `Card badges · ${family.name}`,
+    glossary.filter(entry => entry.family === id).map(entry => ({
+      name: entry.name,
+      definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.`,
+      emblem: AtlasCore.badgeEmblem(entry.id),
+      family: id,
+    })),
+    { lede: family.meaning, badgeFamily: id },
+  ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
-    ["Card badges", AtlasCore.cardBadgeGlossary().map(entry => ({ name: entry.name, definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.` }))],
+    ...badgeGroups,
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
@@ -1368,7 +1487,7 @@ function renderTaxonomy() {
     ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
-  $("#taxonomy-content").innerHTML = groups.map(([name, items]) => `<section class="taxonomy-group"><h2>${escapeHTML(name)}</h2><div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"><strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
+  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
 // Every record dialog is the same frame — find the record, paint one content
@@ -1656,10 +1775,10 @@ function loadSearchIndex(collection) {
 const reportedCapability = value => value == null ? "Not reported" : value ? "Yes" : "No";
 const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
 
-function modelSourceLinks(metadata) {
+function modelSourceLinks(metadata, noLinksText) {
   return [...(metadata.links || []), ...(metadata.weights || [])].map(item =>
     `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
-  ).join("") || "<p>No source links reported by models.dev.</p>";
+  ).join("") || `<p>${escapeHTML(noLinksText)}</p>`;
 }
 
 function importedModelDialogMarkup(model) {
@@ -1673,7 +1792,7 @@ function importedModelDialogMarkup(model) {
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
-      <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata)}</section>
+      <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata, "No source links reported by models.dev.")}</section>
     </div>`;
 }
 
@@ -1687,17 +1806,20 @@ function modelDialogMarkup(model) {
   if (!isReviewedModel(model)) return importedModelDialogMarkup(model);
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
+  const attribution = AtlasCore.modelMetadataAttribution(model);
+  const openWeightsLabel = attribution.listed ? "Open weights reported" : "Open weights";
+  const licenseLabel = attribution.listed ? "License reported" : "License named by the developer";
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p><p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AtlasCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
-      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
-      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
+      <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>${escapeHTML(openWeightsLabel)}:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>${escapeHTML(licenseLabel)}:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
-      <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata)}</section>
+      <section class="detail-block"><h3>${escapeHTML(attribution.linksHeading)}</h3>${modelSourceLinks(metadata, attribution.noLinksText)}</section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(model.evidence || []).map(inferenceEvidenceLink).join("") || "<p>—</p>"}</section>
@@ -2151,6 +2273,7 @@ function activateView(id) {
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
+  syncBadgeLegend();
   writeViewURL(id);
   window.scrollTo({ top: 0 });
 }
@@ -2190,6 +2313,8 @@ function bindEvents() {
     if (document.activeElement === input) loadIndexes();
   }
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
+  initBadgeTooltip();
+  initBadgeLegend();
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
@@ -2199,6 +2324,7 @@ function bindEvents() {
     syncCollectionSwitcher();
     state.page.systems = 1;
     renderProjects();
+    syncBadgeLegend();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));

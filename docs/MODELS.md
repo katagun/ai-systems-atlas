@@ -14,7 +14,7 @@ A model record represents one identifiable model release independently of where 
 
 Models therefore do not receive `system_family`, `primary_role`, or a system-family score. Every commit-pinned models.dev source record participates in the mixed Directory for common discovery, visibly labeled as imported until Atlas review is complete. Models remains a sibling specialist view; only reviewed releases carry the dedicated profile used for scoring, filtering, and comparison.
 
-A models.dev source record is not an Atlas editorial conclusion. It carries only source-attributed identity, modality, capability, limit, date, license-label, open-weight, and link fields. It has no Atlas model type, distribution conclusion, source-model classification, license evidence, score, or `verified_at`. When a reviewed record has the same `source_id`, the UI overlays that reviewed record on the source row instead of showing a duplicate.
+A models.dev source record is not an Atlas editorial conclusion. It carries only source-attributed identity, modality, capability, limit, date, license-label, open-weight, and link fields. It has no Atlas model type, distribution conclusion, source-model classification, license evidence, score, or `verified_at`. When a reviewed record has the same `source_id`, the UI overlays that reviewed record on the source row instead of showing a duplicate. A reviewed record whose `source_id` is `null` was reviewed before models.dev listed the release; it overlays a source row with the same `id` once one appears.
 
 ## Eligibility
 
@@ -49,11 +49,11 @@ Imported `source_metadata` preserves only these provider-independent facts:
 
 Benchmarks and prices are not copied. A models.dev license string is a review lead only; it never becomes an Atlas `licenses` or `source_model` conclusion automatically.
 
-Every source record is published in `models-dev.json`. Reviewed `source_id` values are removed from the queue, but the importer never creates, edits, or deletes a reviewed model. It cannot change descriptions, boundaries, licenses, evidence, scores, `verified_at`, or any other human-owned field. The web projection combines the complete source snapshot with reviewed records by `source_id`; imported rows remain unscored and explicitly unreviewed.
+Every source record is published in `models-dev.json`. Reviewed `source_id` values are removed from the queue, but the importer never creates, edits, or deletes a reviewed model. It cannot change descriptions, boundaries, licenses, evidence, scores, `verified_at`, or any other human-owned field. The web projection combines the complete source snapshot with reviewed records by `source_id` (or by `id` for a record with no `source_id` yet); imported rows remain unscored and explicitly unreviewed.
 
 ## Review workflow
 
-For one record in `directory/model-candidates.json`:
+For one record in `directory/model-candidates.json`, or for a release models.dev does not list (see [Releases models.dev does not list](#releases-modelsdev-does-not-list)):
 
 1. Confirm that the models.dev ID names one provider-independent release rather than an endpoint alias, quantization, or family umbrella.
 2. Identify the developer's authoritative model page and set the record boundary explicitly.
@@ -70,12 +70,39 @@ uv run python scripts/promote_model_candidate.py init PROVIDER/MODEL --output mo
 uv run python scripts/promote_model_candidate.py check model-review.json
 uv run python scripts/promote_model_candidate.py apply model-review.json
 uv run python scripts/sync_web_data.py
+uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
+node scripts/build_asset_version.mjs
 ```
 
 `init` copies only the candidate ID, attributed `source_metadata`, and exact commit-pinned models.dev evidence URL. It deliberately leaves all human-owned classifications, license conclusions, prose, scores, evidence dates, and review dates incomplete. Complete the draft from authoritative sources before running `check`.
 
 `check` is read-only. Both `check` and `apply` refuse changed imported metadata, duplicate source IDs, cross-collection ID collisions, an unverified license review, missing authoritative-model or pinned-source evidence, stale or future review dates, invalid taxonomy values, and incomplete or incorrectly calculated scores. `apply` preflights the complete proposed model collection and remaining queue before writing either canonical file; it removes only the reviewed candidate and does not change the queue's import-snapshot timestamp. It never fetches evidence or makes an editorial conclusion. Commit the completed review draft only if it is useful review history; it is not a catalog input after promotion.
+
+### Releases models.dev does not list
+
+models.dev has gaps; a gap upstream is not a reason to leave a release out ([ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md)). When the pinned snapshot and the upstream `dev` branch both lack a release that passes the eligibility and release-identity rules above:
+
+```bash
+uv run python scripts/promote_model_candidate.py init-gap PROVIDER/MODEL --output model-review.json
+uv run python scripts/promote_model_candidate.py check model-review.json
+uv run python scripts/promote_model_candidate.py apply model-review.json
+```
+
+`PROVIDER/MODEL` is the ID you expect models.dev to use; the record `id` is derived from it and never changes afterwards. `init-gap` refuses an ID that is already in the snapshot, the queue, or the dispositions. The draft has `source_id: null` and an empty `source_metadata` block: fill every field from the developer's first-party documentation, leave unknown values `null`, and date the work with `metadata_verified_at`. That block is Atlas material, not models.dev data. The review is otherwise identical, except that no pinned models.dev evidence URL exists to cite. `apply` does not touch the queue.
+
+When models.dev later lists the release, the weekly refresh queues the row as usual and `validate_directory.py` prints `link pending: <model id> <- <source id>`. Until it is linked, the reviewed card stands in for the row. Link it:
+
+```bash
+uv run python scripts/promote_model_candidate.py link MODEL_ID PROVIDER/MODEL --metadata-verified-at YYYY-MM-DD --dry-run
+uv run python scripts/promote_model_candidate.py link MODEL_ID PROVIDER/MODEL --metadata-verified-at YYYY-MM-DD
+```
+
+`link` prints each difference between the hand-authored and the models.dev metadata, adopts the models.dev copy, adds the pinned evidence URL, and removes the candidate. It changes no prose, classification, license, score, or `verified_at`; if a difference touches a score rationale or the boundary, re-review the record in the same change.
+
+If models.dev used a different ID than expected, the row shows as an ordinary imported card and produces no `link pending` line. Link it the same way; the record keeps its `id`. If upstream later also adds the ID you first expected, validation reports an id collision: set `source_id` to `null`, remove the pinned models.dev evidence entry, run the importer, link to the row whose stable ID matches the record `id` (`link` adds the fresh pinned entry), and exclude the other row as the exact snapshot the reviewed record represents. If upstream deletes a linked row, validation fails; set `source_id` to `null`, remove the pinned models.dev evidence entry, and re-attest the metadata rather than deleting the review — a null-source record may cite no models.dev evidence.
+
+Holds and exclusions still require a snapshot `source_id`, so a release models.dev does not list cannot be dispositioned; see `BACKLOG.md`.
 
 ### Distribution-mode conventions
 
@@ -87,7 +114,7 @@ Apply these consistently so batches score the same way:
 
 ### Release identity: fixed snapshots, not aliases
 
-A models.dev ID names a reviewable release only when it has a fixed identity of its own:
+A release is reviewable only when it has a fixed identity of its own, whether or not models.dev lists it:
 
 - a dated snapshot (for example `claude-sonnet-4-5-20250929` or `gpt-5-2025-08-07`);
 - a dateless ID the publisher defines as a pinned snapshot rather than a moving alias (Anthropic documents post-4.6 dateless IDs this way).
@@ -123,6 +150,6 @@ The score asks how clearly a model can be obtained, governed, deployed, and trac
 
 ## Attribution
 
-The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`.
+The published provider-independent source snapshot is derived from models.dev under its MIT License; the required notice is preserved in `third_party/models.dev-LICENSE.txt`. Atlas classification, prose, scores, and reviewed evidence remain distinct human-authored catalog material under `LICENSE-DATA`. `source_metadata` on a record with `source_id: null` is hand-authored Atlas material under `LICENSE-DATA`, not models.dev data.
 
-See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes.
+See [ADR 025](adr/025-model-releases-are-independent-curated-records.md) for the reviewed-record boundary, [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) for the source/review split, and `DATA_MODEL.md` for the exact JSON shapes, and [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md) for releases models.dev does not list.
