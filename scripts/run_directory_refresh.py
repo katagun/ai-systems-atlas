@@ -4,7 +4,8 @@
 This reproduces `.github/workflows/update-directory.yml` (retired alongside this
 script) on the maintainer's own machine: it runs the same six generation steps, the
 same twelve verification checks, stages the same explicit path list, and commits on
-the same `automation/directory-refresh` branch. A pull request opened with
+the same `automation/directory-refresh` branch. It adds one generation step the
+workflow never had, the OpenRouter cross-check (ADR 039). A pull request opened with
 `GITHUB_TOKEN` never triggers the required `verify` check, so the workflow could never
 reach a mergeable state without an extra repository secret. Running here instead means
 the pull request is opened with the maintainer's own `gh` credentials, so `verify` runs
@@ -50,6 +51,8 @@ STAGED_DIRECTORY_FILES = (
     "directory/models-dev.json",
     "directory/model-candidates.json",
     "directory/model-dispositions.json",
+    "directory/openrouter-model-leads.json",
+    "directory/openrouter-model-dispositions.json",
     "directory/inference-services.json",
     "directory/local-runtimes.json",
     "directory/specifications.json",
@@ -57,8 +60,17 @@ STAGED_DIRECTORY_FILES = (
     "directory/taxonomy.json",
 )
 
-# name, command, whether it reads GITHUB_TOKEN. Order matches the workflow exactly;
-# a failure stops the run there, just as a failed step would stop the job.
+OPENROUTER_STEP = "refresh OpenRouter model leads"
+# Steps whose failure is reported instead of stopping the run. The OpenRouter importer
+# writes only unpublished leads and replaces them only on success, so an outage there
+# must not throw away a week of GitHub and models.dev reads, or hold back the models.dev
+# snapshot that the later steps publish. Verification is reported rather than fatal for
+# the same reason.
+REPORTED_STEPS = frozenset({OPENROUTER_STEP})
+
+# name, command, whether it reads GITHUB_TOKEN. Order matches the workflow, with the
+# OpenRouter cross-check (ADR 039) after the models.dev import so it matches against the
+# fresh snapshot; a failure stops the run there, just as a failed step would stop the job.
 GENERATION_STEPS = (
     (
         "refresh GitHub metadata and discover candidates",
@@ -69,6 +81,11 @@ GENERATION_STEPS = (
         "refresh models.dev source and candidate metadata",
         ("uv", "run", "python", "scripts/import_models_dev.py"),
         True,
+    ),
+    (
+        OPENROUTER_STEP,
+        ("uv", "run", "python", "scripts/import_openrouter.py"),
+        False,
     ),
     (
         "synchronize published data after models.dev refresh",
@@ -204,17 +221,31 @@ def token_env(needs_token: bool, token: str | None) -> dict[str, str] | None:
 def run_generation_steps(
     run, token: str | None
 ) -> tuple[bool, list[tuple[str, int, str]]]:
-    """Run the six generation steps in order. Stop at the first failure."""
+    """Run the seven generation steps in order. Stop at the first failure, except in
+    REPORTED_STEPS, whose failure is only reported."""
     results: list[tuple[str, int, str]] = []
     for name, command, needs_token in GENERATION_STEPS:
         print(f"== {name} ==")
         code, output = run(list(command), ROOT, token_env(needs_token, token))
         print(output)
         results.append((name, code, output))
-        if code != 0:
+        if code != 0 and name in REPORTED_STEPS:
+            print(
+                f"warning: {name!r} failed; its files are unchanged and the run continues",
+                file=sys.stderr,
+            )
+        elif code != 0:
             print(f"error: {name!r} failed", file=sys.stderr)
             return False, results
     return True, results
+
+
+def reported_step_failed(generation_results: list[tuple[str, int, str]]) -> bool:
+    return any(
+        code != 0
+        for name, code, _output in generation_results
+        if name in REPORTED_STEPS
+    )
 
 
 def stage_directory_files(run) -> tuple[int, str]:
@@ -257,6 +288,28 @@ def link_pending_lines(results: list[tuple[str, bool, str]]) -> list[str]:
     return lines
 
 
+# The importer's own report lines: what it staged, why it skipped or failed, what to prune.
+OPENROUTER_REPORT_PREFIXES = (
+    "staged ",
+    "OpenRouter import skipped",
+    "OpenRouter import failed",
+    "prunable OpenRouter disposition:",
+)
+
+
+def openrouter_report(generation_results: list[tuple[str, int, str]]) -> list[str]:
+    """The OpenRouter importer's summary, so the pull request says what it staged, why
+    it made no request, or why it failed (ADR 039); a skipped import is otherwise silent."""
+    for name, _code, output in generation_results:
+        if name == OPENROUTER_STEP:
+            return [
+                line.strip()
+                for line in output.splitlines()
+                if line.strip().startswith(OPENROUTER_REPORT_PREFIXES)
+            ]
+    return []
+
+
 def print_check_summary(results: list[tuple[str, bool, str]]) -> None:
     print("== Verification results ==")
     for name, ok, _output in results:
@@ -282,7 +335,9 @@ def commit_refresh(run) -> tuple[int, str]:
     return run(["git", "commit", "-m", "chore(directory): local weekly refresh"], ROOT)
 
 
-def build_pr_body(results: list[tuple[str, bool, str]]) -> str:
+def build_pr_body(
+    results: list[tuple[str, bool, str]], openrouter: list[str] | None = None
+) -> str:
     lines = ["Local metadata refresh and candidate discovery.", ""]
     lines.append("## Verification")
     lines.append("")
@@ -300,11 +355,23 @@ def build_pr_body(results: list[tuple[str, bool, str]]) -> str:
             "in docs/MODELS.md."
         )
         lines.append("")
+    if openrouter:
+        lines.append("## OpenRouter model leads")
+        lines.append("")
+        lines.extend(f"- {line}" for line in openrouter)
+        lines.append("")
+        lines.append(
+            "Leads are unpublished pointers, never evidence; triage them under "
+            "docs/MODELS.md."
+        )
+        lines.append("")
     lines.append("Review license incidents and candidate additions before merging.")
     return "\n".join(lines)
 
 
-def push_and_open_pr(run, results: list[tuple[str, bool, str]]) -> int:
+def push_and_open_pr(
+    run, results: list[tuple[str, bool, str]], openrouter: list[str] | None = None
+) -> int:
     """Force-with-lease push the refresh branch, then open or update its pull request.
 
     Opened with the maintainer's own `gh` credentials, so `verify` — the required
@@ -328,7 +395,7 @@ def push_and_open_pr(run, results: list[tuple[str, bool, str]]) -> int:
     title = "chore(directory): local weekly refresh"
     if any_failed:
         title += " (verification failed)"
-    body = build_pr_body(results)
+    body = build_pr_body(results, openrouter)
 
     list_code, list_output = run(
         [
@@ -395,7 +462,7 @@ def main(argv: list[str] | None = None, *, run=shell) -> int:
 
     token = github_token(run)
 
-    generated_ok, _generation_results = run_generation_steps(run, token)
+    generated_ok, generation_results = run_generation_steps(run, token)
     if not generated_ok:
         return 1
 
@@ -403,10 +470,11 @@ def main(argv: list[str] | None = None, *, run=shell) -> int:
     print_check_summary(check_results)
     any_check_failed = any(not ok for _name, ok, _output in check_results)
 
+    openrouter_failed = reported_step_failed(generation_results)
     stage_directory_files(run)
     if not has_staged_changes(run):
         print("no directory changes; nothing to commit")
-        return 0
+        return 1 if openrouter_failed else 0
 
     commit_code, commit_output = commit_refresh(run)
     if commit_code != 0:
@@ -418,7 +486,10 @@ def main(argv: list[str] | None = None, *, run=shell) -> int:
 
     publish_failed = False
     if args.publish:
-        publish_failed = push_and_open_pr(run, check_results) != 0
+        publish_failed = (
+            push_and_open_pr(run, check_results, openrouter_report(generation_results))
+            != 0
+        )
     else:
         print(f"to publish: uv run python {Path(__file__).name} --publish")
         print(
@@ -426,7 +497,7 @@ def main(argv: list[str] | None = None, *, run=shell) -> int:
             "pull request with gh)"
         )
 
-    return 1 if (any_check_failed or publish_failed) else 0
+    return 1 if (any_check_failed or publish_failed or openrouter_failed) else 0
 
 
 if __name__ == "__main__":
