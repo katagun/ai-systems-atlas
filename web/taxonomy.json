@@ -1012,7 +1012,7 @@
     {
       "id": "none_listed",
       "name": "No headquarters listed",
-      "definition": "The organization's own pages list its offices but name no headquarters. The record says so rather than inferring a country from a registered office, the largest office, or where its founders are."
+      "definition": "The organization's own pages name no single headquarters: they list only offices, only regional headquarters, or no location at all. The record says so rather than inferring a country from a registered office, the largest office, where staff work, or where its founders are."
     }
   ],
   "architectures": [
