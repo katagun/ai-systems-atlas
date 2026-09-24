@@ -10,12 +10,14 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
+    from . import import_openrouter as openrouter
     from .discovery_sources import (
         canonical_url_key,
         https_url_host,
         validate_discovery_sources,
     )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    import import_openrouter as openrouter
     from discovery_sources import (
         canonical_url_key,
         https_url_host,
@@ -44,6 +46,8 @@ CATALOG_DOCUMENTS = (
     "candidates.json",
     "model-candidates.json",
     "model-dispositions.json",
+    openrouter.LEADS_NAME,
+    openrouter.DISPOSITIONS_NAME,
     "license-review.json",
     "discovery-sources.json",
     "hn-signals.json",
@@ -2368,6 +2372,198 @@ def validate_model_dispositions(
     return dispositioned
 
 
+def validate_openrouter_dispositions(
+    data: dict[str, Any], errors: list[str]
+) -> tuple[set[str], bool]:
+    """Validate the human-owned OpenRouter decisions: the terms review and each disposition.
+
+    Returns the dispositioned routes and whether a terms review is recorded (ADR 039).
+    """
+    name = openrouter.DISPOSITIONS_NAME
+    dispositioned: set[str] = set()
+    if set(data) != {"version", "updated_at", "terms_reviewed_at", "dispositions"}:
+        errors.append(f"{name}: document fields differ from schema")
+    if data.get("version") != "1.0":
+        errors.append(f"{name}: unsupported version")
+    if not valid_date(data.get("updated_at")):
+        errors.append(f"{name}: updated_at must be an ISO date")
+    reviewed_at = data.get("terms_reviewed_at")
+    if reviewed_at is not None and not valid_date(reviewed_at):
+        errors.append(f"{name}: terms_reviewed_at must be an ISO date or null")
+    terms_reviewed = valid_date(reviewed_at)
+    dispositions = data.get("dispositions")
+    if not isinstance(dispositions, list):
+        errors.append(f"{name}: dispositions must be a list")
+        return dispositioned, terms_reviewed
+    for entry in dispositions:
+        route_id = entry.get("openrouter_id") if isinstance(entry, dict) else None
+        prefix = f"OpenRouter disposition {route_id if isinstance(route_id, str) else 'unknown'}"
+        if not isinstance(entry, dict) or set(entry) != {
+            "openrouter_id",
+            "disposition",
+            "reason",
+            "decided_at",
+        }:
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        if (
+            not isinstance(route_id, str)
+            or not openrouter.ROUTE_ID.fullmatch(route_id)
+            or route_id in dispositioned
+        ):
+            errors.append(
+                f"{prefix}: openrouter_id must be a unique route without a variant suffix"
+            )
+            continue
+        dispositioned.add(route_id)
+        if entry.get("disposition") not in {"held", "excluded"}:
+            errors.append(f"{prefix}: disposition must be held or excluded")
+        reason = entry.get("reason")
+        if not isinstance(reason, str) or not reason.strip():
+            errors.append(f"{prefix}: reason must be a non-empty string")
+        if not valid_date(entry.get("decided_at")):
+            errors.append(f"{prefix}: decided_at must be an ISO date")
+    return dispositioned, terms_reviewed
+
+
+def validate_openrouter_lead(
+    lead: Any, fetched_at: Any, prefix: str, errors: list[str]
+) -> None:
+    """One lead holds identifiers only, each seen in the recorded fetch."""
+    if not isinstance(lead.get("canonical_slug"), str) or not (
+        openrouter.ROUTE_ID.fullmatch(lead["canonical_slug"])
+    ):
+        errors.append(f"{prefix}: canonical_slug is invalid")
+    name = lead.get("name")
+    if (
+        not isinstance(name, str)
+        or not name.strip()
+        or CONTROL_CHARACTER_PATTERN.search(name)
+    ):
+        errors.append(f"{prefix}: name must be a non-empty single-line string")
+    hugging_face_id = lead.get("hugging_face_id")
+    if hugging_face_id is not None and (
+        not isinstance(hugging_face_id, str)
+        or not openrouter.HUGGING_FACE_ID.fullmatch(hugging_face_id)
+    ):
+        errors.append(f"{prefix}: hugging_face_id must be null or ORG/REPO")
+    for field in ("listed_at", "discovered_at", "last_seen_at"):
+        if not valid_date(lead.get(field)):
+            errors.append(f"{prefix}: {field} must be an ISO date")
+    if (
+        valid_date(lead.get("discovered_at"))
+        and valid_date(lead.get("last_seen_at"))
+        and lead["discovered_at"] > lead["last_seen_at"]
+    ):
+        errors.append(f"{prefix}: discovered_at must not follow last_seen_at")
+    if lead.get("last_seen_at") != fetched_at:
+        errors.append(f"{prefix}: last_seen_at must equal the recorded fetch date")
+
+
+def validate_openrouter_leads(
+    data: dict[str, Any],
+    dispositioned: set[str],
+    terms_reviewed: bool,
+    errors: list[str],
+) -> None:
+    """Validate the unpublished OpenRouter cross-check (ADR 039).
+
+    A never-fetched file carries nulls and no leads. A fetched one pins the response by
+    date and SHA-256, requires a recorded terms review, and keeps its sorted leads
+    disjoint from the dispositions.
+    """
+    name = openrouter.LEADS_NAME
+    if set(data) != {
+        "version",
+        "updated_at",
+        "source",
+        "listed_count",
+        "eligible_count",
+        "leads",
+    }:
+        errors.append(f"{name}: document fields differ from schema")
+    if data.get("version") != "1.0":
+        errors.append(f"{name}: unsupported version")
+    if not valid_date(data.get("updated_at")):
+        errors.append(f"{name}: updated_at must be an ISO date")
+    source = data.get("source")
+    if not isinstance(source, dict) or set(source) != {
+        "name",
+        "url",
+        "terms_url",
+        "fetched_at",
+        "sha256",
+    }:
+        errors.append(f"{name}: source fields differ from schema")
+        source = {}
+    elif (source["name"], source["url"], source["terms_url"]) != (
+        openrouter.SOURCE_NAME,
+        openrouter.ENDPOINT,
+        openrouter.TERMS_URL,
+    ):
+        errors.append(
+            f"{name}: source must identify OpenRouter's public model list and terms"
+        )
+    leads = data.get("leads")
+    if not isinstance(leads, list):
+        errors.append(f"{name}: leads must be a list")
+        leads = []
+    fetched_at, sha256 = source.get("fetched_at"), source.get("sha256")
+    listed, eligible = data.get("listed_count"), data.get("eligible_count")
+    if fetched_at is None and sha256 is None and listed is None and eligible is None:
+        if leads:
+            errors.append(f"{name}: leads require a recorded fetch")
+        return
+    if not valid_date(fetched_at):
+        errors.append(f"{name}: source fetched_at must be an ISO date once fetched")
+    if not isinstance(sha256, str) or not CONTENT_SHA_PATTERN.fullmatch(sha256):
+        errors.append(f"{name}: source sha256 is invalid")
+    if not all(
+        isinstance(count, int) and not isinstance(count, bool) and count >= 0
+        for count in (listed, eligible)
+    ):
+        errors.append(
+            f"{name}: listed_count and eligible_count must be non-negative integers once fetched"
+        )
+    elif not len(leads) <= eligible <= listed:
+        errors.append(
+            f"{name}: counts must satisfy leads <= eligible_count <= listed_count"
+        )
+    if not terms_reviewed:
+        errors.append(
+            f"{name}: an import requires terms_reviewed_at in "
+            f"{openrouter.DISPOSITIONS_NAME}; clear the leads or record the review"
+        )
+    seen: set[str] = set()
+    previous = ""
+    for lead in leads:
+        route_id = lead.get("openrouter_id") if isinstance(lead, dict) else None
+        prefix = (
+            f"OpenRouter lead {route_id if isinstance(route_id, str) else 'unknown'}"
+        )
+        if not isinstance(lead, dict) or set(lead) != set(openrouter.LEAD_FIELDS):
+            errors.append(f"{prefix}: fields differ from schema")
+            continue
+        if (
+            not isinstance(route_id, str)
+            or not openrouter.ROUTE_ID.fullmatch(route_id)
+            or route_id in seen
+        ):
+            errors.append(
+                f"{prefix}: openrouter_id must be a unique route without a variant suffix"
+            )
+            continue
+        seen.add(route_id)
+        if route_id < previous:
+            errors.append(f"{prefix}: leads must be sorted by openrouter_id")
+        previous = route_id
+        if route_id in dispositioned:
+            errors.append(
+                f"{prefix}: dispositioned OpenRouter routes must not remain leads"
+            )
+        validate_openrouter_lead(lead, fetched_at, prefix, errors)
+
+
 def validate_unique_record_ids(
     projects: list[dict[str, Any]],
     specifications_value: list[Any],
@@ -3008,6 +3204,14 @@ def validate(root: Path = ROOT) -> list[str]:
         )
     if (root / "web" / "hn-signals.json").exists():
         errors.append("hn-signals.json: attention-source signals must not be published")
+    if (root / "web" / openrouter.LEADS_NAME).exists():
+        errors.append(
+            f"{openrouter.LEADS_NAME}: OpenRouter-derived model leads must not be published"
+        )
+    if (root / "web" / openrouter.DISPOSITIONS_NAME).exists():
+        errors.append(
+            f"{openrouter.DISPOSITIONS_NAME}: OpenRouter lead decisions must not be published"
+        )
 
     tax = validate_taxonomy(catalog["taxonomy.json"], errors)
 
@@ -3088,6 +3292,15 @@ def validate(root: Path = ROOT) -> list[str]:
         tax,
         errors,
         dispositioned_ids,
+    )
+    openrouter_dispositioned, terms_reviewed = validate_openrouter_dispositions(
+        catalog[openrouter.DISPOSITIONS_NAME], errors
+    )
+    validate_openrouter_leads(
+        catalog[openrouter.LEADS_NAME],
+        openrouter_dispositioned,
+        terms_reviewed,
+        errors,
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(
