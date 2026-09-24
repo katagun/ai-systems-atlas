@@ -11963,7 +11963,7 @@
     {
       "id": "model-google-gemma-3-12b-it",
       "source_id": "google/gemma-3-12b-it",
-      "name": "Gemma 3 12BB IT",
+      "name": "Gemma 3 12B IT",
       "developer": "Google",
       "url": "https://huggingface.co/google/gemma-3-12b-it",
       "description": "A gated 12B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
@@ -12083,7 +12083,7 @@
     {
       "id": "model-google-gemma-3-27b-it",
       "source_id": "google/gemma-3-27b-it",
-      "name": "Gemma 3 27BB IT",
+      "name": "Gemma 3 27B IT",
       "developer": "Google",
       "url": "https://huggingface.co/google/gemma-3-27b-it",
       "description": "A gated 27B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
@@ -12203,7 +12203,7 @@
     {
       "id": "model-google-gemma-3-4b-it",
       "source_id": "google/gemma-3-4b-it",
-      "name": "Gemma 3 4BB IT",
+      "name": "Gemma 3 4B IT",
       "developer": "Google",
       "url": "https://huggingface.co/google/gemma-3-4b-it",
       "description": "A gated 4B multimodal instruction model handling text and image input with a 128K-token context, governed by the Gemma Terms of Use.",
