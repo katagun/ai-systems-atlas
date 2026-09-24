@@ -1078,7 +1078,6 @@ class ValidationPolicyTests(unittest.TestCase):
         for value in (
             "https://robots.example",
             "robots.example/path",
-            "github.com",
             "",
         ):
             with self.subTest(value=value):
@@ -1115,6 +1114,11 @@ class ValidationPolicyTests(unittest.TestCase):
             "youtube.com",
             "medium.com",
             "notion.site",
+            "raw.githubusercontent.com",
+            "www.youtube.com",
+            "hf.co",
+            "co.uk",
+            "github.com",
         ):
             with self.subTest(value=value):
 
@@ -1123,6 +1127,16 @@ class ValidationPolicyTests(unittest.TestCase):
 
                 errors = self.catalog_with_robot(mutate)
                 self.assertTrue(any("is a shared host" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_refuse_shared_host_subdomains(self) -> None:
+        # A maker's own vendor.github.io page is not a valid bare first-party
+        # entry either, because it still ends in the shared github.io host: cite
+        # the maker's org via github.com/<org> instead (docs/ROBOTS.md step 1).
+        def mutate(robot, root):
+            robot["first_party_domains"].append("vendor.github.io")
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is a shared host" in e for e in errors), errors)
 
     def test_robot_none_published_stands_alone_and_permits_no_terms_evidence(
         self,
@@ -1213,6 +1227,75 @@ class ValidationPolicyTests(unittest.TestCase):
             ),
             errors,
         )
+
+    def test_robot_non_string_form_factor_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["form_factor"] = ["humanoid"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown form factor" in e for e in errors), errors)
+
+    def test_robot_non_string_availability_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["availability"] = {"value": "orderable"}
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown availability" in e for e in errors), errors)
+
+    def test_robot_non_string_status_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["status"] = ["active"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown status" in e for e in errors), errors)
+
+    def test_robot_non_string_research_confidence_is_an_error_not_a_crash(
+        self,
+    ) -> None:
+        def mutate(robot, root):
+            robot["research_confidence"] = ["medium"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown research confidence" in e for e in errors), errors)
+
+    def test_robot_non_string_named_model_kind_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["named_models"][0]["kind"] = ["vision_language_action"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown named model kind" in e for e in errors), errors)
+
+    def test_robot_nested_list_in_ai_basis_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["ai_basis"] = ["vendor_named_model", ["open_model_interface"]]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("ai_basis must contain only strings" in e for e in errors), errors
+        )
+
+    def test_robot_nested_list_in_terms_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["terms"] = ["terms_of_sale", ["sdk_license"]]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("terms must contain only strings" in e for e in errors), errors
+        )
+
+    def test_robot_malformed_url_is_not_first_party_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][0]["url"] = "https://[bad"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is not first-party" in e for e in errors), errors)
+
+    def test_robot_out_of_range_port_is_not_first_party(self) -> None:
+        def mutate(robot, root):
+            robot["url"] = "https://robots.example:99999/sample"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is not first-party" in e for e in errors), errors)
 
     def test_robot_ids_must_be_unique_across_collections(self) -> None:
         def mutate(robot, root):

@@ -543,9 +543,20 @@ function syncCollectionSwitcher() {
   // hide the active entry off-screen. Scrolling only fires when the strip is
   // actually scrollable, so a scope change on a wide viewport never jolts the
   // page, and it never asks for smooth scrolling so reduced motion is respected.
+  // scrollIntoView would do here, but it can scroll the whole page vertically
+  // to bring the switcher itself into view (e.g. a Systems family change that
+  // re-syncs it while it sits above the fold on a phone); moving only
+  // switcher.scrollLeft, by the button's nearest-edge overflow, never touches
+  // the page's own scroll position.
   const switcher = $(".collection-switcher");
   if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
-    activeButton.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const switcherRect = switcher.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    if (buttonRect.left < switcherRect.left) {
+      switcher.scrollLeft -= switcherRect.left - buttonRect.left;
+    } else if (buttonRect.right > switcherRect.right) {
+      switcher.scrollLeft += buttonRect.right - switcherRect.right;
+    }
   }
 }
 
@@ -1570,7 +1581,7 @@ function packDialogMarkup(pack) {
 }
 
 function robotTermsLink(item) {
-  return `<p><strong>${escapeHTML(taxonomyName("robot_terms_kinds", item.terms_kind))}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>`;
+  return `<p><strong>${escapeHTML(taxonomyName("robot_terms_kinds", item.terms_kind))}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>` + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
 }
 
 // An evidence entry a maker can change without notice (a live pricing or
@@ -1581,20 +1592,40 @@ function robotEvidenceLink(item) {
   return specificationEvidenceLink(item) + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
 }
 
+// named_models, terms_evidence, not_verified, verified_at, terms_note,
+// hardware, developer_access, and availability_note only arrive with detail;
+// the boot record carries only id, name, short_name, manufacturer, url,
+// description, form_factor, ai_basis, availability, and status. Asserting an
+// absence — "the maker names no model", "no terms were published" — off a
+// field that has simply not loaded yet would be a false claim, so each one
+// renders the detailText em dash (lines ~31-37) until robotDetailLoaded is
+// true, exactly as the other three record dialogs already do for their own
+// detail-only fields.
 function robotDialogMarkup(robot) {
   const relatedSystems = (robot.related_systems || []).map(id => state.projects.find(item => item.id === id)).filter(Boolean);
   const relatedRobots = (robot.related_robots || []).map(id => state.robots.find(item => item.id === id)).filter(Boolean);
   const hardware = robot.hardware || {};
+  const detailLoaded = robotDetailLoaded(robot);
+  const namedModelsMarkup = (robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("");
+  const modelsSection = detailLoaded && !(robot.ai_basis || []).includes("vendor_named_model")
+    ? "<p>The maker names no model for this robot.</p>"
+    : namedModelsMarkup || "<p>—</p>";
+  const notVerifiedMarkup = robot.not_verified ? `<p class="unscored-note">${escapeHTML(robot.not_verified)}</p>` : "";
+  const termsMarkup = (robot.terms_evidence || []).map(robotTermsLink).join("");
+  const termsSection = detailLoaded
+    ? termsMarkup || "<p>No terms were published on the maker's pages at review time.</p>"
+    : "<p>—</p>";
+  const reviewedLine = robot.verified_at ? `<p>Reviewed ${escapeHTML(robot.verified_at)}.</p>` : "";
   return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
     <div class="detail-grid">
       <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
-      <section class="detail-block"><h3>Models the vendor names</h3>${(robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("") || "<p>The maker names no model for this robot.</p>"}<p class="unscored-note">${escapeHTML(robot.not_verified || "")}</p></section>
+      <section class="detail-block"><h3>Models the vendor names</h3>${modelsSection}${notVerifiedMarkup}</section>
       ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
       <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
       ${(robot.ai_basis || []).includes("open_model_interface") ? "" : `<section class="detail-block"><h3>Developer access</h3><p>${detailText(robot.developer_access || "—")}</p></section>`}
       <section class="detail-block"><h3>Availability</h3><p><strong>${escapeHTML(taxonomyName("robot_availability", robot.availability))}</strong></p><p>${detailText(robot.availability_note || "")}</p></section>
-      <section class="detail-block"><h3>Terms</h3><p>${detailText(robot.terms_note || "")}</p>${(robot.terms_evidence || []).map(robotTermsLink).join("") || "<p>No terms were published on the maker's pages at review time.</p>"}</section>
-      <section class="detail-block"><h3>Reviewed sources</h3>${(robot.evidence || []).map(robotEvidenceLink).join("") || "<p>—</p>"}<p>Reviewed ${escapeHTML(robot.verified_at || "")}.</p></section>
+      <section class="detail-block"><h3>Terms</h3><p>${detailText(robot.terms_note || "")}</p>${termsSection}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(robot.evidence || []).map(robotEvidenceLink).join("") || "<p>—</p>"}${reviewedLine}</section>
       <section class="detail-block"><h3>Related records</h3>${relatedSystems.length || relatedRobots.length ? `<p>${[...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedRobots.map(item => `<button type="button" class="ghost-button" data-open-robot="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
     </div>`;
 }
@@ -1720,6 +1751,9 @@ const loadedDetail = new Set();
 // loadedDetail. Safe to reference from functions defined earlier in this
 // file: none of them run until the whole script has finished loading.
 const inferenceDetailLoaded = service => loadedDetail.has(`inference:${service.id}`);
+// robotDialogMarkup's own version of the same predicate, keyed the way
+// loadDetail keys loadedDetail for a robot: `robot:<id>`.
+const robotDetailLoaded = robot => loadedDetail.has(`robot:${robot.id}`);
 const detailRequests = new Map();
 let modelSourceDetails = null;
 let modelSourceDetailsRequest = null;

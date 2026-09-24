@@ -1679,14 +1679,33 @@ FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+
 FIRST_PARTY_GITHUB_ORG = re.compile(
     r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
 )
-# Hosts many unrelated parties publish on. A bare entry would make every tenant
-# first-party, so a shared host enters only as github.com/<org>.
+# Hosts many unrelated parties publish on, plus public suffixes that are never
+# a maker's own domain. A bare entry, or any subdomain of one
+# (raw.githubusercontent.com, www.youtube.com, vendor.github.io,
+# example.co.uk), would make every tenant of that host first-party, so a
+# shared host enters only as github.com/<org>; a maker whose only site is a
+# github.io page cites it that way too (docs/ROBOTS.md's evidence workflow
+# step 1).
 MULTI_TENANT_HOSTS = frozenset(
     {
         "github.com",
         "github.io",
+        "githubusercontent.com",
+        "api.github.com",
+        "gist.github.com",
         "gitlab.com",
         "huggingface.co",
+        "hf.co",
+        "readthedocs.io",
+        "vercel.app",
+        "netlify.app",
+        "pages.dev",
+        "web.app",
+        "wixsite.com",
+        "wordpress.com",
+        "blogspot.com",
+        "squarespace.com",
+        "webflow.io",
         "youtube.com",
         "medium.com",
         "substack.com",
@@ -1694,15 +1713,33 @@ MULTI_TENANT_HOSTS = frozenset(
         "x.com",
         "twitter.com",
         "linkedin.com",
+        "co.uk",
+        "com.au",
+        "co.jp",
+        "com.cn",
     }
 )
+
+
+def _is_shared_host_entry(entry: str) -> bool:
+    """True when `entry` is a shared host itself, or any subdomain of one."""
+    return any(
+        entry == host or entry.endswith("." + host) for host in MULTI_TENANT_HOSTS
+    )
 
 
 def url_is_first_party(url: object, domains: list[str]) -> bool:
     """True when `url` falls under a declared host, a subdomain of one, or a GitHub org."""
     if not isinstance(url, str):
         return False
-    parsed = urllib.parse.urlsplit(url)
+    try:
+        parsed = urllib.parse.urlsplit(url)
+        # .port only raises here, on access, for a value outside 0-65535;
+        # urlsplit() itself already raises ValueError for a malformed
+        # authority such as an unterminated IPv6 literal.
+        _ = parsed.port
+    except ValueError:
+        return False
     # A trailing dot makes a hostname fully qualified without changing what it
     # names, so robots.example. must anchor the same as robots.example.
     host = (parsed.hostname or "").lower().rstrip(".")
@@ -1739,17 +1776,12 @@ def validate_robot_first_party_domains(
         domains = []
     clean_domains: list[str] = []
     for entry in domains:
-        if (
-            isinstance(entry, str)
-            and entry in MULTI_TENANT_HOSTS
-            and entry != "github.com"
-        ):
+        if isinstance(entry, str) and _is_shared_host_entry(entry):
             errors.append(
                 f"{prefix}: first_party_domains entry {entry!r} is a shared host"
             )
         elif isinstance(entry, str) and (
-            FIRST_PARTY_GITHUB_ORG.fullmatch(entry)
-            or (FIRST_PARTY_HOST.fullmatch(entry) and entry != "github.com")
+            FIRST_PARTY_GITHUB_ORG.fullmatch(entry) or FIRST_PARTY_HOST.fullmatch(entry)
         ):
             clean_domains.append(entry)
         else:
@@ -1798,10 +1830,12 @@ def validate_robot_evidence_roles(
     present_roles = {
         item.get("role") for item in evidence if isinstance(item.get("role"), str)
     }
+    # validate_string_list already reported a non-string ai_basis entry (a
+    # nested list is unhashable and would crash the dict lookup below).
     required_roles = ["product_page"] + [
         ROBOT_BASIS_EVIDENCE_ROLE[basis]
         for basis in ai_basis
-        if basis in ROBOT_BASIS_EVIDENCE_ROLE
+        if isinstance(basis, str) and basis in ROBOT_BASIS_EVIDENCE_ROLE
     ]
     missing_roles = [role for role in required_roles if role not in present_roles]
     if missing_roles:
@@ -1881,7 +1915,9 @@ def validate_robot_terms(
             errors.append(f"{prefix}: terms evidence requires a scope")
         if not valid_date(item["verified_at"]):
             errors.append(f"{prefix}: terms evidence requires verified_at")
-    expected_terms = set(terms) - {"none_published"}
+    # validate_string_list already reported a non-string terms entry (a nested
+    # list is unhashable and would crash set(terms) below).
+    expected_terms = {t for t in terms if isinstance(t, str)} - {"none_published"}
     if covered != expected_terms:
         errors.append(f"{prefix}: terms evidence does not match terms")
     return terms_evidence
@@ -2018,13 +2054,24 @@ def validate_robots(
             "https://"
         ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
-        if robot.get("form_factor") not in enum_ids["robot_form_factors"]:
-            errors.append(f"{prefix}: unknown form factor")
-        if robot.get("availability") not in enum_ids["robot_availability"]:
-            errors.append(f"{prefix}: unknown availability")
-        if robot.get("status") not in enum_ids["project_statuses"]:
-            errors.append(f"{prefix}: unknown status")
+        # Membership on a set/dict requires a hashable key: a list or dict value
+        # would otherwise crash `not in` instead of being reported below.
         if (
+            not isinstance(robot.get("form_factor"), str)
+            or robot.get("form_factor") not in enum_ids["robot_form_factors"]
+        ):
+            errors.append(f"{prefix}: unknown form factor")
+        if (
+            not isinstance(robot.get("availability"), str)
+            or robot.get("availability") not in enum_ids["robot_availability"]
+        ):
+            errors.append(f"{prefix}: unknown availability")
+        if (
+            not isinstance(robot.get("status"), str)
+            or robot.get("status") not in enum_ids["project_statuses"]
+        ):
+            errors.append(f"{prefix}: unknown status")
+        if not isinstance(robot.get("research_confidence"), str) or (
             robot.get("research_confidence")
             not in enum_ids["research_confidence_levels"]
         ):
@@ -2066,7 +2113,10 @@ def validate_robots(
                     errors.append(
                         f"{prefix}: named_models.{field} must be a non-empty string"
                     )
-            if entry["kind"] not in enum_ids["robot_model_kinds"]:
+            if (
+                not isinstance(entry["kind"], str)
+                or entry["kind"] not in enum_ids["robot_model_kinds"]
+            ):
                 errors.append(f"{prefix}: unknown named model kind")
 
         hardware = robot.get("hardware")

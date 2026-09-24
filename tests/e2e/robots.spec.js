@@ -13,11 +13,11 @@ const DETAIL = {
   hardware: { compute: "Not published.", sensors: "Depth camera and lidar.", actuation: "Electric joints.", power: "Swappable battery." },
   developer_access: "A documented SDK for running your own policy.",
   terms: ["terms_of_sale"], terms_note: "Purchase terms only.",
-  terms_evidence: [{ terms_kind: "terms_of_sale", scope: "Purchase terms", kind: "web_terms", url: "https://unibot.example/terms", verified_at: "2026-09-20" }],
+  terms_evidence: [{ terms_kind: "terms_of_sale", scope: "Purchase terms", kind: "web_terms", url: "https://unibot.example/terms", verified_at: "2026-09-20", unpinnable: true }],
   not_verified: "The model named here is the maker's own claim and is not verified by the Atlas.",
   evidence: [
     { kind: "web", role: "named_model", label: "Model page", url: "https://unibot.example/uni-vla", verified_at: "2026-09-20" },
-    { kind: "web", role: "availability", label: "Order page", url: "https://unibot.example/order", verified_at: "2026-09-20", unpinnable: true },
+    { kind: "web", role: "product_page", label: "Order page", url: "https://unibot.example/order", verified_at: "2026-09-20", unpinnable: true },
   ],
   verified_at: "2026-09-20",
 };
@@ -76,12 +76,47 @@ test("the robots scope filters, opens its own dialog, and never scores or compar
   await expect(page.locator("#robot-dialog-content")).toContainText("Running your own models");
   await expect(page.locator("#robot-dialog-content")).toContainText("not verified by the Atlas");
   await expect(page.locator("#robot-dialog-content")).toContainText("This page changes between visits, so the Atlas cannot pin what it said.");
+  // Once for the evidence entry and once for the terms entry: robotTermsLink
+  // now carries the same unpinnable note robotEvidenceLink already adds.
+  await expect(page.locator("#robot-dialog-content .unscored-note", { hasText: "This page changes between visits" })).toHaveCount(2);
+  await expect(page.locator("#robot-dialog-content")).toContainText("Reviewed 2026-09-20.");
   await expect(page).toHaveURL(/record=robot(%3A|:)g-one/);
 
   await page.reload();
   await expect(page.locator("#robot-dialog")).toBeVisible();
   await page.goBack();
   await expect(page.locator("#robot-dialog")).toBeHidden();
+});
+
+test("the models section reads as an em dash, not a false absence claim, while a robot's detail never arrives", async ({ page }) => {
+  // Rover's boot record already says its ai_basis lacks vendor_named_model,
+  // but the dialog must not assert "the maker names no model" off that alone:
+  // it has not confirmed named_models is really empty, because that field
+  // only ever arrives with detail, and Rover's detail route here 404s.
+  await withRobots(page);
+  await page.route(/\/app\/detail\/robot\/rover\.json/, route => route.fulfill({ status: 404, body: "not found" }));
+  await page.goto("/?collection=robots");
+  await page.locator('#robot-grid [data-robot="rover"]').click();
+  await expect(page.locator("#robot-dialog")).toBeVisible();
+  const content = page.locator("#robot-dialog-content");
+  const modelsSection = content.locator("section.detail-block", { hasText: "Models the vendor names" });
+  await expect(modelsSection).not.toContainText("names no model");
+  await expect(modelsSection.locator("p").first()).toHaveText("—");
+  await expect(content).not.toContainText("Reviewed .");
+});
+
+test("a robot with a named-model basis also reads as an em dash before its detail arrives", async ({ page }) => {
+  const namedModelRobot = { id: "solo-arm", name: "Solo Arm", manufacturer: "Lonestar", url: "https://lonestar.example/solo-arm", description: "A tabletop arm.", form_factor: "arm", ai_basis: ["vendor_named_model"], availability: "orderable", status: "active" };
+  await page.route(/\/app\/robots\.json/, route => route.fulfill({ json: { verified_at: "2026-09-20", robots: [...ROBOTS, namedModelRobot] } }));
+  await page.route(/\/app\/search\/robots\.json/, route => route.fulfill({ json: {} }));
+  await page.route(/\/app\/detail\/robot\/solo-arm\.json/, route => route.fulfill({ status: 404, body: "not found" }));
+  await page.goto("/?collection=robots");
+  await page.locator('#robot-grid [data-robot="solo-arm"]').click();
+  await expect(page.locator("#robot-dialog")).toBeVisible();
+  const content = page.locator("#robot-dialog-content");
+  const modelsSection = content.locator("section.detail-block", { hasText: "Models the vendor names" });
+  await expect(modelsSection).not.toContainText("names no model");
+  await expect(modelsSection.locator("p").first()).toHaveText("—");
 });
 
 test("mixed browsing surfaces robots without scores or comparison", async ({ page }) => {
@@ -107,4 +142,19 @@ test("the active Robots switcher entry scrolls into view on a phone", async ({ p
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?collection=robots");
   await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+});
+
+test("syncing the switcher on a phone never scrolls the page vertically", async ({ page }) => {
+  // The switcher is already in view at the top of the page here, so any scope
+  // switch that re-syncs it (e.g. clicking another switcher entry) must touch
+  // only the switcher's own horizontal scroll, never window.scrollY.
+  await withRobots(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=robots");
+  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+  const before = await page.evaluate(() => window.scrollY);
+  await page.getByRole("button", { name: /^All/ }).click();
+  await page.getByRole("button", { name: "Robots 2" }).click();
+  const after = await page.evaluate(() => window.scrollY);
+  expect(after).toBe(before);
 });
