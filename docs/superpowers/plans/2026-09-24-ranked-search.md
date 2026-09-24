@@ -1137,7 +1137,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create: `docs/adr/040-search-orders-by-match-never-by-score.md`
-- Modify: `docs/adr/013-distinct-collections-share-one-directory-surface.md`, `docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md`, and `docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md` (status lines)
+- Modify: `docs/adr/013-distinct-collections-share-one-directory-surface.md`, `docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md`, `docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md`, and `docs/adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md` (status lines)
 - Modify: `docs/WEB.md`
 - Modify: `tests/test_documentation.py` (routing manifest)
 
@@ -1150,7 +1150,7 @@ Create `docs/adr/040-search-orders-by-match-never-by-score.md`:
 ```markdown
 # ADR 040: Search orders by match, never by score
 
-**Status:** Accepted. Amends [ADR 013](013-distinct-collections-share-one-directory-surface.md), [ADR 032](032-agent-packs-are-unscored-records-of-what-a-host-installs.md), and [ADR 037](037-robots-are-unscored-records-of-what-a-vendor-documents.md).
+**Status:** Accepted. Amends [ADR 013](013-distinct-collections-share-one-directory-surface.md), [ADR 032](032-agent-packs-are-unscored-records-of-what-a-host-installs.md), [ADR 037](037-robots-are-unscored-records-of-what-a-vendor-documents.md), and [ADR 041](041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md).
 
 ## Context
 
@@ -1161,7 +1161,7 @@ Directory search matched the whole query as one literal substring and listed mat
 
 A reader who knew what they wanted could not find it first, and a reader who described a need found nothing.
 
-ADR 013 made All "alphabetical discovery", ADR 032 made the Packs scope "alphabetical only", and ADR 037 lists robots alphabetically. Those rules exist so that an order never implies merit: none of those lists may be ranked by score, and packs and robots carry no score at all.
+ADR 013 made All "alphabetical discovery", ADR 032 made the Packs scope "alphabetical only", ADR 037 lists robots alphabetically, and ADR 041 makes the Labs view "alphabetical only". Those rules exist so that an order never implies merit: none of those lists may be ranked by score, and packs, robots, and labs carry no score at all.
 
 ## Decision
 
@@ -1181,7 +1181,7 @@ Each collection's searchable text is unchanged (ADR 026's search indexes). A mat
 
 ## Consequences
 
-- ADR 013's All bullet, ADR 032's "The scope is alphabetical only", and ADR 037's "They are listed alphabetically" now describe browsing; a query orders by match. The Robots session, which owns ADR 037, agreed on 2026-09-24.
+- ADR 013's All bullet, ADR 032's "The scope is alphabetical only", ADR 037's "They are listed alphabetically", and ADR 041's "The view is alphabetical only" now describe browsing; a query orders by match. The Robots session, which owns ADR 037, and the Labs session, which owns ADR 041, agreed on 2026-09-24. ADR 041's other rules stay: no score, no sort control, no comparison.
 - A known name comes first: "ollama" lists Ollama first. A split or misspelled name is still found: "lang chain" finds LangChain, and "olama" suggests Ollama.
 - Search no longer matches inside prose words, so "rag" stops matching "storage". It still matches inside names, so "gpt" finds ChatGPT.
 - Tests pin the matching rules against fixtures and the probe queries against the published catalog.
@@ -1189,7 +1189,7 @@ Each collection's searchable text is unchanged (ADR 026's search indexes). A mat
 
 - [ ] **Step 2: Mark the amended ADRs**
 
-Append this sentence to the status line of ADR 013, ADR 032, and ADR 037. If a status line already lists amendments, add ADR 040 to that list instead.
+Append this sentence to the status line of ADR 013, ADR 032, ADR 037, and ADR 041. If a status line already lists amendments, add ADR 040 to that list instead.
 
 ```markdown
 Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
@@ -1225,7 +1225,7 @@ Expected: PASS. The ADR is reachable from `AGENTS.md` through `docs/WEB.md`'s li
 - [ ] **Step 6: Commit, check the ADR number, open the PR**
 
 ```bash
-git add docs/adr/040-search-orders-by-match-never-by-score.md docs/adr/013-distinct-collections-share-one-directory-surface.md docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md docs/WEB.md tests/test_documentation.py
+git add docs/adr/040-search-orders-by-match-never-by-score.md docs/adr/013-distinct-collections-share-one-directory-surface.md docs/adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md docs/adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md docs/WEB.md tests/test_documentation.py
 git commit -m "Record ADR 040: search orders by match, never by score
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
