@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.parse
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -43,6 +44,7 @@ PUBLISHED_DATA = (
     "models-dev.json",
     "packs.json",
     "labs.json",
+    "robots.json",
 )
 CATALOG_DOCUMENTS = (
     *PUBLISHED_DATA,
@@ -145,6 +147,11 @@ TAXONOMY_GROUPS = (
     "lab_types",
     "lab_channel_kinds",
     "countries",
+    "robot_form_factors",
+    "robot_ai_bases",
+    "robot_availability",
+    "robot_model_kinds",
+    "robot_terms_kinds",
     "architectures",
     "retrieval_modes",
     "capture_modes",
@@ -310,6 +317,53 @@ LAB_CHANNEL_URL_PATTERNS = {
     ),
     "hugging_face": re.compile(r"https://huggingface\.co/([A-Za-z0-9][A-Za-z0-9._-]*)"),
 }
+
+ROBOT_REQUIRED = {
+    "id",
+    "name",
+    "manufacturer",
+    "url",
+    "first_party_domains",
+    "description",
+    "form_factor",
+    "availability",
+    "availability_note",
+    "ai_basis",
+    "named_models",
+    "research_confidence",
+    "hardware",
+    "developer_access",
+    "terms",
+    "terms_note",
+    "terms_evidence",
+    "not_verified",
+    "status",
+    "evidence",
+    "verified_at",
+}
+ROBOT_OPTIONAL = {
+    "short_name",
+    "variants",
+    "repo",
+    "superseded_by",
+    "related_systems",
+    "related_models",
+    "related_robots",
+}
+# A robot is recorded for what its maker documents, never scored, priced, or ranked (ADR 037).
+ROBOT_FORBIDDEN = {
+    "score",
+    "score_profile",
+    "system_family",
+    "primary_role",
+    "stars",
+    "stars_verified_at",
+    "price",
+    "price_usd",
+    "benchmarks",
+}
+ROBOT_HARDWARE_FIELDS = ("compute", "sensors", "actuation", "power")
+ROBOT_NAMED_MODEL_FIELDS = {"name", "kind", "role_note", "evidence_label"}
 
 LOCAL_RUNTIME_REQUIRED = {
     "id",
@@ -1902,6 +1956,525 @@ def validate_labs(
     return labs_value
 
 
+ROBOT_EVIDENCE_ROLES = (
+    "product_page",
+    "technical_documentation",
+    "named_model",
+    "model_interface",
+    "supporting",
+)
+ROBOT_BASIS_EVIDENCE_ROLE = {
+    "vendor_named_model": "named_model",
+    "open_model_interface": "model_interface",
+}
+FIRST_PARTY_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+")
+FIRST_PARTY_GITHUB_ORG = re.compile(
+    r"github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
+)
+# Hosts many unrelated parties publish on. A bare entry, or any subdomain of
+# one (raw.githubusercontent.com, www.youtube.com, vendor.github.io), would
+# make every tenant of that host first-party, so a shared host enters only as
+# github.com/<org>; a maker whose only site is a github.io page cites it that
+# way too (docs/ROBOTS.md's evidence workflow step 1).
+MULTI_TENANT_HOSTS = frozenset(
+    {
+        "github.com",
+        "github.io",
+        "githubusercontent.com",
+        "api.github.com",
+        "gist.github.com",
+        "gitlab.com",
+        "huggingface.co",
+        "hf.co",
+        "readthedocs.io",
+        "vercel.app",
+        "netlify.app",
+        "pages.dev",
+        "web.app",
+        "wixsite.com",
+        "wordpress.com",
+        "blogspot.com",
+        "squarespace.com",
+        "webflow.io",
+        "youtube.com",
+        "medium.com",
+        "substack.com",
+        "notion.site",
+        "x.com",
+        "twitter.com",
+        "linkedin.com",
+    }
+)
+
+# Public suffixes under which any number of unrelated makers register their
+# own distinct domain (engineeredarts.co.uk, sony.co.jp). Unlike a
+# MULTI_TENANT_HOSTS entry, a maker's own registrable domain *under* one of
+# these is a perfectly good first-party anchor; only the bare suffix itself is
+# refused, since nobody's site is "co.uk".
+PUBLIC_SUFFIXES = frozenset(
+    {
+        "co.uk",
+        "com.au",
+        "co.jp",
+        "com.cn",
+        "co.nz",
+        "com.br",
+        "co.kr",
+        "com.tw",
+    }
+)
+
+
+def _is_shared_host_entry(entry: str) -> bool:
+    """True when `entry` is a shared host itself, or any subdomain of one."""
+    return any(
+        entry == host or entry.endswith("." + host) for host in MULTI_TENANT_HOSTS
+    )
+
+
+def url_is_first_party(url: object, domains: list[str]) -> bool:
+    """True when `url` falls under a declared host, a subdomain of one, or a GitHub org."""
+    if not isinstance(url, str):
+        return False
+    try:
+        parsed = urllib.parse.urlsplit(url)
+        # .port only raises here, on access, for a value outside 0-65535;
+        # urlsplit() itself already raises ValueError for a malformed
+        # authority such as an unterminated IPv6 literal.
+        _ = parsed.port
+    except ValueError:
+        return False
+    # A trailing dot makes a hostname fully qualified without changing what it
+    # names, so robots.example. must anchor the same as robots.example.
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if parsed.scheme != "https" or not host:
+        return False
+    segments = [part for part in parsed.path.split("/") if part]
+    # api.github.com blob URLs are /repos/<owner>/<repo>/git/blobs/<sha>.
+    owner_position = {
+        "github.com": 0,
+        "raw.githubusercontent.com": 0,
+        "api.github.com": 1,
+    }
+    for entry in domains:
+        if "/" in entry:
+            position = owner_position.get(host)
+            if (
+                position is not None
+                and len(segments) > position
+                and segments[position].lower() == entry.split("/", 1)[1].lower()
+            ):
+                return True
+        elif host == entry or host.endswith("." + entry):
+            return True
+    return False
+
+
+def validate_robot_first_party_domains(
+    robot: dict[str, Any], prefix: str, errors: list[str]
+) -> list[str]:
+    """Validate first_party_domains and return the entries that are usable as anchors."""
+    domains = robot.get("first_party_domains")
+    if not isinstance(domains, list) or not domains:
+        errors.append(f"{prefix}: first_party_domains must be a non-empty list")
+        domains = []
+    clean_domains: list[str] = []
+    for entry in domains:
+        if isinstance(entry, str) and _is_shared_host_entry(entry):
+            errors.append(
+                f"{prefix}: first_party_domains entry {entry!r} is a shared host"
+            )
+        elif isinstance(entry, str) and entry in PUBLIC_SUFFIXES:
+            errors.append(
+                f"{prefix}: first_party_domains entry {entry!r} is a public "
+                "suffix, not a maker's domain"
+            )
+        elif isinstance(entry, str) and (
+            FIRST_PARTY_GITHUB_ORG.fullmatch(entry) or FIRST_PARTY_HOST.fullmatch(entry)
+        ):
+            clean_domains.append(entry)
+        else:
+            errors.append(
+                f"{prefix}: first_party_domains entries must be a bare lowercase "
+                f"host or github.com/<org>, not {entry!r}"
+            )
+    return clean_domains
+
+
+def validate_robot_evidence_roles(
+    robot: dict[str, Any],
+    ai_basis: list[str],
+    named_models: list[Any],
+    repo: Any,
+    prefix: str,
+    errors: list[str],
+) -> list[dict[str, Any]]:
+    """Validate evidence roles against ai_basis and named_models; return the clean items."""
+    evidence_value = robot.get("evidence")
+    validate_evidence_items(evidence_value, repo, prefix, errors)
+    evidence = (
+        [item for item in evidence_value if isinstance(item, dict)]
+        if isinstance(evidence_value, list)
+        else []
+    )
+    for item in evidence:
+        if item.get("role") not in ROBOT_EVIDENCE_ROLES:
+            errors.append(
+                f"{prefix}: unknown evidence role {item.get('role')!r} on "
+                f"{item.get('label')!r}"
+            )
+        # unpinnable marks a source the vendor can silently edit (a marketing page
+        # rather than a dated capture); it may only soften web evidence, and only
+        # when explicitly true, never a pinned git blob or a falsy placeholder.
+        if "unpinnable" in item and (
+            item["unpinnable"] is not True or item.get("kind") != "web"
+        ):
+            errors.append(
+                f"{prefix}: unpinnable must be true when present, "
+                "and only on web evidence"
+            )
+    # A role that failed the ROBOT_EVIDENCE_ROLES check above is already reported;
+    # only a string can be hashed into this set, so a list or dict role is dropped
+    # here rather than crashing the set comprehension.
+    present_roles = {
+        item.get("role") for item in evidence if isinstance(item.get("role"), str)
+    }
+    # validate_string_list already reported a non-string ai_basis entry (a
+    # nested list is unhashable and would crash the dict lookup below).
+    required_roles = ["product_page"] + [
+        ROBOT_BASIS_EVIDENCE_ROLE[basis]
+        for basis in ai_basis
+        if isinstance(basis, str) and basis in ROBOT_BASIS_EVIDENCE_ROLE
+    ]
+    missing_roles = [role for role in required_roles if role not in present_roles]
+    if missing_roles:
+        errors.append(f"{prefix}: evidence lacks required roles {missing_roles}")
+    named_model_labels = {
+        item.get("label")
+        for item in evidence
+        if item.get("role") == "named_model" and isinstance(item.get("label"), str)
+    }
+    for entry in named_models:
+        if not isinstance(entry, dict):
+            continue
+        evidence_label = entry.get("evidence_label")
+        # A non-string evidence_label already failed the named_models schema check
+        # above (Task 3); testing it against a set of labels here would otherwise
+        # crash on an unhashable list or dict.
+        if isinstance(evidence_label, str) and evidence_label not in named_model_labels:
+            errors.append(
+                f"{prefix}: named model {entry.get('name')!r} evidence_label "
+                f"{evidence_label!r} does not name a named_model source"
+            )
+    return evidence
+
+
+def validate_robot_terms(
+    robot: dict[str, Any],
+    enum_ids: dict[str, set[str]],
+    prefix: str,
+    errors: list[str],
+) -> list[dict[str, Any]]:
+    """Validate terms and terms_evidence together; return the clean evidence items."""
+    validate_string_list(robot, "terms", enum_ids["robot_terms_kinds"], prefix, errors)
+    terms_value = robot.get("terms")
+    terms = terms_value if isinstance(terms_value, list) else []
+    if "none_published" in terms and len(terms) > 1:
+        errors.append(f"{prefix}: none_published must appear alone in terms")
+
+    terms_evidence_value = robot.get("terms_evidence")
+    if not isinstance(terms_evidence_value, list):
+        errors.append(f"{prefix}: terms_evidence must be a list")
+        terms_evidence_value = []
+
+    # The allowed key set: the five required fields, plus an optional `unpinnable`
+    # that is checked on its own below (see the comment there) so this schema check
+    # only ever reports a genuinely wrong shape.
+    terms_evidence_keys = {"terms_kind", "scope", "kind", "url", "verified_at"}
+    terms_evidence: list[dict[str, Any]] = []
+    covered: set[object] = set()
+    for item in terms_evidence_value:
+        if not isinstance(item, dict):
+            errors.append(
+                f"{prefix}: terms evidence must match the terms evidence schema"
+            )
+            continue
+        terms_evidence.append(item)
+        if set(item) - {"unpinnable"} != terms_evidence_keys:
+            errors.append(
+                f"{prefix}: terms evidence must match the terms evidence schema"
+            )
+            continue
+        if item.get("unpinnable", True) is not True:
+            errors.append(
+                f"{prefix}: terms evidence unpinnable must be true when present"
+            )
+            continue
+        terms_kind = item["terms_kind"]
+        if isinstance(terms_kind, str):
+            # An unknown-but-real kind is left to the coverage check below, which
+            # reports it by name; only a non-string can't be hashed into `covered`
+            # at all, so it needs its own error here.
+            covered.add(terms_kind)
+        else:
+            errors.append(f"{prefix}: terms evidence terms_kind must be a string")
+        if item["kind"] != "web_terms":
+            errors.append(f"{prefix}: terms evidence kind must be web_terms")
+        if not isinstance(item["scope"], str) or not item["scope"].strip():
+            errors.append(f"{prefix}: terms evidence requires a scope")
+        if not valid_date(item["verified_at"]):
+            errors.append(f"{prefix}: terms evidence requires verified_at")
+    # validate_string_list already reported a non-string terms entry (a nested
+    # list is unhashable and would crash set(terms) below).
+    expected_terms = {t for t in terms if isinstance(t, str)} - {"none_published"}
+    if covered != expected_terms:
+        errors.append(f"{prefix}: terms evidence does not match terms")
+    return terms_evidence
+
+
+def validate_robot_first_party_urls(
+    robot: dict[str, Any],
+    evidence: list[dict[str, Any]],
+    terms_evidence: list[dict[str, Any]],
+    clean_domains: list[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    """Every URL a robot record cites must resolve under a declared first-party domain."""
+    for label, url in (
+        [("url", robot.get("url"))]
+        + [(f"evidence {item.get('label')!r}", item.get("url")) for item in evidence]
+        + [
+            (f"evidence {item.get('label')!r} immutable_url", item["immutable_url"])
+            for item in evidence
+            if "immutable_url" in item
+        ]
+        + [("terms evidence", item.get("url")) for item in terms_evidence]
+    ):
+        if not url_is_first_party(url, clean_domains):
+            errors.append(f"{prefix}: {label} {url!r} is not first-party")
+
+
+def validate_robot_identity(
+    robot: dict[str, Any],
+    repo: Any,
+    robot_id: Any,
+    index: ProjectIndex,
+    model_ids: set[str],
+    pack_repos: set[str],
+    robot_ids: set[str],
+    robot_repos_seen: set[str],
+    robot_urls_seen: set[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    """A robot's repo, url, and related_*/superseded_by references cross into other collections."""
+    if isinstance(repo, str):
+        if repo.lower() in index.repos:
+            errors.append(f"{prefix}: {repo} cannot be both a system and a robot")
+        if repo.lower() in pack_repos:
+            errors.append(f"{prefix}: {repo} cannot be both a pack and a robot")
+        if repo.lower() in robot_repos_seen:
+            errors.append(f"{prefix}: duplicate robot repository {repo}")
+        robot_repos_seen.add(repo.lower())
+    url_key = canonical_url_key(robot.get("url", ""))
+    if url_key in index.url_keys:
+        errors.append(f"{prefix}: {robot.get('url')} is already a system record")
+    if url_key in robot_urls_seen:
+        errors.append(f"{prefix}: duplicate robot url {robot.get('url')}")
+    robot_urls_seen.add(url_key)
+    for field, allowed in (
+        ("related_systems", index.ids),
+        ("related_models", model_ids),
+        ("related_robots", robot_ids),
+    ):
+        if field in robot:
+            validate_string_list(
+                robot, field, allowed, prefix, errors, allow_empty=True
+            )
+    # Only a list can be searched for self-membership without risk: a null or
+    # dict value already failed the schema check above via validate_string_list.
+    related_robots = robot.get("related_robots")
+    if isinstance(related_robots, list) and robot_id in related_robots:
+        errors.append(f"{prefix}: cannot relate to itself")
+    if "superseded_by" in robot:
+        superseded_by = robot["superseded_by"]
+        if not isinstance(superseded_by, str) or superseded_by not in robot_ids:
+            errors.append(f"{prefix}: superseded_by must name a robot record")
+
+
+def validate_robots(
+    robots_data: dict[str, Any],
+    tax: Taxonomy,
+    index: ProjectIndex,
+    errors: list[str],
+    *,
+    model_ids: set[str],
+    pack_repos: set[str],
+) -> list[Any]:
+    """Validate unscored robot records: what a vendor documents, never what a robot does (ADR 037)."""
+    robots_value = validate_collection_envelope(
+        robots_data, "robots.json", "1.0", "robots", errors
+    )
+    enum_ids = tax.enum_ids
+    robot_ids = {
+        item.get("id")
+        for item in robots_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    robot_repos_seen: set[str] = set()
+    robot_urls_seen: set[str] = set()
+    for robot in robots_value:
+        if not isinstance(robot, dict):
+            errors.append("robots.json: every robot must be an object")
+            continue
+        prefix = f"robot {robot.get('id', 'unknown')}"
+        for field in sorted(ROBOT_FORBIDDEN & set(robot)):
+            errors.append(f"{prefix}: {field} is never recorded on a robot")
+        fields = set(robot) - ROBOT_FORBIDDEN
+        if ROBOT_REQUIRED - fields or fields - ROBOT_REQUIRED - ROBOT_OPTIONAL:
+            missing = sorted(ROBOT_REQUIRED - fields)
+            extra = sorted(fields - ROBOT_REQUIRED - ROBOT_OPTIONAL)
+            errors.append(
+                f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
+            )
+        robot_id = robot.get("id")
+        if not isinstance(robot_id, str) or not ID_PATTERN.fullmatch(robot_id):
+            errors.append(f"{prefix}: invalid id")
+        for field in (
+            "name",
+            "manufacturer",
+            "description",
+            "availability_note",
+            "developer_access",
+            "terms_note",
+            "not_verified",
+        ):
+            if not isinstance(robot.get(field), str) or not robot[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        for field in ("short_name", "variants"):
+            if field in robot and (
+                not isinstance(robot[field], str) or not robot[field].strip()
+            ):
+                errors.append(
+                    f"{prefix}: {field} must be a non-empty string when present"
+                )
+        if not isinstance(robot.get("url"), str) or not robot["url"].startswith(
+            "https://"
+        ):
+            errors.append(f"{prefix}: url must be authoritative HTTPS")
+        # Membership on a set/dict requires a hashable key: a list or dict value
+        # would otherwise crash `not in` instead of being reported below.
+        if (
+            not isinstance(robot.get("form_factor"), str)
+            or robot.get("form_factor") not in enum_ids["robot_form_factors"]
+        ):
+            errors.append(f"{prefix}: unknown form factor")
+        if (
+            not isinstance(robot.get("availability"), str)
+            or robot.get("availability") not in enum_ids["robot_availability"]
+        ):
+            errors.append(f"{prefix}: unknown availability")
+        if (
+            not isinstance(robot.get("status"), str)
+            or robot.get("status") not in enum_ids["project_statuses"]
+        ):
+            errors.append(f"{prefix}: unknown status")
+        if not isinstance(robot.get("research_confidence"), str) or (
+            robot.get("research_confidence")
+            not in enum_ids["research_confidence_levels"]
+        ):
+            errors.append(f"{prefix}: unknown research confidence")
+        if not valid_date(robot.get("verified_at")):
+            errors.append(f"{prefix}: verified_at must be an ISO date")
+        if robot.get("status") == "superseded":
+            if "superseded_by" not in robot:
+                errors.append(f"{prefix}: superseded status requires superseded_by")
+            elif robot["superseded_by"] == robot_id:
+                errors.append(f"{prefix}: a robot cannot supersede itself")
+        elif "superseded_by" in robot:
+            errors.append(f"{prefix}: superseded_by requires the superseded status")
+
+        validate_string_list(
+            robot, "ai_basis", enum_ids["robot_ai_bases"], prefix, errors
+        )
+        ai_basis = (
+            robot.get("ai_basis") if isinstance(robot.get("ai_basis"), list) else []
+        )
+        named_models = robot.get("named_models")
+        if not isinstance(named_models, list):
+            errors.append(f"{prefix}: named_models must be a list")
+            named_models = []
+        if ("vendor_named_model" in ai_basis) != bool(named_models):
+            errors.append(
+                f"{prefix}: vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty"
+            )
+        for entry in named_models:
+            if not isinstance(entry, dict) or set(entry) != ROBOT_NAMED_MODEL_FIELDS:
+                errors.append(
+                    f"{prefix}: named_models entries must carry exactly "
+                    f"{sorted(ROBOT_NAMED_MODEL_FIELDS)}"
+                )
+                continue
+            for field in ("name", "role_note", "evidence_label"):
+                if not isinstance(entry[field], str) or not entry[field].strip():
+                    errors.append(
+                        f"{prefix}: named_models.{field} must be a non-empty string"
+                    )
+            if (
+                not isinstance(entry["kind"], str)
+                or entry["kind"] not in enum_ids["robot_model_kinds"]
+            ):
+                errors.append(f"{prefix}: unknown named model kind")
+
+        hardware = robot.get("hardware")
+        if not isinstance(hardware, dict) or set(hardware) != set(
+            ROBOT_HARDWARE_FIELDS
+        ):
+            errors.append(
+                f"{prefix}: hardware must carry exactly {list(ROBOT_HARDWARE_FIELDS)}"
+            )
+        else:
+            for field in ROBOT_HARDWARE_FIELDS:
+                if not isinstance(hardware[field], str) or not hardware[field].strip():
+                    errors.append(
+                        f"{prefix}: hardware.{field} must be a non-empty string"
+                    )
+
+        clean_domains = validate_robot_first_party_domains(robot, prefix, errors)
+
+        repo = robot.get("repo")
+        if repo is not None and (
+            not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo)
+        ):
+            errors.append(f"{prefix}: repo must be owner/name when present")
+            repo = None
+
+        validate_robot_identity(
+            robot,
+            repo,
+            robot_id,
+            index,
+            model_ids,
+            pack_repos,
+            robot_ids,
+            robot_repos_seen,
+            robot_urls_seen,
+            prefix,
+            errors,
+        )
+
+        evidence = validate_robot_evidence_roles(
+            robot, ai_basis, named_models, repo, prefix, errors
+        )
+        terms_evidence = validate_robot_terms(robot, enum_ids, prefix, errors)
+        validate_robot_first_party_urls(
+            robot, evidence, terms_evidence, clean_domains, prefix, errors
+        )
+    return robots_value
+
+
 def validate_inference_services(
     inference_services_data: dict[str, Any], tax: Taxonomy, errors: list[str]
 ) -> list[Any]:
@@ -2861,6 +3434,7 @@ def validate_unique_record_ids(
     errors: list[str],
     packs_value: list[Any] | None = None,
     labs_value: list[Any] | None = None,
+    robots_value: list[Any] | None = None,
 ) -> None:
     """No identifier may name a record in more than one collection."""
     collection_ids: dict[str, list[str]] = {}
@@ -2872,6 +3446,7 @@ def validate_unique_record_ids(
         ("models.json", models_value),
         ("packs.json", packs_value or []),
         ("labs.json", labs_value or []),
+        ("robots.json", robots_value or []),
     ):
         for record in collection_records:
             if isinstance(record, dict) and isinstance(record.get("id"), str):
@@ -3565,6 +4140,24 @@ def validate(root: Path = ROOT) -> list[str]:
         index,
         errors,
     )
+    model_ids = {
+        item["id"]
+        for item in models_value
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    robots_value = validate_robots(
+        catalog["robots.json"],
+        tax,
+        index,
+        errors,
+        model_ids=model_ids,
+        pack_repos=pack_repos,
+    )
+    robot_repos = {
+        item["repo"].lower()
+        for item in robots_value
+        if isinstance(item, dict) and isinstance(item.get("repo"), str)
+    }
 
     validate_unique_record_ids(
         index.projects,
@@ -3575,6 +4168,7 @@ def validate(root: Path = ROOT) -> list[str]:
         errors,
         packs_value=packs_value,
         labs_value=labs_value,
+        robots_value=robots_value,
     )
 
     candidate_repos = validate_candidates(
@@ -3583,6 +4177,10 @@ def validate(root: Path = ROOT) -> list[str]:
     if overlap := candidate_repos & pack_repos:
         errors.append(
             f"repositories cannot be both candidates and packs: {sorted(overlap)}"
+        )
+    if overlap := candidate_repos & robot_repos:
+        errors.append(
+            f"repositories cannot be both candidates and robots: {sorted(overlap)}"
         )
     validate_hn_signals(catalog["hn-signals.json"], tax, errors)
     dispositioned_ids = validate_model_dispositions(
@@ -3610,7 +4208,10 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     validate_license_review(catalog["license-review.json"], projects_by_id, errors)
     validate_exclusions(
-        catalog["exclusions.json"], index.repos | pack_repos, candidate_repos, errors
+        catalog["exclusions.json"],
+        index.repos | pack_repos | robot_repos,
+        candidate_repos,
+        errors,
     )
     validate_queue_envelopes(
         catalog["candidates.json"], catalog["license-review.json"], errors
@@ -3641,6 +4242,7 @@ def main() -> int:
     covered = sum(
         model["developer"] in lab_names for model in load("models.json")["models"]
     )
+    robot_count = len(load("robots.json")["robots"])
     print(
         f"validated {len(data['projects'])} projects with reviewed license evidence: "
         f"{counts}; {specification_count} unscored specifications; "
@@ -3648,6 +4250,7 @@ def main() -> int:
         f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
         f"{pack_count} unscored agent packs; "
         f"{len(labs)} unscored labs developing {covered} of the reviewed model releases; "
+        f"{robot_count} unscored robots; "
         f"{source_model_count} attributed models.dev source records"
     )
     for model_id, source_id in model_link_pending(

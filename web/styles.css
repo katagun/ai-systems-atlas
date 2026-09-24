@@ -60,6 +60,7 @@
   --card-runtime: linear-gradient(145deg, #fffaf5, #fff 68%);
   --card-pack: linear-gradient(145deg, #f7fdfa, #fff 68%);
   --card-lab: linear-gradient(145deg, #f7f9fb, #fff 68%);
+  --card-robot: linear-gradient(145deg, #fffbfa, #fff 68%);
   --radius: 14px;
   --radius-control: 8px;
   --radius-chip: 6px;
@@ -137,6 +138,7 @@
     --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
     --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
     --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
+    --card-robot: linear-gradient(145deg, rgba(224, 123, 130, .07), var(--panel) 68%);
   }
 }
 :root[data-theme="dark"] {
@@ -201,6 +203,7 @@
   --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
   --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
   --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
+  --card-robot: linear-gradient(145deg, rgba(224, 123, 130, .07), var(--panel) 68%);
 }
 
 * { box-sizing: border-box; }
@@ -491,6 +494,7 @@ h1 {
 
 .collection-switcher {
   display: flex;
+  flex-wrap: wrap;
   gap: .55rem;
   margin-top: 1.5rem;
   padding: .35rem;
@@ -517,6 +521,7 @@ h1 {
 .collection-switcher button.is-active { border-color: var(--text); background: var(--text); color: var(--on-ink); box-shadow: var(--shadow-small); }
 .collection-switcher strong { min-width: 2ch; color: var(--cyan-bright); font: 700 .7rem var(--font-mono); }
 .collection-switcher button:not(.is-active) strong { color: var(--cyan); }
+.collection-switcher button[hidden] { display: none; }
 .collection-panel[hidden] { display: none; }
 
 .control-panel {
@@ -685,6 +690,8 @@ input:focus, select:focus {
 .agent-pack-card::before { background: var(--cyan); }
 .lab-card { min-height: 360px; background: var(--card-lab); }
 .lab-card::before { background: var(--slate-ink); }
+.robot-card { min-height: 380px; background: var(--card-robot); }
+.robot-card::before { background: var(--violet); }
 .mixed-directory-card { min-height: 330px; }
 .project-card:hover {
   transform: translateY(-4px);
@@ -1312,6 +1319,10 @@ footer #data-date, footer .footer-meta {
   .brand small { display: none; }
   .tabs { order: 3; width: 100%; gap: .5rem; overflow-x: auto; }
   .tab { flex: 0 0 auto; font-size: .66rem; }
+  /* Narrow screens keep the horizontal scroll strip rather than wrapping,
+     since a wrapped switcher would push the grid below the fold; the active
+     entry is still reachable through syncCollectionSwitcher's scrollIntoView. */
+  .collection-switcher { flex-wrap: nowrap; overflow-x: auto; }
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
   .hero h1 { font-size: clamp(2.55rem, 11vw, 3.7rem); }
   .hero { gap: 2rem; }

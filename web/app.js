@@ -15,7 +15,7 @@ function writeStoredPageSize(pageSize) {
 }
 
 const state = {
-  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], labs: [], taxonomy: null,
+  projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], labs: [], robots: [], taxonomy: null,
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
@@ -23,7 +23,7 @@ const state = {
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
-  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1 },
+  page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -166,10 +166,10 @@ async function bootstrap() {
   // needed, so it stays a direct read of the endpoint. Everything else arrives
   // on demand: a record's detail when a dialog or comparison needs it, a search
   // index when a search box takes focus, logos.json off the critical path.
-  const [systems, inference, runtimes, specifications, models, taxonomy, packs, labs] = await Promise.all([
+  const [systems, inference, runtimes, specifications, models, taxonomy, packs, labs, robots] = await Promise.all([
     loadJSON("app/systems.json"), loadJSON("app/inference.json"), loadJSON("app/runtimes.json"),
     loadJSON("app/specifications.json"), loadJSON("app/models.json"), loadJSON("taxonomy.json"),
-    loadJSON("app/packs.json"), loadJSON("app/labs.json")
+    loadJSON("app/packs.json"), loadJSON("app/labs.json"), loadJSON("app/robots.json")
   ]);
   state.projects = systems.systems;
   state.inferenceServices = inference.inference;
@@ -183,7 +183,8 @@ async function bootstrap() {
   state.packs = packs.packs;
   state.labs = labs.labs;
   state.labIndex = AtlasCore.buildLabIndex(state.labs, state.models);
-  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at]
+  state.robots = robots.robots;
+  const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at, robots.verified_at]
     .filter(Boolean)
     .sort()
     .at(-1);
@@ -445,6 +446,15 @@ const COLLECTION_FILTERS = {
       ["model_distribution_modes", "#lab-distribution-filter", item => labRelationsFor(item).models.flatMap(model => model.distribution_modes || [])],
     ],
   },
+  robots: {
+    records: () => state.robots,
+    groups: [
+      ["robot_form_factors", "#robot-form-factor-filter", item => [item.form_factor]],
+      ["robot_ai_bases", "#robot-ai-basis-filter", item => item.ai_basis],
+      ["robot_availability", "#robot-availability-filter", item => [item.availability]],
+      ["project_statuses", "#robot-status-filter", item => [item.status]],
+    ],
+  },
 };
 
 // The Models view's Lab facet lists labs by name rather than a taxonomy group.
@@ -516,8 +526,8 @@ function renderStats() {
   const memories = state.projects.filter(project => project.system_family === "memory_system").length;
   const agents = state.projects.filter(project => project.system_family === "agent_system").length;
   const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length;
-  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, and packs`;
+  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length + state.robots.length;
+  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, packs, and robots`;
   $("#all-collection-count").textContent = total;
   $("#system-collection-count").textContent = state.projects.length;
   $("#memory-collection-count").textContent = memories;
@@ -530,17 +540,43 @@ function renderStats() {
   // beside host-installed systems (ADR 035), so both are counted here.
   $("#pack-collection-count").textContent = state.packs.length
     + AtlasCore.packShapedSystems(state.projects, {}).length;
+  // An empty collection has no navigation entry: the scope exists before its
+  // first record is reviewed, and a reader should not be sent to an empty page.
+  $("#robot-collection-count").textContent = state.robots.length;
+  $("#robot-collection-count").parentElement.hidden = state.robots.length === 0;
 }
 
 function syncCollectionSwitcher() {
   const family = $("#family-filter").value;
+  let activeButton = null;
   $$('[data-directory-collection]').forEach(button => {
     const buttonFamily = button.dataset.directoryFamily;
     const active = button.dataset.directoryCollection === state.directoryCollection
       && (buttonFamily === undefined || buttonFamily === family);
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
+    if (active) activeButton = button;
   });
+  // The switcher wraps at desktop widths, so every entry is already visible
+  // there; only the narrow layout keeps the horizontal scroll strip that can
+  // hide the active entry off-screen. Scrolling only fires when the strip is
+  // actually scrollable, so a scope change on a wide viewport never jolts the
+  // page, and it never asks for smooth scrolling so reduced motion is respected.
+  // scrollIntoView would do here, but it can scroll the whole page vertically
+  // to bring the switcher itself into view (e.g. a Systems family change that
+  // re-syncs it while it sits above the fold on a phone); moving only
+  // switcher.scrollLeft, by the button's nearest-edge overflow, never touches
+  // the page's own scroll position.
+  const switcher = $(".collection-switcher");
+  if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
+    const switcherRect = switcher.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    if (buttonRect.left < switcherRect.left) {
+      switcher.scrollLeft -= switcherRect.left - buttonRect.left;
+    } else if (buttonRect.right > switcherRect.right) {
+      switcher.scrollLeft += buttonRect.right - switcherRect.right;
+    }
+  }
 }
 
 function jumpToDirectoryFamily(family) {
@@ -554,7 +590,7 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes", "packs"].includes(collection) ? collection : "all";
+  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime");
@@ -566,16 +602,19 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   $("#inference-directory-panel").hidden = selected !== "inference";
   $("#runtimes-directory-panel").hidden = selected !== "runtimes";
   $("#packs-directory-panel").hidden = selected !== "packs";
+  $("#robots-directory-panel").hidden = selected !== "robots";
   const renderers = {
     all: renderAllDirectoryEntries,
     systems: renderProjects,
     inference: renderInferenceServices,
     runtimes: renderLocalRuntimes,
     packs: renderPacks,
+    robots: () => renderCollection("robots"),
   };
   for (const [name, grid] of [
     ["all", "#all-directory-grid"], ["systems", "#project-grid"],
     ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
+    ["robots", "#robot-grid"],
   ]) {
     if (name !== selected) $(grid).innerHTML = "";
   }
@@ -593,13 +632,14 @@ const PAGE_CONTAINERS = {
   specifications: "#specification-pager",
   packs: "#pack-pager",
   labs: "#lab-pager",
+  robots: "#robot-pager",
 };
 
 function pageRenderer(key) {
   return {
     all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
     runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
-    packs: renderPacks, labs: renderLabs,
+    packs: renderPacks, labs: renderLabs, robots: () => renderCollection("robots"),
   }[key];
 }
 
@@ -827,6 +867,16 @@ function labLinksMarkup(kind, record) {
   return `<p><strong>Lab:</strong> ${labs.map(lab => `<button type="button" class="link-button" data-open-lab="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</button>`).join(" · ")}</p>`;
 }
 
+function robotCard(robot, { mixed = false } = {}) {
+  const formLabel = taxonomyName("robot_form_factors", robot.form_factor);
+  return `<article class="project-card robot-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
+    <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
+    <p>${escapeHTML(robot.description)}</p>
+    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span><button data-robot="${escapeHTML(robot.id)}">View details →</button></div>
+  </article>`;
+}
+
 // Modality and family on a reviewed-model card come from models.dev, or from
 // developer documentation for a model models.dev does not list yet, not from
 // Atlas review, so they carry attributed plain text instead of badges.
@@ -877,7 +927,8 @@ function renderAllDirectoryEntries() {
     runtimeSearchIndex: searchIndexes.runtimes,
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
-  }, state.packs);
+    robotSearchIndex: searchIndexes.robots,
+  }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
@@ -894,6 +945,7 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     if (kind === "pack") return packCard(record, { mixed: true });
+    if (kind === "robot") return robotCard(record, { mixed: true });
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -913,12 +965,13 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, or agent packs match this search.</div>';
+  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.</div>';
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
+  $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
 }
@@ -1135,6 +1188,25 @@ const COLLECTIONS = {
       </article>`;
     },
   },
+  robots: {
+    grid: "#robot-grid",
+    resultCount: "#robot-result-count",
+    pageKey: "robots",
+    dataset: "robot",
+    noun: ["robot", "robots"],
+    empty: "No robots match these filters.",
+    open: id => openRobot(id),
+    context: () => ({ suffix: " · Unscored", comparable: false }),
+    records: () => AtlasCore.filterRobots(state.robots, {
+      term: $("#robot-search").value,
+      searchIndex: searchIndexes.robots,
+      formFactor: $("#robot-form-factor-filter").value,
+      aiBasis: $("#robot-ai-basis-filter").value,
+      availability: $("#robot-availability-filter").value,
+      status: $("#robot-status-filter").value,
+    }),
+    card: robot => robotCard(robot),
+  },
 };
 
 // dataset keys are camelCase; the matching attribute is kebab-case.
@@ -1217,7 +1289,7 @@ function renderSearchSurfaces() {
   const renderers = {
     all: renderAllDirectoryEntries, systems: renderProjects,
     inference: renderInferenceServices, runtimes: renderLocalRuntimes,
-    packs: renderPacks,
+    packs: renderPacks, robots: () => renderCollection("robots"),
   };
   renderers[state.directoryCollection]?.();
   // Specifications, Models, and Labs are sibling views rather than directory
@@ -1543,6 +1615,8 @@ function renderTaxonomy() {
     ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
     ["Pack install mechanisms", state.taxonomy.pack_install_mechanisms],
     ["Lab types", state.taxonomy.lab_types], ["Lab channels", state.taxonomy.lab_channel_kinds],
+    ["Robot forms", state.taxonomy.robot_form_factors], ["How a robot uses AI", state.taxonomy.robot_ai_bases], ["Robot availability", state.taxonomy.robot_availability],
+    ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
   $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
@@ -1624,6 +1698,56 @@ function packDialogMarkup(pack) {
       <section class="detail-block"><h3>Licenses and terms</h3><p>${detailText(pack.license_note)}</p>${(pack.license_evidence || []).map(specificationEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>Reviewed sources</h3>${(pack.evidence || []).map(specificationEvidenceLink).join("") || "<p>—</p>"}</section>
       <section class="detail-block"><h3>Related records</h3>${relatedPacks.length || relatedSystems.length ? `<p>${[...relatedPacks.map(item => `<button type="button" class="ghost-button" data-open-pack="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
+    </div>`;
+}
+
+function robotTermsLink(item) {
+  return `<p><strong>${escapeHTML(taxonomyName("robot_terms_kinds", item.terms_kind))}:</strong> ${escapeHTML(item.scope)} · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>` + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
+}
+
+// An evidence entry a maker can change without notice (a live pricing or
+// availability page, not a dated document) is marked unpinnable at review
+// time. The reader sees the same source link everyone else gets, plus a note
+// that the Atlas cannot pin what the page said when it was reviewed.
+function robotEvidenceLink(item) {
+  return specificationEvidenceLink(item) + (item.unpinnable ? '<p class="unscored-note">This page changes between visits, so the Atlas cannot pin what it said.</p>' : "");
+}
+
+// named_models, terms_evidence, not_verified, verified_at, terms_note,
+// hardware, developer_access, and availability_note only arrive with detail;
+// the boot record carries only id, name, short_name, manufacturer, url,
+// description, form_factor, ai_basis, availability, and status. Asserting an
+// absence — "the maker names no model", "no terms were published" — off a
+// field that has simply not loaded yet would be a false claim, so each one
+// renders the detailText em dash (lines ~31-37) until robotDetailLoaded is
+// true, exactly as the other three record dialogs already do for their own
+// detail-only fields.
+function robotDialogMarkup(robot) {
+  const relatedSystems = (robot.related_systems || []).map(id => state.projects.find(item => item.id === id)).filter(Boolean);
+  const relatedRobots = (robot.related_robots || []).map(id => state.robots.find(item => item.id === id)).filter(Boolean);
+  const hardware = robot.hardware || {};
+  const detailLoaded = robotDetailLoaded(robot);
+  const namedModelsMarkup = (robot.named_models || []).map(model => `<p><strong>${escapeHTML(model.name)}</strong> · ${escapeHTML(taxonomyName("robot_model_kinds", model.kind))} · <em>vendor-stated</em></p><p>${detailText(model.role_note)}</p>`).join("");
+  const modelsSection = detailLoaded && !(robot.ai_basis || []).includes("vendor_named_model")
+    ? "<p>The maker names no model for this robot.</p>"
+    : namedModelsMarkup || "<p>—</p>";
+  const notVerifiedMarkup = robot.not_verified ? `<p class="unscored-note">${escapeHTML(robot.not_verified)}</p>` : "";
+  const termsMarkup = (robot.terms_evidence || []).map(robotTermsLink).join("");
+  const termsSection = detailLoaded
+    ? termsMarkup || "<p>No terms were published on the maker's pages at review time.</p>"
+    : "<p>—</p>";
+  const reviewedLine = robot.verified_at ? `<p>Reviewed ${escapeHTML(robot.verified_at)}.</p>` : "";
+  return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
+    <div class="detail-grid">
+      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>Models the vendor names</h3>${modelsSection}${notVerifiedMarkup}</section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
+      <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
+      ${(robot.ai_basis || []).includes("open_model_interface") ? "" : `<section class="detail-block"><h3>Developer access</h3><p>${detailText(robot.developer_access || "—")}</p></section>`}
+      <section class="detail-block"><h3>Availability</h3><p><strong>${escapeHTML(taxonomyName("robot_availability", robot.availability))}</strong></p><p>${detailText(robot.availability_note || "")}</p></section>
+      <section class="detail-block"><h3>Terms</h3><p>${detailText(robot.terms_note || "")}</p>${termsSection}</section>
+      <section class="detail-block"><h3>Reviewed sources</h3>${(robot.evidence || []).map(robotEvidenceLink).join("") || "<p>—</p>"}${reviewedLine}</section>
+      <section class="detail-block"><h3>Related records</h3>${relatedSystems.length || relatedRobots.length ? `<p>${[...relatedSystems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`), ...relatedRobots.map(item => `<button type="button" class="ghost-button" data-open-robot="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`)].join(" ")}</p>` : "<p>None recorded.</p>"}</section>
     </div>`;
 }
 
@@ -1748,6 +1872,9 @@ const loadedDetail = new Set();
 // loadedDetail. Safe to reference from functions defined earlier in this
 // file: none of them run until the whole script has finished loading.
 const inferenceDetailLoaded = service => loadedDetail.has(`inference:${service.id}`);
+// robotDialogMarkup's own version of the same predicate, keyed the way
+// loadDetail keys loadedDetail for a robot: `robot:<id>`.
+const robotDetailLoaded = robot => loadedDetail.has(`robot:${robot.id}`);
 const detailRequests = new Map();
 let modelSourceDetails = null;
 let modelSourceDetailsRequest = null;
@@ -1988,6 +2115,16 @@ const RECORD_DIALOGS = {
     markup: labDialogMarkup,
     afterRender: bindLabDialogLinks,
   },
+  robot: {
+    dialog: "#robot-dialog",
+    content: "#robot-dialog-content",
+    find: id => state.robots.find(item => item.id === id),
+    markup: robotDialogMarkup,
+    afterRender: () => {
+      $$('[data-open-robot]', $("#robot-dialog-content")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.openRobot)));
+      $$('[data-open-project]', $("#robot-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#robot-dialog").close(); openProject(button.dataset.openProject); }));
+    },
+  },
 };
 
 function paintRecordDialog(dialog, record) {
@@ -2027,6 +2164,7 @@ function openLocalRuntime(id) { return openRecordDialog("runtime", id); }
 function openPack(id) { return openRecordDialog("pack", id); }
 function openModel(id) { return openRecordDialog("model", id); }
 function openLab(id) { return openRecordDialog("lab", id); }
+function openRobot(id) { return openRecordDialog("robot", id); }
 
 
 function specificationEvidenceLink(item) {
@@ -2057,7 +2195,7 @@ function runtimeLicenseEvidenceLink(item) {
 // `record=kind:id` URL, so the address bar always links to what is on screen.
 // Dispatch is static, as with comparisons, because the kind comes from the URL.
 const RECORD_DIALOG_SELECTORS = [
-  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#pack-dialog", "#model-dialog", "#lab-dialog",
+  "#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#pack-dialog", "#model-dialog", "#lab-dialog", "#robot-dialog",
 ];
 const RECORD_LINK_MARKUP = '<p class="record-link"><button type="button" class="ghost-button" data-copy-record-link>Copy link</button><span class="record-link-status" data-record-link-status aria-live="polite">Copy link shares a preview page for this record.</span></p>';
 
@@ -2069,6 +2207,7 @@ function openRecord(kind, id) {
   if (kind === "pack") return openPack(id);
   if (kind === "model") return openModel(id);
   if (kind === "lab") return openLab(id);
+  if (kind === "robot") return openRobot(id);
   return false;
 }
 
@@ -2364,8 +2503,8 @@ function restoreViewFromURL() {
 }
 
 function activateView(id) {
-  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : "packs");
+  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
+    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
   }
   const comparisonFitsView = (id === "models" && state.comparison.kind === "model")
@@ -2392,7 +2531,8 @@ const SEARCH_SCOPES = {
   "#project-search": ["systems"], "#specification-search": ["specifications"],
   "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
   "#model-search": ["models"], "#pack-search": ["packs", "systems"], "#lab-search": ["labs"],
-  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs"],
+  "#robot-search": ["robots"],
+  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
 };
 
 function bindEvents() {
@@ -2441,6 +2581,7 @@ function bindEvents() {
   ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
   ["#lab-search", "#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
   ["#pack-search", "#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
+  ["#robot-search", "#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
   $("#reset-specification-filters").addEventListener("click", () => {
     $("#specification-search").value = "";
     $("#specification-type-filter").value = "";
@@ -2498,6 +2639,15 @@ function bindEvents() {
     $("#lab-distribution-filter").value = "";
     state.page.labs = 1;
     renderLabs();
+  });
+  $("#reset-robot-filters").addEventListener("click", () => {
+    $("#robot-search").value = "";
+    $("#robot-form-factor-filter").value = "";
+    $("#robot-ai-basis-filter").value = "";
+    $("#robot-availability-filter").value = "";
+    $("#robot-status-filter").value = "";
+    state.page.robots = 1;
+    renderCollection("robots");
   });
   $("#reset-all-directory").addEventListener("click", () => {
     $("#all-directory-search").value = "";
@@ -2563,6 +2713,8 @@ function bindEvents() {
   $("#runtime-dialog").addEventListener("click", event => { if (event.target === $("#runtime-dialog")) $("#runtime-dialog").close(); });
   $("#pack-dialog .dialog-close").addEventListener("click", () => $("#pack-dialog").close());
   $("#pack-dialog").addEventListener("click", event => { if (event.target === $("#pack-dialog")) $("#pack-dialog").close(); });
+  $("#robot-dialog .dialog-close").addEventListener("click", () => $("#robot-dialog").close());
+  $("#robot-dialog").addEventListener("click", event => { if (event.target === $("#robot-dialog")) $("#robot-dialog").close(); });
   $("#model-dialog .dialog-close").addEventListener("click", () => $("#model-dialog").close());
   $("#model-dialog").addEventListener("click", event => { if (event.target === $("#model-dialog")) $("#model-dialog").close(); });
   $("#lab-dialog .dialog-close").addEventListener("click", () => $("#lab-dialog").close());

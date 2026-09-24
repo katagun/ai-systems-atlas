@@ -70,6 +70,7 @@ class _TargetBuilder:
     references: set[str] = field(default_factory=set)
     review_dates: dict[str, str | None] = field(default_factory=dict)
     monitor_terms: bool = False
+    unpinnable: bool = False
 
 
 @dataclass(frozen=True)
@@ -138,6 +139,7 @@ def _add_target(
     reference: str,
     reviewed_at: object = None,
     monitor_terms: bool = False,
+    unpinnable: bool = False,
 ) -> None:
     if not isinstance(url, str) or not url.startswith("https://"):
         return
@@ -149,6 +151,7 @@ def _add_target(
         reviewed_at,
     )
     target.monitor_terms = target.monitor_terms or monitor_terms
+    target.unpinnable = target.unpinnable or unpinnable
 
 
 def _add_evidence_items(
@@ -159,18 +162,24 @@ def _add_evidence_items(
     record_id: str,
     group: str,
     record_reviewed_at: object,
+    monitor_roles: frozenset[str] = frozenset(),
 ) -> None:
     for index, item in enumerate(items):
         reference = f"{collection}:{record_id}:{group}:{index}"
         is_terms = item.get("kind") == "web_terms"
         reviewed_at = item.get("verified_at", record_reviewed_at)
+        is_monitored = is_terms or item.get("role") in monitor_roles
         _add_target(
             targets,
             item.get("url"),
             kind="terms" if is_terms else "evidence",
             reference=reference,
             reviewed_at=reviewed_at,
-            monitor_terms=is_terms,
+            monitor_terms=is_monitored,
+            # An unpinnable citation changes between fetches, so its hash can
+            # never settle; it vetoes monitoring for the URL (see collect_targets),
+            # even when another citation of the same URL would monitor it.
+            unpinnable=bool(item.get("unpinnable")),
         )
         _add_target(
             targets,
@@ -381,13 +390,46 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
                 reviewed_at=framework.get("verified_at"),
             )
 
+    # Robots carry terms in place of licences, and their central fact is a vendor
+    # page naming a model (ADR 037), so that page is watched for drift as terms are.
+    for record in load_json(directory / "robots.json")["robots"]:
+        record_id = record["id"]
+        reviewed_at = record.get("verified_at")
+        _add_target(
+            targets,
+            record.get("url"),
+            kind="record",
+            reference=f"robots:{record_id}:url",
+            reviewed_at=reviewed_at,
+        )
+        _add_evidence_items(
+            targets,
+            record["evidence"],
+            collection="robots",
+            record_id=record_id,
+            group="evidence",
+            record_reviewed_at=reviewed_at,
+            monitor_roles=frozenset({"named_model", "model_interface"}),
+        )
+        _add_evidence_items(
+            targets,
+            record["terms_evidence"],
+            collection="robots",
+            record_id=record_id,
+            group="terms",
+            record_reviewed_at=reviewed_at,
+        )
+
     return [
         LinkTarget(
             url=item.url,
             kinds=tuple(sorted(item.kinds)),
             references=tuple(sorted(item.references)),
             review_dates=tuple(sorted(item.review_dates.items())),
-            monitor_terms=item.monitor_terms,
+            # Unpinnable wins per URL: any citation marking it unpinnable means the
+            # hash can never settle, so it vetoes monitoring even when another
+            # citation of the same URL would otherwise turn monitoring on.
+            monitor_terms=item.monitor_terms and not item.unpinnable,
         )
         for item in sorted(targets.values(), key=lambda target: target.url)
     ]

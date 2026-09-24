@@ -100,6 +100,7 @@ class PromoteModelCandidateTests(unittest.TestCase):
             "local-runtimes.json",
             "packs.json",
             "labs.json",
+            "robots.json",
         ):
             (directory / name).write_bytes((ROOT / "directory" / name).read_bytes())
         self.queue = queue

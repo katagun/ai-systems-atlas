@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="peacefulcoexistance is an AI systems directory: reviewed AI systems, models, inference services, local runtimes, agent packs, specifications, and protocols with explicit terms and evidence.">
+  <meta name="description" content="peacefulcoexistance is an AI systems directory: reviewed AI systems, models, inference services, local runtimes, agent packs, robots, specifications, and protocols with explicit terms and evidence.">
   <meta name="theme-color" content="#f7f9fc">
   <script>
     // Stamp a stored theme choice before first paint so the page never flashes
@@ -17,13 +17,13 @@
   </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="peacefulcoexistance — AI systems directory">
-  <meta property="og:description" content="Reviewed AI systems, models, inference services, local runtimes, agent packs, specifications, and protocols with explicit terms and evidence.">
+  <meta property="og:description" content="Reviewed AI systems, models, inference services, local runtimes, agent packs, robots, specifications, and protocols with explicit terms and evidence.">
   <meta property="og:url" content="https://peacefulcoexistance.com/">
   <title>peacefulcoexistance — AI systems directory</title>
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=c2ab93cf9e0e">
+  <link rel="stylesheet" href="styles.css?v=344ce1fa71c1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -91,15 +91,16 @@
         <button data-directory-collection="inference" aria-pressed="false"><span>Inference services</span><strong id="inference-collection-count"></strong></button>
         <button data-directory-collection="runtimes" aria-pressed="false"><span>Local runtimes</span><strong id="runtime-collection-count"></strong></button>
         <button data-directory-collection="packs" aria-pressed="false"><span>Agent packs</span><strong id="pack-collection-count"></strong></button>
+        <button data-directory-collection="robots" aria-pressed="false" hidden><span>Robots</span><strong id="robot-collection-count"></strong></button>
       </nav>
 
       <div id="all-directory-panel" class="collection-panel">
         <section class="control-panel mixed-directory-controls" aria-label="All directory search">
-          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, and agent packs" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, agent packs, and robots" autocomplete="off"></label>
           <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose a specialist collection for filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
-        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, and agent packs"></section>
+        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, and robots"></section>
         <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
       </div>
 
@@ -171,6 +172,20 @@
         <div class="result-row"><p id="pack-result-count" aria-live="polite"></p><button id="reset-pack-filters" class="ghost-button">Clear filters</button></div>
         <section id="pack-grid" class="project-grid inference-grid" aria-label="Reviewed agent packs and scored systems installed as packs"></section>
         <nav id="pack-pager" class="pager" aria-label="Agent packs pagination"></nav>
+      </div>
+
+      <div id="robots-directory-panel" class="collection-panel" hidden>
+        <section class="control-panel inference-controls" aria-label="Robot filters">
+          <label class="search-field"><span>Search</span><input id="robot-search" type="search" placeholder="Search robots, makers, and named models" autocomplete="off"></label>
+          <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
+          <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
+          <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
+          <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
+          <p class="filter-guidance">Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
+        </section>
+        <div class="result-row"><p id="robot-result-count" aria-live="polite"></p><button id="reset-robot-filters" class="ghost-button">Clear filters</button></div>
+        <section id="robot-grid" class="project-grid inference-grid" aria-label="Reviewed robots"></section>
+        <nav id="robot-pager" class="pager" aria-label="Robots pagination"></nav>
       </div>
     </section>
 
@@ -331,6 +346,11 @@
           <p class="endpoint-shape"><code>labs[]</code> · <code>verified_at</code> · <code>version</code></p>
         </article>
         <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/robots.json">robots.json</a></h2>
+          <p>Robots whose maker's own documentation names a learned model or policy, or documents a way to run your own, recorded for hardware, availability, and terms as the maker documents them. Never scored.</p>
+          <p class="endpoint-shape"><code>robots[]</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/license-evidence.json">license-evidence.json</a></h2>
           <p>The reviewed license and terms evidence behind each record, scoped to the components it covers and pinned to the exact file or page it was read from.</p>
           <p class="endpoint-shape"><code>entries[]</code> · <code>verified_at</code></p>
@@ -383,6 +403,11 @@
     <div id="pack-dialog-content"></div>
   </dialog>
 
+  <dialog id="robot-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="robot-dialog-content"></div>
+  </dialog>
+
   <dialog id="model-dialog">
     <button class="dialog-close" aria-label="Close">×</button>
     <div id="model-dialog-content"></div>
@@ -422,8 +447,8 @@
   </dialog>
 
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"968acbf50ce6","taxonomy.json":"00ea540eb84f","license-evidence.json":"6eed3f97dd0e","specifications.json":"f6487c60eb84","inference-services.json":"7b7ab63fcd14","local-runtimes.json":"c3d85a51fff7","models.json":"59fe96edadc6","models-dev.json":"ec5e4b8a29fb","logos.json":"8bc2b56f0082","app/systems.json":"e3af568dc125","app/inference.json":"fd20bf6a3529","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"83d5bc808c99","app/packs.json":"61b78c650076","app/labs.json":"217111b92c88","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"00eb20982219","app/search/inference.json":"47788938660c","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"0f8b27ee0361","app/detail":"e15ee5416a21"}</script>
-  <script src="app-core.js?v=1639080cc6fe" defer></script>
-  <script src="app.js?v=73573b1b3cb6" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"968acbf50ce6","taxonomy.json":"7c82e3e14ed1","license-evidence.json":"6eed3f97dd0e","specifications.json":"f6487c60eb84","inference-services.json":"7b7ab63fcd14","local-runtimes.json":"c3d85a51fff7","models.json":"59fe96edadc6","models-dev.json":"ec5e4b8a29fb","logos.json":"8bc2b56f0082","app/systems.json":"e3af568dc125","app/inference.json":"fd20bf6a3529","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"83d5bc808c99","app/packs.json":"61b78c650076","app/labs.json":"217111b92c88","app/robots.json":"98eca3792ac7","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"00eb20982219","app/search/inference.json":"47788938660c","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"0f8b27ee0361","app/search/robots.json":"ca3d163bab05","app/detail":"e15ee5416a21"}</script>
+  <script src="app-core.js?v=73f338668609" defer></script>
+  <script src="app.js?v=1bd682b065fd" defer></script>
 </body>
 </html>

@@ -281,6 +281,23 @@
     return [...new Set(labs.filter(Boolean))];
   }
 
+  // Robots are unscored (ADR 037): the shared collection filter supplies the
+  // facets and search, and the sort is pinned to name so no caller can ask for
+  // a score order that does not exist.
+  const ROBOT_VIEW = {
+    searchFields: ["id", "name", "short_name", "manufacturer", "description"],
+    facets: {
+      formFactor: "form_factor",
+      aiBasis: "ai_basis",
+      availability: "availability",
+      status: "status",
+    },
+  };
+
+  function filterRobots(robots, filters = {}) {
+    return filterScoredCollection(robots, { ...filters, sort: "name" }, ROBOT_VIEW);
+  }
+
   function filterInferenceServices(services, filters = {}) {
     return filterScoredCollection(services, filters, INFERENCE_SERVICE_VIEW);
   }
@@ -325,10 +342,11 @@
   // filters.searchIndex covers systems (the same shape filterAndSortProjects
   // takes), filters.serviceSearchIndex covers inference services,
   // filters.runtimeSearchIndex covers local runtimes, filters.modelSearchIndex
-  // covers model releases, and filters.packSearchIndex covers agent packs.
-  // Each is supplied independently, so a missing one only narrows that
-  // collection to the searchable fields present in its boot records.
-  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = []) {
+  // covers model releases, filters.packSearchIndex covers agent packs, and
+  // filters.robotSearchIndex covers robots. Each is supplied independently,
+  // so a missing one only narrows that collection to the searchable fields
+  // present in its boot records.
+  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = []) {
     const term = (filters.term || "").trim().toLowerCase();
     const entries = [
       ...projects.filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex)).map(record => ({ kind: "system", record })),
@@ -336,6 +354,7 @@
       ...filterLocalRuntimes(runtimes, { term, sort: "name", searchIndex: filters.runtimeSearchIndex }).map(record => ({ kind: "runtime", record })),
       ...filterModels(models, { term, sort: "name", searchIndex: filters.modelSearchIndex }).map(record => ({ kind: "model", record })),
       ...filterPacks(packs, { term, searchIndex: filters.packSearchIndex }).map(record => ({ kind: "pack", record })),
+      ...filterRobots(robots, { term, searchIndex: filters.robotSearchIndex }).map(record => ({ kind: "robot", record })),
     ];
     return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
@@ -388,7 +407,7 @@
   // Record references come from the URL. The kind is checked against a static
   // list on purpose: a lookup keyed on user input could resolve inherited names
   // such as "constructor", and an id is a plain slug or it is nothing.
-  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model", "pack", "lab"];
+  const RECORD_KINDS = ["system", "spec", "inference", "runtime", "model", "pack", "lab", "robot"];
   const RECORD_ID = /^[\w.-]+$/;
   function parseRecordReference(raw) {
     if (typeof raw !== "string") return null;
@@ -418,6 +437,7 @@
     if (kind === "model") return `records/models/${id}/`;
     if (kind === "pack") return `records/packs/${id}/`;
     if (kind === "lab") return `records/labs/${id}/`;
+    if (kind === "robot") return `records/robots/${id}/`;
     return null;
   }
 
@@ -969,6 +989,7 @@
     filterLocalRuntimes,
     filterModels,
     filterPacks,
+    filterRobots,
     filterScoredCollection,
     filterSpecifications,
     labDistributionModes,

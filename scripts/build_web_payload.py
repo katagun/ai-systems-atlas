@@ -26,6 +26,7 @@ COLLECTIONS = (
     ("models", "models.json", "models", "model"),
     ("packs", "packs.json", "packs", "pack"),
     ("labs", "labs.json", "labs", "lab"),
+    ("robots", "robots.json", "robots", "robot"),
 )
 
 # What a card, a filter, a sort, and the finder read before anything is clicked.
@@ -155,6 +156,18 @@ BOOT_FIELDS = {
         "catalog_names",
         "systems",
     ),
+    "robots": (
+        "id",
+        "name",
+        "short_name",
+        "manufacturer",
+        "url",
+        "description",
+        "form_factor",
+        "ai_basis",
+        "availability",
+        "status",
+    ),
 }
 
 # Exactly the fields each filter in web/app-core.js searches today.
@@ -231,6 +244,15 @@ SEARCH_FIELDS = {
         "organization_note",
         "catalog_names",
         "parent_organization",
+    ),
+    "robots": (
+        "id",
+        "name",
+        "short_name",
+        "manufacturer",
+        "description",
+        "named_models",
+        "variants",
     ),
 }
 
@@ -326,6 +348,11 @@ def searchable_text(value) -> str:
         return ""
     if isinstance(value, list):
         return " ".join(searchable_text(item) for item in value)
+    if isinstance(value, dict):
+        # A robot's named_models entries carry role notes, kinds, and labels
+        # beside the model name; only the name is meant to be findable, so a
+        # dict is reduced to it rather than stringified whole.
+        return searchable_text(value.get("name"))
     return str(value)
 
 

@@ -1,7 +1,7 @@
 # Design: An unscored Robots collection
 
 **Date:** 2026-09-20
-**Status:** Proposed
+**Status:** Implemented (PR 2 plumbing; records follow in PR 3)
 
 ## Problem
 
@@ -99,7 +99,7 @@ The Agent packs pattern, with no new interface concept.
 - A **Robots** scope in the Directory navigation with a count, included in the All total. The entry is hidden while the collection is empty.
 - Cards show name, manufacturer, form factor, and availability, with no score and no badge. Marks come from the existing logo pipeline where a data-backed mark exists; otherwise a monogram.
 - Filters: form factor, AI basis ("Maker names a model", "Runs your own models"), availability, status. Search covers name, manufacturer, description, and named-model names. Alphabetical order, no sort control.
-- The record dialog and share page (`/records/robots/<id>/`) show, in order: what it is; models the vendor names, each with its `role_note` and a "vendor-stated" label, or a plain statement that the maker names none; running your own models, when the maker documents a way; hardware; developer access; availability; terms; the `not_verified` sentence; evidence and verification date; related records.
+- The record dialog and share page (`/records/robots/<id>/`) show, in order: what it is; models the vendor names, each with its `role_note` and a "vendor-stated" label, with the `not_verified` sentence directly beneath them because it is about that claim, or a plain statement that the maker names none once detail has arrived; running your own models, when the maker documents a way; hardware; developer access; availability; terms; evidence and verification date; related records. Detail-only fields render an em dash until the record's detail has loaded; the dialog never asserts an absence from a field that has not arrived.
 - No comparison, no Finder goal, no score scope. In the mixed All view robots appear unscored, as packs do.
 - Reader-facing copy uses plain words — "Robots", "Models the vendor names" — and no internal vocabulary.
 
