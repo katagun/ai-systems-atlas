@@ -121,6 +121,11 @@ TAXONOMY_GROUPS = (
     "model_types",
     "model_modalities",
     "model_distribution_modes",
+    "flag_kinds",
+    "flag_statuses",
+    "flag_domains",
+    "flag_determinations",
+    "flag_scopes",
     "specification_types",
     "specification_scopes",
     "specification_statuses",
@@ -498,6 +503,59 @@ MODEL_REVIEW_REQUIRED = {
     "source_model",
     "model_access_score",
 }
+MODEL_OPTIONAL = {"flags"}
+
+# ADR 039: a reviewed flag records one kind of first-party statement, in the
+# steward's own words. Each status has exactly one shape; a found statement on a
+# page that cannot be pinned carries "unpinnable": true in place of the hash.
+MAKER_RISK_FLAG = "maker_risk_safeguards"
+FLAG_FOUND_FIELDS = frozenset(
+    {
+        "kind",
+        "status",
+        "tier_term",
+        "domains",
+        "determination",
+        "scope",
+        "statement",
+        "url",
+        "content_sha256",
+        "verified_at",
+        "research_confidence",
+    }
+)
+FLAG_FOUND_UNPINNABLE_FIELDS = (FLAG_FOUND_FIELDS - {"content_sha256"}) | {"unpinnable"}
+FLAG_NONE_FIELDS = frozenset(
+    {"kind", "status", "url", "verified_at", "research_confidence"}
+)
+FLAG_SHAPES = {
+    "statement_found": (FLAG_FOUND_FIELDS, FLAG_FOUND_UNPINNABLE_FIELDS),
+    "no_statement_found": (FLAG_NONE_FIELDS,),
+}
+# Collection names a flag kind may list. Only models accept a `flags` field today;
+# a kind for another collection needs its own ADR and its own schema change.
+FLAG_COLLECTION_NAMES = frozenset(
+    {
+        "projects",
+        "specifications",
+        "inference-services",
+        "local-runtimes",
+        "models",
+        "packs",
+    }
+)
+# Hosts shared by many publishers: a site there is the host plus its first path
+# segment (the owner), so huggingface.co/other-org is not huggingface.co/acme.
+SHARED_PUBLISHER_HOSTS = frozenset(
+    {
+        "github.com",
+        "raw.githubusercontent.com",
+        "huggingface.co",
+        "storage.googleapis.com",
+    }
+)
+# Second-level labels under a two-letter country code (example.co.uk, example.com.cn).
+SECOND_LEVEL_LABELS = frozenset({"ac", "co", "com", "edu", "gov", "net", "org"})
 
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
@@ -721,6 +779,7 @@ class Taxonomy(NamedTuple):
     inference_dimensions: dict[str, float]
     runtime_dimensions: dict[str, float]
     model_dimensions: dict[str, float]
+    flag_collections: dict[str, set[str]]
 
 
 class ProjectIndex(NamedTuple):
@@ -730,6 +789,35 @@ class ProjectIndex(NamedTuple):
     ids: set[str]
     repos: set[str]
     url_keys: set[str]
+
+
+def validate_flag_kinds(
+    taxonomy: dict[str, Any], enum_ids: dict[str, set[str]], errors: list[str]
+) -> dict[str, set[str]]:
+    """Each flag kind names the collections it may appear in (ADR 039)."""
+    if enum_ids["flag_statuses"] != set(FLAG_SHAPES):
+        errors.append(f"taxonomy: flag_statuses must be exactly {sorted(FLAG_SHAPES)}")
+    items = taxonomy.get("flag_kinds")
+    allowed: dict[str, set[str]] = {}
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict) or not isinstance(item.get("id"), str):
+            continue
+        collections = item.get("collections")
+        if (
+            not isinstance(collections, list)
+            or not collections
+            or not all(isinstance(name, str) for name in collections)
+        ):
+            errors.append(
+                f"taxonomy: flag kind {item['id']!r} requires a non-empty collections list"
+            )
+            continue
+        if unknown := set(collections) - FLAG_COLLECTION_NAMES:
+            errors.append(
+                f"taxonomy: flag kind {item['id']!r} names unknown collections {sorted(unknown)}"
+            )
+        allowed[item["id"]] = set(collections)
+    return allowed
 
 
 def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
@@ -820,6 +908,7 @@ def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
         "model",
         errors,
     )
+    flag_collections = validate_flag_kinds(taxonomy, enum_ids, errors)
     return Taxonomy(
         enum_ids=enum_ids,
         families=families,
@@ -829,6 +918,7 @@ def validate_taxonomy(taxonomy: dict[str, Any], errors: list[str]) -> Taxonomy:
         inference_dimensions=inference_score_dimensions,
         runtime_dimensions=local_runtime_score_dimensions,
         model_dimensions=model_score_dimensions,
+        flag_collections=flag_collections,
     )
 
 
@@ -2773,6 +2863,154 @@ def validate_model_source_metadata(
                 )
 
 
+def publisher_site(url: object) -> str | None:
+    """The site a URL belongs to, for the first-party check on reviewed flags.
+
+    A host minus a leading www., reduced to its registrable part, or host/owner on a
+    host many publishers share. None for anything that is not a public HTTPS URL.
+    """
+    host = https_url_host(url)
+    if host is None:
+        return None
+    host = host.removeprefix("www.")
+    if host in SHARED_PUBLISHER_HOSTS:
+        owner = urllib.parse.urlsplit(str(url)).path.strip("/").split("/", 1)[0]
+        return f"{host}/{owner.lower()}" if owner else None
+    labels = host.split(".")
+    keep = (
+        3
+        if len(labels) >= 3
+        and len(labels[-1]) == 2
+        and labels[-2] in SECOND_LEVEL_LABELS
+        else 2
+    )
+    return ".".join(labels[-keep:])
+
+
+def record_publisher_sites(model: dict[str, Any]) -> set[str]:
+    """Sites a reviewed model already cites: its url, evidence, and license evidence.
+
+    The models.dev repository is never one: it is attributed source metadata, and
+    models.dev text never establishes a flag (ADR 039, AGENTS.md rule 11).
+    """
+    urls: list[object] = [model.get("url")]
+    for field in ("evidence", "license_evidence"):
+        items = model.get(field)
+        if isinstance(items, list):
+            urls += [item.get("url") for item in items if isinstance(item, dict)]
+    models_dev = publisher_site(MODELS_DEV_REPO)
+    return {
+        site
+        for url in urls
+        if (site := publisher_site(url)) is not None and site != models_dev
+    }
+
+
+def validate_found_statement(
+    entry: dict[str, Any], prefix: str, tax: Taxonomy, errors: list[str]
+) -> None:
+    """The developer's term, domains, determination, scope, quote, and pin."""
+    for field in ("tier_term", "statement"):
+        if not isinstance(entry[field], str) or not entry[field].strip():
+            errors.append(f"{prefix}: {field} must be a non-empty string")
+    validate_string_list(entry, "domains", tax.enum_ids["flag_domains"], prefix, errors)
+    if entry["determination"] not in tax.enum_ids["flag_determinations"]:
+        errors.append(f"{prefix}: unknown determination {entry['determination']!r}")
+    if entry["scope"] not in tax.enum_ids["flag_scopes"]:
+        errors.append(f"{prefix}: unknown scope {entry['scope']!r}")
+    if "unpinnable" in entry:
+        if entry["unpinnable"] is not True:
+            errors.append(
+                f"{prefix}: unpinnable must be true; cite content_sha256 when the page pins"
+            )
+    elif not isinstance(
+        entry["content_sha256"], str
+    ) or not CONTENT_SHA_PATTERN.fullmatch(entry["content_sha256"]):
+        errors.append(
+            f"{prefix}: content_sha256 must be a 64-character lowercase hex digest"
+        )
+
+
+def validate_model_flag(
+    entry: Any,
+    prefix: str,
+    record_verified_at: object,
+    sites: set[str],
+    tax: Taxonomy,
+    errors: list[str],
+) -> str | None:
+    """One flag entry in one of its exact shapes. Returns its kind for the duplicate check."""
+    if not isinstance(entry, dict):
+        errors.append(f"{prefix}: must be an object")
+        return None
+    kind = entry.get("kind")
+    if kind not in tax.flag_collections:
+        errors.append(f"{prefix}: unknown flag kind {kind!r}")
+    elif "models" not in tax.flag_collections[kind]:
+        errors.append(f"{prefix}: flag kind {kind} is not allowed on reviewed models")
+    status = entry.get("status")
+    shapes = FLAG_SHAPES.get(status)
+    if shapes is None:
+        errors.append(f"{prefix}: unknown flag status {status!r}")
+        return kind
+    if not any(set(entry) == shape for shape in shapes):
+        errors.append(
+            f"{prefix}: fields differ from the {status} shape: expected exactly "
+            f"{sorted(shapes[0])}"
+            + (
+                ", with unpinnable: true in place of content_sha256"
+                if len(shapes) > 1
+                else ""
+            )
+        )
+        return kind
+    if publisher_site(entry["url"]) not in sites:
+        errors.append(
+            f"{prefix}: url must be a first-party page on a site the record already "
+            "cites in its url, evidence, or license evidence"
+        )
+    if entry["research_confidence"] not in tax.enum_ids["research_confidence_levels"]:
+        errors.append(f"{prefix}: unknown research_confidence")
+    if not valid_date(entry["verified_at"]):
+        errors.append(f"{prefix}: verified_at must be an ISO date")
+    elif valid_date(record_verified_at) and entry["verified_at"] > record_verified_at:
+        errors.append(f"{prefix}: verified_at must not be after the record verified_at")
+    if status == "statement_found":
+        validate_found_statement(entry, prefix, tax, errors)
+    return kind
+
+
+def validate_model_flags(
+    model: dict[str, Any], prefix: str, tax: Taxonomy, errors: list[str]
+) -> None:
+    """A reviewed model's flags: a maker's own statement, never an Atlas verdict (ADR 039).
+
+    The field is omitted until a reviewer examines the record, which is the third
+    state, "not examined". An empty list would claim an examination that says nothing.
+    """
+    flags = model["flags"]
+    if not isinstance(flags, list) or not flags:
+        errors.append(
+            f"{prefix}: flags must be a non-empty list; omit the field until the record is examined"
+        )
+        return
+    sites = record_publisher_sites(model)
+    seen: set[str] = set()
+    for index, entry in enumerate(flags):
+        kind = validate_model_flag(
+            entry,
+            f"{prefix}: flag {index}",
+            model.get("verified_at"),
+            sites,
+            tax,
+            errors,
+        )
+        if isinstance(kind, str) and kind in seen:
+            errors.append(f"{prefix}: flag kind {kind} appears more than once")
+        elif isinstance(kind, str):
+            seen.add(kind)
+
+
 def stable_model_id(source_id: str) -> str:
     """The id models.dev import derives for a source id; kept equal to the importer's."""
     return "model-" + re.sub(r"[^a-z0-9]+", "-", source_id.lower()).strip("-")
@@ -2815,11 +3053,11 @@ def validate_models(
             errors.append("models.json: every model must be an object")
             continue
         prefix = f"model {model.get('id', 'unknown')}"
-        if set(model) != MODEL_REQUIRED:
+        if not MODEL_REQUIRED <= set(model) <= MODEL_REQUIRED | MODEL_OPTIONAL:
             errors.append(
                 f"{prefix}: fields differ from schema: "
                 f"missing={sorted(MODEL_REQUIRED - set(model))}, "
-                f"extra={sorted(set(model) - MODEL_REQUIRED)}"
+                f"extra={sorted(set(model) - MODEL_REQUIRED - MODEL_OPTIONAL)}"
             )
             continue
         model_id = model.get("id")
@@ -2919,6 +3157,8 @@ def validate_models(
             errors,
         )
         validate_web_evidence(model, prefix, errors)
+        if "flags" in model:
+            validate_model_flags(model, prefix, tax, errors)
         for field in ("metadata_verified_at", "verified_at"):
             if not valid_date(model.get(field)):
                 errors.append(f"{prefix}: {field} must be an ISO date")
@@ -2995,6 +3235,11 @@ def validate_models_dev(
     source_ids: set[str] = set()
     for record in records:
         prefix = f"models.dev source {record.get('source_id', 'unknown') if isinstance(record, dict) else 'unknown'}"
+        if isinstance(record, dict) and "flags" in record:
+            errors.append(
+                f"{prefix}: an imported models.dev row carries no Atlas conclusion "
+                "and never carries a flag (ADR 039)"
+            )
         if not isinstance(record, dict) or set(record) != {
             "id",
             "source_id",
