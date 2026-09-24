@@ -136,7 +136,10 @@ request headers, because a `304 Not Modified` answer carries no body to store. W
 heading of the same or higher level, or the element carrying the id. If the id is missing
 from the page, the whole page is hashed and the run warns `terms anchor not found`. Add a
 `TERMS_SECTION_IDS` entry only after a stored diff shows a page's churn sits outside its
-terms. An entry from before stored text gains its text silently when its hash is unchanged,
+terms. Evaluated 2026-09-23 with no entry added: `https://deepinfra.com/terms` carries only
+heading ids and its h1 section spans the footer `Latest Models` menu, and
+`https://cohere.com/terms-of-use` has no stable id around its terms (React-generated ids only).
+An entry from before stored text gains its text silently when its hash is unchanged,
 and an anchored URL moves from its whole-page baseline to its section silently only when the
 page still hashes to that baseline; any other difference stays drift until reviewed. A page without a
 baseline gets one on its first successful observation only when every review date for that
@@ -229,6 +232,35 @@ or `origin`. To review a run:
    block could have skipped verification entirely. To check an older citation, open its
    `immutable_url`, which addresses a blob SHA and cannot change under it.
    Pass `--baseline-ref` to compare against something other than `origin/main`.
+4. Check that each finding says what its documents say with
+   `uv run python scripts/check_finding_support.py`. `--recheck` proves a cited document
+   is real; it cannot show that the finding quotes it faithfully, and a quote nobody
+   wrote passes every hash check. The script is read-only and works in two layers.
+   Quotes are checked in code: every quoted span of twelve characters or more must
+   appear verbatim in one of the block's pinned documents, after folding typography
+   (curly quotes, dashes, Markdown emphasis, whitespace, a comma tucked inside the
+   closing quote) and honouring `...` elisions. A miss is a fact, printed as
+   `QUOTE NOT IN SOURCE`; `--strict` exits 1 on one. Claims are judged by TypeSafe's
+   System One API when `TYPESAFE_API_KEY` exists (see "Pre-ranking the queue" for the key
+   and what leaves the machine — here, the pinned documents and the finding). Each
+   sentence is one question over the documents with four answers, and sentences about
+   the review itself are never sent. Flags at confidence 0.6 or above are listed,
+   strongest first; `--min-confidence 0` lists them all. `--quotes-only` skips this
+   layer, and any failure in it leaves the quote report standing.
+
+   Two things are reported rather than judged. A web page that no longer hashes to its
+   pin cannot convict a quote or a claim written about the page as it was, so both are
+   skipped for it. A git blob that does not hash to its recorded `content_sha256` is
+   printed as `RECORD INCONSISTENT`, because a blob cannot change: the record pins a blob
+   and a digest that describe different bytes, and the blob is still what gets checked.
+
+   Measured on 2026-09-20 against the 45 findings then queued: 161 quotes, one not in
+   its source (a heading and its body fused into one "quote" with an invented colon), one
+   inconsistent record, and one listed claim, which rested on a page the block never
+   pinned. With one fabricated sentence appended to each of 41 findings, the claim layer
+   flagged 40 and listed 39. Those fabrications were blatant by construction and written
+   by the tool's author, so read the 39 as a ceiling: a subtle distortion will score
+   lower. A listed flag is a place to look, never a conclusion.
 
 The unattended `finish` path validates the queue before any re-fetch and invokes the
 rechecker with `--unattended`. That mode accepts only GitHub LICENSE and README blobs
@@ -436,7 +468,7 @@ Do not copy prices, rate limits, model leaderboards, or exhaustive model invento
 
 Follow [`MODELS.md`](MODELS.md) and treat one provider-independent release—not a lab, model family, hosted endpoint, or repackaging—as the review unit. Verify the official identity, boundary, every governing distribution term, source model, distribution modes, evidence, and `model_access` score. Treat every models.dev field as attributed discovery metadata until first-party evidence supports the Atlas conclusion. Remove the candidate only in the same change that publishes or otherwise disposes of it, then synchronize, regenerate share pages, verify, and exercise Models search, filters, comparison, URL restoration, and details.
 
-For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md).
+For publication, scaffold a review draft with `scripts/promote_model_candidate.py init`, fill its deliberately blank human-owned fields, run `check`, and only then run `apply`. The command validates the complete proposed model collection and remaining queue before it writes. It preserves the imported metadata and queue snapshot, requires exact pinned-source and authoritative-model evidence, and refuses incomplete licensing, scoring, dates, taxonomy, or identity. The exact command sequence and guard contract are in [`MODELS.md`](MODELS.md). When models.dev does not list the release yet, `init-gap` is the second entry path: it scaffolds a `source_id: null` draft, which the same `check` and `apply` commands validate before anything is written; `MODELS.md` documents when to use it and how to `link` the record once models.dev lists the release.
 
 Never copy models.dev benchmarks or prices. Never convert its `license` or `open_weights` field directly into a reviewed Atlas license or source-model classification.
 
@@ -567,7 +599,10 @@ already accepts. A red run still opens or updates its issue-worthy signal in the
 silently vanishing; there is no `report-failure` job to do that automatically, so a failed run
 in the log is the thing to watch. Review license incidents, evidence-link or terms-drift
 signals, candidates, model candidates, and the check summary before merging any refresh pull
-request.
+request. The refresh's check summary and the pull-request body both list a "Models awaiting a
+models.dev link" section when models.dev now lists a release Atlas reviewed earlier; run the
+`link` command in [`MODELS.md`](MODELS.md) for each one. Running `validate_directory.py` directly
+prints the same `link pending:` lines those sections are built from.
 
 ### Tokens
 
@@ -626,9 +661,15 @@ that against the signal's recorded `content_sha256` before truncating anything, 
 detection sees the whole page regardless of the cap. A truncated page gets a trailing
 marker naming its `url` so the model knows the rest was cut, not that the page ended.
 
-To run it daily without being asked, schedule it with launchd. Write
-`~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting the checkout path, then
-load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
+To run it daily without being asked, schedule `scripts/run_hn_sweep.py` with launchd from
+a dedicated worktree on the branch the routine reads:
+
+```bash
+git worktree add -b local/hn-signals ../atlas-hn-sweep origin/main
+```
+
+Write `~/Library/LaunchAgents/com.atlas.hn-sweep.plist`, substituting that worktree's
+path, then load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.hn-sweep.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -636,11 +677,11 @@ load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.
 <plist version="1.0">
 <dict>
   <key>Label</key><string>com.atlas.hn-sweep</string>
-  <key>WorkingDirectory</key><string>/path/to/ai-systems-atlas</string>
+  <key>WorkingDirectory</key><string>/path/to/atlas-hn-sweep</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string><string>-lc</string>
-    <string>uv run python scripts/sweep_hackernews.py</string>
+    <string>uv run python scripts/run_hn_sweep.py</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>23</integer></dict>
@@ -653,11 +694,18 @@ load it with `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.atlas.
 The agent runs only while you are logged in, and launchd fires a missed run once at next
 login rather than once per missed day. A gap is recoverable rather than lost: `--lag-days`
 moves the swept window back, so `--lag-days 3` sweeps the day that ended three days ago.
-The sweep leaves `directory/hn-signals.json` modified in the working tree. The scheduled
-routine reads the queue from the local branch `local/hn-signals`, so in practice the launchd
-job runs a small wrapper from a dedicated worktree on that branch: refuse a dirty tree,
-fetch `origin main`, move the branch onto `origin/main` so the sweep and the routine both
-run current code, sweep, and commit the file.
+`sweep_hackernews.py` alone leaves `directory/hn-signals.json` modified in the working
+tree. The scheduled routine reads the queue from the local branch `local/hn-signals`, so
+the launchd job runs `scripts/run_hn_sweep.py`, which owns the git sequence around the
+sweep: refuse a dirty tree, refuse any branch but `local/hn-signals`, fetch `origin main`,
+move the branch onto `origin/main` so the sweep and the routine both run current code,
+sweep, and commit the file. Arguments it does not know, such as `--lag-days`, pass through
+to the sweep. The plist holds the only machine-specific values, the worktree's path and
+the schedule; the `-lc` login shell supplies `PATH`.
+
+The branch check is a safety catch, not a convention. The runner hard-resets its branch,
+so started by mistake in a working checkout it would discard that branch's unpushed
+commits; it refuses instead, before anything moves.
 
 That last step resets rather than rebases, and the difference is load-bearing. Each sweep
 rewrites the queue wholesale, so replaying yesterday's sweep commits onto `main` conflicts
@@ -669,6 +717,66 @@ discards nothing that matters: assessments are committed to `hn-signals/pending`
 `run_hn_signals.py finish`, never to this branch, and the branch is never pushed. Keep the
 previous tip on a ref such as `local/hn-signals-prev` before resetting, so a swept day
 remains recoverable for one generation.
+
+The commit skips the repository's hooks (`git commit --no-verify`), and a commit that
+fails anyway is unstaged and discarded before the runner exits, as is a queue the sweep
+half-wrote before failing. Both halves come from one
+failure. On 2026-09-18 the pre-commit hook failed the sweep's commit, the queue stayed
+staged, and the dirty-tree guard then refused the next two sweeps — so the routine reran a
+four-day-old queue, again unnoticed, until 2026-09-20. Installing the hook's dependencies
+does not rescue it: the suite asserts that a checkout holds no `.hn-signal-bundle`
+(`test_running_the_suite_leaves_no_stray_bundle_in_the_real_checkout`), and this checkout
+is the one `prepare` writes that directory into, so the suite cannot pass here. Skipping
+it costs nothing, because the commit is one data file on a branch that is never pushed,
+and `run_hn_signals.py finish` and the `verify` check both validate the queue before
+`main` sees it. The rule the two failures share: no step may leave the tree in a state
+the runner's own first guard refuses, because a refused sweep is silent and a stale queue
+still reads as a queue. Both failures happened while this sequence was a shell script
+outside the repository, where no test could hold that rule. `tests/test_run_hn_sweep.py`
+now drives a real repository, injects a failure at the fetch, the reset, the add, and the
+commit, and after each asserts a clean tree and that the next sweep still runs.
+
+`run_hn_signals.py prepare` is where that silence ends. It warns on stderr when the queue
+it was handed was swept more than two days ago, naming the sweep date and
+`/tmp/atlas-hn-sweep.log`, and then prepares the queue anyway: old unassessed signals are
+still work, and a warning a person reads beats a log nobody does. A queue with no
+readable `updated_at` draws no warning, because a guess that fires wrongly stops being
+read.
+
+### Pre-ranking the queue
+
+`prepare` can order the pending list by how likely each page is to be a system, so the
+routine reads the likeliest signals first and the `--limit` cap keeps those rather than
+the lowest story ids. `scripts/rank_signals.py` sends one yes/no question per bundled
+page to TypeSafe's System One API, which returns a probability and no generated text.
+The order is all it produces: every signal still gets an assessment, none is skipped, and
+a rank is never evidence and never cited, exactly as ADR 028 treats points and comment
+counts.
+
+It is off until a key exists. Put `TYPESAFE_API_KEY=...` in the environment, or in an
+ignored `.env` at the root of the checkout `prepare` runs from — for the scheduled
+routine that is the sweep checkout, not the primary one. The key never belongs in the
+repository, a plist that is committed, or a workflow secret. Everything fails open: no
+key, an unreachable API, a rejected request, or a malformed answer leaves the queue in
+sweep order with a warning, and `verify` never reaches the network because only `main`
+passes `prepare` a ranker.
+
+Two things leave the machine when it is on: each pending signal's title and URL, and up
+to 8,000 characters of its page text. All three are already public, and the submitter
+chose the first two, so treat the returned number as you treat the page: data about an
+attacker-influenceable input. The model is pinned by version in `rank_signals.MODEL`;
+move it deliberately, and re-measure against recorded verdicts when you do. The
+2026-09-20 measurement replayed 265 re-fetched pages from every queue in Git history:
+20 seconds in total, about 141,000 tokens and $0.006 per 60-signal queue, and against the
+59 readable signals the routine had already judged, all five `worth_review` ranked in the
+top eight. Three cautions bound it. Five positives is a small sample. Only 106 of the 265
+pages still matched their pinned hash, so the verdicts had been given to text that has
+since changed. And a companion question asking which collection a page belongs to was
+unreliable — it called the iOS 27 page not a product and a Moon essay a model release —
+which is why only the yes/no probability is used. The question also cannot know what the
+catalog already holds: the top of the unjudged ranking was pages about Claude, the Gemini
+app, and the OpenAI Agents API, which the routine calls `out_of_scope` as rehashes.
+`BACKLOG.md` holds the re-measurement that decides whether the step stays.
 
 ### Running the loop locally
 

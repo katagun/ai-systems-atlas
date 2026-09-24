@@ -2,7 +2,7 @@
 
 ## Scope
 
-The scored catalog covers reviewed operational memory, agent, and assistant systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md). Provider-independent language-model releases belong in the separate Models collection described in [`MODELS.md`](MODELS.md); they never receive a system family or role.
+The scored catalog covers reviewed operational memory, agent, and assistant systems. A system must be materially relevant to one role in `directory/taxonomy.json`; its source model and licenses describe the system but do not decide inclusion. Protocols, conventions, and packaging formats belong in the separate unscored specification collection described in [`SPECIFICATIONS.md`](SPECIFICATIONS.md). Provider-independent language-model releases belong in the separate Models collection described in [`MODELS.md`](MODELS.md); they never receive a system family or role. Reaching a physical actuator, or being hardware, does not put a system outside the Atlas: [ADR 036](adr/036-the-agent-to-physical-world-boundary-is-in-scope.md) puts AI robots in scope, and admits nothing until the robot software, Robots collection, and action-policy model decisions in `BACKLOG.md` are made.
 
 ## Inclusion gate
 
@@ -113,7 +113,8 @@ A candidate's `triage` block is likewise evidence, not a conclusion: accepting a
 4. Score only against the matching family profile.
 5. Record strengths, weaknesses, why the project matters, confidence, and verification date.
 6. Remove or resolve any corresponding candidate or license-review record.
-7. Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py`.
+7. Run `uv run python scripts/sync_web_data.py`, `uv run python scripts/build_web_payload.py`,
+   `uv run python scripts/build_share_pages.py`, and `node scripts/build_asset_version.mjs`.
 8. Run validation and tests with `uv`, then exercise the static UI.
 
 Automated system discovery writes durable candidates with proposed family and role only. Automated model ingestion writes provider-independent metadata to the public `models-dev.json` source snapshot and the separate review queue without a proposed Atlas license, source model, boundary, or score. Source rows and candidates have no editorial score or editorial verification date. Discovery never auto-promotes entries and cannot complete editorial or license review.

@@ -238,7 +238,7 @@
   }
 
   // Scored systems that install into a host agent as a skills bundle, plugin,
-  // or vault (deployment mode host_pack, ADR 033). The Packs scope lists them
+  // or vault (deployment mode host_pack, ADR 034). The Packs scope lists them
   // beside the unscored packs; the search term is the only filter that applies,
   // because pack facets describe packs, not systems.
   function packShapedSystems(projects, filters = {}) {
@@ -567,6 +567,38 @@
     return { mode: "badges", badges: ids.map(id => ({ id, name: CARD_BADGES[id].name, family: CARD_BADGES[id].family })) };
   }
 
+  // ADR 038: Atlas can review a release before models.dev lists it. Such a
+  // record has source_id null and metadata written by Atlas, so nothing on
+  // the page may credit models.dev for it.
+  const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";
+  function modelSourceLabel(model) {
+    return model.source_id || UNLISTED_MODEL_LABEL;
+  }
+  function modelMetadataAttribution(model) {
+    if (model.source_id) {
+      return {
+        listed: true,
+        cardTitle: "From models.dev source metadata, not Atlas reviewed",
+        cardPrefix: "From models.dev: ",
+        capabilityNote: "These values are imported discovery metadata, not an Atlas capability test.",
+        linksHeading: "Source links from models.dev",
+        noLinksText: "No source links reported by models.dev.",
+      };
+    }
+    return {
+      listed: false,
+      cardTitle: "Reviewed by Atlas from developer documentation",
+      cardPrefix: "From developer documentation: ",
+      capabilityNote: "Reviewed by Atlas from developer documentation, not an Atlas capability test.",
+      linksHeading: "Source links",
+      noLinksText: "No source links recorded.",
+    };
+  }
+  function modelsKickerText(sourceCount, reviewedCount, unlistedCount) {
+    const base = `${sourceCount} models.dev records · ${reviewedCount} Atlas reviewed`;
+    return unlistedCount > 0 ? `${base} · ${unlistedCount} not yet on models.dev` : base;
+  }
+
   return {
     BADGE_FAMILIES,
     CARD_BADGES,
@@ -590,6 +622,9 @@
     matchesProject,
     matchesRecordSearch,
     mergePackScopeEntries,
+    modelMetadataAttribution,
+    modelSourceLabel,
+    modelsKickerText,
     monogramGlyph,
     packShapedSystems,
     paginate,
@@ -597,6 +632,7 @@
     parseViewId,
     recordHaystack,
     shareRecordPath,
+    UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };
 });

@@ -8,6 +8,7 @@ import os
 import subprocess
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 from typing import ClassVar
 from unittest import mock
@@ -143,6 +144,57 @@ class VerifierTests(unittest.TestCase):
             refresh=False, fetcher=lambda url: original, signals_path=path, baseline=[]
         )
         self.assertEqual(problems, [])
+
+    def test_a_queue_without_a_signals_list_is_reported_not_raised(self) -> None:
+        from scripts import verify_signal_pages
+
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        path.write_text('{"version": "1.0", "signals": {}}', encoding="utf-8")
+        problems = verify_signal_pages.verify(
+            refresh=True, fetcher=lambda url: "page", signals_path=path
+        )
+        self.assertTrue(any("malformed" in problem for problem in problems), problems)
+
+    def test_a_readable_signal_missing_its_url_is_reported_not_fetched(
+        self,
+    ) -> None:
+        from scripts import verify_signal_pages
+
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "hn-signals.json"
+        fetched: list[str] = []
+
+        def fetcher(url: str) -> str:
+            fetched.append(url)
+            return "page"
+
+        path.write_text(
+            json.dumps(
+                {
+                    "version": "1.0",
+                    "signals": [
+                        None,
+                        {
+                            "story_id": "7",
+                            "page_status": "readable",
+                            "assessment": {"verdict": "worth_review"},
+                        },
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        problems = verify_signal_pages.verify(
+            refresh=False, fetcher=fetcher, signals_path=path, baseline=[]
+        )
+        self.assertTrue(
+            any("not an object" in problem for problem in problems), problems
+        )
+        self.assertTrue(any("missing url" in problem for problem in problems), problems)
+        self.assertEqual([], fetched)
 
     def test_the_verifier_hashes_a_page_exactly_as_the_sweep_did(self) -> None:
         """The sweep pins the digest; the verifier reproduces it. Two extractors that
@@ -650,6 +702,89 @@ class PrepareDriftTests(unittest.TestCase):
     def test_a_run_where_nothing_verified_fails(self) -> None:
         self.prepared_worktree({})
         self.assertEqual(1, run_hn_signals.prepare(limit=40, run=self.drifting_run))
+
+    @staticmethod
+    def quiet_run(_command: list[str], _cwd=None) -> tuple[int, str]:
+        return 0, ""
+
+    def prepare_output(self, **kwargs) -> tuple[int, str, str]:
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            code = run_hn_signals.prepare(run=self.quiet_run, **kwargs)
+        return code, stdout.getvalue(), stderr.getvalue()
+
+    def test_the_pending_list_is_printed_in_ranked_order(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        handed: dict[str, object] = {}
+
+        def ranker(pending, signals, pages):
+            handed.update(pending=pending, pages=pages)
+            return ["2", "1"], {"1": 0.02, "2": 0.9}
+
+        code, stdout, _ = self.prepare_output(limit=40, ranker=ranker)
+        self.assertEqual(0, code)
+        self.assertEqual(["1", "2"], handed["pending"])
+        self.assertEqual({"1": "an essay", "2": "an agent"}, handed["pages"])
+        self.assertIn("pending signals (2 of up to 40): ['2', '1']", stdout)
+        self.assertIn("never evidence", stdout)
+
+    def test_the_cap_keeps_the_likeliest_signal_not_the_lowest_id(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        code, stdout, _ = self.prepare_output(
+            limit=1, ranker=lambda *_: (["2", "1"], {"1": 0.02, "2": 0.9})
+        )
+        self.assertEqual(0, code)
+        self.assertIn("pending signals (1 of up to 1): ['2']", stdout)
+
+    def test_a_ranker_that_raises_leaves_sweep_order_and_a_passing_run(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+
+        def ranker(*_):
+            raise RuntimeError("boom")
+
+        code, stdout, stderr = self.prepare_output(limit=40, ranker=ranker)
+        self.assertEqual(0, code)
+        self.assertIn("pending signals (2 of up to 40): ['1', '2']", stdout)
+        self.assertIn("using sweep order", stderr)
+
+    def write_queue_date(self, worktree: Path, updated_at: object) -> None:
+        path = worktree / run_hn_signals.QUEUE
+        queue = json.loads(path.read_text(encoding="utf-8"))
+        queue["updated_at"] = updated_at
+        path.write_text(json.dumps(queue), encoding="utf-8")
+
+    def test_a_queue_older_than_two_days_is_called_out_but_still_prepared(self) -> None:
+        worktree = self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        self.write_queue_date(worktree, "2026-09-15T00:00:00Z")
+        code, stdout, stderr = self.prepare_output(limit=40, today=date(2026, 9, 20))
+        self.assertEqual(0, code)
+        self.assertIn("pending signals (2 of up to 40)", stdout)
+        self.assertIn("5 days old", stderr)
+        self.assertIn("2026-09-15", stderr)
+        self.assertIn("atlas-hn-sweep.log", stderr)
+
+    def test_a_fresh_queue_draws_no_staleness_warning(self) -> None:
+        worktree = self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        self.write_queue_date(worktree, "2026-09-18T00:00:00Z")
+        _, _, stderr = self.prepare_output(limit=40, today=date(2026, 9, 20))
+        self.assertNotIn("days old", stderr)
+
+    def test_a_missing_or_malformed_queue_date_is_not_guessed_at(self) -> None:
+        for value in (None, "yesterday", 20260915, "2026-13-45T00:00:00Z"):
+            with self.subTest(value=value):
+                self.assertIsNone(
+                    run_hn_signals.queue_age_days(
+                        {"updated_at": value}, date(2026, 9, 20)
+                    )
+                )
+        self.assertIsNone(run_hn_signals.queue_age_days({}, date(2026, 9, 20)))
+
+    def test_without_a_ranker_nothing_is_ranked(self) -> None:
+        self.prepared_worktree({"1": "an essay", "2": "an agent"})
+        code, stdout, _ = self.prepare_output(limit=40)
+        self.assertEqual(0, code)
+        self.assertNotIn("ranked", stdout)
+        self.assertIn("['1', '2']", stdout)
 
 
 class BoundGuardTests(unittest.TestCase):
@@ -1476,14 +1611,20 @@ class CLIFromRefWiringTests(unittest.TestCase):
                 ["prepare", "--from-ref", "local-sweep-branch", "--limit", "7"]
             )
         self.assertEqual(0, code)
-        prepare_mock.assert_called_once_with(limit=7, from_ref="local-sweep-branch")
+        prepare_mock.assert_called_once_with(
+            limit=7,
+            from_ref="local-sweep-branch",
+            ranker=run_hn_signals.default_ranker,
+        )
 
     def test_main_defaults_from_ref_to_origin_main(self) -> None:
         with mock.patch.object(
             run_hn_signals, "prepare", return_value=0
         ) as prepare_mock:
             run_hn_signals.main(["prepare"])
-        prepare_mock.assert_called_once_with(limit=40, from_ref="origin/main")
+        prepare_mock.assert_called_once_with(
+            limit=40, from_ref="origin/main", ranker=run_hn_signals.default_ranker
+        )
 
 
 class RealGitPrepareFinishRoundTripTests(unittest.TestCase):

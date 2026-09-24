@@ -642,7 +642,9 @@ def discover_candidates(
     sleeper: Callable[[float], None] = time.sleep,
 ) -> tuple[list[dict[str, Any]], int, int, list[str]]:
     def candidate_key(item: dict[str, Any]) -> str:
-        return str(item.get("repo") or item["url"]).lower()
+        # A queued candidate without either key is malformed catalog input, not a
+        # crash: it keys under "" and survives the pass for a human to repair.
+        return str(item.get("repo") or item.get("url") or "").lower()
 
     candidates = {candidate_key(item): item for item in previous_candidates}
     known = known_projects | set(candidates)

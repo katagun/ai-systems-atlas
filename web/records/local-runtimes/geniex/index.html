@@ -39,7 +39,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 </head>
 <body>
 <main>
-<p class="eyebrow">Local runtime · Local runtime · Desktop runner</p>
+<p class="eyebrow">Local runtime · Desktop runner</p>
 <h1>GenieX</h1>
 <p class="lead">On-device inference runtime for Qualcomm Snapdragon that pulls, caches, and runs language and vision-language models on the Hexagon NPU, Adreno GPU, or CPU, dispatching either to llama.cpp with Qualcomm&#x27;s Hexagon backend or to the Qualcomm AI Engine Direct runtime, through a CLI, an OpenAI-compatible local server, and Python, Android, and C SDKs.</p>
 <dl><dt>Maintainer</dt><dd>Qualcomm</dd><dt>Accelerators</dt><dd>CPU · NPU</dd><dt>Model formats</dt><dd>GGUF</dd><dt>Source model</dt><dd>Mixed open and proprietary</dd><dt>Licenses</dt><dd>BSD 3-Clause License · Proprietary</dd><dt>Boundary</dt><dd>Represents the GenieX software runtime, not the Snapdragon silicon it targets and not Qualcomm AI Hub, the hosted model-compilation and device service from which pre-compiled bundles are fetched. The project was formerly published as NexaAI/nexa-sdk; that repository now redirects to qualcomm/GenieX, and the reviewed product name and owner are GenieX and Qualcomm, described in its own documentation as the community version of Qualcomm GENIE. It is not llama.cpp, which it vendors as a submodule and dispatches to, and not Qualcomm AI Engine Direct, the proprietary Qualcomm runtime reached through a separate plugin repository. Because the product exists to run models on the user&#x27;s own device and its chat session and local server are how that capability is exercised, it classifies as a runtime rather than an assistant under ADR 015.</dd></dl>

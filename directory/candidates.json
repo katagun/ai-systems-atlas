@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-18",
+  "updated_at": "2026-09-20",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -680,7 +680,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot software role decision",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
         "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
         "evidence": [
@@ -1138,7 +1138,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot software role decision",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
         "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
         "evidence": [
@@ -1582,7 +1582,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robots collection decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
         "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, and that documentation site is itself the only stably citable first-party page found: every page on bostondynamics.com proper -- the product page, '/terms/', and '/spot-sales/' alike -- embeds a live WordPress cache-metrics comment whose hit/miss counters differ on every request, confirmed by fetching each of them twice in a row and finding the bytes differ both times, so none of them can be pinned for stable re-verification. Read live (not pinned), '/terms/' is a generic website Terms of Use governing use of bostondynamics.com itself -- content ownership, site access -- not a purchase agreement, EULA, or licence for the product, and '/spot-sales/' routes pricing and purchase through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
         "evidence": [
@@ -1940,7 +1940,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robots collection decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
         "finding": "1X publishes public pricing and reservation plans for NEO on its own order page ($499/mo subscription or $20,000 ownership, a refundable $200 deposit), but the Terms and Conditions page linked from both the product and order pages returns HTTP 404 -- the document does not exist at review time, even though the sibling Privacy Policy page resolves. No reachable first-party page therefore establishes a reviewed source model or complete licence list covering the hardware, its built-in large language model, or its Redwood AI vision-language model; the order page's own feature list describes capability through marketing prose rather than a governing agreement.",
         "evidence": [
@@ -1984,7 +1984,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robots collection decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
         "finding": "figure.ai is served through a Vercel CDN edge cache: repeated fetches within a single verification session return identical bytes with a constant ETag and a climbing 'age' header (observed on the terms-and-conditions, privacy-policy, accessibility-statement, and home pages alike), so the site reads as stable while any one review is underway. But a shared footer icon component embeds a randomly generated SVG gradient identifier that is baked in at origin render time; that value changes only when the edge cache invalidates and Vercel re-renders from origin on its own stale-while-revalidate cadence, not on every request. That makes a hash pinned to any figure.ai page unsafe to rely on indefinitely -- it can hold for an entire review session and still not survive to a later recheck once the cache regenerates, which is exactly the failure this review hit once already when a Wayback capture of this same page was hashed moments after being triggered and had not yet settled. The terms-and-conditions page was read live: it is a generic website Terms and Conditions, dated February 2023 in its own body text, governing use of figure.ai itself (account access, electronic communications, linked sites) with no mention of the robot as a product, its sale, its licensing, or its onboard software, and no product page publishes a price or purchase path. That reading is a first-party observation, not a durably re-verifiable citation, for the CDN-cache reason above; the site's own sitemap is cited instead because, as a static file with no templated component, it does not carry the same regeneration risk, and it establishes from a stable first-party source that the terms page exists and when Figure's content system last touched it. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page, and no page on the domain carrying that content can be durably pinned for a checkable citation in the first place.",
         "evidence": [
@@ -2172,7 +2172,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robots collection decision",
         "rule": "docs/CURATION.md inclusion gate condition 4",
         "finding": "Unitree publishes a public price (from $13.5K) for the G1 on its own product page and a Terms & Policies page, but that page's only substantive content is an after-sales warranty policy for the physical hardware (repair eligibility, damage exclusions, shipping responsibility); it establishes no software licence, source-model classification, or complete licence list for the robot's onboard AI stack or control software. The site links an 'Official Open Source' page, but that page renders no first-party list of components or licences in its own markup. No authoritative first-party source establishes a reviewed source model and complete licence list for the product as sold.",
         "evidence": [
@@ -2210,7 +2210,7 @@
       "discovered_at": "2026-09-04",
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot software role decision",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
         "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
         "evidence": [
@@ -3007,7 +3007,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
         "finding": "Publishes pre-trained checkpoints under the NVIDIA Open Model License alongside Apache-2.0 code implementing a vision-language-action architecture whose action head is a diffusion transformer that denoises continuous actions. The README's own workflow overview ends with 'Connect `Gr00tPolicy` to your robot controller,' and its deployment section documents a server-client architecture where a policy server sends predicted actions to a client controlling real DROID hardware. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is continuous robot-control actions rather than text, image, audio, video, or PDF, and this is stated directly in the README's workflow-overview and deployment sections without reading the source tree.",
         "evidence": [
@@ -3071,7 +3071,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
         "finding": "Ships Apache-2.0 inference code plus a link to separately Hugging-Face-hosted weights under a distinct OpenMDW-1.1 licence, and its own disclaimer describes the release as provided solely for research, experimentation, and evaluation -- lacking real-world sensor access and required safety mechanisms, and explicitly 'not a fully fledged driving stack,' positioned as a building block rather than a deployed system. Its documented output is a predicted multi-second driving trajectory (waypoints) paired with a natural-language reasoning trace; the trajectory is numeric rather than text, image, audio, video, or PDF, and the reasoning trace is auxiliary to it rather than the release's primary output. No model type or modality already in this catalog's vocabulary names a released policy whose primary documented output is a predicted trajectory.",
         "evidence": [
@@ -3264,7 +3264,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot software role decision",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
         "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
         "evidence": [
@@ -3312,7 +3312,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 025 Models collection boundary",
         "finding": "Publishes pre-trained checkpoints on Hugging Face that, per the README's own licensing note, inherit the Llama-2 Community License even though the repository's code is MIT-licensed. The README states the released checkpoints are trained 'to generate actions, and actions alone,' and its getting-started example predicts an action from a camera image and instruction and passes the result straight to 'robot.act(action, ...)'; a separate deployment script serves the model over a REST API for integration into existing robot control stacks. No model type or modality already in this catalog's vocabulary names a released policy whose sole documented output is a robot action rather than text, image, audio, video, or PDF, and this is stated directly in the README's getting-started example without reading the source tree.",
         "evidence": [
@@ -3463,7 +3463,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot software role decision",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
         "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
         "evidence": [
@@ -3716,7 +3716,7 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robotics scope decision",
+        "held_by": "robot description specification boundary",
         "rule": "docs/SPECIFICATIONS.md inclusion boundary",
         "finding": "Reviewable unit is a specification: URDF, a versioned XML vocabulary for a robot's kinematic and visual structure, whose reference parser this repo also ships. This repo's own README states plainly, 'For now, the details of the URDF specifications reside on http://ros.org/wiki/urdf' -- the parser repository disclaims being the format's authoritative documentation home. I followed that link (it redirects to https://wiki.ros.org/urdf) and read two things there: the page carries the ROS project's own end-of-life banner stating 'the ROS Wiki (this website) will also be EOL and transition to being an archive' and directing 'Maintainers: Please migrate any wiki content into your package's README.md file,' and its body already states 'The core URDF parser and data structures (urdfdom, urdfdom_headers) have been pushed upstream into stand alone (no ROS-dependencies) software packages' -- naming this repo by name as where that content now lives. That supports reading urdfdom's README, not the wiki, as the format's current documentation surface, consistent with the versioned 1.0/1.1/1.2 attribute table the README itself carries (exact required and optional attributes, numeric defaults, and forward/backward parsing compatibility for each geometry and joint-limit feature) -- real normative detail, satisfying docs/SPECIFICATIONS.md's normative-detail requirement without reading any source file. The wiki page was read but not pinned as evidence: it is an archive-bound third-party page -- EOL by its own banner, which directs its content into package READMEs -- rather than the format's maintained authoritative home. What this paragraph reports of that page's content is what I read there, not verified first-party evidence the way the pinned README and LICENSE are. URDF is not caught by the boundary's refusal sentence: it is not a general transport, a general serialization format, or an API description language -- it is a domain-specific vocabulary for one thing, a robot's structure, the same way an admitted metadata schema is a domain-specific vocabulary rather than a generic encoding. It also does not cleanly fit the admission sentence: the contract's boundary connects a physical robot's description to the software that consumes it (parsers, simulators, motion planners). The closest of the ten specification_scopes is tool_data_integration ('Connects model applications to tools, resources, prompts, and external data'), since a URDF file is exactly the kind of external data a downstream tool consumes, but it fails to name that the entity described is a physical robot -- hardware -- rather than a model application, tool, resource, or prompt in the software sense. None of the ten specification_scopes values, and none of the boundary parties docs/SPECIFICATIONS.md enumerates (agents, tools, clients, users, repositories, extension packages), name a robot or hardware description boundary; admitting this record would require a scope identifier that does not exist today, and ADR 017 ties that extension to the change that admits a record, not to this sweep. Identity caution for a future reviewer: this candidate's repo and url fields point at the parser (ros/urdfdom, github.com/ros/urdfdom), not at a specification home. If URDF is ever promoted to directory/specifications.json, resolve first where the format's own current authoritative documentation actually lives -- the README's cited wiki page is itself EOL and being archived, and I did not verify what, if anything, has replaced it as URDF's canonical home -- before assuming this repo's url is the right one to record, the way an admitted record points at a specification's own home rather than at one implementation of it.",
         "evidence": [
@@ -4745,6 +4745,127 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-13",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "openai-agents-api",
+      "url": "https://developers.openai.com/api/docs/guides/agents-api/overview",
+      "description": "OpenAI-managed API exposing the Codex harness: managed sessions, orchestration, context compaction, and recovery with sandboxed code execution, MCP connections, and artifact production; the calling application provides tools and chooses the execution environment.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.7,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "agent-framework",
+        "managed-runtime",
+        "official-product",
+        "openai"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "n8n-io/n8n",
+      "name": "n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "NOASSERTION",
+      "stars": 205773,
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "TREE-Ind/Unreal-Agent",
+      "name": "Unreal-Agent",
+      "url": "https://github.com/TREE-Ind/Unreal-Agent",
+      "description": "A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 234,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "oritera/Cairn",
+      "name": "Cairn",
+      "url": "https://github.com/oritera/Cairn",
+      "description": "A AI general-purpose state-space search engine, validated first on autonomous penetration testing.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "AGPL-3.0",
+      "stars": 2984,
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-cybersecurity",
+        "ai-hacker",
+        "ai-hacking",
+        "blackbox-testing",
+        "ctf",
+        "ctf-tools",
+        "llm",
+        "penetration-testing",
+        "pentesting",
+        "red-teaming",
+        "security-automation",
+        "security-tools"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
       "review_required": [
         "licensing",
         "classification",

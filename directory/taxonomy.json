@@ -1352,6 +1352,11 @@
       "kind": "open_source"
     },
     {
+      "id": "LicenseRef-AWS-Service-Terms",
+      "name": "AWS Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-Alibaba-Model-Studio-Agreement",
       "name": "Alibaba Cloud Model Studio Service Agreement",
       "kind": "proprietary"
@@ -1394,6 +1399,11 @@
     {
       "id": "LicenseRef-Gemma-Terms-of-Use",
       "name": "Gemma Terms of Use",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Jamba-Open-Model-License",
+      "name": "Jamba Open Model License",
       "kind": "restricted"
     },
     {
@@ -1452,6 +1462,11 @@
       "kind": "proprietary"
     },
     {
+      "id": "LicenseRef-Microsoft-API-Terms",
+      "name": "Microsoft Product and Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-MiniMax-M2-Modified-MIT",
       "name": "MiniMax M2 Modified MIT License",
       "kind": "restricted"
@@ -1495,6 +1510,11 @@
       "id": "LicenseRef-Mistral-Research-License",
       "name": "Mistral Research License",
       "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Mixedbread-Service-Terms",
+      "name": "Mixedbread Service Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-NVIDIA-Community-Model-2024",
@@ -1552,14 +1572,34 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-TypeSafe-MCA",
+      "name": "TypeSafe Master Customer Agreement",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-Unclear",
       "name": "Unclear or unresolved terms",
       "kind": "unclear"
     },
     {
+      "id": "LicenseRef-Vispark-Service-Terms",
+      "name": "Vispark Service Terms",
+      "kind": "proprietary"
+    },
+    {
       "id": "LicenseRef-W3C-Software-Document",
       "name": "W3C Software and Document License",
       "kind": "open_content"
+    },
+    {
+      "id": "LicenseRef-Writer-API-Terms",
+      "name": "Writer API and Product Terms",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-ZAI-API-Terms",
+      "name": "Z.AI Terms of Use and API Services Terms",
+      "kind": "proprietary"
     },
     {
       "id": "LicenseRef-xAI-AUP",

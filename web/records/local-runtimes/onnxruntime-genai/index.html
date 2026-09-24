@@ -39,7 +39,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 </head>
 <body>
 <main>
-<p class="eyebrow">Local runtime · Local runtime · Embedded library</p>
+<p class="eyebrow">Local runtime · Embedded library</p>
 <h1>ONNX Runtime GenAI</h1>
 <p class="lead">Cross-platform generative inference library that implements the token generation loop for ONNX models, including pre- and post-processing, KV-cache management, sampling, constrained decoding, and adapters, consumed through Python, C, C++, C#, and Java APIs.</p>
 <dl><dt>Maintainer</dt><dd>Microsoft</dd><dt>Accelerators</dt><dd>CPU · NVIDIA CUDA · DirectML · NPU</dd><dt>Model formats</dt><dd>ONNX</dd><dt>Source model</dt><dd>Open source</dd><dt>Licenses</dt><dd>MIT License</dd><dt>Boundary</dt><dd>Represents the generate() API layer published as onnxruntime-genai, not ONNX Runtime itself, which is the general-purpose ONNX inference engine and execution-provider framework underneath it. Products that embed this library, including Foundry Local, Windows ML, and the Visual Studio Code AI Toolkit, are separate boundaries. The library has no server, no network endpoint, and no graphical interface; it is exercised through host application code, which places it on the runtime side of the ADR 015 runtime-versus-assistant test as an embedded library rather than an assistant.</dd></dl>
