@@ -51,6 +51,7 @@ LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
 DISCOVERY_SOURCES_PATH = DIRECTORY / "discovery-sources.json"
 LOCAL_RUNTIMES_PATH = DIRECTORY / "local-runtimes.json"
 PACKS_PATH = DIRECTORY / "packs.json"
+SPECIFICATIONS_PATH = DIRECTORY / "specifications.json"
 ROBOTS_PATH = DIRECTORY / "robots.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
@@ -598,8 +599,8 @@ def refresh_projects(
     return successes, failures, reviews
 
 
-def refresh_local_runtime_stars(
-    runtimes: list[dict[str, Any]],
+def refresh_repo_stars(
+    records: list[dict[str, Any]],
     getter: GitHubGetter,
     token: str | None,
     refreshed_at: str,
@@ -610,8 +611,8 @@ def refresh_local_runtime_stars(
     successes = 0
     failures: list[str] = []
 
-    for runtime in runtimes:
-        repo = runtime.get("repo")
+    for record in records:
+        repo = record.get("repo")
         if not repo:
             continue
         try:
@@ -624,12 +625,24 @@ def refresh_local_runtime_stars(
         ) as exc:
             failures.append(f"{repo}: {type(exc).__name__}: {exc}")
             continue
-        runtime["stars"] = metadata.get("stargazers_count")
-        runtime["stars_verified_at"] = refreshed_at
+        record["stars"] = metadata.get("stargazers_count")
+        record["stars_verified_at"] = refreshed_at
         successes += 1
         sleeper(0.05)
 
     return successes, failures
+
+
+def refresh_local_runtime_stars(
+    runtimes: list[dict[str, Any]],
+    getter: GitHubGetter,
+    token: str | None,
+    refreshed_at: str,
+    *,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> tuple[int, list[str]]:
+    """Refresh descriptive GitHub star counts. Never touches score, evidence, or verified_at."""
+    return refresh_repo_stars(runtimes, getter, token, refreshed_at, sleeper=sleeper)
 
 
 def discover_candidates(
@@ -808,6 +821,10 @@ def main() -> int:
     packs_document = load_json(
         PACKS_PATH, {"version": "1.0", "verified_at": None, "packs": []}
     )
+    specifications_document = load_json(
+        SPECIFICATIONS_PATH,
+        {"version": "1.0", "verified_at": None, "specifications": []},
+    )
     robots_document = load_json(
         ROBOTS_PATH, {"version": "1.0", "verified_at": None, "robots": []}
     )
@@ -881,8 +898,20 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
-    runtime_successes, runtime_failures = refresh_local_runtime_stars(
+    runtime_successes, runtime_failures = refresh_repo_stars(
         local_runtimes_document["runtimes"],
+        github_get,
+        token,
+        refreshed_at,
+    )
+    pack_successes, pack_failures = refresh_repo_stars(
+        packs_document["packs"],
+        github_get,
+        token,
+        refreshed_at,
+    )
+    spec_successes, spec_failures = refresh_repo_stars(
+        specifications_document["specifications"],
         github_get,
         token,
         refreshed_at,
@@ -896,6 +925,10 @@ def main() -> int:
         print(f"warning: official discovery source failed: {failure}", file=sys.stderr)
     for failure in runtime_failures:
         print(f"warning: local runtime star refresh failed: {failure}", file=sys.stderr)
+    for failure in pack_failures:
+        print(f"warning: pack star refresh failed: {failure}", file=sys.stderr)
+    for failure in spec_failures:
+        print(f"warning: specification star refresh failed: {failure}", file=sys.stderr)
 
     projects.sort(
         key=lambda project: (project["system_family"], project["name"].lower())
@@ -911,6 +944,8 @@ def main() -> int:
         {"version": "1.0", "updated_at": refreshed_at, "entries": reviews},
     )
     write_json(LOCAL_RUNTIMES_PATH, local_runtimes_document)
+    write_json(PACKS_PATH, packs_document)
+    write_json(SPECIFICATIONS_PATH, specifications_document)
     sync_web_data()
     build_web_payload([])
 
@@ -926,6 +961,10 @@ def main() -> int:
                 "license_reviews_open": len(reviews),
                 "local_runtime_stars_refreshed": runtime_successes,
                 "local_runtime_stars_failed": len(runtime_failures),
+                "pack_stars_refreshed": pack_successes,
+                "pack_stars_failed": len(pack_failures),
+                "specification_stars_refreshed": spec_successes,
+                "specification_stars_failed": len(spec_failures),
                 "auto_added": 0,
             },
             indent=2,

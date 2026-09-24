@@ -693,8 +693,9 @@ function badgeRow(badges) {
 }
 
 // Stars are live repository metadata, never a score or a badge, and every
-// system and local-runtime card whose record carries a count shows it, in
-// every view. Screen readers hear "GitHub stars" instead of the glyph's name.
+// card whose record carries a count shows it, in every view where the card
+// appears: systems, local runtimes, agent packs, and specifications with a
+// repo. Screen readers hear "GitHub stars" instead of the glyph's name.
 function starCount(record) {
   if (record.stars == null) return "";
   return `<span class="card-stars">${escapeHTML(compactNumber(record.stars))}<span aria-hidden="true"> ★</span><span class="visually-hidden"> GitHub stars</span></span>`;
@@ -818,7 +819,7 @@ function packCard(pack, { mixed = false } = {}) {
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("pack", pack))}
-    <div class="card-footer"><span>${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
   </article>`;
 }
 
@@ -1066,7 +1067,7 @@ const COLLECTIONS = {
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
       ${badgeRow(AtlasCore.cardBadges("spec", specification))}
-      <div class="card-footer"><span>No editorial score</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
     </article>`;
     },
   },
