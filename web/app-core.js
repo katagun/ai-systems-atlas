@@ -324,103 +324,165 @@
     return THEME_PREFERENCES[(THEME_PREFERENCES.indexOf(current) + 1) % THEME_PREFERENCES.length];
   }
 
+  // A badge's family decides its frame and accent. Frames are path data on a
+  // 32-unit viewBox; styles.css colours each family by its token through
+  // [data-family]. A new family is one entry here plus its badges' glyphs.
+  const BADGE_FAMILIES = {
+    control: {
+      name: "Control and privacy",
+      meaning: "Where your data lives and who can touch it.",
+      token: "--cyan",
+      frame: "M16 2.5 27 6.5v8.2c0 7-4.6 12.2-11 14.8C9.6 26.9 5 21.7 5 14.7V6.5Z",
+    },
+    capability: {
+      name: "Capabilities",
+      meaning: "What it can do.",
+      token: "--violet",
+      frame: "M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z",
+    },
+    platform: {
+      name: "Platform and hardware",
+      meaning: "Where it runs and what it runs on.",
+      token: "--amber",
+      frame: "M9 4h14a5 5 0 0 1 5 5v14a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5Z",
+    },
+  };
+  const badgeLettering = text => `<text x="16" y="18.3" text-anchor="middle">${text}</text>`;
+
   // Card badges flag reviewed traits a reader scans a grid for. Each badge is
   // defined once and listed by id wherever it applies, so a name shared across
   // collections always tests the same field and value. A badge only asserts
   // presence: a missing, null, false, or empty field never produces one, and a
   // card without a badge claims nothing is absent. A badge never repeats a fact
-  // the card already prints elsewhere (role pill, license row, footer). See
+  // the card already prints elsewhere (role pill, license row, footer). Each
+  // badge also names its family (frame and accent) and owns one glyph. See
   // docs/WEB.md "Card badges".
   const CARD_BADGES = {
     "local-first": {
       name: "Local-first",
       definition: "Keeps your data on your own device or servers by default. It may still send requests to an online AI model; cloud storage is opt-in.",
       test: { field: "local_first" },
+      family: "control",
+      glyph: '<path d="M10.5 16.5 16 11.5l5.5 5M12.3 15.5V21h7.4v-5.5"/>',
     },
     "self-hostable": {
       name: "Self-hostable",
       definition: "Ships a service you can deploy and run on infrastructure you control.",
       test: { field: "deployment", anyOf: ["self_hosted"] },
+      family: "control",
+      glyph: '<rect x="10.5" y="10.5" width="11" height="4.2" rx="1"/><rect x="10.5" y="16.8" width="11" height="4.2" rx="1"/><circle class="badge-dot" cx="13" cy="12.6" r=".8"/><circle class="badge-dot" cx="13" cy="18.9" r=".8"/>',
     },
     "sandboxed-execution": {
       name: "Sandboxed execution",
       definition: "Can run agent actions in a local container or an external sandbox.",
       test: { field: "execution_boundaries", anyOf: ["container", "external_sandbox"] },
+      family: "control",
+      glyph: '<path d="M16 10 21.5 12.8v6.4L16 22l-5.5-2.8v-6.4ZM10.5 12.8 16 15.6l5.5-2.8M16 15.6V22"/>',
     },
     "browser-control": {
       name: "Browser control",
       definition: "Can operate a web browser as part of its work.",
       test: { field: "agent_capabilities", anyOf: ["browser_control"] },
+      family: "capability",
+      glyph: '<path d="m12 10.5 9 4.3-3.9 1.4-1.6 4.3Z"/>',
     },
     mcp: {
       name: "MCP",
       definition: "Can use tools and data sources through the Model Context Protocol.",
       test: { field: "agent_capabilities", anyOf: ["mcp"] },
+      family: "capability",
+      glyph: '<path d="M13.5 9.5v3.5M18.5 9.5v3.5M11.5 13h9v2.5a4.5 4.5 0 0 1-9 0ZM16 20v2.5"/>',
     },
     "editable-by-you": {
       name: "Editable by you",
       definition: "You can open and change what it keeps, such as notes, memories, or instructions, directly in files or in the app, not only by chatting.",
       test: { field: "human_editable" },
+      family: "control",
+      glyph: '<path d="m11.5 20.5.7-3 6.6-6.6 2.3 2.3-6.6 6.6Z"/>',
     },
     "graph-retrieval": {
       name: "Graph retrieval",
       definition: "Can recall related memories by following connections in a graph.",
       test: { field: "retrieval_modes", anyOf: ["graph_traversal"] },
+      family: "capability",
+      glyph: '<path d="M16 12.5 12.5 19M16 12.5 19.5 19M12.5 19h7"/><circle class="badge-dot" cx="16" cy="11.8" r="1.9"/><circle class="badge-dot" cx="12" cy="19.5" r="1.9"/><circle class="badge-dot" cx="20" cy="19.5" r="1.9"/>',
     },
     "plain-files": {
       name: "Plain files",
       definition: "Keeps data in human-readable files, such as Markdown.",
       test: { field: "architectures", anyOf: ["plain_files"] },
+      family: "control",
+      glyph: '<path d="M12 10h5.5l2.5 2.5V22h-8ZM14.2 15.5h3.6M14.2 18.5h3.6"/>',
     },
     "time-aware-recall": {
       name: "Time-aware recall",
       definition: "Can recall what was true as of a given point in time.",
       test: { field: "retrieval_modes", anyOf: ["temporal"] },
+      family: "capability",
+      glyph: '<circle cx="16" cy="16" r="5.8"/><path d="M16 12.8V16l2.3 1.5"/>',
     },
     "desktop-app": {
       name: "Desktop app",
       definition: "Available as a desktop application you install and run.",
       test: { field: "deployment", anyOf: ["desktop"] },
+      family: "platform",
+      glyph: '<rect x="10" y="10.5" width="12" height="8" rx="1"/><path d="M13.5 22h5M16 18.5V22"/>',
     },
     "mobile-app": {
       name: "Mobile app",
       definition: "Available as a mobile application you install and run.",
       test: { field: "deployment", anyOf: ["mobile"] },
+      family: "platform",
+      glyph: '<rect x="12.5" y="9.5" width="7" height="13" rx="1.5"/><circle class="badge-dot" cx="16" cy="20" r=".8"/>',
     },
     "dedicated-endpoints": {
       name: "Dedicated endpoints",
       definition: "Customers can get isolated serving resources or an endpoint of their own.",
       test: { field: "delivery_modes", anyOf: ["dedicated_endpoint"] },
+      family: "platform",
+      glyph: '<circle cx="16" cy="16" r="5.8"/><circle class="badge-dot" cx="16" cy="16" r="1.8"/>',
     },
     "reserved-capacity": {
       name: "Reserved capacity",
       definition: "Customers can reserve a defined throughput tier or capacity allocation.",
       test: { field: "delivery_modes", anyOf: ["reserved_capacity"] },
+      family: "platform",
+      glyph: '<path d="M11.5 21v-4M16 21V11M20.5 21v-7"/>',
     },
     batch: {
       name: "Batch",
       definition: "Accepts asynchronous jobs that trade an immediate response for separate capacity or pricing.",
       test: { field: "delivery_modes", anyOf: ["batch"] },
+      family: "capability",
+      glyph: '<path d="m10.5 13 5.5-2.8 5.5 2.8-5.5 2.8ZM10.5 16.2 16 19l5.5-2.8M10.5 19.3 16 22l5.5-2.7"/>',
     },
     "apple-metal": {
       name: "Apple Metal",
       definition: "Documented to run on Apple silicon GPUs through Metal.",
       test: { field: "accelerators", anyOf: ["metal"] },
+      family: "platform",
+      glyph: badgeLettering("MTL"),
     },
     "amd-rocm": {
       name: "AMD ROCm",
       definition: "Documented to run on AMD GPUs through ROCm.",
       test: { field: "accelerators", anyOf: ["rocm"] },
+      family: "platform",
+      glyph: badgeLettering("ROC"),
     },
     "distributed-serving": {
       name: "Distributed serving",
       definition: "Can spread a model or its requests across several accelerators or hosts.",
       test: { field: "serving_modes", anyOf: ["distributed_serving"] },
+      family: "capability",
+      glyph: '<rect x="13.8" y="9.8" width="4.4" height="4.4" rx="1"/><rect x="9.8" y="17.8" width="4.4" height="4.4" rx="1"/><rect x="17.8" y="17.8" width="4.4" height="4.4" rx="1"/><path d="M16 14.2v1.8M12 17.8V16h8v1.8"/>',
     },
     npu: {
       name: "NPU",
       definition: "Documented to run on a dedicated neural processing unit.",
       test: { field: "accelerators", anyOf: ["npu"] },
+      family: "platform",
+      glyph: badgeLettering("NPU"),
     },
   };
 
@@ -439,7 +501,7 @@
     inference: "Inference services",
     runtime: "Local runtimes",
   };
-  const MAX_CARD_BADGES = 4;
+  const MAX_CARD_BADGES = 6;
 
   function cardBadgeSetKey(kind, record) {
     if (kind === "system") return `system:${record.system_family}`;
@@ -458,7 +520,7 @@
     return CARD_BADGE_SETS[key]
       .filter(id => matchesBadgeTest(record, CARD_BADGES[id].test))
       .slice(0, MAX_CARD_BADGES)
-      .map(id => ({ id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition }));
+      .map(id => ({ id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, family: CARD_BADGES[id].family }));
   }
 
   // One entry per badge, in first-listed order, naming every place it appears.
@@ -466,11 +528,43 @@
     const entries = new Map();
     for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
       for (const id of ids) {
-        if (!entries.has(id)) entries.set(id, { id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, scopes: [] });
+        if (!entries.has(id)) entries.set(id, { id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, family: CARD_BADGES[id].family, scopes: [] });
         entries.get(id).scopes.push(CARD_BADGE_SET_NAMES[key]);
       }
     }
     return [...entries.values()];
+  }
+
+  // Emblems are decoration: the card, the legend, and Taxonomy print the badge
+  // name as text (visible or visually hidden) beside them.
+  function emblemSVG(familyId, glyph) {
+    const inner = glyph ? `<g class="badge-glyph">${glyph}</g>` : "";
+    return `<svg class="badge-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path class="badge-frame" d="${BADGE_FAMILIES[familyId].frame}"/>${inner}</svg>`;
+  }
+  function badgeEmblem(badgeId) {
+    return emblemSVG(CARD_BADGES[badgeId].family, CARD_BADGES[badgeId].glyph);
+  }
+  function familyEmblem(familyId) {
+    return emblemSVG(familyId, "");
+  }
+
+  // What the Directory legend shows for a scope: the badges its cards can
+  // carry, grouped by family, or only the families where cards of every kind
+  // mix. null means the scope shows no badges at all.
+  function badgeLegend(collection, systemFamily = "") {
+    if (collection === "all" || collection === "packs") {
+      return { mode: "families", families: Object.entries(BADGE_FAMILIES).map(([id, family]) => ({ id, name: family.name, meaning: family.meaning })) };
+    }
+    const systemKeys = Object.keys(CARD_BADGE_SETS).filter(key => key.startsWith("system:"));
+    const keys = collection === "systems" ? (systemFamily ? [`system:${systemFamily}`] : systemKeys)
+      : collection === "inference" ? ["inference"]
+      : collection === "runtimes" ? ["runtime"]
+      : [];
+    const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
+    if (!ids.length) return null;
+    const order = Object.keys(BADGE_FAMILIES);
+    ids.sort((a, b) => order.indexOf(CARD_BADGES[a].family) - order.indexOf(CARD_BADGES[b].family));
+    return { mode: "badges", badges: ids.map(id => ({ id, name: CARD_BADGES[id].name, family: CARD_BADGES[id].family })) };
   }
 
   // ADR 038: Atlas can review a release before models.dev lists it. Such a
@@ -506,13 +600,17 @@
   }
 
   return {
+    BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    badgeEmblem,
+    badgeLegend,
     cardBadgeGlossary,
     cardBadges,
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
+    familyEmblem,
     filterAndSortProjects,
     filterDirectoryEntries,
     filterInferenceServices,
