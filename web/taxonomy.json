@@ -1008,6 +1008,11 @@
       "id": "us",
       "name": "United States",
       "definition": "Headquartered in the United States (ISO 3166-1 US)."
+    },
+    {
+      "id": "none_listed",
+      "name": "No headquarters listed",
+      "definition": "The organization's own pages list its offices but name no headquarters. The record says so rather than inferring a country from a registered office, the largest office, or where its founders are."
     }
   ],
   "architectures": [
