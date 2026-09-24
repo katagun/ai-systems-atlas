@@ -59,6 +59,17 @@ test("a lab dialog joins the records that name the lab and browses its releases 
   await expect(page.locator("#model-lab-filter")).toHaveValue("");
 });
 
+test("a lab dialog fits a phone screen with its longest channel URL and name", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const id of [catalogCounts.labIdWithLongestChannel, catalogCounts.labIdWithLongestNameWord]) {
+    await page.goto(`/?view=labs&record=lab:${id}`);
+    const dialog = page.locator("#lab-dialog");
+    // Channels are detail-only; measure once they have painted.
+    await expect(dialog.locator(".lab-channel-link").first()).toBeVisible();
+    expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth), id).toBe(0);
+  }
+});
+
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
   await page.goto("/?view=models&record=model:model-deepseek-deepseek-v4-pro");
   await expect(page.locator("#model-dialog-content h1")).toHaveText("DeepSeek V4 Pro");
