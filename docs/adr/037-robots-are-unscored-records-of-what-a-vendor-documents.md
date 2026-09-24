@@ -1,6 +1,6 @@
 # ADR 037: Robots are unscored records of what a vendor documents
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
@@ -104,9 +104,9 @@ The Agent packs pattern, with no new interface concept: a Robots scope in the Di
 
 ## Consequences
 
-- Spot, Unitree G1, Figure, and 1X NEO are each reviewed against this boundary in a later change, each on its own evidence and against both bases. No outcome is assumed; any of the four may stay held. Their hold label moves from `robots collection decision` to `robots collection review` when the collection exists.
-- `scripts/check_evidence_links.py` will monitor a robot's terms evidence and its AI-basis pages — every `named_model` and `model_interface` entry — for drift once the collection plumbing lands, because those pages carry the collection's central fact. Drift opens an incident that waits for a human and never hides the record. An unpinnable page is link-checked and left out of drift monitoring, and the record says so.
+- Spot, Unitree G1, Figure, and 1X NEO are each reviewed against this boundary in a later change, each on its own evidence and against both bases. No outcome is assumed; any of the four may stay held. Their hold label moved from `robots collection decision` to `robots collection review` when the collection landed.
+- `scripts/check_evidence_links.py` monitors a robot's terms evidence and its AI-basis pages — every `named_model` and `model_interface` entry — for drift, because those pages carry the collection's central fact. Drift opens an incident that waits for a human and never hides the record. An unpinnable page is link-checked and left out of drift monitoring, and the record says so.
 - Discovery cannot see this collection's members. The refresh finds GitHub repositories by topic, and a robot is a product that usually has no repository. ADR 023 extended discovery in the record that needed it — "A decision that reconsiders itself at three qualifying systems is worthless if the path those systems arrive by cannot see them" — but here there is nothing to extend: no keyword ladder reaches `bostondynamics.com`. Robot candidates are queued by hand, and `BACKLOG.md` carries the routing work. The revisit condition this record can honestly offer is a reviewer's sweep, not a queue that fills itself.
 - `docs/ROBOTS.md` carries the boundary, classification, and evidence workflow a reviewer needs, and `AGENTS.md` routes robot questions to it.
 - Every script that enumerates collections gains a row, and `docs/AGENT_DOCS.md`'s one-commit rule for published files applies.
-- This record becomes Accepted when the collection plumbing lands with zero records. Until then nothing may be written to `directory/robots.json`, and automation never writes a robot record at all.
+- This record was accepted when the collection plumbing landed with zero records. A robot record is written only by a reviewer under `docs/ROBOTS.md`, and automation never writes a robot record at all.

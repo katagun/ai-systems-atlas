@@ -346,6 +346,7 @@ class _CrossCollectionDocuments(NamedTuple):
     local_runtimes: dict[str, Any]
     packs: dict[str, Any]
     labs: dict[str, Any]
+    robots: dict[str, Any]
 
 
 def _validate_proposed_models(
@@ -376,6 +377,9 @@ def _validate_proposed_models(
         labs_value=cross_collection.labs.get("labs")
         if isinstance(cross_collection.labs.get("labs"), list)
         else [],
+        robots_value=cross_collection.robots.get("robots")
+        if isinstance(cross_collection.robots.get("robots"), list)
+        else [],
     )
     return taxonomy
 
@@ -401,6 +405,7 @@ def _preflight_gap(
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
     labs_data = load_json(directory / "labs.json")
+    robots_data = load_json(directory / "robots.json")
 
     errors: list[str] = []
     models = (
@@ -442,6 +447,7 @@ def _preflight_gap(
             local_runtimes_data,
             packs_data,
             labs_data,
+            robots_data,
         ),
         errors,
     )
@@ -476,6 +482,7 @@ def preflight_promotion(
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
     labs_data = load_json(directory / "labs.json")
+    robots_data = load_json(directory / "robots.json")
     dispositions_path = directory / "model-dispositions.json"
     dispositions_data: dict[str, Any] = {"dispositions": []}
     if dispositions_path.exists():
@@ -515,6 +522,7 @@ def preflight_promotion(
             local_runtimes_data,
             packs_data,
             labs_data,
+            robots_data,
         ),
         errors,
     )
@@ -572,6 +580,7 @@ def preflight_link(
     local_runtimes_data = load_json(directory / "local-runtimes.json")
     packs_data = load_json(directory / "packs.json")
     labs_data = load_json(directory / "labs.json")
+    robots_data = load_json(directory / "robots.json")
 
     models = (
         models_data.get("models") if isinstance(models_data.get("models"), list) else []
@@ -656,6 +665,7 @@ def preflight_link(
             local_runtimes_data,
             packs_data,
             labs_data,
+            robots_data,
         ),
         errors,
     )

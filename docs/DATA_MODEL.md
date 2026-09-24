@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of eleven files:
+`directory/` is canonical. The browser consumes synchronized copies of twelve files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -19,6 +19,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
 | `packs.json` | Reviewed, unscored agent packs recorded for what a host installs | Yes |
 | `labs.json` | Reviewed, unscored labs that develop the reviewed model releases, joined to the rest of the catalog by name | Yes |
+| `robots.json` | Reviewed, unscored AI robots recorded for what their maker documents — the models it names or the way it lets you run your own, hardware, availability, and terms | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
@@ -29,8 +30,6 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `hn-signals.json` | Attention-source signal queue: pointers plus optional review assessment | No |
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
-
-`directory/robots.json` is not in the table yet: the Robots collection plumbing has not landed (see the robots item in [`../BACKLOG.md`](../BACKLOG.md)), so it is neither canonical nor published, and the regeneration sequence in step 7 of [`ROBOTS.md`](ROBOTS.md) applies once it ships.
 
 The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory, and Labs is a sibling view because an organization is not a deployable choice. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
@@ -185,7 +184,24 @@ Pack records are independent from project records. They contain no `system_famil
 - **Relationships:** optional `related_packs` and `related_systems` reference records by id without implying compatibility.
 - **Review:** pinned `evidence` (manifest or skill frontmatter as a Git blob, plus dated web sources) and human-owned `verified_at`. A marketplace's `verified_at` dates its pinned manifest, never the catalogue behind it.
 
-A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
+A repository appears in at most one of `projects.json`, `packs.json`, `robots.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
+
+## Robot record
+
+Robot records are independent from every other collection. They record what one manufacturer's own documentation states, never what a robot does, and the validator rejects `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, and `benchmarks` if present. The envelope is `{"version": "1.0", "verified_at": <ISO date>, "robots": [...]}`.
+
+- **Identity:** `id`, `name`, optional `short_name`, `manufacturer`, authoritative HTTPS `url`, `description`, optional `variants` prose, and an optional GitHub `repo` (owner/name); a robot may have none.
+- **First-party anchor:** `first_party_domains`, a non-empty list of bare lowercase hosts or `github.com/<org>` prefixes. A shared host such as `github.io`, `githubusercontent.com`, `huggingface.co`, `hf.co`, `vercel.app`, or `x.com` is refused as a bare entry, and so is any subdomain of one (`raw.githubusercontent.com`, `www.youtube.com`, `vendor.github.io`); `github.com` is accepted only as an org-scoped prefix. A public suffix such as `co.uk`, `com.au`, `co.jp`, or `com.cn` is refused only as a bare entry on its own — nobody's site is `co.uk` — but a maker's own registrable domain under one, such as `engineeredarts.co.uk`, is accepted, since unlike the shared hosts above it is not a platform any tenant can register onto. A maker whose only site is a `github.io` page cites it via `github.com/<org>` instead. The record `url`, every evidence `url` and `immutable_url`, and every terms-evidence `url` must fall under an entry, host or subdomain.
+- **Classification:** one `form_factor` from `robot_form_factors`, one `availability` from `robot_availability`, `availability_note` prose in the vendor's words, and `status` from `project_statuses`.
+- **AI basis:** `ai_basis`, one or both of `vendor_named_model` and `open_model_interface` from `robot_ai_bases`. `named_models` is a list — possibly empty — whose entries carry exactly `name`, `kind` (from `robot_model_kinds`), `role_note`, and `evidence_label`; it is non-empty exactly when `ai_basis` contains `vendor_named_model`. `developer_access` states what a documented interface lets a model control. `research_confidence` from `research_confidence_levels` rates how well the documentation supports the basis.
+- **Hardware:** `hardware` carries exactly `compute`, `sensors`, `actuation`, and `power`, each non-empty prose and each permitted to read `"Not published."`. No hardware number is lifted into a structured field.
+- **Terms:** `terms` from `robot_terms_kinds`, where `none_published` must appear alone, plus `terms_note` prose. `terms_evidence` items carry exactly `terms_kind`, `scope`, `kind` (always `web_terms`), `url`, and `verified_at`, with an optional `unpinnable` that may only be `true`. The set of `terms_kind` values must equal `terms` minus `none_published`.
+- **Evidence:** every `evidence` item carries a `role` from `product_page`, `technical_documentation`, `named_model`, `model_interface`, and `supporting`. `product_page` is always required; `named_model` is required when `ai_basis` includes `vendor_named_model`; `model_interface` is required when it includes `open_model_interface`. `technical_documentation` and `supporting` are never required. Every `named_models[].evidence_label` must name an evidence item whose role is `named_model`. An item may carry `unpinnable`, which must be `true` and only on `web` evidence.
+- **The weak point:** `not_verified` is required prose stating on the record itself that the fact it rests on is the vendor's claim and that the evidence is mutable web content.
+- **Relationships:** optional `related_systems`, `related_models`, and `related_robots` reference records by id without implying compatibility; a robot cannot relate to itself. `superseded_by` names another robot, is required exactly when `status` is `superseded`, and is forbidden otherwise.
+- **Review:** human-owned `verified_at` on the record and on the collection envelope.
+
+A repository appears in at most one collection, and a repo-less robot is unique by its canonical `url` within the collection. See [`ROBOTS.md`](ROBOTS.md) and [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md).
 
 ## Lab record
 

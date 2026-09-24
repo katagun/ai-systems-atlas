@@ -42,6 +42,7 @@ COLLECTIONS = {
     "model": ("models", "models"),
     "pack": ("packs", "packs"),
     "lab": ("labs", "labs"),
+    "robot": ("robots", "robots"),
 }
 COLLECTION_LABELS = {
     "system": "System",
@@ -51,6 +52,7 @@ COLLECTION_LABELS = {
     "model": "Model",
     "pack": "Agent pack",
     "lab": "Lab",
+    "robot": "Robot",
 }
 
 
@@ -90,6 +92,7 @@ def load_catalog(root: Path = ROOT) -> dict:
         "models": read("models.json")["models"],
         "packs": read("packs.json")["packs"],
         "labs": read("labs.json")["labs"],
+        "robots": read("robots.json")["robots"],
         "taxonomy": read("taxonomy.json"),
     }
 
@@ -260,6 +263,35 @@ def _facts_for(
             ("Installs", record["installs"]),
         ]
         return eyebrow, record["description"], facts, "CreativeWork", "Open repository"
+    if kind == "robot":
+        # render_page() already prefixes the eyebrow with COLLECTION_LABELS[kind]
+        # ("Robot"); this branch supplies only the form factor, not the label
+        # again, or the page reads "Robot · Robot · Humanoid".
+        eyebrow = taxonomy_name(taxonomy, "robot_form_factors", record["form_factor"])
+        facts = [
+            ("Maker", record["manufacturer"]),
+            (
+                "Availability",
+                taxonomy_name(taxonomy, "robot_availability", record["availability"]),
+            ),
+            (
+                "Models the vendor names",
+                "; ".join(
+                    f"{model['name']} (vendor-stated): {model['role_note']}"
+                    for model in record["named_models"]
+                )
+                or "None named by the maker",
+            ),
+            (
+                "Runs your own models",
+                "Yes, by a route the maker documents"
+                if "open_model_interface" in record["ai_basis"]
+                else "Not documented by the maker",
+            ),
+            ("Status", humanize(record["status"])),
+            ("Not verified", record["not_verified"]),
+        ]
+        return eyebrow, record["description"], facts, "Product", "Open official page"
     eyebrow = taxonomy_name(taxonomy, "local_runtime_types", record["runtime_type"])
     facts = [
         ("Maintainer", record["maintainer"]),

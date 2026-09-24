@@ -40,6 +40,9 @@ class DirectoryTests(unittest.TestCase):
         cls.labs = json.loads(
             (ROOT / "directory" / "labs.json").read_text(encoding="utf-8")
         )
+        cls.robots = json.loads(
+            (ROOT / "directory" / "robots.json").read_text(encoding="utf-8")
+        )
 
     def test_models_dev_source_snapshot_contains_every_upstream_record(self) -> None:
         source_records = self.models_dev["models"]
@@ -1143,6 +1146,46 @@ class DirectoryTests(unittest.TestCase):
                 claimed[name] = record["id"]
         for group in ("lab_types", "lab_channel_kinds", "countries"):
             self.assertTrue(self.taxonomy[group], group)
+
+    def test_robots_are_a_separate_unscored_collection(self) -> None:
+        for record in self.robots["robots"]:
+            for field in (
+                "system_family",
+                "primary_role",
+                "score_profile",
+                "score",
+                "stars",
+                "stars_verified_at",
+                "price",
+                "price_usd",
+                "benchmarks",
+            ):
+                self.assertNotIn(field, record, record["id"])
+            self.assertEqual(
+                "vendor_named_model" in record["ai_basis"],
+                bool(record["named_models"]),
+                record["id"],
+            )
+            self.assertTrue(record["not_verified"].strip(), record["id"])
+        for group in (
+            "robot_form_factors",
+            "robot_ai_bases",
+            "robot_availability",
+            "robot_model_kinds",
+            "robot_terms_kinds",
+        ):
+            self.assertTrue(self.taxonomy[group], group)
+
+    def test_agent_documents_name_the_robots_endpoint(self) -> None:
+        for relative in (
+            "web/llms.txt",
+            "skills/ai-systems-atlas/SKILL.md",
+            "skills/ai-systems-atlas/reference.md",
+            "docs/DATA_MODEL.md",
+        ):
+            self.assertIn(
+                "robots.json", (ROOT / relative).read_text(encoding="utf-8"), relative
+            )
 
     def test_systems_installed_as_packs_carry_the_host_pack_deployment_mode(
         self,

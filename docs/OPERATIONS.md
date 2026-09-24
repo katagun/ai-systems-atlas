@@ -90,7 +90,7 @@ The refresh is transactional at the repository level:
 
 Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
-The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json` and `directory/labs.json` carry no stars and are never touched by this pass.
+The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json`, `directory/labs.json`, and `directory/robots.json` carry no stars and are never touched by this pass.
 
 models.dev discovery is a separate fail-closed import:
 
@@ -112,7 +112,7 @@ It needs no token and makes no request until `terms_reviewed_at` is recorded in 
 
 The weekly workflow checks the authoritative record URL, every reviewed evidence URL,
 every immutable evidence URL, and every license or governing-terms URL across systems,
-specifications, inference services, local runtimes, reviewed models, agent packs, and labs,
+specifications, inference services, local runtimes, reviewed models, agent packs, labs, and robots,
 including each lab's channel pages and the safety framework it publishes:
 
 ```bash
@@ -173,6 +173,27 @@ not steward, and a finding's pinned `content_sha256` is a review-time record com
 nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
 
+Robots carry terms in place of licences, and the page that names a model is the fact the
+record exists to report, so the checker hashes both. A robot's record `url` is checked as a
+link; every item in `terms_evidence` is hashed as `web_terms` like any other terms page; and
+in `evidence`, the items whose role is `named_model` or `model_interface` are hashed too. A
+drifted named-model or model-interface page is resolved exactly as terms drift is: read the
+stored diff, open the vendor's page, correct whatever the record now states wrongly, and
+advance the affected human-owned `verified_at` so the next run accepts the new hash. Drift
+never hides a robot and never rewrites its record. Evidence with the roles `product_page`,
+`technical_documentation`, or `supporting` is link-checked only.
+
+An evidence or terms-evidence item may carry `"unpinnable": true`, which says the page's
+visible text changes between fetches so its hash can never settle. An unpinnable citation is
+still link-checked — a `404` on it still fails — and is never drift-monitored. The veto is
+per URL rather than per citation: if any record cites a URL as unpinnable, that URL is left
+out of monitoring even where another citation of the same URL would have turned monitoring
+on. Reviewing a page before citing it is `scripts/check_page_stability.py`, below.
+
+`directory/robots.json` is in the refresh's staged path list, so a hand-written robot record
+travels with a weekly refresh, but no step of the refresh ever writes one: automation does
+not create, edit, or remove a robot record (ADR 037).
+
 To resolve terms drift, start from the stored diff (`--show-drift`), inspect the authoritative
 page, update every affected conclusion
 and scoped evidence item as needed, and advance every affected human-owned `verified_at`.
@@ -198,6 +219,27 @@ For each URL the import keeps an entry found in only one cache, prefers the entr
 after a strictly newer human review of every reference, and otherwise keeps the most
 recently checked entry. When two baselines agree it keeps any open drift; when they disagree
 without a newer review it opens terms drift, so a person decides which page is right.
+
+## The two-fetch rule for a robot's evidence
+
+Before citing a page on a robot record, fetch it twice and compare the hashes the evidence
+monitor would keep:
+
+```bash
+uv run python scripts/check_page_stability.py <url>
+uv run python scripts/check_page_stability.py <url> --wait 5   # a shorter gap between fetches
+```
+
+The script fetches the URL, waits `--wait` seconds (120 by default), fetches it again, and
+hashes each body with the same visible-text normalisation `check_evidence_links.py` uses. It
+prints both hashes and exits `0` when they match, `1` when they differ, and `2` when either
+fetch fails. Paste both hashes into the pull request description either way.
+
+Differing hashes do not disqualify the page. Look for a stable first-party alternative
+first; where none exists, cite the page with `"unpinnable": true`, which records the
+instability on the record itself and keeps the link checker on it. An unpinnable page never
+holds a robot out of the collection. See [`ROBOTS.md`](ROBOTS.md) and
+[ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md).
 
 ## Review a candidate
 
@@ -938,7 +980,7 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 ## App payloads
 
-`uv run python scripts/build_web_payload.py` writes five boot payloads, five search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. The weekly refresh (`scripts/run_directory_refresh.py`) synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
+`uv run python scripts/build_web_payload.py` writes seven boot payloads, seven search indexes, one shared imported-model source-detail payload, and one per-record detail file for every reviewed catalog record under `web/app/` — the projection `web/app.js` actually loads at boot, on search focus, and on record or comparison open; see [ADR 026](adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md). `--check` rebuilds the tree in memory and fails when the committed files differ, and `verify.yml` runs it on every pull request. `scripts/update_directory.py` regenerates payloads right after `sync_web_data()`, since payloads project the files that call writes and cannot be built before it. The weekly refresh (`scripts/run_directory_refresh.py`) synchronizes again after the separate models.dev import, then runs the builder, share-page generator, and asset-version builder in that order. Dropping either synchronization/build ordering ships stale card metadata because the app payloads are committed rather than built during Pages deployment.
 
 ## Share pages
 

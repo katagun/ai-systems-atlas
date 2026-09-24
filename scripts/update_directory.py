@@ -51,6 +51,7 @@ LICENSE_REVIEW_PATH = DIRECTORY / "license-review.json"
 DISCOVERY_SOURCES_PATH = DIRECTORY / "discovery-sources.json"
 LOCAL_RUNTIMES_PATH = DIRECTORY / "local-runtimes.json"
 PACKS_PATH = DIRECTORY / "packs.json"
+ROBOTS_PATH = DIRECTORY / "robots.json"
 
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 MIN_METADATA_SUCCESS_RATIO = 0.80
@@ -744,12 +745,14 @@ def known_urls_from(
     projects: list[dict[str, Any]],
     exclusions: dict[str, Any],
     packs: list[dict[str, Any]] = (),
+    robots: list[dict[str, Any]] = (),
 ) -> set[str]:
     """Return every URL discovery should treat as already decided.
 
     An exclusion is a durable human rejection. Without its URL the weekly refresh
     re-adds the same non-GitHub page forever; 10 of the 70 entries have no repo at
-    all, so `repo` alone cannot carry the rejection. A pack is a decided record too.
+    all, so `repo` alone cannot carry the rejection. A pack is a decided record
+    too, and so is a robot.
     """
     known = {
         project["url"] for project in projects if isinstance(project.get("url"), str)
@@ -760,6 +763,7 @@ def known_urls_from(
         if isinstance(item, dict) and isinstance(item.get("url"), str)
     )
     known.update(pack["url"] for pack in packs if isinstance(pack.get("url"), str))
+    known.update(robot["url"] for robot in robots if isinstance(robot.get("url"), str))
     return known
 
 
@@ -767,6 +771,7 @@ def known_repos_from(
     projects: list[dict[str, Any]],
     exclusions: dict[str, Any],
     packs: list[dict[str, Any]] = (),
+    robots: list[dict[str, Any]] = (),
 ) -> set[str]:
     """Return every lower-cased repository discovery should treat as already decided."""
     known = {project["repo"].lower() for project in projects if project.get("repo")}
@@ -777,6 +782,9 @@ def known_repos_from(
     )
     known.update(
         pack["repo"].lower() for pack in packs if isinstance(pack.get("repo"), str)
+    )
+    known.update(
+        robot["repo"].lower() for robot in robots if isinstance(robot.get("repo"), str)
     )
     return known
 
@@ -799,6 +807,9 @@ def main() -> int:
     )
     packs_document = load_json(
         PACKS_PATH, {"version": "1.0", "verified_at": None, "packs": []}
+    )
+    robots_document = load_json(
+        ROBOTS_PATH, {"version": "1.0", "verified_at": None, "robots": []}
     )
     projects = document["projects"]
     previous_reviews = {item["project_id"]: item for item in review_document["entries"]}
@@ -827,7 +838,9 @@ def main() -> int:
         return 1
 
     role_families = {item["id"]: item["family"] for item in taxonomy["primary_roles"]}
-    known_projects = known_repos_from(projects, exclusions, packs_document["packs"])
+    known_projects = known_repos_from(
+        projects, exclusions, packs_document["packs"], robots_document["robots"]
+    )
     candidates, new_candidates, successful_queries, discovery_failures = (
         discover_candidates(
             known_projects,
@@ -847,7 +860,9 @@ def main() -> int:
             print(f"warning: {failure}", file=sys.stderr)
         return 1
 
-    known_urls = known_urls_from(projects, exclusions, packs_document["packs"])
+    known_urls = known_urls_from(
+        projects, exclusions, packs_document["packs"], robots_document["robots"]
+    )
     candidates, new_official_candidates, successful_sources, official_failures = (
         discover_official_candidates(
             candidates,

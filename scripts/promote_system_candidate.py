@@ -213,6 +213,7 @@ def preflight_promotion(
     models_data = load_json(directory / "models.json")
     packs_data = load_json(directory / "packs.json")
     labs_data = load_json(directory / "labs.json")
+    robots_data = load_json(directory / "robots.json")
 
     repo = draft.get("repo")
     if not isinstance(repo, str) or not repo:
@@ -310,6 +311,9 @@ def preflight_promotion(
         else [],
         labs_value=labs_data.get("labs")
         if isinstance(labs_data.get("labs"), list)
+        else [],
+        robots_value=robots_data.get("robots")
+        if isinstance(robots_data.get("robots"), list)
         else [],
     )
 

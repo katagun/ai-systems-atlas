@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+import urllib.parse
 from pathlib import Path
 from typing import ClassVar
 
@@ -963,6 +964,806 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
+    SAMPLE_ROBOT: ClassVar[dict] = {
+        "id": "sample-robot",
+        "name": "Sample Robot",
+        "manufacturer": "Example Robotics",
+        "url": "https://robots.example/sample",
+        "first_party_domains": ["robots.example", "github.com/example-robotics"],
+        "description": "A humanoid whose maker documents a vision-language-action model.",
+        "form_factor": "humanoid",
+        "availability": "reservation",
+        "availability_note": "Reservations open in two regions.",
+        "ai_basis": ["vendor_named_model"],
+        "named_models": [
+            {
+                "name": "Sample-VLA",
+                "kind": "vision_language_action",
+                "role_note": "The vendor says it turns camera frames and a spoken request into arm and hand motion.",
+                "evidence_label": "Model announcement",
+            }
+        ],
+        "research_confidence": "medium",
+        "hardware": {
+            "compute": "Not published.",
+            "sensors": "Two head cameras and a depth sensor, per the spec sheet.",
+            "actuation": "Electric actuators in both arms and hands.",
+            "power": "Not published.",
+        },
+        "developer_access": "The vendor documents no SDK.",
+        "terms": ["terms_of_sale"],
+        "terms_note": "Terms of sale cover the purchase and name no software licence.",
+        "terms_evidence": [
+            {
+                "terms_kind": "terms_of_sale",
+                "scope": "Purchase terms",
+                "kind": "web_terms",
+                "url": "https://robots.example/terms",
+                "verified_at": "2026-09-20",
+            }
+        ],
+        "not_verified": "The model named here is the maker's own claim and is not verified by the Atlas; every source is a web page the maker can change.",
+        "status": "active",
+        "evidence": [
+            {
+                "kind": "web",
+                "role": "product_page",
+                "label": "Product page",
+                "url": "https://robots.example/sample",
+                "verified_at": "2026-09-20",
+            },
+            {
+                "kind": "web",
+                "role": "technical_documentation",
+                "label": "Spec sheet",
+                "url": "https://docs.robots.example/sample/specs",
+                "verified_at": "2026-09-20",
+            },
+            {
+                "kind": "web",
+                "role": "named_model",
+                "label": "Model announcement",
+                "url": "https://robots.example/news/sample-vla",
+                "verified_at": "2026-09-20",
+            },
+        ],
+        "verified_at": "2026-09-20",
+    }
+
+    def catalog_with_robot(self, mutate=None, extra_robots=None) -> list[str]:
+        """Validate a temporary catalog holding one synthetic robot.
+
+        ``extra_robots`` lets a test add further robot records (e.g. to exercise
+        a duplicate repo or url across two robots) without duplicating the whole
+        fixture; ``mutate`` still only ever edits the first (primary) robot.
+        """
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        robots_path = root / "directory" / "robots.json"
+        document = json.loads(robots_path.read_text(encoding="utf-8"))
+        robot = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        document["robots"] = [robot, *(extra_robots or [])]
+        if mutate is not None:
+            mutate(robot, root)
+        self.write_json(robots_path, document)
+        self.write_json(root / "web" / "robots.json", document)
+        return validate(root)
+
+    def test_the_committed_robots_collection_validates(self) -> None:
+        self.assertEqual([], validate(ROOT))
+
+    def test_robot_taxonomy_groups_exist(self) -> None:
+        taxonomy = json.loads(
+            (ROOT / "directory" / "taxonomy.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            ["humanoid", "quadruped", "arm", "mobile_manipulator", "other"],
+            [item["id"] for item in taxonomy["robot_form_factors"]],
+        )
+        self.assertEqual(
+            [
+                "orderable",
+                "reservation",
+                "enterprise_sales",
+                "research_only",
+                "announced",
+            ],
+            [item["id"] for item in taxonomy["robot_availability"]],
+        )
+        self.assertEqual(
+            [
+                "vision_language_action",
+                "language_or_vision_language",
+                "reinforcement_learning_policy",
+                "other_learned",
+            ],
+            [item["id"] for item in taxonomy["robot_model_kinds"]],
+        )
+        self.assertEqual(
+            [
+                "terms_of_sale",
+                "sdk_license",
+                "software_terms",
+                "warranty_only",
+                "none_published",
+            ],
+            [item["id"] for item in taxonomy["robot_terms_kinds"]],
+        )
+        self.assertEqual(
+            ["vendor_named_model", "open_model_interface"],
+            [item["id"] for item in taxonomy["robot_ai_bases"]],
+        )
+
+    def test_valid_robot_passes_validation(self) -> None:
+        errors = self.catalog_with_robot()
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_rejects_every_scoring_price_and_popularity_field(self) -> None:
+        for field, value in (
+            ("score", {"overall": 5}),
+            ("score_profile", "agent_system"),
+            ("system_family", "agent_system"),
+            ("primary_role", "coding_agent"),
+            ("stars", 10),
+            ("stars_verified_at", "2026-09-20"),
+            ("price", "$20,000"),
+            ("price_usd", 20000),
+            ("benchmarks", {"lift_kg": 20}),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field, value=value):
+                    robot[field] = value
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(
+                    any(f"{field} is never recorded on a robot" in e for e in errors),
+                    errors,
+                )
+
+    def test_robot_rejects_unknown_and_missing_fields(self) -> None:
+        def add_unknown(robot, root):
+            robot["payload_kg"] = 3
+
+        def drop_required(robot, root):
+            del robot["not_verified"]
+
+        for mutate, needle in (
+            (add_unknown, "extra=['payload_kg']"),
+            (drop_required, "missing=['not_verified']"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_enums_come_from_the_taxonomy(self) -> None:
+        for field, needle in (
+            ("form_factor", "unknown form factor"),
+            ("availability", "unknown availability"),
+            ("status", "unknown status"),
+            ("research_confidence", "unknown research confidence"),
+        ):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field):
+                    robot[field] = "not-a-value"
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_superseded_status_names_a_successor_robot(self) -> None:
+        def missing(robot, root):
+            robot["status"] = "superseded"
+
+        def stray(robot, root):
+            robot["superseded_by"] = "sample-robot-2"
+
+        def itself(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = "sample-robot"
+
+        def unknown(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = "no-such-robot"
+
+        for mutate, needle in (
+            (missing, "superseded status requires superseded_by"),
+            (stray, "superseded_by requires the superseded status"),
+            (itself, "a robot cannot supersede itself"),
+            (unknown, "superseded_by must name a robot record"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_ai_basis_agrees_with_named_models(self) -> None:
+        def named_without_basis(robot, root):
+            robot["ai_basis"] = ["open_model_interface"]
+
+        def basis_without_named(robot, root):
+            robot["named_models"] = []
+
+        def unknown_basis(robot, root):
+            robot["ai_basis"] = ["autonomy"]
+
+        def no_basis(robot, root):
+            robot["ai_basis"] = []
+
+        for mutate, needle in (
+            (
+                named_without_basis,
+                "vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty",
+            ),
+            (
+                basis_without_named,
+                "vendor_named_model must be in ai_basis exactly when "
+                "named_models is non-empty",
+            ),
+            (unknown_basis, "unknown ai_basis"),
+            (no_basis, "ai_basis must be a non-empty list"),
+        ):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_named_model_has_a_closed_shape_and_a_known_kind(self) -> None:
+        def extra_key(robot, root):
+            robot["named_models"][0]["parameters"] = "7B"
+
+        def bad_kind(robot, root):
+            robot["named_models"][0]["kind"] = "planner"
+
+        for mutate, needle in (
+            (extra_key, "named_models entries must carry exactly"),
+            (bad_kind, "unknown named model kind"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_hardware_is_four_prose_fields(self) -> None:
+        def numeric(robot, root):
+            robot["hardware"]["payload_kg"] = 3
+
+        def empty(robot, root):
+            robot["hardware"]["compute"] = " "
+
+        for mutate, needle in (
+            (numeric, "hardware must carry exactly"),
+            (empty, "hardware.compute must be a non-empty string"),
+        ):
+            with self.subTest(needle=needle):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_evidence_must_cover_the_roles_its_basis_requires(self) -> None:
+        def no_product_page(robot, root):
+            robot["evidence"] = [
+                i for i in robot["evidence"] if i["role"] != "product_page"
+            ]
+
+        def interface_without_source(robot, root):
+            robot["ai_basis"] = ["vendor_named_model", "open_model_interface"]
+
+        for mutate, needle in (
+            (no_product_page, "evidence lacks required roles ['product_page']"),
+            (
+                interface_without_source,
+                "evidence lacks required roles ['model_interface']",
+            ),
+        ):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_robot_may_rest_on_an_open_model_interface_alone(self) -> None:
+        def mutate(robot, root):
+            robot["ai_basis"] = ["open_model_interface"]
+            robot["named_models"] = []
+            robot["evidence"] = [
+                item for item in robot["evidence"] if item["role"] == "product_page"
+            ] + [
+                {
+                    "kind": "web",
+                    "role": "model_interface",
+                    "label": "Policy SDK guide",
+                    "url": "https://docs.robots.example/sdk/policy",
+                    "verified_at": "2026-09-20",
+                }
+            ]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_unpinnable_is_true_and_only_on_web_evidence(self) -> None:
+        def ok(robot, root):
+            robot["evidence"][2]["unpinnable"] = True
+
+        def falsy(robot, root):
+            robot["evidence"][2]["unpinnable"] = False
+
+        def on_git_blob(robot, root):
+            robot["repo"] = "example-robotics/sample-sdk"
+            robot["evidence"].append(
+                {
+                    "kind": "git_blob",
+                    "role": "supporting",
+                    "label": "SDK README",
+                    "path": "README.md",
+                    "url": "https://github.com/example-robotics/sample-sdk/blob/main/README.md",
+                    "blob_sha": "a" * 40,
+                    "immutable_url": "https://api.github.com/repos/example-robotics/sample-sdk/git/blobs/"
+                    + "a" * 40,
+                    "unpinnable": True,
+                }
+            )
+
+        self.assertFalse(
+            [e for e in self.catalog_with_robot(ok) if "sample-robot" in e]
+        )
+        self.assertTrue(
+            any(
+                "unpinnable must be true when present" in e
+                for e in self.catalog_with_robot(falsy)
+            )
+        )
+        self.assertTrue(
+            any(
+                "unpinnable must be true when present" in e
+                for e in self.catalog_with_robot(on_git_blob)
+            )
+        )
+
+    def test_robot_evidence_role_is_required_and_closed(self) -> None:
+        def missing(robot, root):
+            del robot["evidence"][0]["role"]
+
+        def unknown(robot, root):
+            robot["evidence"][0]["role"] = "press"
+
+        for mutate in (missing, unknown):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(
+                    any("unknown evidence role" in e for e in errors), errors
+                )
+
+    def test_robot_named_model_label_must_resolve_to_a_named_model_source(self) -> None:
+        def dangling(robot, root):
+            robot["named_models"][0]["evidence_label"] = "No such source"
+
+        def wrong_role(robot, root):
+            robot["named_models"][0]["evidence_label"] = "Product page"
+
+        for mutate in (dangling, wrong_role):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(
+                    any("does not name a named_model source" in e for e in errors),
+                    errors,
+                )
+
+    def test_robot_urls_must_be_first_party(self) -> None:
+        def press(robot, root):
+            robot["evidence"][2]["url"] = "https://news.example.org/sample-vla"
+
+        def lookalike(robot, root):
+            robot["evidence"][2]["url"] = "https://evilrobots.example/sample-vla"
+
+        def foreign_terms(robot, root):
+            robot["terms_evidence"][0]["url"] = "https://retailer.example.org/terms"
+
+        for mutate in (press, lookalike, foreign_terms):
+            with self.subTest(mutate=mutate.__name__):
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any("is not first-party" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_accept_subdomains_and_github_orgs(self) -> None:
+        def mutate(robot, root):
+            robot["repo"] = "example-robotics/sample-sdk"
+            robot["evidence"].append(
+                {
+                    "kind": "git_blob",
+                    "role": "supporting",
+                    "label": "SDK README",
+                    "path": "README.md",
+                    "url": "https://github.com/example-robotics/sample-sdk/blob/main/README.md",
+                    "blob_sha": "a" * 40,
+                    "immutable_url": "https://api.github.com/repos/example-robotics/sample-sdk/git/blobs/"
+                    + "a" * 40,
+                }
+            )
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_first_party_domains_are_bare_hosts_or_github_orgs(self) -> None:
+        for value in (
+            "https://robots.example",
+            "robots.example/path",
+            "",
+        ):
+            with self.subTest(value=value):
+
+                def mutate(robot, root, value=value):
+                    robot["first_party_domains"] = [value]
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(
+                    any("first_party_domains entries must be" in e for e in errors),
+                    errors,
+                )
+
+    def test_robot_product_page_anchors_the_first_party_list(self) -> None:
+        def mutate(robot, root):
+            robot["first_party_domains"] = [
+                "docs.robots.example",
+                "github.com/example-robotics",
+            ]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any(
+                "url 'https://robots.example/sample' is not first-party" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_robot_first_party_domains_refuse_multi_tenant_hosts(self) -> None:
+        for value in (
+            "github.io",
+            "huggingface.co",
+            "youtube.com",
+            "medium.com",
+            "notion.site",
+            "raw.githubusercontent.com",
+            "www.youtube.com",
+            "hf.co",
+            "github.com",
+        ):
+            with self.subTest(value=value):
+
+                def mutate(robot, root, value=value):
+                    robot["first_party_domains"].append(value)
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any("is a shared host" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_refuse_shared_host_subdomains(self) -> None:
+        # A maker's own vendor.github.io page is not a valid bare first-party
+        # entry either, because it still ends in the shared github.io host: cite
+        # the maker's org via github.com/<org> instead (docs/ROBOTS.md step 1).
+        def mutate(robot, root):
+            robot["first_party_domains"].append("vendor.github.io")
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is a shared host" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_refuse_public_suffixes(self) -> None:
+        # co.uk and com.au are public suffixes, not a maker's own registrable
+        # domain: nobody's site is "co.uk" itself, so a bare entry equal to one
+        # is refused with a distinct message from the shared-host one above.
+        for value in ("co.uk", "com.au"):
+            with self.subTest(value=value):
+
+                def mutate(robot, root, value=value):
+                    robot["first_party_domains"].append(value)
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any("is a public suffix" in e for e in errors), errors)
+
+    def test_robot_first_party_domains_accept_domain_under_public_suffix(
+        self,
+    ) -> None:
+        # Unlike a shared host, a public suffix is not itself a platform any
+        # tenant can register onto: engineeredarts.co.uk is the maker's own
+        # registrable domain and must validate cleanly.
+        def mutate(robot, root):
+            robot["url"] = "https://engineeredarts.co.uk/sample"
+            robot["first_party_domains"] = ["engineeredarts.co.uk"]
+            robot["evidence"][0]["url"] = "https://engineeredarts.co.uk/sample"
+            robot["evidence"][1]["url"] = (
+                "https://docs.engineeredarts.co.uk/sample/specs"
+            )
+            robot["evidence"][2]["url"] = "https://engineeredarts.co.uk/news/sample-vla"
+            robot["terms_evidence"][0]["url"] = "https://engineeredarts.co.uk/terms"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_none_published_stands_alone_and_permits_no_terms_evidence(
+        self,
+    ) -> None:
+        def alone(robot, root):
+            robot["terms"] = ["none_published"]
+            robot["terms_evidence"] = []
+
+        def mixed(robot, root):
+            robot["terms"] = ["none_published", "terms_of_sale"]
+
+        def uncovered(robot, root):
+            robot["terms"] = ["terms_of_sale", "sdk_license"]
+
+        self.assertFalse(
+            [e for e in self.catalog_with_robot(alone) if "sample-robot" in e]
+        )
+        self.assertTrue(
+            any(
+                "none_published must appear alone" in e
+                for e in self.catalog_with_robot(mixed)
+            )
+        )
+        self.assertTrue(
+            any(
+                "terms evidence does not match terms" in e
+                for e in self.catalog_with_robot(uncovered)
+            )
+        )
+
+    def test_robot_terms_evidence_unpinnable_must_be_true_when_present(self) -> None:
+        def falsy(robot, root):
+            robot["terms_evidence"][0]["unpinnable"] = False
+
+        errors = self.catalog_with_robot(falsy)
+        self.assertTrue(
+            any(
+                "terms evidence unpinnable must be true when present" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_robot_urls_accept_a_trailing_dot_fqdn(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][2]["url"] = "https://robots.example./news/sample-vla"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertFalse([e for e in errors if "sample-robot" in e], errors)
+
+    def test_robot_non_string_terms_kind_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["terms_evidence"][0]["terms_kind"] = ["terms_of_sale"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("terms evidence terms_kind must be a string" in e for e in errors),
+            errors,
+        )
+
+    def test_robot_non_string_evidence_role_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][0]["role"] = ["product_page"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown evidence role" in e for e in errors), errors)
+
+    def test_robot_non_string_evidence_label_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][2]["label"] = {"en": "Model announcement"}
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("does not name a named_model source" in e for e in errors), errors
+        )
+
+    def test_robot_non_string_named_model_evidence_label_is_an_error_not_a_crash(
+        self,
+    ) -> None:
+        def mutate(robot, root):
+            robot["named_models"][0]["evidence_label"] = ["Model announcement"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any(
+                "named_models.evidence_label must be a non-empty string" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_robot_non_string_form_factor_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["form_factor"] = ["humanoid"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown form factor" in e for e in errors), errors)
+
+    def test_robot_non_string_availability_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["availability"] = {"value": "orderable"}
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown availability" in e for e in errors), errors)
+
+    def test_robot_non_string_status_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["status"] = ["active"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown status" in e for e in errors), errors)
+
+    def test_robot_non_string_research_confidence_is_an_error_not_a_crash(
+        self,
+    ) -> None:
+        def mutate(robot, root):
+            robot["research_confidence"] = ["medium"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown research confidence" in e for e in errors), errors)
+
+    def test_robot_non_string_named_model_kind_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["named_models"][0]["kind"] = ["vision_language_action"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("unknown named model kind" in e for e in errors), errors)
+
+    def test_robot_nested_list_in_ai_basis_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["ai_basis"] = ["vendor_named_model", ["open_model_interface"]]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("ai_basis must contain only strings" in e for e in errors), errors
+        )
+
+    def test_robot_nested_list_in_terms_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["terms"] = ["terms_of_sale", ["sdk_license"]]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("terms must contain only strings" in e for e in errors), errors
+        )
+
+    def test_robot_malformed_url_is_not_first_party_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["evidence"][0]["url"] = "https://[bad"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is not first-party" in e for e in errors), errors)
+
+    def test_robot_out_of_range_port_is_not_first_party(self) -> None:
+        def mutate(robot, root):
+            robot["url"] = "https://robots.example:99999/sample"
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is not first-party" in e for e in errors), errors)
+
+    def test_robot_ids_must_be_unique_across_collections(self) -> None:
+        def mutate(robot, root):
+            specs = json.loads(
+                (root / "directory" / "specifications.json").read_text(encoding="utf-8")
+            )
+            robot["id"] = specs["specifications"][0]["id"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("appears in more than one collection" in e for e in errors), errors
+        )
+
+    def test_robot_related_ids_must_exist(self) -> None:
+        for field in ("related_systems", "related_models", "related_robots"):
+            with self.subTest(field=field):
+
+                def mutate(robot, root, field=field):
+                    robot[field] = ["no-such-record"]
+
+                errors = self.catalog_with_robot(mutate)
+                self.assertTrue(any(f"unknown {field}" in e for e in errors), errors)
+
+    def test_robot_cannot_relate_to_itself(self) -> None:
+        def mutate(robot, root):
+            robot["related_robots"] = ["sample-robot"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("cannot relate to itself" in e for e in errors), errors)
+
+    def test_robot_url_cannot_duplicate_a_system_url(self) -> None:
+        def mutate(robot, root):
+            projects = json.loads(
+                (root / "directory" / "projects.json").read_text(encoding="utf-8")
+            )
+            repoless = next(p for p in projects["projects"] if p.get("repo") is None)
+            robot["url"] = repoless["url"]
+            robot["first_party_domains"] = [
+                urllib.parse.urlsplit(repoless["url"]).hostname
+            ]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(any("is already a system record" in e for e in errors), errors)
+
+    def test_robot_repo_cannot_also_be_a_published_system(self) -> None:
+        def mutate(robot, root):
+            projects = json.loads(
+                (root / "directory" / "projects.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = next(
+                p["repo"] for p in projects["projects"] if p.get("repo")
+            )
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both a system and a robot" in e for e in errors), errors
+        )
+
+    def test_robot_repo_cannot_also_be_a_pack(self) -> None:
+        def mutate(robot, root):
+            packs = json.loads(
+                (root / "directory" / "packs.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = packs["packs"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both a pack and a robot" in e for e in errors), errors
+        )
+
+    def test_robot_repo_cannot_also_be_a_candidate(self) -> None:
+        def mutate(robot, root):
+            candidates = json.loads(
+                (root / "directory" / "candidates.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = candidates["candidates"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both candidates and robots" in e for e in errors), errors
+        )
+
+    def test_robot_repo_cannot_also_be_excluded(self) -> None:
+        def mutate(robot, root):
+            exclusions = json.loads(
+                (root / "directory" / "exclusions.json").read_text(encoding="utf-8")
+            )
+            robot["repo"] = exclusions["entries"][0]["repo"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("cannot be both included and excluded" in e for e in errors), errors
+        )
+
+    def test_two_robots_cannot_share_a_repo(self) -> None:
+        second = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        second["id"] = "sample-robot-two"
+        second["url"] = "https://robots.example/sample-two"
+
+        def mutate(robot, root):
+            robot["repo"] = "example-robotics/sdk"
+            second["repo"] = "example-robotics/sdk"
+
+        errors = self.catalog_with_robot(mutate, extra_robots=[second])
+        self.assertTrue(any("duplicate robot repository" in e for e in errors), errors)
+
+    def test_two_robots_cannot_share_a_url(self) -> None:
+        second = json.loads(json.dumps(self.SAMPLE_ROBOT))
+        second["id"] = "sample-robot-two"
+
+        errors = self.catalog_with_robot(extra_robots=[second])
+        self.assertTrue(any("duplicate robot url" in e for e in errors), errors)
+
+    def test_robot_superseded_by_list_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["status"] = "superseded"
+            robot["superseded_by"] = ["sample-robot-2"]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("superseded_by must name a robot record" in e for e in errors), errors
+        )
+
+    def test_robot_related_robots_dict_entry_is_an_error_not_a_crash(self) -> None:
+        def mutate(robot, root):
+            robot["related_robots"] = [{"id": "sample-robot-2"}]
+
+        errors = self.catalog_with_robot(mutate)
+        self.assertTrue(
+            any("related_robots must contain only strings" in e for e in errors),
+            errors,
+        )
+
     def catalog_with_malformed_record(
         self, document: str, key: str, entry: object
     ) -> list[str]:
@@ -999,6 +1800,7 @@ class ValidationPolicyTests(unittest.TestCase):
             ("local-runtimes.json", "runtimes", "every runtime must be an object"),
             ("models.json", "models", "every model must be an object"),
             ("packs.json", "packs", "every pack must be an object"),
+            ("robots.json", "robots", "every robot must be an object"),
         ):
             with self.subTest(document=document):
                 errors = self.catalog_with_malformed_record(

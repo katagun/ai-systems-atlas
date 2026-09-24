@@ -23,11 +23,11 @@ const DATA_FILES = [
   "projects.json", "taxonomy.json", "license-evidence.json", "specifications.json",
   "inference-services.json", "local-runtimes.json", "models.json", "models-dev.json", "logos.json",
   "app/systems.json", "app/inference.json", "app/runtimes.json", "app/specifications.json",
-  "app/models.json", "app/packs.json", "app/labs.json",
+  "app/models.json", "app/packs.json", "app/labs.json", "app/robots.json",
   "app/model-source-details.json",
   "app/search/systems.json", "app/search/inference.json",
   "app/search/runtimes.json", "app/search/specifications.json", "app/search/models.json",
-  "app/search/packs.json", "app/search/labs.json",
+  "app/search/packs.json", "app/search/labs.json", "app/search/robots.json",
 ];
 
 // 271 detail files would put 8-10 KB of hashes in index.html to save it, so they

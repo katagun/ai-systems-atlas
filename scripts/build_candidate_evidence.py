@@ -41,6 +41,7 @@ CATALOG_FILES = (
     "inference-services.json",
     "local-runtimes.json",
     "packs.json",
+    "robots.json",
 )
 COLLECTION_KEYS = {
     "projects.json": "projects",
@@ -49,6 +50,7 @@ COLLECTION_KEYS = {
     "inference-services.json": "services",
     "local-runtimes.json": "runtimes",
     "packs.json": "packs",
+    "robots.json": "robots",
 }
 GIT_BLOB_SHA = re.compile(r"[0-9a-f]{40}")
 MAX_WEB_EVIDENCE_BYTES = 2 * 1024 * 1024
