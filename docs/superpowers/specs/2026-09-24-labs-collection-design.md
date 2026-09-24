@@ -71,7 +71,7 @@ Nothing is duplicated, so promoting a new release, adding a service, or renaming
 
 Labs is a **sibling view** — a primary navigation tab after Models, `?view=labs` — not a Directory scope. ADR 013 reserves the Directory for deployable choices; an organization is not one, which is also why Specifications is a sibling view.
 
-- **Labs view:** search (names, catalog names, description, organization note), lab type, headquarters, and a distribution facet ("has at least one reviewed release distributed this way", from `model_distribution_modes`). Alphabetical only; no score, no sort control, no comparison, no Finder goal, no card badges.
+- **Labs view:** search (names, catalog names, description, organization note), lab type, headquarters, and a distribution facet ("has at least one reviewed release distributed this way", from `model_distribution_modes`). Alphabetical only; no score, no sort control, no comparison, no Finder goal. The only card badge is the lab-type badge every card leads with ([type badges design](2026-09-24-type-badges-design.md)).
 - **Cards:** mark, `type · country`, name, parent or site host, the union of the lab's reviewed distribution modes, counts of linked records, the description, and the date of its newest reviewed release — a tracking signal, not a ranking.
 - **Detail dialog:** organization facts, the organization note, the lab's reviewed releases newest first (each opens its model dialog) with a "Browse all in Models" handoff, the count of models.dev rows in its namespaces still awaiting review, its systems, services, runtimes, specifications, and packs (each opens its dialog), channels, the safety framework, and reviewed sources. Record kind `lab:id`, Copy link, share page `records/labs/<id>/`, back-button behaviour like every dialog.
 - **Cross-links:** a model's developer, a service's operator, a runtime's maintainer, a specification's steward, a pack's steward, and a system claimed by a lab each gain a link to the lab dialog.
@@ -86,6 +86,36 @@ Labs is a **sibling view** — a primary navigation tab after Models, `?view=lab
 ### 8. What automation may do
 
 Nothing writes a lab record. The weekly refresh stages `labs.json` like every catalog file and never edits it. Link checking reaches each lab's `url`, evidence, channels, and safety framework. Review age reports labs like every collection. Candidate discovery and candidate evidence ignore labs: they match repositories, and a lab has none.
+
+### 9. Fitting the Directory redesign (direction B)
+
+The landing-page redesign session asked how labs plug into its front door, which has collection tiles, results scope tabs, a filter rail, and a record side panel. These are the answers.
+
+- **(a) Labs are a collection.** They are reviewed records with their own schema, and ADR 041 is their record under ADR 013: an explicit schema, a boundary (the inclusion gate), and a comparison policy (never compared, never scored, so ADR 014's no-mixing rule is met by having no profile). Labs ship today as a sibling primary view like Models and Specifications, not as a Directory switcher chip. An organization is not a deployable choice, so labs stay out of the All union and its count. In the redesign's registry, Labs is one entry:
+  - the tile shows its count, the one-line definition "The organizations that develop the reviewed model releases", and its categories, which `app/labs.json` already carries as `lab_type` and `headquarters`;
+  - the tab, list rows, record panel, share pages (`records/labs/<id>/`) and search index (`app/search/labs.json`) already exist.
+
+  It is never empty, so it needs no hide-while-empty rule.
+- **(b) Labs are the maker behind other records, and that join is already built.**
+  - **What joins.** `buildLabIndex` and `labsForRecord` in `web/app-core.js` return the lab for:
+    - a reviewed model, by `developer`;
+    - an imported row, by its models.dev namespace;
+    - an inference service, by `operator`;
+    - a local runtime, by `maintainer`;
+    - a specification, by any of `stewards`;
+    - a pack, by `steward`;
+    - a system, by the explicit ids in the lab's `systems`.
+
+    `labRelations` returns everything one lab joins. A Maker facet, a Labs group in suggestions, and "More from <lab>" in the side panel can all reuse these, with no scores and no Compare.
+  - **What doesn't join.** The inclusion gate means only organizations with a reviewed release are labs. A Maker facet over every record therefore needs a fallback to the raw field value for makers that are not labs, such as pure hosts, routers, and most system repository owners. A system joins only when a lab lists it; repository owners are never matched automatically. Validation does require every system in a lab's own GitHub organization to be listed.
+  - **Robots.** `robots.manufacturer` is not joined because Robots has not landed. Adding it is one field in `scripts/lab_relations.py` and one in `labRelations`.
+- **Operator reconciliation.** The lab registry maps the strings the catalog already uses to one organization, so it answers "which organization is this" without rewriting any operator value. It does not replace the backlog's legal-entity item, which is about which entity a customer contracts with. If that item renames operator values, validation makes the lab's `catalog_names` change in the same commit.
+- **(c) Tracking over time is not built.** A lab carries only `verified_at`. Its dialog lists releases newest first by models.dev release date, and its card shows the newest reviewed release, which is a tracking signal only. A first-seen date per record, which a "What's new" view would need, is a separate field and a separate decision.
+- **Web files touched.**
+  - Code: `web/app.js`, `web/app-core.js`, `web/index.html`, `web/styles.css`.
+  - Generated: `web/app/`, `web/records/labs/`, `web/labs.json`, `web/logos.json`, `web/llms.txt`, `web/taxonomy.json`, `web/sitemap.xml`, the blog's asset stamps.
+  - Docs: `docs/WEB.md`.
+  - Browser tests: the new `tests/e2e/labs.spec.js`, `page-health.spec.js`, `card-badges.spec.js`, `badge-legend.spec.js`, `helpers/catalog-counts.js`.
 
 ## Out of scope
 

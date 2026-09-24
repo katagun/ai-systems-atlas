@@ -431,7 +431,15 @@
   // A badge's family decides its frame and accent. Frames are path data on a
   // 32-unit viewBox; styles.css colours each family by its token through
   // [data-family]. A new family is one entry here plus its badges' glyphs.
+  // Type comes first: every card leads with exactly one type badge, and the
+  // legend and Taxonomy list families in this order.
   const BADGE_FAMILIES = {
+    type: {
+      name: "Type",
+      meaning: "What kind of record it is. Every card carries exactly one.",
+      token: "--slate-ink",
+      frame: "M16 3a13 13 0 1 1 0 26a13 13 0 1 1 0-26Z",
+    },
     control: {
       name: "Control and privacy",
       meaning: "Where your data lives and who can touch it.",
@@ -455,13 +463,207 @@
 
   // Card badges flag reviewed traits a reader scans a grid for. Each badge is
   // defined once and listed by id wherever it applies, so a name shared across
-  // collections always tests the same field and value. A badge only asserts
-  // presence: a missing, null, false, or empty field never produces one, and a
-  // card without a badge claims nothing is absent. A badge never repeats a fact
-  // the card already prints elsewhere (role pill, license row, footer). Each
-  // badge also names its family (frame and accent) and owns one glyph. See
-  // docs/WEB.md "Card badges".
+  // collections always tests the same field and value. A trait badge only
+  // asserts presence: a missing, null, false, or empty field never produces
+  // one, and a card without a trait badge claims nothing is absent. A trait
+  // badge never repeats a fact the card already prints elsewhere (role pill,
+  // license row, footer). Each badge also names its family (frame and accent)
+  // and owns one glyph. See docs/WEB.md "Card badges".
+  //
+  // Type badges are the exception on purpose: each tests the one field that
+  // says what the record is (`equals` a single value), every card carries
+  // exactly one, and it restates the type the card's eyebrow prints so the
+  // emblem row always leads with the record's kind.
   const CARD_BADGES = {
+    "memory-system": {
+      name: "Memory system",
+      definition: "Its main job is keeping knowledge: capturing, organizing, and recalling what it is given.",
+      test: { field: "system_family", equals: "memory_system" },
+      family: "type",
+      glyph: '<ellipse cx="16" cy="11.6" rx="5" ry="1.9"/><path d="M11 11.6v8.8c0 1.05 2.24 1.9 5 1.9s5-.85 5-1.9v-8.8M11 16c0 1.05 2.24 1.9 5 1.9s5-.85 5-1.9"/>',
+    },
+    "agent-system": {
+      name: "Agent system",
+      definition: "Its main job is planning and taking actions with tools on your behalf.",
+      test: { field: "system_family", equals: "agent_system" },
+      family: "type",
+      glyph: '<rect x="11" y="12.8" width="10" height="8" rx="2"/><path d="M16 12.8v-2"/><circle class="badge-dot" cx="16" cy="10.1" r=".9"/><circle class="badge-dot" cx="13.9" cy="16.6" r="1"/><circle class="badge-dot" cx="18.1" cy="16.6" r="1"/>',
+    },
+    "assistant-system": {
+      name: "Assistant system",
+      definition: "An assistant you converse with to reason, create, research, and sometimes act across broad tasks.",
+      test: { field: "system_family", equals: "assistant_system" },
+      family: "type",
+      glyph: '<path d="M10.5 12a1.5 1.5 0 0 1 1.5-1.5h8a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-4.5l-3.2 2.3v-2.3H12a1.5 1.5 0 0 1-1.5-1.5Z"/>',
+    },
+    "direct-model-api": {
+      name: "Direct model API",
+      definition: "A model developer's own API for its own models.",
+      test: { field: "service_type", equals: "direct_model_api" },
+      family: "type",
+      glyph: '<path d="M10.5 16h6.8M14.6 13.2l2.8 2.8-2.8 2.8"/><circle class="badge-dot" cx="20.4" cy="16" r="1.9"/>',
+    },
+    "cloud-model-platform": {
+      name: "Cloud model platform",
+      definition: "A cloud provider's platform that serves models from several publishers alongside its own deployment controls.",
+      test: { field: "service_type", equals: "cloud_model_platform" },
+      family: "type",
+      glyph: '<rect x="10.5" y="10.5" width="4.6" height="4.6" rx="1"/><rect x="16.9" y="10.5" width="4.6" height="4.6" rx="1"/><rect x="10.5" y="16.9" width="4.6" height="4.6" rx="1"/><rect x="16.9" y="16.9" width="4.6" height="4.6" rx="1"/>',
+    },
+    "managed-inference-host": {
+      name: "Managed inference host",
+      definition: "An infrastructure company that serves selected third-party or open-weight models through its own API.",
+      test: { field: "service_type", equals: "managed_inference_host" },
+      family: "type",
+      glyph: '<rect x="12" y="12" width="8" height="8" rx="1.2"/><path d="M14.5 9.8V12M17.5 9.8V12M14.5 20v2.2M17.5 20v2.2M9.8 14.5H12M9.8 17.5H12M20 14.5h2.2M20 17.5h2.2"/>',
+    },
+    "routing-aggregator": {
+      name: "Routing aggregator",
+      definition: "One API that routes each request among upstream models or providers.",
+      test: { field: "service_type", equals: "routing_aggregator" },
+      family: "type",
+      glyph: '<path d="M10.5 16H15l4.2-4.2h2.3M15 16l4.2 4.2h2.3"/><circle class="badge-dot" cx="15" cy="16" r="1.1"/>',
+    },
+    "desktop-runner": {
+      name: "Desktop runner",
+      definition: "An app or command you install on your own machine that downloads, stores, and serves models for you.",
+      test: { field: "runtime_type", equals: "desktop_runner" },
+      family: "type",
+      glyph: '<rect x="10" y="11" width="12" height="10" rx="1.4"/><path d="m14.6 13.8 3.6 2.2-3.6 2.2Z"/>',
+    },
+    "server-engine": {
+      name: "Server engine",
+      definition: "An inference server built for sustained, batched serving on hardware you operate.",
+      test: { field: "runtime_type", equals: "server_engine" },
+      family: "type",
+      glyph: '<path d="M14.33 12.25 14.84 10.52 17.16 10.52 17.67 12.25 18.41 12.68 20.16 12.25 21.33 14.27 20.08 15.57 20.08 16.43 21.33 17.73 20.16 19.75 18.41 19.32 17.67 19.75 17.16 21.48 14.84 21.48 14.33 19.75 13.59 19.32 11.84 19.75 10.67 17.73 11.92 16.43 11.92 15.57 10.67 14.27 11.84 12.25 13.59 12.68Z"/><circle cx="16" cy="16" r="1.7"/>',
+    },
+    "embedded-library": {
+      name: "Embedded library",
+      definition: "Inference code another application embeds, rather than a service you run.",
+      test: { field: "runtime_type", equals: "embedded_library" },
+      family: "type",
+      glyph: '<path d="M16 12.3c-1.5-1.1-3.2-1.5-5.3-1.3v9.2c2.1-.2 3.8.2 5.3 1.3 1.5-1.1 3.2-1.5 5.3-1.3V11c-2.1-.2-3.8.2-5.3 1.3ZM16 12.3v9.2"/>',
+    },
+    "compatibility-gateway": {
+      name: "Compatibility gateway",
+      definition: "A self-hosted server that offers a familiar API over one or more local inference backends.",
+      test: { field: "runtime_type", equals: "compatibility_gateway" },
+      family: "type",
+      glyph: '<path d="M11 13.5h9.3M17.8 11l2.5 2.5-2.5 2.5M21 18.5h-9.3M14.2 16l-2.5 2.5 2.5 2.5"/>',
+    },
+    "language-model": {
+      name: "Language model",
+      definition: "A model whose documented input and output are text.",
+      test: { field: "model_type", equals: "language_model" },
+      family: "type",
+      glyph: '<path d="M11 12h10M11 15.3h10M11 18.6h6"/>',
+    },
+    "multimodal-language-model": {
+      name: "Multimodal language model",
+      definition: "A model that also takes images, audio, video, or documents, and answers mainly in text.",
+      test: { field: "model_type", equals: "multimodal_language_model" },
+      family: "type",
+      glyph: '<rect x="10.5" y="11" width="11" height="10" rx="1.4"/><path d="m10.8 19.2 3.4-3.4 2.8 2.8 1.9-1.9 2.4 2.4"/><circle class="badge-dot" cx="18.6" cy="13.9" r="1.1"/>',
+    },
+    "source-record": {
+      name: "Source record",
+      definition: "A release listed in the models.dev catalog, shown as attributed metadata. The Atlas has not reviewed it.",
+      test: { field: "review_status", equals: "imported" },
+      family: "type",
+      glyph: '<circle class="badge-dot" cx="11.6" cy="12" r=".95"/><circle class="badge-dot" cx="11.6" cy="16" r=".95"/><circle class="badge-dot" cx="11.6" cy="20" r=".95"/><path d="M14.3 12h7M14.3 16h7M14.3 20h7"/>',
+    },
+    protocol: {
+      name: "Protocol",
+      definition: "A machine-readable contract for exchanging messages or capabilities between independently built components.",
+      test: { field: "specification_type", equals: "protocol" },
+      family: "type",
+      glyph: '<circle class="badge-dot" cx="11.5" cy="16" r="1.7"/><circle class="badge-dot" cx="20.5" cy="16" r="1.7"/><path d="M13.8 14.6h4.4M13.8 17.4h4.4"/>',
+    },
+    "metadata-schema": {
+      name: "Metadata schema",
+      definition: "A versioned vocabulary for describing something so other tools can discover it.",
+      test: { field: "specification_type", equals: "metadata_schema" },
+      family: "type",
+      glyph: '<rect x="10.5" y="10.5" width="11" height="11" rx="1.4"/><path d="M10.5 14.5h11M14.8 14.5v7"/>',
+    },
+    "instruction-convention": {
+      name: "Instruction convention",
+      definition: "A file an agent looks for to read project guidance, without defining a wire protocol.",
+      test: { field: "specification_type", equals: "instruction_convention" },
+      family: "type",
+      glyph: '<path d="M16 10v1.8M16 15.2v1.7M16 20.3V22M11.5 11.8h7.8l1.7 1.7-1.7 1.7h-7.8ZM20.5 16.9h-7.8L11 18.6l1.7 1.7h7.8Z"/>',
+    },
+    "capability-format": {
+      name: "Capability format",
+      definition: "A portable package of instructions, scripts, and resources that teaches an agent a reusable capability.",
+      test: { field: "specification_type", equals: "capability_format" },
+      family: "type",
+      glyph: '<path d="M11 13.5h3.3a1.7 1.7 0 1 1 3.4 0H21v3.3a1.7 1.7 0 1 1 0 3.4V22H11Z"/>',
+    },
+    "package-format": {
+      name: "Package format",
+      definition: "A bundle contract that ships commands, agents, hooks, or integrations together.",
+      test: { field: "specification_type", equals: "package_format" },
+      family: "type",
+      glyph: '<rect x="10.5" y="10.5" width="11" height="3.2" rx=".8"/><path d="M11.5 13.7V21a.8.8 0 0 0 .8.8h7.4a.8.8 0 0 0 .8-.8v-7.3M14.4 16.4h3.2"/>',
+    },
+    "skills-bundle": {
+      name: "Skills bundle",
+      definition: "A set of skill documents a host agent installs together.",
+      test: { field: "pack_type", equals: "skills_bundle" },
+      family: "type",
+      glyph: '<path d="m16 10.4 1.75 3.55 3.9.57-2.82 2.75.66 3.88L16 19.32l-3.49 1.83.66-3.88-2.82-2.75 3.9-.57Z"/>',
+    },
+    plugin: {
+      name: "Plugin",
+      definition: "A host plugin whose manifest declares the commands, agents, skills, or hooks the host loads.",
+      test: { field: "pack_type", equals: "plugin" },
+      family: "type",
+      glyph: '<rect x="10.5" y="10.5" width="11" height="11" rx="2.6"/><path d="M16 13.3v5.4M13.3 16h5.4"/>',
+    },
+    "process-kit": {
+      name: "Process kit",
+      definition: "A way of working packaged as prompts, commands, subagents, and templates a host follows.",
+      test: { field: "pack_type", equals: "process_kit" },
+      family: "type",
+      glyph: '<path d="M10.5 21.5h3.7v-3.7h3.6v-3.6h3.7v-3.7"/>',
+    },
+    "vault-bundle": {
+      name: "Vault bundle",
+      definition: "A knowledge-vault template with the instructions a host follows to keep it up.",
+      test: { field: "pack_type", equals: "vault_bundle" },
+      family: "type",
+      glyph: '<path d="M10.5 12.2a1.2 1.2 0 0 1 1.2-1.2h2.9l1.5 1.7h4.2a1.2 1.2 0 0 1 1.2 1.2v6.9a1.2 1.2 0 0 1-1.2 1.2h-8.6a1.2 1.2 0 0 1-1.2-1.2Z"/>',
+    },
+    marketplace: {
+      name: "Marketplace",
+      definition: "A manifest that lists other packs for a host to install. The Atlas does not review its entries.",
+      test: { field: "pack_type", equals: "marketplace" },
+      family: "type",
+      glyph: '<path d="M10.8 14.3 12 11h8l1.2 3.3M10.8 14.3h10.4M11.8 14.3V21h8.4v-6.7M14.6 21v-3.6h2.8V21"/>',
+    },
+    "ai-company": {
+      name: "AI company",
+      definition: "An organization whose main business is developing AI models and what it builds on them.",
+      test: { field: "lab_type", equals: "ai_company" },
+      family: "type",
+      glyph: '<path d="M16 10.3c.4 3.1 2.3 5 5.4 5.4-3.1.4-5 2.3-5.4 5.4-.4-3.1-2.3-5-5.4-5.4 3.1-.4 5-2.3 5.4-5.4Z"/>',
+    },
+    "technology-company": {
+      name: "Technology company",
+      definition: "A company whose main business is broader than AI models and which develops models through its own units.",
+      test: { field: "lab_type", equals: "technology_company" },
+      family: "type",
+      glyph: '<rect x="11.5" y="10.5" width="9" height="11" rx="1"/><path d="M14 13.6h1M17 13.6h1M14 16.6h1M17 16.6h1M15 21.5v-2.4h2v2.4"/>',
+    },
+    "public-research": {
+      name: "Public research organization",
+      definition: "A government-funded, academic, or nonprofit research organization that develops and releases models.",
+      test: { field: "lab_type", equals: "public_research" },
+      family: "type",
+      glyph: '<path d="M13.8 10.5h4.4M14.6 10.5v4.1l-3.5 5.7c-.5.8.1 1.7 1 1.7h7.8c.9 0 1.5-.9 1-1.7l-3.5-5.7v-4.1M12.6 18.2h6.8"/>',
+    },
     "local-first": {
       name: "Local-first",
       definition: "Keeps your data on your own device or servers by default. It may still send requests to an online AI model; cloud storage is opt-in.",
@@ -611,14 +813,20 @@
     },
   };
 
-  // Order is priority: a card shows the first MAX_CARD_BADGES that match.
+  // Order is priority: a card shows the first MAX_CARD_BADGES that match. Each
+  // set opens with its type badges, which all test one field for one value, so
+  // exactly one of them matches a well-formed record and it always leads.
   const CARD_BADGE_SETS = {
-    "system:agent_system": ["local-first", "sandboxed-execution", "browser-control", "mcp", "self-hostable"],
-    "system:memory_system": ["local-first", "editable-by-you", "graph-retrieval", "plain-files", "time-aware-recall"],
-    "system:assistant_system": ["local-first", "self-hostable", "desktop-app", "mobile-app"],
-    inference: ["dedicated-endpoints", "reserved-capacity", "batch"],
-    runtime: ["apple-metal", "amd-rocm", "distributed-serving", "npu"],
-    model: ["downloadable-weights", "developer-api", "third-party-hosting"],
+    "system:agent_system": ["agent-system", "local-first", "sandboxed-execution", "browser-control", "mcp", "self-hostable"],
+    "system:memory_system": ["memory-system", "local-first", "editable-by-you", "graph-retrieval", "plain-files", "time-aware-recall"],
+    "system:assistant_system": ["assistant-system", "local-first", "self-hostable", "desktop-app", "mobile-app"],
+    inference: ["direct-model-api", "cloud-model-platform", "managed-inference-host", "routing-aggregator", "dedicated-endpoints", "reserved-capacity", "batch"],
+    runtime: ["desktop-runner", "server-engine", "embedded-library", "compatibility-gateway", "apple-metal", "amd-rocm", "distributed-serving", "npu"],
+    model: ["language-model", "multimodal-language-model", "downloadable-weights", "developer-api", "third-party-hosting"],
+    "model-source": ["source-record"],
+    spec: ["protocol", "metadata-schema", "instruction-convention", "capability-format", "package-format"],
+    pack: ["skills-bundle", "plugin", "process-kit", "vault-bundle", "marketplace"],
+    lab: ["ai-company", "technology-company", "public-research"],
   };
   const CARD_BADGE_SET_NAMES = {
     "system:agent_system": "Agent systems",
@@ -627,19 +835,28 @@
     inference: "Inference services",
     runtime: "Local runtimes",
     model: "Model releases",
+    "model-source": "models.dev source records",
+    spec: "Specifications",
+    pack: "Agent packs",
+    lab: "Labs",
   };
   const MAX_CARD_BADGES = 6;
 
   function cardBadgeSetKey(kind, record) {
     if (kind === "system") return `system:${record.system_family}`;
-    // Only a reviewed model has a reviewed field a badge could test; an
-    // imported row, a malformed record, or a future status all take none.
-    if (kind === "model") return record.review_status === "reviewed" ? "model" : "";
+    // A reviewed model takes the reviewed set; an imported row has no reviewed
+    // field, so it takes only the source-record type badge. A malformed record
+    // or a future status takes none.
+    if (kind === "model") {
+      if (record.review_status === "reviewed") return "model";
+      return record.review_status === "imported" ? "model-source" : "";
+    }
     return kind;
   }
 
   function matchesBadgeTest(record, test) {
     const value = record[test.field];
+    if (test.equals !== undefined) return value === test.equals;
     if (!test.anyOf) return value === true;
     return Array.isArray(value) && value.some(item => test.anyOf.includes(item));
   }
@@ -689,7 +906,9 @@
     const keys = collection === "systems" ? (systemFamily ? [`system:${systemFamily}`] : systemKeys)
       : collection === "inference" ? ["inference"]
       : collection === "runtimes" ? ["runtime"]
-      : collection === "models" ? ["model"]
+      : collection === "models" ? ["model", "model-source"]
+      : collection === "specifications" ? ["spec"]
+      : collection === "labs" ? ["lab"]
       : [];
     const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
     if (!ids.length) return null;

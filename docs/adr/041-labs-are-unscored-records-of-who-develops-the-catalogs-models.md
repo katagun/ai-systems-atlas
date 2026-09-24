@@ -47,7 +47,7 @@ A lab record never claims a licence, a source model, an openness verdict, or a q
 
 ### Placement
 
-Labs is a sibling view after Models, like Specifications, rather than a Directory scope. [ADR 013](013-distinct-collections-share-one-directory-surface.md) reserves the Directory for deployable choices, and an organization is not one. The view is alphabetical only, with no score, no sort control, no comparison ([ADR 014](014-comparisons-are-scoped-to-one-score-profile.md)), no Finder goal, and no card badges. A card shows the date of the lab's newest reviewed release as a tracking signal, never as a sort. Every model, service, runtime, specification, pack, and system a lab claims links to the lab's dialog, and the Models view gains a Lab facet.
+Labs is a sibling view after Models, like Specifications, rather than a Directory scope. [ADR 013](013-distinct-collections-share-one-directory-surface.md) reserves the Directory for deployable choices, and an organization is not one. The view is alphabetical only, with no score, no sort control, no comparison ([ADR 014](014-comparisons-are-scoped-to-one-score-profile.md)), no Finder goal, and no trait badges; like every card, a lab card leads with its type badge. A card shows the date of the lab's newest reviewed release as a tracking signal, never as a sort. Every model, service, runtime, specification, pack, and system a lab claims links to the lab's dialog, and the Models view gains a Lab facet.
 
 ## Alternatives considered
 

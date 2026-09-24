@@ -821,6 +821,7 @@ input:focus, select:focus {
   display: inline-flex;
   cursor: help;
 }
+[data-family="type"] { color: var(--slate-ink); }
 [data-family="control"] { color: var(--cyan); }
 [data-family="capability"] { color: var(--violet); }
 [data-family="platform"] { color: var(--amber); }

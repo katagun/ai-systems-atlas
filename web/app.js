@@ -735,7 +735,7 @@ function syncBadgeLegend() {
   const inDirectory = activeViewId === "directory";
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
   const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
-    : activeViewId === "models" ? AtlasCore.badgeLegend("models")
+    : ["models", "specifications", "labs"].includes(activeViewId) ? AtlasCore.badgeLegend(activeViewId)
     : null;
   const shown = Boolean(legend) && $("#comparison-tray").hidden;
   const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
@@ -777,6 +777,7 @@ function packCard(pack, { mixed = false } = {}) {
     <span class="role-badge">${escapeHTML(packHosts(pack))}</span>
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
+    ${badgeRow(AtlasCore.cardBadges("pack", pack))}
     <div class="card-footer"><span>${escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
   </article>`;
 }
@@ -813,6 +814,7 @@ function labCard(lab) {
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
+    ${badgeRow(AtlasCore.cardBadges("lab", lab))}
     <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span><button data-lab="${escapeHTML(lab.id)}">View details →</button></div>
   </article>`;
 }
@@ -845,6 +847,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
     <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
+    ${badgeRow(AtlasCore.cardBadges("model", model))}
     <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><button data-model="${escapeHTML(model.id)}">View source details →</button></div>
   </article>`;
 }
@@ -1009,6 +1012,7 @@ const COLLECTIONS = {
       <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
+      ${badgeRow(AtlasCore.cardBadges("spec", specification))}
       <div class="card-footer"><span>No editorial score</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
     </article>`;
     },
@@ -1443,6 +1447,7 @@ function renderFinderResults() {
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
+      ${badgeRow(AtlasCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
       <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
