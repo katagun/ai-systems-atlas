@@ -109,18 +109,6 @@ test("the Models legend also steps aside for the comparison tray", async ({ page
   await expect(legend(page)).toBeVisible();
 });
 
-// Resolves once the page stops scrolling: focus scrolling honours the page's
-// `scroll-behavior: smooth`, so measure only after it settles.
-const settleScroll = page => page.evaluate(() => new Promise(resolve => {
-  let last = window.scrollY;
-  const check = () => requestAnimationFrame(() => requestAnimationFrame(() => {
-    if (window.scrollY === last) return resolve();
-    last = window.scrollY;
-    check();
-  }));
-  check();
-}));
-
 // The footer's clearance is the strip's measured height, applied once, so at
 // the bottom of the page the footer sits flush above the strip: neither under
 // it nor above a band of empty space.
@@ -166,24 +154,45 @@ test("the open legend never covers the site footer, and phones start collapsed",
 
 test("keyboard focus never lands under the open legend", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
+  // The tab loop settles the scroll after every Tab: under the page's smooth
+  // scrolling that waits out ~150 real-time animations, which alone takes
+  // ~18s on a fast machine and blows the 30s budget on slower CI runners.
+  // Reduced motion is the app's own supported instant-scroll path
+  // (styles.css) and changes neither focus order nor final layout, so the
+  // overlap assertion below measures the same thing in a few seconds.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/?collection=systems");
   await expect(legend(page)).toBeVisible();
   const covered = [];
   let stops = 0;
   for (let tab = 0; tab < 150; tab += 1) {
     await page.keyboard.press("Tab");
-    await settleScroll(page);
-    const stop = await page.evaluate(() => {
-      const element = document.activeElement;
-      const strip = document.querySelector("#badge-legend");
-      if (!element || element === document.body || strip.contains(element)) return null;
-      const box = element.getBoundingClientRect();
-      if (!box.width || !box.height) return null;
-      const key = strip.getBoundingClientRect();
-      const inside = box.top >= key.top && box.bottom <= key.bottom && box.left >= key.left && box.right <= key.right;
-      const name = (element.getAttribute("aria-label") || element.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40);
-      return { inside, label: `${element.tagName.toLowerCase()} ${name}` };
-    });
+    // One round trip per Tab: wait out the focus scroll, then read the
+    // focused stop and its overlap with the open strip in the same settled
+    // layout. Two evaluates per stop would double the protocol cost of this
+    // 150-stop loop for no extra signal.
+    const stop = await page.evaluate(() => new Promise(resolve => {
+      // Focus scrolling honours the page's `scroll-behavior: smooth`, so
+      // measure only after it settles (instant under reduced motion above).
+      let last = window.scrollY;
+      const check = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (window.scrollY !== last) {
+          last = window.scrollY;
+          check();
+          return;
+        }
+        const element = document.activeElement;
+        const strip = document.querySelector("#badge-legend");
+        if (!element || element === document.body || strip.contains(element)) return resolve(null);
+        const box = element.getBoundingClientRect();
+        if (!box.width || !box.height) return resolve(null);
+        const key = strip.getBoundingClientRect();
+        const inside = box.top >= key.top && box.bottom <= key.bottom && box.left >= key.left && box.right <= key.right;
+        const name = (element.getAttribute("aria-label") || element.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40);
+        resolve({ inside, label: `${element.tagName.toLowerCase()} ${name}` });
+      }));
+      check();
+    }));
     if (!stop) continue;
     stops += 1;
     if (stop.inside) covered.push(stop.label);

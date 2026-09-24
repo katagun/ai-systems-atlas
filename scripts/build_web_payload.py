@@ -103,6 +103,7 @@ BOOT_FIELDS = {
         "description",
         "stewards",
         "related_specifications",
+        "stars",
     ),
     # source_metadata is a nested block rather than a card field, and it is here
     # for the same reason the flat ones are: the card prints the family and the
@@ -139,6 +140,7 @@ BOOT_FIELDS = {
         "packaging_formats",
         "licenses",
         "status",
+        "stars",
     ),
     # A lab card and every cross-link to a lab join through catalog_names and
     # systems (ADR 041), so both must be on the boot record; the join itself runs
