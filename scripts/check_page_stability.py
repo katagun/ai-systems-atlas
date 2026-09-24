@@ -3,7 +3,9 @@
 
 Fetch a URL twice and hash its visible text both times with the same
 normalisation the evidence monitor uses. A page whose hashes differ cannot be
-pinned, so it cannot be cited; find a stable first-party alternative instead.
+pinned: prefer a stable first-party alternative, and where none exists cite the
+page with "unpinnable": true, which is link-checked but never drift-monitored.
+An unpinnable page never holds a robot out of the collection (ADR 037).
 """
 
 from __future__ import annotations
@@ -69,7 +71,8 @@ def main(
     print(f"first  {first}\nsecond {second}")
     if first != second:
         print(
-            "UNSTABLE: the visible text changed between fetches; do not cite this page"
+            "UNSTABLE: the visible text changed between fetches; prefer a stable "
+            'first-party page, or cite this one with "unpinnable": true'
         )
         return 1
     print("stable: citable")

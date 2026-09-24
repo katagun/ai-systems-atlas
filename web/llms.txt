@@ -18,7 +18,7 @@ reuse it, including commercially, with credit to AI Systems Atlas
 - [models.json](https://peacefulcoexistance.com/models.json): reviewed provider-independent model releases with a dedicated access-and-deployability score and models.dev source metadata
 - [models-dev.json](https://peacefulcoexistance.com/models-dev.json): complete commit-pinned models.dev source catalog, attributed under its MIT License and carrying no Atlas review or score
 - [packs.json](https://peacefulcoexistance.com/packs.json): unscored agent packs a host agent installs, recorded for what each one installs, its hosts, install mechanism, and licence
-- [robots.json](https://peacefulcoexistance.com/robots.json): unscored robots, recorded for what a maker's own documentation states about hardware, availability, AI basis, and terms, never what a robot does
+- [robots.json](https://peacefulcoexistance.com/robots.json): unscored robots whose maker's own documentation names a learned model or policy, or documents a way to run your own, recorded for hardware, developer access, availability, and terms as the maker documents them, never what a robot does
 
 ## Reference
 
