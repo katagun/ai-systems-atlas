@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { cardBadgeGlossary, cardBadges } = require("../../web/app-core.js");
+const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -18,24 +18,38 @@ const byId = (records, id) => {
   return record;
 };
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-// A badge's text is its name followed by the hidden ": definition".
-const namePatterns = badges => badges.map(badge => new RegExp("^" + escapeRegExp(badge.name) + ":"));
+// A badge's text always contains its name followed by the hidden ": definition";
+// lettered accelerator badges (apple-metal, amd-rocm, npu) also draw letters
+// inside the emblem itself, which precede that text, so the pattern is not
+// anchored to the start.
+const namePatterns = badges => badges.map(badge => new RegExp(escapeRegExp(badge.name) + ":"));
 
-// OpenClaw matches all five agent-system badges, so its card shows the cap.
+// OpenClaw matches all five agent-system badges, so its card shows the whole set.
 const openclaw = byId(projects, "openclaw");
 // Chroma matches no memory-system badge, so its card has no badge row.
 const chroma = byId(projects, "chroma");
 const ollama = byId(runtimes, "ollama");
 const reviewedModel = byId(reviewedModels, "model-alibaba-qwen2-5-coder-0-5b");
 
-test("an agent-system card shows its first four badges in priority order", async ({ page }) => {
+test("an agent-system card shows every matching badge as an emblem in set order", async ({ page }) => {
   const expected = cardBadges("system", openclaw);
-  expect(expected.map(badge => badge.name)).toEqual(["Local-first", "Sandboxed execution", "Browser control", "MCP"]);
+  expect(expected.map(badge => badge.name)).toEqual(["Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
 
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(openclaw.name);
   const card = page.locator('#project-grid .project-card:has([data-project="openclaw"])');
   await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  await expect(card.locator(".card-badge svg.badge-emblem")).toHaveCount(expected.length);
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(expected.map(badge => badge.family));
+  // Emblems are icon-only: the badge carries no visible label of its own,
+  // only the svg emblem and the visually hidden name/definition text.
+  const first = card.locator(".card-badge").first();
+  const structure = await first.evaluate(item => ({
+    children: [...item.children].map(child => child.getAttribute("class")),
+    directText: [...item.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent.trim()).filter(Boolean),
+  }));
+  expect(structure.children).toEqual(["badge-emblem", "visually-hidden"]);
+  expect(structure.directText).toEqual([]);
   await expect(card.locator(".tags")).toHaveCount(0);
 });
 
@@ -73,8 +87,8 @@ test("badges explain themselves without adding tab stops", async ({ page }) => {
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(openclaw.name);
   const badges = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badges');
-  await expect(badges.locator(".card-badge").first()).toHaveAttribute("title", first.definition);
-  await expect(badges.locator(".card-badge .visually-hidden").first()).toHaveText(`: ${first.definition}`);
+  await expect(badges.locator(".card-badge").first()).not.toHaveAttribute("title", /.*/);
+  await expect(badges.locator(".card-badge .visually-hidden").first()).toHaveText(`${first.name}: ${first.definition}`);
   await expect(badges.locator("a, button, [tabindex]")).toHaveCount(0);
 });
 
@@ -124,19 +138,96 @@ for (const colorScheme of ["light", "dark"]) {
     const source = await style(card.locator(".source-badge"));
     expect(badge.background).toBe("rgba(0, 0, 0, 0)");
     expect(source.background).not.toBe(badge.background);
-    expect(badge.color).not.toBe(badge.border);
+    // The emblem reads as a framed icon, not a flat chip: its frame is
+    // filled a soft tint of the family colour while its outline stays solid.
+    const frame = await card.locator(".card-badge .badge-frame").first().evaluate(element => {
+      const computed = getComputedStyle(element);
+      return { fill: computed.fill, stroke: computed.stroke };
+    });
+    expect(frame.fill).not.toBe(frame.stroke);
   });
 }
 
-test("the Taxonomy view defines every card badge and where it appears", async ({ page }) => {
-  const glossary = cardBadgeGlossary();
+test("hovering an emblem explains it and Escape dismisses it", async ({ page }) => {
+  const [first] = cardBadges("system", openclaw);
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  const tooltip = page.locator("#badge-tooltip");
+  await expect(tooltip).toBeHidden();
+  // The emblem sits below the fold, so Playwright's own hover scrolls it
+  // into view over the page's `scroll-behavior: smooth`; that animation
+  // races the hover's pointerover against this file's "scroll hides the
+  // tooltip" behavior. Scroll it into view and let the animation settle
+  // first, the same way the footer test below waits out smooth-scroll.
+  await emblem.scrollIntoViewIfNeeded();
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => new Promise(resolve => {
+    let last = window.scrollY;
+    const check = () => requestAnimationFrame(() => {
+      if (window.scrollY === last) return resolve();
+      last = window.scrollY;
+      check();
+    });
+    check();
+  }));
+  await emblem.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".badge-tooltip-family")).toHaveText("Control and privacy");
+  await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
+  await expect(tooltip.locator(".badge-tooltip-definition")).toHaveText(first.definition);
+  await expect(tooltip).toHaveAttribute("aria-hidden", "true");
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+});
 
+test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
+  const page = await context.newPage();
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  const tooltip = page.locator("#badge-tooltip");
+  await emblem.tap();
+  await expect(tooltip).toBeVisible();
+  const box = await tooltip.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  await page.locator("h1").first().tap();
+  await expect(tooltip).toBeHidden();
+  await context.close();
+});
+
+test("repainting the grid dismisses a tapped tooltip", async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
+  const page = await context.newPage();
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const tooltip = page.locator("#badge-tooltip");
+  await page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first().tap();
+  await expect(tooltip).toBeVisible();
+  // A touch reader types while the tooltip is up; the grid repaints with the
+  // same cards, so nothing scrolls or moves under a pointer to hide it.
+  await page.locator("#project-search").evaluate(input => {
+    input.value = input.value.slice(0, -1);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page.locator('#project-grid [data-project="openclaw"]')).not.toHaveCount(0);
+  await expect(tooltip).toBeHidden();
+  await context.close();
+});
+
+test("Taxonomy lists every badge under its family with its emblem", async ({ page }) => {
   await page.goto("/?view=taxonomy");
-  const group = page.locator("#taxonomy-content .taxonomy-group").filter({ has: page.locator("h2", { hasText: /^Card badges$/ }) });
-  await expect(group.locator(".taxonomy-item")).toHaveCount(glossary.length);
-  for (const [index, entry] of glossary.entries()) {
-    const item = group.locator(".taxonomy-item").nth(index);
-    await expect(item.locator("strong")).toHaveText(entry.name);
-    await expect(item.locator("p")).toHaveText(`${entry.definition} Shown on: ${entry.scopes.join(", ")}.`);
+  const glossary = cardBadgeGlossary();
+  for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
+    const group = page.locator(`#taxonomy-content [data-badge-family="${id}"]`);
+    await expect(group.locator("h2")).toHaveText(`Card badges · ${family.name}`);
+    await expect(group.locator(".taxonomy-lede")).toHaveText(family.meaning);
+    const expected = glossary.filter(entry => entry.family === id);
+    await expect(group.locator(".taxonomy-item strong")).toHaveText(expected.map(entry => entry.name));
+    await expect(group.locator(".taxonomy-item p")).toHaveText(expected.map(entry => `${entry.definition} Shown on: ${entry.scopes.join(", ")}.`));
+    await expect(group.locator(".taxonomy-item svg.badge-emblem")).toHaveCount(expected.length);
   }
+  await expect(page.locator("#taxonomy-content [data-badge-family] .taxonomy-item")).toHaveCount(glossary.length);
 });
