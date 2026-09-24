@@ -767,6 +767,15 @@ input:focus, select:focus {
   gap: .35rem;
   margin: -.25rem 0 .75rem;
 }
+/* A reviewed-model card has no role pill above its licence row, so the
+   negative offset above (which sits the row under a pill's own bottom
+   margin) would pull it up into card-top instead. Restore the pill's own
+   top margin so the row sits the same distance below the card's identity
+   row as everywhere else. Imported cards keep their pill, so this excludes
+   them. */
+.model-card:not(.imported-model-card) .license-row {
+  margin-top: 1.2rem;
+}
 .license-badge,
 .source-badge,
 .review-badge {

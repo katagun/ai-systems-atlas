@@ -731,9 +731,12 @@ function syncBadgeLegend() {
   const strip = $("#badge-legend");
   const chip = $("#badge-legend-chip");
   if (!strip || !chip) return;
-  const inDirectory = $(".view.is-active")?.id === "directory";
+  const activeViewId = $(".view.is-active")?.id;
+  const inDirectory = activeViewId === "directory";
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
-  const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily) : null;
+  const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
+    : activeViewId === "models" ? AtlasCore.badgeLegend("models")
+    : null;
   const shown = Boolean(legend) && $("#comparison-tray").hidden;
   const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
   if (legend) {
@@ -879,10 +882,10 @@ function renderAllDirectoryEntries() {
       if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
-        <span class="role-badge">${escapeHTML(record.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
+        ${badgeRow(AtlasCore.cardBadges("model", record))}
         <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
       </article>`;
     }
@@ -1119,10 +1122,10 @@ const COLLECTIONS = {
       if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
         <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
-        <span class="role-badge">${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</span>
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
+        ${badgeRow(AtlasCore.cardBadges("model", model))}
         <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
       </article>`;
     },

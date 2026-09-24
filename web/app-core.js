@@ -588,6 +588,27 @@
       family: "platform",
       glyph: badgeLettering("NPU"),
     },
+    "downloadable-weights": {
+      name: "Downloadable weights",
+      definition: "The developer publishes the model's weights, so you can download it and run it on hardware you control, under the licence shown on the card.",
+      test: { field: "distribution_modes", anyOf: ["downloadable_weights"] },
+      family: "control",
+      glyph: '<path d="M16 10v7.5M12.8 14.5 16 17.7l3.2-3.2M10.8 18.8v1.7a1 1 0 0 0 1 1h8.4a1 1 0 0 0 1-1v-1.7"/>',
+    },
+    "developer-api": {
+      name: "Developer API",
+      definition: "The developer offers the model through its own managed API.",
+      test: { field: "distribution_modes", anyOf: ["developer_api"] },
+      family: "platform",
+      glyph: '<path d="M14 10.5h-.6c-1.1 0-1.7.6-1.7 1.7v1.9c0 .9-.6 1.6-1.5 1.9.9.3 1.5 1 1.5 1.9v1.9c0 1.1.6 1.7 1.7 1.7h.6M18 10.5h.6c1.1 0 1.7.6 1.7 1.7v1.9c0 .9.6 1.6 1.5 1.9-.9.3-1.5 1-1.5 1.9v1.9c0 1.1-.6 1.7-1.7 1.7h-.6"/>',
+    },
+    "third-party-hosting": {
+      name: "Third-party hosting",
+      definition: "At least one company other than the developer documents hosting this exact model as a service.",
+      test: { field: "distribution_modes", anyOf: ["third_party_hosting"] },
+      family: "platform",
+      glyph: '<path d="M12.8 20.2h6.9a2.4 2.4 0 0 0 .3-4.8 3.9 3.9 0 0 0-7.4-1 2.9 2.9 0 0 0 .2 5.8Z"/>',
+    },
   };
 
   // Order is priority: a card shows the first MAX_CARD_BADGES that match.
@@ -597,6 +618,7 @@
     "system:assistant_system": ["local-first", "self-hostable", "desktop-app", "mobile-app"],
     inference: ["dedicated-endpoints", "reserved-capacity", "batch"],
     runtime: ["apple-metal", "amd-rocm", "distributed-serving", "npu"],
+    model: ["downloadable-weights", "developer-api", "third-party-hosting"],
   };
   const CARD_BADGE_SET_NAMES = {
     "system:agent_system": "Agent systems",
@@ -604,11 +626,15 @@
     "system:assistant_system": "Assistant systems",
     inference: "Inference services",
     runtime: "Local runtimes",
+    model: "Model releases",
   };
   const MAX_CARD_BADGES = 6;
 
   function cardBadgeSetKey(kind, record) {
     if (kind === "system") return `system:${record.system_family}`;
+    // Only a reviewed model has a reviewed field a badge could test; an
+    // imported row, a malformed record, or a future status all take none.
+    if (kind === "model") return record.review_status === "reviewed" ? "model" : "";
     return kind;
   }
 
@@ -663,6 +689,7 @@
     const keys = collection === "systems" ? (systemFamily ? [`system:${systemFamily}`] : systemKeys)
       : collection === "inference" ? ["inference"]
       : collection === "runtimes" ? ["runtime"]
+      : collection === "models" ? ["model"]
       : [];
     const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
     if (!ids.length) return null;
