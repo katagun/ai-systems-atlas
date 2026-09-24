@@ -9,6 +9,8 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
     `${catalogCounts.labs} labs · developers of ${catalogCounts.labCoveredModels} of ${catalogCounts.reviewedModels} reviewed releases`,
   );
   await expect(page.locator("#lab-result-count")).toHaveText(`${catalogCounts.labs} labs · Unscored`);
+  // The labs outrun the default 24 per page; one page of 96 lists them all.
+  await page.locator('#lab-pager select[aria-label="Results per page"]').selectOption("96");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labNames());
   await expect(page.locator("#lab-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#lab-grid .compare-toggle")).toHaveCount(0);
@@ -55,6 +57,17 @@ test("a lab dialog joins the records that name the lab and browses its releases 
 
   await page.locator("#reset-model-filters").click();
   await expect(page.locator("#model-lab-filter")).toHaveValue("");
+});
+
+test("a lab dialog fits a phone screen with its longest channel URL and name", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const id of [catalogCounts.labIdWithLongestChannel, catalogCounts.labIdWithLongestNameWord]) {
+    await page.goto(`/?view=labs&record=lab:${id}`);
+    const dialog = page.locator("#lab-dialog");
+    // Channels are detail-only; measure once they have painted.
+    await expect(dialog.locator(".lab-channel-link").first()).toBeVisible();
+    expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth), id).toBe(0);
+  }
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
