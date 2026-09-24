@@ -223,6 +223,8 @@ SPECIFICATION_REQUIRED = {
     "verified_at",
 }
 
+SPECIFICATION_OPTIONAL = {"stars", "stars_verified_at"}
+
 PACK_REQUIRED = {
     "id",
     "name",
@@ -248,11 +250,12 @@ PACK_OPTIONAL = {
     "distribution_machinery",
     "related_packs",
     "related_systems",
-}
-# A pack is recorded for what it installs, never ranked or scored (ADR 032).
-PACK_FORBIDDEN = {
     "stars",
     "stars_verified_at",
+}
+# A pack is recorded for what it installs, never ranked or scored (ADR 032).
+# Stars are descriptive live metadata, like local runtimes: shown, never sorted.
+PACK_FORBIDDEN = {
     "score",
     "score_profile",
     "system_family",
@@ -1440,9 +1443,11 @@ def validate_specifications(
             errors.append("specifications.json: every specification must be an object")
             continue
         prefix = f"specification {specification.get('id', 'unknown')}"
-        if set(specification) != SPECIFICATION_REQUIRED:
-            missing = sorted(SPECIFICATION_REQUIRED - set(specification))
-            extra = sorted(set(specification) - SPECIFICATION_REQUIRED)
+        missing = sorted(SPECIFICATION_REQUIRED - set(specification))
+        extra = sorted(
+            set(specification) - SPECIFICATION_REQUIRED - SPECIFICATION_OPTIONAL
+        )
+        if missing or extra:
             errors.append(
                 f"{prefix}: fields differ from schema: missing={missing}, extra={extra}"
             )
@@ -1503,6 +1508,23 @@ def validate_specifications(
             errors.append(f"{prefix}: cannot relate to itself")
         if not valid_date(specification.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
+        if specification.get("stars") is not None and (
+            not isinstance(specification["stars"], int) or specification["stars"] < 0
+        ):
+            errors.append(f"{prefix}: stars must be a non-negative integer or null")
+        if specification.get("stars") is not None and not valid_date(
+            specification.get("stars_verified_at")
+        ):
+            errors.append(f"{prefix}: populated stars require stars_verified_at")
+        if specification.get("stars_verified_at") is not None and not valid_date(
+            specification["stars_verified_at"]
+        ):
+            errors.append(f"{prefix}: stars_verified_at must be null or an ISO date")
+        if repo is None and (
+            specification.get("stars") is not None
+            or specification.get("stars_verified_at") is not None
+        ):
+            errors.append(f"{prefix}: a specification without a repo carries no stars")
 
         validate_evidence_items(specification.get("evidence"), repo, prefix, errors)
 
@@ -1605,6 +1627,18 @@ def validate_packs(
             )
         if not valid_date(pack.get("verified_at")):
             errors.append(f"{prefix}: verified_at must be an ISO date")
+        if pack.get("stars") is not None and (
+            not isinstance(pack["stars"], int) or pack["stars"] < 0
+        ):
+            errors.append(f"{prefix}: stars must be a non-negative integer or null")
+        if pack.get("stars") is not None and not valid_date(
+            pack.get("stars_verified_at")
+        ):
+            errors.append(f"{prefix}: populated stars require stars_verified_at")
+        if pack.get("stars_verified_at") is not None and not valid_date(
+            pack["stars_verified_at"]
+        ):
+            errors.append(f"{prefix}: stars_verified_at must be null or an ISO date")
         validate_evidence_items(pack.get("evidence"), repo, prefix, errors)
         validate_scoped_license_evidence(pack, repo, prefix, errors)
     return packs_value

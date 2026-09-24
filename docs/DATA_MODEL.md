@@ -152,7 +152,7 @@ The updater reads recent official announcements, applies conservative launch and
 
 ## Specification record
 
-Specification records are intentionally independent from project records. They contain no `system_family`, role, score profile, score, or popularity metric.
+Specification records are intentionally independent from project records. They contain no `system_family`, role, score profile, or score.
 
 - **Identity:** `id`, `name`, `short_name`, optional GitHub `repo`, authoritative `url`, and `description`.
 - **Classification:** taxonomy-backed `specification_type`, integration `scope`, and `status`.
@@ -161,12 +161,13 @@ Specification records are intentionally independent from project records. They c
 - **Licensing:** complete `licenses`, `license_note`, and scoped `license_evidence`.
 - **Relationships:** `related_specifications` references other records by ID without implying compatibility.
 - **Review:** authoritative `evidence` plus human-owned `verified_at`.
+- **Live metadata (optional):** `stars` and `stars_verified_at`, automation-refreshed GitHub star counts for records with a `repo`. This is descriptive only and never enters a score or a sort; both fields are `null` for a record without a `repo`.
 
 Evidence is either an immutable Git blob or a dated authoritative web source. Every listed license must have one scoped evidence item. `LicenseRef-Unclear` is valid when the artifact is documented but no standalone reusable format license can be established; it must not be rewritten as open source by inference.
 
 ## Pack record
 
-Pack records are independent from project records. They contain no `system_family`, role, score profile, score, or popularity metric, and the validator rejects each if present.
+Pack records are independent from project records. They contain no `system_family`, role, score profile, or score, and the validator rejects each if present.
 
 - **Identity:** `id`, `name`, optional `short_name`, one `steward`, GitHub `repo`, authoritative `url`, and `description`.
 - **Classification:** taxonomy-backed `pack_type`, non-empty `hosts` (`pack_hosts`), `install_mechanism` (`pack_install_mechanisms`), and `packaging_formats` naming `specifications.json` records (may be empty).
@@ -176,6 +177,7 @@ Pack records are independent from project records. They contain no `system_famil
 - **Licensing:** complete `licenses`, `license_note`, and scoped `license_evidence`; `LicenseRef-Unclear` when no licence file is served.
 - **Relationships:** optional `related_packs` and `related_systems` reference records by id without implying compatibility.
 - **Review:** pinned `evidence` (manifest or skill frontmatter as a Git blob, plus dated web sources) and human-owned `verified_at`. A marketplace's `verified_at` dates its pinned manifest, never the catalogue behind it.
+- **Live metadata:** `stars` and `stars_verified_at`, automation-refreshed GitHub star counts. This is descriptive only and never enters a score or a sort.
 
 A repository appears in exactly one of `projects.json`, `packs.json`, and `exclusions.json`; see [ADR 032](adr/032-agent-packs-are-unscored-records-of-what-a-host-installs.md).
 

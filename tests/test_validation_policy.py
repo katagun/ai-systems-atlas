@@ -517,10 +517,8 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_pack()
         self.assertFalse([error for error in errors if "sample-pack" in error], errors)
 
-    def test_pack_rejects_every_scoring_and_popularity_field(self) -> None:
+    def test_pack_rejects_every_scoring_field(self) -> None:
         for field, value in (
-            ("stars", 10),
-            ("stars_verified_at", "2026-09-16"),
             ("score", {"overall": 5}),
             ("score_profile", "agent_system"),
             ("system_family", "agent_system"),
@@ -536,6 +534,24 @@ class ValidationPolicyTests(unittest.TestCase):
                     any(f"{field} is never recorded on a pack" in e for e in errors),
                     errors,
                 )
+
+    def test_pack_stars_are_descriptive_live_metadata(self) -> None:
+        def mutate_valid(pack, root):
+            pack["stars"] = 10
+            pack["stars_verified_at"] = "2026-09-24"
+
+        errors = self.catalog_with_pack(mutate_valid)
+        self.assertFalse([error for error in errors if "sample-pack" in error], errors)
+
+        def mutate_unstamped(pack, root):
+            pack["stars"] = 10
+            pack.pop("stars_verified_at", None)
+
+        errors = self.catalog_with_pack(mutate_unstamped)
+        self.assertTrue(
+            any("populated stars require stars_verified_at" in e for e in errors),
+            errors,
+        )
 
     def test_pack_rejects_unknown_type_host_and_install_mechanism(self) -> None:
         for field, value, message in (

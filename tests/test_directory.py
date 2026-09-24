@@ -1059,10 +1059,12 @@ class DirectoryTests(unittest.TestCase):
                 "primary_role",
                 "score_profile",
                 "score",
-                "stars",
-                "stars_verified_at",
             ):
                 self.assertNotIn(field, record, record["id"])
+            # Stars are descriptive live metadata on every repo-backed card,
+            # never a score: packs carry them, like local runtimes.
+            self.assertIn("stars", record, record["id"])
+            self.assertIn("stars_verified_at", record, record["id"])
             self.assertTrue(record["installs"].strip(), record["id"])
             self.assertNotIn(record["repo"].lower(), project_repos, record["id"])
         for group in ("pack_types", "pack_hosts", "pack_install_mechanisms"):

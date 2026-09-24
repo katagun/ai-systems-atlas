@@ -10,6 +10,8 @@ const WEB_DIR = path.join(__dirname, "..", "..", "web");
 const read = file => JSON.parse(fs.readFileSync(path.join(WEB_DIR, file), "utf8"));
 const projects = read("projects.json").projects;
 const runtimes = read("local-runtimes.json").runtimes;
+const packs = read("packs.json").packs;
+const specifications = read("specifications.json").specifications;
 const taxonomy = read("taxonomy.json");
 
 const byId = (records, id) => {
@@ -28,6 +30,13 @@ const archived = byId(projects, "continue");
 // ChatGPT and LM Studio have no public repository, so they have no star count.
 const chatgpt = byId(projects, "chatgpt");
 const lmStudio = byId(runtimes, "lm-studio");
+// agent-toolkit is an unscored pack with a repository, so its card carries a
+// descriptive count that never sorts.
+const agentToolkit = byId(packs, "agent-toolkit");
+// MCP is a specification with a repository; Cursor Rules documents a vendor
+// convention with no repository, so it carries no count.
+const mcpSpec = byId(specifications, "mcp");
+const cursorRules = byId(specifications, "cursor-rules");
 
 test.beforeAll(() => {
   expect(superpowers.stars).toEqual(expect.any(Number));
@@ -38,6 +47,10 @@ test.beforeAll(() => {
   expect(archived.status).toBe("archived");
   expect(chatgpt.stars).toBeNull();
   expect(lmStudio.stars).toBeNull();
+  expect(agentToolkit.stars).toEqual(expect.any(Number));
+  expect(mcpSpec.stars).toEqual(expect.any(Number));
+  expect(cursorRules.repo).toBeNull();
+  expect(cursorRules.stars).toBeNull();
 });
 
 // A screen reader hears the compact count followed by "GitHub stars", not the
@@ -141,6 +154,28 @@ test("host-installed systems in Agent packs show their star count", async ({ pag
   await expectStars(page.locator('#pack-grid .project-card:has([data-project="superpowers"])'), superpowers);
 });
 
+test("agent pack cards show their star count beside the install mechanism", async ({ page }) => {
+  await page.goto("/?collection=packs");
+  await page.locator("#pack-search").fill(agentToolkit.name);
+  const card = page.locator('#pack-grid .project-card:has([data-pack="agent-toolkit"])');
+
+  await expectStars(card, agentToolkit);
+  await expect(card.locator(".card-footer")).toContainText("Host marketplace");
+
+  await page.goto("/");
+  await page.locator("#all-directory-search").fill(agentToolkit.name);
+  await expectStars(page.locator('#all-directory-grid .project-card:has([data-pack="agent-toolkit"])'), agentToolkit);
+});
+
+test("specification cards show their star count beside the score note", async ({ page }) => {
+  await page.goto("/?view=specifications");
+  await page.locator("#specification-search").fill("Model Context Protocol");
+  const card = page.locator('#specification-grid .project-card:has([data-specification="mcp"])');
+
+  await expectStars(card, mcpSpec);
+  await expect(card.locator(".card-footer")).toContainText("No editorial score");
+});
+
 test("Finder shortlist cards show the star count of every starred record", async ({ page }) => {
   const paths = [
     { direction: "local_runtime", goal: "personal_machine", attribute: "data-finder-runtime", records: runtimes },
@@ -213,4 +248,8 @@ test("outside Systems, a card without a star count makes no GitHub claim", async
   await page.goto("/?collection=runtimes");
   await page.locator("#runtime-search").fill(lmStudio.name);
   await expectNoGitHubClaim(page.locator('#runtime-grid .project-card:has([data-local-runtime="lm-studio"])'));
+
+  await page.goto("/?view=specifications");
+  await page.locator("#specification-search").fill("Cursor Rules");
+  await expectNoGitHubClaim(page.locator('#specification-grid .project-card:has([data-specification="cursor-rules"])'));
 });
