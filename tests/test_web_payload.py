@@ -66,6 +66,7 @@ class WebPayloadTests(unittest.TestCase):
             "specifications",
             "models",
             "packs",
+            "labs",
             "robots",
         ):
             self.assertIn(
@@ -235,6 +236,7 @@ class WebPayloadTests(unittest.TestCase):
                 ("specifications.json", "specifications"),
                 ("models.json", "models"),
                 ("packs.json", "packs"),
+                ("labs.json", "labs"),
                 ("robots.json", "robots"),
             )
         )
@@ -248,6 +250,26 @@ class WebPayloadTests(unittest.TestCase):
             self.assertNotIn("score", entry)
             self.assertNotIn("installs", entry, "installs is detail-only prose")
             self.assertIn("pack_type", entry)
+
+    def test_labs_boot_carries_the_join_keys_and_detail_carries_the_review(
+        self,
+    ) -> None:
+        """The page joins a lab in the browser from boot fields alone (ADR 041)."""
+        boot = json.loads(self.payloads["app/labs.json"])
+        self.assertTrue(boot["labs"], "the collection has published records")
+        for entry in boot["labs"]:
+            self.assertNotIn("score", entry)
+            for field in ("catalog_names", "systems", "lab_type", "headquarters"):
+                self.assertIn(field, entry)
+            for field in ("organization_note", "channels", "evidence"):
+                self.assertNotIn(field, entry, f"{field} is detail-only")
+        detail = json.loads(self.payloads["app/detail/lab/lab-anthropic.json"])
+        self.assertIn("organization_note", detail)
+        self.assertIn("channels", detail)
+        self.assertEqual(
+            "Responsible Scaling Policy (Version 3.4)",
+            detail["safety_framework"]["title"],
+        )
 
     def test_robots_are_unscored_and_boot_carries_only_card_fields(self) -> None:
         boot = json.loads(self.payloads["app/robots.json"])

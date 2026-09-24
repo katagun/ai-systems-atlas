@@ -26,6 +26,7 @@ COLLECTIONS = (
     ("models", "models.json", "models"),
     ("specifications", "specifications.json", "specifications"),
     ("packs", "packs.json", "packs"),
+    ("labs", "labs.json", "labs"),
     ("robots", "robots.json", "robots"),
 )
 COLLECTION_ORDER = {name: index for index, (name, _, _) in enumerate(COLLECTIONS)}

@@ -207,6 +207,34 @@ const RECORD_MARKS = {
   "model-zhipuai-glm-5": "lobe:zai",
   "model-zhipuai-glm-5-3": "lobe:zai",
   "model-zhipuai-glm-5-3-flash": "lobe:zai",
+  // Labs — the organization's own mark
+  "lab-ai21-labs": "lobe:ai21",
+  "lab-alibaba": "lobe:alibaba",
+  "lab-amazon": "lobe:aws",
+  "lab-ant-group": "lobe:antgroup",
+  "lab-anthropic": "lobe:anthropic",
+  "lab-arcee-ai": "lobe:arcee",
+  "lab-bytedance": "simple:bytedance",
+  "lab-cohere": "lobe:cohere",
+  "lab-deepseek": "lobe:deepseek",
+  "lab-google": "lobe:google",
+  "lab-ibm": "lobe:ibm",
+  "lab-meituan": "simple:meituan",
+  "lab-meta": "lobe:meta",
+  "lab-microsoft": "lobe:microsoft",
+  "lab-minimax": "lobe:minimax",
+  "lab-mistral-ai": "lobe:mistral",
+  "lab-moonshot-ai": "lobe:moonshot",
+  "lab-nvidia": "lobe:nvidia",
+  "lab-openai": "lobe:openai",
+  "lab-perplexity": "lobe:perplexity",
+  "lab-poolside": null, // lobe:poolside uses a mask the sanitizer rejects
+  "lab-stepfun": "lobe:stepfun",
+  "lab-tencent": "lobe:tencent",
+  "lab-upstage": "lobe:upstage",
+  "lab-xai": "lobe:xai",
+  "lab-xiaomi": "simple:xiaomi",
+  "lab-z-ai": "lobe:zai",
 };
 
 const ALLOWED_TAGS = new Set(["path", "g", "circle", "rect", "ellipse", "polygon"]);
@@ -254,6 +282,7 @@ for (const [file, listKey] of [
   ["web/local-runtimes.json", "runtimes"],
   ["web/models.json", "models"],
   ["web/packs.json", "packs"],
+  ["web/labs.json", "labs"],
   ["web/robots.json", "robots"],
 ]) {
   for (const record of JSON.parse(readFileSync(join(root, file), "utf8"))[listKey]) recordNames.set(record.id, record.name);

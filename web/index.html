@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=975b1dfdff38">
+  <link rel="stylesheet" href="styles.css?v=344ce1fa71c1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -39,6 +39,7 @@
       <button class="tab is-active" data-tab="directory">Directory</button>
       <button class="tab" data-tab="finder">Finder</button>
       <button class="tab" data-tab="models">Models</button>
+      <button class="tab" data-tab="labs">Labs</button>
       <button class="tab" data-tab="specifications">Specifications</button>
       <button class="tab" data-tab="taxonomy">Taxonomy</button>
       <button class="tab" data-tab="api">API</button>
@@ -213,12 +214,31 @@
         <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
         <label><span>Source model</span><select id="model-source-filter"><option value="">All source models</option></select></label>
         <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
+        <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
         <label><span>Sort</span><select id="model-sort-filter"><option value="score" selected>Review and access score</option><option value="name">Name</option></select></label>
         <p class="filter-guidance">Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
       </section>
       <div class="result-row"><p id="model-result-count" aria-live="polite"></p><button id="reset-model-filters" class="ghost-button">Clear filters</button></div>
       <section id="model-grid" class="project-grid inference-grid" aria-label="models.dev source records and Atlas-reviewed model releases"></section>
       <nav id="model-pager" class="pager" aria-label="Models pagination"></nav>
+    </section>
+
+    <section id="labs" class="view" aria-labelledby="labs-title">
+      <div class="section-heading specifications-heading">
+        <p class="eyebrow" id="labs-kicker">The organizations behind the models</p>
+        <h1 id="labs-title">Who develops the models.</h1>
+        <p>Every lab here developed a release the Atlas has reviewed. Its record gathers what the catalog already holds about it, from releases and services to systems, runtimes, specifications, and packs, and lists where it publishes. Labs are recorded, never scored or ranked.</p>
+      </div>
+      <section class="control-panel specification-controls" aria-label="Lab filters">
+        <label class="search-field"><span>Search</span><input id="lab-search" type="search" placeholder="Search labs, units, and parent companies" autocomplete="off"></label>
+        <label><span>Type</span><select id="lab-type-filter"><option value="">All types</option></select></label>
+        <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
+        <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
+        <p class="filter-guidance">A lab is listed once the Atlas has reviewed a release it developed. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
+      </section>
+      <div class="result-row"><p id="lab-result-count" aria-live="polite"></p><button id="reset-lab-filters" class="ghost-button">Clear filters</button></div>
+      <section id="lab-grid" class="project-grid inference-grid" aria-label="Labs that develop reviewed model releases"></section>
+      <nav id="lab-pager" class="pager" aria-label="Labs pagination"></nav>
     </section>
 
     <section id="specifications" class="view" aria-labelledby="specifications-title">
@@ -261,7 +281,7 @@
       <div class="section-heading">
         <p class="eyebrow">Published data</p>
         <h1 id="api-title">Every record here is a JSON file.</h1>
-        <p>This directory publishes nine static data files straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent.</p>
+        <p>This directory publishes its catalog as static data files straight from this domain. No key, no sign-up, no rate limit—fetch them from a browser, a script, or an agent.</p>
       </div>
 
       <div class="api-facts">
@@ -319,6 +339,11 @@
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/packs.json">packs.json</a></h2>
           <p>Agent packs a host agent installs — skills bundles, plugins, process kits, vault bundles, and marketplaces — recorded for what each installs, into which hosts, by which mechanism, and under which licence. Never scored.</p>
           <p class="endpoint-shape"><code>packs[]</code> · <code>verified_at</code> · <code>version</code></p>
+        </article>
+        <article class="endpoint">
+          <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/labs.json">labs.json</a></h2>
+          <p>The labs that develop the reviewed model releases: type, headquarters, where each publishes, and the exact names the other files use for it, so its models, services, runtimes, specifications, and packs can be joined. Never scored or ranked.</p>
+          <p class="endpoint-shape"><code>labs[]</code> · <code>verified_at</code> · <code>version</code></p>
         </article>
         <article class="endpoint">
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/robots.json">robots.json</a></h2>
@@ -388,6 +413,11 @@
     <div id="model-dialog-content"></div>
   </dialog>
 
+  <dialog id="lab-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div id="lab-dialog-content"></div>
+  </dialog>
+
   <aside id="comparison-tray" class="comparison-tray" aria-label="Comparison selection" hidden>
     <div class="comparison-tray-copy">
       <p class="eyebrow">Scoped comparison</p>
@@ -417,8 +447,8 @@
   </dialog>
 
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"968acbf50ce6","taxonomy.json":"331e847886bf","license-evidence.json":"6eed3f97dd0e","specifications.json":"0bd15f131187","inference-services.json":"7b7ab63fcd14","local-runtimes.json":"c3d85a51fff7","models.json":"2feb629078e7","models-dev.json":"ec5e4b8a29fb","logos.json":"43b6aba81a5b","app/systems.json":"e3af568dc125","app/inference.json":"fd20bf6a3529","app/runtimes.json":"5384dc9974db","app/specifications.json":"b510514cd03f","app/models.json":"bf5c529705e3","app/packs.json":"85ea82b04131","app/robots.json":"98eca3792ac7","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"00eb20982219","app/search/inference.json":"47788938660c","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"f8a4c3d2e2d6","app/search/packs.json":"8cc96448002c","app/search/robots.json":"ca3d163bab05","app/detail":"8ef7c5db9ab4"}</script>
-  <script src="app-core.js?v=b6ce72f117ec" defer></script>
-  <script src="app.js?v=15037f685421" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"968acbf50ce6","taxonomy.json":"7c82e3e14ed1","license-evidence.json":"6eed3f97dd0e","specifications.json":"0bd15f131187","inference-services.json":"7b7ab63fcd14","local-runtimes.json":"c3d85a51fff7","models.json":"59fe96edadc6","models-dev.json":"ec5e4b8a29fb","logos.json":"8bc2b56f0082","app/systems.json":"e3af568dc125","app/inference.json":"fd20bf6a3529","app/runtimes.json":"5384dc9974db","app/specifications.json":"b510514cd03f","app/models.json":"83d5bc808c99","app/packs.json":"85ea82b04131","app/labs.json":"217111b92c88","app/robots.json":"98eca3792ac7","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"00eb20982219","app/search/inference.json":"47788938660c","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"0f8b27ee0361","app/search/robots.json":"ca3d163bab05","app/detail":"8e481b2a5ff7"}</script>
+  <script src="app-core.js?v=73f338668609" defer></script>
+  <script src="app.js?v=2c87d1032245" defer></script>
 </body>
 </html>

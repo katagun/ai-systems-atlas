@@ -1,6 +1,6 @@
 # AI Systems Atlas
 
-> A directory of reviewed agent, memory, and assistant systems, provider-independent model releases, interoperability specifications, managed inference services, self-operated local runtimes, unscored agent packs a host agent installs, and unscored robots recorded from what their makers document, plus a complete attributed models.dev source snapshot. Imported source metadata remains distinct from human conclusions.
+> A directory of reviewed agent, memory, and assistant systems, provider-independent model releases and the labs that develop them, interoperability specifications, managed inference services, self-operated local runtimes, unscored agent packs a host agent installs, and unscored robots recorded from what their makers document, plus a complete attributed models.dev source snapshot. Imported source metadata remains distinct from human conclusions.
 
 ## Data
 
@@ -18,6 +18,7 @@ reuse it, including commercially, with credit to AI Systems Atlas
 - [models.json](https://peacefulcoexistance.com/models.json): reviewed provider-independent model releases with a dedicated access-and-deployability score and, once models.dev lists the release, models.dev source metadata
 - [models-dev.json](https://peacefulcoexistance.com/models-dev.json): complete commit-pinned models.dev source catalog, attributed under its MIT License and carrying no Atlas review or score
 - [packs.json](https://peacefulcoexistance.com/packs.json): unscored agent packs a host agent installs, recorded for what each one installs, its hosts, install mechanism, and licence
+- [labs.json](https://peacefulcoexistance.com/labs.json): unscored AI labs that develop the reviewed model releases, with headquarters, type, where each publishes, and the names the other files use for it
 - [robots.json](https://peacefulcoexistance.com/robots.json): unscored robots whose maker's own documentation names a learned model or policy, or documents a way to run your own, recorded for hardware, developer access, availability, and terms as the maker documents them, never what a robot does
 
 ## Reference

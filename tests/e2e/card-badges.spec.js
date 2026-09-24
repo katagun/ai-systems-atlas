@@ -10,7 +10,8 @@ const WEB_DIR = path.join(__dirname, "..", "..", "web");
 const read = file => JSON.parse(fs.readFileSync(path.join(WEB_DIR, file), "utf8"));
 const projects = read("projects.json").projects;
 const runtimes = read("local-runtimes.json").runtimes;
-const reviewedModels = read("app/models.json").models.filter(model => model.review_status === "reviewed");
+const allModels = read("app/models.json").models;
+const reviewedModels = allModels.filter(model => model.review_status === "reviewed");
 
 const byId = (records, id) => {
   const record = records.find(candidate => candidate.id === id);
@@ -24,16 +25,21 @@ const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // anchored to the start.
 const namePatterns = badges => badges.map(badge => new RegExp(escapeRegExp(badge.name) + ":"));
 
-// OpenClaw matches all five agent-system badges, so its card shows the whole set.
+// OpenClaw matches all five agent-system trait badges, so its card shows its
+// type badge and the whole trait set: the six-badge cap, exactly.
 const openclaw = byId(projects, "openclaw");
-// Chroma matches no memory-system badge, so its card has no badge row.
+// Chroma matches no memory-system trait badge, so its card shows only its type.
 const chroma = byId(projects, "chroma");
 const ollama = byId(runtimes, "ollama");
+// A language model with downloadable weights only: its type and one mode.
 const reviewedModel = byId(reviewedModels, "model-alibaba-qwen2-5-coder-0-5b");
+// A multimodal model carrying all three distribution modes.
+const allModesModel = byId(reviewedModels, "model-alibaba-qwen3-8-27b");
+const importedModel = byId(allModels, "model-alibaba-qwen-flash");
 
-test("an agent-system card shows every matching badge as an emblem in set order", async ({ page }) => {
+test("an agent-system card leads with its type and shows every matching badge as an emblem in set order", async ({ page }) => {
   const expected = cardBadges("system", openclaw);
-  expect(expected.map(badge => badge.name)).toEqual(["Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
+  expect(expected.map(badge => badge.name)).toEqual(["Agent system", "Local-first", "Sandboxed execution", "Browser control", "MCP", "Self-hostable"]);
 
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(openclaw.name);
@@ -53,14 +59,15 @@ test("an agent-system card shows every matching badge as an emblem in set order"
   await expect(card.locator(".tags")).toHaveCount(0);
 });
 
-test("a card without badges omits the row and keeps its footer at the bottom", async ({ page }) => {
-  expect(cardBadges("system", chroma)).toEqual([]);
+test("a card with no trait badge still shows its type badge and keeps its footer at the bottom", async ({ page }) => {
+  expect(cardBadges("system", chroma).map(badge => badge.name)).toEqual(["Memory system"]);
 
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill(chroma.name);
   const card = page.locator('#project-grid .project-card:has([data-project="chroma"])');
   await expect(card).toBeVisible();
-  await expect(card.locator(".card-badges")).toHaveCount(0);
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(cardBadges("system", chroma)));
+  await expect(card.locator(".card-badge")).toHaveAttribute("data-family", "type");
   // Wait out web-font swap (font-display: swap) and the page's own
   // smooth-scroll settling (html { scroll-behavior: smooth }), so the two
   // boundingBox() reads below land after layout has fully settled instead of
@@ -111,17 +118,90 @@ test("a record shows the same badges in its collection grid and in All", async (
     .toHaveText(namePatterns(runtimeBadges));
 });
 
-test("a reviewed-model card shows no badges and keeps its attributed models.dev modality", async ({ page }) => {
-  expect(cardBadges("model", reviewedModel)).toEqual([]);
+test("a reviewed-model card has no role pill and shows its distribution modes as badges, plus its attributed models.dev modality", async ({ page }) => {
+  const expected = cardBadges("model", reviewedModel);
+  expect(expected.map(badge => badge.name)).toEqual(["Language model", "Downloadable weights"]);
 
   await page.goto("/?view=models");
   await page.locator("#model-search").fill(reviewedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
-  await expect(card.locator(".card-badges")).toHaveCount(0);
+  await expect(card.locator(".role-badge")).toHaveCount(0);
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control"]);
   const meta = card.locator(".card-source-meta");
   await expect(meta).toContainText("→");
   await expect(meta).toHaveAttribute("title", "From models.dev source metadata, not Atlas reviewed");
   await expect(meta.locator(".visually-hidden")).toHaveText("From models.dev: ");
+});
+
+test("a reviewed-model card carrying every distribution mode shows its type and all three modes, in taxonomy order", async ({ page }) => {
+  const expected = cardBadges("model", allModesModel);
+  expect(expected.map(badge => badge.name)).toEqual(["Multimodal language model", "Downloadable weights", "Developer API", "Third-party hosting"]);
+
+  await page.goto("/?view=models");
+  await page.locator("#model-search").fill(allModesModel.name);
+  const card = page.locator(`#model-grid .model-card:has([data-model="${allModesModel.id}"])`);
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control", "platform", "platform"]);
+});
+
+test("an imported models.dev card keeps its role pill and shows only its source-record badge", async ({ page }) => {
+  expect(cardBadges("model", importedModel).map(badge => badge.name)).toEqual(["Source record"]);
+
+  await page.goto("/?view=models");
+  await page.locator("#model-search").fill(importedModel.name);
+  const card = page.locator(`#model-grid .model-card:has([data-model="${importedModel.id}"])`);
+  await expect(card.locator(".role-badge")).toHaveText("Imported metadata · Not Atlas reviewed");
+  await expect(card.locator(".card-badge")).toHaveText(namePatterns(cardBadges("model", importedModel)));
+});
+
+// Every grid, including the collections that had no trait badges, now leads
+// each card with its one type badge; the Finder shortlist carries them too.
+test("every card in every grid and the Finder shortlist leads with exactly one type badge", async ({ page }) => {
+  const grids = [
+    ["/?collection=systems", "#project-grid"],
+    ["/?collection=inference", "#inference-grid"],
+    ["/?collection=runtimes", "#runtime-grid"],
+    ["/?collection=packs", "#pack-grid"],
+    ["/", "#all-directory-grid"],
+    ["/?view=models", "#model-grid"],
+    ["/?view=specifications", "#specification-grid"],
+    ["/?view=labs", "#lab-grid"],
+  ];
+  for (const [url, grid] of grids) {
+    await page.goto(url);
+    const cards = page.locator(`${grid} .project-card`);
+    await expect(cards.first()).toBeVisible();
+    const rows = await cards.evaluateAll(items => items.map(item => [...item.querySelectorAll(".card-badge")].map(badge => badge.dataset.family)));
+    expect(rows.length, `${grid} renders cards`).toBeGreaterThan(0);
+    for (const [index, families] of rows.entries()) {
+      expect(families[0], `${grid} card ${index} leads with its type`).toBe("type");
+      expect(families.filter(family => family === "type"), `${grid} card ${index} shows one type badge`).toHaveLength(1);
+    }
+  }
+
+  // A system shortlist (the first direction) and an inference shortlist.
+  for (const direction of ["", "inference_service"]) {
+    await page.goto("/?view=finder");
+    const first = direction ? `#finder-content .finder-choice[data-finder-value="${direction}"]` : "#finder-content .finder-choice";
+    await page.locator(first).first().click();
+    for (let step = 0; step < 2; step += 1) await page.locator("#finder-content .finder-choice").first().click();
+    const shortlist = page.locator(".finder-result");
+    await expect(shortlist.first()).toBeVisible();
+    const finderRows = await shortlist.evaluateAll(items => items.map(item => [...item.querySelectorAll(".card-badge")].map(badge => badge.dataset.family)));
+    expect(finderRows.length).toBeGreaterThan(0);
+    for (const families of finderRows) expect(families[0], `${direction || "first"} shortlist leads with a type badge`).toBe("type");
+  }
+});
+
+test("a reviewed-model card shows the same badges in the Models grid and in the mixed All directory", async ({ page }) => {
+  const expected = cardBadges("model", reviewedModel);
+
+  await page.goto("/");
+  await page.locator("#all-directory-search").fill(reviewedModel.name);
+  const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
+  await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
+  await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));
 });
 
 for (const colorScheme of ["light", "dark"]) {
@@ -173,7 +253,9 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   }));
   await emblem.hover();
   await expect(tooltip).toBeVisible();
-  await expect(tooltip.locator(".badge-tooltip-family")).toHaveText("Control and privacy");
+  // The first emblem is the card's type badge, so the tooltip names the Type family.
+  expect(first.family).toBe("type");
+  await expect(tooltip.locator(".badge-tooltip-family")).toHaveText(BADGE_FAMILIES[first.family].name);
   await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
   await expect(tooltip.locator(".badge-tooltip-definition")).toHaveText(first.definition);
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");

@@ -25,6 +25,7 @@ def write_catalog(
     models: tuple[dict, ...] = (),
     specifications: tuple[dict, ...] = (),
     packs: tuple[dict, ...] = (),
+    labs: tuple[dict, ...] = (),
     robots: tuple[dict, ...] = (),
 ) -> Path:
     files = {
@@ -35,6 +36,7 @@ def write_catalog(
         "models.json": {"models": list(models)},
         "specifications.json": {"specifications": list(specifications)},
         "packs.json": {"packs": list(packs)},
+        "labs.json": {"labs": list(labs)},
         "robots.json": {"robots": list(robots)},
     }
     for name, payload in files.items():
@@ -170,6 +172,21 @@ class ReviewAgeTests(unittest.TestCase):
         self.assertIsNone(
             row.metadata, "a pack carries no stars_verified_at, so no metadata column"
         )
+
+    def test_labs_are_reported_with_their_evidence_and_framework_age(self) -> None:
+        (row,) = self.rows(
+            labs=(
+                record(
+                    "lab-example",
+                    "2026-09-20",
+                    evidence=[{"verified_at": "2026-09-01"}],
+                    safety_framework={"verified_at": "2026-08-15"},
+                ),
+            )
+        )
+        self.assertEqual("labs", row.collection)
+        self.assertEqual(date(2026, 8, 15), row.oldest_evidence.on)
+        self.assertIsNone(row.metadata, "a lab carries no automated timestamp")
 
     def test_robots_are_reported_with_their_evidence_age(self) -> None:
         (row,) = self.rows(

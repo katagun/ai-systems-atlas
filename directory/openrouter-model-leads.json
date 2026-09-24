@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-09-24",
+  "source": {
+    "name": "OpenRouter",
+    "url": "https://openrouter.ai/api/v1/models",
+    "terms_url": "https://openrouter.ai/terms",
+    "fetched_at": null,
+    "sha256": null
+  },
+  "listed_count": null,
+  "eligible_count": null,
+  "leads": []
+}

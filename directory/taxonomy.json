@@ -1,6 +1,6 @@
 {
   "version": "4.0",
-  "principle": "Operational projects belong to one system family and primary role. Models, inference services, local runtimes, specifications, and agent packs retain independent collection schemas. Scores are comparable only inside the same score profile.",
+  "principle": "Operational projects belong to one system family and primary role. Models, inference services, local runtimes, specifications, agent packs, and labs retain independent collection schemas. Scores are comparable only inside the same score profile.",
   "system_families": [
     {
       "id": "memory_system",
@@ -942,6 +942,112 @@
       "id": "clone_template",
       "name": "Clone as template",
       "definition": "The reader clones or forks the repository as the starting vault or project the host then works in."
+    }
+  ],
+  "lab_types": [
+    {
+      "id": "ai_company",
+      "name": "AI company",
+      "definition": "An organization whose principal business is developing AI models and the APIs, applications, or weight releases built on them."
+    },
+    {
+      "id": "technology_company",
+      "name": "Technology company",
+      "definition": "A company whose principal business is broader than AI models, such as search, cloud, social media, devices, chips, commerce, or software, and which develops models through one or more of its own units."
+    },
+    {
+      "id": "public_research",
+      "name": "Public research organization",
+      "definition": "A government-funded, academic, or nonprofit research organization that develops and releases models."
+    }
+  ],
+  "lab_channel_kinds": [
+    {
+      "id": "model_catalog",
+      "name": "Model catalog",
+      "definition": "The organization's own page listing its current models, usually in its API or product documentation."
+    },
+    {
+      "id": "release_notes",
+      "name": "Release notes",
+      "definition": "The organization's own changelog for its models or model API."
+    },
+    {
+      "id": "news",
+      "name": "News",
+      "definition": "The organization's own news, blog, or research index where it announces releases."
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "definition": "A GitHub organization the organization publishes code from."
+    },
+    {
+      "id": "hugging_face",
+      "name": "Hugging Face",
+      "definition": "A Hugging Face organization the organization publishes model weights from."
+    }
+  ],
+  "countries": [
+    {
+      "id": "be",
+      "name": "Belgium",
+      "definition": "Headquartered in Belgium (ISO 3166-1 BE)."
+    },
+    {
+      "id": "ca",
+      "name": "Canada",
+      "definition": "Headquartered in Canada (ISO 3166-1 CA)."
+    },
+    {
+      "id": "cn",
+      "name": "China",
+      "definition": "Headquartered in the People's Republic of China (ISO 3166-1 CN)."
+    },
+    {
+      "id": "fr",
+      "name": "France",
+      "definition": "Headquartered in France (ISO 3166-1 FR)."
+    },
+    {
+      "id": "in",
+      "name": "India",
+      "definition": "Headquartered in India (ISO 3166-1 IN)."
+    },
+    {
+      "id": "il",
+      "name": "Israel",
+      "definition": "Headquartered in Israel (ISO 3166-1 IL)."
+    },
+    {
+      "id": "sg",
+      "name": "Singapore",
+      "definition": "Headquartered in Singapore (ISO 3166-1 SG)."
+    },
+    {
+      "id": "kr",
+      "name": "South Korea",
+      "definition": "Headquartered in the Republic of Korea (ISO 3166-1 KR)."
+    },
+    {
+      "id": "ch",
+      "name": "Switzerland",
+      "definition": "Headquartered in Switzerland (ISO 3166-1 CH)."
+    },
+    {
+      "id": "tr",
+      "name": "Türkiye",
+      "definition": "Headquartered in Türkiye (ISO 3166-1 TR)."
+    },
+    {
+      "id": "us",
+      "name": "United States",
+      "definition": "Headquartered in the United States (ISO 3166-1 US)."
+    },
+    {
+      "id": "none_listed",
+      "name": "No headquarters listed",
+      "definition": "The organization's own pages and filings name no headquarters or base and give no single principal address: they list several offices, only regional headquarters, or no location at all. The record says so rather than picking one office, an offshore holding company's registration, a court or governing-law clause, where staff work, or where the founders are."
     }
   ],
   "robot_form_factors": [

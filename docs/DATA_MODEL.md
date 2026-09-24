@@ -4,7 +4,7 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 ## Canonical and published data
 
-`directory/` is canonical. The browser consumes synchronized copies of ten files:
+`directory/` is canonical. The browser consumes synchronized copies of eleven files:
 
 | Canonical file | Purpose | Published to `web/` |
 |---|---|---|
@@ -18,9 +18,12 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 | `models.json` | Reviewed provider-independent model releases, dedicated access scores, and evidence | Yes |
 | `models-dev.json` | Complete commit-pinned models.dev source snapshot with no Atlas conclusions | Yes |
 | `packs.json` | Reviewed, unscored agent packs recorded for what a host installs | Yes |
+| `labs.json` | Reviewed, unscored labs that develop the reviewed model releases, joined to the rest of the catalog by name | Yes |
 | `candidates.json` | Provisional discovery and migration queue | No |
 | `model-candidates.json` | Imported models.dev discovery metadata awaiting complete human review | No |
 | `model-dispositions.json` | Durable human hold and exclusion decisions for models.dev source IDs | No |
+| `openrouter-model-leads.json` | OpenRouter cross-check leads: releases OpenRouter lists that Atlas does not yet represent, identifiers only | No |
+| `openrouter-model-dispositions.json` | The recorded OpenRouter terms review and human hold and exclusion decisions for leads | No |
 | `license-review.json` | Open license-evidence review incidents | No |
 | `discovery-sources.json` | Allowlisted official feeds used to discover non-GitHub candidates | No |
 | `hn-signals.json` | Attention-source signal queue: pointers plus optional review assessment | No |
@@ -29,7 +32,7 @@ Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_sh
 
 `directory/robots.json` is not in the table yet: the Robots collection plumbing has not landed (see the robots item in [`../BACKLOG.md`](../BACKLOG.md)), so it is neither canonical nor published, and the regeneration sequence in step 7 of [`ROBOTS.md`](ROBOTS.md) applies once it ships.
 
-The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
+The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory, and Labs is a sibling view because an organization is not a deployable choice. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Project record
 
@@ -73,6 +76,7 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 | `stars_verified_at` | Automation | `stars` was observed on this date |
 | `generated_at` | Automation/editor | The published project document was last regenerated |
 | `trust.verified_at` | Human reviewer | The trust record's properties and findings were reviewed on this date; never automated |
+| `safety_framework.verified_at` (lab) | Human reviewer | The lab's published safety framework was read on this date; never automated |
 | `excluded_at` (exclusion) | Human reviewer | The exclusion decision was first recorded on this date |
 | `verified_at` (exclusion) | Human reviewer | The exclusion reason was last re-checked against current sources on this date; never automated |
 
@@ -108,6 +112,10 @@ only through the bounded, public-HTTPS manual path.
 Model candidate records contain a stable Atlas `id`, models.dev `source_id`, attributed `source_metadata`, provisional status, discovery and last-seen dates, and the complete review checklist. Their envelope records the pinned repository commit, immutable archive URL, source path, MIT license, archive SHA-256, total source count, and text-output eligible count. They contain no Atlas model type, distribution conclusion, license classification, evidence, boundary prose, score, or `verified_at`; those fields exist only after human review. Reviewed model `source_id` values must be absent from this queue. Every candidate must match the same source row in `models-dev.json`, but the source snapshot is not itself workflow state.
 
 Model dispositions are the durable human record of what the queue must not carry. Unlike system candidates, model queue entries are regenerated wholesale by the importer and cannot hold per-record state, so holds and exclusions live in `model-dispositions.json` instead of on the queue entries. Each entry carries a models.dev `source_id`, a `disposition` of `held` (not now, may return) or `excluded` (never in this shape), a non-empty `reason`, and `decided_at`. The importer filters dispositioned IDs out of the queue while keeping them in the eligible count, promotion refuses them until the disposition is lifted, and validation requires the eligible count to equal queued plus reviewed plus dispositioned source IDs. A dispositioned ID must exist in the source snapshot and must not be reviewed; both conditions fail loudly so stale dispositions get pruned instead of lingering.
+
+OpenRouter model leads are regenerated wholesale by `scripts/import_openrouter.py` ([ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md)). The envelope is `{"version": "1.0", "updated_at": <ISO date>, "source": {...}, "listed_count": n, "eligible_count": n, "leads": [...]}`, and `source` carries `name` (`OpenRouter`), the endpoint `url`, `terms_url`, `fetched_at`, and the response `sha256`. Before the first import, and after a terms review is withdrawn, `fetched_at`, `sha256`, and both counts are `null` and `leads` is empty. Each lead carries only `openrouter_id` (a route without its variant suffix), `canonical_slug`, `name`, nullable `hugging_face_id`, `listed_at`, `discovered_at`, and `last_seen_at`, which must equal the recorded fetch date. Leads are sorted, unique, and no more numerous than `eligible_count`. A lead has no Atlas classification, evidence, or score, and it never becomes `source_metadata`.
+
+`openrouter-model-dispositions.json` is human-owned: `{"version": "1.0", "updated_at": <ISO date>, "terms_reviewed_at": <ISO date or null>, "dispositions": [...]}`. `terms_reviewed_at` is the date a maintainer last read OpenRouter's terms and found this use permitted. Validation rejects a fetched leads file while it is `null`, and the importer makes no request. Each disposition carries `openrouter_id`, `disposition` (`held` or `excluded`), a non-empty `reason`, and `decided_at`, and dispositioned routes must not remain leads. The listing itself is not stored, so validation cannot detect a stale disposition; the importer prints a `prunable OpenRouter disposition` line instead.
 
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
@@ -195,6 +203,21 @@ Robot records are independent from every other collection. They record what one 
 - **Review:** human-owned `verified_at` on the record and on the collection envelope.
 
 A repository appears in at most one collection, and a repo-less robot is unique by its canonical `url` within the collection. See [`ROBOTS.md`](ROBOTS.md) and [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md).
+
+## Lab record
+
+Lab records are independent from every other collection. They contain no `system_family`, role, score profile, score, rank, stars, licence, or source model, and the validator rejects each if present. The envelope is `{"version": "1.0", "verified_at": <ISO date>, "labs": [...]}`.
+
+- **Identity:** `id` (a slug with the `lab-` prefix, since several organizations share a name with a record elsewhere), `name`, the organization's official `url`, and a one-sentence `description`.
+- **Organization:** taxonomy-backed `lab_type` (`lab_types`) and `headquarters` (`countries`, or `none_listed` when the organization's own pages and filings give no single headquarters, base, or principal address; the rule is in [`LABS.md`](LABS.md#classification)), optional `parent_organization` present only when first-party evidence names one, and `organization_note`, reviewed prose saying how the organization's catalog names relate: which unit develops the models, which operates the services, and what the parent is.
+- **Catalog links:** `catalog_names`, the exact strings other collections use for the organization, and `systems`, ids of the `projects.json` records it builds, because a system record names no organization.
+- **Channels:** non-empty `channels`, each `{kind, url}` with `kind` from `lab_channel_kinds`: the model catalog, release notes, and news pages a reader watches, and the GitHub and Hugging Face organizations it publishes from. `github` and `hugging_face` channels are organization URLs with no path.
+- **Safety framework (optional):** `safety_framework` `{title, url, verified_at}` when the organization publishes a frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages. Absence is not a finding that none exists.
+- **Review:** non-empty dated first-party `evidence` in the inference-service shape and human-owned `verified_at`.
+
+Everything else is joined, never stored: reviewed models whose `developer` is one of `catalog_names`; services by `operator`, runtimes by `maintainer`, specifications by any of `stewards`, and packs by `steward`, each matched against `catalog_names`; models.dev source rows in the namespaces (`source_id` before the `/`) of the lab's reviewed models, until a review overlays them; and the systems listed in `systems`. `scripts/lab_relations.py` and `labRelations` in `web/app-core.js` state these rules for the scripts and the page.
+
+Validation requires every catalog name to match a record and at least one to be a reviewed model's `developer` (the inclusion gate); refuses a catalog name, system, or GitHub organization claimed by two labs; refuses a models.dev namespace split between labs; and requires every published system whose repository sits in one of the lab's GitHub organizations to be listed in `systems`. See [`LABS.md`](LABS.md) and [ADR 041](adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md).
 
 ## Inference service record
 

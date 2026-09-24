@@ -11,11 +11,11 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 4. Decide inclusion by the collection's relevance and operational boundary, never by license or source model.
 5. Base license classifications on authoritative, scoped license/terms evidence covering every material license; README claims and GitHub SPDX detection are insufficient.
 6. Assign exactly one compatible `system_family` and `primary_role` only to system records in `projects.json`; traits are not roles.
-7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, and robots are unscored; mixed discovery hides scores and comparisons.
+7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, labs, and robots are unscored; mixed discovery hides scores and comparisons.
 8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
 9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
 10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
-11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records. A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 038); its metadata is then Atlas-authored, never attributed to models.dev.
+11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records. A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 038); its metadata is then Atlas-authored, never attributed to models.dev. OpenRouter listings are unpublished leads, never source metadata or evidence, fetched only after a recorded terms review (ADR 039).
 12. Publish catalog JSON only from `PUBLISHED_DATA` in `scripts/sync_web_data.py`; queues, dispositions, and discovery configuration remain unpublished.
 13. Edit canonical inputs and generators, not generated data copies, app payloads, share pages, blog output, fonts, or logos. Generator locations and asset-version dependencies are in `docs/WEB.md` and `docs/BLOG.md`.
 14. After published catalog edits, run the regeneration sequence below and commit its output; record additions also need logo regeneration per `docs/WEB.md`.
@@ -32,12 +32,13 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Fields, enums, timestamps, local-first/editability, queues, dispositions | [Data model](docs/DATA_MODEL.md) |
 | Refresh, validation, evidence links, terms/license drift, review age, CI/deploy | [Operations](docs/OPERATIONS.md) |
 | UI, filters, comparison, details, badges, payloads, assets, accessibility | [Web](docs/WEB.md) |
-| Model releases, access scores, models.dev import and promotion | [Models](docs/MODELS.md) |
+| Model releases, access scores, models.dev import, OpenRouter leads, and promotion | [Models](docs/MODELS.md) |
 | Protocols, conventions, packaging formats | [Specifications](docs/SPECIFICATIONS.md) |
 | Managed inference, service scores, trust records | [Inference services](docs/INFERENCE_SERVICES.md) |
 | Self-operated inference, runtime scores | [Local runtimes](docs/LOCAL_RUNTIMES.md) |
 | Skills, plugins, vault bundles, marketplaces, host-installed packs | [Agent packs](docs/PACKS.md) |
 | AI robots, vendor-named models, robot hardware, terms of sale | [Robots](docs/ROBOTS.md) |
+| AI labs, model developers, organization names across collections, where a lab publishes | [Labs](docs/LABS.md) |
 | Candidate triage routine | [Candidate triage](docs/routines/candidate-triage.md) |
 | Hacker News attention signals and sweep routine | [HN signals](docs/routines/hn-signals.md) |
 | Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |

@@ -25,6 +25,7 @@ COLLECTIONS = (
     ("specifications", "specifications.json", "specifications", "spec"),
     ("models", "models.json", "models", "model"),
     ("packs", "packs.json", "packs", "pack"),
+    ("labs", "labs.json", "labs", "lab"),
     ("robots", "robots.json", "robots", "robot"),
 )
 
@@ -139,6 +140,20 @@ BOOT_FIELDS = {
         "licenses",
         "status",
     ),
+    # A lab card and every cross-link to a lab join through catalog_names and
+    # systems (ADR 041), so both must be on the boot record; the join itself runs
+    # in the browser over boot records the page already holds.
+    "labs": (
+        "id",
+        "name",
+        "url",
+        "description",
+        "lab_type",
+        "headquarters",
+        "parent_organization",
+        "catalog_names",
+        "systems",
+    ),
     "robots": (
         "id",
         "name",
@@ -219,6 +234,14 @@ SEARCH_FIELDS = {
         "description",
         "installs",
         "not_a_system",
+    ),
+    "labs": (
+        "id",
+        "name",
+        "description",
+        "organization_note",
+        "catalog_names",
+        "parent_organization",
     ),
     "robots": (
         "id",

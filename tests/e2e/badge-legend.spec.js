@@ -32,15 +32,22 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await expect(items(page)).toHaveText(names(badgeLegend("systems")));
 });
 
-test("mixed scopes show only the families, and badge-less views show nothing", async ({ page }) => {
+test("mixed scopes show only the families, sibling views name their own sets, and badge-less views show nothing", async ({ page }) => {
   await page.goto("/");
-  await expect(items(page)).toHaveCount(3);
-  await expect(items(page).first()).toContainText("Control and privacy");
-  await expect(items(page).first()).toContainText("Where your data lives");
+  await expect(items(page)).toHaveCount(4);
+  await expect(items(page).first()).toContainText("Type");
+  await expect(items(page).first()).toContainText("What kind of record it is");
+  await expect(items(page).nth(1)).toContainText("Control and privacy");
 
   await page.locator('[data-tab="models"]').click();
-  await expect(legend(page)).toBeHidden();
-  await expect(page.locator("#badge-legend-chip")).toBeHidden();
+  await expect(legend(page)).toBeVisible();
+  await expect(items(page)).toHaveText(names(badgeLegend("models")));
+
+  await page.locator('[data-tab="specifications"]').click();
+  await expect(items(page)).toHaveText(names(badgeLegend("specifications")));
+
+  await page.locator('[data-tab="labs"]').click();
+  await expect(items(page)).toHaveText(names(badgeLegend("labs")));
 
   await page.locator('[data-tab="taxonomy"]').click();
   await expect(legend(page)).toBeHidden();
@@ -84,6 +91,22 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
   await expect(page.locator("#comparison-tray")).toBeHidden();
   await expect(legend(page)).toBeVisible();
   await expect(page.locator("#badge-legend-chip")).toBeHidden();
+});
+
+test("the Models legend also steps aside for the comparison tray", async ({ page }) => {
+  // Unlike Systems, every reviewed-model card carries a Compare control with
+  // no family narrowing needed first.
+  await page.goto("/?view=models");
+  await expect(legend(page)).toBeVisible();
+  await expect(items(page)).toHaveText(names(badgeLegend("models")));
+  await page.locator('#model-grid [data-compare-id]').first().click();
+  await expect(page.locator("#comparison-tray")).toBeVisible();
+  await expect(legend(page)).toBeHidden();
+  await expect(page.locator("#badge-legend-chip")).toBeHidden();
+
+  await page.locator("#comparison-clear").click();
+  await expect(page.locator("#comparison-tray")).toBeHidden();
+  await expect(legend(page)).toBeVisible();
 });
 
 // Resolves once the page stops scrolling: focus scrolling honours the page's

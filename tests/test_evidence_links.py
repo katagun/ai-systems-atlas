@@ -176,6 +176,30 @@ class EvidenceLinkTests(unittest.TestCase):
                         }
                     ]
                 },
+                "labs.json": {
+                    "labs": [
+                        {
+                            "id": "lab-example",
+                            "url": "https://example.com/lab",
+                            "verified_at": "2026-08-09",
+                            "evidence": [
+                                {
+                                    "kind": "web",
+                                    "url": "https://example.com/lab-terms",
+                                    "verified_at": "2026-08-09",
+                                }
+                            ],
+                            "channels": [
+                                {"kind": "news", "url": "https://example.com/lab-news"}
+                            ],
+                            "safety_framework": {
+                                "title": "Framework",
+                                "url": "https://example.com/lab-framework",
+                                "verified_at": "2026-08-08",
+                            },
+                        }
+                    ]
+                },
                 "robots.json": {
                     "robots": [
                         {
@@ -228,7 +252,7 @@ class EvidenceLinkTests(unittest.TestCase):
             targets = check_evidence_links.collect_targets(directory)
 
         by_url = {item.url: item for item in targets}
-        self.assertEqual(15, len(targets))
+        self.assertEqual(19, len(targets))
         self.assertEqual(
             ("specifications:spec:url", "systems:system:url"),
             by_url["https://example.com/shared"].references,
@@ -244,6 +268,15 @@ class EvidenceLinkTests(unittest.TestCase):
         self.assertIn("immutable_evidence", by_url["https://api.github.com/blob"].kinds)
         self.assertEqual(
             ("packs:kit:url",), by_url["https://example.com/kit"].references
+        )
+        self.assertEqual(
+            ("labs:lab-example:channel:0",),
+            by_url["https://example.com/lab-news"].references,
+        )
+        self.assertIn("channel", by_url["https://example.com/lab-news"].kinds)
+        self.assertEqual(
+            (("labs:lab-example:safety_framework", "2026-08-08"),),
+            by_url["https://example.com/lab-framework"].review_dates,
         )
         self.assertEqual(
             ("robots:bot:evidence:0", "robots:bot:url"),
@@ -277,6 +310,7 @@ class EvidenceLinkTests(unittest.TestCase):
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
                 "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
                 "robots.json": {
                     "robots": [
                         {
@@ -333,6 +367,7 @@ class EvidenceLinkTests(unittest.TestCase):
                 "local-runtimes.json": {"runtimes": []},
                 "models.json": {"models": []},
                 "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
                 "robots.json": {"robots": []},
                 "inference-services.json": {
                     "services": [

@@ -351,6 +351,45 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
                 record_reviewed_at=reviewed_at,
             )
 
+    # A lab carries no licence evidence; its channels are the pages a reader watches
+    # for the lab's next release, so they are maintained links like any evidence.
+    lab_document = load_json(directory / "labs.json")
+    for record in lab_document["labs"]:
+        record_id = record["id"]
+        reviewed_at = record.get("verified_at")
+        _add_target(
+            targets,
+            record.get("url"),
+            kind="record",
+            reference=f"labs:{record_id}:url",
+            reviewed_at=reviewed_at,
+        )
+        _add_evidence_items(
+            targets,
+            record["evidence"],
+            collection="labs",
+            record_id=record_id,
+            group="evidence",
+            record_reviewed_at=reviewed_at,
+        )
+        for index, channel in enumerate(record["channels"]):
+            _add_target(
+                targets,
+                channel.get("url"),
+                kind="channel",
+                reference=f"labs:{record_id}:channel:{index}",
+                reviewed_at=reviewed_at,
+            )
+        framework = record.get("safety_framework")
+        if isinstance(framework, dict):
+            _add_target(
+                targets,
+                framework.get("url"),
+                kind="safety_framework",
+                reference=f"labs:{record_id}:safety_framework",
+                reviewed_at=framework.get("verified_at"),
+            )
+
     # Robots carry terms in place of licences, and their central fact is a vendor
     # page naming a model (ADR 037), so that page is watched for drift as terms are.
     for record in load_json(directory / "robots.json")["robots"]:

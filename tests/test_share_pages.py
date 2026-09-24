@@ -44,6 +44,9 @@ class SharePageTests(unittest.TestCase):
         )
         self.assertEqual("records/packs/kit/index.html", share_page_path("pack", "kit"))
         self.assertEqual(
+            "records/labs/lab-openai/index.html", share_page_path("lab", "lab-openai")
+        )
+        self.assertEqual(
             "records/robots/bot/index.html", share_page_path("robot", "bot")
         )
         with self.assertRaises(ValueError):
@@ -69,6 +72,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "labs",
                 "robots",
             )
         )
@@ -107,6 +111,26 @@ class SharePageTests(unittest.TestCase):
             ),
         )
 
+    def test_lab_page_joins_the_records_that_name_the_lab(self) -> None:
+        page = self.pages["records/labs/lab-google/index.html"]
+        self.assertIn('<p class="eyebrow">Lab · Technology company</p>', page)
+        self.assertIn('href="../../../?record=lab:lab-google"', page)
+        for fact in (
+            "Alphabet Inc.",
+            "Gemini API",
+            "Gemini CLI",
+            "Frontier Safety Framework",
+        ):
+            with self.subTest(fact=fact):
+                self.assertIn(fact, page)
+        self.assertIn('"parentOrganization"', page)
+        self.assertNotIn("score", page.lower())
+
+    def test_lab_page_says_when_no_framework_is_recorded(self) -> None:
+        page = self.pages["records/labs/lab-deepseek/index.html"]
+        self.assertIn("None recorded", page)
+        self.assertNotIn('"parentOrganization"', page)
+
     def test_runtime_page_still_carries_its_repository_link(self) -> None:
         page = self.pages["records/local-runtimes/ollama/index.html"]
         self.assertIn(
@@ -123,6 +147,7 @@ class SharePageTests(unittest.TestCase):
             "runtime": "exo",
             "model": "model-alibaba-qwen2-5-coder-0-5b",
             "pack": "agent-toolkit",
+            "lab": "lab-anthropic",
         }
         for kind, record_id in samples.items():
             page = self.pages[share_page_path(kind, record_id)]
@@ -178,6 +203,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "labs",
                 "robots",
             )
         }
@@ -225,6 +251,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "labs",
                 "robots",
             )
         }
@@ -260,6 +287,7 @@ class SharePageTests(unittest.TestCase):
                 "runtimes",
                 "models",
                 "packs",
+                "labs",
                 "robots",
             )
         }
@@ -276,6 +304,41 @@ class SharePageTests(unittest.TestCase):
         self.assertNotIn("<script>alert", page)
         self.assertNotIn("<img", page)
         self.assertNotIn("</script><img", page)
+        self.assertIn("Evil &lt;script&gt;", page)
+        self.assertNotIn(
+            "</script>",
+            page.split('<script type="application/ld+json">')[1].split("</script>\n")[
+                0
+            ],
+        )
+
+    def test_lab_pages_escape_organization_text(self) -> None:
+        catalog = {
+            key: []
+            for key in (
+                "projects",
+                "specifications",
+                "services",
+                "runtimes",
+                "models",
+                "packs",
+                "labs",
+                "robots",
+            )
+        }
+        catalog["taxonomy"] = self.catalog["taxonomy"]
+        catalog["labs"] = [
+            {
+                **self.catalog["labs"][0],
+                "id": "lab-evil",
+                "name": 'Evil <script>alert("x")</script> Lab',
+                "parent_organization": "</script><img src=x onerror=alert(1)>",
+                "organization_note": "<img src=x onerror=alert(2)>",
+            }
+        ]
+        page = build_pages(catalog)["records/labs/lab-evil/index.html"]
+        self.assertNotIn("<script>alert", page)
+        self.assertNotIn("<img", page)
         self.assertIn("Evil &lt;script&gt;", page)
         self.assertNotIn(
             "</script>",
