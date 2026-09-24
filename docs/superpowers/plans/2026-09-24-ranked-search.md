@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Starts after the Phase 0 plan (`docs/superpowers/plans/2026-09-24-directory-phase-0-fixes.md`) has merged. This plan uses its `SCOPE_CONTROLS`, `activeScope()`, `SCOPE_URL_PARAMS`, and `writeScopeURL()`, and the Robots collection's `ROBOT_VIEW`, `filterRobots`, and `robotSearchIndex`.
+- Starts after the Phase 0 plan (`docs/superpowers/plans/2026-09-24-directory-phase-0-fixes.md`) has merged. This plan uses its `SCOPE_CONTROLS`, `activeScope()`, `SCOPE_URL_PARAMS`, and `writeScopeURL()`, and the Robots collection's `ROBOT_VIEW`, `filterRobots`, and `robotSearchIndex` from #300.
 - One branch, `claude/directory-p1-ranked-search`, from fresh `origin/main`; one commit per task; one PR after Task 6. ADR 040 and the `docs/WEB.md` changes ship in that same PR, so `main` never contradicts an accepted decision.
 - Before opening the PR, run `git fetch origin && git ls-tree --name-only origin/main docs/adr/`. ADR 040 is claimed; if `main` has taken it anyway, renumber by slug first.
 - Order by match weight only. Nothing reads `score`, `stars`, or any merit field to order a search.
@@ -566,8 +566,6 @@ In `renderPacks`, replace `AtlasCore.mergePackScopeEntries(packs, systems)` with
   });
 ```
 
-In `renderAllDirectoryEntries`, pass `robotSearchIndex: searchIndexes.robots` if the Robots PR did not already.
-
 - [ ] **Step 7: Add "Best match" to the scored Sort controls**
 
 In `web/index.html`, add `<option value="match">Best match</option>` as the first option of `#sort-filter`, `#inference-sort-filter`, `#runtime-sort-filter`, and `#model-sort-filter`. Leave each control's `selected` default unchanged. Task 4 selects "Best match" while a query is present.
@@ -1117,8 +1115,6 @@ Append to `web/styles.css`:
 .empty-search p { margin: 0 0 .5rem; }
 .empty-search p:last-child { margin-bottom: 0; }
 ```
-
-If `pageRenderer` has no entry for `labs` or `robots`, add them (`labs: renderLabs`, and the Robots PR's renderer) so an arriving exclusion list repaints any scope.
 
 - [ ] **Step 4: Run the tests and watch them pass**
 
