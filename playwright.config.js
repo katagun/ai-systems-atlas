@@ -24,7 +24,9 @@ module.exports = defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: `uv run python -m http.server ${port} --bind 127.0.0.1 --directory web`,
+    // Not `python -m http.server`: its listen backlog of five drops connections
+    // from the parallel boot fetches (scripts/serve_web.py explains).
+    command: `uv run python scripts/serve_web.py ${port}`,
     url: origin,
     // Never adopt a server this run did not start: a foreign one serves another
     // checkout's web/ and turns stale data into failures that read as regressions.
