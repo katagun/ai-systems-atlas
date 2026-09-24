@@ -173,7 +173,7 @@ print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
 kill %1
 ```
 
-Expected: 92.5 KB gzipped, measured 2026-09-24. The 60 KB check threshold stands: anything over it requires checking whether source growth or a detail-only field reached a boot payload. The overage grew from 66.8 KB pre-packs (of which `app/packs.json` adds 0.9 KB) through 68.3 KB and 82.2 KB (2026-09-20) to 90.3 KB before labs, mostly on `app/models.json` source-catalog growth; `app/labs.json` and the three lab taxonomy groups add 2.2 KB. The overage is tracked in `BACKLOG.md`.
+Expected: 94.5 KB gzipped, measured 2026-09-24. The 60 KB check threshold stands: anything over it requires checking whether source growth or a detail-only field reached a boot payload. The overage grew from 66.8 KB pre-packs (of which `app/packs.json` adds 0.9 KB) through 68.3 KB and 82.2 KB (2026-09-20) to 90.3 KB before labs, mostly on `app/models.json` source-catalog growth; `app/labs.json` and the three lab taxonomy groups added 2.2 KB with the first fifteen labs, and the second batch of twenty-five, with `none_listed` and seven more countries, 2.0 KB. The overage is tracked in `BACKLOG.md`.
 
 Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 

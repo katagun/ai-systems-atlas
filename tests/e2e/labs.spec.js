@@ -9,6 +9,8 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
     `${catalogCounts.labs} labs · developers of ${catalogCounts.labCoveredModels} of ${catalogCounts.reviewedModels} reviewed releases`,
   );
   await expect(page.locator("#lab-result-count")).toHaveText(`${catalogCounts.labs} labs · Unscored`);
+  // The labs outrun the default 24 per page; one page of 96 lists them all.
+  await page.locator('#lab-pager select[aria-label="Results per page"]').selectOption("96");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labNames());
   await expect(page.locator("#lab-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#lab-grid .compare-toggle")).toHaveCount(0);
