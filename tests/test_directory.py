@@ -1075,26 +1075,53 @@ class DirectoryTests(unittest.TestCase):
 
     def test_labs_are_an_unscored_collection_joined_by_name(self) -> None:
         records = self.labs["labs"]
-        # ByteDance is absent by review: its own pages name offices in many cities and no
-        # headquarters, so its record waits on the decision recorded in BACKLOG.md.
         expected = {
+            "lab-ai-singapore",
+            "lab-ai21-labs",
+            "lab-aikido-security",
             "lab-alibaba",
             "lab-amazon",
+            "lab-ant-group",
             "lab-anthropic",
+            "lab-arcee-ai",
+            "lab-bytedance",
             "lab-cohere",
             "lab-deepseek",
             "lab-google",
+            "lab-ibm",
+            "lab-meituan",
             "lab-meta",
             "lab-microsoft",
             "lab-minimax",
             "lab-mistral-ai",
+            "lab-mixedbread-ai",
             "lab-moonshot-ai",
+            "lab-motif-technologies",
             "lab-nvidia",
             "lab-openai",
+            "lab-openbmb",
+            "lab-ornith-ai",
+            "lab-perplexity",
+            "lab-poolside",
+            "lab-stepfun",
+            "lab-swiss-ai-initiative",
+            "lab-tencent",
+            "lab-thinking-machines-lab",
+            "lab-trendyol",
+            "lab-typesafe-ai",
+            "lab-upstage",
+            "lab-vispark",
+            "lab-vivgrid",
+            "lab-writer",
             "lab-xai",
+            "lab-xiaomi",
             "lab-z-ai",
         }
         self.assertLessEqual(expected, {record["id"] for record in records})
+        by_id = {record["id"]: record for record in records}
+        # ByteDance's own pages list offices by region and name no headquarters, and the
+        # Cayman Islands entity behind its website does not count as one.
+        self.assertEqual(by_id["lab-bytedance"]["headquarters"], "none_listed")
         developers = {model["developer"] for model in self.models["models"]}
         claimed: dict[str, str] = {}
         for record in records:

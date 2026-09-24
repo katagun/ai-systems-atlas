@@ -990,6 +990,11 @@
   ],
   "countries": [
     {
+      "id": "be",
+      "name": "Belgium",
+      "definition": "Headquartered in Belgium (ISO 3166-1 BE)."
+    },
+    {
       "id": "ca",
       "name": "Canada",
       "definition": "Headquartered in Canada (ISO 3166-1 CA)."
@@ -1005,9 +1010,44 @@
       "definition": "Headquartered in France (ISO 3166-1 FR)."
     },
     {
+      "id": "in",
+      "name": "India",
+      "definition": "Headquartered in India (ISO 3166-1 IN)."
+    },
+    {
+      "id": "il",
+      "name": "Israel",
+      "definition": "Headquartered in Israel (ISO 3166-1 IL)."
+    },
+    {
+      "id": "sg",
+      "name": "Singapore",
+      "definition": "Headquartered in Singapore (ISO 3166-1 SG)."
+    },
+    {
+      "id": "kr",
+      "name": "South Korea",
+      "definition": "Headquartered in the Republic of Korea (ISO 3166-1 KR)."
+    },
+    {
+      "id": "ch",
+      "name": "Switzerland",
+      "definition": "Headquartered in Switzerland (ISO 3166-1 CH)."
+    },
+    {
+      "id": "tr",
+      "name": "Türkiye",
+      "definition": "Headquartered in Türkiye (ISO 3166-1 TR)."
+    },
+    {
       "id": "us",
       "name": "United States",
       "definition": "Headquartered in the United States (ISO 3166-1 US)."
+    },
+    {
+      "id": "none_listed",
+      "name": "No headquarters listed",
+      "definition": "The organization's own pages and filings name no headquarters or base and give no single principal address: they list several offices, only regional headquarters, or no location at all. The record says so rather than picking one office, an offshore holding company's registration, a court or governing-law clause, where staff work, or where the founders are."
     }
   ],
   "architectures": [

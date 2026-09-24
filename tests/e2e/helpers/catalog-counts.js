@@ -111,6 +111,12 @@ function reviewedModelsDevelopedBy(labId) {
   return reviewedModelNames(model => names.has(model.developer));
 }
 
+// A lab dialog's longest unbroken strings are a channel URL and a word in the
+// lab's name; the phone-width check opens the lab with the longest of each.
+function labIdWithLongest(measure) {
+  return labs.reduce((best, lab) => (measure(lab) > measure(best) ? lab : best)).id;
+}
+
 const labNamesInCatalog = new Set(labs.flatMap(lab => lab.catalog_names));
 const labCoveredModels = reviewedModels.filter(model => labNamesInCatalog.has(model.developer)).length;
 
@@ -136,4 +142,6 @@ module.exports = {
   labsWithReleaseDistribution,
   labsMatching,
   reviewedModelsDevelopedBy,
+  labIdWithLongestChannel: labIdWithLongest(lab => Math.max(...lab.channels.map(channel => channel.url.length))),
+  labIdWithLongestNameWord: labIdWithLongest(lab => Math.max(...lab.name.split(/\s+/).map(word => word.length))),
 };

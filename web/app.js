@@ -1864,7 +1864,7 @@ function labRecordButtons(records, attribute) {
 
 function labChannelMarkup(channel) {
   const shown = channel.url.replace(/^https:\/\//, "").replace(/\/$/, "");
-  return `<p><strong>${escapeHTML(taxonomyName("lab_channel_kinds", channel.kind))}:</strong> <a href="${escapeHTML(channel.url)}" target="_blank" rel="noreferrer">${escapeHTML(shown)} ↗</a></p>`;
+  return `<p><strong>${escapeHTML(taxonomyName("lab_channel_kinds", channel.kind))}:</strong> <a class="lab-channel-link" href="${escapeHTML(channel.url)}" target="_blank" rel="noreferrer">${escapeHTML(shown)} ↗</a></p>`;
 }
 
 // The framework field says only that the lab publishes one. Until the detail
