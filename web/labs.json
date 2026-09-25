@@ -583,11 +583,11 @@
       "id": "lab-google",
       "name": "Google",
       "url": "https://deepmind.google/",
-      "description": "The technology company whose Google DeepMind unit develops the Gemini and Gemma models that Google serves through the Gemini API, Vertex AI, and the Gemini apps.",
+      "description": "The technology company whose Google DeepMind unit develops the Gemini and Gemma models that Google serves through the Gemini API, Gemini Enterprise Agent Platform, and the Gemini apps.",
       "lab_type": "technology_company",
       "headquarters": "us",
       "parent_organization": "Alphabet Inc.",
-      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates Vertex AI and the Gemini Enterprise Agent Platform. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Vertex AI operator Google Cloud, so all three names belong to this record.",
+      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates the Gemini Enterprise Agent Platform, formerly Vertex AI. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Gemini Enterprise Agent Platform operator Google Cloud, so all three names belong to this record.",
       "catalog_names": [
         "Google",
         "Google DeepMind",
