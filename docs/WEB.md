@@ -76,7 +76,7 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 - Finder system recommendations consider only active projects in the selected family and role set. Inference recommendations consider only the selected service type, and local-runtime recommendations only the selected runtime type. Ranking code must dispatch on `score_profile` and never assume unlike records share fields or dimensions; absence of `system_family` is not a valid test for a collection.
 - Add a Finder goal only after at least one active reviewed project, inference service, or local runtime can satisfy it.
 - Finder priorities affect the shortlist; they are preferences, not hard eligibility filters.
-- “Browse matches” preserves every eligible system role, the selected inference-service type, or the selected runtime type. A manual family or role change clears a temporary system-role set.
+- “Browse matches” preserves every eligible system role, the selected inference-service type, or the selected runtime type. A manual family or role change clears a temporary system-role set. The handoff lands on the results rather than the page top, and a multi-role set shows as a removable "Finder:" chip beside the result count.
 - Active projects appear by default regardless of source model. Archived, superseded, and removed projects remain inspectable through status filters.
 - A superseded project's details lead with a notice naming its successor, and the successor's name opens that record. The notice states that the review still stands.
 - Every card displays its reviewed license identifiers and source model.
