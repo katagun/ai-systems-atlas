@@ -55,6 +55,37 @@ test("a page number restores, and changing scope clears the last scope's paramet
   await expect(page).not.toHaveURL(/page=/);
 });
 
+test("a family chip opens its family on the first page", async ({ page }) => {
+  await page.goto("/?collection=systems&page=5");
+  await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 5 of");
+  await page.getByRole("button", { name: /^Memory / }).click();
+  await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 1 of");
+  await expect(page).not.toHaveURL(/page=/);
+});
+
+test("a record opens while the browser refuses history writes", async ({ page }) => {
+  // WebKit throws a SecurityError once a page makes too many history calls in
+  // a short window, a budget every writer on the page shares. Chromium drops
+  // such calls silently, so here both methods throw from the start.
+  await page.addInitScript(() => {
+    const refuse = () => { throw new DOMException("Too many calls to the History API.", "SecurityError"); };
+    window.history.pushState = refuse;
+    window.history.replaceState = refuse;
+  });
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill("Aider");
+  await page.locator('#project-grid [data-project="aider"]').click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog .dialog-close").click();
+  await expect(page.locator("#project-dialog")).toBeHidden();
+  await page.getByRole("button", { name: /^Memory / }).click();
+  await page.locator('.tab[data-tab="models"]').click();
+  await expect(page.locator("#models")).toHaveClass(/is-active/);
+  expect(errors).toEqual([]);
+});
+
 test("a comparison keeps the role and score sort chosen beside it", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /^Agents / }).click();

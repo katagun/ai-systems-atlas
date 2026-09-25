@@ -272,6 +272,20 @@ function comparisonRecords() {
   return state.comparison.ids.map(id => records.find(item => item.id === id)).filter(Boolean);
 }
 
+// Every history write goes through here. WebKit throws a SecurityError once a
+// page makes too many history calls in a short window, and every writer draws
+// on that one budget: a keystroke's scope, a chip's collection, a dialog's
+// record. So an unchanged URL makes no call, and a refused call is dropped
+// rather than stopping whatever asked for it: the page keeps working, and
+// only the address bar falls behind. Only `record` pushes (writeRecordURL).
+function writeURL(url, { push = false } = {}) {
+  if (url.href === window.location.href) return;
+  try {
+    if (push) window.history.pushState(null, "", url);
+    else window.history.replaceState(null, "", url);
+  } catch {}
+}
+
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryCollection === "all") url.searchParams.delete("collection");
@@ -281,7 +295,7 @@ function writeDirectoryURL() {
   } else {
     url.searchParams.delete("compare");
   }
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 // Each scope's URL parameters and the control that holds each one. Keys are
@@ -334,12 +348,9 @@ function writeScopeURL() {
     for (const [key, value] of AtlasCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
     if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
   }
-  // Every render and keystroke lands here, and WebKit throws once a page makes
-  // too many history calls in a short window. So an unchanged URL makes no
-  // call, and a refused one is dropped rather than stopping the render that
-  // asked for it: the next write brings the address bar up to date.
-  if (url.href === window.location.href) return;
-  try { window.history.replaceState(null, "", url); } catch {}
+  // Every render and keystroke lands here, so this is the writer that spends
+  // most of WebKit's history budget; writeURL skips an unchanged URL.
+  writeURL(url);
 }
 
 // Applies the URL to one scope's controls before its first paint. Family goes
@@ -372,7 +383,7 @@ function restoreScopeFromURL(scope) {
   }
   if (rejected.length) {
     rejected.forEach(key => url.searchParams.delete(key));
-    window.history.replaceState(null, "", url);
+    writeURL(url);
   }
   return values;
 }
@@ -447,7 +458,7 @@ function restoreComparisonFromURL() {
   const profiles = new Set(records.map(item => item.score_profile));
   if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1 || profiles.has(undefined)) {
     url.searchParams.delete("compare");
-    window.history.replaceState(null, "", url);
+    writeURL(url);
     return false;
   }
   const profile = [...profiles][0];
@@ -696,6 +707,10 @@ function syncCollectionSwitcher() {
   }
 }
 
+// Opens Systems on one family, or on every family when `family` is empty,
+// clearing any role or Finder role set. A page kept from the list this
+// replaces, or restored from the URL, belongs to that list, so the new one
+// opens on its first page, as a Family choice does.
 function jumpToDirectoryFamily(family) {
   clearComparison();
   $("#family-filter").value = family;
@@ -704,6 +719,7 @@ function jumpToDirectoryFamily(family) {
   $("#role-filter").value = "";
   populateRoleFilter();
   updateScoreSortAvailability();
+  state.page.systems = 1;
   setDirectoryCollection("systems");
 }
 
@@ -1675,6 +1691,8 @@ function renderFinderResults() {
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
 
+// Each branch lands on the first page of its matches: a page kept from
+// earlier browsing, or restored from the URL, belongs to another list.
 function applyFinderToDirectory() {
   const { direction, goal } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
@@ -1686,6 +1704,7 @@ function applyFinderToDirectory() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    state.page.runtimes = 1;
     setDirectoryCollection("runtimes");
     activateView("directory");
     revealDirectoryResults();
@@ -1698,6 +1717,7 @@ function applyFinderToDirectory() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    state.page.inference = 1;
     setDirectoryCollection("inference");
     activateView("directory");
     revealDirectoryResults();
@@ -1719,16 +1739,22 @@ function applyFinderToDirectory() {
   $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
   updateScoreSortAvailability();
+  state.page.systems = 1;
   setDirectoryCollection("systems");
   activateView("directory");
   revealDirectoryResults();
 }
 
 // The handoff lands on the results the Finder chose, not on the hero above them.
+// The Finder view hides the button that asked for this, so focus moves to the
+// count of what the Finder chose rather than falling to the page, as it does
+// when the Finder chip removes itself. It moves without scrolling, since the
+// scroll above has already placed the results.
 function revealDirectoryResults() {
   const panel = $(".collection-panel:not([hidden])");
   if (!panel) return;
   window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
+  $(COLLECTIONS[state.directoryCollection].resultCount).focus({ preventScroll: true });
 }
 
 function renderTaxonomy() {
@@ -2374,12 +2400,14 @@ function openRecord(kind, id) {
   return false;
 }
 
+// The dialog opens before its URL is written, so the record is on screen
+// whatever the browser makes of the history write that follows.
 function showRecordDialog(selector, kind, id) {
   const dialog = $(selector);
   dialog.dataset.recordKind = kind;
   dialog.dataset.recordId = id;
-  writeRecordURL(kind, id);
   if (!dialog.open) dialog.showModal();
+  writeRecordURL(kind, id);
 }
 
 function writeRecordURL(kind, id) {
@@ -2387,7 +2415,7 @@ function writeRecordURL(kind, id) {
   const reference = `${kind}:${id}`;
   if (url.searchParams.get("record") === reference) return;
   url.searchParams.set("record", reference);
-  window.history.pushState(null, "", url);
+  writeURL(url, { push: true });
 }
 
 function clearRecordURL() {
@@ -2401,7 +2429,7 @@ function clearRecordURL() {
   const url = new URL(window.location.href);
   if (!url.searchParams.has("record")) return;
   url.searchParams.delete("record");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function closeRecordDialogs() {
@@ -2420,7 +2448,7 @@ function restoreRecordFromURL() {
     return;
   }
   url.searchParams.delete("record");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 // Back and forward move between record states only: collection and comparison
@@ -2649,7 +2677,7 @@ function writeViewURL(id) {
   const url = new URL(window.location.href);
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function restoreViewFromURL() {
@@ -2662,7 +2690,7 @@ function restoreViewFromURL() {
     return;
   }
   url.searchParams.delete("view");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function activateView(id) {
@@ -2707,10 +2735,13 @@ const SEARCH_SCOPES = {
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
+  // Systems and the family chips all name the systems collection. Each sets
+  // its family, none for Systems, so Systems clears a family, a role, or a
+  // Finder role set that another chip or the Finder left behind.
   $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => {
-    const family = button.dataset.directoryFamily;
-    if (family !== undefined) jumpToDirectoryFamily(family);
-    else setDirectoryCollection(button.dataset.directoryCollection);
+    const { directoryCollection: collection, directoryFamily: family } = button.dataset;
+    if (collection === "systems") jumpToDirectoryFamily(family || "");
+    else setDirectoryCollection(collection);
   }));
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the

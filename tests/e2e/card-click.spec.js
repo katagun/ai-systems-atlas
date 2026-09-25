@@ -17,13 +17,47 @@ test("clicking a card's title opens its record", async ({ page }) => {
   await expect(page).toHaveURL(/record=system%3Aaider|record=system:aider/);
 });
 
+// The point halfway from an element's last visible box to its card's inner
+// right edge, level with that box: the card beside the element, which a row
+// stretched across the card would cover. Returns the boxes a test checks it
+// against, read after an instant scroll has landed.
+const besideElement = (card, selector, last) => card.evaluate((element, [selector, last]) => {
+  const target = element.querySelector(selector);
+  target.scrollIntoView({ block: "center", behavior: "instant" });
+  const style = getComputedStyle(element);
+  const cardBox = element.getBoundingClientRect();
+  const lastBox = [...target.querySelectorAll(last)].at(-1).getBoundingClientRect();
+  const innerRight = cardBox.right - parseFloat(style.borderRightWidth) - parseFloat(style.paddingRight);
+  return {
+    x: (lastBox.right + innerRight) / 2,
+    y: (lastBox.top + lastBox.bottom) / 2,
+    targetBox: target.getBoundingClientRect().toJSON(),
+    cardBox: cardBox.toJSON(),
+  };
+}, [selector, last]);
+const holds = (box, x, y) => x >= box.left && x <= box.right && y >= box.top && y <= box.bottom;
+
 test("clicking beside a card's emblems opens its record", async ({ page }) => {
   await page.goto("/?collection=systems");
   await page.locator("#project-search").fill("Aider");
+  const card = page.locator('#project-grid .project-card:has([data-project="aider"])');
+  // The emblem row sits above the card's details target and shrinks to its
+  // emblems, so the card beside the row still opens the record. The spot must
+  // fall outside the row: a row stretched across the card would swallow it.
+  const { x, y, targetBox, cardBox } = await besideElement(card, ".card-badges", ".card-badge");
+  expect(holds(cardBox, x, y), "the spot lies inside the card").toBe(true);
+  expect(holds(targetBox, x, y), "the spot lies outside the emblem row").toBe(false);
+  await page.mouse.click(x, y);
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(page).toHaveURL(/record=system%3Aaider|record=system:aider/);
+});
+
+test("clicking between two emblems opens neither the record nor a tooltip", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill("Aider");
   const row = page.locator('#project-grid .project-card:has([data-project="aider"]) .card-badges');
-  // Only the emblems sit above the card's details target, so the rest of
-  // their row still opens the record. The spot is level with the emblems,
-  // halfway from the last one to the row's end.
+  // A near miss inside the row stays inert, so a tap meant for an emblem
+  // never opens the record in its place.
   const { rowBox, emblemBoxes } = await row.evaluate(element => {
     element.scrollIntoView({ block: "center", behavior: "instant" });
     return {
@@ -31,14 +65,30 @@ test("clicking beside a card's emblems opens its record", async ({ page }) => {
       emblemBoxes: [...element.querySelectorAll(".card-badge")].map(emblem => emblem.getBoundingClientRect().toJSON()),
     };
   });
-  const last = emblemBoxes.at(-1);
-  const x = (last.right + rowBox.right) / 2;
-  const y = (last.top + last.bottom) / 2;
-  const holds = box => x >= box.left && x <= box.right && y >= box.top && y <= box.bottom;
-  expect(holds(rowBox) && !emblemBoxes.some(holds), "the spot lies in the row, clear of every emblem").toBe(true);
+  const [first, second] = emblemBoxes;
+  const x = (first.right + second.left) / 2;
+  const y = (first.top + first.bottom) / 2;
+  expect(holds(rowBox, x, y) && !emblemBoxes.some(box => holds(box, x, y)), "the spot lies in the row, between two emblems").toBe(true);
+  const before = page.url();
   await page.mouse.click(x, y);
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await expect(page).toHaveURL(/record=system%3Aaider|record=system:aider/);
+  await expect(page.locator("#badge-tooltip")).toBeHidden();
+  await expect(page.locator("#project-dialog")).not.toBeVisible();
+  expect(page.url()).toBe(before);
+});
+
+test("clicking beside a reviewed-model card's source line opens its record", async ({ page }) => {
+  await page.goto("/?view=models");
+  const card = page.locator("#model-grid .model-card:not(.imported-model-card)").first();
+  const id = await card.locator(".card-open").getAttribute("data-model");
+  // The source line sits above the details target for its hover title and
+  // shrinks to its text, so the card beside the text still opens the record.
+  await expect(card.locator(".card-source-meta")).toHaveAttribute("title", /\S/);
+  const { x, y, targetBox, cardBox } = await besideElement(card, ".card-source-meta", "span:not(.visually-hidden)");
+  expect(holds(cardBox, x, y), "the spot lies inside the card").toBe(true);
+  expect(holds(targetBox, x, y), "the spot lies outside the source line").toBe(false);
+  await page.mouse.click(x, y);
+  await expect(page.locator("#model-dialog")).toBeVisible();
+  await expect(page).toHaveURL(url => url.searchParams.get("record") === `model:${id}`);
 });
 
 test("clicking a Finder result's body opens that result's record", async ({ page }) => {
