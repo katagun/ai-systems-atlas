@@ -97,7 +97,7 @@
       "description": "The application-security company that develops the Altar open-weight model for defensive security work alongside its security platform.",
       "lab_type": "technology_company",
       "headquarters": "be",
-      "organization_note": "Aikido Security BV, registered in Belgium with its registered office in Ghent, is the contracting entity; its press kit says it was founded in Ghent and lists its European headquarters there, beside UK, APAC, and Defense headquarters elsewhere. Its principal business is a code, cloud, and runtime security platform, and Altar-1 is the model release the catalog reviews.",
+      "organization_note": "Aikido Security BV, registered in Belgium with its registered office in Ghent, is the contracting entity; its press kit says it was founded in Ghent, and its site footer lists addresses in Ghent, Chicago, and London. Its principal business is a code, cloud, and runtime security platform, and Altar-1 is the model release the catalog reviews.",
       "catalog_names": [
         "Aikido Security"
       ],
@@ -117,16 +117,22 @@
           "kind": "web",
           "label": "Terms of use: Aikido Security BV, registered in Belgium with its registered office at Coupure Rechts 88, 9000 Gent",
           "url": "https://www.aikido.dev/policies/terms",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "Press kit: founded in Ghent, Belgium, with its European headquarters at Keizer Karelstraat 15, Ghent",
+          "label": "Press kit: founded in Ghent, Belgium; the site footer lists addresses in Ghent, Chicago, and London",
           "url": "https://www.aikido.dev/company/press-kit",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Altar announcement: its first open-weight security model, built to bring frontier-grade defensive security into infrastructure you control",
+          "url": "https://www.aikido.dev/blog/aikido-altar-open-weight-ai-sovereign-security",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-alibaba",
@@ -235,10 +241,10 @@
       "id": "lab-ant-group",
       "name": "Ant Group",
       "url": "https://www.antgroup.com/en",
-      "description": "The digital-payments and technology company whose inclusionAI initiative develops the Ling, Ring, and Ming models.",
+      "description": "The digital financial services and technology company whose inclusionAI initiative develops the Ling, Ring, and Ming models.",
       "lab_type": "technology_company",
       "headquarters": "cn",
-      "organization_note": "Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China, lists Hangzhou offices at 77 Xueyuan Road. inclusionAI, which Ant Group founded as its artificial general intelligence effort, develops and publishes the models; the catalog names their developer Inclusion AI (Ant Group). Ant Group's principal business is digital payments and financial technology.",
+      "organization_note": "Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China, names its headquarters at A Space, No. 569 Xixi Road, Hangzhou. inclusionAI, which its Hugging Face organization calls the home for Ant Group's artificial general intelligence initiative, develops and publishes the models; the catalog names their developer Inclusion AI (Ant Group). Ant Group's home page describes its business as digital life and digital financial services for consumers and small businesses.",
       "catalog_names": [
         "Inclusion AI (Ant Group)"
       ],
@@ -264,24 +270,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Our Offices page listing Ant Group's Hangzhou offices at 77 Xueyuan Road",
+          "label": "Our Offices page naming Ant Group Headquarters at A Space, No. 569 Xixi Road, Hangzhou",
           "url": "https://www.antgroup.com/en/about/our-offices",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "Hong Kong exchange filing naming Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China",
           "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2020/1103/2020110302285.pdf",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "inclusionAI's GitHub profile: the series of open-source projects from Ant Group working towards artificial general intelligence",
           "url": "https://github.com/inclusionAI",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-anthropic",
@@ -348,7 +354,7 @@
       "description": "The AI company that trains the Trinity open-weight models and builds the MergeKit and DistillKit model tools.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Arcee AI, Inc. owns the site and calls itself an open intelligence lab based in the U.S.; its contributor agreement is governed by California law. It trains the Trinity models, publishes their weights under its Hugging Face organization, and serves them through the Arcee platform. One name, Arcee AI, covers the models in the catalog.",
+      "organization_note": "Arcee AI, Inc. owns the site and calls itself an American research lab that develops open-weight models in the U.S.; its contributor agreement is governed by California law. It trains the Trinity models, publishes their weights under its Hugging Face organization, and serves them through the Arcee platform. One name, Arcee AI, covers the models in the catalog.",
       "catalog_names": [
         "Arcee AI"
       ],
@@ -374,18 +380,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Privacy policy: the site is owned by Arcee AI, Inc., an open intelligence lab based in the U.S.",
+          "label": "Privacy policy: the site is owned by Arcee AI, Inc.",
           "url": "https://www.arcee.ai/privacy-policy",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "MergeKit contributor agreement naming Arcee AI, Inc. under California law",
           "url": "https://github.com/arcee-ai/mergekit/blob/main/CLA.md",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Home page: open models from an American research lab that develops open-weight models in the U.S.",
+          "url": "https://www.arcee.ai/",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-bytedance",
@@ -476,7 +488,7 @@
       "id": "lab-cohere",
       "name": "Cohere",
       "url": "https://cohere.com/",
-      "description": "The AI company that develops the Command models for enterprise use and, through its research lab Cohere Labs, the Aya and North releases.",
+      "description": "The AI company that develops the Command and North models for enterprise use and, through its research lab Cohere Labs, the Aya models.",
       "lab_type": "ai_company",
       "headquarters": "ca",
       "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record.",
@@ -504,19 +516,19 @@
         }
       ],
       "safety_framework": {
-        "title": "The Cohere Secure AI Frontier Model Framework (V1.0, February 2025)",
+        "title": "The Cohere Secure AI Frontier Model Framework (V1.0)",
         "url": "https://cohere.com/security/the-cohere-secure-ai-frontier-model-framework-february-2025.pdf",
-        "verified_at": "2026-09-24"
+        "verified_at": "2026-09-25"
       },
       "evidence": [
         {
           "kind": "web",
           "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
           "url": "https://cohere.com/saas-agreement",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-deepseek",
@@ -525,7 +537,7 @@
       "description": "The AI company that develops the DeepSeek V, R, and OCR models and runs the DeepSeek app and API on them.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "Hangzhou DeepSeek Artificial Intelligence Co., Ltd. develops the models and provides the DeepSeek app and the DeepSeek API under its own terms, and publishes weights and the DeepSeek Harness under its deepseek-ai organizations. One name, DeepSeek, covers the models, the API, and the products.",
+      "organization_note": "DeepSeek, which its Hugging Face card calls a Chinese company founded in 2023, develops the models; Hangzhou DeepSeek Artificial Intelligence Co., Ltd. owns and operates the DeepSeek Open Platform, which provides the DeepSeek API under its own terms. It publishes weights and the DeepSeek Harness under its deepseek-ai organizations. One name, DeepSeek, covers the models, the API, and the products.",
       "catalog_names": [
         "DeepSeek"
       ],
@@ -554,12 +566,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Open Platform terms naming Hangzhou DeepSeek Artificial Intelligence Co., Ltd. and its Hangzhou registered office",
+          "label": "Open Platform terms: the DeepSeek Open Platform is owned and operated by Hangzhou DeepSeek Artificial Intelligence Co., Ltd.",
           "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Hugging Face organization card: DeepSeek (深度求索), founded in 2023, is a Chinese company",
+          "url": "https://huggingface.co/deepseek-ai",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-google",
@@ -847,7 +865,7 @@
       "description": "The AI company that develops the MiniMax M-series language models, alongside speech, music, and video models, and offers them through the MiniMax Open Platform.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "MiniMax Group Inc., a Shanghai-based holding company listed on the Hong Kong stock exchange, develops the models and runs the MiniMax Open Platform; its international apps are contracted through Nanonoble Pte. Ltd. of Singapore. One name, MiniMax, covers the models and the platform.",
+      "organization_note": "MiniMax Group Inc., a holding company incorporated in the Cayman Islands and listed on the Hong Kong Stock Exchange, has its headquarters in Xuhui District, Shanghai. Its subsidiaries Shanghai Xiyu Jizhi Technology and Beijing Xiyu Jizhi Technology develop the foundation models, and Shanghai Xiyu Technology and Nanonoble Pte. Ltd. of Singapore operate the open platform; Nanonoble also contracts for the chat.minimax.io and minimax.io/audio services. One name, MiniMax, covers the models and the platform.",
       "catalog_names": [
         "MiniMax"
       ],
@@ -877,18 +895,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "MiniMax Group Inc. global offering prospectus filed with the Hong Kong stock exchange",
+          "label": "MiniMax Group Inc. global offering prospectus: incorporated in the Cayman Islands, with its headquarters and principal places of business in the PRC in Xuhui District, Shanghai, and its subsidiaries' roles",
           "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1231/2025123100025.pdf",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "App and web terms of service naming Nanonoble Pte. Ltd. of Singapore",
           "url": "https://www.minimax.io/audio/doc/terms-of-service.html",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "News page naming MiniMax Group Inc. by its Hong Kong stock code, HKEX: 00100",
+          "url": "https://www.minimax.io/news",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-mistral-ai",
@@ -897,7 +921,7 @@
       "description": "The AI company that develops the Mistral, Ministral, Magistral, Devstral, and Voxtral models and runs Mistral AI Studio and the Mistral Vibe assistant on them.",
       "lab_type": "ai_company",
       "headquarters": "fr",
-      "organization_note": "Mistral AI, a French simplified joint-stock company registered in Paris, develops the models, operates Mistral AI Studio and its API, and runs Mistral Vibe, the assistant it renamed from Le Chat. One name, Mistral AI, covers the models, the service, and the assistant.",
+      "organization_note": "Mistral AI, a French limited joint-stock corporation incorporated in Paris, develops the models, operates Mistral AI Studio and its API, and runs Mistral Vibe, the assistant it renamed from Le Chat. One name, Mistral AI, covers the models, the service, and the assistant.",
       "catalog_names": [
         "Mistral AI"
       ],
@@ -907,7 +931,7 @@
       "channels": [
         {
           "kind": "model_catalog",
-          "url": "https://docs.mistral.ai/models/overview"
+          "url": "https://docs.mistral.ai/models"
         },
         {
           "kind": "news",
@@ -921,12 +945,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Commercial terms: Mistral AI, a French simplified joint-stock company, 15 rue des Halles, Paris",
+          "label": "Commercial terms: Mistral AI, a French limited joint-stock corporation incorporated in Paris, with registered offices at 15 rue des Halles, Paris",
           "url": "https://legal.mistral.ai/terms/commercial-terms-of-service",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Mistral Vibe product page: Le Chat is now Vibe",
+          "url": "https://mistral.ai/products/vibe/",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-mixedbread-ai",
@@ -1492,8 +1522,8 @@
       "url": "https://thinkingmachines.ai/",
       "description": "The AI research and product company that develops the Inkling models and the Tinker fine-tuning API.",
       "lab_type": "ai_company",
-      "headquarters": "none_listed",
-      "organization_note": "Thinking Machines Lab, Inc. describes itself as an artificial intelligence research and product company; its terms send court disputes to San Francisco, but the pages reviewed give no address. It develops the Inkling models, publishes their weights under its Hugging Face organization, and runs Tinker.",
+      "headquarters": "us",
+      "organization_note": "Thinking Machines Lab, Inc. describes itself as an artificial intelligence research and product company and says it is based in the United States; its terms send court disputes to San Francisco. It develops the Inkling models, publishes their weights under its Hugging Face organization, and runs Tinker.",
       "catalog_names": [
         "Thinking Machines Lab"
       ],
@@ -1519,18 +1549,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company",
+          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company, based in the United States",
           "url": "https://thinkingmachines.ai/legal/privacy/",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "Service terms of use, with court disputes in San Francisco",
           "url": "https://thinkingmachines.ai/legal/terms/",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-trendyol",
@@ -1705,10 +1735,10 @@
       "id": "lab-vivgrid",
       "name": "Vivgrid",
       "url": "https://vivgrid.com/",
-      "description": "The AI agent platform company that serves other developers' models, and its own Viv Fast model, through one OpenAI-compatible API.",
+      "description": "The AI agent platform company that runs the Vivgrid managed skills platform for enterprise AI agents and develops the Viv Fast model.",
       "lab_type": "ai_company",
-      "headquarters": "none_listed",
-      "organization_note": "Vivgrid's privacy policy names Allegro US, LLC as the company behind it, and its SDKs carry the same copyright; the pages reviewed give no address. Its platform mainly serves other developers' models through one API, and Viv Fast is the release the catalog reviews.",
+      "headquarters": "us",
+      "organization_note": "Vivgrid's privacy policy names Allegro US, LLC as the company behind it, and its site gives Allegro US, LLC's one address, at 2261 Market Street, San Francisco; the licence of its viv repository carries the same copyright. Its site describes Vivgrid as a managed skills platform for enterprise AI agents, and Viv Fast is the release the catalog reviews.",
       "catalog_names": [
         "Vivgrid"
       ],
@@ -1722,18 +1752,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Privacy policy: Allegro US, LLC (Vivgrid)",
-          "url": "https://www.vivgrid.com/privacy",
-          "verified_at": "2026-09-24"
+          "label": "Privacy policy naming Allegro US, LLC (Vivgrid), with the site footer's address at 2261 Market Street, San Francisco",
+          "url": "https://vivgrid.com/privacy",
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "Viv SDK licence: copyright Allegro US, LLC",
+          "label": "viv repository licence (Apache License 2.0): copyright Allegro US, LLC",
           "url": "https://github.com/vivgrid/viv/blob/main/LICENSE",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-writer",
@@ -1742,7 +1772,7 @@
       "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Writer, Inc. takes legal notices at 111 Maiden Lane, San Francisco, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
+      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
       "catalog_names": [
         "Writer"
       ],
@@ -1770,16 +1800,22 @@
           "kind": "web",
           "label": "Platform services agreement: notices to Writer, Inc., 111 Maiden Lane, San Francisco, under California law",
           "url": "https://writer.com/legal/platform-services/",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "Privacy policy giving the San Francisco mailing address",
           "url": "https://writer.com/legal/privacy/",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
+          "url": "https://writer.com/newsroom/",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-xai",
