@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, switcherCounts, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, shareRecordPath, sourceNamespace, switcherCounts, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1429,4 +1429,33 @@ test("each switcher chip counts what its scope lists by default", () => {
     packs: 1 + 1,
     robots: 0,
   });
+});
+
+test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {
+  assert.deepEqual(
+    scopeURLParams("systems", { q: "graph", family: "memory_system", role: "", status: "active", localOnly: "", sort: "name" }),
+    [["q", "graph"], ["family", "memory_system"]],
+  );
+  assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
+  assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
+});
+
+test("restoring a scope keeps what its controls offer and rejects the rest", () => {
+  const params = new URLSearchParams("q=graph&family=memory_system&role=nope&type=direct_model_api&page=2");
+  const allowed = { q: "text", family: new Set(["", "memory_system"]), role: new Set(["", "human_pkm"]) };
+  assert.deepEqual(readScopeURLParams("systems", params, allowed), {
+    values: { q: "graph", family: "memory_system", page: 2 },
+    rejected: ["role", "type"],
+  });
+  assert.deepEqual(readScopeURLParams("all", new URLSearchParams("page=0"), { q: "text" }), { values: {}, rejected: ["page"] });
+  assert.ok(SCOPE_URL_KEYS.includes("page"));
+});
+
+test("a URL's filters belong to its view or to the Directory collection it names", () => {
+  assert.equal(scopeFromURL(new URLSearchParams("")), "all");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=systems")), "systems");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=nope")), "all");
+  assert.equal(scopeFromURL(new URLSearchParams("view=models&collection=systems")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("view=finder")), null);
 });
