@@ -257,6 +257,7 @@ class RouteTests(unittest.TestCase):
             ),
             "router": listing_row("openrouter/auto"),
             "cloaked model": listing_row("OpenRouter/sonoma-sky-alpha"),
+            "stealth program": listing_row("stealth/space-bunny-alpha"),
             "image only": listing_row(
                 "acme/painter",
                 architecture={"input_modalities": ["text"], "output_modalities": []},
