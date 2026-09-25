@@ -1415,3 +1415,13 @@ footer #data-date, footer .footer-meta {
   .post-nav { position: static; padding-top: 0; }
   .post-nav-list { grid-template-columns: 1fr; }
 }
+.filter-chip {
+  padding: .3rem .55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-chip);
+  background: var(--panel);
+  color: var(--text);
+  font: 600 .74rem var(--font-body);
+  cursor: pointer;
+}
+.filter-chip:hover { border-color: var(--cyan); }
