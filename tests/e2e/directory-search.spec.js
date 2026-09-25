@@ -349,7 +349,8 @@ test("the Memory, Agents, and Assistants chips jump straight into their filtered
 
   await page.getByRole("button", { name: /^Memory / }).click();
   await expect(page).toHaveURL(/collection=systems/);
-  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
   await expect(page.getByRole("button", { name: /^Memory / })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: /^Agents / })).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
@@ -487,7 +488,8 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
   await page.getByRole("button", { name: "Browse matches →" }).click();
-  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
   await expect(page).toHaveURL(/collection=systems/);
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");
