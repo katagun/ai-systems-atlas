@@ -59,3 +59,15 @@ test("an unknown view parameter falls back to the directory rather than showing 
   await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
   await expect(page).not.toHaveURL(/view=/);
 });
+
+test("the active view's tab carries aria-current and no other tab does", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "directory");
+
+  await page.locator('.tab[data-tab="finder"]').click();
+  await expect(page.locator('.tab[aria-current="page"]')).toHaveCount(1);
+  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "finder");
+
+  await page.goto("/?view=labs");
+  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "labs");
+});
