@@ -1459,3 +1459,10 @@ test("a URL's filters belong to its view or to the Directory collection it names
   assert.equal(scopeFromURL(new URLSearchParams("view=models&collection=systems")), "models");
   assert.equal(scopeFromURL(new URLSearchParams("view=finder")), null);
 });
+
+test("the API view does not call web-page evidence pinned", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
+  assert.doesNotMatch(html, /pinned to the exact file or page/);
+  assert.match(html, /web page records the date it was read/);
+});
