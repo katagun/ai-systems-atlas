@@ -216,6 +216,10 @@ class WebPayloadTests(unittest.TestCase):
                         continue
                     items = value if isinstance(value, list) else [value]
                     for item in items:
+                        # A robot's named_models entry is indexed by its name
+                        # alone (searchable_text), never as the whole dict.
+                        if isinstance(item, dict):
+                            item = item["name"]
                         self.assertIn(
                             str(item).lower(),
                             text,

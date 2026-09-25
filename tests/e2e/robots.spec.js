@@ -46,6 +46,18 @@ test("the robots entry stays out of the navigation while the collection is empty
   await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries - catalogCounts.robots));
 });
 
+test("the published robots open from the real collection", async ({ page }) => {
+  // No routing fixtures: this reads the real web/robots.json and a real
+  // robot's detail payload, so it fails if the published records stop loading.
+  await page.goto("/?collection=robots");
+  await expect(page.getByRole("button", { name: `Robots ${catalogCounts.robots}` })).toBeVisible();
+  await page.locator('#robot-grid [data-robot="spot"]').click();
+  await expect(page.locator("#robot-dialog")).toBeVisible();
+  await expect(page.locator("#robot-dialog-content")).toContainText("Models the vendor names");
+  await expect(page.locator("#robot-dialog-content")).toContainText("Reinforcement-learning locomotion controller");
+  await expect(page).toHaveURL(/record=robot(%3A|:)spot/);
+});
+
 test("the robots scope filters, opens its own dialog, and never scores or compares", async ({ page }) => {
   await withRobots(page);
   await page.goto("/?collection=robots");

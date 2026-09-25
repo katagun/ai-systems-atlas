@@ -1,5 +1,398 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-20",
-  "robots": []
+  "verified_at": "2026-09-24",
+  "robots": [
+    {
+      "id": "figure-03",
+      "name": "Figure 03",
+      "manufacturer": "Figure AI",
+      "url": "https://www.figure.ai/figure",
+      "first_party_domains": [
+        "figure.ai"
+      ],
+      "description": "Figure AI's third-generation humanoid robot, which Figure says is designed for household tasks and built around Helix, its vision-language-action model.",
+      "form_factor": "humanoid",
+      "availability": "announced",
+      "availability_note": "Figure's site offers no way to order Figure 03 and describes no pilot programme. Its news pages describe factory deployments instead: Figure 03 arrived at BMW Group Plant Spartanburg in 2026, after Figure 02 contributed to the assembly of 30,000 cars there the year before.",
+      "ai_basis": [
+        "vendor_named_model"
+      ],
+      "named_models": [
+        {
+          "name": "Helix",
+          "kind": "vision_language_action",
+          "role_note": "Figure says Helix controls the full loop of perception, movement, and reasoning, on board and in real time, and that it outputs high-rate continuous control of the entire humanoid upper body, including wrists, torso, head, and individual fingers.",
+          "evidence_label": "Helix page"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "Not published.",
+        "sensors": "A camera system that Figure says delivers twice the frame rate, one-quarter the latency, and a 60% wider field of view per camera, a palm camera in each hand, and fingertip tactile sensors that detect forces as small as three grams. An upgraded audio system has a repositioned microphone.",
+        "actuation": "Electric. Figure says the actuators perform at 2x faster speeds with improved torque density; the product page lists a 20 kg payload and a speed of 1.2 m/s.",
+        "power": "A battery certified to the UN38.3 standard, with a 5-hour runtime on the product page. Charging coils in the robot's feet let it step onto a wireless stand and charge at 2 kW."
+      },
+      "developer_access": "Figure documents no SDK, API or programme for running your own model on Figure 03.",
+      "terms": [
+        "none_published"
+      ],
+      "terms_note": "The only terms page on figure.ai, last updated February 01, 2023, governs use of the figure.ai website and says nothing about the robot's sale, software, or warranty.",
+      "terms_evidence": [],
+      "not_verified": "Helix, and what it does on the robot, is Figure's own claim; the Atlas has not verified it. Every source is a Figure web page that Figure can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.figure.ai/figure",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Introducing Figure 03",
+          "url": "https://www.figure.ai/news/introducing-figure-03",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Helix page",
+          "url": "https://www.figure.ai/helix",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Helix announcement",
+          "url": "https://www.figure.ai/news/helix",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Figure 03 at BMW",
+          "url": "https://www.figure.ai/news/f-03-at-bmw",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Website terms",
+          "url": "https://www.figure.ai/terms-and-conditions",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "neo",
+      "name": "NEO",
+      "manufacturer": "1X Technologies",
+      "url": "https://www.1x.tech/neo",
+      "first_party_domains": [
+        "1x.tech"
+      ],
+      "description": "1X's humanoid robot for the home, built to take on household chores. 1X names the models that run it, Redwood AI and the 1X World Model, and says what each does.",
+      "form_factor": "humanoid",
+      "availability": "reservation",
+      "availability_note": "1X takes pre-orders on its order page against a fully refundable deposit and says US deliveries start in 2026. The order page offers NEO either as a monthly subscription or to own.",
+      "ai_basis": [
+        "vendor_named_model"
+      ],
+      "named_models": [
+        {
+          "name": "Redwood AI",
+          "kind": "language_or_vision_language",
+          "role_note": "1X calls Redwood AI NEO's vision language model for learning and performing chores around the house, and says it is the AI model that lets NEO help around the home, moving, perceiving, and interacting with the world autonomously.",
+          "evidence_label": "AI page"
+        },
+        {
+          "name": "Redwood AI reinforcement-learning controller",
+          "kind": "reinforcement_learning_policy",
+          "role_note": "1X says Redwood AI's latest reinforcement-learning controller gives NEO its mobility: walking in any direction, sitting, standing, kneeling, and climbing stairs using stereo vision.",
+          "evidence_label": "AI page"
+        },
+        {
+          "name": "1X World Model",
+          "kind": "other_learned",
+          "role_note": "1X says the 1X World Model lets NEO anticipate the outcomes of robot actions and their consequences on the world, and that it now serves as NEO's cognitive core, letting it generalise to tasks it has not seen.",
+          "evidence_label": "World model page"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "A 1X NEO Cortex chipset (Nvidia Jetson Thor), which the product page rates at up to 2070 FP4 TFLOPS of AI compute.",
+        "sensors": "Dual 8.85MP 90Hz stereo fisheye cameras, four beamforming microphones, and linkwise differential IMUs.",
+        "actuation": "Low-inertia tendon drives, which 1X calls 1X Tendon Drive. The product page lists 22 degrees of freedom in each hand, 7 in each arm, 3 in the neck, 2 in the spine, and 6 in each leg, with a walking speed of 1.4 m/s.",
+        "power": "An 842 Wh battery with a 4-hour run time. 1X says NEO plugs itself in when it needs a charge, and that a quick charge takes 6 minutes per hour of run time."
+      },
+      "developer_access": "1X documents no way to run your own model or policy on NEO.",
+      "terms": [
+        "terms_of_sale"
+      ],
+      "terms_note": "The legal page publishes 1X's Pre-Order Terms. They say a buyer who is invited to order must agree to Terms of Sale that are presented at the time of purchase, so the full sale terms are not published ahead of an order. The Terms of Use link, 1x.tech/terms-and-conditions, returned a 404 at review. The order page names a 3-year warranty with the ownership option.",
+      "terms_evidence": [
+        {
+          "terms_kind": "terms_of_sale",
+          "scope": "Pre-order terms on the legal page",
+          "kind": "web_terms",
+          "url": "https://www.1x.tech/legal",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "not_verified": "The models named here, and what they do, are 1X's own claims; the Atlas has not verified them. Every source is a 1X web page that 1X can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.1x.tech/neo",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "AI page",
+          "url": "https://www.1x.tech/ai",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "World model page",
+          "url": "https://www.1x.tech/discover/redwood-ai-world-model",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Order page",
+          "url": "https://www.1x.tech/order",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "spot",
+      "name": "Spot",
+      "manufacturer": "Boston Dynamics",
+      "url": "https://bostondynamics.com/products/spot/",
+      "first_party_domains": [
+        "bostondynamics.com",
+        "github.com/boston-dynamics"
+      ],
+      "description": "Boston Dynamics' four-legged robot for automated sensing, inspection, and data capture. Its SDK documents a way to run your own trained model with Spot, and Boston Dynamics says it has built reinforcement learning into Spot's walking control.",
+      "form_factor": "quadruped",
+      "availability": "enterprise_sales",
+      "availability_note": "Spot is sold through Boston Dynamics' sales team: the Spot sales page asks buyers to contact the team to find the right implementation for their application.",
+      "ai_basis": [
+        "vendor_named_model",
+        "open_model_interface"
+      ],
+      "named_models": [
+        {
+          "name": "Reinforcement-learning locomotion controller",
+          "kind": "reinforcement_learning_policy",
+          "role_note": "Boston Dynamics says it has integrated reinforcement learning into Spot's locomotion control system, which has historically used model predictive control.",
+          "evidence_label": "Reinforcement learning blog"
+        }
+      ],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "Not published.",
+        "sensors": "Terrain sensing with a 360° horizontal field of view and a 4 m range, and built-in stereo cameras. The optional arm's gripper adds time-of-flight, IMU, and 4K RGB sensors.",
+        "actuation": "Four legs, with a maximum speed of 1.6 m/s, a 300 mm maximum step height, and a 14 kg payload limit. The optional arm has six degrees of freedom plus a gripper, reaches 984 mm at full extension, and lifts up to 11 kg.",
+        "power": "A 564 Wh battery with an average run time of 90 minutes and a 60-minute recharge. Missions can be launched from the Spot Dock."
+      },
+      "developer_access": "The Spot SDK's Python client library can control Spot and read its sensor and health information. Its network compute bridge runs a model you have trained on a compute payload or a networked server, and your script commands the robot with the results. The Joint Control API, a beta that needs a special-permissions licence, streams low-level joint commands. Boston Dynamics' own demo drove Spot with Google's Gemini Robotics-ER 1.5 through the SDK.",
+      "terms": [
+        "sdk_license"
+      ],
+      "terms_note": "The Spot SDK ships under Boston Dynamics' own Software Development Kit License. The website's Terms of Use say Boston Dynamics' obligations for its products are governed solely by the agreements under which they are provided, and those purchase agreements are not published. The specification sheet mentions a one-year limited warranty.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "Spot SDK licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/boston-dynamics/spot-sdk/blob/master/LICENSE",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "not_verified": "The reinforcement-learning controller and the SDK's model interfaces are Boston Dynamics' own claims; the Atlas has not verified them. Every source is a Boston Dynamics web page or repository file that Boston Dynamics can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://bostondynamics.com/products/spot/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Spot specifications",
+          "url": "https://bostondynamics.com/wp-content/uploads/2020/10/spot-specifications.pdf",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Arm and gripper specifications",
+          "url": "https://dev.bostondynamics.com/docs/concepts/arm/arm_specification.html",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Reinforcement learning blog",
+          "url": "https://bostondynamics.com/blog/starting-on-the-right-foot-with-reinforcement-learning/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Spot SDK overview",
+          "url": "https://dev.bostondynamics.com/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Machine learning bridge",
+          "url": "https://dev.bostondynamics.com/docs/concepts/network_compute_bridge",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Joint Control API",
+          "url": "https://dev.bostondynamics.com/docs/concepts/joint_control/readme",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Spot and Gemini Robotics",
+          "url": "https://bostondynamics.com/blog/tools-for-your-to-do-list-with-spot-and-gemini-robotics/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Spot sales",
+          "url": "https://bostondynamics.com/spot-sales/",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Website terms",
+          "url": "https://bostondynamics.com/terms/",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "unitree-g1",
+      "name": "Unitree G1",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/g1",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's humanoid robot, sold in a basic version and an EDU version for secondary development. Unitree names UnifoLM-VLA-0, a vision-language-action model built with G1 data, and publishes code for training a policy and deploying it to the robot.",
+      "variants": "G1 (basic) and G1 EDU; the product page lists secondary development as available on the EDU version only.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "Unitree's shop sells the G1 and says it is backordered and will ship as soon as it is back in stock. The shop says that version does not support secondary development; the EDU version is bought by contacting Unitree's sales team.",
+      "ai_basis": [
+        "vendor_named_model",
+        "open_model_interface"
+      ],
+      "named_models": [
+        {
+          "name": "UnifoLM-VLA-0",
+          "kind": "vision_language_action",
+          "role_note": "Unitree describes UnifoLM-VLA-0 as a vision-language-action large model in the UnifoLM series, designed for general-purpose humanoid robot manipulation; the twelve datasets its repository lists for its experiments were all recorded on the Unitree G1.",
+          "evidence_label": "UnifoLM-VLA repository"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "An 8-core high-performance CPU. For the EDU version the product page lists a high computing power module, such as Orin, as an accessory.",
+        "sensors": "A depth camera and 3D LiDAR, a four-microphone array, and dual joint encoders. The EDU version's optional Dex3-1 hand can carry tactile sensor arrays.",
+        "actuation": "Low-inertia, high-speed internal-rotor permanent magnet synchronous motors on industrial-grade crossed roller bearings: 23 degrees of freedom on the basic G1 and 23 to 43 on the EDU version, which offers the force-controlled three-fingered Dex3-1 hand as an option.",
+        "power": "A quick-release 13-string lithium smart battery (9000mAh) with about 2 hours of battery life, and a 54V 5A charger."
+      },
+      "developer_access": "The product page lists secondary development for the G1 EDU only. Unitree's unitree_rl_gym repository documents training a policy in simulation and deploying it to a physical G1 for motion control, and its unitree_ros2 repository documents controlling the robot directly with ROS 2 messages, without wrapping the SDK interface.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and the licence agreement is offered as a downloadable document rather than as page text. The product page lists an 8-month warranty for the G1 and 18 months for the EDU version.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "not_verified": "UnifoLM-VLA-0 and the documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/g1",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "UnifoLM-VLA repository",
+          "url": "https://github.com/unitreerobotics/unifolm-vla",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_gym README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_gym/blob/main/README.md",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_ros2 README",
+          "url": "https://github.com/unitreerobotics/unitree_ros2/blob/master/README.md",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-g1",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    }
+  ]
 }
