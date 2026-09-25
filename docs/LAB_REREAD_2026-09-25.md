@@ -1,6 +1,6 @@
 # Lab page re-read, 2026-09-25
 
-**Status: corrections landing in batches.** Every page that `directory/labs.json` cites was read directly on 2026-09-25, and every claim was checked against the saved text.
+**Status: complete.** Every page that `directory/labs.json` cites was read directly on 2026-09-25, and every claim was checked against the saved text.
 
 - **Batch 1, applied: wrong and dead sources.** Covers Meituan, xAI, ByteDance, IBM, OpenBMB, Trendyol, and Perplexity. These records are re-dated to 2026-09-25.
 - **Batch 2, applied: headquarters and legal-entity fixes.**
@@ -11,10 +11,12 @@
 - **Batch 3, applied: labels, notes, and moved channels.**
   - Covers Anthropic, Mixedbread, the Swiss AI Initiative, Ornith AI, AI Singapore, Poolside, Amazon, Tencent, StepFun, TypeSafe AI, Upstage, Meta, Google, Xiaomi, and Motif Technologies, plus Microsoft's news channel.
   - Re-dates the records confirmed without change: AI21 Labs, Alibaba, NVIDIA, and OpenAI.
-- **Still to apply:**
-  - Moonshot AI, Z.ai, and Vispark, whose headquarters need a page with an address;
-  - Microsoft's entity and address;
-  - Amazon's model-catalog channel. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
+- **Batch 4, applied: the headquarters that needed one more page.**
+  - Moonshot AI keeps `cn` on its mainland platform policy's Beijing contact address.
+  - Z.ai keeps `cn` on its site's Haidian address.
+  - Vispark moves to `none_listed`: its terms give Punjab law and no address.
+  - Amazon's model catalog moves to the Nova 2 guide.
+  - Every lab record now carries the 2026-09-25 direct read.
 
 ## Method
 

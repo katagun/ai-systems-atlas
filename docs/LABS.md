@@ -49,7 +49,7 @@ Record `safety_framework` when the organization publishes a frontier-safety, res
 
 1. Confirm the inclusion gate: find the lab's reviewed releases in `models.json` and copy their `developer` strings.
 2. Collect the other names from `inference-services.json`, `local-runtimes.json`, `specifications.json`, and `packs.json`, and the systems from `projects.json`, following the naming rules above.
-3. Read the organization's own terms, privacy policy, imprint, or about page for its legal entity and headquarters, and its about or investor pages for its type and any parent. Cite each as dated `web` evidence. The governing-terms page an inference-service record already cites is often the right source.
+3. Read the organization's own terms, privacy policy, imprint, or about page for its legal entity and headquarters, and its about or investor pages for its type and any parent. Cite each as dated `web` evidence, and open each page yourself: a search-engine extract is a lead, not a read, and a filing or annual report must be the named company's own document. The governing-terms page an inference-service record already cites is often the right source.
 4. Read each channel page and the safety framework before recording it.
 5. Write `description` as one sentence and `organization_note` as the organization's own structure.
 6. Run synchronization, payload and share-page generation, validation, all tests, and the Labs browser checks in [`WEB.md`](WEB.md).
@@ -58,4 +58,4 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Current coverage
 
-Forty labs cover all 303 reviewed releases. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`BACKLOG.md`](../BACKLOG.md) carries the direct re-read of their pages.
+Forty labs cover all 303 reviewed releases. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page they cite.
