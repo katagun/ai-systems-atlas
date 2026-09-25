@@ -419,6 +419,63 @@
     };
   }
 
+  // Every URL parameter a scope writes, with its default. The keys are the
+  // ones the scope's filter already reads — directoryDefaults() for Systems,
+  // the view descriptors' facets elsewhere — so a parameter means the same in
+  // the URL and in the code; `q` is the scope's query. A value equal to its
+  // default is never written.
+  const SCOPE_URL_PARAMS = {
+    all: { q: "" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score" },
+    packs: { q: "", type: "", host: "", install: "", license: "" },
+    robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "" },
+    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score" },
+    labs: { q: "", type: "", headquarters: "", distribution: "" },
+    specifications: { q: "", type: "", scope: "", status: "", license: "" },
+  };
+  const SCOPE_URL_KEYS = [...new Set(Object.values(SCOPE_URL_PARAMS).flatMap(Object.keys)), "page"];
+
+  function scopeURLParams(scope, values = {}) {
+    return Object.entries(SCOPE_URL_PARAMS[scope] || {})
+      .filter(([key, fallback]) => values[key] !== undefined && String(values[key]) !== fallback)
+      .map(([key]) => [key, String(values[key])]);
+  }
+
+  // `allowed` maps each key to the Set of values its control offers, or to
+  // "text" for free text. A present parameter the control cannot take, or one
+  // this scope does not own, comes back in `rejected`, so the caller removes it
+  // rather than applying part of a state.
+  function readScopeURLParams(scope, params, allowed = {}) {
+    const owned = SCOPE_URL_PARAMS[scope] || {};
+    const values = {};
+    const rejected = [];
+    for (const key of SCOPE_URL_KEYS) {
+      if (key === "page" || !params.has(key)) continue;
+      const value = params.get(key);
+      const accepts = allowed[key];
+      if (key in owned && (accepts === "text" || (accepts instanceof Set && accepts.has(value)))) values[key] = value;
+      else rejected.push(key);
+    }
+    const page = params.get("page");
+    if (page !== null) {
+      if (/^[1-9]\d*$/.test(page)) values.page = Number(page);
+      else rejected.push("page");
+    }
+    return { values, rejected };
+  }
+
+  // Which scope a URL's filters belong to: a sibling view with filters, the
+  // Directory collection it names, or All. Views without filters own none.
+  function scopeFromURL(params) {
+    const view = params.get("view");
+    if (["models", "labs", "specifications"].includes(view)) return view;
+    if (view && view !== "directory") return null;
+    const collection = params.get("collection");
+    return ["systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
+  }
+
   function paginate(items, { page = 1, pageSize } = {}) {
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const clampedPage = Math.min(Math.max(1, page), pageCount);
@@ -1010,6 +1067,8 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    SCOPE_URL_KEYS,
+    SCOPE_URL_PARAMS,
     activeSwitcherIndex,
     badgeEmblem,
     badgeLegend,
@@ -1044,9 +1103,12 @@
     paginate,
     parseRecordReference,
     parseViewId,
+    readScopeURLParams,
     recordHaystack,
     releaseDate,
     releasesNewestFirst,
+    scopeFromURL,
+    scopeURLParams,
     shareRecordPath,
     sourceNamespace,
     switcherCounts,

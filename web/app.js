@@ -24,6 +24,7 @@ const state = {
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
   page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
+  urlReady: false,
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -192,6 +193,7 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
+  restoreScopeFromURL(AtlasCore.scopeFromURL(new URL(window.location.href).searchParams));
   renderStats();
   renderFinder();
   renderModels();
@@ -204,6 +206,8 @@ async function bootstrap() {
   }
   restoreViewFromURL();
   restoreRecordFromURL();
+  state.urlReady = true;
+  writeScopeURL();
   loadMarks();
 }
 
@@ -278,6 +282,98 @@ function writeDirectoryURL() {
   window.history.replaceState(null, "", url);
 }
 
+// Each scope's URL parameters and the control that holds each one. Keys are
+// AtlasCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
+const SCOPE_CONTROLS = {
+  all: { q: "#all-directory-search" },
+  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  inference: { q: "#inference-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
+  runtimes: { q: "#runtime-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
+  packs: { q: "#pack-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
+  robots: { q: "#robot-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
+  models: { q: "#model-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
+  labs: { q: "#lab-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
+  specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
+};
+
+// The scope whose state the URL carries: the Directory's collection, or a
+// sibling view that has filters. Finder, Taxonomy, and API carry none.
+function activeScope() {
+  const view = $(".view.is-active")?.id;
+  if (view === "directory") return state.directoryCollection;
+  return SCOPE_CONTROLS[view] ? view : null;
+}
+
+function readScopeControls(scope) {
+  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+    const control = $(selector);
+    return [key, control.type === "checkbox" ? (control.checked ? "1" : "") : control.value];
+  }));
+}
+
+function allowedScopeValues(scope) {
+  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+    const control = $(selector);
+    if (control.type === "checkbox") return [key, new Set(["1"])];
+    if (control.tagName === "SELECT") return [key, new Set([...control.options].filter(option => !option.disabled).map(option => option.value))];
+    return [key, "text"];
+  }));
+}
+
+// Rewrites the active scope's parameters in place: only `record` pushes
+// history (docs/WEB.md), so Back still closes a dialog. Quiet until the
+// page has restored itself, so boot never writes a half-restored state.
+function writeScopeURL() {
+  if (!state.urlReady) return;
+  const url = new URL(window.location.href);
+  AtlasCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
+  const scope = activeScope();
+  if (scope) {
+    for (const [key, value] of AtlasCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
+    if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
+  }
+  window.history.replaceState(null, "", url);
+}
+
+// Applies the URL to one scope's controls before its first paint. Family goes
+// first because it decides which roles and sorts Systems offers, the score
+// sort among them. It goes first even beside a comparison, which decides the
+// family itself (spec, "URL state and history"): restoreComparisonFromURL runs
+// later and replaces a family that disagrees, so the URL then names the
+// comparison's. Anything a control cannot take is removed from the URL rather
+// than half-applied.
+function restoreScopeFromURL(scope) {
+  if (!SCOPE_CONTROLS[scope]) return;
+  const url = new URL(window.location.href);
+  if (scope === "systems" && url.searchParams.has("family")) {
+    const family = url.searchParams.get("family");
+    if ([...$("#family-filter").options].some(option => option.value === family)) {
+      $("#family-filter").value = family;
+      populateRoleFilter();
+      updateScoreSortAvailability();
+    }
+  }
+  const { values, rejected } = AtlasCore.readScopeURLParams(scope, url.searchParams, allowedScopeValues(scope));
+  for (const [key, value] of Object.entries(values)) {
+    if (key === "page") {
+      state.page[scope] = value;
+      continue;
+    }
+    const control = $(SCOPE_CONTROLS[scope][key]);
+    if (control.type === "checkbox") control.checked = value === "1";
+    else control.value = value;
+  }
+  if (rejected.length) {
+    rejected.forEach(key => url.searchParams.delete(key));
+    window.history.replaceState(null, "", url);
+  }
+  // A restored query searches what a typed one does: the indexes its search
+  // box loads on focus, with a repaint once they land.
+  if (values.q) {
+    for (const collection of SEARCH_SCOPES[SCOPE_CONTROLS[scope].q]) loadSearchIndex(collection)?.then(renderSearchSurfaces);
+  }
+}
+
 function clearComparison({ updateURL = true } = {}) {
   state.comparison = { kind: null, profile: null, ids: [], limitReached: false };
   if ($("#comparison-dialog")?.open) $("#comparison-dialog").close();
@@ -337,8 +433,9 @@ function restoreComparisonFromURL() {
   state.comparison = { kind, profile, ids, limitReached: false };
   if (kind === "system") {
     state.directoryRoles = null;
+    // A role restored from the URL stays when the comparison's family offers
+    // it; populateRoleFilter falls back to All roles when it does not.
     $("#family-filter").value = records[0].system_family;
-    $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
     setDirectoryCollection("systems", { updateURL: false });
@@ -971,6 +1068,7 @@ function renderAllDirectoryEntries() {
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
+  if (activeScope() === "all") writeScopeURL();
 }
 
 function filteredProjects() {
@@ -1228,6 +1326,7 @@ function renderCollection(name) {
   }
   hideDetachedBadgeTooltip();
   renderPager(collection.pageKey, paged);
+  if (activeScope() === name) writeScopeURL();
 }
 
 const renderProjects = () => renderCollection("systems");
@@ -1277,6 +1376,7 @@ function renderPacks() {
   paintMarks(grid);
   hideDetachedBadgeTooltip();
   renderPager("packs", paged);
+  if (activeScope() === "packs") writeScopeURL();
 }
 
 // Repaint whatever a search index could have widened. A search box may have a
@@ -2522,6 +2622,7 @@ function activateView(id) {
   else $("#comparison-tray").hidden = true;
   syncBadgeLegend();
   writeViewURL(id);
+  writeScopeURL();
   window.scrollTo({ top: 0 });
 }
 
