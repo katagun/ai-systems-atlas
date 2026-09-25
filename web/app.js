@@ -19,7 +19,7 @@ const state = {
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
-  directoryCollection: "all", directoryRoles: null, badgeLegendPreference: null,
+  directoryCollection: "all", directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
@@ -454,6 +454,7 @@ function restoreComparisonFromURL() {
   state.comparison = { kind, profile, ids, limitReached: false };
   if (kind === "system") {
     state.directoryRoles = null;
+    state.directoryRolesLabel = null;
     // A role restored from the URL stays when the comparison's family offers
     // it; populateRoleFilter falls back to All roles when it does not.
     $("#family-filter").value = records[0].system_family;
@@ -623,6 +624,7 @@ function applyDirectoryDefaults() {
   clearComparison();
   const defaults = AtlasCore.directoryDefaults();
   state.directoryRoles = null;
+  state.directoryRolesLabel = null;
   $("#project-search").value = defaults.term;
   $("#family-filter").value = defaults.family;
   $("#role-filter").value = defaults.role;
@@ -698,6 +700,7 @@ function jumpToDirectoryFamily(family) {
   clearComparison();
   $("#family-filter").value = family;
   state.directoryRoles = null;
+  state.directoryRolesLabel = null;
   $("#role-filter").value = "";
   populateRoleFilter();
   updateScoreSortAvailability();
@@ -1141,6 +1144,11 @@ const COLLECTIONS = {
       const suffix = family
         ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
         : " · Scores hidden across families";
+      const chip = $("#finder-roles-chip");
+      chip.hidden = !state.directoryRolesLabel;
+      chip.innerHTML = state.directoryRolesLabel
+        ? `Finder: ${escapeHTML(state.directoryRolesLabel)}<span aria-hidden="true"> ×</span><span class="visually-hidden">, remove</span>`
+        : "";
       // Scores are never comparable across families, so the compare control
       // only exists once a family narrows the grid to one score profile.
       return { family, suffix, comparable: Boolean(family) };
@@ -1434,7 +1442,7 @@ function bindComparisonButtons(root) {
 
 function finderChoice(key, item) {
   return `<button class="finder-choice" data-finder-choice="${escapeHTML(key)}" data-finder-value="${escapeHTML(item.id)}">
-    <span class="finder-choice-cue">${escapeHTML(item.cue || "Choose this")}</span>
+    ${item.cue ? `<span class="finder-choice-cue">${escapeHTML(item.cue)}</span>` : ""}
     <strong>${escapeHTML(item.label)}</strong>
     <span>${escapeHTML(item.description)}</span>
   </button>`;
@@ -1481,6 +1489,21 @@ function renderFinder() {
   }
   const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
   $("#finder-content").innerHTML = content + navigation;
+}
+
+// The sticky header's live height plus the reading margin both Finder scroll
+// corrections leave beneath it, measured once so the two never disagree.
+function headerClearance() {
+  return ($(".site-header")?.getBoundingClientRect().height || 0) + 12;
+}
+
+// A choice replaces the panel's content, which can leave the step indicator
+// under the sticky header; bring the shell's top back into view, instantly.
+function keepFinderInView() {
+  const shell = $(".finder-shell");
+  const clearance = headerClearance();
+  const top = shell.getBoundingClientRect().top;
+  if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
 }
 
 // A boot record carries only its overall score, so every other dimension this
@@ -1665,6 +1688,7 @@ function applyFinderToDirectory() {
     $("#runtime-sort-filter").value = "score";
     setDirectoryCollection("runtimes");
     activateView("directory");
+    revealDirectoryResults();
     return;
   }
   if (direction === "inference_service") {
@@ -1676,12 +1700,14 @@ function applyFinderToDirectory() {
     $("#inference-sort-filter").value = "score";
     setDirectoryCollection("inference");
     activateView("directory");
+    revealDirectoryResults();
     return;
   }
   $("#project-search").value = "";
   $("#family-filter").value = direction;
   populateRoleFilter();
   state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
+  state.directoryRolesLabel = state.directoryRoles ? goalConfig.label : null;
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
   $("#agent-filter").value = "";
   $("#architecture-filter").value = "";
@@ -1695,6 +1721,14 @@ function applyFinderToDirectory() {
   updateScoreSortAvailability();
   setDirectoryCollection("systems");
   activateView("directory");
+  revealDirectoryResults();
+}
+
+// The handoff lands on the results the Finder chose, not on the hero above them.
+function revealDirectoryResults() {
+  const panel = $(".collection-panel:not([hidden])");
+  if (!panel) return;
+  window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
 }
 
 function renderTaxonomy() {
@@ -2700,6 +2734,7 @@ function bindEvents() {
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
+    state.directoryRolesLabel = null;
     $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
@@ -2708,7 +2743,7 @@ function bindEvents() {
     renderProjects();
     syncBadgeLegend();
   });
-  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.page.systems = 1; renderProjects(); });
+  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
@@ -2794,6 +2829,15 @@ function bindEvents() {
     state.page.systems = 1;
     renderProjects();
   });
+  $("#finder-roles-chip").addEventListener("click", () => {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+    state.page.systems = 1;
+    renderProjects();
+    // The chip removes itself, so keyboard and screen-reader focus would
+    // otherwise fall off the page; land it on the count the chip affected.
+    $("#result-count").focus();
+  });
   $("#finder-content").addEventListener("click", event => {
     const choice = event.target.closest("[data-finder-choice]");
     if (choice) {
@@ -2807,6 +2851,7 @@ function bindEvents() {
       }
       state.finder.step = Math.min(3, state.finder.step + 1);
       renderFinder();
+      keepFinderInView();
       return;
     }
     if (event.target.closest("[data-finder-back]")) {
@@ -2814,11 +2859,13 @@ function bindEvents() {
       if (state.finder.step < 2) delete state.finder.answers.priority;
       if (state.finder.step < 1) delete state.finder.answers.goal;
       renderFinder();
+      keepFinderInView();
       return;
     }
     if (event.target.closest("[data-finder-reset]")) {
       state.finder = { step: 0, answers: {} };
       renderFinder();
+      keepFinderInView();
       return;
     }
     const projectButton = event.target.closest("[data-finder-project]");
