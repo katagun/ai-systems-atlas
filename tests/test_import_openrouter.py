@@ -343,6 +343,14 @@ class MatchingTests(unittest.TestCase):
         self.assertEqual(
             "meta/llama-3.3", with_models_dev_author("Meta-Llama/llama-3.3")
         )
+        # OpenRouter lists ByteDance under both names; models.dev has only bytedance-seed.
+        self.assertEqual(
+            "bytedance-seed/ui-tars-1.5-7b",
+            with_models_dev_author("bytedance/ui-tars-1.5-7b"),
+        )
+        self.assertEqual(
+            "bytedance-seed/seed-1.6", with_models_dev_author("bytedance-seed/seed-1.6")
+        )
         self.assertEqual("acme/qwen/x", with_models_dev_author("acme/qwen/x"))
 
     def test_url_keys_come_only_from_model_pages(self) -> None:
