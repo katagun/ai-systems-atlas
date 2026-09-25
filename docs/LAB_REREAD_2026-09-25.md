@@ -8,7 +8,13 @@
   - Covers Ant Group, DeepSeek, Arcee AI, Aikido Security, Mistral AI, MiniMax, Writer, and Cohere.
   - [`LABS.md`](LABS.md) now says that a self-description such as "a Chinese company" says where an organization is based.
   - These records are re-dated to 2026-09-25.
-- **Still to apply:** the other findings below. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
+- **Batch 3, applied: labels, notes, and moved channels.**
+  - Covers Anthropic, Mixedbread, the Swiss AI Initiative, Ornith AI, AI Singapore, Poolside, Amazon, Tencent, StepFun, TypeSafe AI, Upstage, Meta, Google, Xiaomi, and Motif Technologies, plus Microsoft's news channel.
+  - Re-dates the records confirmed without change: AI21 Labs, Alibaba, NVIDIA, and OpenAI.
+- **Still to apply:**
+  - Moonshot AI, Z.ai, and Vispark, whose headquarters need a page with an address;
+  - Microsoft's entity and address;
+  - Amazon's model-catalog channel. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
 
 ## Method
 
