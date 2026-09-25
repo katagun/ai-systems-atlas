@@ -620,6 +620,7 @@ input:focus, select:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: .55rem;
   color: var(--muted);
   font-size: .86rem;
 }
@@ -1439,3 +1440,20 @@ footer #data-date, footer .footer-meta {
   .post-nav { position: static; padding-top: 0; }
   .post-nav-list { grid-template-columns: 1fr; }
 }
+.filter-chip {
+  padding: .3rem .55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-chip);
+  background: var(--panel);
+  color: var(--text);
+  font: 600 .74rem var(--font-body);
+  cursor: pointer;
+}
+.filter-chip:hover { border-color: var(--cyan); }
+/* The row's flex justify-content space-between would otherwise center the
+   count between the chip and Clear filters; pulling the count's own margin
+   keeps it beside the chip and pushes Clear filters to the row's far edge. */
+#result-count { margin-right: auto; }
+/* Glues the removal glyph to the chip's last word so a narrow chip never
+   wraps the × onto a line by itself. */
+.filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
