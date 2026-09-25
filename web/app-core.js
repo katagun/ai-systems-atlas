@@ -397,6 +397,28 @@
     return entries.findIndex(entry => entry.collection === collection && entry.family === undefined);
   }
 
+  // What each switcher chip counts: exactly what its scope lists by default.
+  // Systems and the family chips open on directoryDefaults().status, so they
+  // count active records; All lists everything, archived references
+  // included; Agent packs lists packs beside host-installed systems (ADR 035).
+  function switcherCounts({ projects = [], services = [], runtimes = [], models = [], packs = [], robots = [] }) {
+    const { status } = directoryDefaults();
+    const listed = projects.filter(project => !status || project.status === status);
+    const family = id => listed.filter(project => project.system_family === id).length;
+    return {
+      all: projects.length + services.length + runtimes.length + models.length + packs.length + robots.length,
+      systems: listed.length,
+      memory_system: family("memory_system"),
+      agent_system: family("agent_system"),
+      assistant_system: family("assistant_system"),
+      inference: services.length,
+      runtimes: runtimes.length,
+      models: models.length,
+      packs: packs.length + packShapedSystems(projects, {}).length,
+      robots: robots.length,
+    };
+  }
+
   function paginate(items, { page = 1, pageSize } = {}) {
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const clampedPage = Math.min(Math.max(1, page), pageCount);
@@ -1027,6 +1049,7 @@
     releasesNewestFirst,
     shareRecordPath,
     sourceNamespace,
+    switcherCounts,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };
