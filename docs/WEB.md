@@ -13,6 +13,7 @@ The directory landing view is action-first. Keep its always-visible introduction
 Use progressive disclosure for explanation and specialist controls:
 
 - Keep the All, Systems, Memory, Agents, Assistants, Models, Inference services, Local runtimes, Agent packs, and Robots quick-filter switcher visible. Models jumps to its sibling specialist view. The Robots entry is hidden while `robots.json` has no records, so an empty collection offers no empty scope. The switcher wraps onto further rows at desktop widths; at 720px and below it stays a one-row horizontal scroll strip, because a wrapped switcher there would push the grid below the fold, and the active entry is scrolled into view when the strip is actually scrollable.
+- Each switcher chip counts what its scope lists by default: Systems and the family chips count active systems, All counts everything it lists, archived references included, and Agent packs counts packs beside host-installed systems.
 - In All, expose one shared search, sort alphabetically, and hide numeric scores.
 - In Systems, keep Search, Family, Role, and Sort visible; keep source model, license, agent relation, architecture, deployment, interface, status, and local-first under “More filters.”
 - In Inference services, keep search, service type, delivery, model source, API style, and score sort visible.
