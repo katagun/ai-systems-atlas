@@ -49,14 +49,19 @@ test("a lab dialog joins the records that name the lab and browses its releases 
   await expect(dialog.getByRole("link", { name: /Responsible Scaling Policy/ })).toBeVisible();
   await expect(dialog).toContainText("does not assess whether or how it is followed");
 
+  // Models continues the dialog's newest-first list instead of the score order.
   await dialog.locator('[data-browse-lab-models="lab-anthropic"]').click();
   await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
   await expect(page.locator("#model-lab-filter")).toHaveValue("lab-anthropic");
+  await expect(page.locator("#model-sort-filter")).toHaveValue("release");
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
-  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(releases);
+  await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+    catalogCounts.reviewedModelsDevelopedByNewestFirst("lab-anthropic"),
+  );
 
   await page.locator("#reset-model-filters").click();
   await expect(page.locator("#model-lab-filter")).toHaveValue("");
+  await expect(page.locator("#model-sort-filter")).toHaveValue("score");
 });
 
 test("a lab dialog fits a phone screen with its longest channel URL and name", async ({ page }) => {

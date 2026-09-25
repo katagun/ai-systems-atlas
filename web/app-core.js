@@ -308,14 +308,17 @@
 
   // `ids`, when present, narrows to one lab's releases: its reviewed rows and the
   // imported rows in its namespaces, which the caller resolves with labRelations.
+  // The "release" sort orders reviewed and imported rows together, newest first:
+  // the release date is models.dev metadata both carry, not a score.
   function filterModels(models, filters = {}) {
-    return filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
+    const matches = filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
       (!filters.modality || [
         ...(model.source_metadata?.modalities?.input || []),
         ...(model.source_metadata?.modalities?.output || []),
       ].includes(filters.modality)) &&
       (!filters.ids || filters.ids.has(model.id))
     );
+    return filters.sort === "release" ? releasesNewestFirst(matches) : matches;
   }
 
   // The mixed directory searches the same visible identity, editorial, and
