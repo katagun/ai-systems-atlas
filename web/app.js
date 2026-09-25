@@ -193,7 +193,8 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
-  restoreScopeFromURL(AtlasCore.scopeFromURL(new URL(window.location.href).searchParams));
+  const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
+  const restored = restoreScopeFromURL(scope);
   renderStats();
   renderFinder();
   renderModels();
@@ -208,6 +209,7 @@ async function bootstrap() {
   restoreRecordFromURL();
   state.urlReady = true;
   writeScopeURL();
+  if (restored.q) loadRestoredSearch(scope, restored.page);
   loadMarks();
 }
 
@@ -332,7 +334,12 @@ function writeScopeURL() {
     for (const [key, value] of AtlasCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
     if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
   }
-  window.history.replaceState(null, "", url);
+  // Every render and keystroke lands here, and WebKit throws once a page makes
+  // too many history calls in a short window. So an unchanged URL makes no
+  // call, and a refused one is dropped rather than stopping the render that
+  // asked for it: the next write brings the address bar up to date.
+  if (url.href === window.location.href) return;
+  try { window.history.replaceState(null, "", url); } catch {}
 }
 
 // Applies the URL to one scope's controls before its first paint. Family goes
@@ -341,9 +348,9 @@ function writeScopeURL() {
 // family itself (spec, "URL state and history"): restoreComparisonFromURL runs
 // later and replaces a family that disagrees, so the URL then names the
 // comparison's. Anything a control cannot take is removed from the URL rather
-// than half-applied.
+// than half-applied. Returns what it applied, for loadRestoredSearch.
 function restoreScopeFromURL(scope) {
-  if (!SCOPE_CONTROLS[scope]) return;
+  if (!SCOPE_CONTROLS[scope]) return {};
   const url = new URL(window.location.href);
   if (scope === "systems" && url.searchParams.has("family")) {
     const family = url.searchParams.get("family");
@@ -367,10 +374,24 @@ function restoreScopeFromURL(scope) {
     rejected.forEach(key => url.searchParams.delete(key));
     window.history.replaceState(null, "", url);
   }
-  // A restored query searches what a typed one does: the indexes its search
-  // box loads on focus, with a repaint once they land.
-  if (values.q) {
-    for (const collection of SEARCH_SCOPES[SCOPE_CONTROLS[scope].q]) loadSearchIndex(collection)?.then(renderSearchSurfaces);
+  return values;
+}
+
+// A restored query searches what a typed one does: the indexes its search box
+// loads on focus, with a repaint as each one lands. The first paint clamped a
+// restored page to the pages the boot records alone fill, which can be fewer
+// than the index fills, so each repaint puts that page back first, until the
+// URL shows the reader has changed something since the page settled.
+function loadRestoredSearch(scope, page) {
+  let restoredPage = page;
+  let settled = window.location.href;
+  for (const collection of SEARCH_SCOPES[SCOPE_CONTROLS[scope].q]) {
+    loadSearchIndex(collection)?.then(() => {
+      if (window.location.href !== settled) restoredPage = undefined;
+      if (restoredPage) state.page[scope] = restoredPage;
+      renderSearchSurfaces();
+      settled = window.location.href;
+    });
   }
 }
 
