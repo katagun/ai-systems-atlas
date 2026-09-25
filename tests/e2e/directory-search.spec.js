@@ -65,6 +65,9 @@ test("the atlas orbital field spans the five landscape nodes", async ({ page }) 
   await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+
+  // Every node is labelled; a colour legend could only disagree with them.
+  await expect(page.locator(".atlas-map .map-legend")).toHaveCount(0);
 });
 
 test("superseded systems leave the active view and link to their successor", async ({ page }) => {

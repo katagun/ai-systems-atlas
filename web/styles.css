@@ -425,8 +425,7 @@ h1 {
   box-shadow: var(--shadow);
   transform: rotate(1deg);
 }
-.map-toolbar,
-.map-legend {
+.map-toolbar {
   min-height: 42px;
   padding: 0 .8rem;
   display: flex;
@@ -436,8 +435,8 @@ h1 {
   color: var(--muted);
   font: 600 .57rem var(--font-mono);
   letter-spacing: .08em;
+  border-bottom: 1px solid var(--line);
 }
-.map-toolbar { border-bottom: 1px solid var(--line); }
 .map-status { color: var(--cyan); }
 .map-status::before { content: ""; width: 6px; height: 6px; margin-right: .45rem; display: inline-block; border-radius: 50%; background: var(--cyan-bright); box-shadow: 0 0 0 4px color-mix(in srgb, var(--cyan-bright) 12%, transparent); }
 .map-field {
@@ -482,15 +481,9 @@ h1 {
 .orbit-three { width: 96%; height: 60%; top: 19%; left: 2%; border-color: color-mix(in srgb, var(--coral) 14%, transparent); transform: rotate(1deg); }
 .orbit-four { width: 82%; height: 88%; top: 5%; left: 9%; border-color: color-mix(in srgb, var(--blue) 15%, transparent); transform: rotate(-15deg); }
 .orbit-five { width: 94%; height: 84%; top: 8%; left: 3%; border-color: color-mix(in srgb, var(--amber) 14%, transparent); transform: rotate(14deg); }
-.map-legend { justify-content: flex-start; border-top: 1px solid var(--line); }
-.map-legend span { display: flex; align-items: center; gap: .3rem; }
-.map-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
-.map-legend .legend-inference { background: var(--coral); }
-.map-legend .legend-runtime { background: var(--amber); }
 .status-notice { border-left: 3px solid var(--amber); }
 .link-button { padding: 0; border: 0; background: none; color: var(--cyan); font: inherit; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--cyan-bright); }
-.map-legend .legend-specs { background: var(--violet); }
 
 .collection-switcher {
   display: flex;
