@@ -199,7 +199,13 @@ class WebPayloadTests(unittest.TestCase):
                 details[record_id]["source_metadata"],
             )
             self.assertEqual(
-                {"family", "modalities", "reported_open_weights", "reported_license"},
+                {
+                    "family",
+                    "modalities",
+                    "reported_open_weights",
+                    "reported_license",
+                    "release_date",
+                },
                 set(entry["source_metadata"]),
             )
 
