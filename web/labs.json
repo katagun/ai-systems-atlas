@@ -205,7 +205,7 @@
       "channels": [
         {
           "kind": "model_catalog",
-          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+          "url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/what-is-nova-2.html"
         },
         {
           "kind": "news",
@@ -1017,7 +1017,7 @@
       "description": "The AI company that develops the Kimi models and offers them through the Moonshot AI Open Platform.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "Beijing Moonshot Technology Co., Ltd. (北京月之暗面科技有限公司), based in Haidian, Beijing, develops the models and operates the Kimi API platform. It trades as Moonshot AI and brands its models and assistant Kimi; the catalog uses the one name Moonshot AI for the models and the platform.",
+      "organization_note": "北京月之暗面科技股份有限公司 (Beijing Moonshot Technology), whose mainland Kimi Open Platform privacy policy gives its contact address in Haidian District, Beijing, runs the platform in China, while MOONSHOT AI PTE. LTD. of Singapore provides the international platform. It trades as Moonshot AI and brands its models and assistant Kimi; the catalog uses the one name Moonshot AI for the models and the platform.",
       "catalog_names": [
         "Moonshot AI"
       ],
@@ -1039,12 +1039,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Kimi API platform privacy policy naming Beijing Moonshot Technology and its Haidian, Beijing contact address",
+          "label": "International Kimi platform privacy policy: the services are provided and controlled by MOONSHOT AI PTE. LTD. in Singapore",
           "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Mainland Kimi Open Platform privacy policy naming 北京月之暗面科技股份有限公司, with its contact address in Haidian District, Beijing",
+          "url": "https://platform.kimi.com/docs/agreement/userprivacy",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-motif-technologies",
@@ -1705,8 +1711,8 @@
       "url": "https://vispark.in/",
       "description": "The technology company that develops the Vision models alongside music, cloud, and payment services.",
       "lab_type": "technology_company",
-      "headquarters": "in",
-      "organization_note": "Vispark describes itself as an Indian tech company offering Vision AI, music streaming, cloud services, and payments, and says its Vision model was trained from scratch in India. The pages reviewed name no legal entity or address.",
+      "headquarters": "none_listed",
+      "organization_note": "Vispark calls Vision AI its flagship offering, with services spanning music streaming, cloud infrastructure, authentication systems, and payments; its pages say it is made in India and that its Vision model was trained from scratch in India, and its terms are governed by the laws of Punjab, India. The pages reviewed name no legal entity or address, and a governing-law clause does not decide headquarters.",
       "catalog_names": [
         "Vispark"
       ],
@@ -1724,18 +1730,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "About page: Vispark is an Indian tech company offering Vision AI, music streaming, cloud services, and payments",
+          "label": "About page: Vision AI is Vispark's flagship offering, and its services span music streaming, cloud infrastructure, authentication systems, and payment solutions",
           "url": "https://vispark.in/about",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "Vision AI page: India's foundational model",
           "url": "https://vispark.in/ai",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service: the site is operated by Vispark under the laws of Punjab, India, with no address given",
+          "url": "https://vispark.in/terms",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-vivgrid",
@@ -1932,7 +1944,7 @@
       "description": "The AI company, known in China as Zhipu, that develops the GLM models and builds the Z.ai assistant, ZCode, and the Z.ai and BigModel APIs on them.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "Beijing Zhipu Huazhang Technology (北京智谱华章科技股份有限公司) develops the GLM models and operates the Zhipu AI Open Platform (BigModel) in China, while the international Z.ai Model API is contracted through Jingsheng Hengxing Technology Pte. Ltd. of Singapore. The catalog uses the brand and both entity names, so all three belong to this record.",
+      "organization_note": "Beijing Zhipu Huazhang Technology (北京智谱华章科技股份有限公司), which its site calls Beijing Knowledge Atlas Technology Joint Stock Company Limited and gives an address in Haidian District, Beijing, develops the GLM models and operates the Zhipu AI Open Platform (BigModel) in China, while the international Z.ai Model API is contracted through JINGSHENG HENGXING TECHNOLOGY PTE.LTD under terms governed by Singapore law. The catalog uses the brand and both entity names, so all three belong to this record.",
       "catalog_names": [
         "Z.ai",
         "Jingsheng Hengxing Technology Pte. Ltd. (Z.ai)",
@@ -1963,18 +1975,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Z.ai terms of use naming Jingsheng Hengxing Technology Pte. Ltd. of Singapore",
+          "label": "Z.ai terms of use naming JINGSHENG HENGXING TECHNOLOGY PTE.LTD as the operator of the Z.ai platform, under Singapore law",
           "url": "https://docs.z.ai/legal-agreement/terms-of-use",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "BigModel user agreement naming 北京智谱华章科技股份有限公司, reviewed for the Zhipu AI Open Platform record",
+          "label": "BigModel user agreement naming 北京智谱华章科技股份有限公司 as the party it calls 智谱",
           "url": "https://docs.bigmodel.cn/cn/terms/user-agreement",
-          "verified_at": "2026-08-31"
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Zhipu site giving the address of Beijing Knowledge Atlas Technology Joint Stock Company Limited: 10F, Building 9, No. 1 Yard, Zhongguancun East Road, Haidian District, Beijing",
+          "url": "https://www.zhipuai.cn/en",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     }
   ]
 }
