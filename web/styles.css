@@ -1317,7 +1317,7 @@ footer #data-date, footer .footer-meta {
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .header-tools { order: 2; }
   .brand small { display: none; }
-  .tabs { order: 3; width: 100%; gap: .5rem; overflow-x: auto; }
+  .tabs { order: 3; width: 100%; flex-wrap: wrap; column-gap: .45rem; row-gap: .1rem; overflow-x: visible; }
   .tab { flex: 0 0 auto; font-size: .66rem; }
   /* Narrow screens keep the horizontal scroll strip rather than wrapping,
      since a wrapped switcher would push the grid below the fold; the active
