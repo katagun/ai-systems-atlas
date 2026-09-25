@@ -256,11 +256,15 @@ SEARCH_FIELDS = {
     ),
 }
 
+# An imported row's card prints the family, modality route, and reported
+# openness; release_date rides along because the Models release-date sort
+# orders imported rows beside reviewed ones before any detail loads.
 MODEL_SOURCE_CARD_METADATA = (
     "family",
     "modalities",
     "reported_open_weights",
     "reported_license",
+    "release_date",
 )
 
 # Envelope keys the page reads: bootstrap() prints the newest of these as "Data updated".

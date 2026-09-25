@@ -127,7 +127,7 @@ The landing-page redesign session asked how labs plug into its front door, which
 - Funding, valuation, revenue, headcount, compute, leadership, benchmark results, and news. None is stable, first-party, and operational.
 - Organizations with no reviewed release (Hugging Face, Groq, Liquid AI until an LFM release is reviewed) and image-, audio-, or video-only developers.
 - Labs in the mixed Directory search; the backlog's unified-search item gains labs instead.
-- A timeline of releases across labs; the backlog carries a Models release-date sort.
+- A timeline of releases across labs; Models has a release-date sort instead.
 - Reconciling `operator` strings to contracting entities (an existing backlog item); `catalog_names` accepts the strings as they stand and fails loudly when they change.
 
 ## Testing

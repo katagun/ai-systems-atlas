@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Start only after the Robots collection's PR 2 (`claude/robots-collection-plumbing`) has merged; code below is written against `main` plus that PR. Anchor every edit by function name, not line number: several sessions are editing the same files.
+- The Robots collection's PR 2 merged as #300 (`ceef3779`); code below is written against `main` from that point. Anchor every edit by function name, not line number: several sessions are editing the same files.
 - One task, one branch, one PR: `git fetch origin && git switch -c claude/directory-p0-<n>-<slug> origin/main`. Before the first commit, run `ListAgents` and message every session touching `web/` or `docs/WEB.md` with the branch and file list (spec, "Coordination").
 - Colours only from the custom properties in `web/styles.css`; no colour or `border-radius` literal outside `:root` (`tests/test_web.js` fails the build on either).
 - After any change to `web/index.html`, `web/app.js`, `web/app-core.js`, or `web/styles.css`, run `/usr/local/bin/node scripts/build_asset_version.mjs` and commit its output. Always use `/usr/local/bin/node` (v22) for tests, lint, and the stamp; the default `node` drifts between versions.
@@ -91,7 +91,7 @@ Expected: PASS.
 
 - [ ] **Step 5: Wire it into the switcher**
 
-Replace the body of `syncCollectionSwitcher()` in `web/app.js`. Keep the Robots PR's scroll-into-view block; only the choice of the active button changes:
+Replace the body of `syncCollectionSwitcher()` in `web/app.js`. Only the choice of the active button changes; the scroll block that #300 added stays exactly as it is, because it moves only `switcher.scrollLeft` and never the page:
 
 ```js
 function syncCollectionSwitcher() {
@@ -104,15 +104,26 @@ function syncCollectionSwitcher() {
     button.classList.toggle("is-active", index === active);
     button.setAttribute("aria-pressed", String(index === active));
   });
+  const activeButton = buttons[active] || null;
   // The switcher wraps at desktop widths, so every entry is already visible
   // there; only the narrow layout keeps the horizontal scroll strip that can
   // hide the active entry off-screen. Scrolling only fires when the strip is
   // actually scrollable, so a scope change on a wide viewport never jolts the
   // page, and it never asks for smooth scrolling so reduced motion is respected.
+  // scrollIntoView would do here, but it can scroll the whole page vertically
+  // to bring the switcher itself into view (e.g. a Systems family change that
+  // re-syncs it while it sits above the fold on a phone); moving only
+  // switcher.scrollLeft, by the button's nearest-edge overflow, never touches
+  // the page's own scroll position.
   const switcher = $(".collection-switcher");
-  const activeButton = buttons[active];
   if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
-    activeButton.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const switcherRect = switcher.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    if (buttonRect.left < switcherRect.left) {
+      switcher.scrollLeft -= switcherRect.left - buttonRect.left;
+    } else if (buttonRect.right > switcherRect.right) {
+      switcher.scrollLeft += buttonRect.right - switcherRect.right;
+    }
   }
 }
 ```
