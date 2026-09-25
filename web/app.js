@@ -2637,7 +2637,12 @@ function activateView(id) {
   if ((id === "directory" || id === "models") && state.comparison.ids.length && !comparisonFitsView) {
     clearComparison();
   }
-  $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
+  $$(".tab").forEach(item => {
+    const active = item.dataset.tab === id;
+    item.classList.toggle("is-active", active);
+    if (active) item.setAttribute("aria-current", "page");
+    else item.removeAttribute("aria-current");
+  });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
