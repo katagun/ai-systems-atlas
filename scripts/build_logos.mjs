@@ -68,6 +68,7 @@ const RECORD_MARKS = {
   "mistral-vibe": "lobe:mistral",
   "muse-code": "lobe:meta",
   "openai-agents-sdk": "lobe:openai",
+  "openai-agents-api": "lobe:openai",
   openclaw: null, // lobe:openclaw carries gradients the sanitizer rejects
   opencode: "lobe:opencode",
   openhands: "lobe:openhands",
