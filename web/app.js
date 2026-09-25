@@ -523,27 +523,24 @@ function applyDirectoryDefaults() {
 }
 
 function renderStats() {
-  const memories = state.projects.filter(project => project.system_family === "memory_system").length;
-  const agents = state.projects.filter(project => project.system_family === "agent_system").length;
-  const assistants = state.projects.filter(project => project.system_family === "assistant_system").length;
-  const total = state.projects.length + state.inferenceServices.length + state.localRuntimes.length + state.models.length + state.packs.length + state.robots.length;
-  $("#hero-kicker").textContent = `${total} systems, source models, services, runtimes, packs, and robots`;
-  $("#all-collection-count").textContent = total;
-  $("#system-collection-count").textContent = state.projects.length;
-  $("#memory-collection-count").textContent = memories;
-  $("#agent-collection-count").textContent = agents;
-  $("#assistant-collection-count").textContent = assistants;
-  $("#inference-collection-count").textContent = state.inferenceServices.length;
-  $("#runtime-collection-count").textContent = state.localRuntimes.length;
-  $("#model-collection-count").textContent = state.models.length;
-  // The switcher counts what the scope lists, and the Packs scope lists packs
-  // beside host-installed systems (ADR 035), so both are counted here.
-  $("#pack-collection-count").textContent = state.packs.length
-    + AtlasCore.packShapedSystems(state.projects, {}).length;
+  const counts = AtlasCore.switcherCounts({
+    projects: state.projects, services: state.inferenceServices, runtimes: state.localRuntimes,
+    models: state.models, packs: state.packs, robots: state.robots,
+  });
+  $("#hero-kicker").textContent = `${counts.all} systems, source models, services, runtimes, packs, and robots`;
+  $("#all-collection-count").textContent = counts.all;
+  $("#system-collection-count").textContent = counts.systems;
+  $("#memory-collection-count").textContent = counts.memory_system;
+  $("#agent-collection-count").textContent = counts.agent_system;
+  $("#assistant-collection-count").textContent = counts.assistant_system;
+  $("#inference-collection-count").textContent = counts.inference;
+  $("#runtime-collection-count").textContent = counts.runtimes;
+  $("#model-collection-count").textContent = counts.models;
+  $("#pack-collection-count").textContent = counts.packs;
   // An empty collection has no navigation entry: the scope exists before its
   // first record is reviewed, and a reader should not be sent to an empty page.
-  $("#robot-collection-count").textContent = state.robots.length;
-  $("#robot-collection-count").parentElement.hidden = state.robots.length === 0;
+  $("#robot-collection-count").textContent = counts.robots;
+  $("#robot-collection-count").parentElement.hidden = counts.robots === 0;
 }
 
 function syncCollectionSwitcher() {
