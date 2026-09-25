@@ -807,6 +807,14 @@ function badgeRow(badges) {
   return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
+// The one control that opens a card's record. Its hidden text names the
+// record, so a page of cards doesn't hold twenty-four buttons with one name,
+// and `.card-open::after` in styles.css stretches it over the whole card. The
+// arrow is decoration, so screen readers hear "View details for <name>".
+function detailsButton(attribute, id, name, text = "View details") {
+  return `<button class="card-open" ${attribute}="${escapeHTML(id)}">${escapeHTML(text)}<span class="visually-hidden"> for ${escapeHTML(name)}</span><span aria-hidden="true"> →</span></button>`;
+}
+
 // Stars are live repository metadata, never a score or a badge, and every
 // card whose record carries a count shows it, in every view where the card
 // appears: systems, local runtimes, agent packs, and specifications with a
@@ -934,7 +942,7 @@ function packCard(pack, { mixed = false } = {}) {
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("pack", pack))}
-    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span>${detailsButton("data-pack", pack.id, pack.name)}</div>
   </article>`;
 }
 
@@ -971,7 +979,7 @@ function labCard(lab) {
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
     ${badgeRow(AtlasCore.cardBadges("lab", lab))}
-    <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span><button data-lab="${escapeHTML(lab.id)}">View details →</button></div>
+    <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
 }
 
@@ -988,7 +996,7 @@ function robotCard(robot, { mixed = false } = {}) {
     <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
-    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span><button data-robot="${escapeHTML(robot.id)}">View details →</button></div>
+    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span>${detailsButton("data-robot", robot.id, robot.name)}</div>
   </article>`;
 }
 
@@ -1014,7 +1022,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
     <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
     ${badgeRow(AtlasCore.cardBadges("model", model))}
-    <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><button data-model="${escapeHTML(model.id)}">View source details →</button></div>
+    <div class="card-footer"><span>${escapeHTML(model.source_id)}</span>${detailsButton("data-model", model.id, model.name, "View source details")}</div>
   </article>`;
 }
 
@@ -1027,7 +1035,7 @@ function mixedSystemCard(record) {
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", record))}
-      <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
+      <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span>${detailsButton("data-project", record.id, record.name)}</div>
     </article>`;
 }
 
@@ -1056,7 +1064,7 @@ function renderAllDirectoryEntries() {
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
         ${badgeRow(AtlasCore.cardBadges("model", record))}
-        <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
     if (kind === "pack") return packCard(record, { mixed: true });
@@ -1067,7 +1075,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         ${badgeRow(AtlasCore.cardBadges("runtime", record))}
-        <div class="card-footer"><span>${starCount(record)}</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>${starCount(record)}</span>${detailsButton("data-local-runtime", record.id, record.name)}</div>
       </article>`;
     }
     if (kind === "inference") {
@@ -1076,7 +1084,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         ${badgeRow(AtlasCore.cardBadges("inference", record))}
-        <div class="card-footer"><span>Dedicated service score</span><button data-inference-service="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>Dedicated service score</span>${detailsButton("data-inference-service", record.id, record.name)}</div>
       </article>`;
     }
     return mixedSystemCard(record);
@@ -1149,7 +1157,7 @@ const COLLECTIONS = {
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", project))}
-      <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
+      <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}${detailsButton("data-project", project.id, project.name)}</div></div>
     </article>`;
     },
   },
@@ -1183,7 +1191,7 @@ const COLLECTIONS = {
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
       ${badgeRow(AtlasCore.cardBadges("spec", specification))}
-      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
     </article>`;
     },
   },
@@ -1236,7 +1244,7 @@ const COLLECTIONS = {
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("inference", service))}
-    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div></div>
+    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-inference-service", service.id, service.name)}</div></div>
   </article>`,
   },
   runtimes: {
@@ -1266,7 +1274,7 @@ const COLLECTIONS = {
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("runtime", runtime))}
-    <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
+    <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-local-runtime", runtime.id, runtime.name)}</div></div>
   </article>`,
   },
   models: {
@@ -1300,7 +1308,7 @@ const COLLECTIONS = {
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
         ${badgeRow(AtlasCore.cardBadges("model", model))}
-        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
+        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
   },
@@ -1639,7 +1647,7 @@ function renderFinderResults() {
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
       ${badgeRow(AtlasCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
-      <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
+      <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span>${detailsButton(detailAttribute, project.id, project.name)}</div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
