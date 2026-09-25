@@ -28592,13 +28592,13 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified",
-      "license_note": "TypeSafe provides the release as a managed service under its Master Customer Agreement, last updated 19 September 2026 and executed through an order. The agreement prohibits offering the Services as a standalone service, using the Services or Output for model distillation, to train a model that imitates the output, or to build a similar or competing product, and reverse engineering the Services; it licenses no model weights for self-operation. It incorporates an Acceptable Use Policy at a URL that did not resolve on 20 September 2026.",
+      "license_note": "TypeSafe provides the release as a managed service under its Master Customer Agreement, last updated 23 September 2026, which a customer accepts through an order, TypeSafe's website checkout, or a confirmation email. The agreement prohibits offering the Services as a standalone service, using the Services or Output for model distillation, to train a model that imitates the output, or to build a similar or competing product, and reverse engineering the Services; it licenses no model weights for self-operation. It incorporates an Acceptable Use Policy, which resolved on 25 September 2026.",
       "license_evidence": [
         {
           "license_id": "LicenseRef-TypeSafe-MCA",
           "kind": "web_terms",
           "url": "https://typesafe.ai/legal/mca",
-          "verified_at": "2026-09-20",
+          "verified_at": "2026-09-25",
           "scope": "Commercial access to the release through TypeSafe API keys and the System One endpoint, including the use restrictions on the Services and their Output"
         }
       ],
@@ -28717,7 +28717,7 @@
           "scope": "API-only commercial distribution of solar-pro2 snapshots with no published model license",
           "kind": "web_terms",
           "url": "https://www.upstage.ai/terms-of-service",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-25"
         }
       ],
       "access_boundary": "This record represents the July 2025 Solar Pro 2 line served as dated snapshots (250710, 250909, 251215) with a tokenizer-only public artifact. The Solar Pro 3 successor, other Upstage lines, and the Upstage platform itself are separate boundaries.",
@@ -28817,7 +28817,7 @@
           "scope": "API-only commercial distribution of solar-pro3 snapshots with no published model license",
           "kind": "web_terms",
           "url": "https://www.upstage.ai/terms-of-service",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-25"
         }
       ],
       "access_boundary": "This record represents the January 2026 Solar Pro 3 line served as dated snapshots (260126, 260323) with a tokenizer-only public artifact. The Solar Pro 2 predecessor, the Pro 4 successor, other Upstage lines, and the platform itself are separate boundaries.",
@@ -28917,7 +28917,7 @@
           "scope": "API-only commercial distribution of solar-pro4 with no published license",
           "kind": "web_terms",
           "url": "https://www.upstage.ai/terms-of-service",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-25"
         }
       ],
       "access_boundary": "This record represents the August 2026 Solar Pro 4 line served as the solar-pro4 API model with 512K context and 128K max output. Earlier Solar generations, other Upstage lines, and the platform itself are separate boundaries.",
