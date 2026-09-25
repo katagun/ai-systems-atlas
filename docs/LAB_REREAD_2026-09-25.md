@@ -1,6 +1,9 @@
 # Lab page re-read, 2026-09-25
 
-**Status: preliminary.** Every page that `directory/labs.json` cites was read directly on 2026-09-25, and every claim was checked against the saved text. The corrections are **not yet applied** to `directory/labs.json`. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
+**Status: corrections landing in batches.** Every page that `directory/labs.json` cites was read directly on 2026-09-25, and every claim was checked against the saved text.
+
+- **Batch 1, applied: wrong and dead sources.** Covers Meituan, xAI, ByteDance, IBM, OpenBMB, Trendyol, and Perplexity. These records are re-dated to 2026-09-25.
+- **Still to apply:** the other findings below. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
 
 ## Method
 
