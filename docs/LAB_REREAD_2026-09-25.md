@@ -3,6 +3,11 @@
 **Status: corrections landing in batches.** Every page that `directory/labs.json` cites was read directly on 2026-09-25, and every claim was checked against the saved text.
 
 - **Batch 1, applied: wrong and dead sources.** Covers Meituan, xAI, ByteDance, IBM, OpenBMB, Trendyol, and Perplexity. These records are re-dated to 2026-09-25.
+- **Batch 2, applied: headquarters and legal-entity fixes.**
+  - Thinking Machines Lab and Vivgrid move to `us`.
+  - Covers Ant Group, DeepSeek, Arcee AI, Aikido Security, Mistral AI, MiniMax, Writer, and Cohere.
+  - [`LABS.md`](LABS.md) now says that a self-description such as "a Chinese company" says where an organization is based.
+  - These records are re-dated to 2026-09-25.
 - **Still to apply:** the other findings below. This file and [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) keep the results so the work survives until the corrections land. The task is the "Re-read both lab batches' pages directly" item in [`BACKLOG.md`](../BACKLOG.md).
 
 ## Method
