@@ -417,12 +417,12 @@
     },
     {
       "id": "vertex-ai-generative-ai",
-      "name": "Vertex AI Generative AI",
+      "name": "Gemini Enterprise Agent Platform Generative AI",
       "operator": "Google Cloud",
       "service_type": "cloud_model_platform",
-      "url": "https://cloud.google.com/vertex-ai/generative-ai/docs",
-      "description": "Google Cloud's managed generative-AI platform for accessing Google, partner, open, and customer-deployed models through Vertex AI and Model Garden.",
-      "service_boundary": "Represents managed generative inference on Vertex AI, not Gemini Apps, Google AI Studio, individual Gemini releases, or the broader Vertex AI agent platform.",
+      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform",
+      "description": "Google Cloud's managed generative-AI platform, formerly Vertex AI, for accessing Google, partner, open, and customer-deployed models through Gemini Enterprise Agent Platform and Model Garden.",
+      "service_boundary": "Represents managed generative inference on Gemini Enterprise Agent Platform, formerly Vertex AI, not Gemini Apps, Google AI Studio, individual Gemini releases, or the platform's broader agent features.",
       "delivery_modes": [
         "on_demand",
         "batch",
@@ -471,6 +471,12 @@
       "evidence": [
         {
           "kind": "web",
+          "label": "Google Cloud product page: Gemini Enterprise Agent Platform (formerly Vertex AI)",
+          "url": "https://cloud.google.com/products/gemini-enterprise-agent-platform",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
           "label": "Generative AI on Vertex AI overview",
           "url": "https://cloud.google.com/vertex-ai/generative-ai/docs",
           "verified_at": "2026-08-28"
@@ -508,42 +514,42 @@
             "status": "documented_yes",
             "note": "Scoped to generated media, not text or tool-call responses. The Content Credentials guide states: \"This technology utilizes cryptographically signed metadata to provide secure and verifiable records of a media file's origin and any changes it's undergone. Being cryptographically signed, this information is tamper-evident.\" Ordinary chat and tool-call responses carry no signature.",
             "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/content-credentials",
-            "scope": "Vertex AI generative-AI content-credentials guide, for Vertex AI Generative AI",
+            "scope": "Vertex AI generative-AI content-credentials guide, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           },
           "upstream_disclosure": {
             "status": "undocumented",
             "note": "The partner-models usage guide describes how to call third-party models but does not state whether the model's publisher (Anthropic, Meta, and others hosted through Vertex) receives the request content or whether it stays within Google's own infrastructure.",
             "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-partner-models",
-            "scope": "Vertex AI partner-models usage guide, for Vertex AI Generative AI",
+            "scope": "Vertex AI partner-models usage guide, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           },
           "credential_handling": {
             "status": "documented_no",
             "note": "The service offers no customer-supplied upstream-key path: \"To use Gemini on Gemini Enterprise Agent Platform, authenticate by using a Google Cloud API key or application default credentials.\"",
             "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/start/api-keys",
-            "scope": "Vertex AI generative-AI API-keys guide, for Vertex AI Generative AI",
+            "scope": "Vertex AI generative-AI API-keys guide, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           },
           "cache_isolation": {
             "status": "documented_yes",
             "note": "The data-governance page states: \"By default, Google's published Gemini models cache Customer Data (inputs, outputs, and derived data) in-memory to reduce latency and accelerate responses. This data is stored only in-memory (not at-rest), is isolated at the project level, and has a 24-hour TTL.\"",
             "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/data-governance",
-            "scope": "Vertex AI generative-AI data-governance page, for Vertex AI Generative AI",
+            "scope": "Vertex AI generative-AI data-governance page, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           },
           "vulnerability_disclosure": {
             "status": "documented_yes",
             "note": "Google's Cloud Vulnerability Reward Program states its scope: \"In principle, any Google Cloud product or web service that handles reasonably sensitive user data is intended to be in scope.\" It does not name the service individually.",
             "url": "https://bughunters.google.com/about/rules/google-friends/4849867320328192/cloud-vulnerability-reward-program-rules",
-            "scope": "Google Cloud Vulnerability Reward Program rules, for Vertex AI Generative AI",
+            "scope": "Google Cloud Vulnerability Reward Program rules, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           },
           "independent_audit": {
             "status": "documented_yes",
             "note": "The Google Cloud SOC 2 scope page names the service, under its current product name: \"Generative AI on Gemini Enterprise Agent Platform (formerly Generative AI on Vertex AI)\".",
             "url": "https://cloud.google.com/security/compliance/soc-2",
-            "scope": "Google Cloud SOC 2 compliance page, for Vertex AI Generative AI",
+            "scope": "Google Cloud SOC 2 compliance page, for Gemini Enterprise Agent Platform Generative AI",
             "verified_at": "2026-09-12"
           }
         },
