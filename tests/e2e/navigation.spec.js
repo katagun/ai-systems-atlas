@@ -16,19 +16,25 @@ test("the primary navigation is plain text with an underline rather than a fille
   expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
 });
 
-test("every tab fits on a phone with room to spare", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.goto("/");
-
-  const slack = await page.locator(".tabs").evaluate(nav => {
-    const tabs = [...nav.querySelectorAll(".tab")];
-    const first = tabs[0].getBoundingClientRect();
-    const last = tabs[tabs.length - 1].getBoundingClientRect();
-    return nav.clientWidth - (last.right - first.left);
+for (const width of [390, 360, 320]) {
+  test(`every navigation item is fully visible at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/");
+    const fit = await page.locator(".tabs").evaluate(nav => {
+      const box = nav.getBoundingClientRect();
+      const items = [...nav.querySelectorAll(".tab, .tab-link")].map(item => item.getBoundingClientRect());
+      return {
+        overflow: nav.scrollWidth - nav.clientWidth,
+        outside: items.filter(item => item.left < box.left - 0.5 || item.right > box.right + 0.5).length,
+        rows: new Set(items.map(item => Math.round(item.top))).size,
+      };
+    });
+    expect(fit.overflow).toBeLessThanOrEqual(0);
+    expect(fit.outside).toBe(0);
+    if (width === 390) expect(fit.rows).toBe(1);
+    expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
   });
-  expect(slack).toBeGreaterThanOrEqual(24);
-  expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
-});
+}
 
 test("choosing a view writes a shareable URL and reloading restores it", async ({ page }) => {
   await page.goto("/");
