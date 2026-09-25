@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-24",
+  "verified_at": "2026-09-25",
   "labs": [
     {
       "id": "lab-ai-singapore",
@@ -394,7 +394,7 @@
       "description": "The technology company whose Seed team develops the Seed models, served through Volcano Engine Ark in China and BytePlus ModelArk internationally.",
       "lab_type": "technology_company",
       "headquarters": "none_listed",
-      "organization_note": "ByteDance's own pages describe more than 150,000 employees in nearly 120 cities and list offices by region, but name no headquarters; its website is provided by ByteDance Ltd. of the Cayman Islands. The ByteDance Seed team develops the models, Beijing Volcano Engine Technology operates Volcano Engine Ark in China, and BytePlus Pte. Ltd. of Singapore operates BytePlus ModelArk. The catalog names the developer and both operators, so all three names belong to this record.",
+      "organization_note": "ByteDance's own site says it has over 150,000 employees based out of nearly 120 cities globally but names no headquarters; its website is provided by ByteDance Ltd. of the Cayman Islands. The ByteDance Seed team develops the models, Beijing Volcano Engine Technology operates Volcano Engine Ark in China, and BytePlus Pte. Ltd. of Singapore operates BytePlus ModelArk. The catalog names the developer and both operators, so all three names belong to this record.",
       "catalog_names": [
         "ByteDance Seed",
         "BytePlus",
@@ -419,7 +419,7 @@
         },
         {
           "kind": "news",
-          "url": "https://seed.bytedance.com/en/blog"
+          "url": "https://seed.bytedance.com/en/research"
         },
         {
           "kind": "github",
@@ -441,42 +441,36 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named",
+          "label": "ByteDance site: over 150,000 employees based out of nearly 120 cities globally, with no headquarters named",
           "url": "https://www.bytedance.com/en/",
-          "verified_at": "2026-09-24"
-        },
-        {
-          "kind": "web",
-          "label": "Offices page listing ByteDance offices by region",
-          "url": "https://www.bytedance.com/en/resources/offices",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "ByteDance.com privacy policy (2023 revision): the site is provided and controlled by ByteDance Ltd., Grand Cayman",
           "url": "https://sf16-sg.tiktokcdn.com/obj/eden-sg/ptvaeh7vbozps/bytedance_official/ByteDance.com%20WebsiteGlobalEN06-2023revision1.pdf",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "BytePlus documentation terms naming BytePlus Pte. Ltd., 1 Raffles Quay, Singapore",
+          "label": "BytePlus Terms of Service: BytePlus Pte. Ltd., incorporated in Singapore with its registered office at 1 Raffles Quay",
           "url": "https://docs.byteplus.com/en/docs/legal/docs-terms-of-service",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "Volcano Engine Ark agreement naming 北京火山引擎科技有限公司, reviewed for the Volcano Engine Ark record",
+          "label": "Volcano Engine Ark platform terms, on a page carrying the copyright of 北京火山引擎科技有限公司",
           "url": "https://docs.volcengine.com/docs/82379/1104498",
-          "verified_at": "2026-09-15"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "ByteDance Seed's GitHub profile: labs across China, Singapore, and the U.S.",
           "url": "https://github.com/ByteDance-Seed",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-cohere",
@@ -657,10 +651,6 @@
           "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-ibm.html?context=wx"
         },
         {
-          "kind": "release_notes",
-          "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx"
-        },
-        {
           "kind": "news",
           "url": "https://www.ibm.com/new/announcements"
         },
@@ -676,29 +666,29 @@
       "safety_framework": {
         "title": "Trustworthy AI at scale: IBM's AI Safety and Governance Framework",
         "url": "https://newsroom.ibm.com/blog-trustworthy-ai-at-scale-ibms-ai-safety-and-governance-framework",
-        "verified_at": "2026-09-24"
+        "verified_at": "2026-09-25"
       },
       "evidence": [
         {
           "kind": "web",
           "label": "Form 10-K: incorporated in New York, principal executive office at One New Orchard Road, Armonk",
           "url": "https://www.sec.gov/Archives/edgar/data/51143/000155837023002376/ibm-20221231x10k.htm",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "IBM announcement contributing BeeAI, Docling, and Data Prep Kit to the Linux Foundation",
           "url": "https://www.ibm.com/new/announcements/ibm-adds-open-source-projects-docling-beeaI-and-data-prep-kit-added-to-the-linux-foundation",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "watsonx Orchestrate product page",
           "url": "https://www.ibm.com/products/watsonx-orchestrate",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-meituan",
@@ -707,7 +697,7 @@
       "description": "The technology company whose LongCat team develops the LongCat models.",
       "lab_type": "technology_company",
       "headquarters": "cn",
-      "organization_note": "Meituan, incorporated in the Cayman Islands and listed in Hong Kong, gives its contact address on Wangjing East Road in Chaoyang District, Beijing. Its LongCat team develops the models, publishes them under the meituan-longcat organizations, and runs LongCat chat. One name, Meituan, covers the models in the catalog.",
+      "organization_note": "Meituan, incorporated in the Cayman Islands and listed in Hong Kong, gives its head office and principal place of business in China on Wang Jing East Road in Chaoyang District, Beijing, which its annual report also calls its headquarters. Its LongCat team develops the models, publishes them under the meituan-longcat organizations, and launched the LongCat App. One name, Meituan, covers the models in the catalog.",
       "catalog_names": [
         "Meituan"
       ],
@@ -725,24 +715,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Meituan contact page giving its address in Chaoyang District, Beijing",
-          "url": "https://about.meituan.com/contact",
-          "verified_at": "2026-09-24"
-        },
-        {
-          "kind": "web",
-          "label": "Meituan 2025 annual report: incorporated in the Cayman Islands with limited liability",
-          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042403596.pdf",
-          "verified_at": "2026-09-24"
+          "label": "Meituan 2025 annual report: incorporated in the Cayman Islands with limited liability, with its head office and principal place of business in China on Wang Jing East Road, Chaoyang District, Beijing",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400179.pdf",
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "LongCat-2.0 licence: copyright Meituan",
           "url": "https://github.com/meituan-longcat/LongCat-2.0/blob/main/LICENSE",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-meta",
@@ -1176,7 +1160,7 @@
       "description": "The open lab that develops the MiniCPM models and open-source agent and training tools.",
       "lab_type": "ai_company",
       "headquarters": "none_listed",
-      "organization_note": "OpenBMB, the Open Lab for Big Model Base, is founded and supported by Tsinghua University's natural language processing laboratory (THUNLP) and ModelBest Inc., and the MiniCPM models credit ModelBest, THUNLP, and Renmin University's Gaoling School of Artificial Intelligence. It names no legal entity of its own, and the pages reviewed give no location.",
+      "organization_note": "OpenBMB, the Open Lab for Big Model Base, is an open-source community jointly initiated by Tsinghua University's THUNLP Laboratory and Modelbest, and the MiniCPM repository says the project is developed by Modelbest Inc., THUNLP, and the Gaoling School of Artificial Intelligence of RUC. It names no legal entity of its own, and the pages reviewed give no address or headquarters.",
       "catalog_names": [
         "OpenBMB"
       ],
@@ -1194,18 +1178,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc.",
-          "url": "https://www.openbmb.org/en/about-us",
-          "verified_at": "2026-09-24"
+          "label": "About page: the OpenBMB open source community was jointly initiated by Tsinghua University's THUNLP Laboratory and Modelbest, its founding council members",
+          "url": "https://www.openbmb.cn/en/about",
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "MiniCPM repository crediting Modelbest Inc., THUNLP, and the Gaoling School of Artificial Intelligence",
           "url": "https://github.com/OpenBMB/MiniCPM",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-ornith-ai",
@@ -1255,10 +1239,10 @@
       "id": "lab-perplexity",
       "name": "Perplexity",
       "url": "https://www.perplexity.ai/",
-      "description": "The AI company that develops the Sonar models and builds the Perplexity answer engine, Perplexity Computer, and the Perplexity API on them.",
+      "description": "The AI company that develops the Sonar models and builds the Perplexity answer engine, Perplexity Computer, and the Perplexity API.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Perplexity AI, Inc., whose careers page calls San Francisco its home base, develops the Sonar models and operates the Perplexity API. The catalog names the developer Perplexity and the API operator Perplexity AI, so both names belong to this record.",
+      "organization_note": "Perplexity AI, Inc., whose terms of service give a contact address on Market Street, San Francisco, and say its services are operated in the United States, develops the Sonar models and operates the Perplexity API. The catalog names the developer Perplexity and the API operator Perplexity AI, so both names belong to this record.",
       "catalog_names": [
         "Perplexity",
         "Perplexity AI"
@@ -1292,18 +1276,18 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "API terms: a contract with Perplexity AI, Inc., reviewed for the Perplexity API record",
+          "label": "API terms: a binding contract between the customer and Perplexity AI, Inc.",
           "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
-          "verified_at": "2026-08-28"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "Careers page: San Francisco is Perplexity's home base",
-          "url": "https://www.perplexity.ai/hub/careers",
-          "verified_at": "2026-09-24"
+          "label": "Terms of service: the services are operated in the United States, with a contact address on Market Street, San Francisco",
+          "url": "https://www.perplexity.ai/hub/legal/terms-of-service",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-poolside",
@@ -1552,10 +1536,10 @@
       "id": "lab-trendyol",
       "name": "Trendyol",
       "url": "https://www.trendyol.com/",
-      "description": "The e-commerce company that develops the Trendyol-LLM models for shopping tasks in Turkish and English.",
+      "description": "The e-commerce company that develops the Trendyol-LLM models for e-commerce tasks in Turkish and English.",
       "lab_type": "technology_company",
       "headquarters": "tr",
-      "organization_note": "Trendyol's imprint gives its headquarters at the Trendyol Campus in Maslak, Istanbul, and its engineering site carries the copyright of DSM Grup Danışmanlık İletişim ve Satış Tic. A.Ş. Its principal business is e-commerce, and it publishes the Trendyol-LLM models under its Hugging Face organization.",
+      "organization_note": "Trendyol's contact page gives the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş., whose copyright its pages carry, in Maslak, Sarıyer, Istanbul, and its about page lists the Trendyol campus in Maslak among its offices. Its principal business is e-commerce, and it publishes the Trendyol-LLM models under its Hugging Face organization.",
       "catalog_names": [
         "Trendyol"
       ],
@@ -1569,18 +1553,24 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul",
-          "url": "https://www.trendyol.com/en/imprint",
-          "verified_at": "2026-09-24"
+          "label": "Contact page giving the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş. in Maslak, Sarıyer, Istanbul, with the same company's copyright",
+          "url": "https://www.trendyol.com/iletisim",
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "Trendyol Tech site source, copyright DSM Grup Danışmanlık İletişim ve Satış Tic. A.Ş.",
-          "url": "https://github.com/Trendyol/trendyol.github.io",
-          "verified_at": "2026-09-24"
+          "label": "About page: one of the largest e-commerce platforms in Türkiye and the region, listing its Maslak campus among its offices",
+          "url": "https://www.trendyol.com/s/meet-us",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Trendyol-LLM-Asure-12B model card: tuned for e-commerce business tasks, with a primary focus on Turkish and English",
+          "url": "https://huggingface.co/Trendyol/Trendyol-LLM-Asure-12B",
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-typesafe-ai",
@@ -1825,29 +1815,29 @@
       "safety_framework": {
         "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
         "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
-        "verified_at": "2026-09-24"
+        "verified_at": "2026-09-25"
       },
       "evidence": [
         {
           "kind": "web",
           "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
           "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
-          "label": "SpaceX Form S-1 Exhibit 21 listing X.AI LLC (Nevada) among its subsidiaries",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001181412/000162828026036936/exhibit21-sx1.htm",
-          "verified_at": "2026-09-24"
+          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
+          "verified_at": "2026-09-25"
         },
         {
           "kind": "web",
           "label": "Privacy policy naming SpaceXAI LLC",
           "url": "https://x.ai/legal/privacy-policy",
-          "verified_at": "2026-09-24"
+          "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-09-25"
     },
     {
       "id": "lab-xiaomi",
