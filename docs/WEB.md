@@ -65,7 +65,7 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 
 - The default Directory scope shows every reviewed system, every models.dev source record with reviewed releases overlaid, every inference service, every local runtime, every agent pack, and every robot alphabetically, including archived system references, with scores hidden across collections.
 - Mixed Directory search indexes visible identity, editorial, and boundary prose rather than hidden provider metadata or evidence URLs.
-- Collection controls are mutually exclusive, expose their selected state accessibly, and preserve the selected Systems, Inference services, Local runtimes, Agent packs, or Robots scope in the `collection` URL parameter.
+- Collection controls are mutually exclusive, expose their selected state accessibly, and preserve the selected Systems, Inference services, Local runtimes, Agent packs, or Robots scope in the `collection` URL parameter. Exactly one switcher control is pressed: while a family is selected, its family chip is pressed instead of Systems.
 - The Systems scope defaults to every active memory, agent, and assistant family alphabetically, with cross-family scores hidden.
 - A one-character directory search matches prefixes of words in system names; two-character searches require a complete word to avoid false positives such as `Pi` inside `API`.
 - Choosing a family clears any role or Finder-role constraint; “Clear filters” restores the all-family active-system default.

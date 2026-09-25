@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1373,4 +1373,22 @@ test("mergePackScopeEntries unions packs and host-pack systems by name with kind
   const systems = [{ id: "z-sys", name: "Z" }, { id: "a-sys", name: "A" }];
   assert.deepEqual(mergePackScopeEntries(packs, systems).map(item => [item.kind, item.record.id]), [["system", "a-sys"], ["pack", "b-pack"], ["system", "z-sys"]]);
   assert.deepEqual(mergePackScopeEntries([], []), []);
+});
+
+test("exactly one switcher chip is pressed, and a family chip wins over Systems", () => {
+  const entries = [
+    { collection: "all" },
+    { collection: "systems" },
+    { collection: "systems", family: "memory_system" },
+    { collection: "systems", family: "agent_system" },
+    { collection: "inference" },
+  ];
+  assert.equal(activeSwitcherIndex(entries, { collection: "all" }), 0);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems" }), 1);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "memory_system" }), 2);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "agent_system" }), 3);
+  // A family with no chip of its own leaves the collection chip pressed.
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "robot_system" }), 1);
+  assert.equal(activeSwitcherIndex(entries, { collection: "inference", family: "memory_system" }), 4);
+  assert.equal(activeSwitcherIndex(entries, { collection: "packs" }), -1);
 });

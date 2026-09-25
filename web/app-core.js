@@ -382,6 +382,18 @@
     ].sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
   }
 
+  // Which one switcher chip is pressed. `entries` describes the buttons in
+  // order: { collection, family }, with no family on a collection-wide chip.
+  // A family chip wins over its collection's chip, so choosing Memory never
+  // also presses Systems: the controls are mutually exclusive (docs/WEB.md).
+  function activeSwitcherIndex(entries, { collection, family = "" }) {
+    if (family) {
+      const familyIndex = entries.findIndex(entry => entry.collection === collection && entry.family === family);
+      if (familyIndex !== -1) return familyIndex;
+    }
+    return entries.findIndex(entry => entry.collection === collection && entry.family === undefined);
+  }
+
   function paginate(items, { page = 1, pageSize } = {}) {
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const clampedPage = Math.min(Math.max(1, page), pageCount);
@@ -973,6 +985,7 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    activeSwitcherIndex,
     badgeEmblem,
     badgeLegend,
     buildLabIndex,

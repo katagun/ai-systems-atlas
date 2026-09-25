@@ -547,16 +547,16 @@ function renderStats() {
 }
 
 function syncCollectionSwitcher() {
-  const family = $("#family-filter").value;
-  let activeButton = null;
-  $$('[data-directory-collection]').forEach(button => {
-    const buttonFamily = button.dataset.directoryFamily;
-    const active = button.dataset.directoryCollection === state.directoryCollection
-      && (buttonFamily === undefined || buttonFamily === family);
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-pressed", String(active));
-    if (active) activeButton = button;
+  const buttons = $$('[data-directory-collection]');
+  const active = AtlasCore.activeSwitcherIndex(
+    buttons.map(button => ({ collection: button.dataset.directoryCollection, family: button.dataset.directoryFamily })),
+    { collection: state.directoryCollection, family: $("#family-filter").value },
+  );
+  buttons.forEach((button, index) => {
+    button.classList.toggle("is-active", index === active);
+    button.setAttribute("aria-pressed", String(index === active));
   });
+  const activeButton = buttons[active] || null;
   // The switcher wraps at desktop widths, so every entry is already visible
   // there; only the narrow layout keeps the horizontal scroll strip that can
   // hide the active entry off-screen. Scrolling only fires when the strip is
