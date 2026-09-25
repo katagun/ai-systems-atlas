@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-18",
+  "generated_at": "2026-09-25",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -18605,6 +18605,95 @@
         "Apache-2.0"
       ],
       "source_model": "open_source"
+    },
+    {
+      "id": "openai-agents-api",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenAI Agents API",
+      "repo": null,
+      "url": "https://developers.openai.com/api/docs/guides/agents-api/overview",
+      "description": "OpenAI-managed API exposing the Codex harness: durable sessions, orchestration, context compaction, and recovery with sandboxed code execution, MCP connections, and artifact production.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "managed agent sessions, event and item history, sandbox workspaces, and produced artifacts",
+      "deployment": [
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "strong",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the managed Agents API; Codex and the OpenAI Agents SDK remain distinct operational systems.",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "research_confidence": "high",
+      "verified_at": "2026-09-25",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.6,
+        "autonomy": 8.0,
+        "human_control": 8.0,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 3.8,
+        "interoperability": 8.0,
+        "maturity": 6.4,
+        "overall": 7.45
+      },
+      "strengths": [
+        "Managed session lifecycle: OpenAI provisions the environment and owns orchestration, context compaction, and recovery while the application supplies tools and chooses hosted or self-hosted execution",
+        "Full tool-using loop in the harness: sandboxed code execution, file editing, MCP connections, web search, subagent delegation, and artifact production",
+        "Durable sessions with streaming events and webhooks: continue or steer a session across turns and resume where it left off"
+      ],
+      "weaknesses": [
+        "Beta API surface (agents=v1) offered as-is with no general-availability commitment and excluded from indemnification",
+        "Data residency is US-only with no Zero Data Retention eligibility, and session state is retained by the vendor by default",
+        "The calling application still owns tool and instruction quality plus the execution environment, and model usage bills separately at API rates"
+      ],
+      "why_it_matters": "OpenAI's productization of the Codex harness as a managed runtime API: the durable differentiator is offloading orchestration, compaction, and recovery rather than offering another model endpoint."
     }
   ]
 }

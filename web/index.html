@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=344ce1fa71c1">
+  <link rel="stylesheet" href="styles.css?v=5e5edf163bee">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -36,7 +36,7 @@
       <small>AI systems directory</small>
     </div>
     <nav class="tabs" aria-label="Primary navigation">
-      <button class="tab is-active" data-tab="directory">Directory</button>
+      <button class="tab is-active" data-tab="directory" aria-current="page">Directory</button>
       <button class="tab" data-tab="finder">Finder</button>
       <button class="tab" data-tab="models">Models</button>
       <button class="tab" data-tab="labs">Labs</button>
@@ -77,7 +77,6 @@
             <span class="map-orbit orbit-four"></span>
             <span class="map-orbit orbit-five"></span>
           </div>
-          <div class="map-legend"><span><i class="legend-memory"></i> systems</span><span><i class="legend-inference"></i> inference</span><span><i class="legend-runtime"></i> runtimes</span><span><i class="legend-specs"></i> specs</span></div>
         </div>
       </div>
 
@@ -125,7 +124,7 @@
           </details>
           <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
-        <div class="result-row"><p id="result-count" aria-live="polite"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
+        <div class="result-row"><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
         <section id="project-grid" class="project-grid" aria-label="Reviewed systems"></section>
         <nav id="project-pager" class="pager" aria-label="Systems pagination"></nav>
       </div>
@@ -352,7 +351,7 @@
         </article>
         <article class="endpoint">
           <h2><a class="endpoint-link" href="https://peacefulcoexistance.com/license-evidence.json">license-evidence.json</a></h2>
-          <p>The reviewed license and terms evidence behind each record, scoped to the components it covers and pinned to the exact file or page it was read from.</p>
+          <p>The reviewed license and terms evidence behind each record, scoped to the components it covers. Evidence from a Git repository is pinned to the exact file; evidence from a web page records the date it was read.</p>
           <p class="endpoint-shape"><code>entries[]</code> · <code>verified_at</code></p>
         </article>
         <article class="endpoint">
@@ -447,8 +446,8 @@
   </dialog>
 
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"968acbf50ce6","taxonomy.json":"7c82e3e14ed1","license-evidence.json":"6eed3f97dd0e","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"2036e061625e","models-dev.json":"ec5e4b8a29fb","logos.json":"8bc2b56f0082","app/systems.json":"e3af568dc125","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"bfed98d6ba28","app/packs.json":"61b78c650076","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"00eb20982219","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"390cb86b239c","app/search/robots.json":"f3ba0fcf79b2","app/detail":"a5e8388d266f"}</script>
-  <script src="app-core.js?v=fd387a6ef15f" defer></script>
-  <script src="app.js?v=7098a4eeea8e" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"36bd6afbcf50","taxonomy.json":"7c82e3e14ed1","license-evidence.json":"1b97e3064da0","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"2036e061625e","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","app/systems.json":"f2c7bb11312c","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"bfed98d6ba28","app/packs.json":"61b78c650076","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"5f8f21253cc0","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"390cb86b239c","app/search/robots.json":"f3ba0fcf79b2","app/detail":"b13576c98cbe"}</script>
+  <script src="app-core.js?v=f77791c7d1a9" defer></script>
+  <script src="app.js?v=ae2250eabf52" defer></script>
 </body>
 </html>

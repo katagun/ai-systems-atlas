@@ -65,6 +65,9 @@ test("the atlas orbital field spans the five landscape nodes", async ({ page }) 
   await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+
+  // Every node is labelled; a colour legend could only disagree with them.
+  await expect(page.locator(".atlas-map .map-legend")).toHaveCount(0);
 });
 
 test("superseded systems leave the active view and link to their successor", async ({ page }) => {
@@ -206,7 +209,7 @@ test("the unified directory distinguishes and opens systems and inference servic
   await expect(serviceCard).toHaveCount(1);
   await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
   await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
-  await serviceCard.getByRole("button", { name: "View details →" }).click();
+  await serviceCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
   await page.locator("#inference-dialog .dialog-close").click();
 
@@ -214,7 +217,7 @@ test("the unified directory distinguishes and opens systems and inference servic
   const systemCard = page.locator("#all-directory-grid .project-card");
   await expect(systemCard).toHaveCount(1);
   await expect(systemCard.locator(".family-label")).toContainText("System · Agent system");
-  await systemCard.getByRole("button", { name: "View details →" }).click();
+  await systemCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#project-dialog")).toContainText("Kilo Code");
 });
 
@@ -241,7 +244,7 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
   }
 
   await page.locator("#specification-search").fill("GEMINI.md");
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#specification-dialog")).toContainText("Gemini CLI");
   await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
 });
@@ -256,7 +259,7 @@ test("new protocol layers are searchable and keep their boundaries distinct", as
   }
 
   await page.locator("#specification-search").fill("OASF");
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#specification-dialog")).toContainText("Metadata schema");
   await expect(page.locator("#specification-dialog")).toContainText("Agent identity and discovery");
 });
@@ -296,7 +299,7 @@ test("inference services combine filters and expose the dedicated service score"
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText("Amazon Bedrock");
   await expect(page.locator("#inference-grid .score-ring")).toHaveText("8.9");
 
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#inference-dialog")).toContainText("Service boundary");
   await expect(page.locator("#inference-dialog")).toContainText("Governing terms");
   await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
@@ -460,7 +463,7 @@ test("Perplexity assistant, Computer, and API remain distinct directory records"
 
   const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
   await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
-  await assistantCard.getByRole("button", { name: "View details →" }).click();
+  await assistantCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Multi-provider");
 });

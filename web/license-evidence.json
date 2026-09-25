@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-20",
+  "verified_at": "2026-09-25",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3463,7 +3463,27 @@
           "immutable_url": "https://api.github.com/repos/withastro/flue/git/blobs/78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33"
         }
       ]
+    },
+    {
+      "project_id": "openai-agents-api",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Terms of Use, the base agreement governing use of the Services",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/terms-of-use/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Service Terms sections 1 (API use), 2 (Beta Services), and 4 (Codex and code generation)",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-25"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-18"
+  "generated_at": "2026-09-25"
 }
