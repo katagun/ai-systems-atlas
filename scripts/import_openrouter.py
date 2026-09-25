@@ -82,8 +82,9 @@ AUTHOR_ALIASES = {
     "x-ai": "xai",
     "z-ai": "zhipuai",
 }
-# OpenRouter's own router and the cloaked models it lists before naming a developer.
-EXCLUDED_AUTHORS = frozenset({"openrouter"})
+# OpenRouter's own namespaces, which name no developer: `openrouter/` holds its routers
+# (and once held cloaked models), `stealth/` holds its stealth program's cloaked models.
+EXCLUDED_AUTHORS = frozenset({"openrouter", "stealth"})
 HUGGING_FACE_HOSTS = frozenset({"huggingface.co", "www.huggingface.co", "hf.co"})
 HUGGING_FACE_NON_MODEL_PATHS = frozenset(
     {"api", "blog", "collections", "datasets", "docs", "papers", "spaces", "tasks"}
@@ -236,8 +237,9 @@ def listed_route(row: object) -> tuple[str, Route] | None:
     """(route ID, identity) for an eligible row, or None when a rule skips it.
 
     Rules apply only where OpenRouter states the fact itself: a `~` prefix or an
-    `alias_target` marks a moving alias, the `openrouter/` namespace names no
-    developer, and the listed output modalities say whether the model outputs text.
+    `alias_target` marks a moving alias, OpenRouter's own `openrouter/` and `stealth/`
+    namespaces name no developer, and the listed output modalities say whether the
+    model outputs text.
     """
     if not isinstance(row, dict):
         raise ValueError("OpenRouter rows must be objects")

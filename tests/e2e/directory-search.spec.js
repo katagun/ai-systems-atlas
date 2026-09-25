@@ -673,3 +673,13 @@ test("the systems deployment filter reaches systems installed into a host agent"
   const names = page.locator("#project-grid .project-card h2");
   await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
 });
+
+test("every family chip counts exactly the systems it lists", async ({ page }) => {
+  await page.goto("/");
+  for (const name of ["Systems", "Memory", "Agents", "Assistants"]) {
+    const chip = page.getByRole("button", { name: new RegExp(`^${name} \\d`) });
+    const count = Number((await chip.locator("strong").textContent()).trim());
+    await chip.click();
+    await expect(page.locator("#result-count")).toContainText(new RegExp(`^${count} projects?\\b`));
+  }
+});

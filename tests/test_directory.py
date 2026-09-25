@@ -1122,8 +1122,8 @@ class DirectoryTests(unittest.TestCase):
         }
         self.assertLessEqual(expected, {record["id"] for record in records})
         by_id = {record["id"]: record for record in records}
-        # ByteDance's own pages list offices by region and name no headquarters, and the
-        # Cayman Islands entity behind its website does not count as one.
+        # ByteDance's own site names only the cities its staff are based out of, not a
+        # headquarters, and the Cayman Islands entity behind its website does not count.
         self.assertEqual(by_id["lab-bytedance"]["headquarters"], "none_listed")
         developers = {model["developer"] for model in self.models["models"]}
         claimed: dict[str, str] = {}
