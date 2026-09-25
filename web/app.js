@@ -1137,7 +1137,7 @@ const COLLECTIONS = {
         ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
         : " · Scores hidden across families";
       const chip = $("#finder-roles-chip");
-      chip.hidden = !state.directoryRoles;
+      chip.hidden = !state.directoryRolesLabel;
       chip.innerHTML = state.directoryRolesLabel
         ? `Finder: ${escapeHTML(state.directoryRolesLabel)}<span aria-hidden="true"> ×</span><span class="visually-hidden">, remove</span>`
         : "";
@@ -1483,13 +1483,19 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
+// The sticky header's live height plus the reading margin both Finder scroll
+// corrections leave beneath it, measured once so the two never disagree.
+function headerClearance() {
+  return ($(".site-header")?.getBoundingClientRect().height || 0) + 12;
+}
+
 // A choice replaces the panel's content, which can leave the step indicator
 // under the sticky header; bring the shell's top back into view, instantly.
 function keepFinderInView() {
   const shell = $(".finder-shell");
-  const clearance = $(".site-header")?.getBoundingClientRect().height || 0;
+  const clearance = headerClearance();
   const top = shell.getBoundingClientRect().top;
-  if (top < clearance) window.scrollBy({ top: top - clearance - 12, behavior: "instant" });
+  if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
 }
 
 // A boot record carries only its overall score, so every other dimension this
@@ -1714,8 +1720,7 @@ function applyFinderToDirectory() {
 function revealDirectoryResults() {
   const panel = $(".collection-panel:not([hidden])");
   if (!panel) return;
-  const clearance = $(".site-header")?.getBoundingClientRect().height || 0;
-  window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - clearance - 12, behavior: "instant" });
+  window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
 }
 
 function renderTaxonomy() {
@@ -2821,6 +2826,9 @@ function bindEvents() {
     state.directoryRolesLabel = null;
     state.page.systems = 1;
     renderProjects();
+    // The chip removes itself, so keyboard and screen-reader focus would
+    // otherwise fall off the page; land it on the count the chip affected.
+    $("#result-count").focus();
   });
   $("#finder-content").addEventListener("click", event => {
     const choice = event.target.closest("[data-finder-choice]");
