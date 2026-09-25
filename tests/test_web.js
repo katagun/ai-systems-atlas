@@ -302,6 +302,21 @@ test("model filtering keeps unscored source imports and sorts them after reviews
   assert.deepEqual(filterModels([importedModel], { type: "language_model" }), []);
 });
 
+test("the release sort orders reviewed and imported rows newest first, undated last", () => {
+  const withDate = (model, date) => ({ ...model, source_metadata: { ...model.source_metadata, release_date: date } });
+  const dated = [
+    withDate(models[0], "2025-04-29"),
+    withDate(models[1], "2026-01"),
+    withDate(importedModel, "2026-03-02"),
+    { ...importedModel, id: "model-acme-undated", name: "Undated Source" },
+  ];
+  assert.deepEqual(
+    filterModels(dated, { sort: "release" }).map(item => item.name),
+    ["Audio Source", "Vision Model", "Qwen", "Undated Source"],
+  );
+  assert.deepEqual(filterModels(dated, { sort: "release", type: "language_model" }).map(item => item.name), ["Qwen"]);
+});
+
 test("a reviewed model without a models.dev row never prints null", () => {
   const unlisted = { ...models[0], source_id: null };
   assert.equal(modelSourceLabel(models[0]), "alibaba/qwen");

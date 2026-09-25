@@ -2055,9 +2055,12 @@ function bindLabDialogLinks() {
   $$("[data-browse-lab-models]", root).forEach(button => button.addEventListener("click", () => browseLabModels(button.dataset.browseLabModels)));
 }
 
+// The grid continues the dialog's newest-first release list rather than
+// switching to the access-score order.
 function browseLabModels(labId) {
   $("#lab-dialog").close();
   $("#model-lab-filter").value = labId;
+  $("#model-sort-filter").value = "release";
   state.page.models = 1;
   renderModels();
   activateView("models");
