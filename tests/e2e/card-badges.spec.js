@@ -313,3 +313,17 @@ test("Taxonomy lists every badge under its family with its emblem", async ({ pag
   }
   await expect(page.locator("#taxonomy-content [data-badge-family] .taxonomy-item")).toHaveCount(glossary.length);
 });
+
+test.describe("on a touch screen", () => {
+  test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+
+  test("tapping an emblem opens its tooltip and neither opens the record nor changes the URL", async ({ page }) => {
+    await page.goto("/?collection=systems");
+    await page.locator("#project-search").fill("Aider");
+    const before = page.url();
+    await page.locator('#project-grid .project-card:has([data-project="aider"]) .card-badge').first().tap();
+    await expect(page.locator("#badge-tooltip")).toBeVisible();
+    await expect(page.locator("#project-dialog")).not.toBeVisible();
+    expect(page.url()).toBe(before);
+  });
+});
