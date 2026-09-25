@@ -4,6 +4,12 @@
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
+      "openrouter_id": "aion-labs/aion-rp-llama-3.1-8b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
       "openrouter_id": "amazon/nova-2-lite-v1",
       "disposition": "excluded",
       "reason": "Same release as the reviewed Nova 2 Lite record (amazon/nova-2-lite); the route name carries the -v1 of its Bedrock model ID, amazon.nova-2-lite-v1:0.",
@@ -34,6 +40,12 @@
       "decided_at": "2026-09-25"
     },
     {
+      "openrouter_id": "anthracite-org/magnum-v4-72b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
       "openrouter_id": "anthropic/claude-3-haiku",
       "disposition": "excluded",
       "reason": "Same release as the models.dev row anthropic/claude-3-haiku-20240307 (Claude Haiku 3), which model-dispositions.json excludes as a retired first-generation snapshot.",
@@ -43,6 +55,12 @@
       "openrouter_id": "anthropic/claude-sonnet-4",
       "disposition": "excluded",
       "reason": "Same release as the models.dev row anthropic/claude-sonnet-4-20250514 (Claude Sonnet 4), which model-dispositions.json excludes as a retired first-generation snapshot.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
       "decided_at": "2026-09-25"
     },
     {
@@ -61,6 +79,18 @@
       "openrouter_id": "google/gemini-2.5-pro-preview",
       "disposition": "excluded",
       "reason": "Retired preview version (gemini-2.5-pro-preview-06-05) of the Gemini 2.5 Pro line, which the reviewed record google/gemini-2.5-pro represents at its stable release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "gryphe/mythomax-l2-13b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "mancer/weaver",
+      "disposition": "held",
+      "reason": "Roleplay model from Mancer whose listing names no base model or Hugging Face repository; held until first-party documentation establishes its identity and a release boundary of its own under docs/MODELS.md.",
       "decided_at": "2026-09-25"
     },
     {
@@ -139,6 +169,48 @@
       "openrouter_id": "perplexity/sonar-pro-search",
       "disposition": "excluded",
       "reason": "Sonar Pro's Pro Search mode, which the reviewed Sonar Pro record (perplexity/sonar-pro) documents as a parameter of that model rather than a separate release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3-lunaris-8b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3.1-euryale-70b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3.3-euryale-70b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/cydonia-24b-v4.1",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/skyfall-36b-v2",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/unslopnemo-12b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "undi95/remm-slerp-l2-13b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
       "decided_at": "2026-09-25"
     },
     {
