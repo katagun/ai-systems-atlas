@@ -91,6 +91,33 @@ test("clicking beside a reviewed-model card's source line opens its record", asy
   await expect(page).toHaveURL(url => url.searchParams.get("record") === `model:${id}`);
 });
 
+test("a card's hover-titled facts stay above its details target", async ({ page }) => {
+  // A licence badge and a reviewed model's source line explain themselves in
+  // a hover title, so the point at their centre must reach them, not the
+  // details target stretched over the card.
+  const reached = locator => locator.evaluate(element => {
+    element.scrollIntoView({ block: "center", behavior: "instant" });
+    const box = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    return element.contains(hit) ? "itself" : `${hit?.tagName}.${hit?.className}`;
+  });
+
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill("Aider");
+  const card = page.locator('#project-grid .project-card:has([data-project="aider"])');
+  expect(await reached(card.locator(".license-badge").first()), "a project card's licence badge").toBe("itself");
+
+  await page.goto("/?view=models");
+  const model = page.locator("#model-grid .model-card:not(.imported-model-card)").first();
+  expect(await reached(model.locator(".card-source-meta")), "a reviewed-model card's source line").toBe("itself");
+
+  await page.goto("/?view=finder");
+  for (const value of ["agent_system", "coding", "balanced"]) {
+    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  }
+  expect(await reached(page.locator(".finder-result .license-badge").first()), "a Finder result's licence badge").toBe("itself");
+});
+
 test("clicking a Finder result's body opens that result's record", async ({ page }) => {
   await page.goto("/?view=finder");
   for (const value of ["agent_system", "coding", "balanced"]) {
