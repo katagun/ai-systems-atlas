@@ -47,8 +47,9 @@ test("the robots entry stays out of the navigation while the collection is empty
 });
 
 test("the published robots open from the real collection", async ({ page }) => {
-  // No routing fixtures: this reads the real web/robots.json and a real
-  // robot's detail payload, so it fails if the published records stop loading.
+  // No routing fixtures: the app boots from the real web/app/robots.json and
+  // fetches a real robot's detail payload, so this fails if the published
+  // records stop loading.
   await page.goto("/?collection=robots");
   await expect(page.getByRole("button", { name: `Robots ${catalogCounts.robots}` })).toBeVisible();
   await page.locator('#robot-grid [data-robot="spot"]').click();

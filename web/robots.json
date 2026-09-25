@@ -13,7 +13,7 @@
       "description": "Figure AI's third-generation humanoid robot, which Figure says is designed for household tasks and built around Helix, its vision-language-action model.",
       "form_factor": "humanoid",
       "availability": "announced",
-      "availability_note": "Figure's site offers no way to order Figure 03 and describes no pilot programme. Its news pages describe factory deployments instead: Figure 03 arrived at BMW Group Plant Spartanburg in 2026, after Figure 02 contributed to the assembly of 30,000 cars there the year before.",
+      "availability_note": "Figure's site offers no way to order Figure 03 and describes no pilot programme. Its news pages describe factory deployments instead: Figure 03 arrived at BMW Group Plant Spartanburg in 2026, after Figure 02 contributed to the assembly of 30,000 cars at BMW the year before.",
       "ai_basis": [
         "vendor_named_model"
       ],
@@ -23,6 +23,12 @@
           "kind": "vision_language_action",
           "role_note": "Figure says Helix controls the full loop of perception, movement, and reasoning, on board and in real time, and that it outputs high-rate continuous control of the entire humanoid upper body, including wrists, torso, head, and individual fingers.",
           "evidence_label": "Helix page"
+        },
+        {
+          "name": "Helix 02",
+          "kind": "vision_language_action",
+          "role_note": "Figure's BMW deployment page calls Helix 02 its proprietary pixels-to-actions VLA and says it coordinates Figure 03's hands, arms, torso, and feet, letting the robot manipulate parts while stepping and repositioning its body.",
+          "evidence_label": "Figure 03 at BMW"
         }
       ],
       "research_confidence": "medium",
@@ -71,7 +77,7 @@
         },
         {
           "kind": "web",
-          "role": "supporting",
+          "role": "named_model",
           "label": "Figure 03 at BMW",
           "url": "https://www.figure.ai/news/f-03-at-bmw",
           "verified_at": "2026-09-24"
@@ -104,8 +110,8 @@
       "named_models": [
         {
           "name": "Redwood AI",
-          "kind": "language_or_vision_language",
-          "role_note": "1X calls Redwood AI NEO's vision language model for learning and performing chores around the house, and says it is the AI model that lets NEO help around the home, moving, perceiving, and interacting with the world autonomously.",
+          "kind": "vision_language_action",
+          "role_note": "1X calls Redwood AI NEO's vision language model for learning and performing chores around the house, and says it is the AI model that lets NEO help around the home, moving, perceiving, and interacting with the world autonomously. 1X also says Redwood is among the first VLAs to control locomotion jointly with manipulation.",
           "evidence_label": "AI page"
         },
         {
@@ -185,7 +191,7 @@
         "bostondynamics.com",
         "github.com/boston-dynamics"
       ],
-      "description": "Boston Dynamics' four-legged robot for automated sensing, inspection, and data capture. Its SDK documents a way to run your own trained model with Spot, and Boston Dynamics says it has built reinforcement learning into Spot's walking control.",
+      "description": "Boston Dynamics' legged robot for automated sensing, inspection, and data capture. Its SDK documents a way to run your own trained model with Spot, and Boston Dynamics says it has built reinforcement learning into Spot's walking control.",
       "form_factor": "quadruped",
       "availability": "enterprise_sales",
       "availability_note": "Spot is sold through Boston Dynamics' sales team: the Spot sales page asks buyers to contact the team to find the right implementation for their application.",
@@ -205,7 +211,7 @@
       "hardware": {
         "compute": "Not published.",
         "sensors": "Terrain sensing with a 360° horizontal field of view and a 4 m range, and built-in stereo cameras. The optional arm's gripper adds time-of-flight, IMU, and 4K RGB sensors.",
-        "actuation": "Four legs, with a maximum speed of 1.6 m/s, a 300 mm maximum step height, and a 14 kg payload limit. The optional arm has six degrees of freedom plus a gripper, reaches 984 mm at full extension, and lifts up to 11 kg.",
+        "actuation": "A maximum speed of 1.6 m/s, a 300 mm maximum step height, and a 14 kg payload limit. The optional arm has six degrees of freedom plus a gripper, reaches 984 mm at full extension, and lifts up to 11 kg.",
         "power": "A 564 Wh battery with an average run time of 90 minutes and a 60-minute recharge. Missions can be launched from the Spot Dock."
       },
       "developer_access": "The Spot SDK's Python client library can control Spot and read its sensor and health information. Its network compute bridge runs a model you have trained on a compute payload or a networked server, and your script commands the robot with the results. The Joint Control API, a beta that needs a special-permissions licence, streams low-level joint commands. Boston Dynamics' own demo drove Spot with Google's Gemini Robotics-ER 1.5 through the SDK.",
@@ -308,7 +314,7 @@
         "github.com/unitreerobotics"
       ],
       "description": "Unitree's humanoid robot, sold in a basic version and an EDU version for secondary development. Unitree names UnifoLM-VLA-0, a vision-language-action model built with G1 data, and publishes code for training a policy and deploying it to the robot.",
-      "variants": "G1 (basic) and G1 EDU; the product page lists secondary development as available on the EDU version only.",
+      "variants": "G1 and G1 EDU on the product page, which lists secondary development for the EDU version only; Unitree's shop also offers a G1 Pro option, which it does not describe.",
       "form_factor": "humanoid",
       "availability": "orderable",
       "availability_note": "Unitree's shop sells the G1 and says it is backordered and will ship as soon as it is back in stock. The shop says that version does not support secondary development; the EDU version is bought by contacting Unitree's sales team.",
