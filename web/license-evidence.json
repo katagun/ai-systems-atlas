@@ -1813,10 +1813,10 @@
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "Terms governing the Meta Business Agent, the platform, its interfaces, and its connectors; the document renders only in a browser and its text could not be re-read during this review",
+          "scope": "Meta Business Agents and Platform Terms of Service, last updated 16 July 2026: the terms for Meta Business Agent, the platform, its APIs, and its connectors when used for a business purpose, with Meta Platforms, Inc. or Meta Platforms Ireland Limited",
           "kind": "web_terms",
           "url": "https://www.facebook.com/legal/3774714022740775/",
-          "verified_at": "2026-08-31"
+          "verified_at": "2026-09-26"
         }
       ]
     },
