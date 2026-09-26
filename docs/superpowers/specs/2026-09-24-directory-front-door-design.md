@@ -74,12 +74,12 @@ Phases 2–5 each get a short spec before work starts, checked against this one.
 
 Each item is one PR with its own e2e assertion.
 
-1. **One selected chip.** When a family chip is active, "Systems" is not pressed. `aria-pressed="true"` appears on exactly one switcher button.
+1. **One selected chip.** When a family chip is active, "Systems" is not pressed. `aria-pressed="true"` appears on exactly one switcher button. The Systems chip clears any family, so it lists every active system.
 2. **Counts match what they show.** Every chip counts what its scope lists by default. Systems and the family chips count active records; All keeps counting everything it lists, archived references included.
 3. **State in the URL.** The Directory writes `family`, `q`, every non-default facet, `sort`, and `page` for the active scope (see "URL state and history"), with `replaceState`. Restoration drops unknown or incompatible values rather than applying part of them.
 4. **The phone nav fits.** At 390 px, and at 360 px, every primary tab is fully visible without scrolling the nav.
 5. **The active view is announced.** The active primary tab carries `aria-current="page"`.
-6. **Whole-card click.** Clicking a card or its title opens the record, through one stretched link from the card's details control. The card's own controls stay separately clickable above it: Compare, and the emblem row (`ul.card-badges`, which also carries ADR 039's flag emblems), raised in stacking order so a tap on an emblem opens its tooltip and nothing else. The stretched link never sits inside the emblem row, and emblems stay out of the tab order. The details control's accessible name includes the record name ("View details for Claude Code"). `tests/e2e/card-badges.spec.js` gains a touch-viewport case: tapping an emblem opens the tooltip and neither opens a dialog nor changes the URL.
+6. **Whole-card click.** Clicking a card or its title opens the record, through one stretched link from the card's details control. The card's own controls stay separately clickable above it: Compare, and the emblem row (`ul.card-badges`, which also carries ADR 042's flag emblems), raised in stacking order so a tap on an emblem opens its tooltip and nothing else. The stretched link never sits inside the emblem row, and emblems stay out of the tab order. The details control's accessible name includes the record name ("View details for Claude Code"). `tests/e2e/card-badges.spec.js` gains a touch-viewport case: tapping an emblem opens the tooltip and neither opens a dialog nor changes the URL.
 7. **Finder fixes.** A choice keeps the step indicator in view below the sticky header. Goal and priority cards drop the default "Choose this" cue. "Browse matches" scrolls to the results rather than the hero and shows the Finder's role set as a visible, removable filter chip.
 8. **Hero map legend.** Legend swatches match the node colours, or the legend goes. The map itself leaves in Phase 2.
 9. **API page accuracy.** The `license-evidence.json` description says evidence is "pinned to the exact file or page it was read from". `docs/DATA_MODEL.md` gives web evidence "no claim of immutability", so the line says files are pinned and web pages are dated.
@@ -143,7 +143,7 @@ Phase 2's spec settles the details. These rules are fixed now so Phase 0's param
 | `compare` | Directory, Models | `kind:id,id` (unchanged) | existing |
 | `family` | Systems | a `system_families` id | 0 |
 | `q` | any searchable scope | the query text | 0 |
-| filter keys | the active scope | one parameter per filter, named after the key the scope's `app-core.js` filter already reads: `directoryDefaults()` for Systems and the view descriptors' `facets` elsewhere (for example `role`, `license`, `type`, `delivery`, `accelerator`, `host`, `formFactor`) | 0 |
+| filter keys | the active scope | one parameter per filter, named after the key the scope's `app-core.js` filter already reads: `directoryDefaults()` for Systems and the view descriptors' `facets` elsewhere (for example `role`, `license`, `type`, `delivery`, `accelerator`, `host`, `formFactor`). `roles`, the Finder's multi-role set, stays out of the URL until the Finder's URL state (Phase 4) | 0 |
 | `sort` | scopes with a Sort control | a sort option id | 0 |
 | `page` | paged grids | page number above 1 | 0 |
 | `job`, `prefer` | Finder | goal id; up to two priority ids | 4 |

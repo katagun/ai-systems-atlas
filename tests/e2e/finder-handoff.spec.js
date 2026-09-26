@@ -68,6 +68,34 @@ test("removing the Finder chip by keyboard moves focus to the result count", asy
   await expect(page.locator("#result-count")).toBeFocused();
 });
 
+test("Browse matches by keyboard moves focus to the result count", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
+  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
+  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+
+  // The Finder hides itself as it hands off, taking the focused button with it.
+  await page.locator("[data-finder-directory]").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#result-count")).toBeFocused();
+});
+
+test("Browse matches opens its matches on their first page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems&page=3");
+  await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 3 of");
+  await page.locator('.tab[data-tab="finder"]').click();
+  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
+  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
+  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+  await page.locator("[data-finder-directory]").click();
+
+  await expect(page.locator("#result-count")).toContainText("Finder match");
+  await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 1 of");
+  await expect(page).not.toHaveURL(/page=/);
+});
+
 test("the Finder chip sits beside the result count, and its × glyph never wraps alone", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
