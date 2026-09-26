@@ -1,6 +1,229 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-24",
+  "updated_at": "2026-09-25",
   "terms_reviewed_at": "2026-09-24",
-  "dispositions": []
+  "dispositions": [
+    {
+      "openrouter_id": "aion-labs/aion-rp-llama-3.1-8b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "amazon/nova-2-lite-v1",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Nova 2 Lite record (amazon/nova-2-lite); the route name carries the -v1 of its Bedrock model ID, amazon.nova-2-lite-v1:0.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "amazon/nova-lite-v1",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Nova Lite record (amazon/nova-lite); the route name carries the -v1 of its Bedrock model ID, amazon.nova-lite-v1:0.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "amazon/nova-micro-v1",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Nova Micro record (amazon/nova-micro); the route name carries the -v1 of its Bedrock model ID, amazon.nova-micro-v1:0.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "amazon/nova-premier-v1",
+      "disposition": "excluded",
+      "reason": "Same release as the models.dev row amazon/nova-premier (Nova Premier), which model-dispositions.json holds; the route name adds the -v1 that Nova Bedrock model IDs carry.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "amazon/nova-pro-v1",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Nova Pro record (amazon/nova-pro); the route name carries the -v1 of its Bedrock model ID, amazon.nova-pro-v1:0.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "anthracite-org/magnum-v4-72b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "anthropic/claude-3-haiku",
+      "disposition": "excluded",
+      "reason": "Same release as the models.dev row anthropic/claude-3-haiku-20240307 (Claude Haiku 3), which model-dispositions.json excludes as a retired first-generation snapshot.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "anthropic/claude-sonnet-4",
+      "disposition": "excluded",
+      "reason": "Same release as the models.dev row anthropic/claude-sonnet-4-20250514 (Claude Sonnet 4), which model-dispositions.json excludes as a retired first-generation snapshot.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "deepseek/deepseek-v3.1-terminus",
+      "disposition": "excluded",
+      "reason": "Superseded September 2025 checkpoint of the DeepSeek V3 line, which is reviewed at V3.2 (deepseek/deepseek-v3.2); model-dispositions.json excludes the earlier V3.1 and V3-0324 checkpoints the same way.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "deepseek/deepseek-v3.2-exp",
+      "disposition": "excluded",
+      "reason": "Experimental September 2025 checkpoint of the DeepSeek V3 line, superseded by the reviewed DeepSeek V3.2 release (deepseek/deepseek-v3.2); model-dispositions.json excludes earlier V3 checkpoints the same way.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "google/gemini-2.5-pro-preview",
+      "disposition": "excluded",
+      "reason": "Retired preview version (gemini-2.5-pro-preview-06-05) of the Gemini 2.5 Pro line, which the reviewed record google/gemini-2.5-pro represents at its stable release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "gryphe/mythomax-l2-13b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "mancer/weaver",
+      "disposition": "held",
+      "reason": "Roleplay model from Mancer whose listing names no base model or Hugging Face repository; held until first-party documentation establishes its identity and a release boundary of its own under docs/MODELS.md.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-medium-3",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Mistral Medium 3 record (mistral/mistral-medium-2505); the route uses the marketing name instead of the dated API ID.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-medium-3-5",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Mistral Medium 3.5 record (mistral/mistral-medium-2604); the route takes its name from Mistral's mistral-medium-3-5 API product, a serving surface of that release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-3.5-turbo-0613",
+      "disposition": "excluded",
+      "reason": "Older June 2023 snapshot of the GPT-3.5 Turbo line, which the reviewed record openai/gpt-3.5-turbo represents at gpt-3.5-turbo-0125.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-3.5-turbo-16k",
+      "disposition": "excluded",
+      "reason": "Undated 16k-context variant name of the GPT-3.5 Turbo line, which the reviewed record openai/gpt-3.5-turbo represents at gpt-3.5-turbo-0125.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-4o-mini-2024-07-18",
+      "disposition": "excluded",
+      "reason": "The exact snapshot the reviewed GPT-4o mini record (openai/gpt-4o-mini) represents; a separate record would duplicate it.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-5-image",
+      "disposition": "excluded",
+      "reason": "OpenRouter's pairing of the reviewed GPT-5 release (openai/gpt-5) with GPT Image 1 image generation (models.dev row openai/gpt-image-1), not a release of its own.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-5-image-mini",
+      "disposition": "excluded",
+      "reason": "OpenRouter's pairing of the reviewed GPT-5 Mini release (openai/gpt-5-mini) with GPT Image 1 Mini image generation, not a release of its own.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-5.2-chat",
+      "disposition": "excluded",
+      "reason": "Same model as the models.dev row openai/gpt-5.2-chat-latest (GPT-5.2 Chat), which model-dispositions.json excludes as an auto-updating alias.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-5.4-image-2",
+      "disposition": "excluded",
+      "reason": "OpenRouter's pairing of the reviewed GPT-5.4 release (openai/gpt-5.4) with GPT Image 2 (models.dev row openai/gpt-image-2), not a release of its own.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-chat-latest",
+      "disposition": "excluded",
+      "reason": "Moving alias: the route follows OpenAI's chat-latest, which resolves to whichever Instant chat model is newest, so it has no fixed identity. Releases it serves are reviewed under their own names, as with GPT-5.5 Instant (openai/gpt-5.5-instant).",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/o3-mini-high",
+      "disposition": "excluded",
+      "reason": "The reviewed o3-mini release (openai/o3-mini) with reasoning effort set to high; the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/o4-mini-high",
+      "disposition": "excluded",
+      "reason": "The reviewed o4-mini release (openai/o4-mini) with reasoning effort set to high; the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "perplexity/sonar-pro-search",
+      "disposition": "excluded",
+      "reason": "Sonar Pro's Pro Search mode, which the reviewed Sonar Pro record (perplexity/sonar-pro) documents as a parameter of that model rather than a separate release.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3-lunaris-8b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3.1-euryale-70b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "sao10k/l3.3-euryale-70b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/cydonia-24b-v4.1",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/skyfall-36b-v2",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "thedrummer/unslopnemo-12b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "undi95/remm-slerp-l2-13b",
+      "disposition": "held",
+      "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "upstage/solar-pro-3",
+      "disposition": "excluded",
+      "reason": "Same release as the reviewed Solar Pro 3 record (upstage/solar-pro3); the IDs differ only by a hyphen.",
+      "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "x-ai/grok-4.20",
+      "disposition": "excluded",
+      "reason": "OpenRouter's single route for xAI's March 9, 2026 Grok 4.20 snapshot, which Atlas represents as the reviewed record xai/grok-4.20-0309-reasoning and the models.dev row xai/grok-4.20-0309-non-reasoning.",
+      "decided_at": "2026-09-25"
+    }
+  ]
 }
