@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-20",
+  "updated_at": "2026-09-24",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -1563,43 +1563,6 @@
     },
     {
       "repo": null,
-      "name": "Spot",
-      "url": "https://bostondynamics.com/products/spot/",
-      "description": "Spot is Boston Dynamics' commercially sold agile mobile robot for autonomous site inspection and remote operation.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robots collection review",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Boston Dynamics publishes extensive Spot SDK developer documentation (dev.bostondynamics.com) covering the robot's API services, autonomy, and data systems, and that documentation site is itself the only stably citable first-party page found: every page on bostondynamics.com proper -- the product page, '/terms/', and '/spot-sales/' alike -- embeds a live WordPress cache-metrics comment whose hit/miss counters differ on every request, confirmed by fetching each of them twice in a row and finding the bytes differ both times, so none of them can be pinned for stable re-verification. Read live (not pinned), '/terms/' is a generic website Terms of Use governing use of bostondynamics.com itself -- content ownership, site access -- not a purchase agreement, EULA, or licence for the product, and '/spot-sales/' routes pricing and purchase through a 'Contact Sales' form rather than a published price or sale terms. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page; capability is shown in vendor-authored demonstrations and documentation, which are evidence of the claim rather than of a governing agreement.",
-        "evidence": [
-          {
-            "label": "Spot SDK documentation",
-            "url": "https://dev.bostondynamics.com/",
-            "kind": "web",
-            "content_sha256": "1616be0909be7c97f12e5d248748778a76f46634833f4ae8fd7ed9e6fcd10611",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
       "name": "GroqChat",
       "url": "https://chat.groq.com/",
       "description": "Groq-hosted end-user chat interface for interacting with supported models through Groq's inference platform.",
@@ -1921,87 +1884,6 @@
     },
     {
       "repo": null,
-      "name": "1X NEO",
-      "url": "https://www.1x.tech/neo",
-      "description": "NEO is 1X's humanoid home robot, sold to perform household chores and provide personalized in-home assistance.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robots collection review",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "1X publishes public pricing and reservation plans for NEO on its own order page ($499/mo subscription or $20,000 ownership, a refundable $200 deposit), but the Terms and Conditions page linked from both the product and order pages returns HTTP 404 -- the document does not exist at review time, even though the sibling Privacy Policy page resolves. No reachable first-party page therefore establishes a reviewed source model or complete licence list covering the hardware, its built-in large language model, or its Redwood AI vision-language model; the order page's own feature list describes capability through marketing prose rather than a governing agreement.",
-        "evidence": [
-          {
-            "label": "NEO product page",
-            "url": "https://www.1x.tech/neo",
-            "kind": "web",
-            "content_sha256": "7b5e2e66b705abc689605b8adaf34e0f7e9ad3425d56a3798241ea180701d44a",
-            "fetched_at": "2026-09-04"
-          },
-          {
-            "label": "NEO order page",
-            "url": "https://www.1x.tech/order",
-            "kind": "web",
-            "content_sha256": "ccc7a569b67b78d79829efdc73697bc1a0bf3b336c19b6592aa788db744f80fc",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Figure",
-      "url": "https://www.figure.ai/",
-      "description": "Figure is an AI robotics company building a general-purpose humanoid robot for commercial deployment.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robots collection review",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "figure.ai is served through a Vercel CDN edge cache: repeated fetches within a single verification session return identical bytes with a constant ETag and a climbing 'age' header (observed on the terms-and-conditions, privacy-policy, accessibility-statement, and home pages alike), so the site reads as stable while any one review is underway. But a shared footer icon component embeds a randomly generated SVG gradient identifier that is baked in at origin render time; that value changes only when the edge cache invalidates and Vercel re-renders from origin on its own stale-while-revalidate cadence, not on every request. That makes a hash pinned to any figure.ai page unsafe to rely on indefinitely -- it can hold for an entire review session and still not survive to a later recheck once the cache regenerates, which is exactly the failure this review hit once already when a Wayback capture of this same page was hashed moments after being triggered and had not yet settled. The terms-and-conditions page was read live: it is a generic website Terms and Conditions, dated February 2023 in its own body text, governing use of figure.ai itself (account access, electronic communications, linked sites) with no mention of the robot as a product, its sale, its licensing, or its onboard software, and no product page publishes a price or purchase path. That reading is a first-party observation, not a durably re-verifiable citation, for the CDN-cache reason above; the site's own sitemap is cited instead because, as a static file with no templated component, it does not carry the same regeneration risk, and it establishes from a stable first-party source that the terms page exists and when Figure's content system last touched it. No product-specific terms or licence establishing a reviewed source model and complete licence list are published on any first-party page, and no page on the domain carrying that content can be durably pinned for a checkable citation in the first place.",
-        "evidence": [
-          {
-            "label": "Sitemap (the only figure.ai resource found to be byte-stable across repeated fetches; it confirms the terms-and-conditions URL exists but carries no terms content itself)",
-            "url": "https://www.figure.ai/sitemap.xml",
-            "kind": "web",
-            "content_sha256": "c273455d32f39ea7efb06c58e4194b3f09721fe4bbc007e88354b31af02498b6",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
-      "repo": null,
       "name": "Genspark AI Workspace",
       "url": "https://www.genspark.ai/",
       "description": "All-in-one AI workspace whose Super Agent plans and acts across research, content creation, data analysis, calls, email, documents, spreadsheets, coding, and other workflows by coordinating specialized agents and connected tools.",
@@ -2150,50 +2032,6 @@
         "traits",
         "editorial_score"
       ]
-    },
-    {
-      "repo": null,
-      "name": "Unitree G1",
-      "url": "https://www.unitree.com/g1/",
-      "description": "The Unitree G1 is a commercially sold humanoid robot with force-position hybrid control and imitation- and reinforcement-learned manipulation skills.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.15,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robots collection review",
-        "rule": "docs/CURATION.md inclusion gate condition 4",
-        "finding": "Unitree publishes a public price (from $13.5K) for the G1 on its own product page and a Terms & Policies page, but that page's only substantive content is an after-sales warranty policy for the physical hardware (repair eligibility, damage exclusions, shipping responsibility); it establishes no software licence, source-model classification, or complete licence list for the robot's onboard AI stack or control software. The site links an 'Official Open Source' page, but that page renders no first-party list of components or licences in its own markup. No authoritative first-party source establishes a reviewed source model and complete licence list for the product as sold.",
-        "evidence": [
-          {
-            "label": "G1 product page",
-            "url": "https://www.unitree.com/g1/",
-            "kind": "web",
-            "content_sha256": "942804cf597a33a6f994c859588af47ce9be97519608b302e578e069a2358700",
-            "fetched_at": "2026-09-04"
-          },
-          {
-            "label": "Terms & Policies",
-            "url": "https://www.unitree.com/terms",
-            "kind": "web",
-            "content_sha256": "852ed22ce2f0e277217ec2cf63c8310843dc860fda061c35c72c66021e63e8a9",
-            "fetched_at": "2026-09-04"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
     },
     {
       "repo": "huggingface/lerobot",
