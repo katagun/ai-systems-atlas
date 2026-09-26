@@ -12,6 +12,7 @@ from scripts.validate_directory import (
     MODELS_DEV_REPO,
     PUBLISHED_DATA,
     validate,
+    weighted_overall,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -340,6 +341,32 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertTrue(
             any("does not match weighted" in error for error in errors), errors
         )
+
+    def test_weighted_overall_sums_exactly_on_every_python(self) -> None:
+        # The gemini-apps assistant score: its weighted parts total exactly 8.915.
+        # Summed left to right in floats, as sum() does before Python 3.12, they
+        # land just below that and round to 8.91 against the stored 8.92.
+        weights = {
+            "task_reliability": 0.19,
+            "context_continuity": 0.14,
+            "tools_integrations": 0.13,
+            "human_control": 0.13,
+            "data_governance": 0.13,
+            "interoperability": 0.1,
+            "usability_access": 0.08,
+            "maturity": 0.1,
+        }
+        score = {
+            "task_reliability": 9.0,
+            "context_continuity": 9.0,
+            "tools_integrations": 9.5,
+            "human_control": 8.7,
+            "data_governance": 8.1,
+            "interoperability": 8.4,
+            "usability_access": 9.2,
+            "maturity": 9.5,
+        }
+        self.assertEqual(8.92, weighted_overall(score, weights))
 
     def test_local_runtime_rejects_unknown_accelerator(self) -> None:
         def mutate(runtime, root):
