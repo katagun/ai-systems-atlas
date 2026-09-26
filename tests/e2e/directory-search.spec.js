@@ -679,10 +679,33 @@ test("the systems deployment filter reaches systems installed into a host agent"
 
 test("every family chip counts exactly the systems it lists", async ({ page }) => {
   await page.goto("/");
-  for (const name of ["Systems", "Memory", "Agents", "Assistants"]) {
+  // Memory goes first, so Systems has a family to clear.
+  for (const name of ["Memory", "Systems", "Agents", "Assistants"]) {
     const chip = page.getByRole("button", { name: new RegExp(`^${name} \\d`) });
     const count = Number((await chip.locator("strong").textContent()).trim());
     await chip.click();
     await expect(page.locator("#result-count")).toContainText(new RegExp(`^${count} projects?\\b`));
+    await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
+    await expect(chip).toHaveAttribute("aria-pressed", "true");
+  }
+});
+
+test("the Systems chip lists every active system after a Finder handoff", async ({ page }) => {
+  // Straight from the handoff, and by way of All, which keeps the family.
+  for (const via of [[], ["All"]]) {
+    await page.goto("/?view=finder");
+    for (const value of ["agent_system", "coding", "balanced"]) {
+      await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+    }
+    await page.locator("[data-finder-directory]").click();
+    await expect(page.locator("#result-count")).toContainText("Finder match");
+    for (const name of via) await page.getByRole("button", { name: new RegExp(`^${name} \\d`) }).click();
+    const systems = page.getByRole("button", { name: /^Systems \d/ });
+    const count = Number((await systems.locator("strong").textContent()).trim());
+    await systems.click();
+    await expect(page.locator("#result-count")).toHaveText(`${count} projects · Scores hidden across families`);
+    await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
+    await expect(systems).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#finder-roles-chip")).toBeHidden();
   }
 });

@@ -1416,9 +1416,9 @@ test("each switcher chip counts what its scope lists by default", () => {
     { name: "A2", system_family: "agent_system", status: "superseded", deployment: [] },
     { name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
   ];
-  const counts = switcherCounts({ projects: systems, services: [{}, {}], runtimes: [{}], models: [{}, {}, {}], packs: [{}], robots: [] });
+  const counts = switcherCounts({ projects: systems, services: [{}, {}], runtimes: [{}], models: [{}, {}, {}], packs: [{}], robots: [{}, {}, {}, {}] });
   assert.deepEqual(counts, {
-    all: 5 + 2 + 1 + 3 + 1,
+    all: 5 + 2 + 1 + 3 + 1 + 4,
     systems: 3,
     memory_system: 1,
     agent_system: 1,
@@ -1427,7 +1427,7 @@ test("each switcher chip counts what its scope lists by default", () => {
     runtimes: 1,
     models: 3,
     packs: 1 + 1,
-    robots: 0,
+    robots: 4,
   });
 });
 
