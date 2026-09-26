@@ -925,7 +925,7 @@ function syncBadgeLegend() {
   if (legend) {
     $("#badge-legend-items").dataset.mode = legend.mode;
     $("#badge-legend-items").innerHTML = legend.mode === "families"
-      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}">${AtlasCore.familyEmblem(family.id)}<span><strong>${escapeHTML(family.name)}</strong> ${escapeHTML(family.meaning)}</span></li>`).join("")
+      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}" title="${escapeHTML(family.meaning)}">${AtlasCore.familyEmblem(family.id)}<span>${escapeHTML(family.name)}</span></li>`).join("")
       : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AtlasCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
   }
   strip.hidden = !open;

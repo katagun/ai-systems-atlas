@@ -35,9 +35,9 @@ test("the legend lists the active scope's badges and follows the scope", async (
 test("mixed scopes show only the families, sibling views name their own sets, and badge-less views show nothing", async ({ page }) => {
   await page.goto("/");
   await expect(items(page)).toHaveCount(4);
-  await expect(items(page).first()).toContainText("Type");
-  await expect(items(page).first()).toContainText("What kind of record it is");
-  await expect(items(page).nth(1)).toContainText("Control and privacy");
+  await expect(items(page).first()).toHaveText(/Type$/);
+  await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
+  await expect(items(page).first()).not.toContainText("What kind of record it is");
 
   await page.locator('[data-tab="models"]').click();
   await expect(legend(page)).toBeVisible();
@@ -144,7 +144,7 @@ test("the open legend never covers the site footer, and phones start collapsed",
   await expect(small.locator("#badge-legend")).toBeHidden();
   await expect(small.locator("#badge-legend-chip")).toBeVisible();
 
-  // Systems is the widest scope; at phone width its strip wraps to several rows.
+  // Systems is the widest scope; at phone width its strip scrolls as one row.
   await small.goto("/?collection=systems");
   await small.locator("#badge-legend-chip").click();
   await expect(small.locator("#badge-legend")).toBeVisible();
