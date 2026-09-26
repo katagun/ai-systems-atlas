@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, shareRecordPath, sourceNamespace, switcherCounts, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1465,4 +1465,40 @@ test("the API view does not call web-page evidence pinned", () => {
   // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
   assert.doesNotMatch(html, /pinned to the exact file or page/);
   assert.match(html, /web page records the date it was read/);
+});
+
+test("search text normalises case, accents, and separators", () => {
+  assert.equal(normalizeSearchText("  Qwen3.8 Omni — Flash!  "), "qwen3.8 omni flash");
+  assert.equal(normalizeSearchText("Café-Crème"), "cafe-creme");
+  assert.deepEqual(searchWords("llama.cpp and self-hosted"), ["llama.cpp", "llama", "cpp", "and", "self-hosted", "self", "hosted"]);
+});
+
+test("query words are stemmed lightly and never below four letters", () => {
+  assert.equal(stemQueryWord("agents"), "agent");
+  assert.equal(stemQueryWord("memories"), "memory");
+  assert.equal(stemQueryWord("locally"), "local");
+  assert.equal(stemQueryWord("hosted"), "host");
+  assert.equal(stemQueryWord("coding"), "coding");
+  assert.equal(stemQueryWord("news"), "news");
+  assert.equal(stemQueryWord("access"), "access");
+});
+
+test("a query drops stop words and treats hyphens as spaces", () => {
+  assert.deepEqual(parseSearchQuery("Memory for Agents").tokens, ["memory", "agent"]);
+  assert.deepEqual(parseSearchQuery("self-hosted").tokens, parseSearchQuery("self hosted").tokens);
+  assert.deepEqual(parseSearchQuery("   ").tokens, []);
+});
+
+test("short words are strict outside names, and names match inside compounds", () => {
+  const prose = searchWords("An agent API that stores vectors in storage");
+  assert.equal(tokenHit(prose, "pi", false), 0);
+  assert.equal(tokenHit(prose, "rag", false), 0);
+  assert.equal(tokenHit(prose, "api", false), 1);
+  assert.equal(tokenHit(prose, "stor", false), 0.8);
+  assert.equal(tokenHit(searchWords("Pi"), "pi", true), 1);
+  assert.equal(tokenHit(searchWords("ChatGPT"), "gpt", true), 0.6);
+  assert.equal(tokenHit(searchWords("agentmemory"), "memory", true), 0.6);
+  assert.equal(tokenHit(searchWords("GBrain"), "gbr", true), 0.8);
+  assert.equal(tokenHit(searchWords("zebra"), "z", false), 0);
+  assert.equal(tokenHit(searchWords("Alpha"), "a", true), 0.8);
 });

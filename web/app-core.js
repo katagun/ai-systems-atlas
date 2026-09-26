@@ -32,6 +32,61 @@
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
   }
 
+  // Search (ADR 040): words, not substrings; results ordered by match, never
+  // by score.
+  const SEARCH_STOP_WORDS = new Set(["a", "an", "the", "for", "with", "my", "to", "of", "and", "on", "in", "i", "me"]);
+
+  // Lower case with accents dropped; every character other than a letter, a
+  // digit, ".", "+", "#", or "-" becomes a space.
+  function normalizeSearchText(text) {
+    return String(text || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      .replace(/[^a-z0-9.+#-]+/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  // A text's words. A word joined by ".", "+", "#", or "-" also counts as its
+  // parts, so "llama.cpp" is found by "llama" and "self-hosted" by "hosted".
+  function searchWords(text) {
+    const words = [];
+    for (const word of normalizeSearchText(text).split(" ")) {
+      if (!word) continue;
+      words.push(word);
+      if (/[.+#-]/.test(word)) for (const part of word.split(/[.+#-]+/)) if (part) words.push(part);
+    }
+    return words;
+  }
+
+  // Light stemming for query words only: plurals, then -ly, -ing, or -ed when
+  // the stem keeps four letters, so "hosted" becomes "host" but "coding" stays.
+  function stemQueryWord(word) {
+    if (word.length > 4 && word.endsWith("ies")) return `${word.slice(0, -3)}y`;
+    let stem = word;
+    if (stem.length > 4 && stem.endsWith("s") && !stem.endsWith("ss")) stem = stem.slice(0, -1);
+    for (const suffix of ["ly", "ing", "ed"]) {
+      if (stem.endsWith(suffix) && stem.length - suffix.length >= 4) return stem.slice(0, -suffix.length);
+    }
+    return stem;
+  }
+
+  // Hyphens split query words, so "self-hosted" asks what "self hosted" asks.
+  function parseSearchQuery(raw) {
+    const tokens = normalizeSearchText(raw).replace(/-/g, " ").split(" ")
+      .filter(word => word && !SEARCH_STOP_WORDS.has(word))
+      .map(stemQueryWord);
+    return { raw: String(raw || ""), text: tokens.join(" "), tokens };
+  }
+
+  // How one query word hits one field's words: 1 for a whole word, 0.8 for a
+  // word's start, 0.6 for the inside of a word in a name, otherwise 0. Short
+  // words are strict outside names, so "pi" never finds API and "rag" never
+  // finds storage, while "gpt" still finds ChatGPT (docs/WEB.md).
+  function tokenHit(words, token, inName) {
+    if (token.length === 1) return inName && words.some(word => word.startsWith(token)) ? 0.8 : 0;
+    if (words.includes(token)) return 1;
+    if (words.some(word => word.startsWith(token)) && (inName || token.length >= 4)) return 0.8;
+    if (inName && token.length >= 3 && words.some(word => word.includes(token))) return 0.6;
+    return 0;
+  }
+
   // The systems grid's own haystack: an optional index entry for the record,
   // or (until an index arrives) the whole record stringified and lowercased —
   // exactly what this search already matched against before indexes existed,
@@ -1099,9 +1154,11 @@
     modelSourceLabel,
     modelsKickerText,
     monogramGlyph,
+    normalizeSearchText,
     packShapedSystems,
     paginate,
     parseRecordReference,
+    parseSearchQuery,
     parseViewId,
     readScopeURLParams,
     recordHaystack,
@@ -1109,9 +1166,12 @@
     releasesNewestFirst,
     scopeFromURL,
     scopeURLParams,
+    searchWords,
     shareRecordPath,
     sourceNamespace,
+    stemQueryWord,
     switcherCounts,
+    tokenHit,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };
