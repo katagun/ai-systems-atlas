@@ -19,11 +19,12 @@ const state = {
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
-  directoryCollection: "all", directoryRoles: null, badgeLegendPreference: null,
+  directoryCollection: "all", directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
   page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
+  urlReady: false,
 };
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -192,6 +193,8 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
+  const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
+  const restored = restoreScopeFromURL(scope);
   renderStats();
   renderFinder();
   renderModels();
@@ -204,6 +207,9 @@ async function bootstrap() {
   }
   restoreViewFromURL();
   restoreRecordFromURL();
+  state.urlReady = true;
+  writeScopeURL();
+  if (restored.q) loadRestoredSearch(scope, restored.page);
   loadMarks();
 }
 
@@ -266,6 +272,20 @@ function comparisonRecords() {
   return state.comparison.ids.map(id => records.find(item => item.id === id)).filter(Boolean);
 }
 
+// Every history write goes through here. WebKit throws a SecurityError once a
+// page makes too many history calls in a short window, and every writer draws
+// on that one budget: a keystroke's scope, a chip's collection, a dialog's
+// record. So an unchanged URL makes no call, and a refused call is dropped
+// rather than stopping whatever asked for it: the page keeps working, and
+// only the address bar falls behind. Only `record` pushes (writeRecordURL).
+function writeURL(url, { push = false } = {}) {
+  if (url.href === window.location.href) return;
+  try {
+    if (push) window.history.pushState(null, "", url);
+    else window.history.replaceState(null, "", url);
+  } catch {}
+}
+
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryCollection === "all") url.searchParams.delete("collection");
@@ -275,7 +295,115 @@ function writeDirectoryURL() {
   } else {
     url.searchParams.delete("compare");
   }
-  window.history.replaceState(null, "", url);
+  writeURL(url);
+}
+
+// Each scope's URL parameters and the control that holds each one. Keys are
+// AtlasCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
+const SCOPE_CONTROLS = {
+  all: { q: "#all-directory-search" },
+  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  inference: { q: "#inference-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
+  runtimes: { q: "#runtime-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
+  packs: { q: "#pack-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
+  robots: { q: "#robot-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
+  models: { q: "#model-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
+  labs: { q: "#lab-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
+  specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
+};
+
+// The scope whose state the URL carries: the Directory's collection, or a
+// sibling view that has filters. Finder, Taxonomy, and API carry none.
+function activeScope() {
+  const view = $(".view.is-active")?.id;
+  if (view === "directory") return state.directoryCollection;
+  return SCOPE_CONTROLS[view] ? view : null;
+}
+
+function readScopeControls(scope) {
+  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+    const control = $(selector);
+    return [key, control.type === "checkbox" ? (control.checked ? "1" : "") : control.value];
+  }));
+}
+
+function allowedScopeValues(scope) {
+  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+    const control = $(selector);
+    if (control.type === "checkbox") return [key, new Set(["1"])];
+    if (control.tagName === "SELECT") return [key, new Set([...control.options].filter(option => !option.disabled).map(option => option.value))];
+    return [key, "text"];
+  }));
+}
+
+// Rewrites the active scope's parameters in place: only `record` pushes
+// history (docs/WEB.md), so Back still closes a dialog. Quiet until the
+// page has restored itself, so boot never writes a half-restored state.
+function writeScopeURL() {
+  if (!state.urlReady) return;
+  const url = new URL(window.location.href);
+  AtlasCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
+  const scope = activeScope();
+  if (scope) {
+    for (const [key, value] of AtlasCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
+    if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
+  }
+  // Every render and keystroke lands here, so this is the writer that spends
+  // most of WebKit's history budget; writeURL skips an unchanged URL.
+  writeURL(url);
+}
+
+// Applies the URL to one scope's controls before its first paint. Family goes
+// first because it decides which roles and sorts Systems offers, the score
+// sort among them. It goes first even beside a comparison, which decides the
+// family itself (spec, "URL state and history"): restoreComparisonFromURL runs
+// later and replaces a family that disagrees, so the URL then names the
+// comparison's. Anything a control cannot take is removed from the URL rather
+// than half-applied. Returns what it applied, for loadRestoredSearch.
+function restoreScopeFromURL(scope) {
+  if (!SCOPE_CONTROLS[scope]) return {};
+  const url = new URL(window.location.href);
+  if (scope === "systems" && url.searchParams.has("family")) {
+    const family = url.searchParams.get("family");
+    if ([...$("#family-filter").options].some(option => option.value === family)) {
+      $("#family-filter").value = family;
+      populateRoleFilter();
+      updateScoreSortAvailability();
+    }
+  }
+  const { values, rejected } = AtlasCore.readScopeURLParams(scope, url.searchParams, allowedScopeValues(scope));
+  for (const [key, value] of Object.entries(values)) {
+    if (key === "page") {
+      state.page[scope] = value;
+      continue;
+    }
+    const control = $(SCOPE_CONTROLS[scope][key]);
+    if (control.type === "checkbox") control.checked = value === "1";
+    else control.value = value;
+  }
+  if (rejected.length) {
+    rejected.forEach(key => url.searchParams.delete(key));
+    writeURL(url);
+  }
+  return values;
+}
+
+// A restored query searches what a typed one does: the indexes its search box
+// loads on focus, with a repaint as each one lands. The first paint clamped a
+// restored page to the pages the boot records alone fill, which can be fewer
+// than the index fills, so each repaint puts that page back first, until the
+// URL shows the reader has changed something since the page settled.
+function loadRestoredSearch(scope, page) {
+  let restoredPage = page;
+  let settled = window.location.href;
+  for (const collection of SEARCH_SCOPES[SCOPE_CONTROLS[scope].q]) {
+    loadSearchIndex(collection)?.then(() => {
+      if (window.location.href !== settled) restoredPage = undefined;
+      if (restoredPage) state.page[scope] = restoredPage;
+      renderSearchSurfaces();
+      settled = window.location.href;
+    });
+  }
 }
 
 function clearComparison({ updateURL = true } = {}) {
@@ -330,15 +458,17 @@ function restoreComparisonFromURL() {
   const profiles = new Set(records.map(item => item.score_profile));
   if (separator < 1 || referencedIds.length > 4 || records.length !== ids.length || !records.length || profiles.size !== 1 || profiles.has(undefined)) {
     url.searchParams.delete("compare");
-    window.history.replaceState(null, "", url);
+    writeURL(url);
     return false;
   }
   const profile = [...profiles][0];
   state.comparison = { kind, profile, ids, limitReached: false };
   if (kind === "system") {
     state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+    // A role restored from the URL stays when the comparison's family offers
+    // it; populateRoleFilter falls back to All roles when it does not.
     $("#family-filter").value = records[0].system_family;
-    $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
     setDirectoryCollection("systems", { updateURL: false });
@@ -505,6 +635,7 @@ function applyDirectoryDefaults() {
   clearComparison();
   const defaults = AtlasCore.directoryDefaults();
   state.directoryRoles = null;
+  state.directoryRolesLabel = null;
   $("#project-search").value = defaults.term;
   $("#family-filter").value = defaults.family;
   $("#role-filter").value = defaults.role;
@@ -576,13 +707,19 @@ function syncCollectionSwitcher() {
   }
 }
 
+// Opens Systems on one family, or on every family when `family` is empty,
+// clearing any role or Finder role set. A page kept from the list this
+// replaces, or restored from the URL, belongs to that list, so the new one
+// opens on its first page, as a Family choice does.
 function jumpToDirectoryFamily(family) {
   clearComparison();
   $("#family-filter").value = family;
   state.directoryRoles = null;
+  state.directoryRolesLabel = null;
   $("#role-filter").value = "";
   populateRoleFilter();
   updateScoreSortAvailability();
+  state.page.systems = 1;
   setDirectoryCollection("systems");
 }
 
@@ -687,6 +824,14 @@ function modelModalityRoute(model) {
 function badgeRow(badges) {
   if (!badges.length) return "";
   return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+}
+
+// The one control that opens a card's record. Its hidden text names the
+// record, so a page of cards doesn't hold twenty-four buttons with one name,
+// and `.card-open::after` in styles.css stretches it over the whole card. The
+// arrow is decoration, so screen readers hear "View details for <name>".
+function detailsButton(attribute, id, name, text = "View details") {
+  return `<button class="card-open" ${attribute}="${escapeHTML(id)}">${escapeHTML(text)}<span class="visually-hidden"> for ${escapeHTML(name)}</span><span aria-hidden="true"> →</span></button>`;
 }
 
 // Stars are live repository metadata, never a score or a badge, and every
@@ -816,7 +961,7 @@ function packCard(pack, { mixed = false } = {}) {
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("pack", pack))}
-    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span><button data-pack="${escapeHTML(pack.id)}">View details →</button></div>
+    <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span>${detailsButton("data-pack", pack.id, pack.name)}</div>
   </article>`;
 }
 
@@ -853,7 +998,7 @@ function labCard(lab) {
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
     ${badgeRow(AtlasCore.cardBadges("lab", lab))}
-    <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span><button data-lab="${escapeHTML(lab.id)}">View details →</button></div>
+    <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
 }
 
@@ -870,7 +1015,7 @@ function robotCard(robot, { mixed = false } = {}) {
     <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
-    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span><button data-robot="${escapeHTML(robot.id)}">View details →</button></div>
+    <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span>${detailsButton("data-robot", robot.id, robot.name)}</div>
   </article>`;
 }
 
@@ -896,7 +1041,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
     <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
     ${badgeRow(AtlasCore.cardBadges("model", model))}
-    <div class="card-footer"><span>${escapeHTML(model.source_id)}</span><button data-model="${escapeHTML(model.id)}">View source details →</button></div>
+    <div class="card-footer"><span>${escapeHTML(model.source_id)}</span>${detailsButton("data-model", model.id, model.name, "View source details")}</div>
   </article>`;
 }
 
@@ -909,7 +1054,7 @@ function mixedSystemCard(record) {
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", record))}
-      <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span><button data-project="${escapeHTML(record.id)}">View details →</button></div>
+      <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span>${detailsButton("data-project", record.id, record.name)}</div>
     </article>`;
 }
 
@@ -938,7 +1083,7 @@ function renderAllDirectoryEntries() {
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
         ${badgeRow(AtlasCore.cardBadges("model", record))}
-        <div class="card-footer"><span>Dedicated model-access score</span><button data-model="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
     if (kind === "pack") return packCard(record, { mixed: true });
@@ -949,7 +1094,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         ${badgeRow(AtlasCore.cardBadges("runtime", record))}
-        <div class="card-footer"><span>${starCount(record)}</span><button data-local-runtime="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>${starCount(record)}</span>${detailsButton("data-local-runtime", record.id, record.name)}</div>
       </article>`;
     }
     if (kind === "inference") {
@@ -958,7 +1103,7 @@ function renderAllDirectoryEntries() {
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
         ${badgeRow(AtlasCore.cardBadges("inference", record))}
-        <div class="card-footer"><span>Dedicated service score</span><button data-inference-service="${escapeHTML(record.id)}">View details →</button></div>
+        <div class="card-footer"><span>Dedicated service score</span>${detailsButton("data-inference-service", record.id, record.name)}</div>
       </article>`;
     }
     return mixedSystemCard(record);
@@ -971,6 +1116,7 @@ function renderAllDirectoryEntries() {
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
+  if (activeScope() === "all") writeScopeURL();
 }
 
 function filteredProjects() {
@@ -1014,6 +1160,11 @@ const COLLECTIONS = {
       const suffix = family
         ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
         : " · Scores hidden across families";
+      const chip = $("#finder-roles-chip");
+      chip.hidden = !state.directoryRolesLabel;
+      chip.innerHTML = state.directoryRolesLabel
+        ? `Finder: ${escapeHTML(state.directoryRolesLabel)}<span aria-hidden="true"> ×</span><span class="visually-hidden">, remove</span>`
+        : "";
       // Scores are never comparable across families, so the compare control
       // only exists once a family narrows the grid to one score profile.
       return { family, suffix, comparable: Boolean(family) };
@@ -1030,7 +1181,7 @@ const COLLECTIONS = {
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
       ${badgeRow(AtlasCore.cardBadges("system", project))}
-      <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}<button data-project="${escapeHTML(project.id)}">View details →</button></div></div>
+      <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}${detailsButton("data-project", project.id, project.name)}</div></div>
     </article>`;
     },
   },
@@ -1064,7 +1215,7 @@ const COLLECTIONS = {
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
       ${badgeRow(AtlasCore.cardBadges("spec", specification))}
-      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span><button data-specification="${escapeHTML(specification.id)}">View details →</button></div>
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
     </article>`;
     },
   },
@@ -1117,7 +1268,7 @@ const COLLECTIONS = {
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("inference", service))}
-    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button><button data-inference-service="${escapeHTML(service.id)}">View details →</button></div></div>
+    <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-inference-service", service.id, service.name)}</div></div>
   </article>`,
   },
   runtimes: {
@@ -1147,7 +1298,7 @@ const COLLECTIONS = {
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
     ${badgeRow(AtlasCore.cardBadges("runtime", runtime))}
-    <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button><button data-local-runtime="${escapeHTML(runtime.id)}">View details →</button></div></div>
+    <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-local-runtime", runtime.id, runtime.name)}</div></div>
   </article>`,
   },
   models: {
@@ -1181,7 +1332,7 @@ const COLLECTIONS = {
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
         ${badgeRow(AtlasCore.cardBadges("model", model))}
-        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button><button data-model="${escapeHTML(model.id)}">View details →</button></div></div>
+        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
   },
@@ -1228,6 +1379,7 @@ function renderCollection(name) {
   }
   hideDetachedBadgeTooltip();
   renderPager(collection.pageKey, paged);
+  if (activeScope() === name) writeScopeURL();
 }
 
 const renderProjects = () => renderCollection("systems");
@@ -1277,6 +1429,7 @@ function renderPacks() {
   paintMarks(grid);
   hideDetachedBadgeTooltip();
   renderPager("packs", paged);
+  if (activeScope() === "packs") writeScopeURL();
 }
 
 // Repaint whatever a search index could have widened. A search box may have a
@@ -1305,7 +1458,7 @@ function bindComparisonButtons(root) {
 
 function finderChoice(key, item) {
   return `<button class="finder-choice" data-finder-choice="${escapeHTML(key)}" data-finder-value="${escapeHTML(item.id)}">
-    <span class="finder-choice-cue">${escapeHTML(item.cue || "Choose this")}</span>
+    ${item.cue ? `<span class="finder-choice-cue">${escapeHTML(item.cue)}</span>` : ""}
     <strong>${escapeHTML(item.label)}</strong>
     <span>${escapeHTML(item.description)}</span>
   </button>`;
@@ -1352,6 +1505,21 @@ function renderFinder() {
   }
   const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
   $("#finder-content").innerHTML = content + navigation;
+}
+
+// The sticky header's live height plus the reading margin both Finder scroll
+// corrections leave beneath it, measured once so the two never disagree.
+function headerClearance() {
+  return ($(".site-header")?.getBoundingClientRect().height || 0) + 12;
+}
+
+// A choice replaces the panel's content, which can leave the step indicator
+// under the sticky header; bring the shell's top back into view, instantly.
+function keepFinderInView() {
+  const shell = $(".finder-shell");
+  const clearance = headerClearance();
+  const top = shell.getBoundingClientRect().top;
+  if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
 }
 
 // A boot record carries only its overall score, so every other dimension this
@@ -1518,11 +1686,13 @@ function renderFinderResults() {
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
       ${badgeRow(AtlasCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
-      <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span><button ${detailAttribute}="${escapeHTML(project.id)}">View details →</button></div>
+      <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span>${detailsButton(detailAttribute, project.id, project.name)}</div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
 }
 
+// Each branch lands on the first page of its matches: a page kept from
+// earlier browsing, or restored from the URL, belongs to another list.
 function applyFinderToDirectory() {
   const { direction, goal } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
@@ -1534,8 +1704,10 @@ function applyFinderToDirectory() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    state.page.runtimes = 1;
     setDirectoryCollection("runtimes");
     activateView("directory");
+    revealDirectoryResults();
     return;
   }
   if (direction === "inference_service") {
@@ -1545,14 +1717,17 @@ function applyFinderToDirectory() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    state.page.inference = 1;
     setDirectoryCollection("inference");
     activateView("directory");
+    revealDirectoryResults();
     return;
   }
   $("#project-search").value = "";
   $("#family-filter").value = direction;
   populateRoleFilter();
   state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
+  state.directoryRolesLabel = state.directoryRoles ? goalConfig.label : null;
   $("#role-filter").value = goalConfig.roles.length === 1 ? goalConfig.roles[0] : "";
   $("#agent-filter").value = "";
   $("#architecture-filter").value = "";
@@ -1564,8 +1739,22 @@ function applyFinderToDirectory() {
   $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
   updateScoreSortAvailability();
+  state.page.systems = 1;
   setDirectoryCollection("systems");
   activateView("directory");
+  revealDirectoryResults();
+}
+
+// The handoff lands on the results the Finder chose, not on the hero above them.
+// The Finder view hides the button that asked for this, so focus moves to the
+// count of what the Finder chose rather than falling to the page, as it does
+// when the Finder chip removes itself. It moves without scrolling, since the
+// scroll above has already placed the results.
+function revealDirectoryResults() {
+  const panel = $(".collection-panel:not([hidden])");
+  if (!panel) return;
+  window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
+  $(COLLECTIONS[state.directoryCollection].resultCount).focus({ preventScroll: true });
 }
 
 function renderTaxonomy() {
@@ -2211,12 +2400,14 @@ function openRecord(kind, id) {
   return false;
 }
 
+// The dialog opens before its URL is written, so the record is on screen
+// whatever the browser makes of the history write that follows.
 function showRecordDialog(selector, kind, id) {
   const dialog = $(selector);
   dialog.dataset.recordKind = kind;
   dialog.dataset.recordId = id;
-  writeRecordURL(kind, id);
   if (!dialog.open) dialog.showModal();
+  writeRecordURL(kind, id);
 }
 
 function writeRecordURL(kind, id) {
@@ -2224,7 +2415,7 @@ function writeRecordURL(kind, id) {
   const reference = `${kind}:${id}`;
   if (url.searchParams.get("record") === reference) return;
   url.searchParams.set("record", reference);
-  window.history.pushState(null, "", url);
+  writeURL(url, { push: true });
 }
 
 function clearRecordURL() {
@@ -2238,7 +2429,7 @@ function clearRecordURL() {
   const url = new URL(window.location.href);
   if (!url.searchParams.has("record")) return;
   url.searchParams.delete("record");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function closeRecordDialogs() {
@@ -2257,7 +2448,7 @@ function restoreRecordFromURL() {
     return;
   }
   url.searchParams.delete("record");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 // Back and forward move between record states only: collection and comparison
@@ -2486,7 +2677,7 @@ function writeViewURL(id) {
   const url = new URL(window.location.href);
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function restoreViewFromURL() {
@@ -2499,7 +2690,7 @@ function restoreViewFromURL() {
     return;
   }
   url.searchParams.delete("view");
-  window.history.replaceState(null, "", url);
+  writeURL(url);
 }
 
 function activateView(id) {
@@ -2516,12 +2707,18 @@ function activateView(id) {
   if ((id === "directory" || id === "models") && state.comparison.ids.length && !comparisonFitsView) {
     clearComparison();
   }
-  $$(".tab").forEach(item => item.classList.toggle("is-active", item.dataset.tab === id));
+  $$(".tab").forEach(item => {
+    const active = item.dataset.tab === id;
+    item.classList.toggle("is-active", active);
+    if (active) item.setAttribute("aria-current", "page");
+    else item.removeAttribute("aria-current");
+  });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
   if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
   syncBadgeLegend();
   writeViewURL(id);
+  writeScopeURL();
   window.scrollTo({ top: 0 });
 }
 
@@ -2538,10 +2735,13 @@ const SEARCH_SCOPES = {
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
+  // Systems and the family chips all name the systems collection. Each sets
+  // its family, none for Systems, so Systems clears a family, a role, or a
+  // Finder role set that another chip or the Finder left behind.
   $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => {
-    const family = button.dataset.directoryFamily;
-    if (family !== undefined) jumpToDirectoryFamily(family);
-    else setDirectoryCollection(button.dataset.directoryCollection);
+    const { directoryCollection: collection, directoryFamily: family } = button.dataset;
+    if (collection === "systems") jumpToDirectoryFamily(family || "");
+    else setDirectoryCollection(collection);
   }));
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
@@ -2565,6 +2765,7 @@ function bindEvents() {
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
+    state.directoryRolesLabel = null;
     $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
@@ -2573,7 +2774,7 @@ function bindEvents() {
     renderProjects();
     syncBadgeLegend();
   });
-  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.page.systems = 1; renderProjects(); });
+  $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
@@ -2659,6 +2860,15 @@ function bindEvents() {
     state.page.systems = 1;
     renderProjects();
   });
+  $("#finder-roles-chip").addEventListener("click", () => {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+    state.page.systems = 1;
+    renderProjects();
+    // The chip removes itself, so keyboard and screen-reader focus would
+    // otherwise fall off the page; land it on the count the chip affected.
+    $("#result-count").focus();
+  });
   $("#finder-content").addEventListener("click", event => {
     const choice = event.target.closest("[data-finder-choice]");
     if (choice) {
@@ -2672,6 +2882,7 @@ function bindEvents() {
       }
       state.finder.step = Math.min(3, state.finder.step + 1);
       renderFinder();
+      keepFinderInView();
       return;
     }
     if (event.target.closest("[data-finder-back]")) {
@@ -2679,11 +2890,13 @@ function bindEvents() {
       if (state.finder.step < 2) delete state.finder.answers.priority;
       if (state.finder.step < 1) delete state.finder.answers.goal;
       renderFinder();
+      keepFinderInView();
       return;
     }
     if (event.target.closest("[data-finder-reset]")) {
       state.finder = { step: 0, answers: {} };
       renderFinder();
+      keepFinderInView();
       return;
     }
     const projectButton = event.target.closest("[data-finder-project]");

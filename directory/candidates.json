@@ -6184,31 +6184,6 @@
       }
     },
     {
-      "repo": null,
-      "name": "openai-agents-api",
-      "url": "https://developers.openai.com/api/docs/guides/agents-api/overview",
-      "description": "OpenAI-managed API exposing the Codex harness: managed sessions, orchestration, context compaction, and recovery with sandboxed code execution, MCP connections, and artifact production; the calling application provides tools and chooses the execution environment.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.7,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "agent-framework",
-        "managed-runtime",
-        "official-product",
-        "openai"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "n8n-io/n8n",
       "name": "n8n",
       "url": "https://github.com/n8n-io/n8n",

@@ -425,8 +425,7 @@ h1 {
   box-shadow: var(--shadow);
   transform: rotate(1deg);
 }
-.map-toolbar,
-.map-legend {
+.map-toolbar {
   min-height: 42px;
   padding: 0 .8rem;
   display: flex;
@@ -436,8 +435,8 @@ h1 {
   color: var(--muted);
   font: 600 .57rem var(--font-mono);
   letter-spacing: .08em;
+  border-bottom: 1px solid var(--line);
 }
-.map-toolbar { border-bottom: 1px solid var(--line); }
 .map-status { color: var(--cyan); }
 .map-status::before { content: ""; width: 6px; height: 6px; margin-right: .45rem; display: inline-block; border-radius: 50%; background: var(--cyan-bright); box-shadow: 0 0 0 4px color-mix(in srgb, var(--cyan-bright) 12%, transparent); }
 .map-field {
@@ -482,15 +481,9 @@ h1 {
 .orbit-three { width: 96%; height: 60%; top: 19%; left: 2%; border-color: color-mix(in srgb, var(--coral) 14%, transparent); transform: rotate(1deg); }
 .orbit-four { width: 82%; height: 88%; top: 5%; left: 9%; border-color: color-mix(in srgb, var(--blue) 15%, transparent); transform: rotate(-15deg); }
 .orbit-five { width: 94%; height: 84%; top: 8%; left: 3%; border-color: color-mix(in srgb, var(--amber) 14%, transparent); transform: rotate(14deg); }
-.map-legend { justify-content: flex-start; border-top: 1px solid var(--line); }
-.map-legend span { display: flex; align-items: center; gap: .3rem; }
-.map-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
-.map-legend .legend-inference { background: var(--coral); }
-.map-legend .legend-runtime { background: var(--amber); }
 .status-notice { border-left: 3px solid var(--amber); }
 .link-button { padding: 0; border: 0; background: none; color: var(--cyan); font: inherit; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--cyan-bright); }
-.map-legend .legend-specs { background: var(--violet); }
 
 .collection-switcher {
   display: flex;
@@ -620,6 +613,7 @@ input:focus, select:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: .55rem;
   color: var(--muted);
   font-size: .86rem;
 }
@@ -816,10 +810,14 @@ input:focus, select:focus {
   color: var(--chip-ink);
   font: .62rem var(--font-mono);
 }
+/* The row sits above the card's details target, so it shrinks to its emblems:
+   the card beside the row still opens the record, while a near miss between
+   emblems stays inert. It still wraps once the emblems outgrow the card. */
 .card-badges {
   display: flex;
   flex-wrap: wrap;
   gap: .35rem;
+  width: fit-content;
   margin: 0;
   padding: 1rem 0 0;
   list-style: none;
@@ -919,10 +917,13 @@ input:focus, select:focus {
    only bottom clearance, lets the page's end scroll clear of it. */
 html:has(body.has-badge-legend) { scroll-padding-bottom: var(--legend-h); }
 body.has-badge-legend footer { margin-bottom: var(--legend-h); }
+/* Raised above the card's details target for its hover title, so it shrinks
+   to its text and the card beside the text still opens the record. */
 .card-source-meta {
   display: flex;
   flex-wrap: wrap;
   gap: .35rem;
+  width: fit-content;
   padding-top: .55rem;
   color: var(--muted);
   font: .62rem var(--font-mono);
@@ -961,6 +962,29 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 }
 .card-footer button:hover,
 .finder-result-footer button:hover { color: var(--text); }
+/* The details control's target covers its whole card; the card's own controls,
+   its emblem row, and its hover-titled facts sit above it, so a tap on an
+   emblem only opens its tooltip and Compare only toggles. */
+.card-open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.project-card .card-badges,
+.project-card .compare-toggle,
+.project-card .card-source-meta,
+.project-card .license-badge,
+.finder-result .card-badges,
+.finder-result .license-badge {
+  position: relative;
+  z-index: 2;
+}
+.project-card:has(.card-open:focus-visible),
+.finder-result:has(.card-open:focus-visible) {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
 .card-actions { display: flex; align-items: center; gap: .8rem; }
 .card-footer .compare-toggle {
   padding: .3rem .5rem;
@@ -1123,6 +1147,7 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   background: var(--panel);
   display: flex;
   flex-direction: column;
+  position: relative; /* Keeps the details control's stretched target inside the result. */
 }
 .finder-result.agent_system { background: var(--card-agent); }
 .finder-result.assistant_system { background: var(--card-assistant); }
@@ -1317,8 +1342,8 @@ footer #data-date, footer .footer-meta {
   .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .header-tools { order: 2; }
   .brand small { display: none; }
-  .tabs { order: 3; width: 100%; gap: .5rem; overflow-x: auto; }
-  .tab { flex: 0 0 auto; font-size: .66rem; }
+  .tabs { order: 3; width: 100%; flex-wrap: wrap; column-gap: .35rem; row-gap: .1rem; overflow-x: visible; }
+  .tab, .tab-link { flex: 0 0 auto; font-size: .66rem; }
   /* Narrow screens keep the horizontal scroll strip rather than wrapping,
      since a wrapped switcher would push the grid below the fold; the active
      entry is still reachable through syncCollectionSwitcher's scrollIntoView. */
@@ -1415,3 +1440,20 @@ footer #data-date, footer .footer-meta {
   .post-nav { position: static; padding-top: 0; }
   .post-nav-list { grid-template-columns: 1fr; }
 }
+.filter-chip {
+  padding: .3rem .55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-chip);
+  background: var(--panel);
+  color: var(--text);
+  font: 600 .74rem var(--font-body);
+  cursor: pointer;
+}
+.filter-chip:hover { border-color: var(--cyan); }
+/* The row's flex justify-content space-between would otherwise center the
+   count between the chip and Clear filters; pulling the count's own margin
+   keeps it beside the chip and pushes Clear filters to the row's far edge. */
+#result-count { margin-right: auto; }
+/* Glues the removal glyph to the chip's last word so a narrow chip never
+   wraps the × onto a line by itself. */
+.filter-chip > span[aria-hidden="true"] { white-space: nowrap; }

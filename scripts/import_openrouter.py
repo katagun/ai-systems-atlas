@@ -72,6 +72,7 @@ LEAD_FIELDS = (
 # A missing entry costs a spurious lead, which a disposition closes; it never hides one,
 # because the rest of the ID must still derive the same stable Atlas ID.
 AUTHOR_ALIASES = {
+    "bytedance": "bytedance-seed",
     "ibm-granite": "ibm",
     "meta-llama": "meta",
     "mistralai": "mistral",

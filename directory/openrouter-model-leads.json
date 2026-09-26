@@ -57,87 +57,6 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "aion-labs/aion-rp-llama-3.1-8b",
-      "canonical_slug": "aion-labs/aion-rp-llama-3.1-8b",
-      "name": "AionLabs: Aion-RP 1.0 (8B)",
-      "hugging_face_id": null,
-      "listed_at": "2025-02-04",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "amazon/nova-2-lite-v1",
-      "canonical_slug": "amazon/nova-2-lite-v1",
-      "name": "Amazon: Nova 2 Lite",
-      "hugging_face_id": null,
-      "listed_at": "2025-12-02",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "amazon/nova-lite-v1",
-      "canonical_slug": "amazon/nova-lite-v1",
-      "name": "Amazon: Nova Lite 1.0",
-      "hugging_face_id": null,
-      "listed_at": "2024-12-05",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "amazon/nova-micro-v1",
-      "canonical_slug": "amazon/nova-micro-v1",
-      "name": "Amazon: Nova Micro 1.0",
-      "hugging_face_id": null,
-      "listed_at": "2024-12-05",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "amazon/nova-premier-v1",
-      "canonical_slug": "amazon/nova-premier-v1",
-      "name": "Amazon: Nova Premier 1.0",
-      "hugging_face_id": null,
-      "listed_at": "2025-10-31",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "amazon/nova-pro-v1",
-      "canonical_slug": "amazon/nova-pro-v1",
-      "name": "Amazon: Nova Pro 1.0",
-      "hugging_face_id": null,
-      "listed_at": "2024-12-05",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "anthracite-org/magnum-v4-72b",
-      "canonical_slug": "anthracite-org/magnum-v4-72b",
-      "name": "Magnum v4 72B",
-      "hugging_face_id": "anthracite-org/magnum-v4-72b",
-      "listed_at": "2024-10-22",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "anthropic/claude-3-haiku",
-      "canonical_slug": "anthropic/claude-3-haiku",
-      "name": "Anthropic: Claude 3 Haiku",
-      "hugging_face_id": null,
-      "listed_at": "2024-03-13",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "anthropic/claude-sonnet-4",
-      "canonical_slug": "anthropic/claude-4-sonnet-20250522",
-      "name": "Anthropic: Claude Sonnet 4",
-      "hugging_face_id": null,
-      "listed_at": "2025-05-22",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "baidu/ernie-4.5-vl-424b-a47b",
       "canonical_slug": "baidu/ernie-4.5-vl-424b-a47b",
       "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
@@ -152,15 +71,6 @@
       "name": "ByteDance: UI-TARS 7B ",
       "hugging_face_id": "ByteDance-Seed/UI-TARS-1.5-7B",
       "listed_at": "2025-07-22",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
-      "canonical_slug": "venice/uncensored",
-      "name": "Venice: Uncensored",
-      "hugging_face_id": "cognitivecomputations/Dolphin-Mistral-24B-Venice-Edition",
-      "listed_at": "2025-07-09",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -183,24 +93,6 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "deepseek/deepseek-v3.1-terminus",
-      "canonical_slug": "deepseek/deepseek-v3.1-terminus",
-      "name": "DeepSeek: DeepSeek V3.1 Terminus",
-      "hugging_face_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
-      "listed_at": "2025-09-22",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "deepseek/deepseek-v3.2-exp",
-      "canonical_slug": "deepseek/deepseek-v3.2-exp",
-      "name": "DeepSeek: DeepSeek V3.2 Exp",
-      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
-      "listed_at": "2025-09-29",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "dots-studio/dots-3-note-preview",
       "canonical_slug": "dots-studio/dots-3-note-preview-20260813",
       "name": "Dots Studio: Dots3-Note Preview (free)",
@@ -219,29 +111,11 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "google/gemini-2.5-pro-preview",
-      "canonical_slug": "google/gemini-2.5-pro-preview-06-05",
-      "name": "Google: Gemini 2.5 Pro Preview 06-05",
-      "hugging_face_id": null,
-      "listed_at": "2025-06-05",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "google/gemma-2-27b-it",
       "canonical_slug": "google/gemma-2-27b-it",
       "name": "Google: Gemma 2 27B",
       "hugging_face_id": "google/gemma-2-27b-it",
       "listed_at": "2024-07-13",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "gryphe/mythomax-l2-13b",
-      "canonical_slug": "gryphe/mythomax-l2-13b",
-      "name": "MythoMax 13B",
-      "hugging_face_id": "Gryphe/MythoMax-L2-13b",
-      "listed_at": "2023-07-02",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -332,15 +206,6 @@
       "name": "LiquidAI: LFM2.5-2.6B (free)",
       "hugging_face_id": "LiquidAI/LFM2.5-2.6B",
       "listed_at": "2026-08-11",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "mancer/weaver",
-      "canonical_slug": "mancer/weaver",
-      "name": "Mancer: Weaver (alpha)",
-      "hugging_face_id": null,
-      "listed_at": "2023-08-02",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -449,24 +314,6 @@
       "name": "Mistral Large 2407",
       "hugging_face_id": null,
       "listed_at": "2024-11-19",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "mistralai/mistral-medium-3",
-      "canonical_slug": "mistralai/mistral-medium-3",
-      "name": "Mistral: Mistral Medium 3",
-      "hugging_face_id": null,
-      "listed_at": "2025-05-07",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "mistralai/mistral-medium-3-5",
-      "canonical_slug": "mistralai/mistral-medium-3.5-20260430",
-      "name": "Mistral: Mistral Medium 3.5",
-      "hugging_face_id": null,
-      "listed_at": "2026-04-30",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -588,74 +435,11 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "openai/gpt-3.5-turbo-0613",
-      "canonical_slug": "openai/gpt-3.5-turbo-0613",
-      "name": "OpenAI: GPT-3.5 Turbo (older v0613)",
-      "hugging_face_id": null,
-      "listed_at": "2024-01-25",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-3.5-turbo-16k",
-      "canonical_slug": "openai/gpt-3.5-turbo-16k",
-      "name": "OpenAI: GPT-3.5 Turbo 16k",
-      "hugging_face_id": null,
-      "listed_at": "2023-08-28",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "openai/gpt-3.5-turbo-instruct",
       "canonical_slug": "openai/gpt-3.5-turbo-instruct",
       "name": "OpenAI: GPT-3.5 Turbo Instruct",
       "hugging_face_id": null,
       "listed_at": "2023-09-28",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-4o-mini-2024-07-18",
-      "canonical_slug": "openai/gpt-4o-mini-2024-07-18",
-      "name": "OpenAI: GPT-4o-mini (2024-07-18)",
-      "hugging_face_id": null,
-      "listed_at": "2024-07-18",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-5-image",
-      "canonical_slug": "openai/gpt-5-image",
-      "name": "OpenAI: GPT-5 Image",
-      "hugging_face_id": null,
-      "listed_at": "2025-10-14",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-5-image-mini",
-      "canonical_slug": "openai/gpt-5-image-mini",
-      "name": "OpenAI: GPT-5 Image Mini",
-      "hugging_face_id": null,
-      "listed_at": "2025-10-16",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-5.2-chat",
-      "canonical_slug": "openai/gpt-5.2-chat-20251211",
-      "name": "OpenAI: GPT-5.2 Chat",
-      "hugging_face_id": null,
-      "listed_at": "2025-12-10",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/gpt-5.4-image-2",
-      "canonical_slug": "openai/gpt-5.4-image-2-20260421",
-      "name": "OpenAI: GPT-5.4 Image 2",
-      "hugging_face_id": null,
-      "listed_at": "2026-04-21",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -750,47 +534,11 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "openai/gpt-chat-latest",
-      "canonical_slug": "openai/gpt-chat-latest-20260505",
-      "name": "OpenAI: GPT Chat Latest",
-      "hugging_face_id": null,
-      "listed_at": "2026-05-05",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/o3-mini-high",
-      "canonical_slug": "openai/o3-mini-high-2025-01-31",
-      "name": "OpenAI: o3 Mini High",
-      "hugging_face_id": null,
-      "listed_at": "2025-02-12",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "openai/o4-mini-high",
-      "canonical_slug": "openai/o4-mini-high-2025-04-16",
-      "name": "OpenAI: o4 Mini High",
-      "hugging_face_id": null,
-      "listed_at": "2025-04-16",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "perceptron/perceptron-mk1",
       "canonical_slug": "perceptron/perceptron-mk1-20260512",
       "name": "Perceptron: Perceptron Mk1",
       "hugging_face_id": null,
       "listed_at": "2026-05-12",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "perplexity/sonar-pro-search",
-      "canonical_slug": "perplexity/sonar-pro-search",
-      "name": "Perplexity: Sonar Pro Search",
-      "hugging_face_id": null,
-      "listed_at": "2025-10-30",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
@@ -1020,33 +768,6 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "sao10k/l3-lunaris-8b",
-      "canonical_slug": "sao10k/l3-lunaris-8b",
-      "name": "Sao10K: Llama 3 8B Lunaris",
-      "hugging_face_id": "Sao10K/L3-8B-Lunaris-v1",
-      "listed_at": "2024-08-13",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "sao10k/l3.1-euryale-70b",
-      "canonical_slug": "sao10k/l3.1-euryale-70b",
-      "name": "Sao10K: Llama 3.1 Euryale 70B v2.2",
-      "hugging_face_id": "Sao10K/L3.1-70B-Euryale-v2.2",
-      "listed_at": "2024-08-28",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "sao10k/l3.3-euryale-70b",
-      "canonical_slug": "sao10k/l3.3-euryale-70b-v2.3",
-      "name": "Sao10K: Llama 3.3 Euryale 70B",
-      "hugging_face_id": "Sao10K/L3.3-70B-Euryale-v2.3",
-      "listed_at": "2024-12-18",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "tencent/hunyuan-a13b-instruct",
       "canonical_slug": "tencent/hunyuan-a13b-instruct",
       "name": "Tencent: Hunyuan A13B Instruct",
@@ -1083,65 +804,11 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "thedrummer/cydonia-24b-v4.1",
-      "canonical_slug": "thedrummer/cydonia-24b-v4.1",
-      "name": "TheDrummer: Cydonia 24B V4.1",
-      "hugging_face_id": "thedrummer/cydonia-24b-v4.1",
-      "listed_at": "2025-09-27",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "thedrummer/skyfall-36b-v2",
-      "canonical_slug": "thedrummer/skyfall-36b-v2",
-      "name": "TheDrummer: Skyfall 36B V2",
-      "hugging_face_id": "TheDrummer/Skyfall-36B-v2",
-      "listed_at": "2025-03-10",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "thedrummer/unslopnemo-12b",
-      "canonical_slug": "thedrummer/unslopnemo-12b",
-      "name": "TheDrummer: UnslopNemo 12B",
-      "hugging_face_id": "TheDrummer/UnslopNemo-12B-v4.1",
-      "listed_at": "2024-11-08",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "undi95/remm-slerp-l2-13b",
-      "canonical_slug": "undi95/remm-slerp-l2-13b",
-      "name": "ReMM SLERP 13B",
-      "hugging_face_id": "Undi95/ReMM-SLERP-L2-13B",
-      "listed_at": "2023-07-22",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "upstage/solar-mini4",
       "canonical_slug": "upstage/solar-mini4-20260922",
       "name": "Upstage: Solar Mini 4",
       "hugging_face_id": null,
       "listed_at": "2026-09-23",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "upstage/solar-pro-3",
-      "canonical_slug": "upstage/solar-pro-3",
-      "name": "Upstage: Solar Pro 3",
-      "hugging_face_id": null,
-      "listed_at": "2026-01-27",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "x-ai/grok-4.20",
-      "canonical_slug": "x-ai/grok-4.20-20260309",
-      "name": "SpaceXAI: Grok 4.20",
-      "hugging_face_id": null,
-      "listed_at": "2026-03-31",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
