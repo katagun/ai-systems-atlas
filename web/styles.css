@@ -870,32 +870,33 @@ input:focus, select:focus {
 .badge-tooltip-family { font: 600 .6rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
 .badge-tooltip-name { color: var(--text); font-size: .86rem; }
 .badge-tooltip-definition { color: var(--muted); }
-/* The strip is fixed over the bottom of the viewport. Script measures its
-   height into --legend-h, and the rules below keep content clear of it. */
+/* The strip is fixed over the bottom of the viewport as one slim scrolling row:
+   the Key label, the scrolling emblem list, the All badges link, and the close
+   button never wrap. Script measures its height into --legend-h, and the rules
+   below keep content clear of it. */
 .badge-legend {
   position: fixed;
   inset: auto 0 0;
   z-index: 25;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: .45rem 1.1rem;
-  padding: .55rem max(1.5rem, calc((100% - 1360px) / 2));
+  gap: .5rem .75rem;
+  padding: .35rem max(.75rem, calc((100% - 1360px) / 2));
   border-top: 1px solid var(--line-strong);
   background: var(--panel-glass);
   backdrop-filter: blur(10px);
-  font-size: .78rem;
+  font-size: .74rem;
+  overflow: hidden;
 }
 .badge-legend[hidden], .badge-legend-chip[hidden] { display: none; }
-.badge-legend-title { margin: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
-.badge-legend-items { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: 0; padding: 0; list-style: none; }
-.badge-legend-items li { display: inline-flex; align-items: center; gap: .4rem; }
-.badge-legend-items span { color: var(--muted); }
-.badge-legend-items strong { color: var(--text); font-weight: 600; }
-.badge-legend-items[data-mode="badges"] li > span:only-of-type { color: var(--text); font-weight: 600; }
-.badge-legend .badge-emblem { width: 1.35rem; height: 1.35rem; flex: none; }
-.badge-legend-more { margin-left: auto; color: var(--cyan); font-weight: 600; }
-.badge-legend-close { border: 0; background: transparent; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.badge-legend-title { margin: 0; flex: none; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.badge-legend-items { display: flex; flex: 1 1 auto; flex-wrap: nowrap; gap: .4rem .8rem; min-width: 0; margin: 0; padding: 0 0 .1rem; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; white-space: nowrap; list-style: none; }
+.badge-legend-items li { display: inline-flex; flex: none; align-items: center; gap: .35rem; white-space: nowrap; }
+.badge-legend-items span { color: var(--text); font-weight: 600; }
+.badge-legend .badge-emblem { width: 1.15rem; height: 1.15rem; flex: none; }
+.badge-legend-more { flex: none; margin-left: auto; color: var(--cyan); font-weight: 600; white-space: nowrap; }
+.badge-legend-close { flex: none; border: 0; background: transparent; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; }
 .badge-legend-close:hover { color: var(--text); }
 .badge-legend-chip {
   position: fixed;
@@ -911,8 +912,7 @@ input:focus, select:focus {
   font: 600 .72rem var(--font-body);
   cursor: pointer;
 }
-/* The strip's height varies with scope and width (one or two rows on a desktop,
-   more on a phone), so clearance uses the measured --legend-h. Scroll padding keeps
+/* The strip is always one row tall, so clearance uses the measured --legend-h. Scroll padding keeps
    focused and scrolled-to elements above the strip; the footer's margin, the
    only bottom clearance, lets the page's end scroll clear of it. */
 html:has(body.has-badge-legend) { scroll-padding-bottom: var(--legend-h); }
